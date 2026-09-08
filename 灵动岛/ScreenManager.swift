@@ -11,7 +11,9 @@ struct ScreenSnapshot: Equatable {
 public final class ScreenManager: ObservableObject {
     @Published public private(set) var screens: [ScreenEnvironment] = []
     @Published public private(set) var activeScreen: ScreenEnvironment?
+    @Published public private(set) var physicalScreen: ScreenEnvironment?
     @Published public private(set) var selectionPolicy: ScreenSelectionPolicy
+    @Published public private(set) var simulationConfiguration: ScreenSimulationConfiguration?
 
     private let notificationCenter: NotificationCenter
     private let snapshotProvider: () -> ScreenSnapshot
@@ -60,18 +62,28 @@ public final class ScreenManager: ObservableObject {
         selectActiveScreen()
     }
 
+    public func setSimulationConfiguration(_ configuration: ScreenSimulationConfiguration?) {
+        let normalizedConfiguration = configuration?.normalized
+        guard simulationConfiguration != normalizedConfiguration else {
+            return
+        }
+
+        simulationConfiguration = normalizedConfiguration
+        selectActiveScreen()
+    }
+
     public func refresh() {
         let snapshot = snapshotProvider()
         screens = snapshot.screens
         mainDisplayID = snapshot.mainDisplayID
-        activeScreen = selectionPolicy.select(
-            from: snapshot.screens,
-            mainDisplayID: snapshot.mainDisplayID
-        )
+        selectActiveScreen()
     }
 
     private func selectActiveScreen() {
-        activeScreen = selectionPolicy.select(from: screens, mainDisplayID: mainDisplayID)
+        let selectedPhysicalScreen = selectionPolicy.select(from: screens, mainDisplayID: mainDisplayID)
+        physicalScreen = selectedPhysicalScreen
+        activeScreen = simulationConfiguration?.makeEnvironment(anchoredTo: selectedPhysicalScreen)
+            ?? selectedPhysicalScreen
     }
 
     private static func captureSystemSnapshot() -> ScreenSnapshot {

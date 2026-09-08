@@ -16,6 +16,10 @@ struct DynamicIslandApp: App {
 final class AppDelegate: NSObject, NSApplicationDelegate {
     private var statusItem: NSStatusItem?
     private var panelController: IslandPanelController?
+    private var screenManager: ScreenManager?
+#if DEBUG
+    private var screenSimulatorWindowController: ScreenSimulatorWindowController?
+#endif
 
     func applicationDidFinishLaunching(_ notification: Notification) {
         guard NSClassFromString("XCTestCase") == nil else {
@@ -25,7 +29,9 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         NSApp.setActivationPolicy(.accessory)
 
         let viewModel = IslandViewModel()
-        let panelController = IslandPanelController(viewModel: viewModel)
+        let screenManager = ScreenManager()
+        let panelController = IslandPanelController(viewModel: viewModel, screenManager: screenManager)
+        self.screenManager = screenManager
         self.panelController = panelController
         panelController.show()
         configureStatusItem()
@@ -43,6 +49,12 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         let menu = NSMenu()
         menu.addItem(NSMenuItem(title: "显示灵动岛", action: #selector(showIsland), keyEquivalent: ""))
         menu.addItem(NSMenuItem(title: "隐藏灵动岛", action: #selector(hideIsland), keyEquivalent: ""))
+#if DEBUG
+        menu.addItem(.separator())
+        let simulatorItem = NSMenuItem(title: "屏幕模拟器...", action: #selector(showScreenSimulator), keyEquivalent: "")
+        simulatorItem.image = NSImage(systemSymbolName: "display.2", accessibilityDescription: "屏幕模拟器")
+        menu.addItem(simulatorItem)
+#endif
         menu.addItem(.separator())
         menu.addItem(NSMenuItem(title: "退出", action: #selector(quit), keyEquivalent: "q"))
         item.menu = menu
@@ -57,6 +69,19 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     @objc private func hideIsland() {
         panelController?.hide()
     }
+
+#if DEBUG
+    @objc private func showScreenSimulator() {
+        guard let screenManager else {
+            return
+        }
+
+        let controller = screenSimulatorWindowController
+            ?? ScreenSimulatorWindowController(screenManager: screenManager)
+        screenSimulatorWindowController = controller
+        controller.present()
+    }
+#endif
 
     @objc private func quit() {
         NSApp.terminate(nil)

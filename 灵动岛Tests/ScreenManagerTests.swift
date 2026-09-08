@@ -119,6 +119,66 @@ final class ScreenManagerTests: XCTestCase {
         }
     }
 
+    func testSimulationOverridesGeometryAndStaysAnchoredToPhysicalScreen() async {
+        await MainActor.run {
+            let physical = makeScreen(displayID: 1, frameOriginX: 1728, isBuiltIn: true)
+            let snapshot = ScreenSnapshot(screens: [physical], mainDisplayID: physical.displayID)
+            let manager = ScreenManager(
+                notificationCenter: NotificationCenter(),
+                snapshotProvider: { snapshot }
+            )
+            var configuration = SimulatedScreenProfile.macBookAir13.defaultConfiguration
+            configuration.notchWidth = 300
+
+            manager.startMonitoring()
+            manager.setSimulationConfiguration(configuration)
+
+            XCTAssertEqual(manager.physicalScreen, physical)
+            XCTAssertEqual(manager.simulationConfiguration, configuration)
+            XCTAssertEqual(manager.activeScreen?.displayID, configuration.profile.simulatedDisplayID)
+            XCTAssertEqual(manager.activeScreen?.frame.size, configuration.logicalSize)
+            XCTAssertEqual(manager.activeScreen?.frame.midX ?? 0, physical.frame.midX, accuracy: 0.5)
+            XCTAssertEqual(manager.activeScreen?.frame.maxY ?? 0, physical.frame.maxY, accuracy: 0.5)
+            XCTAssertEqual(
+                manager.activeScreen.map(IslandPanelGeometry.compactFrame(in:))?.width ?? 0,
+                300,
+                accuracy: 0.5
+            )
+        }
+    }
+
+    func testSimulationReanchorsAfterMainDisplayChangeAndCanBeDisabled() async {
+        await MainActor.run {
+            let notificationCenter = NotificationCenter()
+            let builtIn = makeScreen(displayID: 1, frameOriginX: 0, isBuiltIn: true)
+            let external = makeScreen(displayID: 2, frameOriginX: 1728, isBuiltIn: false)
+            var snapshot = ScreenSnapshot(screens: [builtIn, external], mainDisplayID: builtIn.displayID)
+            let manager = ScreenManager(
+                selectionPolicy: .main,
+                notificationCenter: notificationCenter,
+                snapshotProvider: { snapshot }
+            )
+            let configuration = SimulatedScreenProfile.external4K.defaultConfiguration
+            manager.startMonitoring()
+            manager.setSimulationConfiguration(configuration)
+
+            snapshot = ScreenSnapshot(screens: [builtIn, external], mainDisplayID: external.displayID)
+            notificationCenter.post(
+                name: NSApplication.didChangeScreenParametersNotification,
+                object: nil
+            )
+
+            XCTAssertEqual(manager.physicalScreen, external)
+            XCTAssertEqual(manager.activeScreen?.frame.midX ?? 0, external.frame.midX, accuracy: 0.5)
+            XCTAssertEqual(manager.activeScreen?.frame.maxY ?? 0, external.frame.maxY, accuracy: 0.5)
+
+            manager.setSimulationConfiguration(nil)
+
+            XCTAssertNil(manager.simulationConfiguration)
+            XCTAssertEqual(manager.activeScreen, external)
+        }
+    }
+
     private func makeScreen(
         displayID: CGDirectDisplayID,
         frameOriginX: CGFloat,

@@ -27,6 +27,9 @@ xcuserdata/
 *.pkg
 *.zip
 
+# Generated validation artifacts
+artifacts/screen-matrix/
+
 # Signing material and local secrets
 .env
 .env.*
