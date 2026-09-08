@@ -6,8 +6,19 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXContainerItemProxy section */
+		462651542FF50D2A00AC1171 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4626512B2FF50D2A00AC1171 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 462651322FF50D2A00AC1171;
+			remoteInfo = "灵动岛";
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
 		462651332FF50D2A00AC1171 /* 灵动岛.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "灵动岛.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		462651512FF50D2A00AC1171 /* 灵动岛Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "灵动岛Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -16,10 +27,22 @@
 			path = "灵动岛";
 			sourceTree = "<group>";
 		};
+		462651522FF50D2A00AC1171 /* 灵动岛Tests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = "灵动岛Tests";
+			sourceTree = "<group>";
+		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		462651302FF50D2A00AC1171 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		462651532FF50D2A00AC1171 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -33,6 +56,7 @@
 			isa = PBXGroup;
 			children = (
 				462651352FF50D2A00AC1171 /* 灵动岛 */,
+				462651522FF50D2A00AC1171 /* 灵动岛Tests */,
 				462651342FF50D2A00AC1171 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -41,6 +65,7 @@
 			isa = PBXGroup;
 			children = (
 				462651332FF50D2A00AC1171 /* 灵动岛.app */,
+				462651512FF50D2A00AC1171 /* 灵动岛Tests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -70,6 +95,29 @@
 			productReference = 462651332FF50D2A00AC1171 /* 灵动岛.app */;
 			productType = "com.apple.product-type.application";
 		};
+		462651552FF50D2A00AC1171 /* 灵动岛Tests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4626515A2FF50D2A00AC1171 /* Build configuration list for PBXNativeTarget "灵动岛Tests" */;
+			buildPhases = (
+				462651562FF50D2A00AC1171 /* Sources */,
+				462651532FF50D2A00AC1171 /* Frameworks */,
+				462651572FF50D2A00AC1171 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				462651582FF50D2A00AC1171 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				462651522FF50D2A00AC1171 /* 灵动岛Tests */,
+			);
+			name = "灵动岛Tests";
+			packageProductDependencies = (
+			);
+			productName = "灵动岛Tests";
+			productReference = 462651512FF50D2A00AC1171 /* 灵动岛Tests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -82,6 +130,10 @@
 				TargetAttributes = {
 					462651322FF50D2A00AC1171 = {
 						CreatedOnToolsVersion = 26.0.1;
+					};
+					462651552FF50D2A00AC1171 = {
+						CreatedOnToolsVersion = 26.0.1;
+						TestTargetID = 462651322FF50D2A00AC1171;
 					};
 				};
 			};
@@ -100,12 +152,20 @@
 			projectRoot = "";
 			targets = (
 				462651322FF50D2A00AC1171 /* 灵动岛 */,
+				462651552FF50D2A00AC1171 /* 灵动岛Tests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
 		462651312FF50D2A00AC1171 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		462651572FF50D2A00AC1171 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -122,7 +182,22 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		462651562FF50D2A00AC1171 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		462651582FF50D2A00AC1171 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 462651322FF50D2A00AC1171 /* 灵动岛 */;
+			targetProxy = 462651542FF50D2A00AC1171 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		4626513C2FF50D2C00AC1171 /* Debug */ = {
@@ -248,20 +323,25 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "灵动岛/灵动岛.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				ENABLE_APP_SANDBOX = YES;
 				ENABLE_PREVIEWS = YES;
-				ENABLE_USER_SELECTED_FILES = readonly;
+				ENABLE_USER_SELECTED_FILES = readwrite;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_LSUIElement = YES;
+				INFOPLIST_KEY_NSAppleEventsUsageDescription = "用于读取 Apple Music 的当前曲目信息并控制播放、暂停与切歌。";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INFOPLIST_KEY_NSPrefersDisplaySafeAreaCompatibilityMode = NO;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "-.---";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.rong5.dynamic-island-mac";
+				PRODUCT_MODULE_NAME = DynamicIsland;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				REGISTER_APP_GROUPS = YES;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
@@ -278,20 +358,25 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "灵动岛/灵动岛.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				ENABLE_APP_SANDBOX = YES;
 				ENABLE_PREVIEWS = YES;
-				ENABLE_USER_SELECTED_FILES = readonly;
+				ENABLE_USER_SELECTED_FILES = readwrite;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_LSUIElement = YES;
+				INFOPLIST_KEY_NSAppleEventsUsageDescription = "用于读取 Apple Music 的当前曲目信息并控制播放、暂停与切歌。";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INFOPLIST_KEY_NSPrefersDisplaySafeAreaCompatibilityMode = NO;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "-.---";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.rong5.dynamic-island-mac";
+				PRODUCT_MODULE_NAME = DynamicIsland;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				REGISTER_APP_GROUPS = YES;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
@@ -300,6 +385,52 @@
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		4626515B2FF50D2A00AC1171 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundlePackageType = BNDL;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 26.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.rong5.dynamic-island-mac.tests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/灵动岛.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/灵动岛";
+			};
+			name = Debug;
+		};
+		4626515C2FF50D2A00AC1171 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundlePackageType = BNDL;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 26.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.rong5.dynamic-island-mac.tests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/灵动岛.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/灵动岛";
 			};
 			name = Release;
 		};
@@ -320,6 +451,15 @@
 			buildConfigurations = (
 				4626513F2FF50D2C00AC1171 /* Debug */,
 				462651402FF50D2C00AC1171 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		4626515A2FF50D2A00AC1171 /* Build configuration list for PBXNativeTarget "灵动岛Tests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4626515B2FF50D2A00AC1171 /* Debug */,
+				4626515C2FF50D2A00AC1171 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
