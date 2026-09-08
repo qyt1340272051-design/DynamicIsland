@@ -95,4 +95,40 @@ final class MusicControlServiceTests: XCTestCase {
             XCTAssertEqual(playing.advanced(by: 200).position, 120, accuracy: 0.001)
         }
     }
+
+    func testAppleScriptPermissionDenialMapsToActionableError() {
+        let error = AppleScriptErrorMapper.musicControlError(from: [
+            "NSAppleScriptErrorNumber": NSNumber(value: -1743),
+            "NSAppleScriptErrorMessage": "Not authorized to send Apple events",
+        ])
+
+        XCTAssertEqual(error, .automationPermissionDenied)
+        XCTAssertEqual(
+            error.localizedDescription,
+            "没有控制 Apple Music 的权限，请在系统设置的“隐私与安全性 > 自动化”中允许灵动岛控制音乐"
+        )
+    }
+
+    func testAppleScriptFailurePreservesCodeAndReadableMessage() {
+        let error = AppleScriptErrorMapper.musicControlError(from: [
+            "NSAppleScriptErrorNumber": NSNumber(value: -1728),
+            "NSAppleScriptErrorMessage": "The requested track was not found.",
+        ])
+
+        XCTAssertEqual(
+            error,
+            .executionFailed(code: -1728, message: "The requested track was not found.")
+        )
+        XCTAssertEqual(
+            error.localizedDescription,
+            "Apple Music 控制失败（错误 -1728）：The requested track was not found."
+        )
+    }
+
+    func testAppleScriptFailureWithoutDetailsUsesStableFallbackMessage() {
+        let error = AppleScriptErrorMapper.musicControlError(from: [:])
+
+        XCTAssertEqual(error, .executionFailed(code: nil, message: "未知错误"))
+        XCTAssertEqual(error.localizedDescription, "Apple Music 控制失败：未知错误")
+    }
 }

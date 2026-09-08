@@ -1,7 +1,7 @@
 import Foundation
 import UniformTypeIdentifiers
 
-public struct TrayFileItem: Identifiable, Equatable {
+public nonisolated struct TrayFileItem: Identifiable, Equatable, Sendable {
     public let id: UUID
     public let url: URL
     public let originalURL: URL
@@ -26,7 +26,7 @@ public protocol FileTrayService {
     func clear() throws
 }
 
-public enum TrayFileIconKind: Equatable {
+public nonisolated enum TrayFileIconKind: Equatable {
     case imageThumbnail
     case systemIcon(String)
 

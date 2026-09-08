@@ -6,20 +6,32 @@ import SwiftUI
 final class IslandPanelController {
     private let viewModel: IslandViewModel
     private let screenManager: ScreenManager
+    private let workspaceNotificationCenter: NotificationCenter
+    private let applicationNotificationCenter: NotificationCenter
     private var panel: NSPanel?
     private var hoverTimer: Timer?
     private var screenObservation: AnyCancellable?
     private var isPointerInsidePanel = false
+    private lazy var stabilityMonitor = IslandPanelStabilityMonitor(
+        workspaceNotificationCenter: workspaceNotificationCenter,
+        applicationNotificationCenter: applicationNotificationCenter
+    ) { [weak self] in
+        self?.restorePanelAfterEnvironmentChange()
+    }
 
     init(viewModel: IslandViewModel) {
         self.viewModel = viewModel
         self.screenManager = ScreenManager()
+        self.workspaceNotificationCenter = NSWorkspace.shared.notificationCenter
+        self.applicationNotificationCenter = .default
         observeScreenChanges()
     }
 
     init(viewModel: IslandViewModel, screenManager: ScreenManager) {
         self.viewModel = viewModel
         self.screenManager = screenManager
+        self.workspaceNotificationCenter = NSWorkspace.shared.notificationCenter
+        self.applicationNotificationCenter = .default
         observeScreenChanges()
     }
 
@@ -29,11 +41,13 @@ final class IslandPanelController {
         self.panel = panel
         updateFrame(for: panel)
         panel.orderFrontRegardless()
+        stabilityMonitor.start()
         startHoverTracking()
     }
 
     func hide() {
         stopHoverTracking()
+        stabilityMonitor.stop()
         screenManager.stopMonitoring()
         panel?.orderOut(nil)
     }
@@ -46,14 +60,12 @@ final class IslandPanelController {
             defer: false
         )
         panel.backgroundColor = .clear
-        panel.collectionBehavior = [.canJoinAllSpaces, .fullScreenAuxiliary, .stationary]
         panel.hasShadow = false
-        panel.hidesOnDeactivate = false
         panel.isMovable = false
         panel.isOpaque = false
-        panel.level = .statusBar
         panel.titleVisibility = .hidden
         panel.titlebarAppearsTransparent = true
+        IslandPanelWindowPolicy.apply(to: panel)
 
         let rootView = IslandView(viewModel: viewModel)
         panel.contentViewController = NSHostingController(rootView: rootView)
@@ -105,8 +117,22 @@ final class IslandPanelController {
                     return
                 }
                 self.updateFrame(for: panel)
+                if panel.isVisible {
+                    panel.orderFrontRegardless()
+                }
                 self.updatePointerContainment()
             }
+    }
+
+    private func restorePanelAfterEnvironmentChange() {
+        guard let panel, panel.isVisible else {
+            return
+        }
+
+        screenManager.refresh()
+        updateFrame(for: panel)
+        panel.orderFrontRegardless()
+        updatePointerContainment()
     }
 
     private func startHoverTracking() {

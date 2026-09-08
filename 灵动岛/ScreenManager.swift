@@ -80,10 +80,17 @@ public final class ScreenManager: ObservableObject {
     }
 
     private func selectActiveScreen() {
-        let selectedPhysicalScreen = selectionPolicy.select(from: screens, mainDisplayID: mainDisplayID)
-        physicalScreen = selectedPhysicalScreen
-        activeScreen = simulationConfiguration?.makeEnvironment(anchoredTo: selectedPhysicalScreen)
-            ?? selectedPhysicalScreen
+        if let selectedPhysicalScreen = selectionPolicy.select(from: screens, mainDisplayID: mainDisplayID) {
+            physicalScreen = selectedPhysicalScreen
+        }
+
+        guard let physicalScreen else {
+            activeScreen = simulationConfiguration?.makeEnvironment()
+            return
+        }
+
+        activeScreen = simulationConfiguration?.makeEnvironment(anchoredTo: physicalScreen)
+            ?? physicalScreen
     }
 
     private static func captureSystemSnapshot() -> ScreenSnapshot {

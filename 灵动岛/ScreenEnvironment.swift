@@ -1,6 +1,6 @@
 import CoreGraphics
 
-public struct ScreenEdgeInsets: Equatable, Sendable {
+public nonisolated struct ScreenEdgeInsets: Equatable, Sendable {
     public let top: CGFloat
     public let left: CGFloat
     public let bottom: CGFloat
@@ -21,7 +21,7 @@ public struct ScreenEdgeInsets: Equatable, Sendable {
     public nonisolated static let zero = ScreenEdgeInsets()
 }
 
-public struct ScreenEnvironment: Equatable, Sendable {
+public nonisolated struct ScreenEnvironment: Equatable, Sendable {
     public let displayID: CGDirectDisplayID
     public let name: String
     public let frame: CGRect

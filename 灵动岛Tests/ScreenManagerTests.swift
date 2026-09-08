@@ -95,6 +95,81 @@ final class ScreenManagerTests: XCTestCase {
         }
     }
 
+    func testClamshellTransitionFallsBackFromBuiltInToRemainingExternalDisplay() async {
+        await MainActor.run {
+            let notificationCenter = NotificationCenter()
+            let builtIn = makeScreen(displayID: 1, frameOriginX: 0, isBuiltIn: true)
+            let external = makeScreen(displayID: 2, frameOriginX: 1728, isBuiltIn: false)
+            var snapshot = ScreenSnapshot(screens: [builtIn, external], mainDisplayID: builtIn.displayID)
+            let manager = ScreenManager(
+                selectionPolicy: .builtIn,
+                notificationCenter: notificationCenter,
+                snapshotProvider: { snapshot }
+            )
+            manager.startMonitoring()
+
+            snapshot = ScreenSnapshot(screens: [external], mainDisplayID: external.displayID)
+            notificationCenter.post(
+                name: NSApplication.didChangeScreenParametersNotification,
+                object: nil
+            )
+
+            XCTAssertEqual(manager.screens, [external])
+            XCTAssertEqual(manager.physicalScreen, external)
+            XCTAssertEqual(manager.activeScreen, external)
+        }
+    }
+
+    func testTransientEmptySnapshotKeepsLastUsableScreenUntilDisplaysRecover() async {
+        await MainActor.run {
+            let notificationCenter = NotificationCenter()
+            let builtIn = makeScreen(displayID: 1, frameOriginX: 0, isBuiltIn: true)
+            let external = makeScreen(displayID: 2, frameOriginX: 1728, isBuiltIn: false)
+            var snapshot = ScreenSnapshot(screens: [builtIn], mainDisplayID: builtIn.displayID)
+            let manager = ScreenManager(
+                selectionPolicy: .builtIn,
+                notificationCenter: notificationCenter,
+                snapshotProvider: { snapshot }
+            )
+            manager.startMonitoring()
+
+            snapshot = ScreenSnapshot(screens: [], mainDisplayID: nil)
+            notificationCenter.post(
+                name: NSApplication.didChangeScreenParametersNotification,
+                object: nil
+            )
+
+            XCTAssertTrue(manager.screens.isEmpty)
+            XCTAssertEqual(manager.physicalScreen, builtIn)
+            XCTAssertEqual(manager.activeScreen, builtIn)
+
+            snapshot = ScreenSnapshot(screens: [external], mainDisplayID: external.displayID)
+            notificationCenter.post(
+                name: NSApplication.didChangeScreenParametersNotification,
+                object: nil
+            )
+
+            XCTAssertEqual(manager.physicalScreen, external)
+            XCTAssertEqual(manager.activeScreen, external)
+        }
+    }
+
+    func testSimulationRemainsAvailableBeforeFirstPhysicalScreenSnapshot() async {
+        await MainActor.run {
+            let manager = ScreenManager(
+                notificationCenter: NotificationCenter(),
+                snapshotProvider: { ScreenSnapshot(screens: [], mainDisplayID: nil) }
+            )
+            let configuration = SimulatedScreenProfile.macBookPro14.defaultConfiguration
+
+            manager.setSimulationConfiguration(configuration)
+            manager.startMonitoring()
+
+            XCTAssertNil(manager.physicalScreen)
+            XCTAssertEqual(manager.activeScreen, configuration.makeEnvironment())
+        }
+    }
+
     func testStopMonitoringIgnoresLaterScreenNotifications() async {
         await MainActor.run {
             let notificationCenter = NotificationCenter()

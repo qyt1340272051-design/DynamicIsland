@@ -158,7 +158,7 @@ public enum IslandPanelGeometry {
     }
 
     private static func normalizedTopReservedHeight(_ height: CGFloat) -> CGFloat {
-        height > 0 ? height : fallbackTopReservedHeight
+        height.isFinite && height > 0 ? height : fallbackTopReservedHeight
     }
 
     private static func topAlignedFrame(

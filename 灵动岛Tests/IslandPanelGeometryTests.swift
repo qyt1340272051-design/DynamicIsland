@@ -39,6 +39,28 @@ final class IslandPanelGeometryTests: XCTestCase {
         XCTAssertEqual(frame.maxY, screenFrame.maxY, accuracy: 0.5)
     }
 
+    func testCompactFrameFallsBackWhenVisibleFrameTemporarilyExtendsAboveScreen() {
+        let screenFrame = CGRect(x: 0, y: 0, width: 1728, height: 1117)
+        let transientVisibleFrame = CGRect(x: 0, y: 0, width: 1728, height: 1200)
+
+        let frame = IslandPanelGeometry.compactFrame(
+            screenFrame: screenFrame,
+            visibleFrame: transientVisibleFrame,
+            auxiliaryTopLeftArea: .zero,
+            auxiliaryTopRightArea: .zero
+        )
+
+        XCTAssertEqual(frame.height, IslandPanelGeometry.fallbackTopReservedHeight)
+        XCTAssertEqual(frame.maxY, screenFrame.maxY, accuracy: 0.5)
+    }
+
+    func testCompactSizeFallsBackForNonFiniteReservedHeight() {
+        XCTAssertEqual(
+            IslandPanelGeometry.compactSize(forTopReservedHeight: .infinity).height,
+            IslandPanelGeometry.fallbackTopReservedHeight
+        )
+    }
+
     func testExpandedFrameKeepsTopEdgeOverlappingNotchArea() {
         let screenFrame = CGRect(x: 0, y: 0, width: 1728, height: 1117)
         let left = CGRect(x: 0, y: 1079, width: 756, height: 38)

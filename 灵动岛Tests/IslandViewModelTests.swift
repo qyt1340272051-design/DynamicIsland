@@ -286,6 +286,27 @@ final class IslandViewModelTests: XCTestCase {
         }
     }
 
+    func testRefreshNowPlayingReportsAutomationPermissionDenial() async {
+        let model = await MainActor.run {
+            IslandViewModel(
+                volumeService: MockVolumeService(),
+                fileTrayService: PreviewEmptyFileTrayService(),
+                sharingService: MockSharingService(),
+                musicService: FailingMusicControlService(error: .automationPermissionDenied),
+                hapticFeedbackService: MockHapticFeedbackService()
+            )
+        }
+
+        await model.refreshNowPlaying()
+
+        await MainActor.run {
+            XCTAssertEqual(
+                model.lastErrorMessage,
+                MusicControlError.automationPermissionDenied.localizedDescription
+            )
+        }
+    }
+
     func testMusicButtonsSendPreviousPlayPauseAndNextCommands() async throws {
         let musicService = RecordingMusicControlService()
         let model = await MainActor.run {
@@ -721,6 +742,15 @@ private struct MockMusicControlService: MusicControlService {
     func skipBackward() async throws {}
     func skipForward() async throws {}
     func nowPlaying() async throws -> NowPlayingInfo { nowPlayingResult }
+}
+
+private struct FailingMusicControlService: MusicControlService {
+    let error: MusicControlError
+
+    func togglePlayPause() async throws { throw error }
+    func skipBackward() async throws { throw error }
+    func skipForward() async throws { throw error }
+    func nowPlaying() async throws -> NowPlayingInfo { throw error }
 }
 
 private actor RecordingMusicControlService: MusicControlService {

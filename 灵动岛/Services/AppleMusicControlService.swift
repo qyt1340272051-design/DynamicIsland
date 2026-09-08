@@ -1,17 +1,41 @@
 import AppKit
 import Foundation
 
-public enum MusicControlError: LocalizedError {
+public enum MusicControlError: LocalizedError, Equatable, Sendable {
+    case automationPermissionDenied
     case scriptCompilationFailed
-    case executionFailed(String)
+    case executionFailed(code: Int?, message: String)
 
-    public var errorDescription: String? {
+    public nonisolated var errorDescription: String? {
         switch self {
+        case .automationPermissionDenied:
+            return "没有控制 Apple Music 的权限，请在系统设置的“隐私与安全性 > 自动化”中允许灵动岛控制音乐"
         case .scriptCompilationFailed:
             return "无法创建 Apple Music 控制脚本"
-        case .executionFailed(let details):
-            return "Apple Music 控制失败：\(details)"
+        case .executionFailed(let code, let message):
+            if let code {
+                return "Apple Music 控制失败（错误 \(code)）：\(message)"
+            }
+            return "Apple Music 控制失败：\(message)"
         }
+    }
+}
+
+enum AppleScriptErrorMapper {
+    nonisolated static let automationPermissionDeniedCode = -1743
+
+    nonisolated static func musicControlError(from errorInfo: NSDictionary) -> MusicControlError {
+        let code = (errorInfo["NSAppleScriptErrorNumber"] as? NSNumber)?.intValue
+        if code == automationPermissionDeniedCode {
+            return .automationPermissionDenied
+        }
+
+        let rawMessage = errorInfo["NSAppleScriptErrorMessage"] as? String
+        let message = rawMessage?.trimmingCharacters(in: .whitespacesAndNewlines)
+        return .executionFailed(
+            code: code,
+            message: message.flatMap { $0.isEmpty ? nil : $0 } ?? "未知错误"
+        )
     }
 }
 
@@ -65,7 +89,7 @@ enum AppleScriptRunner {
 
         let descriptor = script.executeAndReturnError(&errorInfo)
         if let errorInfo {
-            throw MusicControlError.executionFailed(errorInfo.description)
+            throw AppleScriptErrorMapper.musicControlError(from: errorInfo)
         }
 
         return descriptor
@@ -121,7 +145,7 @@ public actor AppleMusicControlService: MusicControlService {
         return info
     }
 
-    private static func readArtworkData() throws -> Data? {
+    private nonisolated static func readArtworkData() throws -> Data? {
         guard let data = try AppleScriptRunner.runData(Self.artworkScript),
               NSImage(data: data) != nil else {
             return nil
@@ -139,7 +163,7 @@ public actor AppleMusicControlService: MusicControlService {
         !NSRunningApplication.runningApplications(withBundleIdentifier: "com.apple.Music").isEmpty
     }
 
-    private static var nowPlayingScript: String {
+    private nonisolated static var nowPlayingScript: String {
         let sep = NowPlayingParser.fieldSeparator
         return [
             "tell application \"Music\"",
@@ -159,7 +183,7 @@ public actor AppleMusicControlService: MusicControlService {
         ].joined(separator: "\n")
     }
 
-    private static var artworkScript: String {
+    private nonisolated static var artworkScript: String {
         [
             "tell application \"Music\"",
             "if player state is stopped then return missing value",
