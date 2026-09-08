@@ -1,18 +1,30 @@
 import AppKit
+import Combine
 import SwiftUI
 
 @MainActor
 final class IslandPanelController {
     private let viewModel: IslandViewModel
+    private let screenManager: ScreenManager
     private var panel: NSPanel?
     private var hoverTimer: Timer?
+    private var screenObservation: AnyCancellable?
     private var isPointerInsidePanel = false
 
     init(viewModel: IslandViewModel) {
         self.viewModel = viewModel
+        self.screenManager = ScreenManager()
+        observeScreenChanges()
+    }
+
+    init(viewModel: IslandViewModel, screenManager: ScreenManager) {
+        self.viewModel = viewModel
+        self.screenManager = screenManager
+        observeScreenChanges()
     }
 
     func show() {
+        screenManager.startMonitoring()
         let panel = panel ?? makePanel()
         self.panel = panel
         updateFrame(for: panel)
@@ -22,6 +34,7 @@ final class IslandPanelController {
 
     func hide() {
         stopHoverTracking()
+        screenManager.stopMonitoring()
         panel?.orderOut(nil)
     }
 
@@ -48,30 +61,24 @@ final class IslandPanelController {
     }
 
     private func updateFrame(for panel: NSPanel) {
-        guard let screen = NSScreen.main else {
-            panel.setFrame(CGRect(origin: .zero, size: IslandPanelGeometry.expandedSize), display: true, animate: false)
+        guard let screen = screenManager.activeScreen else {
+            if panel.frame.isEmpty {
+                panel.setFrame(CGRect(origin: .zero, size: IslandPanelGeometry.expandedSize), display: true, animate: false)
+            }
             return
         }
 
-        let compactFrame = currentCompactFrame(on: screen)
+        let compactFrame = currentCompactFrame(in: screen)
         viewModel.setCompactPanelSize(compactFrame.size)
-        panel.setFrame(currentStablePanelFrame(on: screen), display: true, animate: false)
+        panel.setFrame(currentStablePanelFrame(in: screen), display: true, animate: false)
     }
 
-    private func currentCompactFrame(on screen: NSScreen) -> CGRect {
-        let leftArea = screen.auxiliaryTopLeftArea ?? .zero
-        let rightArea = screen.auxiliaryTopRightArea ?? .zero
-
-        return IslandPanelGeometry.compactFrame(
-            screenFrame: screen.frame,
-            visibleFrame: screen.visibleFrame,
-            auxiliaryTopLeftArea: leftArea,
-            auxiliaryTopRightArea: rightArea
-        )
+    private func currentCompactFrame(in screen: ScreenEnvironment) -> CGRect {
+        IslandPanelGeometry.compactFrame(in: screen)
     }
 
-    private func currentCompactPresentationFrame(on screen: NSScreen) -> CGRect {
-        let baseFrame = currentCompactFrame(on: screen)
+    private func currentCompactPresentationFrame(in screen: ScreenEnvironment) -> CGRect {
+        let baseFrame = currentCompactFrame(in: screen)
         let presentationSize = IslandVisualStyle.compactShellSize(
             baseSize: baseFrame.size,
             isPlaying: viewModel.isPlaying,
@@ -86,16 +93,20 @@ final class IslandPanelController {
         )
     }
 
-    private func currentStablePanelFrame(on screen: NSScreen) -> CGRect {
-        let leftArea = screen.auxiliaryTopLeftArea ?? .zero
-        let rightArea = screen.auxiliaryTopRightArea ?? .zero
+    private func currentStablePanelFrame(in screen: ScreenEnvironment) -> CGRect {
+        IslandPanelGeometry.stableFrame(in: screen)
+    }
 
-        return IslandPanelGeometry.stableFrame(
-            screenFrame: screen.frame,
-            visibleFrame: screen.visibleFrame,
-            auxiliaryTopLeftArea: leftArea,
-            auxiliaryTopRightArea: rightArea
-        )
+    private func observeScreenChanges() {
+        screenObservation = screenManager.$activeScreen
+            .removeDuplicates()
+            .sink { [weak self] _ in
+                guard let self, let panel = self.panel else {
+                    return
+                }
+                self.updateFrame(for: panel)
+                self.updatePointerContainment()
+            }
     }
 
     private func startHoverTracking() {
@@ -138,13 +149,13 @@ final class IslandPanelController {
     }
 
     private func currentHoverFrame(for panel: NSPanel) -> CGRect {
-        guard let screen = NSScreen.main else {
+        guard let screen = screenManager.activeScreen else {
             return panel.frame
         }
 
         return IslandPanelHoverRegion.hoverFrame(
             panelFrame: panel.frame,
-            compactFrame: currentCompactPresentationFrame(on: screen),
+            compactFrame: currentCompactPresentationFrame(in: screen),
             presentationState: viewModel.presentationState,
             isPointerInside: isPointerInsidePanel,
             expandedShellSize: IslandVisualStyle.expandedShellSize

@@ -37,14 +37,20 @@ public enum IslandPanelGeometry {
                 auxiliaryTopRightArea: auxiliaryTopRightArea
             )
         )
-        let originX = notchCenterX - size.width / 2
-        let originY = screenFrame.maxY - size.height - topPadding
+        return topAlignedFrame(
+            centeredAtX: notchCenterX,
+            requestedSize: size,
+            screenFrame: screenFrame,
+            topPadding: topPadding
+        )
+    }
 
-        return CGRect(
-            x: originX.rounded(.toNearestOrAwayFromZero),
-            y: originY.rounded(.toNearestOrAwayFromZero),
-            width: size.width,
-            height: size.height
+    public static func compactFrame(in environment: ScreenEnvironment) -> CGRect {
+        compactFrame(
+            screenFrame: environment.frame,
+            visibleFrame: environment.visibleFrame,
+            auxiliaryTopLeftArea: environment.auxiliaryTopLeftArea,
+            auxiliaryTopRightArea: environment.auxiliaryTopRightArea
         )
     }
 
@@ -60,14 +66,20 @@ public enum IslandPanelGeometry {
             auxiliaryTopRightArea: auxiliaryTopRightArea
         )
         let topPadding: CGFloat = 0
-        let originX = notchCenterX - expandedSize.width / 2
-        let originY = screenFrame.maxY - expandedSize.height - topPadding
+        return topAlignedFrame(
+            centeredAtX: notchCenterX,
+            requestedSize: expandedSize,
+            screenFrame: screenFrame,
+            topPadding: topPadding
+        )
+    }
 
-        return CGRect(
-            x: originX.rounded(.toNearestOrAwayFromZero),
-            y: originY.rounded(.toNearestOrAwayFromZero),
-            width: expandedSize.width,
-            height: expandedSize.height
+    public static func expandedFrame(in environment: ScreenEnvironment) -> CGRect {
+        expandedFrame(
+            screenFrame: environment.frame,
+            auxiliaryTopLeftArea: environment.auxiliaryTopLeftArea,
+            auxiliaryTopRightArea: environment.auxiliaryTopRightArea,
+            safeAreaInsetsTop: environment.safeAreaInsets.top
         )
     }
 
@@ -82,6 +94,15 @@ public enum IslandPanelGeometry {
             auxiliaryTopLeftArea: auxiliaryTopLeftArea,
             auxiliaryTopRightArea: auxiliaryTopRightArea,
             safeAreaInsetsTop: topReservedHeight(screenFrame: screenFrame, visibleFrame: visibleFrame)
+        )
+    }
+
+    public static func stableFrame(in environment: ScreenEnvironment) -> CGRect {
+        stableFrame(
+            screenFrame: environment.frame,
+            visibleFrame: environment.visibleFrame,
+            auxiliaryTopLeftArea: environment.auxiliaryTopLeftArea,
+            auxiliaryTopRightArea: environment.auxiliaryTopRightArea
         )
     }
 
@@ -138,5 +159,26 @@ public enum IslandPanelGeometry {
 
     private static func normalizedTopReservedHeight(_ height: CGFloat) -> CGFloat {
         height > 0 ? height : fallbackTopReservedHeight
+    }
+
+    private static func topAlignedFrame(
+        centeredAtX centerX: CGFloat,
+        requestedSize: CGSize,
+        screenFrame: CGRect,
+        topPadding: CGFloat
+    ) -> CGRect {
+        let width = min(requestedSize.width, screenFrame.width)
+        let height = min(requestedSize.height, screenFrame.height)
+        let maximumOriginX = screenFrame.maxX - width
+        let unclampedOriginX = centerX - width / 2
+        let originX = min(max(unclampedOriginX, screenFrame.minX), maximumOriginX)
+        let originY = screenFrame.maxY - height - topPadding
+
+        return CGRect(
+            x: originX.rounded(.toNearestOrAwayFromZero),
+            y: originY.rounded(.toNearestOrAwayFromZero),
+            width: width,
+            height: height
+        )
     }
 }

@@ -104,4 +104,27 @@ final class IslandPanelGeometryTests: XCTestCase {
         XCTAssertEqual(expanded.midX, compact.midX, accuracy: 0.5)
         XCTAssertTrue(screenFrame.contains(CGPoint(x: expanded.midX, y: expanded.midY)))
     }
+
+    func testEnvironmentFramesRemainInsideOffsetNarrowScreen() {
+        let environment = ScreenEnvironment(
+            displayID: 2,
+            name: "Narrow External Display",
+            frame: CGRect(x: 1728, y: -120, width: 480, height: 900),
+            visibleFrame: CGRect(x: 1728, y: -120, width: 480, height: 876),
+            backingScaleFactor: 1,
+            isBuiltIn: false
+        )
+
+        let compact = IslandPanelGeometry.compactFrame(in: environment)
+        let stable = IslandPanelGeometry.stableFrame(in: environment)
+
+        for frame in [compact, stable] {
+            XCTAssertGreaterThanOrEqual(frame.minX, environment.frame.minX)
+            XCTAssertLessThanOrEqual(frame.maxX, environment.frame.maxX)
+            XCTAssertGreaterThanOrEqual(frame.minY, environment.frame.minY)
+            XCTAssertLessThanOrEqual(frame.maxY, environment.frame.maxY)
+        }
+        XCTAssertEqual(stable.width, environment.frame.width)
+        XCTAssertEqual(stable.maxY, environment.frame.maxY, accuracy: 0.5)
+    }
 }
