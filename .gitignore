@@ -1,0 +1,42 @@
+# Local tooling
+.superpowers/
+docs/superpowers/
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Xcode
+DerivedData/
+build/
+*.xcuserstate
+xcuserdata/
+*.xccheckout
+*.xcscmblueprint
+*.moved-aside
+*.xcarchive
+*.xcresult
+
+# Swift Package Manager
+.build/
+.swiftpm/
+
+# Distribution artifacts
+*.dmg
+*.pkg
+*.zip
+
+# Signing material and local secrets
+.env
+.env.*
+!.env.example
+*.p8
+*.p12
+*.pem
+*.key
+*.mobileprovision
+
+# Temporary files
+*.log
+*.tmp
