@@ -14,10 +14,12 @@ fi
 
 mkdir -p "$(dirname "$RESULT_BUNDLE_PATH")"
 
+"$SCRIPT_DIR/validate-release-config.sh"
+
 printf 'Running Dynamic Island tests...\n'
 xcodebuild test \
-  -project "$ROOT_DIR/灵动岛.xcodeproj" \
-  -scheme "灵动岛" \
+  -project "$ROOT_DIR/DynamicIsland.xcodeproj" \
+  -scheme "Dynamic Island" \
   -destination "platform=macOS" \
   -derivedDataPath "$DERIVED_DATA_PATH" \
   -resultBundlePath "$RESULT_BUNDLE_PATH" \
@@ -25,8 +27,8 @@ xcodebuild test \
 
 printf 'Building Dynamic Island in Release configuration...\n'
 xcodebuild build \
-  -project "$ROOT_DIR/灵动岛.xcodeproj" \
-  -scheme "灵动岛" \
+  -project "$ROOT_DIR/DynamicIsland.xcodeproj" \
+  -scheme "Dynamic Island" \
   -configuration Release \
   -destination "platform=macOS" \
   -derivedDataPath "$DERIVED_DATA_PATH"

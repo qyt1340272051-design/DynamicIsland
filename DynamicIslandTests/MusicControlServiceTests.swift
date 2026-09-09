@@ -105,7 +105,7 @@ final class MusicControlServiceTests: XCTestCase {
         XCTAssertEqual(error, .automationPermissionDenied)
         XCTAssertEqual(
             error.localizedDescription,
-            "没有控制 Apple Music 的权限，请在系统设置的“隐私与安全性 > 自动化”中允许灵动岛控制音乐"
+            "没有控制 Apple Music 的权限，请在系统设置的“隐私与安全性 > 自动化”中允许 Dynamic Island 控制音乐"
         )
     }
 

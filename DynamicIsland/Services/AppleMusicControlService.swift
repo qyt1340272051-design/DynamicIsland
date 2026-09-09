@@ -9,7 +9,7 @@ public enum MusicControlError: LocalizedError, Equatable, Sendable {
     public nonisolated var errorDescription: String? {
         switch self {
         case .automationPermissionDenied:
-            return "没有控制 Apple Music 的权限，请在系统设置的“隐私与安全性 > 自动化”中允许灵动岛控制音乐"
+            return "没有控制 Apple Music 的权限，请在系统设置的“隐私与安全性 > 自动化”中允许 Dynamic Island 控制音乐"
         case .scriptCompilationFailed:
             return "无法创建 Apple Music 控制脚本"
         case .executionFailed(let code, let message):

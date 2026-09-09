@@ -1,10 +1,10 @@
-# 灵动岛
+# Dynamic Island
 
 [![CI](https://github.com/qyt1340272051-design/DynamicIsland/actions/workflows/ci.yml/badge.svg)](https://github.com/qyt1340272051-design/DynamicIsland/actions/workflows/ci.yml)
 
 一个贴合 Mac 刘海区域的 SwiftUI 交互模块。应用常驻菜单栏，通过无标题 `NSPanel` 在屏幕顶部提供系统音量、Apple Music、文件托盘、AirDrop 和计时工具，并在活动进行时保留紧凑状态提示。
 
-> 当前仓库处于源码预览阶段，尚未提供签名和公证后的安装包。
+> 当前版本目标为 `v0.4.0-beta.1`。发布链路已建立，但在 Developer ID 凭据和干净 Mac 验收完成前不会提供正式安装包。
 
 ## 界面预览
 
@@ -46,23 +46,23 @@
 ```bash
 git clone https://github.com/qyt1340272051-design/DynamicIsland.git
 cd DynamicIsland
-open 灵动岛.xcodeproj
+open DynamicIsland.xcodeproj
 ```
 
-在 Xcode 中选择共享 scheme `灵动岛`，然后运行应用。应用使用 `LSUIElement` 作为菜单栏配件启动，不会显示普通主窗口；可通过菜单栏图标重新显示或退出。
+在 Xcode 中选择共享 scheme `Dynamic Island`，然后运行应用。应用使用 `LSUIElement` 作为菜单栏配件启动，不会显示普通主窗口；可通过菜单栏图标重新显示或退出。
 
 也可以直接从命令行构建：
 
 ```bash
 xcodebuild build \
-  -project 灵动岛.xcodeproj \
-  -scheme 灵动岛 \
+  -project DynamicIsland.xcodeproj \
+  -scheme 'Dynamic Island' \
   -destination 'platform=macOS'
 ```
 
 ## 权限说明
 
-- **Apple Music 自动化**：首次读取或控制音乐时，macOS 会请求允许“灵动岛”控制“音乐”。拒绝后可前往“系统设置 > 隐私与安全性 > 自动化”重新开启。
+- **Apple Music 自动化**：首次读取或控制音乐时，macOS 会请求允许“Dynamic Island”控制“音乐”。拒绝后可前往“系统设置 > 隐私与安全性 > 自动化”重新开启。
 - **用户选择的文件**：文件托盘使用沙盒的用户所选文件读写权限；导入内容会复制到应用临时托盘目录。
 - **AirDrop**：分享由系统 `NSSharingService` 提供，实际可用性取决于当前 Mac 的 AirDrop 状态。
 
@@ -76,9 +76,9 @@ xcodebuild build \
 | 面板 | `IslandPanelController.swift`、`IslandPanelGeometry.swift` | `NSPanel` 创建、命中区域、屏幕顶边定位和状态尺寸 |
 | 状态 | `IslandViewModel.swift` | 展示状态、服务调用、悬停与活动态协调 |
 | 界面 | `IslandView.swift`、`IslandTimerToolsView.swift` | 音乐、文件、音量、计时工具和紧凑态 UI |
-| 系统服务 | `灵动岛/Services/` | CoreAudio、Apple Music、文件托盘、AirDrop 和触觉反馈 |
+| 系统服务 | `DynamicIsland/Services/` | CoreAudio、Apple Music、文件托盘、AirDrop 和触觉反馈 |
 | 屏幕适配 | `ScreenManager.swift`、`ScreenEnvironment.swift` | 多屏选择、拓扑变化和模拟环境 |
-| 测试 | `灵动岛Tests/` | 几何、状态机、系统服务适配和快照矩阵 |
+| 测试 | `DynamicIslandTests/` | 几何、状态机、系统服务适配和快照矩阵 |
 
 ## 验证
 
@@ -103,11 +103,21 @@ open artifacts/screen-matrix/index.html
 
 生成的矩阵位于被 Git 忽略的 `artifacts/screen-matrix/`，不会污染提交。
 
+## 发布
+
+本地可用下列命令验证 Archive、通用架构 DMG、SHA-256 和 manifest 生成流程：
+
+```bash
+./Scripts/release.sh --local
+```
+
+该命令产生的是未公证的本地测试包，不可分发。Developer ID、公证凭据、Tag workflow 和干净 Mac 验收步骤见 [发布指南](docs/RELEASING.md)。
+
 ## 已知限制
 
 - 音乐集成目前只支持 macOS 自带的 Apple Music，不支持 Spotify 等第三方播放器。
 - 秒表、番茄钟和倒计时状态不会跨应用重启恢复。
-- 正式分发所需的 Developer ID 签名、公证、安装包和自动更新尚未实现。
+- 正式 Developer ID 签名与公证需要发布团队凭据；自动更新尚未实现。
 - 屏幕矩阵覆盖常见几何组合，但真实硬件、缩放和多显示器排列仍需要持续收集反馈。
 
 ## 参与开发

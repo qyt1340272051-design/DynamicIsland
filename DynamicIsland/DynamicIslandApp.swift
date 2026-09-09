@@ -43,12 +43,12 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
     private func configureStatusItem() {
         let item = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
-        item.button?.image = NSImage(systemSymbolName: "capsule.tophalf.filled", accessibilityDescription: "灵动岛")
+        item.button?.image = NSImage(systemSymbolName: "capsule.tophalf.filled", accessibilityDescription: "Dynamic Island")
         item.button?.imagePosition = .imageOnly
 
         let menu = NSMenu()
-        menu.addItem(NSMenuItem(title: "显示灵动岛", action: #selector(showIsland), keyEquivalent: ""))
-        menu.addItem(NSMenuItem(title: "隐藏灵动岛", action: #selector(hideIsland), keyEquivalent: ""))
+        menu.addItem(NSMenuItem(title: "显示 Dynamic Island", action: #selector(showIsland), keyEquivalent: ""))
+        menu.addItem(NSMenuItem(title: "隐藏 Dynamic Island", action: #selector(hideIsland), keyEquivalent: ""))
 #if DEBUG
         menu.addItem(.separator())
         let simulatorItem = NSMenuItem(title: "屏幕模拟器...", action: #selector(showScreenSimulator), keyEquivalent: "")

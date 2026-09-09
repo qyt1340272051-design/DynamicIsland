@@ -11,7 +11,7 @@ body:
     attributes:
       label: 问题摘要
       description: 简要说明发生了什么。
-      placeholder: 灵动岛在……时出现……
+      placeholder: Dynamic Island 在……时出现……
     validations:
       required: true
   - type: textarea

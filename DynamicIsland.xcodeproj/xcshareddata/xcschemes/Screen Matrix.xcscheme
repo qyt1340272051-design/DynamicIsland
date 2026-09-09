@@ -16,9 +16,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "462651322FF50D2A00AC1171"
-               BuildableName = "&#x7075;&#x52a8;&#x5c9b;.app"
-               BlueprintName = "&#x7075;&#x52a8;&#x5c9b;"
-               ReferencedContainer = "container:&#x7075;&#x52a8;&#x5c9b;.xcodeproj">
+               BuildableName = "Dynamic Island.app"
+               BlueprintName = "Dynamic Island"
+               ReferencedContainer = "container:DynamicIsland.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -36,9 +36,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "462651552FF50D2A00AC1171"
-               BuildableName = "&#x7075;&#x52a8;&#x5c9b;Tests.xctest"
-               BlueprintName = "&#x7075;&#x52a8;&#x5c9b;Tests"
-               ReferencedContainer = "container:&#x7075;&#x52a8;&#x5c9b;.xcodeproj">
+               BuildableName = "DynamicIslandTests.xctest"
+               BlueprintName = "DynamicIslandTests"
+               ReferencedContainer = "container:DynamicIsland.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>

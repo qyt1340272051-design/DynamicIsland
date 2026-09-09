@@ -10,12 +10,12 @@ DERIVED_DATA_PATH="${SCREEN_MATRIX_DERIVED_DATA_PATH:-/tmp/dynamic-island-screen
 mkdir -p "$(dirname "$OUTPUT_DIR")"
 
 xcodebuild test \
-  -project "$ROOT_DIR/灵动岛.xcodeproj" \
+  -project "$ROOT_DIR/DynamicIsland.xcodeproj" \
   -scheme "Screen Matrix" \
   -destination "platform=macOS" \
   -derivedDataPath "$DERIVED_DATA_PATH" \
   -parallel-testing-enabled NO \
-  -only-testing:"灵动岛Tests/ScreenSnapshotMatrixTests/testGenerateSnapshotMatrix" \
+  -only-testing:"DynamicIslandTests/ScreenSnapshotMatrixTests/testGenerateSnapshotMatrix" \
   ENABLE_APP_SANDBOX=NO \
   CODE_SIGN_ENTITLEMENTS=
 

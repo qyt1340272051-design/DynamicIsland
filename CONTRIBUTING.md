@@ -1,6 +1,6 @@
 # 参与开发
 
-感谢你帮助改进灵动岛。提交前请先搜索现有 Issue，确认问题或提案没有重复。
+感谢你帮助改进 Dynamic Island。提交前请先搜索现有 Issue，确认问题或提案没有重复。
 
 ## 开发环境
 
@@ -11,7 +11,7 @@
 ```bash
 git clone https://github.com/qyt1340272051-design/DynamicIsland.git
 cd DynamicIsland
-open 灵动岛.xcodeproj
+open DynamicIsland.xcodeproj
 ```
 
 ## 提交要求

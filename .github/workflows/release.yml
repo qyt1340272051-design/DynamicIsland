@@ -1,0 +1,143 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  verify:
+    name: Test and build
+    runs-on: macos-26
+    timeout-minutes: 30
+    env:
+      DEVELOPER_DIR: /Applications/Xcode_26.6.app/Contents/Developer
+      CI_DERIVED_DATA_PATH: /tmp/dynamic-island-release-verification
+      CI_RESULT_BUNDLE_PATH: /tmp/DynamicIslandReleaseTests.xcresult
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Test and build
+        run: ./Scripts/ci.sh
+
+      - name: Upload test diagnostics
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: DynamicIslandReleaseTests-${{ github.run_id }}
+          path: ${{ env.CI_RESULT_BUNDLE_PATH }}
+          if-no-files-found: ignore
+          retention-days: 7
+
+  release:
+    name: Sign, notarize, and publish
+    needs: verify
+    runs-on: macos-26
+    timeout-minutes: 60
+    env:
+      DEVELOPER_DIR: /Applications/Xcode_26.6.app/Contents/Developer
+      APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+      APPLE_ID: ${{ secrets.APPLE_ID }}
+      APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.APPLE_APP_SPECIFIC_PASSWORD }}
+      DEVELOPER_ID_APPLICATION_P12_BASE64: ${{ secrets.DEVELOPER_ID_APPLICATION_P12_BASE64 }}
+      DEVELOPER_ID_APPLICATION_P12_PASSWORD: ${{ secrets.DEVELOPER_ID_APPLICATION_P12_PASSWORD }}
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - name: Check out tagged source
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Validate release secrets
+        run: |
+          missing=0
+          for name in \
+            APPLE_TEAM_ID \
+            APPLE_ID \
+            APPLE_APP_SPECIFIC_PASSWORD \
+            DEVELOPER_ID_APPLICATION_P12_BASE64 \
+            DEVELOPER_ID_APPLICATION_P12_PASSWORD
+          do
+            if [[ -z "${!name:-}" ]]; then
+              echo "::error::Missing GitHub Actions secret: $name"
+              missing=1
+            fi
+          done
+          exit "$missing"
+
+      - name: Import Developer ID certificate
+        run: |
+          certificate_path="$RUNNER_TEMP/developer-id.p12"
+          keychain_path="$RUNNER_TEMP/dynamic-island-signing.keychain-db"
+          keychain_password="$(openssl rand -hex 24)"
+
+          echo "::add-mask::$keychain_password"
+          printf '%s' "$DEVELOPER_ID_APPLICATION_P12_BASE64" | base64 --decode > "$certificate_path"
+          security create-keychain -p "$keychain_password" "$keychain_path"
+          security set-keychain-settings -lut 21600 "$keychain_path"
+          security unlock-keychain -p "$keychain_password" "$keychain_path"
+          security import "$certificate_path" \
+            -k "$keychain_path" \
+            -P "$DEVELOPER_ID_APPLICATION_P12_PASSWORD" \
+            -A \
+            -t cert \
+            -f pkcs12
+          security set-key-partition-list \
+            -S apple-tool:,apple: \
+            -s \
+            -k "$keychain_password" \
+            "$keychain_path"
+          security list-keychains -d user -s "$keychain_path" "$HOME/Library/Keychains/login.keychain-db"
+
+          echo "RELEASE_KEYCHAIN_PATH=$keychain_path" >> "$GITHUB_ENV"
+          echo "RELEASE_CERTIFICATE_PATH=$certificate_path" >> "$GITHUB_ENV"
+
+      - name: Build notarized release
+        run: ./Scripts/release.sh --release "$GITHUB_REF_NAME"
+
+      - name: Upload release artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: Dynamic-Island-${{ github.ref_name }}
+          path: |
+            build/release/*.dmg
+            build/release/*.sha256
+            build/release/*.json
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Publish GitHub release
+        run: |
+          version="${GITHUB_REF_NAME#v}"
+          dmg="build/release/Dynamic-Island-${version}.dmg"
+          checksum="$dmg.sha256"
+          manifest="build/release/Dynamic-Island-${version}.json"
+          release_flags=(--verify-tag --title "Dynamic Island $GITHUB_REF_NAME" --generate-notes)
+
+          if [[ "$GITHUB_REF_NAME" == *-* ]]; then
+            release_flags+=(--prerelease)
+          fi
+
+          if gh release view "$GITHUB_REF_NAME" >/dev/null 2>&1; then
+            gh release upload "$GITHUB_REF_NAME" "$dmg" "$checksum" "$manifest" --clobber
+          else
+            gh release create "$GITHUB_REF_NAME" "$dmg" "$checksum" "$manifest" "${release_flags[@]}"
+          fi
+
+      - name: Remove temporary signing keychain
+        if: always()
+        run: |
+          if [[ -n "${RELEASE_KEYCHAIN_PATH:-}" ]]; then
+            security delete-keychain "$RELEASE_KEYCHAIN_PATH" || true
+          fi
+          rm -f "${RELEASE_CERTIFICATE_PATH:-}"
