@@ -22,8 +22,8 @@ jobs:
     timeout-minutes: 30
     env:
       DEVELOPER_DIR: /Applications/Xcode_26.6.app/Contents/Developer
-      CI_DERIVED_DATA_PATH: ${{ runner.temp }}/dynamic-island-derived-data
-      CI_RESULT_BUNDLE_PATH: ${{ runner.temp }}/DynamicIslandTests.xcresult
+      CI_DERIVED_DATA_PATH: /tmp/dynamic-island-derived-data
+      CI_RESULT_BUNDLE_PATH: /tmp/DynamicIslandTests.xcresult
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
