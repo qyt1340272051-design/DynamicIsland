@@ -1,0 +1,97 @@
+name: Bug 报告
+description: 报告可复现的功能、交互或稳定性问题
+title: "[Bug] "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        感谢反馈。刘海位置与屏幕环境高度相关，请尽量完整填写设备和显示设置。
+  - type: textarea
+    id: summary
+    attributes:
+      label: 问题摘要
+      description: 简要说明发生了什么。
+      placeholder: 灵动岛在……时出现……
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: 复现步骤
+      description: 请按发生顺序列出稳定复现问题的操作。
+      placeholder: |
+        1. 启动应用
+        2. 将鼠标移入刘海区域
+        3. ……
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: 预期行为
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: 实际行为
+    validations:
+      required: true
+  - type: input
+    id: macos
+    attributes:
+      label: macOS 版本
+      placeholder: 例如 26.0 (25A...)
+    validations:
+      required: true
+  - type: input
+    id: hardware
+    attributes:
+      label: Mac 型号
+      placeholder: 例如 MacBook Pro 14-inch, 2024
+    validations:
+      required: true
+  - type: textarea
+    id: displays
+    attributes:
+      label: 显示器与缩放设置
+      description: 请注明内建或外接屏幕、是否有刘海、分辨率、缩放、排列方式和主屏幕。
+      placeholder: 内建刘海屏，默认缩放；左侧连接一台 4K 外接屏，外接屏为主屏幕。
+    validations:
+      required: true
+  - type: dropdown
+    id: menu_bar
+    attributes:
+      label: 菜单栏设置
+      options:
+        - 始终显示
+        - 自动隐藏
+        - 不确定
+    validations:
+      required: true
+  - type: dropdown
+    id: space_mode
+    attributes:
+      label: 发生场景
+      options:
+        - 普通桌面
+        - 全屏 App
+        - 切换 Space 后
+        - 合盖或切换显示器后
+        - 其他
+    validations:
+      required: true
+  - type: textarea
+    id: diagnostics
+    attributes:
+      label: 截图、录屏与日志
+      description: 可直接拖入附件；请隐藏私人信息。若问题涉及 Apple Music，请说明自动化权限状态。
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: 提交前确认
+      options:
+        - label: 我已搜索现有 Issue，未发现相同问题。
+          required: true
+        - label: 我没有在附件中包含私人文件、密钥或其他敏感信息。
+          required: true

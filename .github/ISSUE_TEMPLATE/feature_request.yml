@@ -1,0 +1,49 @@
+name: 功能建议
+description: 提议新的功能或交互改进
+title: "[Feature] "
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: 使用场景
+      description: 这个功能希望解决什么问题？请先描述场景，而不只是实现方式。
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: 建议方案
+      description: 描述期望的界面、交互和结果。
+    validations:
+      required: true
+  - type: dropdown
+    id: area
+    attributes:
+      label: 所属模块
+      options:
+        - 刘海与面板
+        - 系统音量
+        - 音乐
+        - 文件托盘与 AirDrop
+        - 秒表、番茄钟与倒计时
+        - 屏幕适配
+        - 其他
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: 替代方案
+      description: 目前如何完成这件事，或还考虑过哪些方式？
+  - type: textarea
+    id: references
+    attributes:
+      label: 参考资料
+      description: 可附草图、截图或相关链接，请注明来源。
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: 提交前确认
+      options:
+        - label: 我已搜索现有 Issue，未发现相同建议。
+          required: true

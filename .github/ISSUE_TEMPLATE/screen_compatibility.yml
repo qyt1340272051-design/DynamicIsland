@@ -1,0 +1,59 @@
+name: 屏幕兼容性反馈
+description: 提交刘海、缩放或多显示器环境下的定位结果
+title: "[Screen] "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        这类反馈用于补充真实设备矩阵。即使界面正常，也欢迎提交新的硬件组合。
+  - type: input
+    id: hardware
+    attributes:
+      label: Mac 型号
+      placeholder: 例如 MacBook Air 15-inch, M4
+    validations:
+      required: true
+  - type: input
+    id: macos
+    attributes:
+      label: macOS 版本
+      placeholder: 例如 26.0 (25A...)
+    validations:
+      required: true
+  - type: textarea
+    id: topology
+    attributes:
+      label: 屏幕拓扑
+      description: 请列出每块屏幕的分辨率、缩放、相对排列、刘海情况和主屏幕设置。
+    validations:
+      required: true
+  - type: dropdown
+    id: result
+    attributes:
+      label: 结果
+      options:
+        - 定位与交互均正常
+        - 位置或尺寸异常
+        - 无法悬停或点击
+        - 切换屏幕后异常
+    validations:
+      required: true
+  - type: textarea
+    id: details
+    attributes:
+      label: 详细说明
+      description: 请说明菜单栏自动隐藏、全屏、Space、合盖等相关状态。
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: 截图或录屏
+      description: 建议包含完整屏幕顶边，以便判断安全区和面板 frame。
+  - type: checkboxes
+    id: privacy
+    attributes:
+      label: 隐私确认
+      options:
+        - label: 我已检查附件，不包含私人文件、密钥或其他敏感信息。
+          required: true
