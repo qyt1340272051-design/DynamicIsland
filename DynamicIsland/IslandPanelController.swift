@@ -19,6 +19,14 @@ final class IslandPanelController {
         self?.restorePanelAfterEnvironmentChange()
     }
 
+    var diagnosticPanelFrame: CGRect? {
+        panel?.frame
+    }
+
+    var isPanelVisible: Bool {
+        panel?.isVisible ?? false
+    }
+
     init(viewModel: IslandViewModel) {
         self.viewModel = viewModel
         self.screenManager = ScreenManager()

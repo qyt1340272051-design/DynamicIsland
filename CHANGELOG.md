@@ -16,6 +16,8 @@
 - 64 状态屏幕快照矩阵和关键系统场景稳定性测试。
 - README、贡献说明、Issue/PR 模板和 GitHub Actions 持续集成。
 - Developer ID Archive、公证、DMG、SHA-256、manifest、Tag 和 GitHub Release 自动化。
+- 菜单栏脱敏调试报告、Beta 反馈入口和诊断信息单元测试。
+- 可由 CI 校验的 9 类真机 Beta 矩阵、验收手册和 `S0`–`S3` 问题分级流程。
 
 ### Changed
 

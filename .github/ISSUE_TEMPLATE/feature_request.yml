@@ -1,6 +1,9 @@
 name: 功能建议
 description: 提议新的功能或交互改进
 title: "[Feature] "
+labels:
+  - enhancement
+  - needs-triage
 body:
   - type: textarea
     id: problem

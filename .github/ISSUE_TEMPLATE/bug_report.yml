@@ -1,6 +1,9 @@
 name: Bug 报告
 description: 报告可复现的功能、交互或稳定性问题
 title: "[Bug] "
+labels:
+  - bug
+  - needs-triage
 body:
   - type: markdown
     attributes:
@@ -84,8 +87,8 @@ body:
   - type: textarea
     id: diagnostics
     attributes:
-      label: 截图、录屏与日志
-      description: 可直接拖入附件；请隐藏私人信息。若问题涉及 Apple Music，请说明自动化权限状态。
+      label: 调试信息、截图与录屏
+      description: 若 App 可启动，请粘贴菜单栏“复制调试信息”生成的文本。可直接拖入附件，请先隐藏私人信息。
   - type: checkboxes
     id: checks
     attributes:

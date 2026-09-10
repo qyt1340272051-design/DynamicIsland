@@ -32,6 +32,7 @@
 - 紧凑活动态：音乐播放时显示微缩封面与六点动态指示，计时运行时显示功能图标和实时数据。
 - 多屏适配：按当前屏幕、刘海安全区、菜单栏可见状态和显示器变化重新计算面板位置。
 - 调试矩阵：内置模拟屏幕配置，可生成 8 种屏幕环境、8 种界面状态的 64 张快照。
+- Beta 诊断：菜单栏可复制脱敏的设备、屏幕与面板信息，并直接打开结构化反馈表单。
 
 ## 环境要求
 
@@ -78,6 +79,7 @@ xcodebuild build \
 | 界面 | `IslandView.swift`、`IslandTimerToolsView.swift` | 音乐、文件、音量、计时工具和紧凑态 UI |
 | 系统服务 | `DynamicIsland/Services/` | CoreAudio、Apple Music、文件托盘、AirDrop 和触觉反馈 |
 | 屏幕适配 | `ScreenManager.swift`、`ScreenEnvironment.swift` | 多屏选择、拓扑变化和模拟环境 |
+| Beta 诊断 | `DynamicIsland/Diagnostics/` | 脱敏诊断报告、剪贴板与反馈入口 |
 | 测试 | `DynamicIslandTests/` | 几何、状态机、系统服务适配和快照矩阵 |
 
 ## 验证
@@ -103,6 +105,12 @@ open artifacts/screen-matrix/index.html
 
 生成的矩阵位于被 Git 忽略的 `artifacts/screen-matrix/`，不会污染提交。
 
+## Beta 测试
+
+真机公测覆盖有/无刘海、单/双屏、合盖外接、多种缩放以及 Apple Silicon/Intel。完整的 `DI-B01` 至 `DI-B09` 矩阵、测试步骤、隐私范围、`S0`–`S3` 问题分级与公测出口条件见 [Beta 验收手册](docs/BETA_TESTING.md)。
+
+测试者可从菜单栏选择“复制调试信息”和“提交 Beta 反馈...”。调试报告不包含用户名、序列号、文件名或音乐元数据。
+
 ## 发布
 
 本地可用下列命令验证 Archive、通用架构 DMG、SHA-256 和 manifest 生成流程：
@@ -118,11 +126,11 @@ open artifacts/screen-matrix/index.html
 - 音乐集成目前只支持 macOS 自带的 Apple Music，不支持 Spotify 等第三方播放器。
 - 秒表、番茄钟和倒计时状态不会跨应用重启恢复。
 - 正式 Developer ID 签名与公证需要发布团队凭据；自动更新尚未实现。
-- 屏幕矩阵覆盖常见几何组合，但真实硬件、缩放和多显示器排列仍需要持续收集反馈。
+- 屏幕模拟矩阵已覆盖常见几何组合；真机 Beta 矩阵的待验证项以 `docs/beta-device-matrix.json` 为准。
 
 ## 参与开发
 
-提交改动前请阅读 [CONTRIBUTING.md](CONTRIBUTING.md)。Bug 报告、功能建议和屏幕兼容性反馈都有对应的结构化 Issue 模板；Pull Request 会自动执行测试和 Release 构建。
+提交改动前请阅读 [CONTRIBUTING.md](CONTRIBUTING.md)。Bug 报告、功能建议、屏幕兼容性和 Beta 验收都有对应的结构化 Issue 模板；Pull Request 会自动校验真机矩阵、执行测试和 Release 构建。
 
 ## 许可证
 

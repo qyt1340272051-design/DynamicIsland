@@ -37,6 +37,8 @@ open DynamicIsland.xcodeproj
 ./Scripts/generate-screen-matrix.sh
 ```
 
+Beta 真机验收请按 [Beta 验收手册](docs/BETA_TESTING.md) 选择 `DI-B01`–`DI-B09` 场景，从菜单栏复制脱敏调试信息，并通过 Beta Issue 模板提交结果。
+
 ## Pull Request
 
 PR 描述应说明变更目的、用户可见行为、验证结果和已知风险。GitHub Actions 中的 `Test and build` 检查必须通过后才能合并。
