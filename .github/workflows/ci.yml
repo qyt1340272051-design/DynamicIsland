@@ -26,7 +26,7 @@ jobs:
       CI_RESULT_BUNDLE_PATH: /tmp/DynamicIslandTests.xcresult
     steps:
       - name: Check out repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Show toolchain
         run: xcodebuild -version
