@@ -2,11 +2,13 @@
 
 [![CI](https://github.com/qyt1340272051-design/DynamicIsland/actions/workflows/ci.yml/badge.svg)](https://github.com/qyt1340272051-design/DynamicIsland/actions/workflows/ci.yml)
 
-一个贴合 Mac 刘海区域的 SwiftUI 交互模块。应用常驻菜单栏，通过无标题 `NSPanel` 在屏幕顶部提供系统音量、Apple Music、文件托盘、AirDrop 和计时工具，并在活动进行时保留紧凑状态提示。
+一个贴合 Mac 刘海区域的开源 SwiftUI 菜单栏应用。通过无标题 `NSPanel` 在屏幕顶部提供系统音量、Apple Music、文件托盘、AirDrop 和计时工具，并在活动进行时保留紧凑状态提示。
 
 > 当前版本目标为 `v0.4.0-beta.1`。发布链路已建立，但在 Developer ID 凭据和干净 Mac 验收完成前不会提供正式安装包。
 
 ## 界面预览
+
+以下图片由工程的屏幕矩阵工具生成，展示模拟状态；不代表真实设备兼容性验收结果。完整截图位于 [`docs/images/`](docs/images/)。
 
 ### Apple Music
 
@@ -42,7 +44,9 @@
 
 刘海 MacBook 是主要使用场景；无刘海内建屏幕和外接显示器也有对应的几何回退与模拟测试。
 
-## 本地运行
+## 快速开始
+
+仓库目前为私有仓库，克隆需要 GitHub 访问权限；尚无经过 Developer ID 签名、公证的公开安装包。请从源码运行：
 
 ```bash
 git clone https://github.com/qyt1340272051-design/DynamicIsland.git
@@ -50,14 +54,17 @@ cd DynamicIsland
 open DynamicIsland.xcodeproj
 ```
 
-在 Xcode 中选择共享 scheme `Dynamic Island`，然后运行应用。应用使用 `LSUIElement` 作为菜单栏配件启动，不会显示普通主窗口；可通过菜单栏图标重新显示或退出。
+在 Xcode 中选择共享 scheme `Dynamic Island`，目标选 `My Mac`，按 `Command-R`。应用使用 `LSUIElement` 作为菜单栏配件启动，不会显示普通主窗口。鼠标移入屏幕顶边的岛以展开；菜单栏图标提供显示、隐藏、诊断与退出。
 
-也可以直接从命令行构建：
+详细操作见 [使用说明](docs/USAGE.md)；Xcode、命令行编译、测试和本地打包步骤见 [编译说明](docs/BUILDING.md)。
+
+命令行快速编译：
 
 ```bash
 xcodebuild build \
   -project DynamicIsland.xcodeproj \
   -scheme 'Dynamic Island' \
+  -configuration Debug \
   -destination 'platform=macOS'
 ```
 
