@@ -44,17 +44,22 @@ final class IslandPanelHoverRegionTests: XCTestCase {
     func testExpandedHoverRegionUsesVisibleShellInsteadOfFullTransparentPanel() {
         let panelFrame = CGRect(x: 604, y: 877, width: 520, height: 240)
         let compactFrame = CGRect(x: 756, y: 1079, width: 216, height: 38)
+        let shellSize = IslandVisualStyle.expandedShellSize(
+            for: .fileTray, timerMode: .stopwatch, hasTrayItems: true,
+            hasError: false, hasTimerCompletion: false
+        )
 
         let hoverFrame = IslandPanelHoverRegion.hoverFrame(
             panelFrame: panelFrame,
             compactFrame: compactFrame,
             presentationState: .dragging,
             isPointerInside: true,
-            expandedShellSize: CGSize(width: 500, height: 220)
+            expandedShellSize: shellSize
         )
 
-        XCTAssertEqual(hoverFrame, CGRect(x: 614, y: 897, width: 500, height: 220))
+        XCTAssertEqual(hoverFrame, CGRect(x: 624, y: 953, width: 480, height: 164))
         XCTAssertTrue(IslandPanelHoverRegion.contains(CGPoint(x: hoverFrame.midX, y: hoverFrame.midY), in: hoverFrame))
         XCTAssertFalse(IslandPanelHoverRegion.contains(CGPoint(x: panelFrame.minX + 4, y: panelFrame.midY), in: hoverFrame))
+        XCTAssertFalse(IslandPanelHoverRegion.contains(CGPoint(x: hoverFrame.midX, y: 930), in: hoverFrame))
     }
 }

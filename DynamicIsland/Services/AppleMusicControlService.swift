@@ -109,11 +109,19 @@ public actor AppleMusicControlService: MusicControlService {
     }
 
     public func skipBackward() async throws {
-        _ = try AppleScriptRunner.run("tell application \"Music\" to previous track")
+        _ = try AppleScriptRunner.run(Self.skipBackwardScript)
     }
 
     public func skipForward() async throws {
         _ = try AppleScriptRunner.run("tell application \"Music\" to next track")
+    }
+
+    public func seek(to position: TimeInterval, trackIdentifier: String) async throws -> Bool {
+        guard !Task.isCancelled, Self.isMusicRunning,
+              let script = Self.seekScript(position: position, trackIdentifier: trackIdentifier) else {
+            return false
+        }
+        return try AppleScriptRunner.run(script) == "true"
     }
 
     public func nowPlaying() async throws -> NowPlayingInfo {
@@ -179,6 +187,44 @@ public actor AppleMusicControlService: MusicControlService {
             "set trackID to (name of current track) & \" | \" & (artist of current track) & \" | \" & trackDuration",
             "end try",
             "return s & \"\(sep)\" & (name of current track) & \"\(sep)\" & (artist of current track) & \"\(sep)\" & (album of current track) & \"\(sep)\" & trackDuration & \"\(sep)\" & trackPosition & \"\(sep)\" & trackID",
+            "end tell",
+        ].joined(separator: "\n")
+    }
+
+    nonisolated static func seekScript(position: TimeInterval, trackIdentifier: String) -> String? {
+        guard position.isFinite, position >= 0, !trackIdentifier.isEmpty else {
+            return nil
+        }
+
+        let seconds = String(format: "%.3f", locale: Locale(identifier: "en_US_POSIX"), position)
+        let identifier = trackIdentifier
+            .replacingOccurrences(of: "\\", with: "\\\\")
+            .replacingOccurrences(of: "\"", with: "\\\"")
+        return [
+            "tell application \"Music\"",
+            "if player state is stopped then return \"false\"",
+            "set trackDuration to duration of current track as string",
+            "try",
+            "set trackID to persistent ID of current track as string",
+            "on error",
+            "set trackID to (name of current track) & \" | \" & (artist of current track) & \" | \" & trackDuration",
+            "end try",
+            "if trackID is not \"\(identifier)\" then return \"false\"",
+            "set player position to \(seconds)",
+            "return \"true\"",
+            "end tell",
+        ].joined(separator: "\n")
+    }
+
+    nonisolated static var skipBackwardScript: String {
+        [
+            "tell application \"Music\"",
+            // Music can treat a previous-track request during playback as a restart.
+            // Start at zero so a single request selects the preceding track.
+            "try",
+            "if player state is not stopped then set player position to 0",
+            "end try",
+            "previous track",
             "end tell",
         ].joined(separator: "\n")
     }

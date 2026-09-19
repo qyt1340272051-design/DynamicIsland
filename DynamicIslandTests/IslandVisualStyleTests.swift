@@ -2,6 +2,62 @@ import XCTest
 @testable import DynamicIsland
 
 final class IslandVisualStyleTests: XCTestCase {
+    func testExpandedShellCloselyFramesMusicContent() {
+        let shell = IslandVisualStyle.expandedShellSize
+        let content = IslandVisualStyle.expandedContentSize
+        let padding = IslandVisualStyle.expandedContentPadding
+        let horizontalInset = (shell.width - content.width) / 2 + padding
+
+        XCTAssertEqual(shell.height, content.height)
+        XCTAssertGreaterThanOrEqual(content.height - 2 * padding, 28 + 8 + 124)
+        XCTAssertGreaterThanOrEqual(horizontalInset, 16)
+        XCTAssertLessThanOrEqual(horizontalInset, 24)
+        XCTAssertLessThan(shell.height, IslandPanelGeometry.expandedSize.height)
+    }
+
+    func testShorterSurfacesUseTighterExpandedShell() {
+        let emptyTray = IslandVisualStyle.expandedShellSize(
+            for: .fileTray, timerMode: .stopwatch, hasTrayItems: false,
+            hasError: false, hasTimerCompletion: false
+        )
+        let filledTray = IslandVisualStyle.expandedShellSize(
+            for: .fileTray, timerMode: .stopwatch, hasTrayItems: true,
+            hasError: false, hasTimerCompletion: false
+        )
+        let stopwatch = IslandVisualStyle.expandedShellSize(
+            for: .tools, timerMode: .stopwatch, hasTrayItems: false,
+            hasError: false, hasTimerCompletion: false
+        )
+        let pomodoro = IslandVisualStyle.expandedShellSize(
+            for: .tools, timerMode: .pomodoro, hasTrayItems: false,
+            hasError: false, hasTimerCompletion: false
+        )
+        let countdown = IslandVisualStyle.expandedShellSize(
+            for: .tools, timerMode: .countdown, hasTrayItems: false,
+            hasError: false, hasTimerCompletion: false
+        )
+
+        XCTAssertEqual(emptyTray.height, IslandVisualStyle.expandedCompactContentHeight)
+        XCTAssertEqual(filledTray.height, IslandVisualStyle.expandedFileTrayHeight)
+        XCTAssertEqual(stopwatch.height, IslandVisualStyle.expandedCompactContentHeight)
+        XCTAssertEqual(pomodoro, IslandVisualStyle.expandedShellSize)
+        XCTAssertEqual(countdown, IslandVisualStyle.expandedShellSize)
+    }
+
+    func testMessagesAndTimerCompletionKeepEnoughHeight() {
+        let trayWithError = IslandVisualStyle.expandedShellSize(
+            for: .fileTray, timerMode: .stopwatch, hasTrayItems: true,
+            hasError: true, hasTimerCompletion: false
+        )
+        let completedStopwatch = IslandVisualStyle.expandedShellSize(
+            for: .tools, timerMode: .stopwatch, hasTrayItems: false,
+            hasError: false, hasTimerCompletion: true
+        )
+
+        XCTAssertEqual(trayWithError, IslandVisualStyle.expandedShellSize)
+        XCTAssertEqual(completedStopwatch, IslandVisualStyle.expandedShellSize)
+    }
+
     func testExpandedShellHasNoVisibleBorderOrShadow() {
         XCTAssertEqual(IslandVisualStyle.shellShadowOpacity(isCompactHovering: false), 0)
         XCTAssertEqual(IslandVisualStyle.expandedShellStrokeOpacity, 0)
@@ -60,9 +116,9 @@ final class IslandVisualStyleTests: XCTestCase {
     }
 
     func testExpandedShellKeepsSymmetricRoundedCorners() {
-        let radii = IslandVisualStyle.shellCornerRadii(isExpanded: true, shellHeight: 220)
+        let radii = IslandVisualStyle.shellCornerRadii(isExpanded: true, shellHeight: 190)
 
-        XCTAssertEqual(radii.top, 30)
-        XCTAssertEqual(radii.bottom, 30)
+        XCTAssertEqual(radii.top, 26)
+        XCTAssertEqual(radii.bottom, 26)
     }
 }

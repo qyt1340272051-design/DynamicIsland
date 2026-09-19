@@ -20,10 +20,13 @@ public final class IslandViewModel: ObservableObject {
     @Published public private(set) var isDragging = false
     @Published public private(set) var isPlaying = false
     @Published public private(set) var nowPlaying: NowPlayingInfo = .empty
+    @Published public private(set) var isSeekingPlayback = false
     @Published public private(set) var trayItems: [TrayFileItem] = []
+    @Published public private(set) var isFileTrayLocked = false
     @Published public private(set) var expandedSurface: IslandExpandedSurface = .music
     @Published public private(set) var compactPanelSize = IslandPanelGeometry.compactSize
     @Published public private(set) var compactTimerMode: IslandTimerToolMode?
+    @Published private(set) var timerShellMode: IslandTimerToolMode = .stopwatch
     @Published public private(set) var isTimerCompletionPresented = false
     @Published public private(set) var volume: Float
     @Published public private(set) var isMuted: Bool
@@ -44,7 +47,14 @@ public final class IslandViewModel: ObservableObject {
     private var ignoresFinishedFileDropUpdates = false
     private var nowPlayingPollTask: Task<Void, Never>?
     private var playbackProgressTask: Task<Void, Never>?
+    private var playbackSeekSession: PlaybackSeekSession?
+    private var playbackSeekTask: Task<Void, Never>?
+    private var playbackSeekIdleTask: Task<Void, Never>?
+    private var playbackSeekTaskGeneration: UInt64?
+    private var playbackSeekGeneration: UInt64 = 0
+    private var lastPlaybackSeekDispatchAt: Date?
     private var timerSessionObservation: AnyCancellable?
+    private var timerModeObservation: AnyCancellable?
     private var timerCompletionObservation: AnyCancellable?
     private var suppressesHoverExpansionUntilPointerExit = false
     private let nowPlayingPollIntervalNanoseconds: UInt64 = 1_500_000_000
@@ -54,8 +64,13 @@ public final class IslandViewModel: ObservableObject {
         Self.presentationState(
             isDragging: isDragging,
             isHovering: isHovering,
+            isFileTrayLocked: isFileTrayLocked,
             isTimerCompletionPresented: isTimerCompletionPresented
         )
+    }
+
+    public var canSeekPlayback: Bool {
+        nowPlaying.duration > 0 && !nowPlaying.trackIdentifier.isEmpty
     }
 
     public nonisolated static let defaultHoverExpansionDelayNanoseconds: UInt64 = 350_000_000
@@ -99,7 +114,10 @@ public final class IslandViewModel: ObservableObject {
         hoverTask?.cancel()
         nowPlayingPollTask?.cancel()
         playbackProgressTask?.cancel()
+        playbackSeekTask?.cancel()
+        playbackSeekIdleTask?.cancel()
         timerSessionObservation?.cancel()
+        timerModeObservation?.cancel()
         timerCompletionObservation?.cancel()
         volumeObservation?.cancel()
     }
@@ -118,10 +136,11 @@ public final class IslandViewModel: ObservableObject {
     public static func presentationState(
         isDragging: Bool,
         isHovering: Bool,
+        isFileTrayLocked: Bool = false,
         isTimerCompletionPresented: Bool = false
     ) -> IslandPresentationState {
         if isDragging { return .dragging }
-        if isHovering || isTimerCompletionPresented { return .expanded }
+        if isHovering || isFileTrayLocked || isTimerCompletionPresented { return .expanded }
         return .compact
     }
 
@@ -141,7 +160,7 @@ public final class IslandViewModel: ObservableObject {
         }
         isPointerInside = hovering
         isHovering = hovering
-        if hovering, !isDragging {
+        if hovering, !isDragging, !isFileTrayLocked {
             expandedSurface = preferredSurfaceForExpansion
         }
         updateExpansionFeedback()
@@ -174,7 +193,7 @@ public final class IslandViewModel: ObservableObject {
                 guard self.isPointerInside else {
                     return
                 }
-                if !self.isDragging {
+                if !self.isDragging, !self.isFileTrayLocked {
                     self.expandedSurface = self.preferredSurfaceForExpansion
                 }
                 self.isHovering = true
@@ -184,6 +203,9 @@ public final class IslandViewModel: ObservableObject {
     }
 
     public func endHovering() {
+        if isSeekingPlayback {
+            finishPlaybackSeek(to: nowPlaying.progress)
+        }
         hoverTask?.cancel()
         hoverTask = nil
         suppressesHoverExpansionUntilPointerExit = false
@@ -200,6 +222,9 @@ public final class IslandViewModel: ObservableObject {
             return
         }
         if dragging {
+            if isSeekingPlayback {
+                finishPlaybackSeek(to: nowPlaying.progress)
+            }
             expandedSurface = .fileTray
         }
         isDragging = dragging
@@ -208,10 +233,18 @@ public final class IslandViewModel: ObservableObject {
 
     public func selectExpandedSurface(_ surface: IslandExpandedSurface) {
         let targetSurface: IslandExpandedSurface = isTimerCompletionPresented ? .tools : surface
+        if targetSurface != .music, isSeekingPlayback {
+            finishPlaybackSeek(to: nowPlaying.progress)
+        }
         guard expandedSurface != targetSurface else {
             return
         }
         expandedSurface = targetSurface
+    }
+
+    public func toggleFileTrayLock() {
+        isFileTrayLocked.toggle()
+        updateExpansionFeedback()
     }
 
     public func acknowledgeTimerCompletion() {
@@ -371,6 +404,21 @@ public final class IslandViewModel: ObservableObject {
         }
     }
 
+    public func removeTrayItem(_ item: TrayFileItem) {
+        guard let index = trayItems.firstIndex(where: { $0.id == item.id }) else {
+            return
+        }
+
+        do {
+            try fileTrayService.remove(trayItems[index])
+            trayItems.remove(at: index)
+            updateExpansionFeedback()
+            lastErrorMessage = nil
+        } catch {
+            lastErrorMessage = error.localizedDescription
+        }
+    }
+
     public func shareTrayViaAirDrop() {
         do {
             try sharingService.share(urls: trayItems.map(\.url))
@@ -398,22 +446,162 @@ public final class IslandViewModel: ObservableObject {
         performMusicAction(.skipForward)
     }
 
+    public func updatePlaybackSeek(to progress: Double) {
+        guard progress.isFinite else { return }
+
+        if playbackSeekSession == nil {
+            guard canSeekPlayback else { return }
+            playbackSeekGeneration &+= 1
+            lastPlaybackSeekDispatchAt = nil
+            playbackSeekSession = PlaybackSeekSession(
+                generation: playbackSeekGeneration,
+                trackIdentifier: nowPlaying.trackIdentifier,
+                isDragging: true,
+                pendingPosition: nil
+            )
+            isSeekingPlayback = true
+        }
+
+        guard playbackSeekSession?.trackIdentifier == nowPlaying.trackIdentifier else {
+            cancelPlaybackSeek()
+            return
+        }
+
+        let position = min(max(progress, 0), 1) * nowPlaying.duration
+        nowPlaying = nowPlaying.replacing(position: position)
+        playbackSeekSession?.isDragging = true
+        playbackSeekSession?.pendingPosition = position
+        schedulePlaybackSeekIdleFinish()
+        startPlaybackSeekTaskIfNeeded()
+    }
+
+    public func finishPlaybackSeek(to progress: Double) {
+        updatePlaybackSeek(to: progress)
+        guard playbackSeekSession != nil else { return }
+        playbackSeekIdleTask?.cancel()
+        playbackSeekIdleTask = nil
+        playbackSeekSession?.isDragging = false
+        startPlaybackSeekTaskIfNeeded()
+    }
+
+    private func schedulePlaybackSeekIdleFinish() {
+        playbackSeekIdleTask?.cancel()
+        playbackSeekIdleTask = Task { [weak self] in
+            try? await Task.sleep(nanoseconds: 2_000_000_000)
+            guard let self, !Task.isCancelled,
+                  self.playbackSeekSession?.isDragging == true else { return }
+            self.playbackSeekIdleTask = nil
+            self.finishPlaybackSeek(to: self.nowPlaying.progress)
+        }
+    }
+
     public func refreshNowPlaying(reportError: Bool = true) async {
+        guard playbackSeekSession == nil else { return }
+        let seekGeneration = playbackSeekGeneration
         do {
             let requestStartedAt = Date()
             let refreshedInfo = try await musicService.nowPlaying()
+            guard playbackSeekSession == nil, seekGeneration == playbackSeekGeneration else { return }
             let requestDuration = Date().timeIntervalSince(requestStartedAt)
             nowPlaying = refreshedInfo.advanced(by: requestDuration)
             isPlaying = nowPlaying.isPlaying
             lastErrorMessage = nil
         } catch {
+            guard playbackSeekSession == nil, seekGeneration == playbackSeekGeneration else { return }
             if reportError {
                 lastErrorMessage = error.localizedDescription
             }
         }
     }
 
+    private func startPlaybackSeekTaskIfNeeded() {
+        // One worker serializes AppleScript commands while newer drag samples replace the pending target.
+        guard playbackSeekTask == nil, let session = playbackSeekSession else { return }
+        let generation = session.generation
+        playbackSeekTaskGeneration = generation
+        playbackSeekTask = Task { [weak self] in
+            await self?.drainPlaybackSeek(generation: generation)
+        }
+    }
+
+    private func drainPlaybackSeek(generation: UInt64) async {
+        defer {
+            if playbackSeekTaskGeneration == generation {
+                playbackSeekTask = nil
+                playbackSeekTaskGeneration = nil
+                if playbackSeekSession?.pendingPosition != nil {
+                    startPlaybackSeekTaskIfNeeded()
+                }
+            }
+        }
+
+        while !Task.isCancelled {
+            guard var session = playbackSeekSession, session.generation == generation else { return }
+            guard let position = session.pendingPosition else {
+                if !session.isDragging {
+                    playbackSeekSession = nil
+                    isSeekingPlayback = false
+                    playbackSeekGeneration &+= 1
+                    await refreshNowPlaying(reportError: false)
+                }
+                return
+            }
+
+            if session.isDragging, let lastDispatch = lastPlaybackSeekDispatchAt {
+                let remaining = 0.12 - Date().timeIntervalSince(lastDispatch)
+                if remaining > 0 {
+                    do {
+                        try await Task.sleep(nanoseconds: UInt64(remaining * 1_000_000_000))
+                    } catch {
+                        return
+                    }
+                    continue
+                }
+            }
+
+            session.pendingPosition = nil
+            playbackSeekSession = session
+            lastPlaybackSeekDispatchAt = Date()
+            do {
+                let applied = try await musicService.seek(
+                    to: position,
+                    trackIdentifier: session.trackIdentifier
+                )
+                guard playbackSeekSession?.generation == generation, !Task.isCancelled else { return }
+                if !applied {
+                    cancelPlaybackSeek()
+                    await refreshNowPlaying(reportError: false)
+                    return
+                }
+            } catch {
+                guard playbackSeekSession?.generation == generation, !Task.isCancelled else { return }
+                cancelPlaybackSeek()
+                let seekError = error.localizedDescription
+                let errorGeneration = playbackSeekGeneration
+                await refreshNowPlaying(reportError: false)
+                if playbackSeekGeneration == errorGeneration {
+                    lastErrorMessage = seekError
+                }
+                return
+            }
+
+        }
+    }
+
+    private func cancelPlaybackSeek() {
+        guard playbackSeekSession != nil else { return }
+        playbackSeekGeneration &+= 1
+        playbackSeekSession = nil
+        isSeekingPlayback = false
+        playbackSeekIdleTask?.cancel()
+        playbackSeekIdleTask = nil
+        playbackSeekTask?.cancel()
+        playbackSeekTask = nil
+        playbackSeekTaskGeneration = nil
+    }
+
     private func performMusicAction(_ action: MusicAction) {
+        cancelPlaybackSeek()
         Task { [weak self] in
             guard let self else { return }
             do {
@@ -510,7 +698,7 @@ public final class IslandViewModel: ObservableObject {
     }
 
     private func advancePlaybackProgress(by interval: TimeInterval) {
-        guard nowPlaying.isPlaying, nowPlaying.duration > 0 else {
+        guard playbackSeekSession == nil, nowPlaying.isPlaying, nowPlaying.duration > 0 else {
             return
         }
 
@@ -529,6 +717,13 @@ public final class IslandViewModel: ObservableObject {
     }
 
     private func startTimerToolsObservation() {
+        timerModeObservation = timerTools.$selectedMode
+            .removeDuplicates()
+            .sink { [weak self] mode in
+                guard let self, self.timerShellMode != mode else { return }
+                self.timerShellMode = mode
+            }
+
         timerSessionObservation = timerTools.$sessionMode
             .removeDuplicates()
             .sink { [weak self] mode in
@@ -571,6 +766,13 @@ public final class IslandViewModel: ObservableObject {
     }
 }
 
+private struct PlaybackSeekSession {
+    let generation: UInt64
+    let trackIdentifier: String
+    var isDragging: Bool
+    var pendingPosition: TimeInterval?
+}
+
 private struct PreviewVolumeService: VolumeService {
     func currentVolume() throws -> Float { 0.58 }
     func setVolume(_ volume: Float) throws {}
@@ -584,6 +786,7 @@ private struct PreviewFileTrayService: FileTrayService {
     }
 
     func clear() throws {}
+    func remove(_ item: TrayFileItem) throws {}
 }
 
 private struct PreviewSharingService: SharingService {

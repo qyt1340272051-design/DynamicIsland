@@ -35,6 +35,41 @@ final class FileTrayServiceTests: XCTestCase {
         XCTAssertTrue(contents.isEmpty)
     }
 
+    func testRemoveDeletesOnlySelectedCopyAndLeavesOriginalsIntact() throws {
+        let root = FileManager.default.temporaryDirectory
+            .appendingPathComponent(UUID().uuidString, isDirectory: true)
+        defer { try? FileManager.default.removeItem(at: root) }
+        try FileManager.default.createDirectory(at: root, withIntermediateDirectories: true)
+        let firstSource = root.appendingPathComponent("first.txt")
+        let secondSource = root.appendingPathComponent("second.txt")
+        try "first".write(to: firstSource, atomically: true, encoding: .utf8)
+        try "second".write(to: secondSource, atomically: true, encoding: .utf8)
+
+        let service = SandboxFileTrayService(trayDirectory: root.appendingPathComponent("tray", isDirectory: true))
+        let items = try service.importFiles(from: [firstSource, secondSource])
+        try service.remove(items[0])
+
+        XCTAssertFalse(FileManager.default.fileExists(atPath: items[0].url.path))
+        XCTAssertTrue(FileManager.default.fileExists(atPath: items[1].url.path))
+        XCTAssertTrue(FileManager.default.fileExists(atPath: firstSource.path))
+        XCTAssertTrue(FileManager.default.fileExists(atPath: secondSource.path))
+    }
+
+    func testRemoveRejectsFilesOutsideTrayDirectory() throws {
+        let root = FileManager.default.temporaryDirectory
+            .appendingPathComponent(UUID().uuidString, isDirectory: true)
+        defer { try? FileManager.default.removeItem(at: root) }
+        try FileManager.default.createDirectory(at: root, withIntermediateDirectories: true)
+        let source = root.appendingPathComponent("source.txt")
+        try "original".write(to: source, atomically: true, encoding: .utf8)
+
+        let service = SandboxFileTrayService(trayDirectory: root.appendingPathComponent("tray", isDirectory: true))
+        let outsideItem = TrayFileItem(url: source, originalURL: source, byteCount: 8)
+
+        XCTAssertThrowsError(try service.remove(outsideItem))
+        XCTAssertTrue(FileManager.default.fileExists(atPath: source.path))
+    }
+
     func testTrayFileItemCreatesFileURLDragProvider() throws {
         let root = FileManager.default.temporaryDirectory
             .appendingPathComponent(UUID().uuidString, isDirectory: true)

@@ -326,7 +326,7 @@
 				CODE_SIGN_ENTITLEMENTS = DynamicIsland/DynamicIsland.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				ENABLE_APP_SANDBOX = YES;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
@@ -335,14 +335,14 @@
 				INFOPLIST_KEY_CFBundleDisplayName = "Dynamic Island";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				INFOPLIST_KEY_LSUIElement = YES;
-				INFOPLIST_KEY_NSAppleEventsUsageDescription = "用于读取 Apple Music 的当前曲目信息并控制播放、暂停与切歌。";
+				INFOPLIST_KEY_NSAppleEventsUsageDescription = "用于读取 Apple Music 的当前曲目信息并控制播放、暂停、切歌与播放进度。";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright (c) 2026 qyt1340272051-design";
 				INFOPLIST_KEY_NSPrefersDisplaySafeAreaCompatibilityMode = NO;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = 0.4.0;
+				MARKETING_VERSION = 0.5.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.rong5.dynamic-island-mac";
 				PRODUCT_MODULE_NAME = DynamicIsland;
 				PRODUCT_NAME = "Dynamic Island";
@@ -365,7 +365,7 @@
 				CODE_SIGN_INJECT_BASE_ENTITLEMENTS = NO;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				ENABLE_APP_SANDBOX = YES;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
@@ -374,14 +374,14 @@
 				INFOPLIST_KEY_CFBundleDisplayName = "Dynamic Island";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				INFOPLIST_KEY_LSUIElement = YES;
-				INFOPLIST_KEY_NSAppleEventsUsageDescription = "用于读取 Apple Music 的当前曲目信息并控制播放、暂停与切歌。";
+				INFOPLIST_KEY_NSAppleEventsUsageDescription = "用于读取 Apple Music 的当前曲目信息并控制播放、暂停、切歌与播放进度。";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright (c) 2026 qyt1340272051-design";
 				INFOPLIST_KEY_NSPrefersDisplaySafeAreaCompatibilityMode = NO;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = 0.4.0;
+				MARKETING_VERSION = 0.5.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.rong5.dynamic-island-mac";
 				PRODUCT_MODULE_NAME = DynamicIsland;
 				PRODUCT_NAME = "Dynamic Island";
@@ -400,7 +400,7 @@
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundlePackageType = BNDL;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -409,7 +409,7 @@
 					"@loader_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 26.0;
-				MARKETING_VERSION = 0.4.0;
+				MARKETING_VERSION = 0.5.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.rong5.dynamic-island-mac.tests";
 				PRODUCT_NAME = DynamicIslandTests;
 				SDKROOT = macosx;
@@ -423,7 +423,7 @@
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundlePackageType = BNDL;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -432,7 +432,7 @@
 					"@loader_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 26.0;
-				MARKETING_VERSION = 0.4.0;
+				MARKETING_VERSION = 0.5.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.rong5.dynamic-island-mac.tests";
 				PRODUCT_NAME = DynamicIslandTests;
 				SDKROOT = macosx;

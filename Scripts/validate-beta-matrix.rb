@@ -16,7 +16,7 @@ rescue JSON::ParserError => error
 end
 
 errors << "schemaVersion must be 1" unless matrix["schemaVersion"] == 1
-errors << "targetVersion must be v0.4.0-beta.1" unless matrix["targetVersion"] == "v0.4.0-beta.1"
+errors << "targetVersion must be v0.5.0" unless matrix["targetVersion"] == "v0.5.0"
 
 begin
   Date.iso8601(matrix.fetch("lastUpdated"))
