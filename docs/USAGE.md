@@ -1,10 +1,10 @@
 # 使用说明
 
-Dynamic Island 是 macOS 菜单栏应用，支持 macOS 26.0 或更高版本。当前 `0.5.0` 尚无正式签名、公证的下载包；请按 [编译说明](BUILDING.md) 从源码运行。GitHub 上旧的 `0.4.0` beta DMG 是未公证的本地测试包。刘海 MacBook 是主要场景，无刘海屏幕和外接屏幕使用顶部居中的回退布局。
+Dynamic Island 是 macOS 菜单栏应用，支持 macOS 26.0 或更高版本。`0.5.0` 可从 [GitHub Releases](https://github.com/qyt1340272051-design/DynamicIsland/releases) 下载未公证的 ad hoc 测试 DMG，或按 [编译说明](BUILDING.md) 从源码运行；它不是 Developer ID 正式安装包。刘海 MacBook 是主要场景，无刘海屏幕和外接屏幕使用顶部居中的回退布局。
 
 ## 启动与菜单栏
 
-1. 在 Xcode 运行 `Dynamic Island` scheme，或在 Finder 双击本地编译得到的 `Dynamic Island.app` 图标启动。
+1. 在 Xcode 运行 `Dynamic Island` scheme，或把测试 DMG 中的 `Dynamic Island.app` 拖到“应用程序”后尝试打开。测试包未经公证，若 macOS 拦截，请先核对 SHA-256 并确认来源可信，再到“系统设置 > 隐私与安全性”点击“仍要打开”、确认“打开”；参阅 [Apple 官方说明](https://support.apple.com/zh-cn/102445)。无法放行时请联系设备管理员，不要关闭系统安全机制。
 2. App 不显示普通主窗口，也不驻留 Dock。找到菜单栏的岛形图标，选择“显示 Dynamic Island”或“隐藏 Dynamic Island”；要彻底关闭应用，请选择“退出”。
 3. 将鼠标移到屏幕顶边的紧凑岛，稍候即可展开；移开鼠标后收起。将文件拖到岛上也会展开文件托盘。
 

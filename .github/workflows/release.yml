@@ -40,17 +40,12 @@ jobs:
           retention-days: 7
 
   release:
-    name: Sign, notarize, and publish
+    name: Build and publish unnotarized test DMG
     needs: verify
     runs-on: macos-26
     timeout-minutes: 60
     env:
       DEVELOPER_DIR: /Applications/Xcode_26.6.app/Contents/Developer
-      APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
-      APPLE_ID: ${{ secrets.APPLE_ID }}
-      APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.APPLE_APP_SPECIFIC_PASSWORD }}
-      DEVELOPER_ID_APPLICATION_P12_BASE64: ${{ secrets.DEVELOPER_ID_APPLICATION_P12_BASE64 }}
-      DEVELOPER_ID_APPLICATION_P12_PASSWORD: ${{ secrets.DEVELOPER_ID_APPLICATION_P12_PASSWORD }}
       GH_TOKEN: ${{ github.token }}
     steps:
       - name: Check out tagged source
@@ -58,52 +53,18 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Validate release secrets
+      - name: Build unnotarized test DMG
+        run: RELEASE_TAG="$GITHUB_REF_NAME" ./Scripts/release.sh --local
+
+      - name: Verify test artifact and checksum
         run: |
-          missing=0
-          for name in \
-            APPLE_TEAM_ID \
-            APPLE_ID \
-            APPLE_APP_SPECIFIC_PASSWORD \
-            DEVELOPER_ID_APPLICATION_P12_BASE64 \
-            DEVELOPER_ID_APPLICATION_P12_PASSWORD
-          do
-            if [[ -z "${!name:-}" ]]; then
-              echo "::error::Missing GitHub Actions secret: $name"
-              missing=1
-            fi
-          done
-          exit "$missing"
-
-      - name: Import Developer ID certificate
-        run: |
-          certificate_path="$RUNNER_TEMP/developer-id.p12"
-          keychain_path="$RUNNER_TEMP/dynamic-island-signing.keychain-db"
-          keychain_password="$(openssl rand -hex 24)"
-
-          echo "::add-mask::$keychain_password"
-          printf '%s' "$DEVELOPER_ID_APPLICATION_P12_BASE64" | base64 --decode > "$certificate_path"
-          security create-keychain -p "$keychain_password" "$keychain_path"
-          security set-keychain-settings -lut 21600 "$keychain_path"
-          security unlock-keychain -p "$keychain_password" "$keychain_path"
-          security import "$certificate_path" \
-            -k "$keychain_path" \
-            -P "$DEVELOPER_ID_APPLICATION_P12_PASSWORD" \
-            -A \
-            -t cert \
-            -f pkcs12
-          security set-key-partition-list \
-            -S apple-tool:,apple: \
-            -s \
-            -k "$keychain_password" \
-            "$keychain_path"
-          security list-keychains -d user -s "$keychain_path" "$HOME/Library/Keychains/login.keychain-db"
-
-          echo "RELEASE_KEYCHAIN_PATH=$keychain_path" >> "$GITHUB_ENV"
-          echo "RELEASE_CERTIFICATE_PATH=$certificate_path" >> "$GITHUB_ENV"
-
-      - name: Build notarized release
-        run: ./Scripts/release.sh --release "$GITHUB_REF_NAME"
+          version="${GITHUB_REF_NAME#v}"
+          manifest="build/release/Dynamic-Island-${version}-local.json"
+          [[ "$(plutil -extract notarized raw "$manifest")" == "false" ]]
+          (
+            cd build/release
+            shasum -a 256 -c "Dynamic-Island-${version}-local.dmg.sha256"
+          )
 
       - name: Upload release artifacts
         uses: actions/upload-artifact@v4
@@ -119,10 +80,10 @@ jobs:
       - name: Publish GitHub release
         run: |
           version="${GITHUB_REF_NAME#v}"
-          dmg="build/release/Dynamic-Island-${version}.dmg"
+          dmg="build/release/Dynamic-Island-${version}-local.dmg"
           checksum="$dmg.sha256"
-          manifest="build/release/Dynamic-Island-${version}.json"
-          release_flags=(--verify-tag --title "Dynamic Island $GITHUB_REF_NAME")
+          manifest="build/release/Dynamic-Island-${version}-local.json"
+          release_flags=(--verify-tag --title "Dynamic Island $GITHUB_REF_NAME (未公证测试版)" --prerelease)
 
           notes_file="docs/releases/${GITHUB_REF_NAME}.md"
           if [[ -f "$notes_file" ]]; then
@@ -131,22 +92,9 @@ jobs:
             release_flags+=(--generate-notes)
           fi
 
-          if [[ "$GITHUB_REF_NAME" == *-* ]]; then
-            release_flags+=(--prerelease)
-          else
-            release_flags+=(--draft)
-          fi
-
           if gh release view "$GITHUB_REF_NAME" >/dev/null 2>&1; then
-            gh release upload "$GITHUB_REF_NAME" "$dmg" "$checksum" "$manifest" --clobber
+            echo "::error::Release $GITHUB_REF_NAME already exists; refusing to replace public artifacts"
+            exit 1
           else
             gh release create "$GITHUB_REF_NAME" "$dmg" "$checksum" "$manifest" "${release_flags[@]}"
           fi
-
-      - name: Remove temporary signing keychain
-        if: always()
-        run: |
-          if [[ -n "${RELEASE_KEYCHAIN_PATH:-}" ]]; then
-            security delete-keychain "$RELEASE_KEYCHAIN_PATH" || true
-          fi
-          rm -f "${RELEASE_CERTIFICATE_PATH:-}"
