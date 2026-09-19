@@ -23,7 +23,14 @@ public nonisolated struct TrayFileItem: Identifiable, Equatable, Sendable {
 
 public protocol FileTrayService {
     func importFiles(from urls: [URL]) throws -> [TrayFileItem]
+    func remove(_ item: TrayFileItem) throws
     func clear() throws
+}
+
+private enum FileTrayServiceError: LocalizedError {
+    case itemOutsideTray
+
+    var errorDescription: String? { "只能删除文件托盘中的临时副本" }
 }
 
 public nonisolated enum TrayFileIconKind: Equatable {
@@ -107,6 +114,16 @@ public struct SandboxFileTrayService: FileTrayService {
         for url in contents {
             try fileManager.removeItem(at: url)
         }
+    }
+
+    public func remove(_ item: TrayFileItem) throws {
+        let copiedURL = item.url.standardizedFileURL
+        guard copiedURL.isFileURL,
+              copiedURL.deletingLastPathComponent() == trayDirectory.standardizedFileURL else {
+            throw FileTrayServiceError.itemOutsideTray
+        }
+
+        try fileManager.removeItem(at: copiedURL)
     }
 
     private func uniqueDestinationURL(for filename: String) -> URL {

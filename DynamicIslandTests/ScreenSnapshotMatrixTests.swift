@@ -414,6 +414,7 @@ private struct ScreenMatrixFileTrayService: FileTrayService {
     }
 
     func clear() throws {}
+    func remove(_ item: TrayFileItem) throws {}
 }
 
 private struct ScreenMatrixSharingService: SharingService {
@@ -426,6 +427,7 @@ private struct ScreenMatrixMusicService: MusicControlService {
     func togglePlayPause() async throws {}
     func skipBackward() async throws {}
     func skipForward() async throws {}
+    func seek(to position: TimeInterval, trackIdentifier: String) async throws -> Bool { true }
     func nowPlaying() async throws -> NowPlayingInfo { nowPlayingInfo }
 }
 

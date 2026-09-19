@@ -4,7 +4,13 @@ import UniformTypeIdentifiers
 
 public struct IslandView: View {
     @ObservedObject private var viewModel: IslandViewModel
-    private static let expandedContentSize = CGSize(width: 480, height: 210)
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @State private var hoveredTrayItemID: UUID?
+    @State private var isHoveringPlaybackProgress = false
+    @State private var isDraggingPlaybackProgress = false
+    @State private var isQuitting = false
+    @State private var isQuitImpacting = false
+    @State private var isIslandFading = false
     private static let compactArtworkSize: CGFloat = 26
     private static let musicArtworkSize: CGFloat = 124
     private static let trayIconSize = CGSize(width: 74, height: 74)
@@ -16,13 +22,22 @@ public struct IslandView: View {
     public var body: some View {
         ZStack(alignment: .top) {
             islandShell
+                .animation(expandedShellResizeAnimation, value: expandedShellSize)
             islandBody
                 .frame(width: contentSize.width, height: contentSize.height)
                 .clipShape(RoundedRectangle(cornerRadius: contentClipCornerRadius, style: .continuous))
+                .mask(alignment: .top) {
+                    shellShape
+                        .frame(width: IslandVisualStyle.expandedShellSize.width, height: IslandVisualStyle.expandedShellSize.height)
+                        .offset(y: shellVerticalOffset)
+                        .animation(expandedShellResizeAnimation, value: expandedShellSize)
+                }
         }
         .compositingGroup()
         .frame(width: IslandPanelGeometry.expandedSize.width, height: IslandPanelGeometry.expandedSize.height, alignment: .top)
         .clipped()
+        .opacity(isIslandFading ? 0 : 1)
+        .animation(reduceMotion ? nil : IslandQuitAnimation.islandFade, value: isIslandFading)
         .animation(IslandExpansionAnimation.shell, value: isExpanded)
         .animation(.easeInOut(duration: 0.24), value: viewModel.isPlaying)
         .animation(.easeInOut(duration: 0.24), value: viewModel.compactTimerMode)
@@ -31,11 +46,12 @@ public struct IslandView: View {
             of: [UTType.fileURL, TrayFileDragProvider.localDragType],
             delegate: IslandFileDropDelegate(viewModel: viewModel)
         )
+        .allowsHitTesting(!isQuitting)
     }
 
     private var shellSize: CGSize {
         if isExpanded {
-            return IslandVisualStyle.expandedShellSize
+            return expandedShellSize
         }
 
         let compactSize = compactPresentationSize
@@ -50,7 +66,28 @@ public struct IslandView: View {
     }
 
     private var contentSize: CGSize {
-        Self.expandedContentSize
+        IslandVisualStyle.expandedContentSize
+    }
+
+    private var expandedShellSize: CGSize {
+        IslandVisualStyle.expandedShellSize(
+            for: viewModel.expandedSurface,
+            timerMode: viewModel.timerShellMode,
+            hasTrayItems: !viewModel.trayItems.isEmpty,
+            hasError: viewModel.lastErrorMessage != nil,
+            hasTimerCompletion: viewModel.isTimerCompletionPresented
+        )
+    }
+
+    private var expandedShellResizeAnimation: Animation {
+        guard isExpanded, viewModel.expandedSurface == .tools else {
+            return IslandExpansionAnimation.shell
+        }
+
+        // Timer content fades out before a shorter shell closes; a taller shell opens first.
+        return expandedShellSize.height < IslandVisualStyle.expandedShellSize.height
+            ? IslandTimerModeTransition.shellShrink
+            : IslandTimerModeTransition.shellGrowth
     }
 
     private var compactPresentationSize: CGSize {
@@ -73,12 +110,16 @@ public struct IslandView: View {
         IslandVisualStyle.shellCornerRadii(isExpanded: isExpanded, shellHeight: shellSize.height)
     }
 
+    private var shellShape: IslandShellShape {
+        IslandShellShape(size: shellSize, topCornerRadius: shellCornerRadii.top, bottomCornerRadius: shellCornerRadii.bottom)
+    }
+
     private var contentClipCornerRadius: CGFloat {
         isExpanded ? IslandVisualStyle.expandedShellCornerRadius : shellCornerRadii.bottom
     }
 
     private var isExpanded: Bool {
-        viewModel.presentationState != .compact
+        isQuitting || viewModel.presentationState != .compact
     }
 
     private var isCompactHovering: Bool {
@@ -97,14 +138,14 @@ public struct IslandView: View {
     }
 
     private var islandBackground: some View {
-        IslandShellShape(size: shellSize, topCornerRadius: shellCornerRadii.top, bottomCornerRadius: shellCornerRadii.bottom)
+        shellShape
             .fill(Color.black)
             .overlay {
                 if viewModel.isDragging {
-                    IslandShellShape(size: shellSize, topCornerRadius: shellCornerRadii.top, bottomCornerRadius: shellCornerRadii.bottom)
+                    shellShape
                         .stroke(Color.accentColor.opacity(IslandVisualStyle.draggingShellStrokeOpacity), lineWidth: 1)
                 } else if isExpanded, IslandVisualStyle.expandedShellStrokeOpacity > 0 {
-                    IslandShellShape(size: shellSize, topCornerRadius: shellCornerRadii.top, bottomCornerRadius: shellCornerRadii.bottom)
+                    shellShape
                         .stroke(Color.white.opacity(IslandVisualStyle.expandedShellStrokeOpacity), lineWidth: 1)
                 }
             }
@@ -125,7 +166,7 @@ public struct IslandView: View {
                 .allowsHitTesting(!isExpanded)
 
             expandedContent
-                .frame(width: Self.expandedContentSize.width, height: Self.expandedContentSize.height)
+                .frame(width: contentSize.width, height: contentSize.height)
                 .opacity(isExpanded ? 1 : 0)
                 .scaleEffect(
                     isExpanded ? IslandExpansionAnimation.expandedContentScale : IslandExpansionAnimation.compactContentScale,
@@ -161,7 +202,7 @@ public struct IslandView: View {
 
     @ViewBuilder
     private var expandedContent: some View {
-        VStack(spacing: 12) {
+        VStack(spacing: 8) {
             surfaceSwitcher
 
             ZStack(alignment: .topLeading) {
@@ -171,7 +212,7 @@ public struct IslandView: View {
             .clipped()
             .animation(IslandSurfaceTransition.animation, value: viewModel.expandedSurface)
         }
-        .padding(18)
+        .padding(IslandVisualStyle.expandedContentPadding)
         .foregroundStyle(.white)
     }
 
@@ -198,9 +239,51 @@ public struct IslandView: View {
         HStack(spacing: 8) {
             surfaceButton(surface: .music, title: "音乐", systemName: "music.note")
             surfaceButton(surface: .fileTray, title: "拖盘", systemName: "tray.full")
-            surfaceButton(surface: .tools, title: "工具", systemName: "wrench.adjustable.fill")
+            surfaceButton(surface: .tools, title: "计时", systemName: "alarm.fill")
             Spacer(minLength: 0)
+            quitButton
         }
+    }
+
+    private var quitButton: some View {
+        Button {
+            guard !isQuitting else { return }
+            isQuitting = true
+            if reduceMotion {
+                NSApp.terminate(nil)
+                return
+            }
+
+            isQuitImpacting = true
+            Task { @MainActor in
+                do {
+                    try await Task.sleep(nanoseconds: IslandQuitAnimation.impactHoldNanoseconds)
+                    isQuitImpacting = false
+                    try await Task.sleep(nanoseconds: IslandQuitAnimation.reboundWaitNanoseconds)
+                    isIslandFading = true
+                    try await Task.sleep(nanoseconds: IslandQuitAnimation.fadeWaitNanoseconds)
+                    NSApp.terminate(nil)
+                } catch {
+                    return
+                }
+            }
+        } label: {
+            Image(systemName: "power")
+                .font(.system(size: 12, weight: .semibold))
+                .foregroundStyle(isQuitImpacting ? Color.red : Color.white.opacity(0.68))
+                .scaleEffect(isQuitImpacting ? IslandQuitAnimation.pressedScale : 1)
+                .frame(width: 28, height: 28)
+                .background(isQuitImpacting ? Color.red.opacity(0.28) : Color.white.opacity(0.08), in: Circle())
+                .overlay {
+                    Circle()
+                        .stroke(Color.red.opacity(isQuitImpacting ? 0.9 : 0), lineWidth: 1.5)
+                }
+        }
+        .buttonStyle(.plain)
+        .allowsHitTesting(!isQuitting)
+        .animation(reduceMotion ? nil : IslandQuitAnimation.impact, value: isQuitImpacting)
+        .help("退出 Dynamic Island")
+        .accessibilityLabel("退出 Dynamic Island")
     }
 
     private var musicExpandedContent: some View {
@@ -284,13 +367,50 @@ public struct IslandView: View {
                 ZStack(alignment: .leading) {
                     Capsule()
                         .fill(Color.white.opacity(0.14))
+                        .frame(height: 4)
                     Capsule()
                         .fill(viewModel.isPlaying ? Color.green : Color.white.opacity(0.55))
-                        .frame(width: proxy.size.width * CGFloat(viewModel.nowPlaying.progress))
+                        .frame(width: proxy.size.width * CGFloat(viewModel.nowPlaying.progress), height: 4)
+                    Circle()
+                        .fill(Color.white)
+                        .frame(
+                            width: IslandPlaybackProgressAppearance.dotDiameter,
+                            height: IslandPlaybackProgressAppearance.dotDiameter
+                        )
+                        .shadow(color: .black.opacity(0.35), radius: 2)
+                        .offset(x: IslandPlaybackProgressAppearance.dotOffset(
+                            progress: viewModel.nowPlaying.progress,
+                            width: proxy.size.width
+                        ))
+                        .opacity(showsPlaybackProgressDot ? 1 : 0)
+                        .animation(reduceMotion ? nil : .easeInOut(duration: 0.16), value: showsPlaybackProgressDot)
+                        .allowsHitTesting(false)
                 }
+                .frame(width: proxy.size.width, height: proxy.size.height)
+                .contentShape(Rectangle())
+                .gesture(
+                    DragGesture(minimumDistance: 0)
+                        .onChanged { value in
+                            isDraggingPlaybackProgress = true
+                            viewModel.updatePlaybackSeek(
+                                to: playbackProgressFraction(at: value.location.x, width: proxy.size.width)
+                            )
+                        }
+                        .onEnded { value in
+                            isDraggingPlaybackProgress = false
+                            viewModel.finishPlaybackSeek(
+                                to: playbackProgressFraction(at: value.location.x, width: proxy.size.width)
+                            )
+                        }
+                )
+                .onHover { isHoveringPlaybackProgress = $0 }
             }
-            .frame(height: 4)
-            .animation(.linear(duration: 0.25), value: viewModel.nowPlaying.progress)
+            .frame(height: 18)
+            .allowsHitTesting(viewModel.canSeekPlayback)
+            .animation(
+                viewModel.isSeekingPlayback ? nil : .linear(duration: 0.25),
+                value: viewModel.nowPlaying.progress
+            )
 
             HStack {
                 Text(formattedPlaybackTime(viewModel.nowPlaying.position))
@@ -303,6 +423,45 @@ public struct IslandView: View {
         .accessibilityElement(children: .ignore)
         .accessibilityLabel("播放进度")
         .accessibilityValue("\(formattedPlaybackTime(viewModel.nowPlaying.position)) / \(formattedPlaybackDuration)")
+        .accessibilityAdjustableAction { direction in
+            guard viewModel.canSeekPlayback else { return }
+            let step = 5.0 / viewModel.nowPlaying.duration
+            switch direction {
+            case .increment:
+                viewModel.finishPlaybackSeek(to: viewModel.nowPlaying.progress + step)
+            case .decrement:
+                viewModel.finishPlaybackSeek(to: viewModel.nowPlaying.progress - step)
+            @unknown default:
+                break
+            }
+        }
+        .help(viewModel.canSeekPlayback ? "拖动以调整播放进度" : "当前曲目无法调整播放进度")
+        .onChange(of: viewModel.canSeekPlayback) { _, canSeek in
+            if !canSeek {
+                isHoveringPlaybackProgress = false
+                isDraggingPlaybackProgress = false
+            }
+        }
+        .onDisappear {
+            isHoveringPlaybackProgress = false
+            isDraggingPlaybackProgress = false
+            if viewModel.isSeekingPlayback {
+                viewModel.finishPlaybackSeek(to: viewModel.nowPlaying.progress)
+            }
+        }
+    }
+
+    private var showsPlaybackProgressDot: Bool {
+        IslandPlaybackProgressAppearance.showsDot(
+            canSeek: viewModel.canSeekPlayback,
+            hovered: isHoveringPlaybackProgress,
+            dragging: isDraggingPlaybackProgress
+        )
+    }
+
+    private func playbackProgressFraction(at x: CGFloat, width: CGFloat) -> Double {
+        guard width > 0 else { return 0 }
+        return min(max(Double(x / width), 0), 1)
     }
 
     private var nowPlayingTitle: String {
@@ -435,11 +594,21 @@ public struct IslandView: View {
                     Button(action: viewModel.shareTrayViaAirDrop) {
                         Label("AirDrop", systemImage: "square.and.arrow.up")
                     }
-                    Button(action: viewModel.clearTray) {
-                        Image(systemName: "trash")
-                    }
-                    .buttonStyle(.borderless)
+                    .transition(.opacity)
                 }
+                TrayDeleteButton(hasItems: !viewModel.trayItems.isEmpty, action: viewModel.clearTray)
+                Button(action: viewModel.toggleFileTrayLock) {
+                    Image(systemName: viewModel.isFileTrayLocked ? "lock.fill" : "lock.open")
+                        .font(.system(size: 12, weight: .semibold))
+                        .contentTransition(.symbolEffect(.replace))
+                        .frame(width: 28, height: 28)
+                        .background(Color.white.opacity(viewModel.isFileTrayLocked ? 0.18 : 0.08), in: Circle())
+                }
+                .buttonStyle(.plain)
+                .foregroundStyle(viewModel.isFileTrayLocked ? .white : .white.opacity(0.68))
+                .animation(IslandFileTrayAnimation.lock, value: viewModel.isFileTrayLocked)
+                .help(viewModel.isFileTrayLocked ? "解锁文件托盘" : "锁定文件托盘")
+                .accessibilityLabel(viewModel.isFileTrayLocked ? "解锁文件托盘" : "锁定文件托盘")
             }
 
             if viewModel.trayItems.isEmpty {
@@ -451,22 +620,22 @@ public struct IslandView: View {
                             .font(.caption)
                             .foregroundStyle(.white.opacity(0.58))
                     }
+                    .transition(.opacity)
             } else {
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack(alignment: .top, spacing: 12) {
                         ForEach(viewModel.trayItems) { item in
                             trayIcon(for: item)
-                                .onDrag {
-                                    TrayFileDragProvider.itemProvider(for: item)
-                                }
-                                .help(item.displayName)
+                                .transition(.opacity.combined(with: .scale(scale: 0.92)))
                         }
                     }
                     .padding(.vertical, 2)
                 }
                 .frame(height: Self.trayIconSize.height + 6)
+                .transition(.opacity)
             }
         }
+        .animation(IslandFileTrayAnimation.fileFade, value: viewModel.trayItems.map(\.id))
     }
 
     private func trayIcon(for item: TrayFileItem) -> some View {
@@ -495,6 +664,40 @@ public struct IslandView: View {
         }
         .frame(width: Self.trayIconSize.width, height: Self.trayIconSize.height, alignment: .top)
         .contentShape(Rectangle())
+        .help(item.displayName)
+        .onDrag {
+            TrayFileDragProvider.itemProvider(for: item)
+        }
+        .overlay(alignment: .topLeading) {
+            if hoveredTrayItemID == item.id {
+                Button {
+                    viewModel.removeTrayItem(item)
+                    hoveredTrayItemID = nil
+                } label: {
+                    Image(systemName: "minus")
+                        .font(.system(size: 11, weight: .heavy))
+                        .foregroundStyle(.red)
+                        .frame(width: 22, height: 22)
+                        .background(Color.black.opacity(0.88), in: Circle())
+                }
+                .buttonStyle(.plain)
+                .padding(.leading, 9)
+                .help("移除 \(item.displayName)")
+                .accessibilityLabel("移除 \(item.displayName)")
+                .transition(.opacity.combined(with: .scale(scale: 0.8)))
+            }
+        }
+        .onHover { hovering in
+            if hovering {
+                hoveredTrayItemID = item.id
+            } else if hoveredTrayItemID == item.id {
+                hoveredTrayItemID = nil
+            }
+        }
+        .animation(.easeInOut(duration: 0.15), value: hoveredTrayItemID == item.id)
+        .accessibilityAction(named: Text("移除 \(item.displayName)")) {
+            viewModel.removeTrayItem(item)
+        }
     }
 
     @ViewBuilder
@@ -561,6 +764,53 @@ public struct IslandView: View {
             .resizable()
             .scaledToFit()
             .frame(width: 44, height: 42)
+    }
+}
+
+private struct TrayDeleteButton: View {
+    let hasItems: Bool
+    let action: () -> Void
+
+    @State private var impactCount = 0
+    @State private var holdsImpact = false
+    @State private var impactTask: Task<Void, Never>?
+
+    var body: some View {
+        Button {
+            impactTask?.cancel()
+            holdsImpact = true
+            impactCount += 1
+            action()
+            impactTask = Task {
+                try? await Task.sleep(nanoseconds: IslandFileTrayAnimation.impactHoldNanoseconds)
+                guard !Task.isCancelled else { return }
+                holdsImpact = false
+                impactTask = nil
+            }
+        } label: {
+            Image(systemName: "trash")
+                .font(.system(size: 12, weight: .semibold))
+                .foregroundStyle(holdsImpact ? Color.red : Color.white.opacity(0.78))
+                .symbolEffect(.bounce, value: impactCount)
+                .frame(width: 28, height: 28)
+                .background(Color.red.opacity(holdsImpact ? 0.22 : 0), in: Circle())
+                .animation(IslandFileTrayAnimation.impact, value: holdsImpact)
+        }
+        .buttonStyle(TrayDeleteImpactButtonStyle())
+        .opacity(hasItems || holdsImpact ? 1 : 0)
+        .disabled(!hasItems)
+        .accessibilityHidden(!hasItems)
+        .animation(IslandFileTrayAnimation.fileFade, value: hasItems || holdsImpact)
+        .help("清空文件托盘")
+        .accessibilityLabel("清空文件托盘")
+    }
+}
+
+private struct TrayDeleteImpactButtonStyle: ButtonStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .scaleEffect(configuration.isPressed ? 0.78 : 1)
+            .animation(IslandFileTrayAnimation.impact, value: configuration.isPressed)
     }
 }
 

@@ -1,10 +1,12 @@
 # Dynamic Island
 
+<img src="DynamicIsland/Assets.xcassets/AppIcon.appiconset/AppIcon-512.png" alt="Dynamic Island 应用图标" width="96">
+
 [![CI](https://github.com/qyt1340272051-design/DynamicIsland/actions/workflows/ci.yml/badge.svg)](https://github.com/qyt1340272051-design/DynamicIsland/actions/workflows/ci.yml)
 
 一个贴合 Mac 刘海区域的开源 SwiftUI 菜单栏应用。通过无标题 `NSPanel` 在屏幕顶部提供系统音量、Apple Music、文件托盘、AirDrop 和计时工具，并在活动进行时保留紧凑状态提示。
 
-> 当前版本目标为 `v0.4.0-beta.1`。发布链路已建立，已发布测试版安装包供大家测试产品。
+> 当前代码版本为 `0.5.0`。仓库已公开；GitHub 上旧的 `0.4.0` beta DMG 是未公证的本地测试包。`0.5.0` 的正式 DMG 尚未完成 Developer ID 签名、Apple 公证与干净 Mac 验收，不应将本地测试包当作正式安装包。
 
 ## 界面预览
 
@@ -28,9 +30,10 @@
 
 - 刘海顶部 `NSPanel`：悬停延迟展开、拖入文件展开、状态切换动画与触觉反馈。
 - 系统音量：实时读取和调节默认输出设备音量，支持增减、滑杆与静音。
-- Apple Music：读取封面、曲名、歌手和播放进度，支持播放、暂停、上一曲与下一曲。
-- 文件托盘：把拖入文件复制到沙盒临时目录，并通过系统 AirDrop 分享面板发送。
-- 计时工具：秒表、多个番茄钟时段和可长按快速调节的倒计时。
+- Apple Music：读取封面、曲名、歌手和播放进度，支持播放、暂停、上一曲、下一曲和实时拖动进度条；悬停进度条时显示拖动圆点。
+- 文件托盘：把拖入文件复制到沙盒临时目录，支持锁定展开、单项移除和清空，并通过系统 AirDrop 分享面板发送。
+- 计时工具：通过闹钟图标选择秒表、多个番茄钟时段和可长按快速调节的倒计时；岛体随当前内容调整高度。
+- 岛内退出：展开后可点击电源图标关闭应用。
 - 紧凑活动态：音乐播放时显示微缩封面与六点动态指示，计时运行时显示功能图标和实时数据。
 - 多屏适配：按当前屏幕、刘海安全区、菜单栏可见状态和显示器变化重新计算面板位置。
 - 调试矩阵：内置模拟屏幕配置，可生成 8 种屏幕环境、8 种界面状态的 64 张快照。
@@ -46,7 +49,7 @@
 
 ## 快速开始
 
-仓库目前为私有仓库，克隆需要 GitHub 访问权限；尚无经过 Developer ID 签名、公证的公开安装包。请从源码运行：
+仓库已公开，可直接克隆；`0.5.0` 尚无经过 Developer ID 签名、公证的正式安装包。请从源码运行：
 
 ```bash
 git clone https://github.com/qyt1340272051-design/DynamicIsland.git
@@ -114,7 +117,7 @@ open artifacts/screen-matrix/index.html
 
 ## Beta 测试
 
-真机公测覆盖有/无刘海、单/双屏、合盖外接、多种缩放以及 Apple Silicon/Intel。完整的 `DI-B01` 至 `DI-B09` 矩阵、测试步骤、隐私范围、`S0`–`S3` 问题分级与公测出口条件见 [Beta 验收手册](docs/BETA_TESTING.md)。
+真机公测计划覆盖有/无刘海、单/双屏、合盖外接、多种缩放以及 Apple Silicon/Intel；当前 `DI-B01` 至 `DI-B09` 均待验收。矩阵、测试步骤、隐私范围、`S0`–`S3` 问题分级与公测出口条件见 [Beta 验收手册](docs/BETA_TESTING.md)。
 
 测试者可从菜单栏选择“复制调试信息”和“提交 Beta 反馈...”。调试报告不包含用户名、序列号、文件名或音乐元数据。
 
@@ -126,7 +129,7 @@ open artifacts/screen-matrix/index.html
 ./Scripts/release.sh --local
 ```
 
-该命令产生的是未公证的本地测试包，不可分发。Developer ID、公证凭据、Tag workflow 和干净 Mac 验收步骤见 [发布指南](docs/RELEASING.md)。
+该命令产生的是未公证的本地测试包，不可作为正式安装包分发。Developer ID、公证凭据、Tag workflow 和干净 Mac 验收步骤见 [发布指南](docs/RELEASING.md)。
 
 ## 已知限制
 

@@ -89,6 +89,7 @@ public protocol MusicControlService {
     func togglePlayPause() async throws
     func skipBackward() async throws
     func skipForward() async throws
+    func seek(to position: TimeInterval, trackIdentifier: String) async throws -> Bool
     func nowPlaying() async throws -> NowPlayingInfo
 }
 
@@ -98,5 +99,6 @@ public struct PlaceholderMusicControlService: MusicControlService {
     public func togglePlayPause() async throws {}
     public func skipBackward() async throws {}
     public func skipForward() async throws {}
+    public func seek(to position: TimeInterval, trackIdentifier: String) async throws -> Bool { false }
     public func nowPlaying() async throws -> NowPlayingInfo { .empty }
 }

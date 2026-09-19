@@ -42,6 +42,163 @@ final class IslandViewModelTests: XCTestCase {
         }
     }
 
+    func testLockedFileTrayStaysExpandedAfterPointerLeavesAndTrayIsCleared() async throws {
+        let root = FileManager.default.temporaryDirectory
+            .appendingPathComponent(UUID().uuidString, isDirectory: true)
+        let source = root.appendingPathComponent("note.txt")
+        try FileManager.default.createDirectory(at: root, withIntermediateDirectories: true)
+        defer { try? FileManager.default.removeItem(at: root) }
+        try "note".write(to: source, atomically: true, encoding: .utf8)
+
+        await MainActor.run {
+            let model = IslandViewModel(
+                volumeService: MockVolumeService(),
+                fileTrayService: SandboxFileTrayService(trayDirectory: root.appendingPathComponent("tray", isDirectory: true)),
+                sharingService: MockSharingService(),
+                musicService: PlaceholderMusicControlService(),
+                hapticFeedbackService: MockHapticFeedbackService()
+            )
+            model.setHovering(true)
+            model.importFiles(from: [source])
+            XCTAssertEqual(model.trayItems.count, 1)
+
+            model.toggleFileTrayLock()
+            model.endHovering()
+            XCTAssertTrue(model.isFileTrayLocked)
+            XCTAssertFalse(model.isPointerInside)
+            XCTAssertEqual(model.presentationState, .expanded)
+
+            model.clearTray()
+            XCTAssertTrue(model.trayItems.isEmpty)
+            XCTAssertEqual(model.presentationState, .expanded)
+
+            model.selectExpandedSurface(.music)
+            model.setHovering(true)
+            XCTAssertEqual(model.expandedSurface, .music)
+            model.endHovering()
+            model.selectExpandedSurface(.fileTray)
+            model.toggleFileTrayLock()
+            XCTAssertFalse(model.isFileTrayLocked)
+            XCTAssertEqual(model.presentationState, .compact)
+        }
+    }
+
+    func testRemovingOneTrayItemKeepsOtherCopyAndPreservesLockWhenLastIsRemoved() async throws {
+        let root = FileManager.default.temporaryDirectory
+            .appendingPathComponent(UUID().uuidString, isDirectory: true)
+        defer { try? FileManager.default.removeItem(at: root) }
+        try FileManager.default.createDirectory(at: root, withIntermediateDirectories: true)
+        let firstSource = root.appendingPathComponent("first.txt")
+        let secondSource = root.appendingPathComponent("second.txt")
+        try "first".write(to: firstSource, atomically: true, encoding: .utf8)
+        try "second".write(to: secondSource, atomically: true, encoding: .utf8)
+
+        await MainActor.run {
+            let model = IslandViewModel(
+                volumeService: MockVolumeService(),
+                fileTrayService: SandboxFileTrayService(trayDirectory: root.appendingPathComponent("tray", isDirectory: true)),
+                sharingService: MockSharingService(),
+                musicService: PlaceholderMusicControlService(),
+                hapticFeedbackService: MockHapticFeedbackService()
+            )
+            model.setHovering(true)
+            model.importFiles(from: [firstSource, secondSource])
+            XCTAssertEqual(model.trayItems.count, 2)
+            let first = model.trayItems[0]
+            let second = model.trayItems[1]
+            model.toggleFileTrayLock()
+            model.endHovering()
+
+            model.removeTrayItem(first)
+            XCTAssertEqual(model.trayItems, [second])
+            XCTAssertFalse(FileManager.default.fileExists(atPath: first.url.path))
+            XCTAssertTrue(FileManager.default.fileExists(atPath: second.url.path))
+            XCTAssertTrue(FileManager.default.fileExists(atPath: firstSource.path))
+            XCTAssertNil(model.lastErrorMessage)
+
+            model.removeTrayItem(second)
+            XCTAssertTrue(model.trayItems.isEmpty)
+            XCTAssertTrue(model.isFileTrayLocked)
+            XCTAssertEqual(model.presentationState, .expanded)
+            model.toggleFileTrayLock()
+            XCTAssertEqual(model.presentationState, .compact)
+        }
+    }
+
+    func testFailedTrayItemRemovalKeepsItemVisible() async throws {
+        let root = FileManager.default.temporaryDirectory
+            .appendingPathComponent(UUID().uuidString, isDirectory: true)
+        defer { try? FileManager.default.removeItem(at: root) }
+        try FileManager.default.createDirectory(at: root, withIntermediateDirectories: true)
+        let source = root.appendingPathComponent("source.txt")
+        try "original".write(to: source, atomically: true, encoding: .utf8)
+
+        await MainActor.run {
+            let model = IslandViewModel(
+                volumeService: MockVolumeService(),
+                fileTrayService: SandboxFileTrayService(trayDirectory: root.appendingPathComponent("tray", isDirectory: true)),
+                sharingService: MockSharingService(),
+                musicService: PlaceholderMusicControlService(),
+                hapticFeedbackService: MockHapticFeedbackService()
+            )
+            model.importFiles(from: [source])
+            XCTAssertEqual(model.trayItems.count, 1)
+            let item = model.trayItems[0]
+            try? FileManager.default.removeItem(at: item.url)
+
+            model.removeTrayItem(item)
+
+            XCTAssertEqual(model.trayItems, [item])
+            XCTAssertNotNil(model.lastErrorMessage)
+            XCTAssertTrue(FileManager.default.fileExists(atPath: source.path))
+        }
+    }
+
+    func testUnlockWhilePointerIsInsideWaitsForPointerExit() async {
+        await MainActor.run {
+            let model = IslandViewModel.preview()
+            model.setHovering(true)
+            model.selectExpandedSurface(.fileTray)
+            model.toggleFileTrayLock()
+
+            model.toggleFileTrayLock()
+            XCTAssertFalse(model.isFileTrayLocked)
+            XCTAssertEqual(model.presentationState, .expanded)
+
+            model.endHovering()
+            XCTAssertEqual(model.presentationState, .compact)
+        }
+    }
+
+    func testLockKeepsIslandExpandedThroughDragAndTimerCompletion() async {
+        await MainActor.run {
+            let model = IslandViewModel.preview()
+            model.setHovering(true)
+            model.selectExpandedSurface(.fileTray)
+            model.toggleFileTrayLock()
+            model.endHovering()
+
+            model.setDragging(true)
+            XCTAssertEqual(model.presentationState, .dragging)
+            model.setDragging(false)
+            XCTAssertEqual(model.presentationState, .expanded)
+
+            let start = Date(timeIntervalSinceReferenceDate: 750)
+            model.timerTools.selectedMode = .pomodoro
+            model.timerTools.startSelectedTimer(at: start)
+            model.timerTools.refresh(at: start.addingTimeInterval(model.timerTools.pomodoroDuration))
+            XCTAssertTrue(model.isTimerCompletionPresented)
+            XCTAssertEqual(model.expandedSurface, .tools)
+
+            model.acknowledgeTimerCompletion()
+            XCTAssertFalse(model.isTimerCompletionPresented)
+            XCTAssertEqual(model.presentationState, .expanded)
+            model.selectExpandedSurface(.fileTray)
+            model.toggleFileTrayLock()
+            XCTAssertEqual(model.presentationState, .compact)
+        }
+    }
+
     func testToolsSurfaceIsRestoredAfterIslandReopens() async {
         await MainActor.run {
             let model = IslandViewModel.preview()
@@ -357,6 +514,224 @@ final class IslandViewModelTests: XCTestCase {
             XCTAssertGreaterThan(model.nowPlaying.position, 30.15)
             XCTAssertLessThan(model.nowPlaying.position, 31)
             model.endHovering()
+        }
+    }
+
+    func testPlaybackSeekPreviewsClampedPositionAndCommitsFinalPosition() async throws {
+        let track = NowPlayingInfo(
+            isPlaying: false,
+            title: "Song",
+            artist: "Artist",
+            album: "Album",
+            duration: 120,
+            position: 15,
+            trackIdentifier: "track-1"
+        )
+        let musicService = RecordingSeekingMusicService(nowPlayingInfo: track, trackIdentifier: "track-1")
+        let model = await MainActor.run { makeMusicModel(musicService: musicService) }
+        await model.refreshNowPlaying()
+
+        await MainActor.run {
+            XCTAssertTrue(model.canSeekPlayback)
+            model.updatePlaybackSeek(to: 0.5)
+            XCTAssertTrue(model.isSeekingPlayback)
+            XCTAssertEqual(model.nowPlaying.position, 60, accuracy: 0.001)
+
+            model.updatePlaybackSeek(to: 2)
+            XCTAssertEqual(model.nowPlaying.position, 120, accuracy: 0.001)
+            model.updatePlaybackSeek(to: -1)
+            XCTAssertEqual(model.nowPlaying.position, 0, accuracy: 0.001)
+        }
+
+        // The Apple Music poll must not visually rewind an active drag.
+        await model.refreshNowPlaying()
+        await MainActor.run {
+            XCTAssertEqual(model.nowPlaying.position, 0, accuracy: 0.001)
+            model.finishPlaybackSeek(to: 0.75)
+            XCTAssertEqual(model.nowPlaying.position, 90, accuracy: 0.001)
+        }
+
+        try await waitForSeek(position: 90, trackIdentifier: "track-1", from: musicService)
+    }
+
+    func testPlaybackSeekUpdatesRemoteMusicBeforePointerIsReleased() async throws {
+        let track = NowPlayingInfo(
+            isPlaying: false,
+            title: "Song",
+            artist: "Artist",
+            album: "Album",
+            duration: 60,
+            position: 0,
+            trackIdentifier: "track-1"
+        )
+        let musicService = RecordingSeekingMusicService(nowPlayingInfo: track, trackIdentifier: "track-1")
+        let model = await MainActor.run { makeMusicModel(musicService: musicService) }
+        await model.refreshNowPlaying()
+
+        await MainActor.run { model.updatePlaybackSeek(to: 0.4) }
+        try await waitForSeek(position: 24, trackIdentifier: "track-1", from: musicService)
+        await MainActor.run {
+            XCTAssertTrue(model.isSeekingPlayback)
+            XCTAssertEqual(model.nowPlaying.position, 24, accuracy: 0.001)
+            model.finishPlaybackSeek(to: 0.6)
+        }
+        try await waitForSeek(position: 36, trackIdentifier: "track-1", from: musicService)
+    }
+
+    func testEndingHoverCommitsUnfinishedPlaybackSeekAndAllowsLaterRefresh() async throws {
+        let track = NowPlayingInfo(
+            isPlaying: false,
+            title: "Song",
+            artist: "Artist",
+            album: "Album",
+            duration: 100,
+            position: 10,
+            trackIdentifier: "track-1"
+        )
+        let musicService = RecordingSeekingMusicService(nowPlayingInfo: track, trackIdentifier: "track-1")
+        let model = await MainActor.run { makeMusicModel(musicService: musicService) }
+        await model.refreshNowPlaying()
+
+        await MainActor.run {
+            model.setHovering(true)
+            model.updatePlaybackSeek(to: 0.65)
+            XCTAssertTrue(model.isSeekingPlayback)
+            model.endHovering() // The drag gesture may never deliver onEnded.
+        }
+        try await waitForSeek(position: 65, trackIdentifier: "track-1", from: musicService)
+        try await waitForPlaybackSeekToFinish(in: model)
+
+        await musicService.setNowPlaying(track.replacing(position: 31), trackIdentifier: "track-1")
+        await model.refreshNowPlaying()
+        await MainActor.run {
+            XCTAssertFalse(model.isSeekingPlayback)
+            XCTAssertEqual(model.nowPlaying.position, 31, accuracy: 0.001)
+        }
+    }
+
+    func testPlaybackSeekIsDisabledWithoutKnownDuration() async throws {
+        let track = NowPlayingInfo(
+            isPlaying: false,
+            title: "Unknown duration",
+            artist: "Artist",
+            album: "Album",
+            duration: 0,
+            position: 12,
+            trackIdentifier: "track-1"
+        )
+        let musicService = RecordingSeekingMusicService(nowPlayingInfo: track, trackIdentifier: "track-1")
+        let model = await MainActor.run { makeMusicModel(musicService: musicService) }
+        await model.refreshNowPlaying()
+
+        await MainActor.run {
+            XCTAssertFalse(model.canSeekPlayback)
+            model.updatePlaybackSeek(to: 0.8)
+            model.finishPlaybackSeek(to: 0.8)
+            XCTAssertFalse(model.isSeekingPlayback)
+            XCTAssertEqual(model.nowPlaying.position, 12, accuracy: 0.001)
+        }
+        let requests = await musicService.recordedSeeks()
+        XCTAssertTrue(requests.isEmpty)
+    }
+
+    func testInFlightMusicPollCannotOverwritePlaybackSeekPreview() async throws {
+        let track = NowPlayingInfo(
+            isPlaying: false,
+            title: "Song",
+            artist: "Artist",
+            album: "Album",
+            duration: 100,
+            position: 10,
+            trackIdentifier: "track-1"
+        )
+        let musicService = DelayedNowPlayingMusicService(nowPlayingInfo: track)
+        let model = await MainActor.run { makeMusicModel(musicService: musicService) }
+        await model.refreshNowPlaying()
+
+        let stalePoll = Task { await model.refreshNowPlaying() }
+        try await waitForNowPlayingRequestCount(2, from: musicService)
+        await MainActor.run {
+            model.updatePlaybackSeek(to: 0.8)
+            XCTAssertEqual(model.nowPlaying.position, 80, accuracy: 0.001)
+        }
+        await musicService.releaseDelayedNowPlaying()
+        await stalePoll.value
+
+        await MainActor.run {
+            XCTAssertTrue(model.isSeekingPlayback)
+            XCTAssertEqual(model.nowPlaying.position, 80, accuracy: 0.001)
+        }
+    }
+
+    func testPlaybackSeekRejectsTrackThatChangedRemotely() async throws {
+        let firstTrack = NowPlayingInfo(
+            isPlaying: false,
+            title: "First",
+            artist: "Artist",
+            album: "Album",
+            duration: 100,
+            position: 10,
+            trackIdentifier: "track-1"
+        )
+        let secondTrack = NowPlayingInfo(
+            isPlaying: false,
+            title: "Second",
+            artist: "Artist",
+            album: "Album",
+            duration: 200,
+            position: 20,
+            trackIdentifier: "track-2"
+        )
+        let musicService = RecordingSeekingMusicService(nowPlayingInfo: firstTrack, trackIdentifier: "track-1")
+        let model = await MainActor.run { makeMusicModel(musicService: musicService) }
+        await model.refreshNowPlaying()
+        await musicService.setNowPlaying(secondTrack, trackIdentifier: "track-2")
+
+        await MainActor.run {
+            model.updatePlaybackSeek(to: 0.6)
+            model.finishPlaybackSeek(to: 0.6)
+        }
+        try await waitForTrackIdentifier("track-2", in: model)
+
+        let requests = await musicService.recordedSeeks()
+        XCTAssertFalse(requests.isEmpty)
+        XCTAssertTrue(requests.allSatisfy { $0.trackIdentifier == "track-1" })
+        await MainActor.run {
+            XCTAssertEqual(model.nowPlaying.position, 20, accuracy: 0.001)
+            XCTAssertFalse(model.isSeekingPlayback)
+        }
+    }
+
+    func testPlaybackSeekFailureRestoresRemotePositionAndShowsError() async throws {
+        let track = NowPlayingInfo(
+            isPlaying: false,
+            title: "Song",
+            artist: "Artist",
+            album: "Album",
+            duration: 100,
+            position: 10,
+            trackIdentifier: "track-1"
+        )
+        let error = MusicControlError.executionFailed(code: -1728, message: "Cannot set player position")
+        let musicService = RecordingSeekingMusicService(
+            nowPlayingInfo: track,
+            trackIdentifier: "track-1",
+            seekError: error
+        )
+        let model = await MainActor.run { makeMusicModel(musicService: musicService) }
+        await model.refreshNowPlaying()
+
+        await MainActor.run {
+            model.updatePlaybackSeek(to: 0.7)
+            XCTAssertEqual(model.nowPlaying.position, 70, accuracy: 0.001)
+            model.finishPlaybackSeek(to: 0.7)
+        }
+        try await waitForSeekFailure(in: model)
+
+        await MainActor.run {
+            XCTAssertFalse(model.isSeekingPlayback)
+            XCTAssertEqual(model.nowPlaying.position, 10, accuracy: 0.001)
+            XCTAssertEqual(model.lastErrorMessage, error.localizedDescription)
         }
     }
 
@@ -716,6 +1091,78 @@ final class IslandViewModelTests: XCTestCase {
         )
     }
 
+    @MainActor
+    private func makeMusicModel(musicService: MusicControlService) -> IslandViewModel {
+        IslandViewModel(
+            volumeService: MockVolumeService(),
+            fileTrayService: PreviewEmptyFileTrayService(),
+            sharingService: MockSharingService(),
+            musicService: musicService,
+            hapticFeedbackService: MockHapticFeedbackService()
+        )
+    }
+
+    private func waitForSeek(
+        position: TimeInterval,
+        trackIdentifier: String,
+        from service: RecordingSeekingMusicService
+    ) async throws {
+        for _ in 0..<100 {
+            let requests = await service.recordedSeeks()
+            if requests.last == .init(position: position, trackIdentifier: trackIdentifier) {
+                return
+            }
+            try await Task.sleep(nanoseconds: 5_000_000)
+        }
+        XCTFail("最终播放进度未提交到音乐服务")
+    }
+
+    private func waitForNowPlayingRequestCount(
+        _ count: Int,
+        from service: DelayedNowPlayingMusicService
+    ) async throws {
+        for _ in 0..<100 {
+            if await service.nowPlayingRequestCount() >= count {
+                return
+            }
+            try await Task.sleep(nanoseconds: 5_000_000)
+        }
+        XCTFail("预期的音乐轮询未开始")
+    }
+
+    private func waitForTrackIdentifier(_ identifier: String, in model: IslandViewModel) async throws {
+        for _ in 0..<100 {
+            if await MainActor.run(body: { model.nowPlaying.trackIdentifier == identifier }) {
+                return
+            }
+            try await Task.sleep(nanoseconds: 5_000_000)
+        }
+        XCTFail("切歌后没有刷新当前曲目")
+    }
+
+    private func waitForSeekFailure(in model: IslandViewModel) async throws {
+        for _ in 0..<100 {
+            let didShowFailure = await MainActor.run {
+                !model.isSeekingPlayback && model.lastErrorMessage != nil
+            }
+            if didShowFailure {
+                return
+            }
+            try await Task.sleep(nanoseconds: 5_000_000)
+        }
+        XCTFail("播放进度修改失败后未恢复可用状态并显示错误")
+    }
+
+    private func waitForPlaybackSeekToFinish(in model: IslandViewModel) async throws {
+        for _ in 0..<100 {
+            if await MainActor.run(body: { !model.isSeekingPlayback }) {
+                return
+            }
+            try await Task.sleep(nanoseconds: 5_000_000)
+        }
+        XCTFail("离开音乐界面后播放进度拖动未结束")
+    }
+
     private func waitForMusicCommandCount(
         _ expectedCount: Int,
         from service: RecordingMusicControlService
@@ -741,6 +1188,7 @@ private struct MockMusicControlService: MusicControlService {
     func togglePlayPause() async throws {}
     func skipBackward() async throws {}
     func skipForward() async throws {}
+    func seek(to position: TimeInterval, trackIdentifier: String) async throws -> Bool { true }
     func nowPlaying() async throws -> NowPlayingInfo { nowPlayingResult }
 }
 
@@ -750,6 +1198,7 @@ private struct FailingMusicControlService: MusicControlService {
     func togglePlayPause() async throws { throw error }
     func skipBackward() async throws { throw error }
     func skipForward() async throws { throw error }
+    func seek(to position: TimeInterval, trackIdentifier: String) async throws -> Bool { throw error }
     func nowPlaying() async throws -> NowPlayingInfo { throw error }
 }
 
@@ -774,6 +1223,10 @@ private actor RecordingMusicControlService: MusicControlService {
         commands.append(.next)
     }
 
+    func seek(to position: TimeInterval, trackIdentifier: String) async throws -> Bool {
+        true
+    }
+
     func nowPlaying() async throws -> NowPlayingInfo {
         .empty
     }
@@ -783,12 +1236,98 @@ private actor RecordingMusicControlService: MusicControlService {
     }
 }
 
+private actor RecordingSeekingMusicService: MusicControlService {
+    struct SeekRequest: Equatable, Sendable {
+        let position: TimeInterval
+        let trackIdentifier: String
+    }
+
+    private var currentInfo: NowPlayingInfo
+    private var currentTrackIdentifier: String
+    private let seekError: MusicControlError?
+    private var seeks: [SeekRequest] = []
+
+    init(
+        nowPlayingInfo: NowPlayingInfo,
+        trackIdentifier: String,
+        seekError: MusicControlError? = nil
+    ) {
+        currentInfo = nowPlayingInfo
+        currentTrackIdentifier = trackIdentifier
+        self.seekError = seekError
+    }
+
+    func togglePlayPause() async throws {}
+    func skipBackward() async throws {}
+    func skipForward() async throws {}
+
+    func seek(to position: TimeInterval, trackIdentifier: String) async throws -> Bool {
+        seeks.append(.init(position: position, trackIdentifier: trackIdentifier))
+        if let seekError {
+            throw seekError
+        }
+        guard trackIdentifier == currentTrackIdentifier else {
+            return false
+        }
+        currentInfo = currentInfo.replacing(position: position)
+        return true
+    }
+
+    func nowPlaying() async throws -> NowPlayingInfo {
+        currentInfo
+    }
+
+    func recordedSeeks() -> [SeekRequest] {
+        seeks
+    }
+
+    func setNowPlaying(_ info: NowPlayingInfo, trackIdentifier: String) {
+        currentInfo = info
+        currentTrackIdentifier = trackIdentifier
+    }
+}
+
+private actor DelayedNowPlayingMusicService: MusicControlService {
+    private let nowPlayingInfo: NowPlayingInfo
+    private var requestCount = 0
+    private var delayedContinuation: CheckedContinuation<NowPlayingInfo, Never>?
+
+    init(nowPlayingInfo: NowPlayingInfo) {
+        self.nowPlayingInfo = nowPlayingInfo
+    }
+
+    func togglePlayPause() async throws {}
+    func skipBackward() async throws {}
+    func skipForward() async throws {}
+    func seek(to position: TimeInterval, trackIdentifier: String) async throws -> Bool { true }
+
+    func nowPlaying() async throws -> NowPlayingInfo {
+        requestCount += 1
+        if requestCount == 2 {
+            return await withCheckedContinuation { continuation in
+                delayedContinuation = continuation
+            }
+        }
+        return nowPlayingInfo
+    }
+
+    func nowPlayingRequestCount() -> Int {
+        requestCount
+    }
+
+    func releaseDelayedNowPlaying() {
+        delayedContinuation?.resume(returning: nowPlayingInfo)
+        delayedContinuation = nil
+    }
+}
+
 private struct MockSharingService: SharingService {
     func share(urls: [URL]) throws {}
 }
 
 private struct PreviewEmptyFileTrayService: FileTrayService {
     func importFiles(from urls: [URL]) throws -> [TrayFileItem] { [] }
+    func remove(_ item: TrayFileItem) throws {}
     func clear() throws {}
 }
 

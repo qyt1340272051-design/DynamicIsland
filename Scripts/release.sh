@@ -119,7 +119,7 @@ BUILD_NUMBER="$(read_setting CURRENT_PROJECT_VERSION)"
 [[ -n "$BUILD_NUMBER" ]] || fail "CURRENT_PROJECT_VERSION is unavailable"
 
 if [[ -z "$RELEASE_TAG" ]]; then
-  RELEASE_TAG="v${MARKETING_VERSION}-beta.1"
+  RELEASE_TAG="v${MARKETING_VERSION}"
 fi
 
 if [[ ! "$RELEASE_TAG" =~ ^v([0-9]+\.[0-9]+\.[0-9]+)(-[0-9A-Za-z][0-9A-Za-z.-]*)?$ ]]; then

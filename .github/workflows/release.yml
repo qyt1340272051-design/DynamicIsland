@@ -122,10 +122,19 @@ jobs:
           dmg="build/release/Dynamic-Island-${version}.dmg"
           checksum="$dmg.sha256"
           manifest="build/release/Dynamic-Island-${version}.json"
-          release_flags=(--verify-tag --title "Dynamic Island $GITHUB_REF_NAME" --generate-notes)
+          release_flags=(--verify-tag --title "Dynamic Island $GITHUB_REF_NAME")
+
+          notes_file="docs/releases/${GITHUB_REF_NAME}.md"
+          if [[ -f "$notes_file" ]]; then
+            release_flags+=(--notes-file "$notes_file")
+          else
+            release_flags+=(--generate-notes)
+          fi
 
           if [[ "$GITHUB_REF_NAME" == *-* ]]; then
             release_flags+=(--prerelease)
+          else
+            release_flags+=(--draft)
           fi
 
           if gh release view "$GITHUB_REF_NAME" >/dev/null 2>&1; then

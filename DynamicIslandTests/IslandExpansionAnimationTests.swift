@@ -17,12 +17,15 @@ final class IslandExpansionAnimationTests: XCTestCase {
         )
     }
 
-    func testExpandedContentWaitsUntilShellMostlyExpands() {
-        XCTAssertGreaterThanOrEqual(
+    func testExpandedContentRevealsEarlyAndFinishesBeforeShellSettles() {
+        XCTAssertLessThanOrEqual(
             IslandExpansionAnimation.contentRevealDelay,
-            IslandExpansionAnimation.shellDuration * 0.6
+            IslandExpansionAnimation.shellDuration * 0.35
         )
-        XCTAssertLessThan(IslandExpansionAnimation.contentRevealDelay, IslandExpansionAnimation.shellDuration)
+        XCTAssertLessThan(
+            IslandExpansionAnimation.contentRevealDelay + IslandExpansionAnimation.contentRevealDuration,
+            IslandExpansionAnimation.shellDuration
+        )
     }
 
     func testExpandedContentScalesOutwardFromCenter() {

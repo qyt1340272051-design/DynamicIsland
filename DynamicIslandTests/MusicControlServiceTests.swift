@@ -1,3 +1,4 @@
+import AppKit
 import XCTest
 @testable import DynamicIsland
 
@@ -94,6 +95,64 @@ final class MusicControlServiceTests: XCTestCase {
             XCTAssertEqual(paused.advanced(by: 0.25).position, 20, accuracy: 0.001)
             XCTAssertEqual(playing.advanced(by: 200).position, 120, accuracy: 0.001)
         }
+    }
+
+    func testReplacingPlaybackPositionClampsSeekBoundariesAndKeepsTrackIdentity() {
+        let track = NowPlayingInfo(
+            isPlaying: false,
+            title: "Song",
+            artist: "Artist",
+            album: "Album",
+            duration: 120,
+            position: 20,
+            trackIdentifier: "track-1"
+        )
+
+        XCTAssertEqual(track.replacing(position: -5).position, 0)
+        XCTAssertEqual(track.replacing(position: 180).position, 120)
+        XCTAssertEqual(track.replacing(position: .infinity).position, 0)
+        XCTAssertEqual(track.replacing(position: .nan).position, 0)
+        XCTAssertEqual(track.replacing(position: 60).progress, 0.5, accuracy: 0.001)
+        XCTAssertEqual(track.replacing(position: 60).trackIdentifier, "track-1")
+    }
+
+    func testAppleMusicSeekScriptRejectsInvalidPositionOrTrackIdentifier() {
+        XCTAssertNil(AppleMusicControlService.seekScript(position: .nan, trackIdentifier: "track-1"))
+        XCTAssertNil(AppleMusicControlService.seekScript(position: .infinity, trackIdentifier: "track-1"))
+        XCTAssertNil(AppleMusicControlService.seekScript(position: -1, trackIdentifier: "track-1"))
+        XCTAssertNil(AppleMusicControlService.seekScript(position: 10, trackIdentifier: ""))
+    }
+
+    func testAppleMusicPreviousTrackScriptResetsProgressBeforeSingleSkip() throws {
+        let script = AppleMusicControlService.skipBackwardScript
+        let reset = try XCTUnwrap(script.range(of: "set player position to 0"))
+        let skip = try XCTUnwrap(script.range(of: "previous track"))
+
+        XCTAssertLessThan(reset.lowerBound, skip.lowerBound)
+        XCTAssertEqual(script.components(separatedBy: "previous track").count - 1, 1)
+        XCTAssertTrue(script.contains("if player state is not stopped then set player position to 0"))
+        XCTAssertTrue(script.contains("try\nif player state is not stopped then set player position to 0\nend try"))
+
+        let appleScript = try XCTUnwrap(NSAppleScript(source: script))
+        var compilationError: NSDictionary?
+        XCTAssertTrue(appleScript.compileAndReturnError(&compilationError), "\(String(describing: compilationError))")
+    }
+
+    func testAppleMusicSeekScriptMatchesTrackBeforeWritingPosixDecimalPosition() throws {
+        let script = try XCTUnwrap(
+            AppleMusicControlService.seekScript(position: 61.25, trackIdentifier: "TRACK-ID")
+        )
+
+        XCTAssertTrue(script.contains("if trackID is not \"TRACK-ID\" then return \"false\""))
+        XCTAssertTrue(script.contains("set player position to 61.250"))
+        XCTAssertLessThan(
+            try XCTUnwrap(script.range(of: "if trackID is not")?.lowerBound),
+            try XCTUnwrap(script.range(of: "set player position to")?.lowerBound)
+        )
+
+        let appleScript = try XCTUnwrap(NSAppleScript(source: script))
+        var compilationError: NSDictionary?
+        XCTAssertTrue(appleScript.compileAndReturnError(&compilationError), "\(String(describing: compilationError))")
     }
 
     func testAppleScriptPermissionDenialMapsToActionableError() {
