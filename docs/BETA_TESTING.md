@@ -4,9 +4,9 @@
 
 ## 安装原则
 
-- 外部测试者只安装通过 Developer ID 签名、Apple 公证并 staple 的 Beta DMG。
-- `Scripts/release.sh --local` 生成的 ad hoc 包只用于本机开发验证，不得对外分发，也不能代替 Gatekeeper 验收。
-- 正式公测前，至少在一台没有 Xcode 和开发证书的干净 Mac 上验证首次安装、启动、权限请求和卸载。
+- 外部测试者可安装 GitHub 公开预发布的 ad hoc 签名、未公证 Beta DMG，但必须先核对来源与 SHA-256，并知悉这不是 Developer ID 正式安装包。macOS 首次运行可能要求在“系统设置 > 隐私与安全性 > 仍要打开”手动批准；仅在信任来源时按 [Apple 官方说明](https://support.apple.com/zh-cn/102445) 操作。
+- `Scripts/release.sh --local` 的产物可用于收集真机验收证据，但不能代替 Developer ID、公证或无需放行的 Gatekeeper 安装验证；受设备管理策略限制时可能无法安装。
+- 在至少一台没有 Xcode 和开发证书的干净 Mac 上实测下载、校验和、首次安装、启动、权限请求及卸载，并记录是否需要手动批准；未经实测前不得声称“任何人双击即可运行”。
 
 ## 测试流程
 
@@ -36,7 +36,7 @@
 | `DI-B08` | 无刘海 Mac，双屏混合缩放与负坐标排列 | Pending |
 | `DI-B09` | Intel Mac，无刘海，受支持 macOS | Pending |
 
-`pending` 表示尚未验证，`local-pass` 只表示开发机 ad hoc 构建通过，`passed` 表示正式签名 Beta 在真机通过。任何非 `pending` 状态都必须有证据；每条证据至少包含版本、日期和 Issue 链接或可重复的本地验证说明。
+`pending` 表示尚未验证，`local-pass` 只表示开发机 ad hoc 构建通过，`passed` 表示对应版本在真机完成场景验证（注明 ad hoc 测试包及是否手动放行）。任何非 `pending` 状态都必须有证据；每条证据至少包含版本、日期和 Issue 链接或可重复的本地验证说明。九项场景目前仍全部为 `pending`。
 
 ## 问题分级
 
@@ -53,5 +53,5 @@
 
 - `DI-B01` 至 `DI-B09` 全部有真机 `passed` 证据。
 - 没有未解决的 `S0` 或 `S1` Issue，已接受的 `S2` 有记录清晰的规避方法。
-- 签名、公证、staple、DMG 校验和干净 Mac Gatekeeper 安装全部通过。
+- 对公开测试预发布：DMG 校验和、干净 Mac 安装（含必要时的手动批准）均有可复现证据；这不等同于签名、公证及 Gatekeeper 自动放行。若将来宣称正式 Developer ID 版，还须单独通过签名、公证、staple 和无需手动放行的 Gatekeeper 安装验证。
 - `Scripts/ci.sh` 和 `Scripts/run-stability-matrix.sh` 通过，与本次修复相关的矩阵场景已回归。

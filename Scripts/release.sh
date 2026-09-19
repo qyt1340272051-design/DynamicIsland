@@ -20,8 +20,9 @@ Usage:
   ./Scripts/release.sh --release <tag> [--output <directory>]
 
 Modes:
-  --local          Build an ad hoc signed archive and DMG for pipeline testing.
-                   This artifact is not notarized and must not be distributed.
+  --local          Build an ad hoc signed archive and DMG for test releases.
+                   This artifact is not notarized. Public test releases must
+                   warn users that macOS requires manual approval to open it.
   --release <tag>  Build, Developer ID sign, notarize, staple, and verify a DMG.
 
 Formal release environment:
@@ -199,7 +200,7 @@ else
     CODE_SIGN_IDENTITY=-
     DEVELOPMENT_TEAM=
   )
-  printf 'Local mode creates a non-notarized artifact for pipeline testing only.\n'
+  printf 'Local mode creates a non-notarized artifact; users must manually approve it in macOS.\n'
 fi
 
 printf 'Archiving %s %s (%s)...\n' "$APP_NAME" "$MARKETING_VERSION" "$RELEASE_TAG"
@@ -347,5 +348,5 @@ printf 'DMG: %s\n' "$DMG_PATH"
 printf 'SHA-256: %s\n' "$SHA256"
 printf 'Manifest: %s\n' "$MANIFEST_PATH"
 if [[ "$MODE" == "local" ]]; then
-  printf 'This local artifact is not notarized and must not be published.\n'
+  printf 'This local artifact is not notarized. Publish only as a clearly labeled test release with installation instructions.\n'
 fi

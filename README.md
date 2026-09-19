@@ -6,7 +6,7 @@
 
 一个贴合 Mac 刘海区域的开源 SwiftUI 菜单栏应用。通过无标题 `NSPanel` 在屏幕顶部提供系统音量、Apple Music、文件托盘、AirDrop 和计时工具，并在活动进行时保留紧凑状态提示。
 
-> 当前代码版本为 `0.5.0`。仓库已公开；GitHub 上旧的 `0.4.0` beta DMG 是未公证的本地测试包。`0.5.0` 的正式 DMG 尚未完成 Developer ID 签名、Apple 公证与干净 Mac 验收，不应将本地测试包当作正式安装包。
+> 当前版本为 `0.5.0`。GitHub Release 提供本地 ad hoc 签名、未经 Apple 公证的公开测试 DMG，不是 Developer ID 正式安装包。macOS 26.0 或更高版本首次运行时可能拦截；请核对来源和 SHA-256，仅在信任此包时按下方步骤手动批准。
 
 ## 界面预览
 
@@ -49,7 +49,7 @@
 
 ## 快速开始
 
-仓库已公开，可直接克隆；`0.5.0` 尚无经过 Developer ID 签名、公证的正式安装包。请从源码运行：
+可以从 [GitHub Releases](https://github.com/qyt1340272051-design/DynamicIsland/releases) 下载 `0.5.0` 测试 DMG，也可以克隆源码运行：
 
 ```bash
 git clone https://github.com/qyt1340272051-design/DynamicIsland.git
@@ -60,6 +60,8 @@ open DynamicIsland.xcodeproj
 在 Xcode 中选择共享 scheme `Dynamic Island`，目标选 `My Mac`，按 `Command-R`。应用使用 `LSUIElement` 作为菜单栏配件启动，不会显示普通主窗口。鼠标移入屏幕顶边的岛以展开；菜单栏图标提供显示、隐藏、诊断与退出。
 
 详细操作见 [使用说明](docs/USAGE.md)；Xcode、命令行编译、测试和本地打包步骤见 [编译说明](docs/BUILDING.md)。
+
+测试 DMG 的首次安装：下载后核对随附的 SHA-256，把 `Dynamic Island.app` 从 DMG 拖到“应用程序”，尝试打开。若 macOS 拦截，请在确认文件可信后前往“系统设置 > 隐私与安全性”，点击“仍要打开”，再确认“打开”。这是未公证构建的手动放行，不代表 Apple 已验证其安全性；具体步骤见 [Apple 官方说明](https://support.apple.com/zh-cn/102445)。受设备管理策略限制时可能无法放行。
 
 命令行快速编译：
 
@@ -123,13 +125,13 @@ open artifacts/screen-matrix/index.html
 
 ## 发布
 
-本地可用下列命令验证 Archive、通用架构 DMG、SHA-256 和 manifest 生成流程：
+本地可用下列命令构建通用架构测试 DMG、SHA-256 和 manifest：
 
 ```bash
 ./Scripts/release.sh --local
 ```
 
-该命令产生的是未公证的本地测试包，不可作为正式安装包分发。Developer ID、公证凭据、Tag workflow 和干净 Mac 验收步骤见 [发布指南](docs/RELEASING.md)。
+此包采用 ad hoc 签名，未经 Developer ID 签名或 Apple 公证，可作为明确标注风险的 GitHub 预发布测试包，但不能声称可无提示双击启动。`v*` Tag 的自动打包与预发布流程见 [发布指南](docs/RELEASING.md)。
 
 ## 已知限制
 
