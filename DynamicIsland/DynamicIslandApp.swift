@@ -22,6 +22,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     private var statusFeedbackTask: Task<Void, Never>?
 #if DEBUG
     private var screenSimulatorWindowController: ScreenSimulatorWindowController?
+    private var activityDebugWindowController: ActivityDebugWindowController?
 #endif
 
     func applicationDidFinishLaunching(_ notification: Notification) {
@@ -82,6 +83,9 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         let simulatorItem = NSMenuItem(title: "屏幕模拟器...", action: #selector(showScreenSimulator), keyEquivalent: "")
         simulatorItem.image = NSImage(systemSymbolName: "display.2", accessibilityDescription: "屏幕模拟器")
         menu.addItem(simulatorItem)
+        let activityDebugItem = NSMenuItem(title: "Activity Debug...", action: #selector(showActivityDebug), keyEquivalent: "")
+        activityDebugItem.image = NSImage(systemSymbolName: "square.stack.3d.up", accessibilityDescription: "Activity Debug")
+        menu.addItem(activityDebugItem)
 #endif
         menu.addItem(.separator())
         menu.addItem(NSMenuItem(title: "退出", action: #selector(quit), keyEquivalent: "q"))
@@ -130,6 +134,12 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         let controller = screenSimulatorWindowController
             ?? ScreenSimulatorWindowController(screenManager: screenManager)
         screenSimulatorWindowController = controller
+        controller.present()
+    }
+
+    @objc private func showActivityDebug() {
+        let controller = activityDebugWindowController ?? ActivityDebugWindowController()
+        activityDebugWindowController = controller
         controller.present()
     }
 #endif

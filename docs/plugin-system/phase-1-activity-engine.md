@@ -1,6 +1,6 @@
 # Phase 1：Activity Engine 设计与验收记录
 
-依据 [开发计划的 T03–T08](DevelopmentPlan.md)；逐项状态以 [进度表](PROGRESS.md) 为准。本文记录当前实现与尚未完成的验收，不代表 Phase 1 已整体完成。`./Scripts/ci.sh` 通过：188 项测试、1 项按设计跳过、0 失败，Release 构建通过。
+依据 [开发计划的 T03–T08](DevelopmentPlan.md)；逐项状态以 [进度表](PROGRESS.md) 为准。本文记录当前实现与尚未完成的验收，不代表 Phase 1 已整体完成。`./Scripts/ci.sh` 通过：190 项测试、1 项按设计跳过、0 失败，Release 构建通过。
 
 ## 数据边界：T03–T05
 
@@ -13,7 +13,7 @@
 
 - [ActivityManager](../../DynamicIsland/Core/Activity/ActivityManager.swift) 在 `@MainActor` 上提供 `publish`、`update`、`dismiss`、`end`，并以只读 `current` 发布当前 Activity。相同 ID 的再次 `publish` 转为更新；更新保留首次入库的创建时间、生命周期状态与策略。Manager 校验 ID、source 所有权、策略及过期时间；跨 source 不能更新、隐藏或结束别人的 Activity。状态变化记录 source、ID、前后状态及原因。后台调用者须跨到主 actor。
 - [ActivityQueue](../../DynamicIsland/Core/Activity/ActivityQueue.swift) 过滤已过期或非候选状态，再按有限优先级和稳定的同级规则排序。Manager 将被抢占的当前 Activity 转为 background；短暂 Activity 结束后，仍有效的 persistent Activity 可恢复。不可中断的当前 Activity 保持展示，直至结束或受显示时长策略处理。
-- [Manager 测试](../../DynamicIslandTests/ActivityManagerTests.swift) 覆盖同 ID 更新、所有权冲突、dismiss/end、过期拒绝、后台入口和重复发布抑制；[队列测试](../../DynamicIslandTests/ActivityQueueTests.swift) 覆盖抢占、嵌套恢复及计划中的 Music → GitHub → AirPods → Battery Critical → Music 顺序。T06 **尚未完成计划验收**：还没有 Debug Provider 发布/更新/结束 Activity 并让实际 UI 只观察 Manager 输出的闭环。T07 的代码和单元验收记录见进度表。
+- [Manager 测试](../../DynamicIslandTests/ActivityManagerTests.swift) 覆盖同 ID 更新、所有权冲突、dismiss/end、过期拒绝、后台入口和重复发布抑制；[队列测试](../../DynamicIslandTests/ActivityQueueTests.swift) 覆盖抢占、嵌套恢复及计划中的 Music → GitHub → AirPods → Battery Critical → Music 顺序。[DEBUG 专用 Provider 与窗口](../../DynamicIsland/Core/Activity/ActivityDebugPanel.swift)能发布、更新、结束 Music/Battery/Download 样例；视图只观察 `manager.current`，[渲染测试](../../DynamicIslandTests/ActivityDebugPanelTests.swift)验证同一 NSHostingView 随三次操作更新。T06/T07 的验收记录见进度表；调试窗口尚未人工点击验证。
 
 ## 集中调度：T08
 
@@ -24,4 +24,4 @@
 
 ## 后续验收边界
 
-Phase 1 的 Manager→Debug Provider→UI 观察闭环、真实动画闪烁和能耗仍待验证。Music、Volume、Battery 的实际 Provider 迁移及多屏、睡眠唤醒、压力回归属于 [Phase 3 的 T14–T17](DevelopmentPlan.md)，目前不能用 Phase 1 单元测试代替这些验收。
+Phase 1 的实际岛体动画闪烁和能耗仍待验证。Music、Volume、Battery 的实际 Provider 迁移及多屏、睡眠唤醒、压力回归属于 [Phase 3 的 T14–T17](DevelopmentPlan.md)，目前不能用 Phase 1 单元测试代替这些验收。
