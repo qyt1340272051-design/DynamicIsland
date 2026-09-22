@@ -26,9 +26,9 @@
 | T03 | IslandActivity | T01 | `verified` | [纯数据模型](../../DynamicIsland/Core/Activity/IslandActivity.swift)与 [Music/Battery/Download 构造和 Codable 测试](../../DynamicIslandTests/IslandActivityTests.swift)；`./Scripts/ci.sh` 170 tests、1 skipped、0 failures、Release build passed。 |
 | T04 | ActivityPriority | T03 | `verified` | [有限优先级及默认映射](../../DynamicIsland/Core/Activity/ActivityPriority.swift)、[确定性排序测试](../../DynamicIslandTests/ActivityPriorityTests.swift)；同上 CI。 |
 | T05 | ActivityLifecycle | T03 | `verified` | [状态转换与行为策略](../../DynamicIsland/Core/Activity/ActivityLifecycle.swift)、[dismiss/ended/恢复/过期测试](../../DynamicIslandTests/ActivityLifecycleTests.swift)；同上 CI。 |
-| T06 | ActivityManager | T03–T05 | `pending` | 待补。 |
-| T07 | Priority Queue | T06 | `pending` | 待补。 |
-| T08 | Activity Scheduler | T07 | `pending` | 待补。 |
+| T06 | ActivityManager | T03–T05 | `in progress` | [单写入口](../../DynamicIsland/Core/Activity/ActivityManager.swift)与 [所有权/更新/状态测试](../../DynamicIslandTests/ActivityManagerTests.swift)；`./Scripts/ci.sh` 188 tests、1 skipped、0 failures、Release build passed。Debug Provider 与 UI 观察闭环待接入。 |
+| T07 | Priority Queue | T06 | `verified` | [确定性队列](../../DynamicIsland/Core/Activity/ActivityQueue.swift)和 [抢占/恢复测试](../../DynamicIslandTests/ActivityQueueTests.swift)；同上 CI。 |
+| T08 | Activity Scheduler | T07 | `in progress` | [集中截止任务](../../DynamicIsland/Core/Activity/ActivityScheduler.swift)与 [过期、续展、正时长、20 事件、自动唤醒测试](../../DynamicIslandTests/ActivitySchedulerTests.swift)；同上 CI。实际 UI 闪烁和空闲能耗待接入后实测。 |
 
 ## Phase 2 — IslandNode、Renderer 与动作路由
 
