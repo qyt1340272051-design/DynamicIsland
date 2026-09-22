@@ -34,7 +34,7 @@
 
 | ID | 任务 | 前置依赖 | 状态 | 验收证据 |
 | --- | --- | --- | --- | --- |
-| T09 | IslandNode | T03 | `pending` | 待补。 |
+| T09 | IslandNode | T03 | `verified` | [受限数据节点与 JSON 校验](../../DynamicIsland/IslandUI/Schema/IslandNode.swift)、[计时/构建/音乐树及恶意输入测试](../../DynamicIslandTests/IslandNodeTests.swift)；6 项定向测试通过。 |
 | T10 | DesignTokens | T09 | `pending` | 待补。 |
 | T11 | Presentation Model | T09 | `pending` | 待补。 |
 | T12 | IslandRenderer | T09–T11 | `pending` | 待补。 |
