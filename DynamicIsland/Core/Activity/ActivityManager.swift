@@ -13,12 +13,29 @@ public enum ActivityManagerError: Error, Equatable {
     case expired
 }
 
+/// Host-owned identity for one admission of an Activity ID. An update keeps
+/// the token; ending and publishing the same ID creates a different token.
+public nonisolated struct ActivityInstanceToken: Equatable, Hashable, Sendable {
+    fileprivate let value: UUID
+
+    fileprivate init() { value = UUID() }
+}
+
+/// The Activity and its identity must be captured together by an interactive
+/// view. Looking up a token later by ID could authorize a stale button.
+public nonisolated struct ActivitySnapshot: Equatable, Sendable {
+    public let activity: IslandActivity
+    public let instanceToken: ActivityInstanceToken
+}
+
 /// The sole mutable boundary for Activity data and presentation state.
 @MainActor
 public final class ActivityManager: ObservableObject {
     @Published public private(set) var current: IslandActivity?
+    @Published public private(set) var currentSnapshot: ActivitySnapshot?
 
     private var activities: [String: IslandActivity] = [:]
+    private var instanceTokens: [String: ActivityInstanceToken] = [:]
     private var displayDeadlines: [String: Date] = [:]
     private var firstPresentedAt: [String: Date] = [:]
     private var currentSince: Date?
@@ -53,6 +70,7 @@ public final class ActivityManager: ObservableObject {
             actions: activity.actions
         )
         activities[admitted.id] = admitted
+        instanceTokens[admitted.id] = ActivityInstanceToken()
         log(admitted, from: nil, to: .queued, reason: "publish")
         reconcile()
     }
@@ -134,6 +152,7 @@ public final class ActivityManager: ObservableObject {
 
     private func remove(id: String) {
         activities.removeValue(forKey: id)
+        instanceTokens.removeValue(forKey: id)
         displayDeadlines.removeValue(forKey: id)
         firstPresentedAt.removeValue(forKey: id)
     }
@@ -299,7 +318,29 @@ public final class ActivityManager: ObservableObject {
     }
 
     private func setCurrent(_ next: IslandActivity?) {
+        let snapshot = next.flatMap { activity in
+            instanceTokens[activity.id].map { ActivitySnapshot(activity: activity, instanceToken: $0) }
+        }
+        if currentSnapshot != snapshot { currentSnapshot = snapshot }
         if current != next { current = next }
+    }
+
+    /// Reconcile deadlines and check the exact Activity instance before an
+    /// action can reach its source. The caller must also check its action list.
+    func activeActionActivity(
+        id: String,
+        source: ActivitySource,
+        instanceToken: ActivityInstanceToken
+    ) -> IslandActivity? {
+        reconcile()
+        guard let activity = activities[id],
+              activity.source == source,
+              activity.lifecycle.state == .presented,
+              currentSnapshot?.activity.id == id,
+              currentSnapshot?.instanceToken == instanceToken,
+              instanceTokens[id] == instanceToken,
+              !activity.isExpired(at: scheduler.clock.now()) else { return nil }
+        return activity
     }
 
     private func log(_ activity: IslandActivity, from: ActivityLifecycle.State?, to: ActivityLifecycle.State, reason: String) {

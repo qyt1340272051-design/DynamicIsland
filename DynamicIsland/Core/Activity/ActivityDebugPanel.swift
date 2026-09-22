@@ -114,15 +114,21 @@ final class ActivityDebugProvider {
 final class ActivityDebugWindowController: NSWindowController {
     private let manager: ActivityManager
     private let provider: ActivityDebugProvider
+    private let router: ActionRouter
 
     init() {
         let manager = ActivityManager()
         let provider = ActivityDebugProvider(manager: manager)
+        let router = ActionRouter(manager: manager)
+        let timerModel = IslandTimerToolsModel()
+        let pomodoro = PomodoroActivityProvider(model: timerModel, manager: manager)
+        pomodoro.registerActions(with: router)
         self.manager = manager
         self.provider = provider
+        self.router = router
 
         let panel = NSPanel(
-            contentRect: CGRect(x: 0, y: 0, width: 470, height: 350),
+            contentRect: CGRect(x: 0, y: 0, width: 470, height: 440),
             styleMask: [.titled, .closable, .utilityWindow],
             backing: .buffered,
             defer: false
@@ -131,9 +137,20 @@ final class ActivityDebugWindowController: NSWindowController {
         panel.isFloatingPanel = true
         panel.hidesOnDeactivate = false
         panel.isReleasedWhenClosed = false
-        panel.minSize = CGSize(width: 440, height: 320)
+        panel.minSize = CGSize(width: 440, height: 400)
         panel.contentViewController = NSHostingController(
-            rootView: ActivityDebugView(manager: manager, provider: provider)
+            rootView: ActivityDebugView(
+                manager: manager,
+                provider: provider,
+                router: router,
+                startPomodoro: {
+                    timerModel.selectedMode = .pomodoro
+                    if timerModel.runningMode != .pomodoro {
+                        timerModel.toggleSelectedTimer()
+                    }
+                    try? pomodoro.synchronize()
+                }
+            )
         )
         super.init(window: panel)
     }
@@ -153,56 +170,111 @@ final class ActivityDebugWindowController: NSWindowController {
 struct ActivityDebugView: View {
     @ObservedObject var manager: ActivityManager
     let provider: ActivityDebugProvider
+    let router: ActionRouter
+    let startPomodoro: (() -> Void)?
     @State private var errorText: String?
+    @State private var previewMode: ActivityPresentation.Mode = .expanded
+
+    init(
+        manager: ActivityManager,
+        provider: ActivityDebugProvider,
+        router: ActionRouter? = nil,
+        startPomodoro: (() -> Void)? = nil
+    ) {
+        self.manager = manager
+        self.provider = provider
+        self.router = router ?? ActionRouter(manager: manager)
+        self.startPomodoro = startPomodoro
+    }
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 14) {
-            Text("Activity Engine · Debug")
-                .font(.headline)
+        ScrollView {
+            VStack(alignment: .leading, spacing: 14) {
+                Text("Activity Engine · Debug")
+                    .font(.headline)
 
-            ForEach(ActivityDebugSample.allCases) { sample in
-                HStack {
-                    Text(sample.name)
-                        .frame(width: 90, alignment: .leading)
-                    Button("Publish") { perform { try provider.publish(sample) } }
-                    Button("Update") { perform { try provider.update(sample) } }
-                    Button("End") { perform { try provider.end(sample) } }
-                    Spacer(minLength: 0)
+                ForEach(ActivityDebugSample.allCases) { sample in
+                    HStack {
+                        Text(sample.name)
+                            .frame(width: 90, alignment: .leading)
+                        Button("Publish") { perform { try provider.publish(sample) } }
+                        Button("Update") { perform { try provider.update(sample) } }
+                        Button("End") { perform { try provider.end(sample) } }
+                        Spacer(minLength: 0)
+                    }
                 }
-            }
 
-            Divider()
+                if let startPomodoro {
+                    Button("Start Pomodoro") { startPomodoro() }
+                }
 
-            if let current = manager.current {
-                VStack(alignment: .leading, spacing: 6) {
-                    Text(current.presentation.title)
-                        .font(.title3.weight(.semibold))
-                        .accessibilityIdentifier("activity-debug-current-title")
-                    if let subtitle = current.presentation.subtitle {
-                        Text(subtitle).foregroundStyle(.secondary)
+                Divider()
+
+                if let snapshot = manager.currentSnapshot {
+                    let current = snapshot.activity
+                    VStack(alignment: .leading, spacing: 6) {
+                        Text(current.presentation.title)
+                            .font(.title3.weight(.semibold))
+                            .accessibilityIdentifier("activity-debug-current-title")
+                        if let subtitle = current.presentation.subtitle {
+                            Text(subtitle).foregroundStyle(.secondary)
+                        }
+                        if let progress = current.presentation.progress {
+                            ProgressView(value: min(max(progress, 0), 1))
+                        }
+                        Text("\(current.id) · \(current.source.kind.rawValue) · \(current.lifecycle.state.rawValue)")
+                            .font(.caption.monospaced())
+                            .foregroundStyle(.secondary)
+
+                        Picker("Presentation", selection: $previewMode) {
+                            ForEach(ActivityPresentation.Mode.allCases, id: \.self) { mode in
+                                Text(mode.rawValue.capitalized).tag(mode)
+                            }
+                        }
+                        .pickerStyle(.segmented)
+
+                        IslandRenderer(
+                            presentation: current.presentation,
+                            mode: previewMode,
+                            shellSize: previewShellSize,
+                            onAction: { action in
+                                let result = router.dispatch(
+                                    id: current.id,
+                                    source: current.source,
+                                    instanceToken: snapshot.instanceToken,
+                                    action: action
+                                )
+                                if result != .handled { errorText = String(describing: result) }
+                            }
+                        )
+                        .frame(width: previewShellSize.width, height: previewShellSize.height)
+                        .background(Color.black, in: RoundedRectangle(cornerRadius: 16))
+                        .accessibilityIdentifier("activity-debug-renderer")
                     }
-                    if let progress = current.presentation.progress {
-                        ProgressView(value: min(max(progress, 0), 1))
-                    }
-                    Text("\(current.id) · \(current.source.kind.rawValue) · \(current.lifecycle.state.rawValue)")
-                        .font(.caption.monospaced())
+                } else {
+                    Text("No current Activity")
                         .foregroundStyle(.secondary)
+                        .accessibilityIdentifier("activity-debug-empty")
                 }
-            } else {
-                Text("No current Activity")
-                    .foregroundStyle(.secondary)
-                    .accessibilityIdentifier("activity-debug-empty")
-            }
 
-            if let errorText {
-                Text(errorText)
-                    .font(.caption)
-                    .foregroundStyle(.red)
+                if let errorText {
+                    Text(errorText)
+                        .font(.caption)
+                        .foregroundStyle(.red)
+                }
             }
-            Spacer(minLength: 0)
+            .padding(18)
+            .frame(maxWidth: .infinity, alignment: .leading)
         }
-        .padding(18)
-        .frame(minWidth: 440, idealWidth: 470, minHeight: 320, idealHeight: 350)
+        .frame(minWidth: 440, idealWidth: 470, minHeight: 400, idealHeight: 440)
+    }
+
+    private var previewShellSize: CGSize {
+        switch previewMode {
+        case .minimal: CGSize(width: 120, height: 32)
+        case .compact: CGSize(width: 220, height: 38)
+        case .expanded: CGSize(width: 350, height: 190)
+        }
     }
 
     private func perform(_ operation: () throws -> Void) {
