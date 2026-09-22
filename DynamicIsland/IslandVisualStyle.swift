@@ -1,11 +1,15 @@
 import CoreGraphics
 
 public enum IslandVisualStyle {
-    public static let expandedShellSize = CGSize(width: 480, height: 190)
+    public static let expandedShellSize = CGSize(width: 480, height: 200)
+    public static let expandedMusicHeight: CGFloat = 200
+    public static let expandedTimerHeight: CGFloat = 190
     public static let expandedFileTrayHeight: CGFloat = 164
     public static let expandedCompactContentHeight: CGFloat = 152
-    public static let expandedContentSize = CGSize(width: 468, height: 190)
+    public static let expandedContentSize = CGSize(width: 468, height: 200)
     public static let expandedContentPadding: CGFloat = 12
+    public static let expandedSurfaceSwitcherHeight: CGFloat = 28
+    public static let expandedSurfaceSpacing: CGFloat = 8
     public static let expandedShellCornerRadius: CGFloat = 26
     public static let playingCompactHorizontalExpansion: CGFloat = 72
     public static let timerCompactHorizontalExpansion: CGFloat = 126
@@ -24,15 +28,15 @@ public enum IslandVisualStyle {
     ) -> CGSize {
         let height: CGFloat
         if hasTimerCompletion || (surface == .fileTray && hasError) {
-            height = expandedShellSize.height
+            height = expandedTimerHeight
         } else {
             switch surface {
             case .music:
-                height = expandedShellSize.height
+                height = expandedMusicHeight
             case .fileTray:
                 height = hasTrayItems ? expandedFileTrayHeight : expandedCompactContentHeight
             case .tools:
-                height = timerMode == .stopwatch ? expandedCompactContentHeight : expandedShellSize.height
+                height = timerMode == .stopwatch ? expandedCompactContentHeight : expandedTimerHeight
             }
         }
 

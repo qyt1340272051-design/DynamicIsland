@@ -3,13 +3,28 @@ import XCTest
 
 final class IslandVisualStyleTests: XCTestCase {
     func testExpandedShellCloselyFramesMusicContent() {
-        let shell = IslandVisualStyle.expandedShellSize
+        let shell = IslandVisualStyle.expandedShellSize(
+            for: .music, timerMode: .stopwatch, hasTrayItems: false,
+            hasError: false, hasTimerCompletion: false
+        )
         let content = IslandVisualStyle.expandedContentSize
         let padding = IslandVisualStyle.expandedContentPadding
         let horizontalInset = (shell.width - content.width) / 2 + padding
+        let availableMusicSurfaceHeight = shell.height
+            - 2 * padding
+            - IslandVisualStyle.expandedSurfaceSwitcherHeight
+            - IslandVisualStyle.expandedSurfaceSpacing
+        // Two metadata lines, progress track and labels, playback controls,
+        // volume controls, and the three 4pt gaps in the right-hand VStack.
+        let requiredMusicSurfaceHeight: CGFloat = 33 + 32 + 28 + 28 + 3 * 4
 
         XCTAssertEqual(shell.height, content.height)
-        XCTAssertGreaterThanOrEqual(content.height - 2 * padding, 28 + 8 + 124)
+        XCTAssertEqual(shell.height, IslandVisualStyle.expandedMusicHeight)
+        XCTAssertGreaterThanOrEqual(
+            availableMusicSurfaceHeight,
+            requiredMusicSurfaceHeight,
+            "Music controls must fit above the bottom content clip without flattening the volume buttons."
+        )
         XCTAssertGreaterThanOrEqual(horizontalInset, 16)
         XCTAssertLessThanOrEqual(horizontalInset, 24)
         XCTAssertLessThan(shell.height, IslandPanelGeometry.expandedSize.height)
@@ -40,8 +55,8 @@ final class IslandVisualStyleTests: XCTestCase {
         XCTAssertEqual(emptyTray.height, IslandVisualStyle.expandedCompactContentHeight)
         XCTAssertEqual(filledTray.height, IslandVisualStyle.expandedFileTrayHeight)
         XCTAssertEqual(stopwatch.height, IslandVisualStyle.expandedCompactContentHeight)
-        XCTAssertEqual(pomodoro, IslandVisualStyle.expandedShellSize)
-        XCTAssertEqual(countdown, IslandVisualStyle.expandedShellSize)
+        XCTAssertEqual(pomodoro.height, IslandVisualStyle.expandedTimerHeight)
+        XCTAssertEqual(countdown.height, IslandVisualStyle.expandedTimerHeight)
     }
 
     func testMessagesAndTimerCompletionKeepEnoughHeight() {
@@ -54,8 +69,26 @@ final class IslandVisualStyleTests: XCTestCase {
             hasError: false, hasTimerCompletion: true
         )
 
-        XCTAssertEqual(trayWithError, IslandVisualStyle.expandedShellSize)
-        XCTAssertEqual(completedStopwatch, IslandVisualStyle.expandedShellSize)
+        XCTAssertEqual(trayWithError.height, IslandVisualStyle.expandedTimerHeight)
+        XCTAssertEqual(completedStopwatch.height, IslandVisualStyle.expandedTimerHeight)
+    }
+
+    func testExpandedCanvasContainsEverySurfaceShell() {
+        let sizes = [IslandExpandedSurface.music, .fileTray, .tools].flatMap { surface in
+            IslandTimerToolMode.allCases.map { mode in
+                IslandVisualStyle.expandedShellSize(
+                    for: surface,
+                    timerMode: mode,
+                    hasTrayItems: true,
+                    hasError: false,
+                    hasTimerCompletion: false
+                )
+            }
+        }
+
+        XCTAssertEqual(sizes.map(\.height).max(), IslandVisualStyle.expandedShellSize.height)
+        XCTAssertEqual(IslandVisualStyle.expandedContentSize.height, IslandVisualStyle.expandedShellSize.height)
+        XCTAssertTrue(sizes.allSatisfy { $0.width <= IslandVisualStyle.expandedContentSize.width + 12 })
     }
 
     func testExpandedShellHasNoVisibleBorderOrShadow() {

@@ -85,7 +85,7 @@ public struct IslandView: View {
         }
 
         // Timer content fades out before a shorter shell closes; a taller shell opens first.
-        return expandedShellSize.height < IslandVisualStyle.expandedShellSize.height
+        return expandedShellSize.height <= IslandVisualStyle.expandedCompactContentHeight
             ? IslandTimerModeTransition.shellShrink
             : IslandTimerModeTransition.shellGrowth
     }
@@ -202,8 +202,9 @@ public struct IslandView: View {
 
     @ViewBuilder
     private var expandedContent: some View {
-        VStack(spacing: 8) {
+        VStack(spacing: IslandVisualStyle.expandedSurfaceSpacing) {
             surfaceSwitcher
+                .frame(height: IslandVisualStyle.expandedSurfaceSwitcherHeight)
 
             ZStack(alignment: .topLeading) {
                 expandedSurfaceContent
