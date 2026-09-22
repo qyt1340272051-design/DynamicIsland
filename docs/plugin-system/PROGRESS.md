@@ -23,9 +23,9 @@
 
 | ID | 任务 | 前置依赖 | 状态 | 验收证据 |
 | --- | --- | --- | --- | --- |
-| T03 | IslandActivity | T01 | `in progress` | 纯数据模型与测试开发中，待满足三类 Activity 构造和序列化验收。 |
-| T04 | ActivityPriority | T03 | `pending` | 待补。 |
-| T05 | ActivityLifecycle | T03 | `pending` | 待补。 |
+| T03 | IslandActivity | T01 | `verified` | [纯数据模型](../../DynamicIsland/Core/Activity/IslandActivity.swift)与 [Music/Battery/Download 构造和 Codable 测试](../../DynamicIslandTests/IslandActivityTests.swift)；`./Scripts/ci.sh` 170 tests、1 skipped、0 failures、Release build passed。 |
+| T04 | ActivityPriority | T03 | `verified` | [有限优先级及默认映射](../../DynamicIsland/Core/Activity/ActivityPriority.swift)、[确定性排序测试](../../DynamicIslandTests/ActivityPriorityTests.swift)；同上 CI。 |
+| T05 | ActivityLifecycle | T03 | `verified` | [状态转换与行为策略](../../DynamicIsland/Core/Activity/ActivityLifecycle.swift)、[dismiss/ended/恢复/过期测试](../../DynamicIslandTests/ActivityLifecycleTests.swift)；同上 CI。 |
 | T06 | ActivityManager | T03–T05 | `pending` | 待补。 |
 | T07 | Priority Queue | T06 | `pending` | 待补。 |
 | T08 | Activity Scheduler | T07 | `pending` | 待补。 |
