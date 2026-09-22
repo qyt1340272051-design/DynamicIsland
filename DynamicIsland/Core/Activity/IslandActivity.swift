@@ -18,24 +18,40 @@ public nonisolated struct ActivitySource: Codable, Equatable, Hashable, Sendable
     }
 }
 
-/// A small, serializable summary. Phase 2 can add declarative layout nodes
-/// without putting SwiftUI views or platform objects in the activity model.
+/// A serializable summary and optional declarative layouts. The summary remains
+/// required so older activities and missing layouts always have a safe display.
+/// The Host chooses a layout; activities cannot specify window dimensions.
 public nonisolated struct ActivityPresentation: Codable, Equatable, Sendable {
+    public enum Mode: String, Codable, CaseIterable, Sendable {
+        case minimal
+        case compact
+        case expanded
+    }
+
     public var title: String
     public var subtitle: String?
     public var symbolName: String?
     public var progress: Double?
+    public var minimal: IslandNode?
+    public var compact: IslandNode?
+    public var expanded: IslandNode?
 
     public init(
         title: String,
         subtitle: String? = nil,
         symbolName: String? = nil,
-        progress: Double? = nil
+        progress: Double? = nil,
+        minimal: IslandNode? = nil,
+        compact: IslandNode? = nil,
+        expanded: IslandNode? = nil
     ) {
         self.title = title
         self.subtitle = subtitle
         self.symbolName = symbolName
         self.progress = progress
+        self.minimal = minimal
+        self.compact = compact
+        self.expanded = expanded
     }
 }
 
