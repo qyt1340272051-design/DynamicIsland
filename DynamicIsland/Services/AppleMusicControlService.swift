@@ -1,5 +1,6 @@
 import AppKit
 import Foundation
+import ImageIO
 
 public enum MusicControlError: LocalizedError, Equatable, Sendable {
     case automationPermissionDenied
@@ -97,10 +98,13 @@ enum AppleScriptRunner {
 }
 
 public actor AppleMusicControlService: MusicControlService {
+    nonisolated static let maximumArtworkByteCount = 4 * 1_024 * 1_024
+    nonisolated static let maximumArtworkPixelDimension = 2_048
+
     private var cachedArtworkIdentifier = ""
     private var cachedArtworkData: Data?
     private var lastArtworkAttempt = Date.distantPast
-    private let artworkRetryInterval: TimeInterval = 10
+    private var consecutiveArtworkMisses = 0
 
     public init() {}
 
@@ -140,13 +144,19 @@ public actor AppleMusicControlService: MusicControlService {
         let artworkIdentifier = info.trackIdentifier.isEmpty
             ? "\(info.title)\u{1F}\(info.artist)\u{1F}\(info.album)\u{1F}\(info.duration)"
             : info.trackIdentifier
-        let shouldRefreshArtwork = artworkIdentifier != cachedArtworkIdentifier
-            || (cachedArtworkData == nil && Date().timeIntervalSince(lastArtworkAttempt) >= artworkRetryInterval)
+        let isNewTrack = artworkIdentifier != cachedArtworkIdentifier
+        let shouldRefreshArtwork = isNewTrack
+            || (cachedArtworkData == nil && Date().timeIntervalSince(lastArtworkAttempt) >= Self.artworkRetryInterval(afterMisses: consecutiveArtworkMisses))
 
         if shouldRefreshArtwork {
+            if isNewTrack {
+                consecutiveArtworkMisses = 0
+                cachedArtworkData = nil
+            }
             cachedArtworkIdentifier = artworkIdentifier
             lastArtworkAttempt = Date()
             cachedArtworkData = try? Self.readArtworkData()
+            consecutiveArtworkMisses = cachedArtworkData == nil ? consecutiveArtworkMisses + 1 : 0
         }
 
         info = info.replacing(artworkData: cachedArtworkData)
@@ -154,17 +164,67 @@ public actor AppleMusicControlService: MusicControlService {
     }
 
     private nonisolated static func readArtworkData() throws -> Data? {
-        guard let data = try AppleScriptRunner.runData(Self.artworkScript),
-              NSImage(data: data) != nil else {
+        let data = try AppleScriptRunner.runData(Self.artworkScript)
+        return validatedArtworkData(data)
+    }
+
+    /// Validates artwork before it can enter the service cache or a
+    /// `NowPlayingInfo` value. The byte limit is checked before ImageIO parses
+    /// or decodes the payload so oversized data does not consume decode work.
+    nonisolated static func validatedArtworkData(_ data: Data?) -> Data? {
+        guard let data,
+              artworkFitsResourceLimits(
+                  byteCount: data.count,
+                  pixelWidth: 1,
+                  pixelHeight: 1
+              ),
+              let source = CGImageSourceCreateWithData(data as CFData, nil),
+              CGImageSourceGetCount(source) == 1,
+              let properties = CGImageSourceCopyPropertiesAtIndex(source, 0, nil) as? [CFString: Any],
+              let pixelWidth = (properties[kCGImagePropertyPixelWidth] as? NSNumber)?.intValue,
+              let pixelHeight = (properties[kCGImagePropertyPixelHeight] as? NSNumber)?.intValue,
+              artworkFitsResourceLimits(
+                  byteCount: data.count,
+                  pixelWidth: pixelWidth,
+                  pixelHeight: pixelHeight
+              ),
+              let decodedImage = CGImageSourceCreateImageAtIndex(
+                  source,
+                  0,
+                  [kCGImageSourceShouldCacheImmediately: true] as CFDictionary
+              ),
+              artworkFitsResourceLimits(
+                  byteCount: data.count,
+                  pixelWidth: decodedImage.width,
+                  pixelHeight: decodedImage.height
+              ) else {
             return nil
         }
         return data
+    }
+
+    nonisolated static func artworkFitsResourceLimits(
+        byteCount: Int,
+        pixelWidth: Int,
+        pixelHeight: Int
+    ) -> Bool {
+        byteCount > 0
+            && byteCount <= maximumArtworkByteCount
+            && pixelWidth > 0
+            && pixelWidth <= maximumArtworkPixelDimension
+            && pixelHeight > 0
+            && pixelHeight <= maximumArtworkPixelDimension
     }
 
     private func clearArtworkCache() {
         cachedArtworkIdentifier = ""
         cachedArtworkData = nil
         lastArtworkAttempt = .distantPast
+        consecutiveArtworkMisses = 0
+    }
+
+    nonisolated static func artworkRetryInterval(afterMisses misses: Int) -> TimeInterval {
+        misses < 3 ? 1 : 10
     }
 
     private nonisolated static var isMusicRunning: Bool {

@@ -35,6 +35,9 @@ public nonisolated struct ActivityPresentation: Codable, Equatable, Sendable {
     public var minimal: IslandNode?
     public var compact: IslandNode?
     public var expanded: IslandNode?
+    /// `nil` preserves the legacy default of showing a compact presentation.
+    /// Providers may suppress a persistent background activity while idle.
+    public var showsCompact: Bool?
 
     public init(
         title: String,
@@ -43,7 +46,8 @@ public nonisolated struct ActivityPresentation: Codable, Equatable, Sendable {
         progress: Double? = nil,
         minimal: IslandNode? = nil,
         compact: IslandNode? = nil,
-        expanded: IslandNode? = nil
+        expanded: IslandNode? = nil,
+        showsCompact: Bool? = nil
     ) {
         self.title = title
         self.subtitle = subtitle
@@ -52,7 +56,10 @@ public nonisolated struct ActivityPresentation: Codable, Equatable, Sendable {
         self.minimal = minimal
         self.compact = compact
         self.expanded = expanded
+        self.showsCompact = showsCompact
     }
+
+    public var isCompactVisible: Bool { showsCompact ?? true }
 }
 
 /// The Host routes an action ID back to its source. No executable callback

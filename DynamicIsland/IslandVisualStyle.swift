@@ -11,7 +11,7 @@ public enum IslandVisualStyle {
     public static let expandedSurfaceSwitcherHeight: CGFloat = 28
     public static let expandedSurfaceSpacing: CGFloat = 8
     public static let expandedShellCornerRadius: CGFloat = 26
-    public static let playingCompactHorizontalExpansion: CGFloat = 72
+    public static let activityCompactHorizontalExpansion: CGFloat = 72
     public static let timerCompactHorizontalExpansion: CGFloat = 126
     public static let hoverShellShadowOpacity: Double = 0.28
     public static let hoverShellShadowRadius: CGFloat = 18
@@ -49,14 +49,14 @@ public enum IslandVisualStyle {
 
     public static func compactShellSize(
         baseSize: CGSize,
-        isPlaying: Bool,
+        hasCompactActivity: Bool,
         hasActiveTimer: Bool = false
     ) -> CGSize {
         let horizontalExpansion: CGFloat
         if hasActiveTimer {
             horizontalExpansion = timerCompactHorizontalExpansion
-        } else if isPlaying {
-            horizontalExpansion = playingCompactHorizontalExpansion
+        } else if hasCompactActivity {
+            horizontalExpansion = activityCompactHorizontalExpansion
         } else {
             horizontalExpansion = 0
         }

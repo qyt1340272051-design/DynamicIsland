@@ -8,6 +8,39 @@ public nonisolated enum IslandRenderActionValue: Equatable, Sendable {
     case toggle(Bool)
     /// A finite value in the inclusive range 0...1.
     case slider(Double)
+    /// Final bounded value emitted when the user ends a slider edit.
+    case sliderCommit(Double)
+}
+
+/// Keeps the thumb under the pointer while Activity updates arrive during a
+/// drag. A committed value remains local until the next presentation sync.
+nonisolated struct IslandSliderInteractionState {
+    private var values: [String: Double] = [:]
+    private var editingIDs: Set<String> = []
+
+    func displayedValue(for actionID: String, fallback: Double) -> Double {
+        values[actionID] ?? fallback
+    }
+
+    mutating func beginEditing(_ actionID: String) {
+        editingIDs.insert(actionID)
+    }
+
+    @discardableResult
+    mutating func update(_ actionID: String, value: Double, fallback: Double) -> Double {
+        let bounded = value.isFinite ? min(1, max(0, value)) : fallback
+        values[actionID] = bounded
+        return bounded
+    }
+
+    mutating func endEditing(_ actionID: String, fallback: Double) -> Double {
+        editingIDs.remove(actionID)
+        return values[actionID] ?? fallback
+    }
+
+    mutating func presentationDidChange() {
+        values = values.filter { editingIDs.contains($0.key) }
+    }
 }
 
 public nonisolated struct IslandRenderAction: Equatable, Sendable {
@@ -36,7 +69,7 @@ public struct IslandRenderer: View {
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @State private var hoveredActionID: String?
     @State private var toggleValues: [String: Bool] = [:]
-    @State private var sliderValues: [String: Double] = [:]
+    @State private var sliderInteraction = IslandSliderInteractionState()
 
     public init(
         presentation: ActivityPresentation,
@@ -54,18 +87,19 @@ public struct IslandRenderer: View {
 
     public var body: some View {
         let size = Self.contentSize(for: mode, shellSize: shellSize)
+        let alignment: Alignment = mode == .expanded ? .topLeading : .center
         ViewThatFits(in: [.horizontal, .vertical]) {
             renderedNode(Self.resolvedNode(in: presentation, for: mode), depth: 1)
             fallbackSummary
         }
-        .frame(width: size.width, height: size.height, alignment: .center)
+        .frame(width: size.width, height: size.height, alignment: alignment)
         .contentShape(Rectangle())
         .clipped()
         .animation(reduceMotion ? nil : .easeInOut(duration: 0.2), value: mode)
         .animation(reduceMotion ? nil : .easeInOut(duration: 0.2), value: presentation)
         .onChange(of: presentation) { _, _ in
             toggleValues.removeAll()
-            sliderValues.removeAll()
+            sliderInteraction.presentationDidChange()
         }
     }
 
@@ -119,7 +153,7 @@ public struct IslandRenderer: View {
     }
 
     private var nodeSpacing: CGFloat {
-        IslandDesignTokens.spacing(mode == .expanded ? .sm : .xs)
+        IslandDesignTokens.spacing(.xs)
     }
 
     private var iconSide: CGFloat { mode == .expanded ? 20 : 16 }
@@ -135,13 +169,16 @@ public struct IslandRenderer: View {
                 .minimumScaleFactor(0.8)
                 .accessibilityLabel(value.content))
         case .icon(let value):
+            let isCompactWaveform = mode == .compact && value.symbolName == "waveform"
             return AnyView(Image(systemName: value.symbolName)
                 .font(IslandDesignTokens.font(for: .headline))
-                .foregroundStyle(color(.accent))
+                .foregroundStyle(isCompactWaveform ? color(.success) : color(.accent))
                 .frame(width: iconSide, height: iconSide)
+                .symbolEffect(.variableColor, options: .repeating,
+                              isActive: isCompactWaveform && !reduceMotion)
                 .accessibilityLabel(accessibleIdentifier(value.symbolName)))
         case .image(let value):
-            return AnyView(renderedImage(value.source))
+            return AnyView(renderedImage(value))
         case .hStack(let stack):
             return AnyView(HStack(spacing: nodeSpacing) {
                 ForEach(stack.children.indices, id: \.self) { index in
@@ -149,7 +186,7 @@ public struct IslandRenderer: View {
                 }
             })
         case .vStack(let stack):
-            return AnyView(VStack(spacing: nodeSpacing) {
+            return AnyView(VStack(alignment: .leading, spacing: nodeSpacing) {
                 ForEach(stack.children.indices, id: \.self) { index in
                     renderedNode(stack.children[index], depth: depth + 1)
                 }
@@ -174,18 +211,30 @@ public struct IslandRenderer: View {
             return AnyView(SwiftUI.Button {
                 onAction(.init(actionID: value.actionID, value: .none))
             } label: {
-                renderedNode(value.label, depth: depth + 1)
-                    .frame(minWidth: 28, minHeight: 28)
-                    .padding(.horizontal, IslandDesignTokens.spacing(.xs))
-                    .background(
-                        RoundedRectangle(cornerRadius: IslandDesignTokens.cornerRadius(.sm))
-                            .fill(color(.primary).opacity(hoveredActionID == value.actionID ? 0.18 : 0.08))
-                    )
+                if case .icon(let icon) = value.label {
+                    Image(systemName: icon.symbolName)
+                        .font(.system(size: 12, weight: .semibold))
+                        .foregroundStyle(color(.primary))
+                        .frame(width: 28, height: 28)
+                        .background(Circle().fill(color(.primary).opacity(
+                            hoveredActionID == value.actionID ? 0.18 : 0.08
+                        )))
+                        .contentShape(Circle())
+                } else {
+                    renderedNode(value.label, depth: depth + 1)
+                        .frame(minWidth: 28, minHeight: 28)
+                        .padding(.horizontal, IslandDesignTokens.spacing(.xs))
+                        .background(
+                            RoundedRectangle(cornerRadius: IslandDesignTokens.cornerRadius(.sm))
+                                .fill(color(.primary).opacity(hoveredActionID == value.actionID ? 0.18 : 0.08))
+                        )
+                }
             }
             .buttonStyle(.plain)
             .contentShape(Rectangle())
             .onHover { hoveredActionID = $0 ? value.actionID : nil }
-            .accessibilityLabel(accessibleLabel(for: value.label)))
+            .animation(reduceMotion ? nil : .easeInOut(duration: 0.12), value: hoveredActionID)
+            .accessibilityLabel(value.accessibilityLabel ?? accessibleLabel(for: value.label)))
         case .toggle(let value):
             return AnyView(SwiftUI.Toggle(isOn: Binding(
                 get: { toggleValues[value.actionID] ?? value.isOn },
@@ -206,18 +255,28 @@ public struct IslandRenderer: View {
             .accessibilityLabel(value.title))
         case .slider(let value):
             return AnyView(VStack(alignment: .leading, spacing: IslandDesignTokens.spacing(.xs)) {
-                Text(value.title)
-                    .font(IslandDesignTokens.font(for: .caption))
-                    .foregroundStyle(color(.primary))
-                    .lineLimit(1)
+                if value.showsTitle {
+                    Text(value.title)
+                        .font(IslandDesignTokens.font(for: .caption))
+                        .foregroundStyle(color(.primary))
+                        .lineLimit(1)
+                }
                 SwiftUI.Slider(value: Binding(
-                    get: { sliderValues[value.actionID] ?? value.value },
+                    get: { sliderInteraction.displayedValue(for: value.actionID, fallback: value.value) },
                     set: { newValue in
-                        let bounded = newValue.isFinite ? min(1, max(0, newValue)) : value.value
-                        sliderValues[value.actionID] = bounded
+                        let bounded = sliderInteraction.update(
+                            value.actionID, value: newValue, fallback: value.value
+                        )
                         onAction(.init(actionID: value.actionID, value: .slider(bounded)))
                     }
-                ), in: 0...1)
+                ), in: 0...1, onEditingChanged: { isEditing in
+                    if isEditing {
+                        sliderInteraction.beginEditing(value.actionID)
+                    } else {
+                        let committed = sliderInteraction.endEditing(value.actionID, fallback: value.value)
+                        onAction(.init(actionID: value.actionID, value: .sliderCommit(committed)))
+                    }
+                })
                 .controlSize(.mini)
                 .tint(color(.accent))
                 .accessibilityLabel(value.title)
@@ -226,28 +285,51 @@ public struct IslandRenderer: View {
     }
 
     @ViewBuilder
-    private func renderedImage(_ source: IslandNode.ImageSource) -> some View {
-        switch source {
+    private func renderedImage(_ value: IslandNode.Image) -> some View {
+        let side = IslandDesignTokens.imageSide(value.size, mode: mode)
+        let radius: CGFloat = switch value.size {
+        case .icon: 0
+        case .thumbnail: 3
+        case .artwork: IslandDesignTokens.cornerRadius(.md)
+        }
+        switch value.source {
         case .systemSymbol(let name):
             Image(systemName: name)
                 .resizable()
                 .scaledToFit()
                 .foregroundStyle(color(.accent))
-                .frame(width: iconSide, height: iconSide)
+                .frame(width: side, height: side)
                 .accessibilityLabel(accessibleIdentifier(name))
         case .pluginAsset, .brokerResource:
-            if let image = imageResolver(source) {
+            if let image = imageResolver(value.source) {
                 Image(nsImage: image)
                     .resizable()
-                    .scaledToFit()
-                    .frame(width: iconSide, height: iconSide)
+                    .aspectRatio(contentMode: value.size == .artwork ? .fill : .fit)
+                    .frame(width: side, height: side)
+                    .clipped()
+                    .clipShape(RoundedRectangle(cornerRadius: radius, style: .continuous))
                     .accessibilityLabel("Image")
+            } else if value.size != .icon {
+                ZStack {
+                    RoundedRectangle(cornerRadius: radius, style: .continuous)
+                        .fill(Color.white.opacity(0.09))
+                    Image(systemName: "music.note")
+                        .font(.system(size: max(10, side * 0.25), weight: .semibold))
+                        .foregroundStyle(color(.secondary).opacity(0.65))
+                }
+                .frame(width: side, height: side)
+                .clipShape(RoundedRectangle(cornerRadius: radius, style: .continuous))
+                .overlay {
+                    RoundedRectangle(cornerRadius: radius, style: .continuous)
+                        .stroke(Color.white.opacity(0.14), lineWidth: 0.5)
+                }
+                .accessibilityLabel("Image unavailable")
             } else {
                 Image(systemName: "photo")
                     .resizable()
                     .scaledToFit()
                     .foregroundStyle(color(.secondary))
-                    .frame(width: iconSide, height: iconSide)
+                    .frame(width: side, height: side)
                     .accessibilityLabel("Image unavailable")
             }
         }

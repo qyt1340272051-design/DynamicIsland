@@ -14,6 +14,7 @@ final class ActivityPresentationTests: XCTestCase {
         XCTAssertNil(presentation.minimal)
         XCTAssertNil(presentation.compact)
         XCTAssertNil(presentation.expanded)
+        XCTAssertTrue(presentation.isCompactVisible)
         XCTAssertEqual(presentation.resolvedNode(for: .minimal), .icon(.init("timer")))
         XCTAssertEqual(presentation.resolvedNode(for: .compact), .hStack(.init([
             .icon(.init("timer")), .text(.init("Focus"))
@@ -30,6 +31,17 @@ final class ActivityPresentationTests: XCTestCase {
         XCTAssertNil(object["minimal"])
         XCTAssertNil(object["compact"])
         XCTAssertNil(object["expanded"])
+        XCTAssertNil(object["showsCompact"])
+    }
+
+    func testProviderCanSuppressCompactPresentationAndRoundTripIt() throws {
+        let presentation = ActivityPresentation(title: "Paused", showsCompact: false)
+
+        XCTAssertFalse(presentation.isCompactVisible)
+        let data = try JSONEncoder().encode(presentation)
+        XCTAssertEqual(try JSONDecoder().decode(ActivityPresentation.self, from: data), presentation)
+        let object = try XCTUnwrap(JSONSerialization.jsonObject(with: data) as? [String: Any])
+        XCTAssertEqual(object["showsCompact"] as? Bool, false)
     }
 
     func testMissingLayoutsOnlyFallBackTowardSimplerSuppliedLayouts() {
@@ -55,7 +67,7 @@ final class ActivityPresentationTests: XCTestCase {
             .text(.init("one")), .text(.init("two"))
         ]))
         let oversizedExpanded: IslandNode = .vStack(.init(
-            Array(repeating: .text(.init("row")), count: 6)
+            Array(repeating: .text(.init("row")), count: 8)
         ))
         let presentation = ActivityPresentation(
             title: "Focus", symbolName: "timer", minimal: invalidMinimal,
@@ -117,5 +129,60 @@ final class ActivityPresentationTests: XCTestCase {
         XCTAssertEqual(ActivityPresentation.HostPolicy.expandedContentHeight(forHostShellHeight: 500), 140)
         XCTAssertEqual(ActivityPresentation.HostPolicy.expandedContentHeight(forHostShellHeight: 20), 0)
         XCTAssertEqual(ActivityPresentation.HostPolicy.expandedContentHeight(forHostShellHeight: .nan), 0)
+    }
+
+    func testArtworkIsExpandedOnlyAndBoundedToOneImage() {
+        let artwork: IslandNode = .image(.init(source: .brokerResource(id: "music.artwork"), size: .artwork))
+        let thumbnail: IslandNode = .image(.init(source: .brokerResource(id: "music.artwork"), size: .thumbnail))
+        XCTAssertFalse(ActivityPresentation.HostPolicy.accepts(artwork, for: .minimal))
+        XCTAssertFalse(ActivityPresentation.HostPolicy.accepts(artwork, for: .compact))
+        XCTAssertTrue(ActivityPresentation.HostPolicy.accepts(artwork, for: .expanded))
+        XCTAssertFalse(ActivityPresentation.HostPolicy.accepts(.hStack(.init([artwork, artwork])), for: .expanded))
+        XCTAssertFalse(ActivityPresentation.HostPolicy.accepts(thumbnail, for: .minimal))
+        XCTAssertTrue(ActivityPresentation.HostPolicy.accepts(thumbnail, for: .compact))
+
+        let compactMusic: IslandNode = .hStack(.init([
+            thumbnail, .text(.init("Song")), .icon(.init("waveform")),
+            .button(.init(actionID: "music.playPause", label: .icon(.init("pause.fill"))))
+        ]))
+        XCTAssertTrue(ActivityPresentation.HostPolicy.accepts(compactMusic, for: .compact))
+
+        let presentation = ActivityPresentation(title: "Song", compact: artwork, expanded: artwork)
+        XCTAssertEqual(presentation.resolvedNode(for: .compact), .hStack(.init([.text(.init("Song"))])))
+        XCTAssertEqual(presentation.resolvedNode(for: .expanded), artwork)
+    }
+
+    func testUntitledSliderUsesOneRowAndMusicCanExposeEightActions() {
+        let rows = Array(repeating: IslandNode.text(.init("Row")), count: 6)
+        let titled: IslandNode = .vStack(.init(rows + [
+            .slider(.init(title: "Seek", value: 0.5, actionID: "music.seek"))
+        ]))
+        let untitled: IslandNode = .vStack(.init(rows + [
+            .slider(.init(title: "Seek", value: 0.5, actionID: "music.seek", showsTitle: false))
+        ]))
+        XCTAssertFalse(ActivityPresentation.HostPolicy.accepts(titled, for: .expanded))
+        XCTAssertTrue(ActivityPresentation.HostPolicy.accepts(untitled, for: .expanded))
+
+        let controls: IslandNode = .vStack(.init([.hStack(.init((0..<4).map { index in
+            .button(.init(actionID: "music.action\(index)", label: .icon(.init("play.fill"))))
+        })), .hStack(.init((4..<8).map { index in
+            .button(.init(actionID: "music.action\(index)", label: .icon(.init("play.fill"))))
+        }))]))
+        XCTAssertTrue(ActivityPresentation.HostPolicy.accepts(controls, for: .expanded))
+        let tooMany: IslandNode = .vStack(.init([controls, .button(.init(
+            actionID: "music.action8", label: .icon(.init("play.fill"))
+        ))]))
+        XCTAssertFalse(ActivityPresentation.HostPolicy.accepts(tooMany, for: .expanded))
+    }
+
+    func testAccessibilityLabelsCountTowardExpandedTextBudget() {
+        let oversized = IslandNode.button(.init(
+            actionID: "music.next",
+            label: .icon(.init("forward.fill")),
+            accessibilityLabel: String(repeating: "x", count: IslandNode.Limits.maxTextBytes)
+        ))
+        let tree = IslandNode.hStack(.init([oversized, oversized, .text(.init("x"))]))
+
+        XCTAssertFalse(ActivityPresentation.HostPolicy.accepts(tree, for: .expanded))
     }
 }

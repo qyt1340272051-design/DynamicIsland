@@ -31,6 +31,7 @@ public final class IslandViewModel: ObservableObject {
     @Published public private(set) var volume: Float
     @Published public private(set) var isMuted: Bool
     @Published public private(set) var lastErrorMessage: String?
+    @Published public private(set) var musicErrorMessage: String?
 
     public let timerTools: IslandTimerToolsModel
 
@@ -57,7 +58,7 @@ public final class IslandViewModel: ObservableObject {
     private var timerModeObservation: AnyCancellable?
     private var timerCompletionObservation: AnyCancellable?
     private var suppressesHoverExpansionUntilPointerExit = false
-    private let nowPlayingPollIntervalNanoseconds: UInt64 = 1_500_000_000
+    private let nowPlayingPollIntervalNanoseconds: UInt64
     private let playbackProgressIntervalNanoseconds: UInt64 = 250_000_000
 
     public var presentationState: IslandPresentationState {
@@ -93,7 +94,8 @@ public final class IslandViewModel: ObservableObject {
         sharingService: SharingService,
         musicService: MusicControlService,
         hapticFeedbackService: HapticFeedbackService,
-        hoverExpansionDelayNanoseconds: UInt64 = IslandViewModel.defaultHoverExpansionDelayNanoseconds
+        hoverExpansionDelayNanoseconds: UInt64 = IslandViewModel.defaultHoverExpansionDelayNanoseconds,
+        nowPlayingPollIntervalNanoseconds: UInt64 = 1_500_000_000
     ) {
         self.volumeService = volumeService
         self.fileTrayService = fileTrayService
@@ -102,12 +104,14 @@ public final class IslandViewModel: ObservableObject {
         self.hapticFeedbackService = hapticFeedbackService
         self.timerTools = IslandTimerToolsModel()
         self.hoverExpansionDelayNanoseconds = hoverExpansionDelayNanoseconds
+        self.nowPlayingPollIntervalNanoseconds = nowPlayingPollIntervalNanoseconds
         let initialVolume = Self.clampedVolume((try? volumeService.currentVolume()) ?? 0.5)
         self.volume = initialVolume
         self.isMuted = (try? volumeService.isMuted()) ?? (initialVolume == 0)
         self.lastAudibleVolume = initialVolume > 0 ? initialVolume : 0.5
         startVolumeObservation()
         startTimerToolsObservation()
+        startNowPlayingPollingIfNeeded()
     }
 
     deinit {
@@ -505,11 +509,11 @@ public final class IslandViewModel: ObservableObject {
             let requestDuration = Date().timeIntervalSince(requestStartedAt)
             nowPlaying = refreshedInfo.advanced(by: requestDuration)
             isPlaying = nowPlaying.isPlaying
-            lastErrorMessage = nil
+            musicErrorMessage = nil
         } catch {
             guard playbackSeekSession == nil, seekGeneration == playbackSeekGeneration else { return }
             if reportError {
-                lastErrorMessage = error.localizedDescription
+                musicErrorMessage = error.localizedDescription
             }
         }
     }
@@ -580,7 +584,7 @@ public final class IslandViewModel: ObservableObject {
                 let errorGeneration = playbackSeekGeneration
                 await refreshNowPlaying(reportError: false)
                 if playbackSeekGeneration == errorGeneration {
-                    lastErrorMessage = seekError
+                    musicErrorMessage = seekError
                 }
                 return
             }
@@ -616,57 +620,52 @@ public final class IslandViewModel: ObservableObject {
                 self.expandedSurface = .music
                 await self.refreshNowPlaying()
                 self.updateExpansionFeedback()
-                self.lastErrorMessage = nil
+                self.musicErrorMessage = nil
             } catch {
-                self.lastErrorMessage = error.localizedDescription
+                self.musicErrorMessage = error.localizedDescription
             }
         }
     }
 
     private func updateExpansionFeedback(allowsHaptic: Bool = true) {
         let isExpanded = presentationState != .compact
-        if isExpanded, !isExpandedForFeedback, allowsHaptic {
+        let didExpand = isExpanded && !isExpandedForFeedback
+        if didExpand, allowsHaptic {
             hapticFeedbackService.performExpansionFeedback()
         }
         isExpandedForFeedback = isExpanded
-        updateNowPlayingPolling(isExpanded: isExpanded)
+        updateNowPlayingPolling(isExpanded: isExpanded, didExpand: didExpand)
     }
 
-    private func updateNowPlayingPolling(isExpanded: Bool) {
+    private func updateNowPlayingPolling(isExpanded: Bool, didExpand: Bool) {
         if isExpanded {
-            startNowPlayingPollingIfNeeded()
+            startPlaybackProgressUpdatesIfNeeded()
+            if didExpand {
+                Task { [weak self] in
+                    self?.refreshVolume()
+                    await self?.refreshNowPlaying(reportError: false)
+                }
+            }
         } else {
-            nowPlayingPollTask?.cancel()
-            nowPlayingPollTask = nil
             playbackProgressTask?.cancel()
             playbackProgressTask = nil
         }
     }
 
     private func startNowPlayingPollingIfNeeded() {
-        startPlaybackProgressUpdatesIfNeeded()
-
         guard nowPlayingPollTask == nil else {
             return
-        }
-
-        Task { [weak self] in
-            self?.refreshVolume()
-            await self?.refreshNowPlaying(reportError: false)
         }
 
         let interval = nowPlayingPollIntervalNanoseconds
         nowPlayingPollTask = Task { [weak self] in
             while !Task.isCancelled {
+                await self?.refreshNowPlaying(reportError: false)
                 do {
                     try await Task.sleep(nanoseconds: interval)
                 } catch {
                     return
                 }
-                guard !Task.isCancelled else {
-                    return
-                }
-                await self?.refreshNowPlaying(reportError: false)
             }
         }
     }

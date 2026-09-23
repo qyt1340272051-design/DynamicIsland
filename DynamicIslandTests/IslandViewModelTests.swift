@@ -422,6 +422,56 @@ final class IslandViewModelTests: XCTestCase {
         }
     }
 
+    func testCompactIslandRefreshesArtworkAfterAutomaticTrackChange() async throws {
+        let firstTrack = NowPlayingInfo(
+            isPlaying: true,
+            title: "First",
+            artist: "Artist",
+            album: "Album",
+            trackIdentifier: "track-1",
+            artworkData: Data([1])
+        )
+        let secondTrack = NowPlayingInfo(
+            isPlaying: true,
+            title: "Second",
+            artist: "Artist",
+            album: "Album",
+            trackIdentifier: "track-2",
+            artworkData: Data([2])
+        )
+        let musicService = RecordingSeekingMusicService(nowPlayingInfo: firstTrack, trackIdentifier: "track-1")
+        let model = await MainActor.run {
+            IslandViewModel(
+                volumeService: MockVolumeService(),
+                fileTrayService: PreviewEmptyFileTrayService(),
+                sharingService: MockSharingService(),
+                musicService: musicService,
+                hapticFeedbackService: MockHapticFeedbackService(),
+                nowPlayingPollIntervalNanoseconds: 20_000_000
+            )
+        }
+
+        // Music already playing at launch must appear without opening the island.
+        try await waitForTrackIdentifier("track-1", in: model)
+        await MainActor.run {
+            XCTAssertEqual(model.presentationState, .compact)
+            XCTAssertEqual(model.nowPlaying.artworkData, Data([1]))
+            model.setHovering(true)
+            model.endHovering()
+            XCTAssertEqual(model.presentationState, .compact)
+        }
+
+        // The next track starts in Music, not via the island's skip button.
+        await musicService.setNowPlaying(secondTrack, trackIdentifier: "track-2")
+        try await waitForTrackIdentifier("track-2", in: model)
+        await MainActor.run {
+            XCTAssertEqual(model.presentationState, .compact)
+            XCTAssertTrue(model.isPlaying)
+            XCTAssertEqual(model.nowPlaying.title, "Second")
+            XCTAssertEqual(model.nowPlaying.artworkData, Data([2]))
+        }
+    }
+
     func testRefreshNowPlayingUpdatesPlayingStateAndTrackInfo() async throws {
         let playing = NowPlayingInfo(isPlaying: true, title: "Song", artist: "Artist", album: "Album")
         let model = await MainActor.run {
@@ -439,6 +489,7 @@ final class IslandViewModelTests: XCTestCase {
         await MainActor.run {
             XCTAssertTrue(model.isPlaying)
             XCTAssertEqual(model.nowPlaying, playing)
+            XCTAssertNil(model.musicErrorMessage)
             XCTAssertNil(model.lastErrorMessage)
         }
     }
@@ -458,9 +509,10 @@ final class IslandViewModelTests: XCTestCase {
 
         await MainActor.run {
             XCTAssertEqual(
-                model.lastErrorMessage,
+                model.musicErrorMessage,
                 MusicControlError.automationPermissionDenied.localizedDescription
             )
+            XCTAssertNil(model.lastErrorMessage)
         }
     }
 
@@ -646,10 +698,13 @@ final class IslandViewModelTests: XCTestCase {
         )
         let musicService = DelayedNowPlayingMusicService(nowPlayingInfo: track)
         let model = await MainActor.run { makeMusicModel(musicService: musicService) }
+        try await waitForNowPlayingRequestCount(1, from: musicService)
         await model.refreshNowPlaying()
 
+        await musicService.delayNextNowPlaying()
+        let nextRequestCount = await musicService.nowPlayingRequestCount() + 1
         let stalePoll = Task { await model.refreshNowPlaying() }
-        try await waitForNowPlayingRequestCount(2, from: musicService)
+        try await waitForNowPlayingRequestCount(nextRequestCount, from: musicService)
         await MainActor.run {
             model.updatePlaybackSeek(to: 0.8)
             XCTAssertEqual(model.nowPlaying.position, 80, accuracy: 0.001)
@@ -731,7 +786,8 @@ final class IslandViewModelTests: XCTestCase {
         await MainActor.run {
             XCTAssertFalse(model.isSeekingPlayback)
             XCTAssertEqual(model.nowPlaying.position, 10, accuracy: 0.001)
-            XCTAssertEqual(model.lastErrorMessage, error.localizedDescription)
+            XCTAssertEqual(model.musicErrorMessage, error.localizedDescription)
+            XCTAssertNil(model.lastErrorMessage)
         }
     }
 
@@ -1080,6 +1136,29 @@ final class IslandViewModelTests: XCTestCase {
         }
     }
 
+    func testSuccessfulMusicRefreshDoesNotClearUnrelatedVolumeError() async {
+        let volumeService = RecordingVolumeService(volume: 0.5)
+        volumeService.setVolumeError = TestVolumeError.writeFailed
+        let model = await MainActor.run {
+            IslandViewModel(
+                volumeService: volumeService,
+                fileTrayService: PreviewEmptyFileTrayService(),
+                sharingService: MockSharingService(),
+                musicService: MockMusicControlService(nowPlayingResult: .empty),
+                hapticFeedbackService: MockHapticFeedbackService(),
+                nowPlayingPollIntervalNanoseconds: 3_600_000_000_000
+            )
+        }
+
+        await MainActor.run { model.increaseVolume() }
+        await model.refreshNowPlaying()
+
+        await MainActor.run {
+            XCTAssertEqual(model.lastErrorMessage, TestVolumeError.writeFailed.localizedDescription)
+            XCTAssertNil(model.musicErrorMessage)
+        }
+    }
+
     @MainActor
     private func makeModel(volumeService: VolumeService) -> IslandViewModel {
         IslandViewModel(
@@ -1143,7 +1222,7 @@ final class IslandViewModelTests: XCTestCase {
     private func waitForSeekFailure(in model: IslandViewModel) async throws {
         for _ in 0..<100 {
             let didShowFailure = await MainActor.run {
-                !model.isSeekingPlayback && model.lastErrorMessage != nil
+                !model.isSeekingPlayback && model.musicErrorMessage != nil
             }
             if didShowFailure {
                 return
@@ -1290,6 +1369,7 @@ private actor RecordingSeekingMusicService: MusicControlService {
 private actor DelayedNowPlayingMusicService: MusicControlService {
     private let nowPlayingInfo: NowPlayingInfo
     private var requestCount = 0
+    private var shouldDelayNextRequest = false
     private var delayedContinuation: CheckedContinuation<NowPlayingInfo, Never>?
 
     init(nowPlayingInfo: NowPlayingInfo) {
@@ -1303,7 +1383,8 @@ private actor DelayedNowPlayingMusicService: MusicControlService {
 
     func nowPlaying() async throws -> NowPlayingInfo {
         requestCount += 1
-        if requestCount == 2 {
+        if shouldDelayNextRequest {
+            shouldDelayNextRequest = false
             return await withCheckedContinuation { continuation in
                 delayedContinuation = continuation
             }
@@ -1313,6 +1394,10 @@ private actor DelayedNowPlayingMusicService: MusicControlService {
 
     func nowPlayingRequestCount() -> Int {
         requestCount
+    }
+
+    func delayNextNowPlaying() {
+        shouldDelayNextRequest = true
     }
 
     func releaseDelayedNowPlaying() {

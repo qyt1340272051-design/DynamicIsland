@@ -1,5 +1,13 @@
 import Foundation
 
+/// The Host maps these finite image roles to physical sizes. A plugin cannot
+/// request an arbitrary point size through an Activity payload.
+public nonisolated enum IslandImageSizeToken: String, Codable, CaseIterable, Sendable {
+    case icon
+    case thumbnail
+    case artwork
+}
+
 /// Data-only UI description. The Host owns rendering and action dispatch.
 public nonisolated indirect enum IslandNode: Codable, Equatable, Sendable {
     case text(Text)
@@ -27,7 +35,26 @@ public nonisolated indirect enum IslandNode: Codable, Equatable, Sendable {
 
     public nonisolated struct Image: Codable, Equatable, Sendable {
         public var source: ImageSource
-        public init(source: ImageSource) { self.source = source }
+        public var size: IslandImageSizeToken
+
+        private enum CodingKeys: String, CodingKey { case source, size }
+
+        public init(source: ImageSource, size: IslandImageSizeToken = .icon) {
+            self.source = source
+            self.size = size
+        }
+
+        public init(from decoder: Decoder) throws {
+            let container = try decoder.container(keyedBy: CodingKeys.self)
+            source = try container.decode(ImageSource.self, forKey: .source)
+            size = try container.decodeIfPresent(IslandImageSizeToken.self, forKey: .size) ?? .icon
+        }
+
+        public func encode(to encoder: Encoder) throws {
+            var container = encoder.container(keyedBy: CodingKeys.self)
+            try container.encode(source, forKey: .source)
+            if size != .icon { try container.encode(size, forKey: .size) }
+        }
     }
 
     public nonisolated struct Stack: Codable, Equatable, Sendable {
@@ -52,9 +79,12 @@ public nonisolated indirect enum IslandNode: Codable, Equatable, Sendable {
     public nonisolated struct Button: Codable, Equatable, Sendable {
         public var actionID: String
         public var label: IslandNode
-        public init(actionID: String, label: IslandNode) {
+        public var accessibilityLabel: String?
+
+        public init(actionID: String, label: IslandNode, accessibilityLabel: String? = nil) {
             self.actionID = actionID
             self.label = label
+            self.accessibilityLabel = accessibilityLabel
         }
     }
 
@@ -74,10 +104,31 @@ public nonisolated indirect enum IslandNode: Codable, Equatable, Sendable {
         public var title: String
         public var value: Double
         public var actionID: String
-        public init(title: String, value: Double, actionID: String) {
+        public var showsTitle: Bool
+
+        private enum CodingKeys: String, CodingKey { case title, value, actionID, showsTitle }
+
+        public init(title: String, value: Double, actionID: String, showsTitle: Bool = true) {
             self.title = title
             self.value = value
             self.actionID = actionID
+            self.showsTitle = showsTitle
+        }
+
+        public init(from decoder: Decoder) throws {
+            let container = try decoder.container(keyedBy: CodingKeys.self)
+            title = try container.decode(String.self, forKey: .title)
+            value = try container.decode(Double.self, forKey: .value)
+            actionID = try container.decode(String.self, forKey: .actionID)
+            showsTitle = try container.decodeIfPresent(Bool.self, forKey: .showsTitle) ?? true
+        }
+
+        public func encode(to encoder: Encoder) throws {
+            var container = encoder.container(keyedBy: CodingKeys.self)
+            try container.encode(title, forKey: .title)
+            try container.encode(value, forKey: .value)
+            try container.encode(actionID, forKey: .actionID)
+            if !showsTitle { try container.encode(false, forKey: .showsTitle) }
         }
     }
 
@@ -180,6 +231,9 @@ public nonisolated indirect enum IslandNode: Codable, Equatable, Sendable {
         case .progress(let node): try Self.checkNormalized(node.value)
         case .button(let node):
             try Self.checkIdentifier(node.actionID, maxBytes: Limits.maxActionIDBytes)
+            if let accessibilityLabel = node.accessibilityLabel {
+                try Self.checkText(accessibilityLabel)
+            }
             try node.label.validate(depth: depth + 1, count: &count)
         case .toggle(let node):
             try Self.checkText(node.title)
@@ -207,7 +261,10 @@ public nonisolated indirect enum IslandNode: Codable, Equatable, Sendable {
         guard value.isFinite, (0...1).contains(value) else { throw ValidationError.invalidNumber }
     }
 
-    private enum CodingKeys: String, CodingKey { case type, content, symbolName, source, children, value, actionID, label, title, isOn }
+    private enum CodingKeys: String, CodingKey {
+        case type, content, symbolName, source, size, children, value, actionID, label
+        case accessibilityLabel, title, isOn, showsTitle
+    }
     private enum Kind: String, Codable {
         case text, icon, image, hStack, vStack, zStack, spacer, divider, progress, button, toggle, slider
     }
@@ -223,7 +280,10 @@ public nonisolated indirect enum IslandNode: Codable, Equatable, Sendable {
         switch kind {
         case .text: self = .text(.init(try container.decode(String.self, forKey: .content)))
         case .icon: self = .icon(.init(try container.decode(String.self, forKey: .symbolName)))
-        case .image: self = .image(.init(source: try container.decode(ImageSource.self, forKey: .source)))
+        case .image: self = .image(.init(
+            source: try container.decode(ImageSource.self, forKey: .source),
+            size: try container.decodeIfPresent(IslandImageSizeToken.self, forKey: .size) ?? .icon
+        ))
         case .hStack, .vStack, .zStack:
             var nested = try container.nestedUnkeyedContainer(forKey: .children)
             if let count = nested.count, count > Limits.maxChildren {
@@ -249,7 +309,8 @@ public nonisolated indirect enum IslandNode: Codable, Equatable, Sendable {
         case .progress: self = .progress(.init(try container.decode(Double.self, forKey: .value)))
         case .button: self = .button(.init(
             actionID: try container.decode(String.self, forKey: .actionID),
-            label: try container.decode(IslandNode.self, forKey: .label)
+            label: try container.decode(IslandNode.self, forKey: .label),
+            accessibilityLabel: try container.decodeIfPresent(String.self, forKey: .accessibilityLabel)
         ))
         case .toggle: self = .toggle(.init(
             title: try container.decode(String.self, forKey: .title),
@@ -259,7 +320,8 @@ public nonisolated indirect enum IslandNode: Codable, Equatable, Sendable {
         case .slider: self = .slider(.init(
             title: try container.decode(String.self, forKey: .title),
             value: try container.decode(Double.self, forKey: .value),
-            actionID: try container.decode(String.self, forKey: .actionID)
+            actionID: try container.decode(String.self, forKey: .actionID),
+            showsTitle: try container.decodeIfPresent(Bool.self, forKey: .showsTitle) ?? true
         ))
         }
         do { try validate() }
@@ -281,6 +343,7 @@ public nonisolated indirect enum IslandNode: Codable, Equatable, Sendable {
         case .image(let node):
             try container.encode(Kind.image, forKey: .type)
             try container.encode(node.source, forKey: .source)
+            if node.size != .icon { try container.encode(node.size, forKey: .size) }
         case .hStack(let node):
             try container.encode(Kind.hStack, forKey: .type)
             try container.encode(node.children, forKey: .children)
@@ -301,6 +364,7 @@ public nonisolated indirect enum IslandNode: Codable, Equatable, Sendable {
             try container.encode(Kind.button, forKey: .type)
             try container.encode(node.actionID, forKey: .actionID)
             try container.encode(node.label, forKey: .label)
+            try container.encodeIfPresent(node.accessibilityLabel, forKey: .accessibilityLabel)
         case .toggle(let node):
             try container.encode(Kind.toggle, forKey: .type)
             try container.encode(node.title, forKey: .title)
@@ -311,6 +375,7 @@ public nonisolated indirect enum IslandNode: Codable, Equatable, Sendable {
             try container.encode(node.title, forKey: .title)
             try container.encode(node.value, forKey: .value)
             try container.encode(node.actionID, forKey: .actionID)
+            if !node.showsTitle { try container.encode(false, forKey: .showsTitle) }
         }
     }
 }

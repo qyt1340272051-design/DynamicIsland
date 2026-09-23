@@ -94,6 +94,94 @@ final class IslandRendererTests: XCTestCase {
         }
     }
 
+    func testExpandedArtworkUsesHostSizeAndUntitledSliderStillRenders() throws {
+        let artwork = NSImage(size: CGSize(width: 124, height: 124), flipped: false) { rect in
+            NSColor.red.setFill()
+            NSBezierPath(rect: rect).fill()
+            return true
+        }
+        let source = IslandNode.ImageSource.brokerResource(id: "music.artwork")
+        let node: IslandNode = .image(.init(source: source, size: .artwork))
+        let renderer = IslandRenderer(
+            presentation: ActivityPresentation(title: "Song", expanded: node),
+            mode: .expanded, shellSize: CGSize(width: 480, height: 200),
+            imageResolver: { $0 == source ? artwork : nil }
+        )
+        let bitmap = try render(renderer, size: CGSize(width: 456, height: 140))
+        let redPixels = (0..<bitmap.pixelsHigh).reduce(0) { count, y in
+            count + (0..<bitmap.pixelsWide).filter { x in
+                guard let color = bitmap.colorAt(x: x, y: y) else { return false }
+                return color.redComponent > 0.7 && color.greenComponent < 0.3 && color.alphaComponent > 0.5
+            }.count
+        }
+        XCTAssertGreaterThan(redPixels, 12_000)
+        XCTAssertLessThan(redPixels, 124 * 124 + 1)
+
+        let untitled = IslandNode.slider(.init(title: "Seek", value: 0.5,
+                                               actionID: "music.seek", showsTitle: false))
+        let sliderBitmap = try render(IslandRenderer(
+            presentation: ActivityPresentation(title: "Song", expanded: untitled),
+            mode: .expanded, shellSize: CGSize(width: 480, height: 200)
+        ), size: CGSize(width: 456, height: 140))
+        XCTAssertGreaterThan(visiblePixelCount(sliderBitmap), 0)
+    }
+
+    func testMissingArtworkIsDarkCardWithSmallCenteredSymbol() throws {
+        let node: IslandNode = .image(.init(
+            source: .brokerResource(id: "music.artwork"), size: .artwork
+        ))
+        let bitmap = try render(IslandRenderer(
+            presentation: ActivityPresentation(title: "Song", expanded: node),
+            mode: .expanded, shellSize: CGSize(width: 480, height: 200)
+        ), size: CGSize(width: 456, height: 140))
+
+        let cardPixel = try XCTUnwrap(bitmap.colorAt(x: 20, y: 20))
+        XCTAssertGreaterThan(cardPixel.alphaComponent, 0.03)
+        XCTAssertLessThan(cardPixel.alphaComponent, 0.3)
+        let brightPixels = (0..<bitmap.pixelsHigh).reduce(0) { count, y in
+            count + (0..<bitmap.pixelsWide).filter { x in
+                guard let pixel = bitmap.colorAt(x: x, y: y) else { return false }
+                return pixel.redComponent > 0.6 && pixel.greenComponent > 0.6
+                    && pixel.blueComponent > 0.6 && pixel.alphaComponent > 0.5
+            }.count
+        }
+        XCTAssertLessThan(brightPixels, 1_000)
+    }
+
+    func testIconButtonKeepsCircular28PointFootprint() throws {
+        let button: IslandNode = .button(.init(
+            actionID: "music.playPause", label: .icon(.init("pause.fill"))
+        ))
+        let bitmap = try render(IslandRenderer(
+            presentation: ActivityPresentation(title: "Song", expanded: button),
+            mode: .expanded, shellSize: CGSize(width: 480, height: 200)
+        ), size: CGSize(width: 456, height: 140))
+        let painted = (0..<bitmap.pixelsHigh).reduce(0) { count, y in
+            count + (0..<bitmap.pixelsWide).filter { x in
+                (bitmap.colorAt(x: x, y: y)?.alphaComponent ?? 0) > 0.02
+            }.count
+        }
+        XCTAssertGreaterThan(painted, 350)
+        XCTAssertLessThan(painted, 750)
+    }
+
+    func testSliderKeepsDragValueAcrossPresentationUpdatesAndCommitsFinalValue() {
+        var interaction = IslandSliderInteractionState()
+        interaction.beginEditing("music.seek")
+        XCTAssertEqual(interaction.update("music.seek", value: 0.82, fallback: 0.1), 0.82)
+        interaction.presentationDidChange()
+        XCTAssertEqual(interaction.displayedValue(for: "music.seek", fallback: 0.12), 0.82)
+
+        let committed = interaction.endEditing("music.seek", fallback: 0.12)
+        XCTAssertEqual(IslandRenderActionValue.sliderCommit(committed), .sliderCommit(0.82))
+        XCTAssertEqual(interaction.displayedValue(for: "music.seek", fallback: 0.12), 0.82)
+        interaction.presentationDidChange()
+        XCTAssertEqual(interaction.displayedValue(for: "music.seek", fallback: 0.83), 0.83)
+
+        XCTAssertEqual(interaction.update("music.volume", value: 1.5, fallback: 0.5), 1)
+        XCTAssertEqual(interaction.update("music.volume", value: .nan, fallback: 0.5), 0.5)
+    }
+
     private func render<Content: View>(_ content: Content, size: CGSize) throws -> NSBitmapImageRep {
         let hostingView = NSHostingView(rootView: content.environment(\.colorScheme, .dark))
         hostingView.frame = CGRect(origin: .zero, size: size)

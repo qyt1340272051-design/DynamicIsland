@@ -110,7 +110,8 @@ public final class ActionRouter {
     private static func isValidPayload(_ value: IslandRenderActionValue) -> Bool {
         switch value {
         case .none, .toggle: true
-        case .slider(let number): number.isFinite && (0...1).contains(number)
+        case .slider(let number), .sliderCommit(let number):
+            number.isFinite && (0...1).contains(number)
         }
     }
 }

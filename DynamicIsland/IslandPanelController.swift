@@ -5,6 +5,7 @@ import SwiftUI
 @MainActor
 final class IslandPanelController {
     private let viewModel: IslandViewModel
+    private let activityRuntime: IslandActivityRuntime
     private let screenManager: ScreenManager
     private let workspaceNotificationCenter: NotificationCenter
     private let applicationNotificationCenter: NotificationCenter
@@ -27,16 +28,17 @@ final class IslandPanelController {
         panel?.isVisible ?? false
     }
 
-    init(viewModel: IslandViewModel) {
-        self.viewModel = viewModel
-        self.screenManager = ScreenManager()
-        self.workspaceNotificationCenter = NSWorkspace.shared.notificationCenter
-        self.applicationNotificationCenter = .default
-        observeScreenChanges()
+    convenience init(viewModel: IslandViewModel) {
+        self.init(viewModel: viewModel, screenManager: ScreenManager())
     }
 
-    init(viewModel: IslandViewModel, screenManager: ScreenManager) {
+    init(
+        viewModel: IslandViewModel,
+        screenManager: ScreenManager,
+        activityRuntime: IslandActivityRuntime? = nil
+    ) {
         self.viewModel = viewModel
+        self.activityRuntime = activityRuntime ?? IslandActivityRuntime(viewModel: viewModel)
         self.screenManager = screenManager
         self.workspaceNotificationCenter = NSWorkspace.shared.notificationCenter
         self.applicationNotificationCenter = .default
@@ -75,7 +77,7 @@ final class IslandPanelController {
         panel.titlebarAppearsTransparent = true
         IslandPanelWindowPolicy.apply(to: panel)
 
-        let rootView = IslandView(viewModel: viewModel)
+        let rootView = IslandView(viewModel: viewModel, activityRuntime: activityRuntime)
         panel.contentViewController = NSHostingController(rootView: rootView)
         return panel
     }
@@ -101,7 +103,7 @@ final class IslandPanelController {
         let baseFrame = currentCompactFrame(in: screen)
         let presentationSize = IslandVisualStyle.compactShellSize(
             baseSize: baseFrame.size,
-            isPlaying: viewModel.isPlaying,
+            hasCompactActivity: activityRuntime.isCompactActivityVisible,
             hasActiveTimer: viewModel.compactTimerMode != nil
         )
 

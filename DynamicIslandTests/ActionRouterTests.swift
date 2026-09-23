@@ -109,6 +109,7 @@ final class ActionRouterTests: XCTestCase {
 
         XCTAssertEqual(dispatch(router, snapshot, "pomodoro.stop", value: .slider(.nan)), .invalidPayload)
         XCTAssertEqual(dispatch(router, snapshot, "pomodoro.stop", value: .slider(-0.1)), .invalidPayload)
+        XCTAssertEqual(dispatch(router, snapshot, "pomodoro.stop", value: .sliderCommit(.infinity)), .invalidPayload)
         XCTAssertEqual(dispatch(router, snapshot, "bad action id"), .invalidActionID)
         XCTAssertEqual(dispatch(router, snapshot, String(repeating: "x", count: IslandNode.Limits.maxActionIDBytes + 1)), .invalidActionID)
         XCTAssertEqual(dispatch(router, snapshot, "pomodoro.stop"), .handled)

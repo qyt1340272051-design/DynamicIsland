@@ -50,6 +50,50 @@ final class IslandNodeTests: XCTestCase {
         XCTAssertEqual(try IslandNode.decodeJSON(data), tree)
     }
 
+    func testImageSizeAndSliderTitleDecodeLegacyJSON() throws {
+        let oldImage = Data(#"{"type":"image","source":{"type":"brokerResource","id":"artwork.current"}}"#.utf8)
+        XCTAssertEqual(
+            try IslandNode.decodeJSON(oldImage),
+            .image(.init(source: .brokerResource(id: "artwork.current"), size: .icon))
+        )
+        let directImage = Data(#"{"source":{"type":"pluginAsset","id":"cover"}}"#.utf8)
+        XCTAssertEqual(try JSONDecoder().decode(IslandNode.Image.self, from: directImage).size, .icon)
+
+        let artwork: IslandNode = .image(.init(source: .brokerResource(id: "artwork.current"), size: .artwork))
+        let artworkJSON = try artwork.encodeJSON()
+        XCTAssertEqual(try IslandNode.decodeJSON(artworkJSON), artwork)
+        XCTAssertTrue(String(decoding: artworkJSON, as: UTF8.self).contains(#""size":"artwork""#))
+        XCTAssertThrowsError(try IslandNode.decodeJSON(Data(
+            #"{"type":"image","source":{"type":"pluginAsset","id":"cover"},"size":"999pt"}"#.utf8
+        )))
+        let thumbnail: IslandNode = .image(.init(source: .brokerResource(id: "artwork.current"), size: .thumbnail))
+        XCTAssertEqual(try IslandNode.decodeJSON(thumbnail.encodeJSON()), thumbnail)
+
+        let oldSlider = Data(#"{"type":"slider","title":"Position","value":0.5,"actionID":"music.seek"}"#.utf8)
+        XCTAssertEqual(try IslandNode.decodeJSON(oldSlider),
+                       .slider(.init(title: "Position", value: 0.5, actionID: "music.seek", showsTitle: true)))
+        let directSlider = Data(#"{"title":"Position","value":0.5,"actionID":"music.seek"}"#.utf8)
+        XCTAssertTrue(try JSONDecoder().decode(IslandNode.Slider.self, from: directSlider).showsTitle)
+
+        let untitled: IslandNode = .slider(.init(title: "Position", value: 0.5,
+                                                actionID: "music.seek", showsTitle: false))
+        let untitledJSON = try untitled.encodeJSON()
+        XCTAssertEqual(try IslandNode.decodeJSON(untitledJSON), untitled)
+        XCTAssertTrue(String(decoding: untitledJSON, as: UTF8.self).contains(#""showsTitle":false"#))
+
+        let oldButton = Data(#"{"type":"button","actionID":"music.next","label":{"type":"icon","symbolName":"forward.fill"}}"#.utf8)
+        XCTAssertEqual(
+            try IslandNode.decodeJSON(oldButton),
+            .button(.init(actionID: "music.next", label: .icon(.init("forward.fill"))))
+        )
+        let accessibleButton: IslandNode = .button(.init(
+            actionID: "music.next",
+            label: .icon(.init("forward.fill")),
+            accessibilityLabel: "下一首"
+        ))
+        XCTAssertEqual(try IslandNode.decodeJSON(accessibleButton.encodeJSON()), accessibleButton)
+    }
+
     func testRejectsUnknownAndMalformedNodes() {
         for json in [
             #"{"type":"webView","url":"https://example.com"}"#,

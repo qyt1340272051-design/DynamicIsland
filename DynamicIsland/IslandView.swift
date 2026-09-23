@@ -4,19 +4,20 @@ import UniformTypeIdentifiers
 
 public struct IslandView: View {
     @ObservedObject private var viewModel: IslandViewModel
+    @ObservedObject private var activityManager: ActivityManager
+    private let activityRuntime: IslandActivityRuntime
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @State private var hoveredTrayItemID: UUID?
-    @State private var isHoveringPlaybackProgress = false
-    @State private var isDraggingPlaybackProgress = false
     @State private var isQuitting = false
     @State private var isQuitImpacting = false
     @State private var isIslandFading = false
-    private static let compactArtworkSize: CGFloat = 26
-    private static let musicArtworkSize: CGFloat = 124
     private static let trayIconSize = CGSize(width: 74, height: 74)
 
-    public init(viewModel: IslandViewModel) {
+    public init(viewModel: IslandViewModel, activityRuntime: IslandActivityRuntime? = nil) {
         self.viewModel = viewModel
+        let runtime = activityRuntime ?? IslandActivityRuntime(viewModel: viewModel)
+        self.activityRuntime = runtime
+        self.activityManager = runtime.manager
     }
 
     public var body: some View {
@@ -39,7 +40,7 @@ public struct IslandView: View {
         .opacity(isIslandFading ? 0 : 1)
         .animation(reduceMotion ? nil : IslandQuitAnimation.islandFade, value: isIslandFading)
         .animation(IslandExpansionAnimation.shell, value: isExpanded)
-        .animation(.easeInOut(duration: 0.24), value: viewModel.isPlaying)
+        .animation(.easeInOut(duration: 0.24), value: hasCompactActivity)
         .animation(.easeInOut(duration: 0.24), value: viewModel.compactTimerMode)
         .animation(IslandExpansionAnimation.pointerHover, value: viewModel.isPointerInside)
         .onDrop(
@@ -93,13 +94,17 @@ public struct IslandView: View {
     private var compactPresentationSize: CGSize {
         IslandVisualStyle.compactShellSize(
             baseSize: viewModel.compactPanelSize,
-            isPlaying: viewModel.isPlaying,
+            hasCompactActivity: hasCompactActivity,
             hasActiveTimer: viewModel.compactTimerMode != nil
         )
     }
 
     private var hasCompactContent: Bool {
-        viewModel.compactTimerMode != nil || viewModel.isPlaying
+        viewModel.compactTimerMode != nil || hasCompactActivity
+    }
+
+    private var hasCompactActivity: Bool {
+        activityRuntime.isCompactActivityVisible
     }
 
     private var shellVerticalOffset: CGFloat {
@@ -182,20 +187,16 @@ public struct IslandView: View {
         if viewModel.compactTimerMode != nil {
             CompactTimerStatus(model: viewModel.timerTools)
                 .transition(.opacity.combined(with: .scale(scale: 0.86)))
-        } else if viewModel.isPlaying {
-            HStack(spacing: 0) {
-                NowPlayingArtwork(
-                    artworkData: viewModel.nowPlaying.artworkData,
-                    isPlaying: true,
-                    size: Self.compactArtworkSize
-                )
-                .id("compact-\(nowPlayingArtworkIdentity)")
-
-                Spacer(minLength: 0)
-
-                CompactPlaybackIndicator()
-            }
-            .padding(.horizontal, 8)
+        } else if hasCompactActivity, let snapshot = activityManager.currentSnapshot {
+            IslandRenderer(
+                presentation: snapshot.activity.presentation,
+                mode: .compact,
+                shellSize: compactPresentationSize,
+                imageResolver: { image in
+                    activityRuntime.resolveImage(image, for: snapshot.activity.source)
+                },
+                onAction: { action in route(action, from: snapshot) }
+            )
             .transition(.opacity.combined(with: .scale(scale: 0.86)))
         }
     }
@@ -288,31 +289,33 @@ public struct IslandView: View {
     }
 
     private var musicExpandedContent: some View {
-        HStack(alignment: .top, spacing: 14) {
-            NowPlayingArtwork(
-                artworkData: viewModel.nowPlaying.artworkData,
-                isPlaying: viewModel.isPlaying,
-                size: Self.musicArtworkSize
-            )
-            .id(nowPlayingArtworkIdentity)
-
-            VStack(alignment: .leading, spacing: 4) {
-                nowPlayingInfo
-                playbackProgress
-                playbackControls
-                volumeRow
-
-                if let message = viewModel.lastErrorMessage {
-                    Text(message)
-                        .font(.caption2)
-                        .foregroundStyle(.red.opacity(0.9))
-                        .lineLimit(1)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                }
+        Group {
+            if let snapshot = activityManager.currentSnapshot {
+                IslandRenderer(
+                    presentation: snapshot.activity.presentation,
+                    mode: .expanded,
+                    shellSize: CGSize(width: contentSize.width, height: expandedShellSize.height),
+                    imageResolver: { image in
+                        activityRuntime.resolveImage(image, for: snapshot.activity.source)
+                    },
+                    onAction: { action in route(action, from: snapshot) }
+                )
+            } else {
+                Text("在 Apple Music 播放后显示曲目信息")
+                    .font(.caption)
+                    .foregroundStyle(.white.opacity(0.6))
             }
-            .frame(maxWidth: .infinity, minHeight: Self.musicArtworkSize, alignment: .topLeading)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+    }
+
+    private func route(_ action: IslandRenderAction, from snapshot: ActivitySnapshot) {
+        _ = activityRuntime.router.dispatch(
+            id: snapshot.activity.id,
+            source: snapshot.activity.source,
+            instanceToken: snapshot.instanceToken,
+            action: action
+        )
     }
 
     private var fileTrayExpandedContent: some View {
@@ -328,261 +331,6 @@ public struct IslandView: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
             }
         }
-    }
-
-    private var nowPlayingInfo: some View {
-        VStack(alignment: .leading, spacing: 2) {
-            Text(nowPlayingTitle)
-                .font(.system(size: 15, weight: .semibold))
-                .lineLimit(1)
-            Text(nowPlayingSubtitle)
-                .font(.system(size: 11, weight: .medium))
-                .foregroundStyle(.white.opacity(0.55))
-                .lineLimit(1)
-        }
-        .frame(maxWidth: .infinity, alignment: .leading)
-    }
-
-    private var playbackControls: some View {
-        HStack(spacing: 8) {
-            AnimatedTrackSkipButton(
-                direction: .backward,
-                action: viewModel.skipBackward
-            )
-            controlButton(
-                systemName: viewModel.isPlaying ? "pause.fill" : "play.fill",
-                help: viewModel.isPlaying ? "暂停" : "播放",
-                action: viewModel.togglePlayPause
-            )
-            AnimatedTrackSkipButton(
-                direction: .forward,
-                action: viewModel.skipForward
-            )
-        }
-        .frame(maxWidth: .infinity, alignment: .center)
-    }
-
-    private var playbackProgress: some View {
-        VStack(spacing: 3) {
-            GeometryReader { proxy in
-                ZStack(alignment: .leading) {
-                    Capsule()
-                        .fill(Color.white.opacity(0.14))
-                        .frame(height: 4)
-                    Capsule()
-                        .fill(viewModel.isPlaying ? Color.green : Color.white.opacity(0.55))
-                        .frame(width: proxy.size.width * CGFloat(viewModel.nowPlaying.progress), height: 4)
-                    Circle()
-                        .fill(Color.white)
-                        .frame(
-                            width: IslandPlaybackProgressAppearance.dotDiameter,
-                            height: IslandPlaybackProgressAppearance.dotDiameter
-                        )
-                        .shadow(color: .black.opacity(0.35), radius: 2)
-                        .offset(x: IslandPlaybackProgressAppearance.dotOffset(
-                            progress: viewModel.nowPlaying.progress,
-                            width: proxy.size.width
-                        ))
-                        .opacity(showsPlaybackProgressDot ? 1 : 0)
-                        .animation(reduceMotion ? nil : .easeInOut(duration: 0.16), value: showsPlaybackProgressDot)
-                        .allowsHitTesting(false)
-                }
-                .frame(width: proxy.size.width, height: proxy.size.height)
-                .contentShape(Rectangle())
-                .gesture(
-                    DragGesture(minimumDistance: 0)
-                        .onChanged { value in
-                            isDraggingPlaybackProgress = true
-                            viewModel.updatePlaybackSeek(
-                                to: playbackProgressFraction(at: value.location.x, width: proxy.size.width)
-                            )
-                        }
-                        .onEnded { value in
-                            isDraggingPlaybackProgress = false
-                            viewModel.finishPlaybackSeek(
-                                to: playbackProgressFraction(at: value.location.x, width: proxy.size.width)
-                            )
-                        }
-                )
-                .onHover { isHoveringPlaybackProgress = $0 }
-            }
-            .frame(height: 18)
-            .allowsHitTesting(viewModel.canSeekPlayback)
-            .animation(
-                viewModel.isSeekingPlayback ? nil : .linear(duration: 0.25),
-                value: viewModel.nowPlaying.progress
-            )
-
-            HStack {
-                Text(formattedPlaybackTime(viewModel.nowPlaying.position))
-                Spacer(minLength: 0)
-                Text(formattedPlaybackDuration)
-            }
-            .font(.system(size: 9, weight: .medium, design: .monospaced))
-            .foregroundStyle(.white.opacity(0.46))
-        }
-        .accessibilityElement(children: .ignore)
-        .accessibilityLabel("播放进度")
-        .accessibilityValue("\(formattedPlaybackTime(viewModel.nowPlaying.position)) / \(formattedPlaybackDuration)")
-        .accessibilityAdjustableAction { direction in
-            guard viewModel.canSeekPlayback else { return }
-            let step = 5.0 / viewModel.nowPlaying.duration
-            switch direction {
-            case .increment:
-                viewModel.finishPlaybackSeek(to: viewModel.nowPlaying.progress + step)
-            case .decrement:
-                viewModel.finishPlaybackSeek(to: viewModel.nowPlaying.progress - step)
-            @unknown default:
-                break
-            }
-        }
-        .help(viewModel.canSeekPlayback ? "拖动以调整播放进度" : "当前曲目无法调整播放进度")
-        .onChange(of: viewModel.canSeekPlayback) { _, canSeek in
-            if !canSeek {
-                isHoveringPlaybackProgress = false
-                isDraggingPlaybackProgress = false
-            }
-        }
-        .onDisappear {
-            isHoveringPlaybackProgress = false
-            isDraggingPlaybackProgress = false
-            if viewModel.isSeekingPlayback {
-                viewModel.finishPlaybackSeek(to: viewModel.nowPlaying.progress)
-            }
-        }
-    }
-
-    private var showsPlaybackProgressDot: Bool {
-        IslandPlaybackProgressAppearance.showsDot(
-            canSeek: viewModel.canSeekPlayback,
-            hovered: isHoveringPlaybackProgress,
-            dragging: isDraggingPlaybackProgress
-        )
-    }
-
-    private func playbackProgressFraction(at x: CGFloat, width: CGFloat) -> Double {
-        guard width > 0 else { return 0 }
-        return min(max(Double(x / width), 0), 1)
-    }
-
-    private var nowPlayingTitle: String {
-        if !viewModel.nowPlaying.title.isEmpty {
-            return viewModel.nowPlaying.title
-        }
-        return viewModel.isPlaying ? "正在播放" : "未在播放"
-    }
-
-    private var nowPlayingSubtitle: String {
-        let info = viewModel.nowPlaying
-        var parts: [String] = []
-        if !info.artist.isEmpty {
-            parts.append(info.artist)
-        }
-        if !info.album.isEmpty {
-            parts.append(info.album)
-        }
-        return parts.isEmpty ? "在 Apple Music 播放后显示曲目信息" : parts.joined(separator: " — ")
-    }
-
-    private var nowPlayingArtworkIdentity: String {
-        let info = viewModel.nowPlaying
-        if !info.trackIdentifier.isEmpty {
-            return info.trackIdentifier
-        }
-        return "\(info.title)|\(info.artist)|\(info.album)"
-    }
-
-    private var formattedPlaybackDuration: String {
-        guard viewModel.nowPlaying.duration > 0 else {
-            return "--:--"
-        }
-        return formattedPlaybackTime(viewModel.nowPlaying.duration)
-    }
-
-    private func formattedPlaybackTime(_ seconds: TimeInterval) -> String {
-        let totalSeconds = max(Int(seconds.rounded(.down)), 0)
-        let hours = totalSeconds / 3_600
-        let minutes = (totalSeconds % 3_600) / 60
-        let remainingSeconds = totalSeconds % 60
-        if hours > 0 {
-            return String(format: "%d:%02d:%02d", hours, minutes, remainingSeconds)
-        }
-        return String(format: "%d:%02d", minutes, remainingSeconds)
-    }
-
-    private var volumeRow: some View {
-        HStack(spacing: 10) {
-            muteControlButton
-            volumeControlButton(
-                systemName: "minus",
-                help: "减小音量",
-                action: viewModel.decreaseVolume
-            )
-            .disabled(viewModel.volume <= 0)
-
-            IslandVolumeSlider(
-                value: Binding(
-                    get: { viewModel.volume },
-                    set: { viewModel.setVolume($0) }
-                ),
-                isMuted: viewModel.isMuted
-            )
-            .frame(minWidth: 120, maxWidth: .infinity)
-
-            volumeControlButton(
-                systemName: "plus",
-                help: "增大音量",
-                action: viewModel.increaseVolume
-            )
-            .disabled(viewModel.volume >= 1 && !viewModel.isMuted)
-
-            Text(viewModel.isMuted ? "静音" : "\(Int((viewModel.volume * 100).rounded()))%")
-                .font(.caption.monospacedDigit())
-                .foregroundStyle(.white.opacity(0.7))
-                .frame(width: 38, alignment: .trailing)
-        }
-    }
-
-    private var muteControlButton: some View {
-        Button(action: viewModel.toggleMute) {
-            AnimatedMuteIcon(
-                systemName: volumeBaseSystemImage,
-                isMuted: viewModel.isMuted
-            )
-            .frame(width: 28, height: 28)
-            .background(Color.white.opacity(viewModel.isMuted ? 0.18 : 0.1), in: Circle())
-        }
-        .buttonStyle(.plain)
-        .help(viewModel.isMuted ? "取消静音" : "静音")
-    }
-
-    private var volumeBaseSystemImage: String {
-        if viewModel.volume == 0 {
-            return "speaker.fill"
-        }
-        if viewModel.volume < 0.34 {
-            return "speaker.wave.1.fill"
-        }
-        if viewModel.volume < 0.67 {
-            return "speaker.wave.2.fill"
-        }
-        return "speaker.wave.3.fill"
-    }
-
-    private func volumeControlButton(
-        systemName: String,
-        help: String,
-        action: @escaping () -> Void
-    ) -> some View {
-        Button(action: action) {
-            Image(systemName: systemName)
-                .font(.system(size: 11, weight: .bold))
-                .foregroundStyle(Color.white.opacity(0.78))
-                .frame(width: 28, height: 28)
-                .background(Color.white.opacity(0.1), in: Circle())
-        }
-        .buttonStyle(.plain)
-        .help(help)
     }
 
     private var trayArea: some View {
@@ -723,22 +471,6 @@ public struct IslandView: View {
         }
     }
 
-    private func controlButton(
-        systemName: String,
-        help: String,
-        action: @escaping () -> Void
-    ) -> some View {
-        Button(action: action) {
-            Image(systemName: systemName)
-                .font(.system(size: 12, weight: .bold))
-                .frame(width: 28, height: 28)
-                .background(Color.white.opacity(0.12), in: Circle())
-        }
-        .buttonStyle(.plain)
-        .help(help)
-        .accessibilityLabel(help)
-    }
-
     private func surfaceButton(surface: IslandExpandedSurface, title: String, systemName: String) -> some View {
         let isSelected = viewModel.expandedSurface == surface
         return Button {
@@ -815,80 +547,6 @@ private struct TrayDeleteImpactButtonStyle: ButtonStyle {
     }
 }
 
-private struct AnimatedTrackSkipButton: View {
-    let direction: IslandTrackSkipDirection
-    let action: () -> Void
-
-    @State private var animationTrigger = 0
-
-    private var systemName: String {
-        direction == .backward ? "backward.fill" : "forward.fill"
-    }
-
-    private var accessibilityLabel: String {
-        direction == .backward ? "上一首" : "下一首"
-    }
-
-    var body: some View {
-        Button {
-            animationTrigger &+= 1
-            action()
-        } label: {
-            ZStack {
-                Circle()
-                    .fill(Color.white.opacity(0.12))
-
-                Image(systemName: systemName)
-                    .font(.system(size: 12, weight: .bold))
-                    .keyframeAnimator(
-                        initialValue: TrackSkipAnimationValues(),
-                        trigger: animationTrigger
-                    ) { content, value in
-                        content
-                            .offset(x: value.horizontalOffset)
-                            .opacity(value.opacity)
-                    } keyframes: { _ in
-                        KeyframeTrack(\.horizontalOffset) {
-                            LinearKeyframe(travelOffset, duration: IslandTrackSkipAnimation.exitDuration)
-                            MoveKeyframe(resetOffset)
-                            LinearKeyframe(0, duration: IslandTrackSkipAnimation.entryDuration)
-                        }
-
-                        KeyframeTrack(\.opacity) {
-                            LinearKeyframe(0, duration: IslandTrackSkipAnimation.exitDuration)
-                            MoveKeyframe(0)
-                            LinearKeyframe(1, duration: IslandTrackSkipAnimation.entryDuration)
-                        }
-                    }
-            }
-            .frame(width: 28, height: 28)
-            .clipShape(Circle())
-        }
-        .buttonStyle(.plain)
-        .help(accessibilityLabel)
-        .accessibilityLabel(accessibilityLabel)
-    }
-
-    private var travelOffset: CGFloat {
-        IslandTrackSkipAnimation.offset(
-            for: direction,
-            distance: IslandTrackSkipAnimation.travelDistance
-        )
-    }
-
-    private var resetOffset: CGFloat {
-        IslandTrackSkipAnimation.offset(
-            for: direction,
-            distance: -IslandTrackSkipAnimation.resetDistance
-        )
-    }
-}
-
-private struct TrackSkipAnimationValues {
-    var horizontalOffset: CGFloat = 0
-    var opacity: Double = 1
-}
-
 private struct CompactTimerStatus: View {
     @ObservedObject var model: IslandTimerToolsModel
 
@@ -925,218 +583,6 @@ private struct CompactTimerStatus: View {
         case .countdown:
             return .orange
         }
-    }
-}
-
-private struct CompactPlaybackIndicator: View {
-    var body: some View {
-        TimelineView(.animation(minimumInterval: 1.0 / 30.0)) { context in
-            HStack(alignment: .center, spacing: IslandCompactPlaybackAnimation.dotSpacing) {
-                ForEach(0..<IslandCompactPlaybackAnimation.dotCount, id: \.self) { index in
-                    Capsule()
-                        .fill(Color.green)
-                        .frame(
-                            width: IslandCompactPlaybackAnimation.dotWidth,
-                            height: IslandCompactPlaybackAnimation.height(
-                                for: index,
-                                at: context.date.timeIntervalSinceReferenceDate
-                            )
-                        )
-                }
-            }
-        }
-        .frame(
-            width: IslandCompactPlaybackAnimation.indicatorWidth,
-            height: IslandCompactPlaybackAnimation.maximumHeight
-        )
-        .accessibilityElement(children: .ignore)
-        .accessibilityLabel("正在播放")
-    }
-}
-
-private struct NowPlayingArtwork: View {
-    let artworkData: Data?
-    let isPlaying: Bool
-    let size: CGFloat
-
-    @State private var image: NSImage?
-
-    private var cornerRadius: CGFloat {
-        min(10, max(3, size * 0.08))
-    }
-
-    init(artworkData: Data?, isPlaying: Bool, size: CGFloat) {
-        self.artworkData = artworkData
-        self.isPlaying = isPlaying
-        self.size = size
-        _image = State(initialValue: artworkData.flatMap(NSImage.init(data:)))
-    }
-
-    var body: some View {
-        ZStack {
-            RoundedRectangle(cornerRadius: 7, style: .continuous)
-                .fill(Color.white.opacity(0.09))
-
-            if let image {
-                Image(nsImage: image)
-                    .resizable()
-                    .scaledToFill()
-            } else {
-                Image(systemName: isPlaying ? "waveform" : "music.note")
-                    .font(.system(size: max(10, size * 0.25), weight: .semibold))
-                    .foregroundStyle(isPlaying ? Color.green : Color.white.opacity(0.5))
-            }
-        }
-        .frame(width: size, height: size)
-        .clipShape(RoundedRectangle(cornerRadius: cornerRadius, style: .continuous))
-        .overlay {
-            RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
-                .stroke(Color.white.opacity(0.14), lineWidth: 0.5)
-        }
-        .onChange(of: artworkData) { _, newData in
-            image = newData.flatMap(NSImage.init(data:))
-        }
-        .accessibilityHidden(true)
-    }
-}
-
-private struct IslandVolumeSlider: View {
-    @Binding private var value: Float
-    let isMuted: Bool
-
-    @State private var displayedValue: CGFloat
-    @State private var isDragging = false
-
-    private let thumbDiameter: CGFloat = 14
-    private let trackHeight: CGFloat = 4
-
-    init(value: Binding<Float>, isMuted: Bool) {
-        _value = value
-        self.isMuted = isMuted
-        _displayedValue = State(initialValue: Self.clamped(CGFloat(value.wrappedValue)))
-    }
-
-    var body: some View {
-        GeometryReader { proxy in
-            let travelWidth = max(proxy.size.width - thumbDiameter, 0)
-            let progress = Self.clamped(displayedValue)
-
-            ZStack(alignment: .leading) {
-                Capsule()
-                    .fill(Color.white.opacity(0.16))
-                    .frame(height: trackHeight)
-                    .padding(.horizontal, thumbDiameter / 2)
-
-                Capsule()
-                    .fill(isMuted ? Color.white.opacity(0.3) : Color.accentColor)
-                    .frame(width: travelWidth * progress, height: trackHeight)
-                    .offset(x: thumbDiameter / 2)
-
-                Circle()
-                    .fill(isMuted ? Color.white.opacity(0.78) : Color.white)
-                    .overlay {
-                        Circle()
-                            .stroke(Color.black.opacity(0.18), lineWidth: 0.5)
-                    }
-                    .frame(width: thumbDiameter, height: thumbDiameter)
-                    .shadow(color: .black.opacity(0.35), radius: 2, y: 1)
-                    .offset(x: travelWidth * progress)
-            }
-            .frame(width: proxy.size.width, height: proxy.size.height)
-            .contentShape(Rectangle())
-            .gesture(
-                DragGesture(minimumDistance: 0)
-                    .onChanged { gesture in
-                        isDragging = true
-                        updateValue(at: gesture.location.x, availableWidth: proxy.size.width)
-                    }
-                    .onEnded { gesture in
-                        updateValue(at: gesture.location.x, availableWidth: proxy.size.width)
-                        isDragging = false
-                    }
-            )
-        }
-        .frame(height: 28)
-        .onAppear {
-            displayedValue = Self.clamped(CGFloat(value))
-        }
-        .onChange(of: value) { _, newValue in
-            let target = Self.clamped(CGFloat(newValue))
-            if isDragging {
-                displayedValue = target
-            } else {
-                withAnimation(IslandVolumeAnimation.sliderTravel) {
-                    displayedValue = target
-                }
-            }
-        }
-        .animation(IslandVolumeAnimation.muteSlash, value: isMuted)
-        .accessibilityElement()
-        .accessibilityLabel("系统音量")
-        .accessibilityValue(isMuted ? "静音" : "\(Int((value * 100).rounded()))%")
-        .accessibilityAdjustableAction { direction in
-            switch direction {
-            case .increment:
-                value = Self.clamped(value + IslandViewModel.volumeAdjustmentStep)
-            case .decrement:
-                value = Self.clamped(value - IslandViewModel.volumeAdjustmentStep)
-            @unknown default:
-                break
-            }
-        }
-    }
-
-    private func updateValue(at xPosition: CGFloat, availableWidth: CGFloat) {
-        let travelWidth = max(availableWidth - thumbDiameter, 1)
-        let progress = Self.clamped((xPosition - thumbDiameter / 2) / travelWidth)
-        var transaction = Transaction(animation: nil)
-        transaction.disablesAnimations = true
-        withTransaction(transaction) {
-            displayedValue = progress
-            value = Float(progress)
-        }
-    }
-
-    private static func clamped(_ value: CGFloat) -> CGFloat {
-        min(max(value, 0), 1)
-    }
-
-    private static func clamped(_ value: Float) -> Float {
-        min(max(value, 0), 1)
-    }
-}
-
-private struct AnimatedMuteIcon: View {
-    let systemName: String
-    let isMuted: Bool
-
-    var body: some View {
-        ZStack {
-            Image(systemName: systemName)
-                .font(.system(size: 11, weight: .bold))
-                .foregroundStyle(
-                    Color.white.opacity(isMuted ? IslandVolumeAnimation.muteIconDimmedOpacity : 0.78)
-                )
-
-            MuteSlashShape()
-                .trim(from: 0, to: isMuted ? 1 : 0)
-                .stroke(
-                    Color.accentColor,
-                    style: StrokeStyle(lineWidth: 2, lineCap: .round, lineJoin: .round)
-                )
-                .shadow(color: Color.accentColor.opacity(isMuted ? 0.45 : 0), radius: 1)
-        }
-        .frame(width: 17, height: 17)
-        .animation(IslandVolumeAnimation.muteSlash, value: isMuted)
-    }
-}
-
-private struct MuteSlashShape: Shape {
-    func path(in rect: CGRect) -> Path {
-        var path = Path()
-        path.move(to: CGPoint(x: rect.minX + 1.5, y: rect.maxY - 2))
-        path.addLine(to: CGPoint(x: rect.maxX - 1.5, y: rect.minY + 2))
-        return path
     }
 }
 

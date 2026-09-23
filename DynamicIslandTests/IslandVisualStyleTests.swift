@@ -113,10 +113,10 @@ final class IslandVisualStyleTests: XCTestCase {
 
     func testActiveTimerUsesWiderCompactPresentationThanMusic() {
         let baseSize = CGSize(width: 216, height: 38)
-        let musicSize = IslandVisualStyle.compactShellSize(baseSize: baseSize, isPlaying: true)
+        let musicSize = IslandVisualStyle.compactShellSize(baseSize: baseSize, hasCompactActivity: true)
         let timerSize = IslandVisualStyle.compactShellSize(
             baseSize: baseSize,
-            isPlaying: true,
+            hasCompactActivity: true,
             hasActiveTimer: true
         )
 
@@ -128,16 +128,16 @@ final class IslandVisualStyleTests: XCTestCase {
         XCTAssertGreaterThan(timerSize.width, musicSize.width)
     }
 
-    func testPlayingCompactShellExpandsHorizontallyOnly() {
+    func testActivityCompactShellExpandsHorizontallyOnly() {
         let baseSize = CGSize(width: 216, height: 38)
-        let pausedSize = IslandVisualStyle.compactShellSize(baseSize: baseSize, isPlaying: false)
-        let playingSize = IslandVisualStyle.compactShellSize(baseSize: baseSize, isPlaying: true)
+        let idleSize = IslandVisualStyle.compactShellSize(baseSize: baseSize, hasCompactActivity: false)
+        let activitySize = IslandVisualStyle.compactShellSize(baseSize: baseSize, hasCompactActivity: true)
 
-        XCTAssertEqual(pausedSize, baseSize)
-        XCTAssertEqual(playingSize.height, baseSize.height)
+        XCTAssertEqual(idleSize, baseSize)
+        XCTAssertEqual(activitySize.height, baseSize.height)
         XCTAssertEqual(
-            playingSize.width,
-            baseSize.width + IslandVisualStyle.playingCompactHorizontalExpansion
+            activitySize.width,
+            baseSize.width + IslandVisualStyle.activityCompactHorizontalExpansion
         )
     }
 

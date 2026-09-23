@@ -81,20 +81,23 @@ public extension ActivityPresentation {
             guard metrics.hasVisibleContent, metrics.verticalRows > 0 else { return false }
             switch mode {
             case .minimal:
+                guard metrics.nonIconImageCount == 0 else { return false }
                 switch node {
                 case .text, .icon, .image: break
                 default: return false
                 }
                 return metrics.nodeCount <= 1 && metrics.depth <= 1 && metrics.textBytes <= 40
             case .compact:
-                return metrics.nodeCount <= 8 && metrics.depth <= 3
+                return metrics.artworkCount == 0
+                    && metrics.nodeCount <= 8 && metrics.depth <= 3
                     && metrics.maxChildren <= 4 && metrics.verticalRows <= 1
                     && metrics.textBytes <= 96 && metrics.actionCount <= 1
                     && !metrics.hasExpandedOnlyControl
             case .expanded:
-                return metrics.nodeCount <= 32 && metrics.depth <= 5
-                    && metrics.maxChildren <= 8 && metrics.verticalRows <= 5
-                    && metrics.textBytes <= 512 && metrics.actionCount <= 4
+                return metrics.artworkCount <= 1
+                    && metrics.nodeCount <= 32 && metrics.depth <= 5
+                    && metrics.maxChildren <= 8 && metrics.verticalRows <= 7
+                    && metrics.textBytes <= 512 && metrics.actionCount <= 8
             }
         }
 
@@ -105,6 +108,8 @@ public extension ActivityPresentation {
             var verticalRows = 1
             var textBytes = 0
             var actionCount = 0
+            var artworkCount = 0
+            var nonIconImageCount = 0
             var hasExpandedOnlyControl = false
             var hasVisibleContent = false
 
@@ -113,8 +118,12 @@ public extension ActivityPresentation {
                 case .text(let value):
                     textBytes = value.content.utf8.count
                     hasVisibleContent = !value.content.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
-                case .icon, .image, .progress:
+                case .icon, .progress:
                     hasVisibleContent = true
+                case .image(let value):
+                    hasVisibleContent = true
+                    artworkCount = value.size == .artwork ? 1 : 0
+                    nonIconImageCount = value.size == .icon ? 0 : 1
                 case .spacer, .divider: break
                 case .hStack(let stack), .zStack(let stack):
                     merge(stack.children, vertical: false)
@@ -123,6 +132,7 @@ public extension ActivityPresentation {
                 case .button(let value):
                     let label = Metrics(value.label)
                     mergeChild(label)
+                    textBytes += value.accessibilityLabel?.utf8.count ?? 0
                     verticalRows = label.verticalRows
                     actionCount += 1
                 case .toggle(let value):
@@ -133,7 +143,7 @@ public extension ActivityPresentation {
                 case .slider(let value):
                     textBytes = value.title.utf8.count
                     actionCount = 1
-                    verticalRows = 2
+                    verticalRows = value.showsTitle ? 2 : 1
                     hasExpandedOnlyControl = true
                     hasVisibleContent = true
                 }
@@ -156,6 +166,8 @@ public extension ActivityPresentation {
                 maxChildren = max(maxChildren, child.maxChildren)
                 textBytes += child.textBytes
                 actionCount += child.actionCount
+                artworkCount += child.artworkCount
+                nonIconImageCount += child.nonIconImageCount
                 hasExpandedOnlyControl = hasExpandedOnlyControl || child.hasExpandedOnlyControl
                 hasVisibleContent = hasVisibleContent || child.hasVisibleContent
             }

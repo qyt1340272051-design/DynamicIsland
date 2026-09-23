@@ -63,6 +63,16 @@ public enum IslandDesignTokens {
         }
     }
 
+    /// Album art keeps the existing 124 pt Host surface size. The smaller
+    /// icon role follows the current presentation mode.
+    public static func imageSide(_ token: IslandImageSizeToken, mode: ActivityPresentation.Mode) -> CGFloat {
+        switch token {
+        case .icon: return mode == .expanded ? 20 : 16
+        case .thumbnail: return 26
+        case .artwork: return 124
+        }
+    }
+
     /// The app's island shell is black in both system appearances. Resolve text
     /// and state colors against that actual surface, and strengthen secondary
     /// text when Increase Contrast is enabled.
@@ -79,12 +89,12 @@ public enum IslandDesignTokens {
     /// A plugin cannot specify a preferred shell size.
     public static func compactShellSize(
         baseSize: CGSize,
-        isPlaying: Bool,
+        hasCompactActivity: Bool,
         hasActiveTimer: Bool
     ) -> CGSize {
         IslandVisualStyle.compactShellSize(
             baseSize: baseSize,
-            isPlaying: isPlaying,
+            hasCompactActivity: hasCompactActivity,
             hasActiveTimer: hasActiveTimer
         )
     }

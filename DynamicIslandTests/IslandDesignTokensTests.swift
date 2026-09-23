@@ -15,10 +15,12 @@ final class IslandDesignTokensTests: XCTestCase {
             "primary", "secondary", "accent", "success", "warning", "danger"
         ])
         try assertFiniteCodable(IslandCornerRadiusToken.allCases, expected: ["sm", "md"])
+        try assertFiniteCodable(IslandImageSizeToken.allCases, expected: ["icon", "thumbnail", "artwork"])
 
         XCTAssertThrowsError(try JSONDecoder().decode(IslandTypographyToken.self, from: Data(#""72pt""#.utf8)))
         XCTAssertThrowsError(try JSONDecoder().decode(IslandSpacingToken.self, from: Data(#""99""#.utf8)))
         XCTAssertThrowsError(try JSONDecoder().decode(IslandSemanticColorToken.self, from: Data("\"#ff0000\"".utf8)))
+        XCTAssertThrowsError(try JSONDecoder().decode(IslandImageSizeToken.self, from: Data("\"200pt\"".utf8)))
     }
 
     func testSpacingAndCornerRadiiUseFiniteHostValues() {
@@ -29,18 +31,23 @@ final class IslandDesignTokensTests: XCTestCase {
     }
 
     func testCompactAndExpandedBoundsFollowExistingHostGeometry() {
+        XCTAssertEqual(IslandDesignTokens.imageSide(.icon, mode: .minimal), 16)
+        XCTAssertEqual(IslandDesignTokens.imageSide(.icon, mode: .compact), 16)
+        XCTAssertEqual(IslandDesignTokens.imageSide(.icon, mode: .expanded), 20)
+        XCTAssertEqual(IslandDesignTokens.imageSide(.thumbnail, mode: .compact), 26)
+        XCTAssertEqual(IslandDesignTokens.imageSide(.artwork, mode: .expanded), 124)
         let compactBase = CGSize(width: 270, height: 32)
         XCTAssertEqual(
-            IslandDesignTokens.compactShellSize(baseSize: compactBase, isPlaying: false, hasActiveTimer: false),
+            IslandDesignTokens.compactShellSize(baseSize: compactBase, hasCompactActivity: false, hasActiveTimer: false),
             compactBase
         )
         XCTAssertEqual(
-            IslandDesignTokens.compactShellSize(baseSize: compactBase, isPlaying: true, hasActiveTimer: false),
-            IslandVisualStyle.compactShellSize(baseSize: compactBase, isPlaying: true)
+            IslandDesignTokens.compactShellSize(baseSize: compactBase, hasCompactActivity: true, hasActiveTimer: false),
+            IslandVisualStyle.compactShellSize(baseSize: compactBase, hasCompactActivity: true)
         )
         XCTAssertEqual(
-            IslandDesignTokens.compactShellSize(baseSize: compactBase, isPlaying: true, hasActiveTimer: true),
-            IslandVisualStyle.compactShellSize(baseSize: compactBase, isPlaying: true, hasActiveTimer: true)
+            IslandDesignTokens.compactShellSize(baseSize: compactBase, hasCompactActivity: true, hasActiveTimer: true),
+            IslandVisualStyle.compactShellSize(baseSize: compactBase, hasCompactActivity: true, hasActiveTimer: true)
         )
 
         for (surface, mode, expectedHeight) in [
