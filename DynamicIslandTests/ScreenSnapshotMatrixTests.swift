@@ -6,11 +6,13 @@ import XCTest
 final class ScreenSnapshotMatrixTests: XCTestCase {
     func testMatrixCoversEveryProfileAndRequiredIslandState() {
         XCTAssertEqual(SimulatedScreenProfile.allCases.count, 8)
-        XCTAssertEqual(ScreenSnapshotScenario.allCases.count, 8)
+        XCTAssertEqual(ScreenSnapshotScenario.allCases.count, 10)
         XCTAssertEqual(
             SimulatedScreenProfile.allCases.count * ScreenSnapshotScenario.allCases.count,
-            64
+            80
         )
+        XCTAssertTrue(ScreenSnapshotScenario.allCases.contains(.compactVolume))
+        XCTAssertTrue(ScreenSnapshotScenario.allCases.contains(.expandedVolume))
         XCTAssertTrue(ScreenSnapshotScenario.allCases.contains(.expandedMusic))
         XCTAssertTrue(ScreenSnapshotScenario.allCases.contains(.expandedFileTray))
         XCTAssertTrue(ScreenSnapshotScenario.allCases.contains(.expandedToolsStopwatch))
@@ -47,8 +49,12 @@ final class ScreenSnapshotMatrixTests: XCTestCase {
             try fileManager.createDirectory(at: profileDirectory, withIntermediateDirectories: true)
 
             for scenario in ScreenSnapshotScenario.allCases {
-                let viewModel = await makeViewModel(for: scenario, environment: environment)
-                let canvas = ScreenSnapshotCanvas(environment: environment, viewModel: viewModel)
+                let context = try await makeContext(for: scenario, environment: environment)
+                let canvas = ScreenSnapshotCanvas(
+                    environment: environment,
+                    viewModel: context.viewModel,
+                    activityRuntime: context.activityRuntime
+                )
                     .environment(\.colorScheme, .dark)
                 let rendered = try ScreenSnapshotRenderer.render(
                     canvas,
@@ -79,16 +85,16 @@ final class ScreenSnapshotMatrixTests: XCTestCase {
             }
         }
 
-        XCTAssertEqual(records.count, 64)
+        XCTAssertEqual(records.count, 80)
         try writeManifest(records: records, to: outputDirectory)
         try writeIndex(records: records, to: outputDirectory)
     }
 
     @MainActor
-    private func makeViewModel(
+    private func makeContext(
         for scenario: ScreenSnapshotScenario,
         environment: ScreenEnvironment
-    ) async -> IslandViewModel {
+    ) async throws -> ScreenSnapshotContext {
         let musicInfo = scenario.usesPlayingTrack ? Self.sampleNowPlaying : .empty
         let viewModel = IslandViewModel(
             volumeService: ScreenMatrixVolumeService(),
@@ -107,8 +113,10 @@ final class ScreenSnapshotMatrixTests: XCTestCase {
         }
 
         switch scenario {
-        case .compact, .compactPlaying:
+        case .compact, .compactPlaying, .compactVolume:
             break
+        case .expandedVolume:
+            viewModel.setHovering(true)
         case .expandedMusic:
             viewModel.setHovering(true)
             viewModel.selectExpandedSurface(.music)
@@ -131,7 +139,22 @@ final class ScreenSnapshotMatrixTests: XCTestCase {
             viewModel.selectExpandedSurface(.tools)
         }
 
-        return viewModel
+        let activityRuntime = IslandActivityRuntime(viewModel: viewModel)
+        if scenario.usesVolumeActivity {
+            try activityRuntime.manager.publish(VolumeActivityProvider.makeActivity(
+                for: VolumeActivityEvent(volume: 0.72, isMuted: false),
+                createdAt: Date()
+            ))
+            try activityRuntime.manager.end(
+                id: MusicActivityProvider.activityID,
+                source: MusicActivityProvider.source
+            )
+        }
+
+        return ScreenSnapshotContext(
+            viewModel: viewModel,
+            activityRuntime: activityRuntime
+        )
     }
 
     private func writeManifest(records: [ScreenSnapshotRecord], to outputDirectory: URL) throws {
@@ -222,6 +245,8 @@ final class ScreenSnapshotMatrixTests: XCTestCase {
 private enum ScreenSnapshotScenario: String, CaseIterable {
     case compact
     case compactPlaying = "compact-playing"
+    case compactVolume = "compact-volume"
+    case expandedVolume = "expanded-volume"
     case expandedMusic = "expanded-music"
     case expandedFileTray = "expanded-file-tray"
     case draggingFile = "dragging-file"
@@ -235,6 +260,10 @@ private enum ScreenSnapshotScenario: String, CaseIterable {
             return "收起"
         case .compactPlaying:
             return "收起 · 音乐播放"
+        case .compactVolume:
+            return "收起 · 系统音量"
+        case .expandedVolume:
+            return "展开 · 系统音量"
         case .expandedMusic:
             return "展开 · 音乐"
         case .expandedFileTray:
@@ -257,6 +286,16 @@ private enum ScreenSnapshotScenario: String, CaseIterable {
     var usesTrayItems: Bool {
         self == .expandedFileTray || self == .draggingFile
     }
+
+    var usesVolumeActivity: Bool {
+        self == .compactVolume || self == .expandedVolume
+    }
+}
+
+@MainActor
+private struct ScreenSnapshotContext {
+    let viewModel: IslandViewModel
+    let activityRuntime: IslandActivityRuntime
 }
 
 private struct ScreenSnapshotCanvas: View {
@@ -264,6 +303,7 @@ private struct ScreenSnapshotCanvas: View {
 
     let environment: ScreenEnvironment
     @ObservedObject var viewModel: IslandViewModel
+    let activityRuntime: IslandActivityRuntime
 
     var body: some View {
         ZStack(alignment: .top) {
@@ -279,7 +319,7 @@ private struct ScreenSnapshotCanvas: View {
                     .frame(width: notchWidth, height: environment.safeAreaInsets.top)
             }
 
-            IslandView(viewModel: viewModel)
+            IslandView(viewModel: viewModel, activityRuntime: activityRuntime)
                 .frame(
                     width: IslandPanelGeometry.expandedSize.width,
                     height: IslandPanelGeometry.expandedSize.height,

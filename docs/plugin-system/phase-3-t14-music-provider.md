@@ -27,4 +27,4 @@
 ## 尚未覆盖
 
 - 真实 Apple Music 自动化权限、真实鼠标拖动和 VoiceOver 仍需要人工设备验收；自动化测试使用可控 MusicService，视觉测试使用屏幕矩阵样例数据。
-- T15 将把系统音量变化作为独立 transient Activity；T16 将加入 Battery Provider；T17 负责压力、能耗、多显示器和睡眠唤醒回归。因此本记录不代表 Phase 3 已完成。
+- T15 已完成系统音量 transient Activity 的代码与自动化闭环，见 [T15 验证记录](phase-3-t15-volume-provider.md)；T16 将加入 Battery Provider，T17 负责压力、能耗、多显示器和睡眠唤醒回归。因此本记录不代表 Phase 3 已完成。

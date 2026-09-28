@@ -45,7 +45,7 @@
 | ID | 任务 | 前置依赖 | 状态 | 验收证据 |
 | --- | --- | --- | --- | --- |
 | T14 | Music Provider | T06–T13 | `in progress` | [正式 Music Activity Provider 与 Runtime](../../DynamicIsland/Core/Activity/MusicActivityProvider.swift)、[Provider/动作/抢占/封面测试](../../DynamicIslandTests/MusicActivityProviderTests.swift)、[64 场景视觉矩阵与验证记录](phase-3-t14-music-provider.md)；`./Scripts/ci.sh` 244 tests、1 skipped、0 failures、Release build passed。代码与自动化闭环已完成；真实 Apple Music 权限、鼠标拖动及 VoiceOver 待设备验收。 |
-| T15 | Volume Provider | T14 基础 | `pending` | 待补。 |
+| T15 | Volume Provider | T14 基础 | `in progress` | [固定 ID、debounce、回声抑制、音乐恢复、80 场景视觉矩阵与验证记录](phase-3-t15-volume-provider.md)；`./Scripts/ci.sh` 254 tests、1 skipped、0 failures、Release build passed。代码与自动化闭环已完成；真实 Core Audio 连续调节和动画待设备验收。 |
 | T16 | Battery Provider | T14 基础 | `pending` | 待补。 |
 | T17 | Activity 压力与回归测试 | T14–T16 | `pending` | 待补。 |
 

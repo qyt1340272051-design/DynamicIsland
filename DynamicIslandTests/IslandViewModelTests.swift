@@ -1118,7 +1118,44 @@ final class IslandViewModelTests: XCTestCase {
         await MainActor.run {
             XCTAssertEqual(model.volume, 0.8, accuracy: 0.0001)
             XCTAssertTrue(model.isMuted)
+            XCTAssertEqual(model.volumeActivityEvent, VolumeActivityEvent(volume: 0.8, isMuted: true))
             XCTAssertNil(model.lastErrorMessage)
+        }
+    }
+
+    func testLocalVolumeWriteAndCoreAudioEchoDoNotPublishVolumeActivity() async throws {
+        let volumeService = RecordingVolumeService(volume: 0.25)
+        let model = await MainActor.run { makeModel(volumeService: volumeService) }
+
+        await MainActor.run {
+            model.setVolume(0.75)
+            XCTAssertNil(model.volumeActivityEvent)
+        }
+        volumeService.simulateSystemChange(volume: 0.75, isMuted: false)
+        try await Task.sleep(nanoseconds: 10_000_000)
+
+        await MainActor.run {
+            XCTAssertEqual(model.volume, 0.75, accuracy: 0.0001)
+            XCTAssertNil(model.volumeActivityEvent)
+        }
+    }
+
+    func testLocalMuteWriteAndCoreAudioEchoDoNotPublishVolumeActivity() async throws {
+        let volumeService = RecordingVolumeService(volume: 0.25)
+        let model = await MainActor.run { makeModel(volumeService: volumeService) }
+
+        await MainActor.run {
+            model.toggleMute()
+            XCTAssertTrue(model.isMuted)
+            XCTAssertNil(model.volumeActivityEvent)
+        }
+        volumeService.simulateSystemChange(volume: 0.25, isMuted: true)
+        try await Task.sleep(nanoseconds: 10_000_000)
+
+        await MainActor.run {
+            XCTAssertEqual(model.volume, 0.25, accuracy: 0.0001)
+            XCTAssertTrue(model.isMuted)
+            XCTAssertNil(model.volumeActivityEvent)
         }
     }
 

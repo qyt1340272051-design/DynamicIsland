@@ -105,6 +105,8 @@ final class IslandPanelController {
             baseSize: baseFrame.size,
             hasCompactActivity: activityRuntime.isCompactActivityVisible,
             hasActiveTimer: viewModel.compactTimerMode != nil
+                && !(activityRuntime.prioritizesCurrentActivityOverLegacyContent
+                    && activityRuntime.isCompactActivityVisible)
         )
 
         return CGRect(

@@ -13,6 +13,19 @@ public enum IslandExpandedSurface: Hashable {
     case tools
 }
 
+/// A system-originated volume change that may be presented as a transient
+/// Activity. Local island controls update the same model but suppress their
+/// Core Audio echo so dragging the music slider is not interrupted.
+public nonisolated struct VolumeActivityEvent: Equatable, Sendable {
+    public let volume: Float
+    public let isMuted: Bool
+
+    public init(volume: Float, isMuted: Bool) {
+        self.volume = min(max(volume, 0), 1)
+        self.isMuted = isMuted
+    }
+}
+
 @MainActor
 public final class IslandViewModel: ObservableObject {
     @Published public private(set) var isPointerInside = false
@@ -32,6 +45,7 @@ public final class IslandViewModel: ObservableObject {
     @Published public private(set) var isMuted: Bool
     @Published public private(set) var lastErrorMessage: String?
     @Published public private(set) var musicErrorMessage: String?
+    @Published public private(set) var volumeActivityEvent: VolumeActivityEvent?
 
     public let timerTools: IslandTimerToolsModel
 
@@ -57,6 +71,7 @@ public final class IslandViewModel: ObservableObject {
     private var timerSessionObservation: AnyCancellable?
     private var timerModeObservation: AnyCancellable?
     private var timerCompletionObservation: AnyCancellable?
+    private var pendingVolumeEcho: PendingVolumeEcho?
     private var suppressesHoverExpansionUntilPointerExit = false
     private let nowPlayingPollIntervalNanoseconds: UInt64
     private let playbackProgressIntervalNanoseconds: UInt64 = 250_000_000
@@ -306,14 +321,26 @@ public final class IslandViewModel: ObservableObject {
         compactPanelSize = size
     }
 
-    public func refreshVolume() {
+    public func refreshVolume(publishesActivityEvent: Bool = false) {
         do {
             let currentVolume = Self.clampedVolume(try volumeService.currentVolume())
             let currentMutedState = try volumeService.isMuted()
+            let didChange = abs(currentVolume - volume) > 0.0001 || currentMutedState != isMuted
             volume = currentVolume
             isMuted = currentMutedState
             if currentVolume > 0 {
                 lastAudibleVolume = currentVolume
+            }
+            if publishesActivityEvent {
+                let event = VolumeActivityEvent(volume: currentVolume, isMuted: currentMutedState)
+                if pendingVolumeEcho?.matches(event, at: Date()) == true {
+                    pendingVolumeEcho = nil
+                } else {
+                    pendingVolumeEcho = nil
+                    if didChange {
+                        volumeActivityEvent = event
+                    }
+                }
             }
             lastErrorMessage = nil
         } catch {
@@ -331,11 +358,16 @@ public final class IslandViewModel: ObservableObject {
         if clamped > 0 {
             lastAudibleVolume = clamped
         }
+        pendingVolumeEcho = PendingVolumeEcho(
+            event: VolumeActivityEvent(volume: clamped, isMuted: clamped == 0),
+            expiresAt: Date().addingTimeInterval(1)
+        )
 
         do {
             try volumeService.setVolume(clamped)
             lastErrorMessage = nil
         } catch {
+            pendingVolumeEcho = nil
             volume = previousVolume
             isMuted = previousMutedState
             lastAudibleVolume = previousLastAudibleVolume
@@ -371,8 +403,13 @@ public final class IslandViewModel: ObservableObject {
                 isMuted = false
                 try volumeService.setMuted(false)
             }
+            pendingVolumeEcho = PendingVolumeEcho(
+                event: VolumeActivityEvent(volume: volume, isMuted: isMuted),
+                expiresAt: Date().addingTimeInterval(1)
+            )
             lastErrorMessage = nil
         } catch {
+            pendingVolumeEcho = nil
             volume = previousVolume
             isMuted = previousMutedState
             lastAudibleVolume = previousLastAudibleVolume
@@ -755,7 +792,7 @@ public final class IslandViewModel: ObservableObject {
     private func startVolumeObservation() {
         volumeObservation = try? volumeService.observeVolumeChanges { [weak self] in
             Task { @MainActor [weak self] in
-                self?.refreshVolume()
+                self?.refreshVolume(publishesActivityEvent: true)
             }
         }
     }
@@ -770,6 +807,16 @@ private struct PlaybackSeekSession {
     let trackIdentifier: String
     var isDragging: Bool
     var pendingPosition: TimeInterval?
+}
+
+private struct PendingVolumeEcho {
+    let event: VolumeActivityEvent
+    let expiresAt: Date
+
+    func matches(_ candidate: VolumeActivityEvent, at date: Date) -> Bool {
+        date <= expiresAt && abs(event.volume - candidate.volume) <= 0.01
+            && event.isMuted == candidate.isMuted
+    }
 }
 
 private struct PreviewVolumeService: VolumeService {

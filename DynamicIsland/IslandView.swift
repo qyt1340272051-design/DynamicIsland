@@ -96,6 +96,8 @@ public struct IslandView: View {
             baseSize: viewModel.compactPanelSize,
             hasCompactActivity: hasCompactActivity,
             hasActiveTimer: viewModel.compactTimerMode != nil
+                && !(activityRuntime.prioritizesCurrentActivityOverLegacyContent
+                    && hasCompactActivity)
         )
     }
 
@@ -184,20 +186,17 @@ public struct IslandView: View {
 
     @ViewBuilder
     private var compactContent: some View {
-        if viewModel.compactTimerMode != nil {
+        if activityRuntime.prioritizesCurrentActivityOverLegacyContent,
+           let snapshot = activityManager.currentSnapshot,
+           snapshot.activity.presentation.isCompactVisible {
+            renderedActivity(snapshot, mode: .compact, shellSize: compactPresentationSize)
+                .transition(.opacity.combined(with: .scale(scale: 0.86)))
+        } else if viewModel.compactTimerMode != nil {
             CompactTimerStatus(model: viewModel.timerTools)
                 .transition(.opacity.combined(with: .scale(scale: 0.86)))
         } else if hasCompactActivity, let snapshot = activityManager.currentSnapshot {
-            IslandRenderer(
-                presentation: snapshot.activity.presentation,
-                mode: .compact,
-                shellSize: compactPresentationSize,
-                imageResolver: { image in
-                    activityRuntime.resolveImage(image, for: snapshot.activity.source)
-                },
-                onAction: { action in route(action, from: snapshot) }
-            )
-            .transition(.opacity.combined(with: .scale(scale: 0.86)))
+            renderedActivity(snapshot, mode: .compact, shellSize: compactPresentationSize)
+                .transition(.opacity.combined(with: .scale(scale: 0.86)))
         }
     }
 
@@ -221,20 +220,41 @@ public struct IslandView: View {
     @ViewBuilder
     private var expandedSurfaceContent: some View {
         Group {
-            switch viewModel.expandedSurface {
-            case .music:
-                musicExpandedContent
-            case .fileTray:
-                fileTrayExpandedContent
-            case .tools:
-                IslandTimerToolsView(
-                    model: viewModel.timerTools,
-                    onAcknowledgeCompletion: viewModel.acknowledgeTimerCompletion
+            if activityRuntime.prioritizesCurrentActivityOverLegacyContent,
+               let snapshot = activityManager.currentSnapshot {
+                renderedActivity(
+                    snapshot,
+                    mode: .expanded,
+                    shellSize: CGSize(width: contentSize.width, height: expandedShellSize.height)
                 )
+            } else {
+                switch viewModel.expandedSurface {
+                case .music:
+                    musicExpandedContent
+                case .fileTray:
+                    fileTrayExpandedContent
+                case .tools:
+                    IslandTimerToolsView(
+                        model: viewModel.timerTools,
+                        onAcknowledgeCompletion: viewModel.acknowledgeTimerCompletion
+                    )
+                }
             }
         }
-        .id(viewModel.expandedSurface)
+        .id(expandedContentIdentity)
         .transition(IslandSurfaceTransition.content)
+    }
+
+    private var expandedContentIdentity: String {
+        if activityRuntime.prioritizesCurrentActivityOverLegacyContent,
+           let id = activityManager.currentSnapshot?.activity.id {
+            return "activity:\(id)"
+        }
+        switch viewModel.expandedSurface {
+        case .music: return "surface:music"
+        case .fileTray: return "surface:fileTray"
+        case .tools: return "surface:tools"
+        }
     }
 
     private var surfaceSwitcher: some View {
@@ -291,14 +311,10 @@ public struct IslandView: View {
     private var musicExpandedContent: some View {
         Group {
             if let snapshot = activityManager.currentSnapshot {
-                IslandRenderer(
-                    presentation: snapshot.activity.presentation,
+                renderedActivity(
+                    snapshot,
                     mode: .expanded,
-                    shellSize: CGSize(width: contentSize.width, height: expandedShellSize.height),
-                    imageResolver: { image in
-                        activityRuntime.resolveImage(image, for: snapshot.activity.source)
-                    },
-                    onAction: { action in route(action, from: snapshot) }
+                    shellSize: CGSize(width: contentSize.width, height: expandedShellSize.height)
                 )
             } else {
                 Text("在 Apple Music 播放后显示曲目信息")
@@ -315,6 +331,22 @@ public struct IslandView: View {
             source: snapshot.activity.source,
             instanceToken: snapshot.instanceToken,
             action: action
+        )
+    }
+
+    private func renderedActivity(
+        _ snapshot: ActivitySnapshot,
+        mode: ActivityPresentation.Mode,
+        shellSize: CGSize
+    ) -> some View {
+        IslandRenderer(
+            presentation: snapshot.activity.presentation,
+            mode: mode,
+            shellSize: shellSize,
+            imageResolver: { image in
+                activityRuntime.resolveImage(image, for: snapshot.activity.source)
+            },
+            onAction: { action in route(action, from: snapshot) }
         )
     }
 
