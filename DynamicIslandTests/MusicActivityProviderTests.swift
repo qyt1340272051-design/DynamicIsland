@@ -168,15 +168,33 @@ final class MusicActivityProviderTests: XCTestCase {
         ))
     }
 
-    private func makeModel(music: MusicActivityTestService) -> IslandViewModel {
-        IslandViewModel(
-            volumeService: MusicActivityTestVolume(),
-            fileTrayService: MusicActivityTestTray(),
-            sharingService: MusicActivityTestSharing(),
-            musicService: music,
-            hapticFeedbackService: MusicActivityTestHaptic(),
-            nowPlayingPollIntervalNanoseconds: 3_600_000_000_000
+    func testMusicErrorAppearsInSubtitleAndRecoveryClearsIt() async throws {
+        let service = MusicActivityTestService(info: track(title: "可恢复曲目"))
+        let model = makeModel(music: service)
+        await model.refreshNowPlaying()
+        let manager = ActivityManager(configuration: .immediate)
+        let provider = MusicActivityProvider(viewModel: model, manager: manager)
+
+        await service.setError(.temporarilyUnavailable)
+        await model.refreshNowPlaying()
+        try provider.synchronize()
+
+        XCTAssertEqual(model.musicErrorMessage, MusicActivityTestError.temporarilyUnavailable.localizedDescription)
+        XCTAssertEqual(
+            manager.currentSnapshot?.activity.presentation.subtitle,
+            MusicActivityTestError.temporarilyUnavailable.localizedDescription
         )
+
+        await service.setError(nil)
+        await model.refreshNowPlaying()
+        try provider.synchronize()
+
+        XCTAssertNil(model.musicErrorMessage)
+        XCTAssertEqual(manager.currentSnapshot?.activity.presentation.subtitle, "艺人 — 专辑")
+    }
+
+    private func makeModel(music: MusicActivityTestService) -> IslandViewModel {
+        makeMusicActivityTestModel(music: music)
     }
 
     private func track(title: String, playing: Bool = false, artwork: Data? = nil) -> NowPlayingInfo {
@@ -203,8 +221,15 @@ final class MusicActivityProviderTests: XCTestCase {
     }
 }
 
-private actor MusicActivityTestService: MusicControlService {
+enum MusicActivityTestError: LocalizedError {
+    case temporarilyUnavailable
+
+    var errorDescription: String? { "音乐服务暂不可用" }
+}
+
+actor MusicActivityTestService: MusicControlService {
     var info: NowPlayingInfo
+    private var error: MusicActivityTestError?
     private(set) var toggleCount = 0
     private(set) var previousCount = 0
     private(set) var nextCount = 0
@@ -213,6 +238,7 @@ private actor MusicActivityTestService: MusicControlService {
     init(info: NowPlayingInfo) { self.info = info }
 
     func setInfo(_ info: NowPlayingInfo) { self.info = info }
+    func setError(_ error: MusicActivityTestError?) { self.error = error }
     func togglePlayPause() async throws { toggleCount += 1 }
     func skipBackward() async throws { previousCount += 1 }
     func skipForward() async throws { nextCount += 1 }
@@ -220,24 +246,39 @@ private actor MusicActivityTestService: MusicControlService {
         lastSeek = position
         return true
     }
-    func nowPlaying() async throws -> NowPlayingInfo { info }
+    func nowPlaying() async throws -> NowPlayingInfo {
+        if let error { throw error }
+        return info
+    }
 }
 
-private struct MusicActivityTestVolume: VolumeService {
+struct MusicActivityTestVolume: VolumeService {
     func currentVolume() throws -> Float { 0.5 }
     func setVolume(_ volume: Float) throws {}
 }
 
-private struct MusicActivityTestTray: FileTrayService {
+struct MusicActivityTestTray: FileTrayService {
     func importFiles(from urls: [URL]) throws -> [TrayFileItem] { [] }
     func remove(_ item: TrayFileItem) throws {}
     func clear() throws {}
 }
 
-private struct MusicActivityTestSharing: SharingService {
+struct MusicActivityTestSharing: SharingService {
     func share(urls: [URL]) throws {}
 }
 
-private struct MusicActivityTestHaptic: HapticFeedbackService {
+struct MusicActivityTestHaptic: HapticFeedbackService {
     func performExpansionFeedback() {}
+}
+
+@MainActor
+func makeMusicActivityTestModel(music: MusicActivityTestService) -> IslandViewModel {
+    IslandViewModel(
+        volumeService: MusicActivityTestVolume(),
+        fileTrayService: MusicActivityTestTray(),
+        sharingService: MusicActivityTestSharing(),
+        musicService: music,
+        hapticFeedbackService: MusicActivityTestHaptic(),
+        nowPlayingPollIntervalNanoseconds: 3_600_000_000_000
+    )
 }

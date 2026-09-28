@@ -1,3 +1,4 @@
+import AppKit
 import XCTest
 @testable import DynamicIsland
 
@@ -54,10 +55,27 @@ final class IslandActivityRuntimeTests: XCTestCase {
         XCTAssertTrue(runtime.isCompactActivityVisible)
     }
 
-    func testRuntimeScopesBrokerResourcesToOwningSource() {
-        let runtime = IslandActivityRuntime(viewModel: .preview())
+    func testRuntimeForwardsOwnedArtworkToMusicProviderAndScopesOtherResources() async throws {
+        let image = NSImage(size: NSSize(width: 2, height: 2))
+        image.lockFocus()
+        NSColor.systemBlue.setFill()
+        NSRect(x: 0, y: 0, width: 2, height: 2).fill()
+        image.unlockFocus()
+        let artworkData = try XCTUnwrap(image.tiffRepresentation)
+        let service = MusicActivityTestService(info: NowPlayingInfo(
+            isPlaying: true,
+            title: "Resolver",
+            artist: "Artist",
+            album: "Album",
+            trackIdentifier: "resolver-track",
+            artworkData: artworkData
+        ))
+        let model = makeMusicActivityTestModel(music: service)
+        await model.refreshNowPlaying()
+        let runtime = IslandActivityRuntime(viewModel: model)
         let artwork = IslandNode.ImageSource.brokerResource(id: MusicActivityProvider.artworkResourceID)
 
+        XCTAssertNotNil(runtime.resolveImage(artwork, for: MusicActivityProvider.source))
         XCTAssertNil(runtime.resolveImage(
             artwork,
             for: ActivitySource(kind: .builtIn, identifier: "another-provider")
@@ -66,5 +84,33 @@ final class IslandActivityRuntimeTests: XCTestCase {
             .brokerResource(id: "another.resource"),
             for: MusicActivityProvider.source
         ))
+    }
+
+    func testMusicPlayingAndPausedUpdatesDriveRuntimeCompactVisibility() async throws {
+        let service = MusicActivityTestService(info: NowPlayingInfo(
+            isPlaying: true,
+            title: "正在播放",
+            artist: "艺人",
+            album: "专辑",
+            trackIdentifier: "visibility-track"
+        ))
+        let model = makeMusicActivityTestModel(music: service)
+        await model.refreshNowPlaying()
+        let runtime = IslandActivityRuntime(viewModel: model)
+
+        XCTAssertEqual(runtime.manager.currentSnapshot?.activity.presentation.title, "正在播放")
+        XCTAssertTrue(runtime.isCompactActivityVisible)
+
+        await service.setInfo(NowPlayingInfo(
+            isPlaying: false,
+            title: "已暂停",
+            artist: "艺人",
+            album: "专辑",
+            trackIdentifier: "visibility-track"
+        ))
+        await model.refreshNowPlaying()
+
+        XCTAssertEqual(runtime.manager.currentSnapshot?.activity.presentation.title, "已暂停")
+        XCTAssertFalse(runtime.isCompactActivityVisible)
     }
 }
