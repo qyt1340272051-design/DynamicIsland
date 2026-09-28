@@ -6,13 +6,16 @@ import XCTest
 final class ScreenSnapshotMatrixTests: XCTestCase {
     func testMatrixCoversEveryProfileAndRequiredIslandState() {
         XCTAssertEqual(SimulatedScreenProfile.allCases.count, 8)
-        XCTAssertEqual(ScreenSnapshotScenario.allCases.count, 10)
+        XCTAssertEqual(ScreenSnapshotScenario.allCases.count, 13)
         XCTAssertEqual(
             SimulatedScreenProfile.allCases.count * ScreenSnapshotScenario.allCases.count,
-            80
+            104
         )
         XCTAssertTrue(ScreenSnapshotScenario.allCases.contains(.compactVolume))
         XCTAssertTrue(ScreenSnapshotScenario.allCases.contains(.expandedVolume))
+        XCTAssertTrue(ScreenSnapshotScenario.allCases.contains(.compactBatteryCharging))
+        XCTAssertTrue(ScreenSnapshotScenario.allCases.contains(.expandedBatteryLow))
+        XCTAssertTrue(ScreenSnapshotScenario.allCases.contains(.expandedBatteryCritical))
         XCTAssertTrue(ScreenSnapshotScenario.allCases.contains(.expandedMusic))
         XCTAssertTrue(ScreenSnapshotScenario.allCases.contains(.expandedFileTray))
         XCTAssertTrue(ScreenSnapshotScenario.allCases.contains(.expandedToolsStopwatch))
@@ -85,7 +88,7 @@ final class ScreenSnapshotMatrixTests: XCTestCase {
             }
         }
 
-        XCTAssertEqual(records.count, 80)
+        XCTAssertEqual(records.count, 104)
         try writeManifest(records: records, to: outputDirectory)
         try writeIndex(records: records, to: outputDirectory)
     }
@@ -113,9 +116,9 @@ final class ScreenSnapshotMatrixTests: XCTestCase {
         }
 
         switch scenario {
-        case .compact, .compactPlaying, .compactVolume:
+        case .compact, .compactPlaying, .compactVolume, .compactBatteryCharging:
             break
-        case .expandedVolume:
+        case .expandedVolume, .expandedBatteryLow, .expandedBatteryCritical:
             viewModel.setHovering(true)
         case .expandedMusic:
             viewModel.setHovering(true)
@@ -143,6 +146,17 @@ final class ScreenSnapshotMatrixTests: XCTestCase {
         if scenario.usesVolumeActivity {
             try activityRuntime.manager.publish(VolumeActivityProvider.makeActivity(
                 for: VolumeActivityEvent(volume: 0.72, isMuted: false),
+                createdAt: Date()
+            ))
+            try activityRuntime.manager.end(
+                id: MusicActivityProvider.activityID,
+                source: MusicActivityProvider.source
+            )
+        }
+        if let batteryScenario = scenario.batteryScenario {
+            try activityRuntime.manager.publish(BatteryActivityProvider.makeActivity(
+                for: batteryScenario.state,
+                classification: batteryScenario.classification,
                 createdAt: Date()
             ))
             try activityRuntime.manager.end(
@@ -247,6 +261,9 @@ private enum ScreenSnapshotScenario: String, CaseIterable {
     case compactPlaying = "compact-playing"
     case compactVolume = "compact-volume"
     case expandedVolume = "expanded-volume"
+    case compactBatteryCharging = "compact-battery-charging"
+    case expandedBatteryLow = "expanded-battery-low"
+    case expandedBatteryCritical = "expanded-battery-critical"
     case expandedMusic = "expanded-music"
     case expandedFileTray = "expanded-file-tray"
     case draggingFile = "dragging-file"
@@ -264,6 +281,12 @@ private enum ScreenSnapshotScenario: String, CaseIterable {
             return "收起 · 系统音量"
         case .expandedVolume:
             return "展开 · 系统音量"
+        case .compactBatteryCharging:
+            return "收起 · 电池充电"
+        case .expandedBatteryLow:
+            return "展开 · 低电量"
+        case .expandedBatteryCritical:
+            return "展开 · 严重低电量"
         case .expandedMusic:
             return "展开 · 音乐"
         case .expandedFileTray:
@@ -290,6 +313,48 @@ private enum ScreenSnapshotScenario: String, CaseIterable {
     var usesVolumeActivity: Bool {
         self == .compactVolume || self == .expandedVolume
     }
+
+    var batteryScenario: ScreenMatrixBatteryScenario? {
+        switch self {
+        case .compactBatteryCharging:
+            return ScreenMatrixBatteryScenario(
+                state: BatteryState(
+                    level: 0.72,
+                    powerSource: .ac,
+                    isCharging: true,
+                    isCharged: false
+                ),
+                classification: .charging
+            )
+        case .expandedBatteryLow:
+            return ScreenMatrixBatteryScenario(
+                state: BatteryState(
+                    level: 0.18,
+                    powerSource: .battery,
+                    isCharging: false,
+                    isCharged: false
+                ),
+                classification: .low
+            )
+        case .expandedBatteryCritical:
+            return ScreenMatrixBatteryScenario(
+                state: BatteryState(
+                    level: 0.08,
+                    powerSource: .battery,
+                    isCharging: false,
+                    isCharged: false
+                ),
+                classification: .critical
+            )
+        default:
+            return nil
+        }
+    }
+}
+
+private struct ScreenMatrixBatteryScenario {
+    let state: BatteryState
+    let classification: BatteryActivityProvider.Classification
 }
 
 @MainActor

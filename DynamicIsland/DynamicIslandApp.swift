@@ -34,7 +34,15 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
         let viewModel = IslandViewModel()
         let screenManager = ScreenManager()
-        let panelController = IslandPanelController(viewModel: viewModel, screenManager: screenManager)
+        let activityRuntime = IslandActivityRuntime(
+            viewModel: viewModel,
+            batteryService: IOKitBatteryService()
+        )
+        let panelController = IslandPanelController(
+            viewModel: viewModel,
+            screenManager: screenManager,
+            activityRuntime: activityRuntime
+        )
         self.viewModel = viewModel
         self.screenManager = screenManager
         self.panelController = panelController

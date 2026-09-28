@@ -9,19 +9,32 @@ public final class IslandActivityRuntime {
     public let router: ActionRouter
     private let music: MusicActivityProvider
     private let volume: VolumeActivityProvider
+    private let battery: BatteryActivityProvider?
 
     private let musicRegistration: UUID
 
-    public init(viewModel: IslandViewModel) {
+    public init(
+        viewModel: IslandViewModel,
+        batteryService: (any BatteryService)? = nil,
+        batteryDebounceNanoseconds: UInt64 = BatteryActivityProvider.defaultDebounceNanoseconds
+    ) {
         let manager = ActivityManager()
         let router = ActionRouter(manager: manager)
         let music = MusicActivityProvider(viewModel: viewModel, manager: manager)
         let volume = VolumeActivityProvider(viewModel: viewModel, manager: manager)
+        let battery = batteryService.map {
+            BatteryActivityProvider(
+                service: $0,
+                manager: manager,
+                debounceNanoseconds: batteryDebounceNanoseconds
+            )
+        }
 
         self.manager = manager
         self.router = router
         self.music = music
         self.volume = volume
+        self.battery = battery
         musicRegistration = music.registerActions(with: router)
     }
 

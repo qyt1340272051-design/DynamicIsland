@@ -147,6 +147,82 @@ final class IslandActivityRuntimeTests: XCTestCase {
         XCTAssertEqual(runtime.manager.currentSnapshot?.activity.presentation.title, "已暂停")
         XCTAssertFalse(runtime.isCompactActivityVisible)
     }
+
+    func testBatteryCriticalPreemptsAndRecoveryRestoresSameMusicInstance() async throws {
+        let battery = RuntimeBatteryService(state: BatteryState(
+            level: 0.65,
+            powerSource: .battery,
+            isCharging: false,
+            isCharged: false
+        ))
+        let model = IslandViewModel.preview()
+        let runtime = IslandActivityRuntime(
+            viewModel: model,
+            batteryService: battery,
+            batteryDebounceNanoseconds: 0
+        )
+        let music = try XCTUnwrap(runtime.manager.currentSnapshot)
+        XCTAssertEqual(music.activity.id, MusicActivityProvider.activityID)
+
+        battery.emit(BatteryState(
+            level: 0.08,
+            powerSource: .battery,
+            isCharging: false,
+            isCharged: false
+        ))
+        try await waitForRuntime { runtime.manager.current?.id == BatteryActivityProvider.activityID }
+
+        XCTAssertEqual(runtime.manager.current?.priority, .critical)
+        XCTAssertTrue(runtime.prioritizesCurrentActivityOverLegacyContent)
+        XCTAssertTrue(runtime.isCompactActivityVisible)
+
+        battery.emit(BatteryState(
+            level: 0.08,
+            powerSource: .ac,
+            isCharging: false,
+            isCharged: false
+        ))
+        try await waitForRuntime { runtime.manager.current?.id == MusicActivityProvider.activityID }
+
+        XCTAssertEqual(runtime.manager.currentSnapshot?.instanceToken, music.instanceToken)
+        XCTAssertNil(runtime.manager.activity(id: BatteryActivityProvider.activityID))
+        XCTAssertFalse(runtime.prioritizesCurrentActivityOverLegacyContent)
+    }
+
+    private func waitForRuntime(_ condition: @escaping @MainActor () -> Bool) async throws {
+        for _ in 0..<100 {
+            if condition() { return }
+            try await Task.sleep(nanoseconds: 2_000_000)
+        }
+        XCTFail("Timed out waiting for Activity runtime")
+    }
+}
+
+private final class RuntimeBatteryService: BatteryService, @unchecked Sendable {
+    private let lock = NSLock()
+    private var state: BatteryState?
+    private var handler: (@Sendable () -> Void)?
+
+    init(state: BatteryState?) {
+        self.state = state
+    }
+
+    func currentState() throws -> BatteryState? {
+        lock.withLock { state }
+    }
+
+    func observeChanges(_ handler: @escaping @Sendable () -> Void) throws -> BatteryObservation? {
+        lock.withLock { self.handler = handler }
+        return nil
+    }
+
+    func emit(_ state: BatteryState?) {
+        let callback = lock.withLock { () -> (@Sendable () -> Void)? in
+            self.state = state
+            return handler
+        }
+        callback?()
+    }
 }
 
 private final class RuntimeVolumeService: VolumeService, @unchecked Sendable {

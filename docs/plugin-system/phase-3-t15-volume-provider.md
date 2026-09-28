@@ -26,4 +26,4 @@
 ## 尚未覆盖
 
 - 仍需在真实 Core Audio 输出设备上连续使用键盘音量键、控制中心和岛内滑块，确认设备量化、多声道回调与默认输出设备切换不会产生反馈 Activity，并观察连续动画和 Reduce Motion 行为。
-- T16 Battery Provider 与 T17 压力、能耗、多显示器及睡眠唤醒回归尚未完成，因此本记录不代表 Phase 3 已完成。
+- T16 已完成 Battery Provider 的代码与聚焦自动化测试，但真实设备验收仍在进行，见 [T16 验证记录](phase-3-t16-battery-provider.md)。T17 压力、能耗、多显示器及睡眠唤醒回归尚未完成，因此本记录不代表 Phase 3 已完成。
