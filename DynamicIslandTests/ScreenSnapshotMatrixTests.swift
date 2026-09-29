@@ -45,6 +45,8 @@ final class ScreenSnapshotMatrixTests: XCTestCase {
         try fileManager.createDirectory(at: outputDirectory, withIntermediateDirectories: true)
 
         var records: [ScreenSnapshotRecord] = []
+        let renderer = ScreenSnapshotRenderer(size: ScreenSnapshotCanvas.size)
+        defer { renderer.close() }
         for profile in SimulatedScreenProfile.allCases {
             let configuration = profile.defaultConfiguration
             let environment = configuration.makeEnvironment()
@@ -59,11 +61,12 @@ final class ScreenSnapshotMatrixTests: XCTestCase {
                     activityRuntime: context.activityRuntime
                 )
                     .environment(\.colorScheme, .dark)
-                let rendered = try ScreenSnapshotRenderer.render(
-                    canvas,
-                    size: ScreenSnapshotCanvas.size,
-                    scale: environment.backingScaleFactor
-                )
+                let rendered = try autoreleasepool {
+                    try renderer.render(
+                        canvas,
+                        scale: environment.backingScaleFactor
+                    )
+                }
                 let relativePath = "\(profile.rawValue)/\(scenario.rawValue).png"
                 try rendered.data.write(
                     to: outputDirectory.appendingPathComponent(relativePath),
@@ -404,17 +407,30 @@ private struct ScreenSnapshotCanvas: View {
     }
 }
 
-private enum ScreenSnapshotRenderer {
+@MainActor
+private final class ScreenSnapshotRenderer {
     struct RenderedImage {
         let data: Data
         let pixelWidth: Int
         let pixelHeight: Int
     }
 
-    @MainActor
-    static func render<Content: View>(
+    private let size: CGSize
+    private let window: NSWindow
+
+    init(size: CGSize) {
+        self.size = size
+        window = NSWindow(
+            contentRect: NSRect(origin: .zero, size: size),
+            styleMask: .borderless,
+            backing: .buffered,
+            defer: false
+        )
+        window.isReleasedWhenClosed = false
+    }
+
+    func render<Content: View>(
         _ content: Content,
-        size: CGSize,
         scale: CGFloat
     ) throws -> RenderedImage {
         let pixelWidth = Int((size.width * scale).rounded())
@@ -438,13 +454,6 @@ private enum ScreenSnapshotRenderer {
         hostingView.frame = NSRect(origin: .zero, size: size)
         hostingView.appearance = NSAppearance(named: .darkAqua)
 
-        let window = NSWindow(
-            contentRect: hostingView.frame,
-            styleMask: .borderless,
-            backing: .buffered,
-            defer: false
-        )
-        window.isReleasedWhenClosed = false
         window.contentView = hostingView
         hostingView.layoutSubtreeIfNeeded()
         hostingView.displayIfNeeded()
@@ -461,6 +470,11 @@ private enum ScreenSnapshotRenderer {
             pixelWidth: pixelWidth,
             pixelHeight: pixelHeight
         )
+    }
+
+    func close() {
+        window.contentView = nil
+        window.close()
     }
 }
 

@@ -71,6 +71,36 @@ final class ActivityManagerTests: XCTestCase {
         withExtendedLifetime(observation) {}
     }
 
+    func testEndedOneOffSourcesReleaseAllSchedulingMetadata() throws {
+        let manager = ActivityManager(clock: TestActivityClock(start), configuration: .immediate)
+
+        for index in 0..<100 {
+            let source = ActivitySource(kind: .plugin, identifier: "stress.source.\(index)")
+            let activity = make(
+                "stress.activity.\(index)",
+                source: source,
+                priority: .normal,
+                policy: .transient
+            )
+            try manager.publish(activity)
+            try manager.end(id: activity.id, source: source)
+        }
+
+        XCTAssertNil(manager.current)
+        XCTAssertNil(manager.currentSnapshot)
+        XCTAssertEqual(
+            manager.diagnostics,
+            ActivityManagerDiagnostics(
+                activityCount: 0,
+                instanceTokenCount: 0,
+                displayDeadlineCount: 0,
+                firstPresentedCount: 0,
+                rateLimitedSourceCount: 0,
+                scheduledWakeDeadline: nil
+            )
+        )
+    }
+
     private func make(_ id: String, source: ActivitySource, priority: ActivityPriority, policy: ActivityLifecycle.Policy) -> IslandActivity {
         IslandActivity(id: id, source: source, priority: priority, lifecycle: ActivityLifecycle(policy: policy), presentation: ActivityPresentation(title: id), createdAt: start)
     }

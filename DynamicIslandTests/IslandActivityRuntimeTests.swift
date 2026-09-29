@@ -189,6 +189,106 @@ final class IslandActivityRuntimeTests: XCTestCase {
         XCTAssertFalse(runtime.prioritizesCurrentActivityOverLegacyContent)
     }
 
+    func testTransientActivityPreservesTimerCompletionUntilLegacyToolsRestore() throws {
+        let model = IslandViewModel.preview()
+        let completedAt = Date(timeIntervalSinceReferenceDate: 120_000)
+        model.timerTools.selectedMode = .pomodoro
+        model.timerTools.startSelectedTimer(at: completedAt)
+        model.timerTools.refresh(
+            at: completedAt.addingTimeInterval(model.timerTools.pomodoroDuration)
+        )
+        XCTAssertTrue(model.isTimerCompletionPresented)
+        XCTAssertEqual(model.timerTools.completedMode, .pomodoro)
+        XCTAssertEqual(model.expandedSurface, .tools)
+        XCTAssertEqual(model.presentationState, .expanded)
+
+        let runtime = IslandActivityRuntime(viewModel: model)
+        let music = try XCTUnwrap(runtime.manager.currentSnapshot)
+        try publishTransientOverride(in: runtime)
+
+        XCTAssertEqual(runtime.manager.current?.id, BatteryActivityProvider.activityID)
+        XCTAssertTrue(runtime.prioritizesCurrentActivityOverLegacyContent)
+        XCTAssertTrue(model.isTimerCompletionPresented)
+        XCTAssertEqual(model.timerTools.completedMode, .pomodoro)
+        XCTAssertEqual(model.expandedSurface, .tools)
+        XCTAssertEqual(model.presentationState, .expanded)
+
+        try runtime.manager.end(
+            id: BatteryActivityProvider.activityID,
+            source: BatteryActivityProvider.source
+        )
+
+        XCTAssertEqual(runtime.manager.current?.id, MusicActivityProvider.activityID)
+        XCTAssertEqual(runtime.manager.currentSnapshot?.instanceToken, music.instanceToken)
+        XCTAssertFalse(runtime.prioritizesCurrentActivityOverLegacyContent)
+        XCTAssertTrue(model.isTimerCompletionPresented)
+        XCTAssertEqual(model.timerTools.completedMode, .pomodoro)
+        XCTAssertEqual(model.expandedSurface, .tools)
+        XCTAssertEqual(model.presentationState, .expanded)
+
+        model.acknowledgeTimerCompletion()
+        XCTAssertFalse(model.isTimerCompletionPresented)
+        XCTAssertNil(model.timerTools.completedMode)
+        XCTAssertEqual(model.presentationState, .compact)
+    }
+
+    func testTransientActivityPreservesLockedFileTrayUntilLegacyTrayRestores() throws {
+        let model = IslandViewModel(
+            volumeService: RuntimeVolumeService(initialVolume: 0.5),
+            fileTrayService: RuntimeFileTrayService(),
+            sharingService: MusicActivityTestSharing(),
+            musicService: MusicActivityTestService(info: .empty),
+            hapticFeedbackService: MusicActivityTestHaptic(),
+            nowPlayingPollIntervalNanoseconds: 3_600_000_000_000
+        )
+        model.setHovering(true)
+        model.importFiles(from: [URL(fileURLWithPath: "/tmp/runtime-tray.txt")])
+        model.toggleFileTrayLock()
+        model.endHovering()
+        let trayItems = model.trayItems
+        XCTAssertEqual(trayItems.count, 1)
+        XCTAssertTrue(model.isFileTrayLocked)
+        XCTAssertEqual(model.expandedSurface, .fileTray)
+        XCTAssertEqual(model.presentationState, .expanded)
+
+        let runtime = IslandActivityRuntime(viewModel: model)
+        let music = try XCTUnwrap(runtime.manager.currentSnapshot)
+        try publishTransientOverride(in: runtime)
+
+        XCTAssertEqual(runtime.manager.current?.id, BatteryActivityProvider.activityID)
+        XCTAssertTrue(runtime.prioritizesCurrentActivityOverLegacyContent)
+        XCTAssertEqual(model.trayItems, trayItems)
+        XCTAssertTrue(model.isFileTrayLocked)
+        XCTAssertEqual(model.expandedSurface, .fileTray)
+        XCTAssertEqual(model.presentationState, .expanded)
+
+        try runtime.manager.end(
+            id: BatteryActivityProvider.activityID,
+            source: BatteryActivityProvider.source
+        )
+
+        XCTAssertEqual(runtime.manager.current?.id, MusicActivityProvider.activityID)
+        XCTAssertEqual(runtime.manager.currentSnapshot?.instanceToken, music.instanceToken)
+        XCTAssertFalse(runtime.prioritizesCurrentActivityOverLegacyContent)
+        XCTAssertEqual(model.trayItems, trayItems)
+        XCTAssertTrue(model.isFileTrayLocked)
+        XCTAssertEqual(model.expandedSurface, .fileTray)
+        XCTAssertEqual(model.presentationState, .expanded)
+    }
+
+    private func publishTransientOverride(in runtime: IslandActivityRuntime) throws {
+        try runtime.manager.publish(BatteryActivityProvider.makeActivity(
+            for: BatteryState(
+                level: 0.18,
+                powerSource: .battery,
+                isCharging: false,
+                isCharged: false
+            ),
+            classification: .low,
+            createdAt: Date()
+        ))
+    }
+
     private func waitForRuntime(_ condition: @escaping @MainActor () -> Bool) async throws {
         for _ in 0..<100 {
             if condition() { return }
@@ -196,6 +296,17 @@ final class IslandActivityRuntimeTests: XCTestCase {
         }
         XCTFail("Timed out waiting for Activity runtime")
     }
+}
+
+private struct RuntimeFileTrayService: FileTrayService {
+    func importFiles(from urls: [URL]) throws -> [TrayFileItem] {
+        urls.map { url in
+            TrayFileItem(url: url, originalURL: url, byteCount: 128)
+        }
+    }
+
+    func remove(_ item: TrayFileItem) throws {}
+    func clear() throws {}
 }
 
 private final class RuntimeBatteryService: BatteryService, @unchecked Sendable {

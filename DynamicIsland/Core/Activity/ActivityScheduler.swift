@@ -89,5 +89,9 @@ public final class ActivityScheduler {
         arm(at: nil, wake: {})
     }
 
+    /// Internal observability for deterministic stress tests. The scheduler
+    /// still owns at most one task; callers cannot mutate its deadline.
+    var scheduledWakeDeadline: Date? { armedDeadline }
+
     deinit { wakeTask?.cancel() }
 }

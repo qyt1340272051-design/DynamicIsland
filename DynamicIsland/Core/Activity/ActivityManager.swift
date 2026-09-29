@@ -28,6 +28,17 @@ public nonisolated struct ActivitySnapshot: Equatable, Sendable {
     public let instanceToken: ActivityInstanceToken
 }
 
+/// A read-only inventory used by engine stress tests to catch retained
+/// per-Activity scheduling state after an event has ended.
+nonisolated struct ActivityManagerDiagnostics: Equatable, Sendable {
+    let activityCount: Int
+    let instanceTokenCount: Int
+    let displayDeadlineCount: Int
+    let firstPresentedCount: Int
+    let rateLimitedSourceCount: Int
+    let scheduledWakeDeadline: Date?
+}
+
 /// The sole mutable boundary for Activity data and presentation state.
 @MainActor
 public final class ActivityManager: ObservableObject {
@@ -49,6 +60,17 @@ public final class ActivityManager: ObservableObject {
     }
 
     public func activity(id: String) -> IslandActivity? { activities[id] }
+
+    var diagnostics: ActivityManagerDiagnostics {
+        ActivityManagerDiagnostics(
+            activityCount: activities.count,
+            instanceTokenCount: instanceTokens.count,
+            displayDeadlineCount: displayDeadlines.count,
+            firstPresentedCount: firstPresentedAt.count,
+            rateLimitedSourceCount: lastPresentedAt.count,
+            scheduledWakeDeadline: scheduler.scheduledWakeDeadline
+        )
+    }
 
     public func publish(_ activity: IslandActivity) throws {
         try validateIdentity(activity)
@@ -280,7 +302,12 @@ public final class ActivityManager: ObservableObject {
         activities[selected.id] = selected
         setCurrent(selected)
         currentSince = now
-        lastPresentedAt[selected.source] = now
+        // Only configured sources participate in rate limiting. Retaining
+        // every one-off source here would make the dictionary grow forever
+        // even after its Activity ended.
+        if max(0, scheduler.configuration.minimumIntervalBySource[selected.source] ?? 0) > 0 {
+            lastPresentedAt[selected.source] = now
+        }
         if displayDeadlines[selected.id] == nil {
             firstPresentedAt[selected.id] = now
             switch selected.lifecycle.policy {
