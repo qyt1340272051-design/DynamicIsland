@@ -54,7 +54,7 @@
 | ID | 任务 | 前置依赖 | 状态 | 验收证据 |
 | --- | --- | --- | --- | --- |
 | T18 | PluginManifest | T17 | `verified` | [V1 模型、严格解析、SemVer、JSON Schema 和验证记录](phase-4-t18-plugin-manifest.md)，以及 [15 项定向测试](../../DynamicIslandTests/PluginManifestTests.swift)；`./Scripts/ci.sh` 292 passed、1 skipped、0 failures，Release build passed。 |
-| T19 | PluginValidator | T18 | `pending` | 待补。 |
+| T19 | PluginValidator | T18 | `verified` | [静态目录校验、不可变入口快照与安全边界记录](phase-4-t19-plugin-validator.md)，以及 [14 项定向测试](../../DynamicIslandTests/PluginValidatorTests.swift)；`./Scripts/ci.sh` 306 passed、1 skipped、0 failures，Release build passed。 |
 | T20 | PluginManager | T18–T19 | `pending` | 待补。 |
 | T21 | Plugin Lifecycle | T20 | `pending` | 待补。 |
 
