@@ -10,7 +10,7 @@
 - `in progress`：已有审计、设计、实现或验证工作，但尚未满足计划原文的完成标准。
 - `verified`：满足计划原文对应任务的完成标准，并在本表的「验收证据」列链接可审查的证据。证据至少说明实现或审计产物、执行的验证及结果；涉及 UI、性能、能耗或设备行为的任务还应记录相应实测环境和结果。仅有代码或一次构建成功不足以将任务标为 `verified`。
 
-依赖列中的 `Txx–Tyy` 表示该范围内的全部任务；`T14 基础` 沿用原计划表述。每个阶段结束时，按计划的「每个阶段的统一检查清单」复核旧功能、架构、并发、性能、能耗、安全、隐私、兼容、测试和回滚，并链接阶段验收记录。未满足前置阶段的验收门槛时，不进入后续阶段的正式验收。
+依赖列中的 `Txx–Tyy` 表示该范围内的全部任务；`T14 基础` 沿用原计划表述。任务开始与验收前必须满足任务总表列出的直接前置依赖；每个阶段结束时，按计划的「每个阶段的统一检查清单」复核旧功能、架构、并发、性能、能耗、安全、隐私、兼容、测试和回滚，并链接阶段验收记录。后续任务通过不会自动关闭仍为 `in progress` 的旧任务，其额外证据缺口继续在原任务中独立追踪。
 
 ## Phase 0 — 准备阶段：项目审计、分支与基线
 
@@ -44,16 +44,16 @@
 
 | ID | 任务 | 前置依赖 | 状态 | 验收证据 |
 | --- | --- | --- | --- | --- |
-| T14 | Music Provider | T06–T13 | `in progress` | [正式 Music Activity Provider 与 Runtime](../../DynamicIsland/Core/Activity/MusicActivityProvider.swift)、[Provider/动作/抢占/封面测试](../../DynamicIslandTests/MusicActivityProviderTests.swift)、[64 场景视觉矩阵与验证记录](phase-3-t14-music-provider.md)；`./Scripts/ci.sh` 244 tests、1 skipped、0 failures、Release build passed。代码与自动化闭环已完成；真实 Apple Music 权限、鼠标拖动及 VoiceOver 待设备验收。 |
-| T15 | Volume Provider | T14 基础 | `in progress` | [固定 ID、debounce、回声抑制、音乐恢复、80 场景视觉矩阵与验证记录](phase-3-t15-volume-provider.md)；`./Scripts/ci.sh` 254 tests、1 skipped、0 failures、Release build passed。代码与自动化闭环已完成；真实 Core Audio 连续调节和动画待设备验收。 |
-| T16 | Battery Provider | T14 基础 | `in progress` | [IOKit 事件服务、单 ID Provider、迟滞、生命周期与 104 场景视觉矩阵验证记录](phase-3-t16-battery-provider.md)，以及 [Provider 9 项测试](../../DynamicIslandTests/BatteryActivityProviderTests.swift)和 [Service 4 项测试](../../DynamicIslandTests/BatteryServiceTests.swift)；`./Scripts/ci.sh` 268 tests、1 skipped、0 failures、Release build passed。代码与自动化闭环已完成；真实电池、沙盒回调、睡眠唤醒和能耗仍待设备验收。 |
-| T17 | Activity 压力与回归测试 | T14–T16 | `in progress` | [100 Activity 压力、同秒多 source、并发入口、集中调度释放、Runtime 旧状态恢复、性能采样及回归记录](phase-3-t17-activity-stress-regression.md)；`./Scripts/ci.sh` 278 tests、1 skipped、0 failures，Release build passed；稳定性矩阵 49 tests 通过，104 张截图生成并抽查。真实多屏、睡眠唤醒、系统服务交错、空闲能耗和动画帧率待设备验收。 |
+| T14 | Music Provider | T06–T13 | `verified` | [正式 Music Activity Provider 与 Runtime](../../DynamicIsland/Core/Activity/MusicActivityProvider.swift)、[Provider/动作/抢占/封面测试](../../DynamicIslandTests/MusicActivityProviderTests.swift)、[验证记录](phase-3-t14-music-provider.md)及[用户确认的 Phase 3 真机验收](phase-3-acceptance.md)；Music 权限、真实控制、封面更新、鼠标拖动和 VoiceOver 验收完成。 |
+| T15 | Volume Provider | T14 基础 | `verified` | [固定 ID、debounce、回声抑制、音乐恢复与视觉矩阵验证记录](phase-3-t15-volume-provider.md)及[用户确认的 Phase 3 真机验收](phase-3-acceptance.md)；真实 Core Audio 连续调节、输出设备变化、动画和 Reduce Motion 验收完成。 |
+| T16 | Battery Provider | T14 基础 | `verified` | [IOKit 事件服务、迟滞与生命周期验证记录](phase-3-t16-battery-provider.md)、[Provider 测试](../../DynamicIslandTests/BatteryActivityProviderTests.swift)、[Service 测试](../../DynamicIslandTests/BatteryServiceTests.swift)及[用户确认的 Phase 3 真机验收](phase-3-acceptance.md)；真实电池组合、回调、沙盒和睡眠唤醒验收完成。 |
+| T17 | Activity 压力与回归测试 | T14–T16 | `verified` | [100 Activity 压力、并发、性能采样及回归记录](phase-3-t17-activity-stress-regression.md)和[用户确认的 Phase 3 真机验收及统一检查](phase-3-acceptance.md)；CI 278 tests、1 skipped、0 failures，稳定性矩阵 49 tests 通过，104 张截图生成并抽查；真实多屏、睡眠唤醒、系统服务交错与 Release App 验收完成。 |
 
 ## Phase 4 — Plugin Core
 
 | ID | 任务 | 前置依赖 | 状态 | 验收证据 |
 | --- | --- | --- | --- | --- |
-| T18 | PluginManifest | T17 | `pending` | 待补。 |
+| T18 | PluginManifest | T17 | `verified` | [V1 模型、严格解析、SemVer、JSON Schema 和验证记录](phase-4-t18-plugin-manifest.md)，以及 [15 项定向测试](../../DynamicIslandTests/PluginManifestTests.swift)；`./Scripts/ci.sh` 292 passed、1 skipped、0 failures，Release build passed。 |
 | T19 | PluginValidator | T18 | `pending` | 待补。 |
 | T20 | PluginManager | T18–T19 | `pending` | 待补。 |
 | T21 | Plugin Lifecycle | T20 | `pending` | 待补。 |

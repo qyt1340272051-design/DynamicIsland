@@ -1,6 +1,6 @@
 # Phase 3 — T15 Volume Provider 验证记录
 
-日期：2026-09-28。范围：T15 Volume Provider。代码与自动化闭环已完成；真实 Core Audio 设备上的连续调节动画仍待人工验收。
+初始记录日期：2026-09-28。范围：T15 Volume Provider；记录建立时代码与自动化闭环已完成，真实 Core Audio 验收尚待进行，最终结论见文末。
 
 ## 事件边界与回声抑制
 
@@ -23,7 +23,11 @@
 - ViewModel 与 Runtime 测试覆盖外部音量发布、音量与静音本地回声抑制、岛内音乐音量操作不显示系统 HUD、正式 Runtime 抢占状态及 compact 可见性。
 - `./Scripts/generate-screen-matrix.sh`：8 种屏幕配置 × 10 种状态，共 80 张截图生成成功。新增 `compact-volume` 和 `expanded-volume`；检查 MacBook Air 13 与外接 1080p 场景，图标、进度条和百分比均位于 Host 外壳内，没有裁切。
 
-## 尚未覆盖
+## 当时尚未覆盖
 
 - 仍需在真实 Core Audio 输出设备上连续使用键盘音量键、控制中心和岛内滑块，确认设备量化、多声道回调与默认输出设备切换不会产生反馈 Activity，并观察连续动画和 Reduce Motion 行为。
 - T16 已完成 Battery Provider 的代码与聚焦自动化测试，但真实设备验收仍在进行，见 [T16 验证记录](phase-3-t16-battery-provider.md)。T17 压力、能耗、多显示器及睡眠唤醒回归尚未完成，因此本记录不代表 Phase 3 已完成。
+
+## 最终验收
+
+上述人工项目已于 2026-09-29 由用户确认验收完成，且未报告阻塞问题。统一结论与证据边界见 [Phase 3 真机验收结论](phase-3-acceptance.md)；T15 状态更新为 `verified`。

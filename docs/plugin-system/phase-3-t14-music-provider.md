@@ -1,6 +1,6 @@
 # Phase 3 — T14 Music Provider 验证记录
 
-日期：2026-09-23。范围：T14 Music Provider。T15–T17 尚未完成。
+初始记录日期：2026-09-23。范围：T14 Music Provider；记录建立时 T15–T17 尚未完成，最终验收见文末。
 
 ## 数据与控制迁移
 
@@ -24,7 +24,11 @@
 - `./Scripts/generate-screen-matrix.sh`：8 种屏幕配置 × 8 种状态，共 64 张截图生成成功。检查了 MacBook Air 13 的 compact-playing 与 expanded-music：26 pt 缩略图/波形、124 pt 封面占位、曲目信息、进度、时间、播放控制和音量行均位于 Host 外壳内，没有重现 0.5.0 的裁切问题。
 - Provider 聚焦测试覆盖固定 ID 更新、paused persistent 状态、抢占恢复、全部动作路由、seek 提交、音量与静音、缓存入口的字节/像素限制、来源隔离、错误隔离和 HostPolicy 三态。
 
-## 尚未覆盖
+## 当时尚未覆盖
 
 - 真实 Apple Music 自动化权限、真实鼠标拖动和 VoiceOver 仍需要人工设备验收；自动化测试使用可控 MusicService，视觉测试使用屏幕矩阵样例数据。
 - T15 已完成系统音量 transient Activity 的代码与自动化闭环，见 [T15 验证记录](phase-3-t15-volume-provider.md)；T16 已完成 Battery Provider 的代码与聚焦自动化测试，但真实设备验收仍在进行，见 [T16 验证记录](phase-3-t16-battery-provider.md)。T17 负责压力、能耗、多显示器和睡眠唤醒回归。因此本记录不代表 Phase 3 已完成。
+
+## 最终验收
+
+上述人工项目已于 2026-09-29 由用户确认验收完成，且未报告阻塞问题。统一结论与证据边界见 [Phase 3 真机验收结论](phase-3-acceptance.md)；T14 状态更新为 `verified`。

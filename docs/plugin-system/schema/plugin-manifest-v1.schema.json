@@ -1,0 +1,123 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/qyt1340272051-design/DynamicIsland/main/docs/plugin-system/schema/plugin-manifest-v1.schema.json",
+  "title": "DynamicIsland Plugin Manifest V1",
+  "description": "Strict manifest contract for DynamicIsland JavaScriptCore plugins.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "id",
+    "name",
+    "version",
+    "engine",
+    "entry",
+    "minimumHostVersion",
+    "permissions",
+    "capabilities"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "description": "Manifest schema generation understood by the host.",
+      "type": "integer",
+      "const": 1
+    },
+    "id": {
+      "description": "Stable lowercase reverse-DNS identifier with at least three labels.",
+      "type": "string",
+      "minLength": 5,
+      "maxLength": 255,
+      "pattern": "^[a-z](?:[a-z0-9-]{0,61}[a-z0-9])?(?:\\.[a-z](?:[a-z0-9-]{0,61}[a-z0-9])?){2,}$",
+      "examples": [
+        "com.example.pomodoro"
+      ]
+    },
+    "name": {
+      "description": "Human-readable plugin name.",
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 80,
+      "pattern": "^(?![ \\u00A0\\u1680\\u2000-\\u200A\\u202F\\u205F\\u3000])(?![\\s\\S]*[ \\u00A0\\u1680\\u2000-\\u200A\\u202F\\u205F\\u3000]$)[^\\u0000-\\u001F\\u007F-\\u009F\\u00AD\\u061C\\u180E\\u200B-\\u200F\\u2028-\\u202E\\u2060-\\u206F\\uFEFF\\uFFF9-\\uFFFB]+$"
+    },
+    "version": {
+      "$ref": "#/$defs/semanticVersion",
+      "description": "Plugin version using Semantic Versioning 2.0.0."
+    },
+    "engine": {
+      "description": "Runtime required by this manifest version.",
+      "type": "string",
+      "enum": [
+        "javascriptcore"
+      ]
+    },
+    "entry": {
+      "description": "Relative POSIX path to the JavaScript entry file. Absolute paths, parent traversal, dot segments, backslashes, and empty segments are rejected.",
+      "type": "string",
+      "minLength": 4,
+      "maxLength": 240,
+      "pattern": "^(?!/)(?!.*\\\\)(?!.*(?:^|/)\\.\\.?(?:/|$))(?!.*//)[A-Za-z0-9._-]+(?:/[A-Za-z0-9._-]+)*\\.js$",
+      "examples": [
+        "index.js",
+        "dist/plugin.js"
+      ]
+    },
+    "minimumHostVersion": {
+      "$ref": "#/$defs/semanticVersion",
+      "description": "Oldest compatible DynamicIsland host version using Semantic Versioning 2.0.0."
+    },
+    "permissions": {
+      "description": "Permissions requested by the plugin. Declaration does not grant access; unknown permissions are invalid.",
+      "type": "array",
+      "maxItems": 7,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/permission"
+      }
+    },
+    "capabilities": {
+      "description": "V1 Host API capabilities used by the plugin. Unknown capabilities are invalid.",
+      "type": "array",
+      "maxItems": 7,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/capability"
+      }
+    }
+  },
+  "$defs": {
+    "semanticVersion": {
+      "type": "string",
+      "minLength": 5,
+      "maxLength": 128,
+      "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)(?:-(?:0|[1-9][0-9]*|[0-9]*[A-Za-z-][0-9A-Za-z-]*)(?:\\.(?:0|[1-9][0-9]*|[0-9]*[A-Za-z-][0-9A-Za-z-]*))*)?(?:\\+[0-9A-Za-z-]+(?:\\.[0-9A-Za-z-]+)*)?$",
+      "examples": [
+        "1.0.0",
+        "1.2.3-beta.1+build.7"
+      ]
+    },
+    "permission": {
+      "type": "string",
+      "enum": [
+        "network",
+        "storage.local",
+        "notifications.publish",
+        "clipboard.read",
+        "clipboard.write",
+        "calendar.read",
+        "files.userSelected"
+      ]
+    },
+    "capability": {
+      "type": "string",
+      "enum": [
+        "activity.publish",
+        "activity.update",
+        "activity.end",
+        "ui.islandNode",
+        "actions.handle",
+        "storage.local",
+        "scheduler"
+      ]
+    }
+  }
+}
