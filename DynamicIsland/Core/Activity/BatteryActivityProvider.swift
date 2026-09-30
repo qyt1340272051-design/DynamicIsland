@@ -9,6 +9,9 @@ public final class BatteryActivityProvider {
     public nonisolated static let activityID = "builtin.battery"
     public nonisolated static let source = ActivitySource(kind: .builtIn, identifier: "battery")
     public nonisolated static let presentationDuration: TimeInterval = 3
+    /// Power-source notifications receive one immediate read and one short
+    /// confirmation read. The confirmation catches IOKit snapshots that settle
+    /// just after the notification without delaying the first response.
     public nonisolated static let defaultDebounceNanoseconds: UInt64 = 250_000_000
 
     nonisolated enum Classification: Equatable, Sendable {
@@ -57,14 +60,15 @@ public final class BatteryActivityProvider {
 
     private func scheduleRefresh() {
         pendingRefresh?.cancel()
+        refresh(isInitial: false)
+
         let delay = debounceNanoseconds
+        guard delay > 0 else { return }
         pendingRefresh = Task { @MainActor [weak self] in
-            if delay > 0 {
-                do {
-                    try await Task.sleep(nanoseconds: delay)
-                } catch {
-                    return
-                }
+            do {
+                try await Task.sleep(nanoseconds: delay)
+            } catch {
+                return
             }
             guard !Task.isCancelled, let self else { return }
             self.refresh(isInitial: false)
@@ -151,7 +155,10 @@ public final class BatteryActivityProvider {
         previous: Classification?
     ) -> Classification? {
         guard state.powerSource == .battery else {
-            return state.isCharging && !state.isCharged ? .charging : nil
+            // The AC power-source bit changes before `isCharging` on some Macs.
+            // Treat a non-full external-power state as charging so plug-in
+            // feedback is not held back while that secondary flag catches up.
+            return !state.isCharged ? .charging : nil
         }
 
         if previous == .critical, state.level < 0.12 { return .critical }
@@ -171,6 +178,7 @@ public final class BatteryActivityProvider {
         let title: String
         let subtitle: String
         let symbolName: String
+        let statusColor: IslandSemanticColorToken
         let priority: ActivityPriority
         let policy: ActivityLifecycle.Policy
 
@@ -179,35 +187,41 @@ public final class BatteryActivityProvider {
             title = "正在充电"
             subtitle = "当前电量 \(percentage)"
             symbolName = "battery.100percent.bolt"
-            priority = .defaultForBuiltIn(.batteryCharging)
+            statusColor = .success
+            // Plug-in feedback must not wait behind a three-second normal
+            // transient (for example, volume feedback) before it can appear.
+            priority = .important
             policy = .transient
         case .low:
             title = "电量偏低"
             subtitle = "剩余电量 \(percentage)"
             symbolName = "battery.25percent"
+            statusColor = .warning
             priority = .defaultForBuiltIn(.batteryLow)
             policy = .transient
         case .critical:
             title = "电量严重不足"
             subtitle = "剩余电量 \(percentage)，请尽快充电"
             symbolName = "battery.0percent"
+            statusColor = .danger
             priority = .defaultForBuiltIn(.batteryCritical)
             policy = .critical
         }
 
         let compact: IslandNode = .hStack(.init([
-            .icon(.init(symbolName)),
-            .progress(.init(state.level)),
-            .text(.init(percentage))
+            .text(.init(title)),
+            .spacer(.init()),
+            .text(.init(percentage, color: statusColor)),
+            .progress(.init(state.level, style: .battery, color: statusColor))
         ]))
         let expanded: IslandNode = .vStack(.init([
             .hStack(.init([
-                .icon(.init(symbolName)),
                 .text(.init(title)),
                 .spacer(.init()),
-                .text(.init(percentage))
+                .text(.init(percentage, color: statusColor)),
+                .progress(.init(state.level, style: .battery, color: statusColor))
             ])),
-            .progress(.init(state.level))
+            .progress(.init(state.level, color: statusColor))
         ]))
 
         return IslandActivity(

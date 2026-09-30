@@ -164,7 +164,7 @@ public struct IslandRenderer: View {
         case .text(let value):
             return AnyView(Text(value.content)
                 .font(IslandDesignTokens.font(for: mode == .expanded ? .body : .caption))
-                .foregroundStyle(color(.primary))
+                .foregroundStyle(color(value.color))
                 .lineLimit(1)
                 .minimumScaleFactor(0.8)
                 .accessibilityLabel(value.content))
@@ -202,11 +202,20 @@ public struct IslandRenderer: View {
         case .divider:
             return AnyView(Divider().overlay(color(.secondary).opacity(0.6)))
         case .progress(let value):
-            return AnyView(ProgressView(value: value.value)
-                .progressViewStyle(.linear)
-                .tint(color(.accent))
-                .accessibilityLabel("Progress")
-                .accessibilityValue("\(Int((value.value * 100).rounded())) percent"))
+            switch value.style {
+            case .linear:
+                return AnyView(ProgressView(value: value.value)
+                    .progressViewStyle(.linear)
+                    .tint(color(value.color))
+                    .accessibilityLabel("Progress")
+                    .accessibilityValue("\(Int((value.value * 100).rounded())) percent"))
+            case .battery:
+                return AnyView(BatteryProgressView(
+                    value: value.value,
+                    colorToken: value.color,
+                    mode: mode
+                ))
+            }
         case .button(let value):
             return AnyView(SwiftUI.Button {
                 onAction(.init(actionID: value.actionID, value: .none))
@@ -345,7 +354,7 @@ public struct IslandRenderer: View {
         case .button(let value): return accessibleLabel(for: value.label)
         case .toggle(let value): return value.title
         case .slider(let value): return value.title
-        case .progress: return "Progress"
+        case .progress(let value): return value.style == .battery ? "Battery level" : "Progress"
         case .spacer, .divider: return ""
         }
     }

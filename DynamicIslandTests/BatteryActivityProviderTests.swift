@@ -6,7 +6,7 @@ import XCTest
 final class BatteryActivityProviderTests: XCTestCase {
     private let start = Date(timeIntervalSinceReferenceDate: 96_000)
 
-    func testInitialHealthyAndChargingStatesRemainSilent() async throws {
+    func testInitialHealthyAndExternalPowerStatesRemainSilent() async throws {
         let healthy = BatteryActivityTestService(state: battery(0.64))
         let healthyManager = ActivityManager(configuration: .immediate)
         let healthyProvider = BatteryActivityProvider(
@@ -39,7 +39,25 @@ final class BatteryActivityProviderTests: XCTestCase {
         try await settle()
         XCTAssertNil(chargingManager.current)
 
-        withExtendedLifetime((healthyProvider, chargingProvider)) {}
+        let connected = BatteryActivityTestService(state: battery(
+            0.51,
+            powerSource: .ac,
+            isCharging: false
+        ))
+        let connectedManager = ActivityManager(configuration: .immediate)
+        let connectedProvider = BatteryActivityProvider(
+            service: connected,
+            manager: connectedManager,
+            debounceNanoseconds: 0
+        )
+
+        try await settle()
+        XCTAssertNil(connectedManager.activity(id: BatteryActivityProvider.activityID))
+        connected.emit(battery(0.52, powerSource: .ac, isCharging: true))
+        try await settle()
+        XCTAssertNil(connectedManager.current)
+
+        withExtendedLifetime((healthyProvider, chargingProvider, connectedProvider)) {}
     }
 
     func testInitialLowAndCriticalStatesAreNotMissed() async throws {
@@ -69,7 +87,7 @@ final class BatteryActivityProviderTests: XCTestCase {
         withExtendedLifetime((lowProvider, criticalProvider)) {}
     }
 
-    func testChargingPublishesProgressUpdatesOneInstanceAndDoesNotRepublishAfterExpiry() async throws {
+    func testPowerConnectionPublishesBeforeChargingFlagThenUpdatesOneInstanceAndExpires() async throws {
         let clock = TestActivityClock(start)
         let manager = makeManager(clock: clock)
         let music = try publishMusic(on: manager)
@@ -82,12 +100,14 @@ final class BatteryActivityProviderTests: XCTestCase {
             now: clock.now
         )
 
-        service.emit(battery(0.63, powerSource: .ac, isCharging: true))
+        // The AC bit leads `isCharging` on some Macs. The plug-in transition
+        // must publish from that first state instead of waiting for the flag.
+        service.emit(battery(0.63, powerSource: .ac, isCharging: false))
         try await waitFor { manager.current?.presentation.progress == 0.63 }
         let first = try XCTUnwrap(manager.currentSnapshot)
 
         XCTAssertEqual(first.activity.id, BatteryActivityProvider.activityID)
-        XCTAssertEqual(first.activity.priority, .normal)
+        XCTAssertEqual(first.activity.priority, .important)
         XCTAssertEqual(first.activity.lifecycle.policy, .transient)
         XCTAssertEqual(first.activity.presentation.progress ?? -1, 0.63, accuracy: 0.000_1)
 
@@ -266,35 +286,93 @@ final class BatteryActivityProviderTests: XCTestCase {
         withExtendedLifetime(provider) {}
     }
 
-    func testDebounceCoalescesPowerSourceNotificationBurstIntoOneRead() async throws {
+    func testLeadingRefreshPublishesImmediatelyAndConfirmationCapturesSettledState() async throws {
         let manager = ActivityManager(configuration: .immediate)
         let service = BatteryActivityTestService(state: battery(0.50))
         let provider = BatteryActivityProvider(
             service: service,
             manager: manager,
-            debounceNanoseconds: 80_000_000
+            debounceNanoseconds: 250_000_000
         )
 
         XCTAssertEqual(service.readCount, 1)
-        service.emit(battery(0.19))
-        service.emit(battery(0.09))
-        service.emit(battery(0.08))
+        service.emit(battery(0.51, powerSource: .ac, isCharging: false))
+        try await waitFor { manager.current?.presentation.progress == 0.51 }
 
-        try await Task.sleep(nanoseconds: 20_000_000)
-        XCTAssertEqual(service.readCount, 1)
-        XCTAssertNil(manager.current)
-
-        try await waitFor {
-            manager.current?.presentation.progress == 0.08
-        }
+        // Startup + leading read. The 250 ms confirmation has not gated the
+        // user-visible publication.
         XCTAssertEqual(service.readCount, 2)
-        XCTAssertEqual(manager.current?.priority, .critical)
+
+        // Model an IOKit snapshot that settles without another callback. The
+        // one confirmation read must observe the latest state in the burst.
+        service.setState(battery(0.73, powerSource: .ac, isCharging: true))
+        try await waitFor { manager.current?.presentation.progress == 0.73 }
+        XCTAssertEqual(service.readCount, 3)
         withExtendedLifetime(provider) {}
+    }
+
+    func testQuickUnplugEndsChargingActivityOnLeadingRead() async throws {
+        let manager = ActivityManager(configuration: .immediate)
+        let service = BatteryActivityTestService(state: battery(0.62))
+        let provider = BatteryActivityProvider(
+            service: service,
+            manager: manager,
+            debounceNanoseconds: 500_000_000
+        )
+
+        service.emit(battery(0.62, powerSource: .ac, isCharging: false))
+        try await waitFor { manager.current?.id == BatteryActivityProvider.activityID }
+        XCTAssertEqual(service.readCount, 2)
+
+        service.emit(battery(0.62))
+        try await waitFor { manager.activity(id: BatteryActivityProvider.activityID) == nil }
+        XCTAssertNil(manager.current)
+        XCTAssertEqual(service.readCount, 3)
+        withExtendedLifetime(provider) {}
+    }
+
+    func testPowerConnectionPreemptsNormalTransientWithDefaultScheduler() async throws {
+        let clock = TestActivityClock(start)
+        let manager = ActivityManager(clock: clock)
+        let normal = IslandActivity(
+            id: "test.normal-transient",
+            source: ActivitySource(kind: .builtIn, identifier: "test-normal"),
+            priority: .normal,
+            lifecycle: ActivityLifecycle(policy: .transient),
+            presentation: ActivityPresentation(title: "Volume"),
+            createdAt: start,
+            expiresAt: start.addingTimeInterval(3)
+        )
+        try manager.publish(normal)
+        XCTAssertEqual(manager.current?.id, normal.id)
+
+        let service = BatteryActivityTestService(state: battery(0.62))
+        let provider = BatteryActivityProvider(
+            service: service,
+            manager: manager,
+            debounceNanoseconds: 0,
+            now: clock.now
+        )
+
+        service.emit(battery(0.62, powerSource: .ac, isCharging: false))
+        try await waitFor { manager.current?.id == BatteryActivityProvider.activityID }
+
+        XCTAssertEqual(manager.current?.priority, .important)
+        XCTAssertEqual(manager.activity(id: normal.id)?.lifecycle.state, .background)
+        withExtendedLifetime(provider) {}
+    }
+
+    func testDefaultConfirmationDelayIsAtMostQuarterSecond() {
+        XCTAssertGreaterThan(BatteryActivityProvider.defaultDebounceNanoseconds, 0)
+        XCTAssertLessThanOrEqual(
+            BatteryActivityProvider.defaultDebounceNanoseconds,
+            250_000_000
+        )
     }
 
     func testFactoryUsesFixedIdentityNoActionsAndHostSafePresentations() {
         let cases: [(BatteryActivityProvider.Classification, BatteryState, ActivityPriority, ActivityLifecycle.Policy)] = [
-            (.charging, battery(0.63, powerSource: .ac, isCharging: true), .normal, .transient),
+            (.charging, battery(0.63, powerSource: .ac, isCharging: true), .important, .transient),
             (.low, battery(0.18), .important, .transient),
             (.critical, battery(0.08), .critical, .critical)
         ]
@@ -315,6 +393,14 @@ final class BatteryActivityProviderTests: XCTestCase {
             XCTAssertEqual(activity.lifecycle.policy, policy)
             XCTAssertEqual(activity.presentation.progress ?? -1, state.level, accuracy: 0.000_1)
             XCTAssertTrue(activity.actions.isEmpty)
+            assertCompactBattery(
+                activity.presentation.compact,
+                title: activity.presentation.title,
+                percentage: "\(Int((state.level * 100).rounded()))%",
+                level: state.level,
+                color: classification == .charging ? .success
+                    : classification == .low ? .warning : .danger
+            )
             if policy == .transient {
                 XCTAssertEqual(
                     activity.expiresAt,
@@ -332,6 +418,35 @@ final class BatteryActivityProviderTests: XCTestCase {
                 )
             }
         }
+    }
+
+    private func assertCompactBattery(
+        _ node: IslandNode?,
+        title: String,
+        percentage: String,
+        level: Double,
+        color: IslandSemanticColorToken,
+        file: StaticString = #filePath,
+        line: UInt = #line
+    ) {
+        guard case .hStack(let stack) = node else {
+            return XCTFail("Expected compact battery HStack", file: file, line: line)
+        }
+        XCTAssertEqual(stack.children.count, 4, file: file, line: line)
+        XCTAssertEqual(stack.children[0], .text(.init(title)), file: file, line: line)
+        XCTAssertEqual(stack.children[1], .spacer(.init()), file: file, line: line)
+        XCTAssertEqual(
+            stack.children[2],
+            .text(.init(percentage, color: color)),
+            file: file,
+            line: line
+        )
+        XCTAssertEqual(
+            stack.children[3],
+            .progress(.init(level, style: .battery, color: color)),
+            file: file,
+            line: line
+        )
     }
 
     private func makeManager(clock: TestActivityClock) -> ActivityManager {
@@ -440,6 +555,14 @@ private final class BatteryActivityTestService: BatteryService, @unchecked Senda
         callbacks = Array(observers.values)
         lock.unlock()
         callbacks.forEach { $0() }
+    }
+
+    /// Updates the next snapshot without delivering another notification,
+    /// matching power-source dictionaries that settle after the first event.
+    func setState(_ next: BatteryState?) {
+        lock.lock()
+        state = next
+        lock.unlock()
     }
 
     fileprivate func cancelObservation(id: UUID) {

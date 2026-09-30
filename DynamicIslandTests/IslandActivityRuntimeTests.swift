@@ -148,7 +148,7 @@ final class IslandActivityRuntimeTests: XCTestCase {
         XCTAssertFalse(runtime.isCompactActivityVisible)
     }
 
-    func testBatteryCriticalPreemptsAndRecoveryRestoresSameMusicInstance() async throws {
+    func testBatteryCriticalTransitionsToChargingThenRecoveryRestoresSameMusicInstance() async throws {
         let battery = RuntimeBatteryService(state: BatteryState(
             level: 0.65,
             powerSource: .battery,
@@ -175,10 +175,27 @@ final class IslandActivityRuntimeTests: XCTestCase {
         XCTAssertEqual(runtime.manager.current?.priority, .critical)
         XCTAssertTrue(runtime.prioritizesCurrentActivityOverLegacyContent)
         XCTAssertTrue(runtime.isCompactActivityVisible)
+        let critical = try XCTUnwrap(runtime.manager.currentSnapshot)
 
         battery.emit(BatteryState(
             level: 0.08,
             powerSource: .ac,
+            isCharging: false,
+            isCharged: false
+        ))
+        try await waitForRuntime {
+            runtime.manager.current?.id == BatteryActivityProvider.activityID
+                && runtime.manager.current?.priority == .important
+        }
+
+        let charging = try XCTUnwrap(runtime.manager.currentSnapshot)
+        XCTAssertNotEqual(charging.instanceToken, critical.instanceToken)
+        XCTAssertEqual(charging.activity.lifecycle.policy, .transient)
+        XCTAssertTrue(runtime.prioritizesCurrentActivityOverLegacyContent)
+
+        battery.emit(BatteryState(
+            level: 0.65,
+            powerSource: .battery,
             isCharging: false,
             isCharged: false
         ))

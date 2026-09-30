@@ -40,8 +40,8 @@ public struct IslandView: View {
         .opacity(isIslandFading ? 0 : 1)
         .animation(reduceMotion ? nil : IslandQuitAnimation.islandFade, value: isIslandFading)
         .animation(IslandExpansionAnimation.shell, value: isExpanded)
-        .animation(.easeInOut(duration: 0.24), value: hasCompactActivity)
-        .animation(.easeInOut(duration: 0.24), value: viewModel.compactTimerMode)
+        .animation(reduceMotion ? nil : IslandExpansionAnimation.compactActivityShell, value: hasCompactActivity)
+        .animation(reduceMotion ? nil : IslandExpansionAnimation.compactActivityShell, value: viewModel.compactTimerMode)
         .animation(IslandExpansionAnimation.pointerHover, value: viewModel.isPointerInside)
         .onDrop(
             of: [UTType.fileURL, TrayFileDragProvider.localDragType],
@@ -190,14 +190,19 @@ public struct IslandView: View {
            let snapshot = activityManager.currentSnapshot,
            snapshot.activity.presentation.isCompactVisible {
             renderedActivity(snapshot, mode: .compact, shellSize: compactPresentationSize)
-                .transition(.opacity.combined(with: .scale(scale: 0.86)))
+                .transition(compactContentTransition)
         } else if viewModel.compactTimerMode != nil {
             CompactTimerStatus(model: viewModel.timerTools)
-                .transition(.opacity.combined(with: .scale(scale: 0.86)))
+                .transition(compactContentTransition)
         } else if hasCompactActivity, let snapshot = activityManager.currentSnapshot {
             renderedActivity(snapshot, mode: .compact, shellSize: compactPresentationSize)
-                .transition(.opacity.combined(with: .scale(scale: 0.86)))
+                .transition(compactContentTransition)
         }
+    }
+
+    private var compactContentTransition: AnyTransition {
+        guard !reduceMotion else { return .opacity }
+        return .opacity.combined(with: .scale(scale: IslandExpansionAnimation.compactActivityContentScale))
     }
 
     @ViewBuilder

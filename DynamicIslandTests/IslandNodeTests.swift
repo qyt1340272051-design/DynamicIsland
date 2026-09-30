@@ -94,6 +94,58 @@ final class IslandNodeTests: XCTestCase {
         XCTAssertEqual(try IslandNode.decodeJSON(accessibleButton.encodeJSON()), accessibleButton)
     }
 
+    func testTextColorAndProgressAppearanceDecodeLegacyJSONAndRoundTrip() throws {
+        let legacyText = Data(#"{"type":"text","content":"正在充电"}"#.utf8)
+        XCTAssertEqual(
+            try IslandNode.decodeJSON(legacyText),
+            .text(.init("正在充电", color: .primary))
+        )
+        let directLegacyText = Data(#"{"content":"正在充电"}"#.utf8)
+        XCTAssertEqual(
+            try JSONDecoder().decode(IslandNode.Text.self, from: directLegacyText).color,
+            .primary
+        )
+
+        let legacyProgress = Data(#"{"type":"progress","value":0.73}"#.utf8)
+        XCTAssertEqual(
+            try IslandNode.decodeJSON(legacyProgress),
+            .progress(.init(0.73, style: .linear, color: .accent))
+        )
+        let directLegacyProgress = Data(#"{"value":0.73}"#.utf8)
+        let decodedProgress = try JSONDecoder().decode(
+            IslandNode.Progress.self,
+            from: directLegacyProgress
+        )
+        XCTAssertEqual(decodedProgress.style, .linear)
+        XCTAssertEqual(decodedProgress.color, .accent)
+
+        let coloredText: IslandNode = .text(.init("73%", color: .success))
+        let coloredTextJSON = try coloredText.encodeJSON()
+        XCTAssertEqual(try IslandNode.decodeJSON(coloredTextJSON), coloredText)
+        XCTAssertTrue(String(decoding: coloredTextJSON, as: UTF8.self).contains(#""color":"success""#))
+
+        let batteryProgress: IslandNode = .progress(.init(
+            0.73,
+            style: .battery,
+            color: .success
+        ))
+        let batteryJSON = try batteryProgress.encodeJSON()
+        let encodedBattery = String(decoding: batteryJSON, as: UTF8.self)
+        XCTAssertEqual(try IslandNode.decodeJSON(batteryJSON), batteryProgress)
+        XCTAssertTrue(encodedBattery.contains(#""style":"battery""#))
+        XCTAssertTrue(encodedBattery.contains(#""color":"success""#))
+    }
+
+    func testRejectsUnknownTextAndProgressAppearanceTokens() {
+        for json in [
+            #"{"type":"text","content":"73%","color":"neon"}"#,
+            #"{"type":"progress","value":0.73,"style":"gauge"}"#,
+            #"{"type":"progress","value":0.73,"color":"green"}"#
+        ] {
+            XCTAssertThrowsError(try IslandNode.decodeJSON(Data(json.utf8)), json)
+        }
+    }
+
     func testRejectsUnknownAndMalformedNodes() {
         for json in [
             #"{"type":"webView","url":"https://example.com"}"#,

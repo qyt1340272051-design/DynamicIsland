@@ -165,6 +165,36 @@ final class IslandRendererTests: XCTestCase {
         XCTAssertLessThan(painted, 750)
     }
 
+    func testCompactBatteryProgressHasVisibleFootprintAndFillTracksLevel() throws {
+        let levels = [0.0, 0.5, 0.73, 1.0]
+        let shellSize = CGSize(width: 100, height: 24)
+        let renderSize = IslandRenderer.contentSize(for: .compact, shellSize: shellSize)
+        var fillCounts: [Int] = []
+
+        for level in levels {
+            let node: IslandNode = .progress(.init(
+                level,
+                style: .battery,
+                color: .success
+            ))
+            let bitmap = try render(IslandRenderer(
+                presentation: ActivityPresentation(title: "Battery", compact: node),
+                mode: .compact,
+                shellSize: shellSize
+            ), size: renderSize)
+
+            fillCounts.append(successPixelCount(bitmap))
+            let bounds = try XCTUnwrap(visibleBounds(bitmap), "Battery outline should be visible")
+            XCTAssertGreaterThanOrEqual(bounds.width, 42, "compact battery width at \(level)")
+            XCTAssertGreaterThanOrEqual(bounds.height, 16, "compact battery height at \(level)")
+        }
+
+        XCTAssertEqual(fillCounts[0], 0)
+        XCTAssertLessThan(fillCounts[0], fillCounts[1])
+        XCTAssertLessThan(fillCounts[1], fillCounts[2])
+        XCTAssertLessThan(fillCounts[2], fillCounts[3])
+    }
+
     func testSliderKeepsDragValueAcrossPresentationUpdatesAndCommitsFinalValue() {
         var interaction = IslandSliderInteractionState()
         interaction.beginEditing("music.seek")
@@ -219,6 +249,41 @@ final class IslandRendererTests: XCTestCase {
                 (bitmap.colorAt(x: x, y: y)?.alphaComponent ?? 0) > 0.1
             }.count
         }
+    }
+
+    private func successPixelCount(_ bitmap: NSBitmapImageRep) -> Int {
+        (0..<bitmap.pixelsHigh).reduce(0) { count, y in
+            count + (0..<bitmap.pixelsWide).filter { x in
+                guard let color = bitmap.colorAt(x: x, y: y) else { return false }
+                return color.alphaComponent > 0.2
+                    && color.greenComponent > color.redComponent + 0.15
+                    && color.greenComponent > color.blueComponent + 0.10
+            }.count
+        }
+    }
+
+    private func visibleBounds(_ bitmap: NSBitmapImageRep) -> CGRect? {
+        var minimumX = bitmap.pixelsWide
+        var maximumX = -1
+        var minimumY = bitmap.pixelsHigh
+        var maximumY = -1
+
+        for y in 0..<bitmap.pixelsHigh {
+            for x in 0..<bitmap.pixelsWide
+            where (bitmap.colorAt(x: x, y: y)?.alphaComponent ?? 0) > 0.1 {
+                minimumX = min(minimumX, x)
+                maximumX = max(maximumX, x)
+                minimumY = min(minimumY, y)
+                maximumY = max(maximumY, y)
+            }
+        }
+        guard maximumX >= minimumX, maximumY >= minimumY else { return nil }
+        return CGRect(
+            x: minimumX,
+            y: minimumY,
+            width: maximumX - minimumX + 1,
+            height: maximumY - minimumY + 1
+        )
     }
 
     private enum RenderError: Error { case bitmapCreationFailed }
