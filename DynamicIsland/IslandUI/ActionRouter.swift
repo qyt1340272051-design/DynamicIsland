@@ -65,6 +65,12 @@ public final class ActionRouter {
         registrations.removeValue(forKey: source)
     }
 
+    /// A stopped execution session must not retain its handler after a source
+    /// is enabled again. Only the Host lifecycle boundary uses this bulk path.
+    func unregisterAll(for source: ActivitySource) {
+        registrations.removeValue(forKey: source)
+    }
+
     /// Disabling a source invalidates interactions immediately, including
     /// callbacks retained by SwiftUI while a plugin is stopping.
     public func setEnabled(_ enabled: Bool, for source: ActivitySource) {

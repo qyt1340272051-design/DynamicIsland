@@ -169,34 +169,43 @@ public actor PluginManager {
 
     private let validator: PluginValidator
     private let stateStore: any PluginManagerStatePersisting
+    private let lifecycleHandler: (any PluginManagerLifecycleHandling)?
     private var entries: [String: LoadedPlugin] = [:]
     private var persistedState = PluginManagerStateFile.empty
     private var hasLoadedState = false
+    private var mutationInProgress = false
+    private var mutationWaiters: [CheckedContinuation<Void, Never>] = []
 
     public init(
         configuration: PluginManagerConfiguration,
-        validator: PluginValidator = PluginValidator()
+        validator: PluginValidator = PluginValidator(),
+        lifecycleHandler: (any PluginManagerLifecycleHandling)? = nil
     ) {
         self.configuration = configuration
         self.validator = validator
         stateStore = PluginManagerFileStateStore(fileURL: configuration.stateFileURL)
+        self.lifecycleHandler = lifecycleHandler
     }
 
     init(
         configuration: PluginManagerConfiguration,
         validator: PluginValidator = PluginValidator(),
-        stateStore: any PluginManagerStatePersisting
+        stateStore: any PluginManagerStatePersisting,
+        lifecycleHandler: (any PluginManagerLifecycleHandling)? = nil
     ) {
         self.configuration = configuration
         self.validator = validator
         self.stateStore = stateStore
+        self.lifecycleHandler = lifecycleHandler
     }
 
     /// Rebuilds the registry from direct children of `Installed`. Every
     /// candidate is isolated; a malformed package never hides valid siblings.
     /// Duplicate IDs in one discovery batch are all rejected so filesystem
     /// enumeration order cannot choose which code wins.
-    public func discover() -> PluginDiscoveryReport {
+    public func discover() async -> PluginDiscoveryReport {
+        await beginMutation()
+        defer { endMutation() }
         var failures: [PluginDiscoveryFailure] = []
         do {
             try prepareManagedDirectories()
@@ -280,6 +289,9 @@ public actor PluginManager {
             )
         }
 
+        for id in entries.keys.sorted() {
+            await lifecycleHandler?.pluginWillUnload(id: id)
+        }
         entries = nextEntries
         persistedState = nextState
         do {
@@ -288,13 +300,21 @@ public actor PluginManager {
             failures.append(.init(candidateName: nil, error: .stateWriteFailed))
         }
 
+        for id in entries.keys.sorted() {
+            guard let entry = entries[id] else { continue }
+            await lifecycleHandler?.pluginDidLoad(entry.package, isEnabled: entry.isEnabled)
+        }
+
         return makeReport(failures: failures)
     }
 
     /// Validates and registers one package already committed to `Installed`.
-    /// The actor does not suspend between the occupied-ID snapshot and commit.
+    /// The mutation guard covers registration and the lifecycle callback, even
+    /// while the actor awaits the MainActor Host boundary.
     @discardableResult
-    public func load(at packageURL: URL) throws -> PluginRecord {
+    public func load(at packageURL: URL) async throws -> PluginRecord {
+        await beginMutation()
+        defer { endMutation() }
         try prepareManagedDirectories()
         try ensureStateLoaded()
         try requireDirectInstalledChild(packageURL)
@@ -326,24 +346,31 @@ public actor PluginManager {
 
         persistedState = nextState
         entries[package.manifest.id] = loaded
+        await lifecycleHandler?.pluginDidLoad(package, isEnabled: isEnabled)
         return loaded.record
     }
 
     @discardableResult
-    public func enable(id pluginID: String) throws -> PluginRecord {
-        try setEnabled(true, id: pluginID)
+    public func enable(id pluginID: String) async throws -> PluginRecord {
+        await beginMutation()
+        defer { endMutation() }
+        return try await setEnabled(true, id: pluginID)
     }
 
     @discardableResult
-    public func disable(id pluginID: String) throws -> PluginRecord {
-        try setEnabled(false, id: pluginID)
+    public func disable(id pluginID: String) async throws -> PluginRecord {
+        await beginMutation()
+        defer { endMutation() }
+        return try await setEnabled(false, id: pluginID)
     }
 
     /// Revalidates the package and atomically replaces its immutable snapshot.
     /// A failed validation or state write leaves the previous record untouched.
     /// Manifest changes disable the plugin until the user enables it again.
     @discardableResult
-    public func reload(id pluginID: String) throws -> PluginRecord {
+    public func reload(id pluginID: String) async throws -> PluginRecord {
+        await beginMutation()
+        defer { endMutation() }
         try prepareManagedDirectories()
         try ensureStateLoaded()
         guard let existing = entries[pluginID] else {
@@ -375,8 +402,10 @@ public actor PluginManager {
         )
         try saveStateForOperation(nextState)
 
+        await lifecycleHandler?.pluginWillUnload(id: pluginID)
         persistedState = nextState
         entries[pluginID] = reloaded
+        await lifecycleHandler?.pluginDidLoad(package, isEnabled: isEnabled)
         return reloaded.record
     }
 
@@ -384,7 +413,9 @@ public actor PluginManager {
     /// Host-owned quarantine first makes it disappear from discovery without
     /// traversing a caller-supplied path.
     @discardableResult
-    public func uninstall(id pluginID: String) throws -> PluginRecord {
+    public func uninstall(id pluginID: String) async throws -> PluginRecord {
+        await beginMutation()
+        defer { endMutation() }
         try prepareManagedDirectories()
         try ensureStateLoaded()
         guard let existing = entries[pluginID] else {
@@ -397,11 +428,16 @@ public actor PluginManager {
             .appendingPathComponent(UUID().uuidString, isDirectory: true)
         var movedToQuarantine = false
 
+        // Stop execution and remove every owned Activity before touching the
+        // installed package. Direct Manager calls cannot bypass this boundary.
+        await lifecycleHandler?.pluginWillUnload(id: pluginID)
+
         if Self.pathExistsWithoutFollowingSymlinks(sourceURL) {
             do {
                 try FileManager.default.moveItem(at: sourceURL, to: quarantineURL)
                 movedToQuarantine = true
             } catch {
+                await lifecycleHandler?.pluginDidLoad(existing.package, isEnabled: existing.isEnabled)
                 throw PluginManagerError.uninstallFailed(pluginID)
             }
         }
@@ -422,6 +458,7 @@ public actor PluginManager {
                     throw PluginManagerError.uninstallRollbackFailed(pluginID)
                 }
             }
+            await lifecycleHandler?.pluginDidLoad(existing.package, isEnabled: existing.isEnabled)
             throw PluginManagerError.stateWriteFailed
         }
 
@@ -457,13 +494,16 @@ public actor PluginManager {
         entries[pluginID]?.package
     }
 
-    private func setEnabled(_ enabled: Bool, id pluginID: String) throws -> PluginRecord {
+    private func setEnabled(_ enabled: Bool, id pluginID: String) async throws -> PluginRecord {
         try prepareManagedDirectories()
         try ensureStateLoaded()
         guard let current = entries[pluginID] else {
             throw PluginManagerError.pluginNotFound(pluginID)
         }
-        guard current.isEnabled != enabled else { return current.record }
+        guard current.isEnabled != enabled else {
+            await lifecycleHandler?.pluginDidChangeEnablement(id: pluginID, isEnabled: enabled)
+            return current.record
+        }
 
         let updated = LoadedPlugin(package: current.package, isEnabled: enabled)
         var nextState = persistedState
@@ -475,7 +515,23 @@ public actor PluginManager {
 
         persistedState = nextState
         entries[pluginID] = updated
+        await lifecycleHandler?.pluginDidChangeEnablement(id: pluginID, isEnabled: enabled)
         return updated.record
+    }
+
+    /// A plain actor is reentrant at the MainActor lifecycle hop. FIFO ownership
+    /// keeps all mutations serial until their runtime/UI effects are complete.
+    private func beginMutation() async {
+        if !mutationInProgress {
+            mutationInProgress = true
+            return
+        }
+        await withCheckedContinuation { mutationWaiters.append($0) }
+    }
+
+    private func endMutation() {
+        if mutationWaiters.isEmpty { mutationInProgress = false }
+        else { mutationWaiters.removeFirst().resume() }
     }
 
     private func ensureStateLoaded() throws {

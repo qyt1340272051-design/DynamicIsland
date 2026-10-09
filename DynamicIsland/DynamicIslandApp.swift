@@ -1,4 +1,5 @@
 import AppKit
+import OSLog
 import SwiftUI
 
 @main
@@ -20,6 +21,11 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     private var viewModel: IslandViewModel?
     private let diagnosticReportService = DiagnosticReportService()
     private var statusFeedbackTask: Task<Void, Never>?
+    private var pluginManager: PluginManager?
+    private var pluginEnvironment: PluginLifecycleEnvironment?
+    private var pluginStartupTask: Task<Void, Never>?
+    private var pluginLifecycle: PluginLifecycleBridge?
+    private let pluginLogger = Logger(subsystem: "DynamicIsland", category: "PluginLifecycle")
 #if DEBUG
     private var screenSimulatorWindowController: ScreenSimulatorWindowController?
     private var activityDebugWindowController: ActivityDebugWindowController?
@@ -34,9 +40,10 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
         let viewModel = IslandViewModel()
         let screenManager = ScreenManager()
+        let batteryService = IOKitBatteryService()
         let activityRuntime = IslandActivityRuntime(
             viewModel: viewModel,
-            batteryService: IOKitBatteryService()
+            batteryService: batteryService
         )
         let panelController = IslandPanelController(
             viewModel: viewModel,
@@ -46,13 +53,41 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         self.viewModel = viewModel
         self.screenManager = screenManager
         self.panelController = panelController
+        configurePlugins(lifecycle: activityRuntime.pluginLifecycle, batteryService: batteryService)
         panelController.show()
         configureStatusItem()
     }
 
     func applicationWillTerminate(_ notification: Notification) {
         statusFeedbackTask?.cancel()
+        pluginStartupTask?.cancel()
+        pluginEnvironment?.stop()
+        pluginLifecycle?.shutdown()
         panelController?.hide()
+    }
+
+    private func configurePlugins(lifecycle: PluginLifecycleBridge, batteryService: any BatteryService) {
+        pluginLifecycle = lifecycle
+        pluginEnvironment = PluginLifecycleEnvironment(batteryService: batteryService) { [weak lifecycle] state in
+            lifecycle?.setEnvironment(isSleeping: state.isSleeping, isLowBattery: state.isLowBattery)
+        }
+        do {
+            // Plugin Host compatibility is the 0.6.0 development contract.
+            // Distribution metadata is updated by the release task separately.
+            let configuration = try PluginManagerConfiguration.applicationSupport(
+                hostVersion: SemanticVersion("0.6.0")
+            )
+            let manager = PluginManager(configuration: configuration, lifecycleHandler: lifecycle)
+            pluginManager = manager
+            pluginStartupTask = Task { [pluginLogger] in
+                let report = await manager.discover()
+                for failure in report.failures {
+                    pluginLogger.error("Plugin discovery rejected a candidate: \(failure.error.code, privacy: .public)")
+                }
+            }
+        } catch {
+            pluginLogger.error("Plugin Host directory could not be configured.")
+        }
     }
 
     private func configureStatusItem() {

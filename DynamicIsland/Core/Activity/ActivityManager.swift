@@ -11,6 +11,7 @@ public enum ActivityManagerError: Error, Equatable {
     case notPresentedTransient
     case notFound
     case expired
+    case disabledSource
 }
 
 /// Host-owned identity for one admission of an Activity ID. An update keeps
@@ -52,6 +53,8 @@ public final class ActivityManager: ObservableObject {
     private var currentSince: Date?
     private var ordinaryDebounceUntil: Date?
     private var lastPresentedAt: [ActivitySource: Date] = [:]
+    private var requiresPluginActivation = false
+    private var enabledPluginSources: Set<ActivitySource> = []
     private let logger = Logger(subsystem: "DynamicIsland", category: "ActivityManager")
     private let scheduler: ActivityScheduler
 
@@ -125,6 +128,30 @@ public final class ActivityManager: ObservableObject {
         try transition(id: id, source: source, event: .sourceEnd, reason: "sourceEnd")
     }
 
+    /// Host lifecycle cleanup includes queued, background, and dismissed
+    /// activities, and reconciles the visible island only once after removal.
+    public func endAll(source: ActivitySource) {
+        for id in activities.keys.sorted() {
+            guard let activity = activities[id], activity.source == source else { continue }
+            log(activity, from: activity.lifecycle.state, to: .ended, reason: "sourceStopped")
+            remove(id: id)
+        }
+        lastPresentedAt.removeValue(forKey: source)
+        reconcile()
+    }
+
+    /// Enabled by the production plugin lifecycle boundary. Standalone engine
+    /// fixtures and the DEBUG provider can still exercise synthetic sources.
+    func requirePluginActivation() {
+        requiresPluginActivation = true
+    }
+
+    func setPluginSourceEnabled(_ enabled: Bool, for source: ActivitySource) {
+        guard source.kind == .plugin else { return }
+        if enabled { enabledPluginSources.insert(source) }
+        else { enabledPluginSources.remove(source) }
+    }
+
     /// Host-only signal for ongoing user interaction such as volume dragging.
     /// Each renewal is capped to the normal transient duration, and the total
     /// continuous display cannot exceed the configured maximum.
@@ -157,6 +184,10 @@ public final class ActivityManager: ObservableObject {
         guard !activity.id.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty,
               !activity.source.identifier.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
             throw ActivityManagerError.invalidIdentifier
+        }
+        if activity.source.kind == .plugin, requiresPluginActivation,
+           !enabledPluginSources.contains(activity.source) {
+            throw ActivityManagerError.disabledSource
         }
     }
 

@@ -57,7 +57,7 @@ Manager 创建的目录使用 `0700`，包括 `Recovery` 和 `Trash`。已有目
 
 单个候选的 Manifest、兼容性、入口、路径、资源配额或所有权错误只进入该候选的 `PluginDiscoveryFailure`，不会隐藏合法兄弟包。`PluginManagerError` 提供稳定 `code`；T19 错误原样包装为 `.validation`，供设置界面和诊断层显示。
 
-`PluginManager` 的 actor 隔离覆盖已占用 ID 快照、复查和登记提交，中间没有 suspension point。两个并发 `load` 即使都携带相同 Manifest ID，也只能有一个成功；批量发现中的重复项则全部失败。
+`PluginManager` 的 actor 隔离覆盖已占用 ID 快照、复查和登记提交。T21 增加跨 Actor 生命周期回调后，所有变更还通过 FIFO mutation guard 保持整个操作串行，避免回调期间的重入。两个并发 `load` 即使都携带相同 Manifest ID，也只能有一个成功；批量发现中的重复项则全部失败。
 
 ## 状态保存与恢复
 

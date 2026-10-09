@@ -7,6 +7,7 @@ import Foundation
 public final class IslandActivityRuntime {
     public let manager: ActivityManager
     public let router: ActionRouter
+    public let pluginLifecycle: PluginLifecycleBridge
     private let music: MusicActivityProvider
     private let volume: VolumeActivityProvider
     private let battery: BatteryActivityProvider?
@@ -20,6 +21,7 @@ public final class IslandActivityRuntime {
     ) {
         let manager = ActivityManager()
         let router = ActionRouter(manager: manager)
+        let pluginLifecycle = PluginLifecycleBridge(activityManager: manager, actionRouter: router)
         let music = MusicActivityProvider(viewModel: viewModel, manager: manager)
         let volume = VolumeActivityProvider(viewModel: viewModel, manager: manager)
         let battery = batteryService.map {
@@ -32,6 +34,7 @@ public final class IslandActivityRuntime {
 
         self.manager = manager
         self.router = router
+        self.pluginLifecycle = pluginLifecycle
         self.music = music
         self.volume = volume
         self.battery = battery
