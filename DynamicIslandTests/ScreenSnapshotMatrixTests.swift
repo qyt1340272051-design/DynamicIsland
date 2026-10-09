@@ -23,6 +23,140 @@ final class ScreenSnapshotMatrixTests: XCTestCase {
         XCTAssertTrue(ScreenSnapshotScenario.allCases.contains(.expandedToolsCountdown))
     }
 
+    @MainActor
+    func testCompactBatteryContentRemainsVisibleOutsidePhysicalNotch() async throws {
+        let configuration = SimulatedScreenProfile.macBookAir13.defaultConfiguration
+        let environment = configuration.makeEnvironment()
+        let context = try await makeContext(for: .compactBatteryCharging, environment: environment)
+        let canvas = ScreenSnapshotCanvas(
+            environment: environment,
+            viewModel: context.viewModel,
+            activityRuntime: context.activityRuntime
+        )
+        .environment(\.colorScheme, .dark)
+        let renderer = ScreenSnapshotRenderer(size: ScreenSnapshotCanvas.size)
+        defer { renderer.close() }
+        let rendered = try renderer.render(canvas, scale: environment.backingScaleFactor)
+        let bitmap = try XCTUnwrap(NSBitmapImageRep(data: rendered.data))
+
+        let scale = environment.backingScaleFactor
+        let notchHalfWidth = configuration.notchWidth * scale / 2
+        let centerX = ScreenSnapshotCanvas.size.width * scale / 2
+        let notchMinimumX = Int((centerX - notchHalfWidth).rounded())
+        let notchMaximumX = Int((centerX + notchHalfWidth).rounded())
+
+        var titleMinimumX = bitmap.pixelsWide
+        var titleMaximumX = -1
+        var chargingMinimumX = bitmap.pixelsWide
+        var chargingMaximumX = -1
+        for y in 0..<bitmap.pixelsHigh {
+            for x in 0..<bitmap.pixelsWide {
+                guard let pixel = bitmap.colorAt(x: x, y: y), pixel.alphaComponent > 0.8 else { continue }
+                if x < notchMinimumX,
+                   pixel.redComponent > 0.75,
+                   pixel.greenComponent > 0.75,
+                   pixel.blueComponent > 0.75 {
+                    titleMinimumX = min(titleMinimumX, x)
+                    titleMaximumX = max(titleMaximumX, x)
+                }
+                if x > notchMaximumX,
+                   pixel.greenComponent > 0.20,
+                   pixel.greenComponent > pixel.redComponent + 0.10,
+                   pixel.greenComponent > pixel.blueComponent + 0.08 {
+                    chargingMinimumX = min(chargingMinimumX, x)
+                    chargingMaximumX = max(chargingMaximumX, x)
+                }
+            }
+        }
+
+        XCTAssertGreaterThanOrEqual(
+            titleMaximumX - titleMinimumX + 1,
+            70,
+            "The full charging title must fit in the left display wing."
+        )
+        XCTAssertGreaterThanOrEqual(
+            notchMinimumX - titleMaximumX,
+            8,
+            "The charging title needs clearance from the physical notch."
+        )
+        XCTAssertGreaterThanOrEqual(
+            chargingMaximumX - chargingMinimumX + 1,
+            135,
+            "The percentage and battery fill must fit in the right display wing."
+        )
+        XCTAssertGreaterThanOrEqual(
+            chargingMinimumX - notchMaximumX,
+            8,
+            "The charging metrics need clearance from the physical notch."
+        )
+    }
+
+    @MainActor
+    func testCompactVolumeContentRemainsVisibleOutsidePhysicalNotch() async throws {
+        let configuration = SimulatedScreenProfile.macBookAir13.defaultConfiguration
+        let environment = configuration.makeEnvironment()
+        let context = try await makeContext(for: .compactVolume, environment: environment)
+        let canvas = ScreenSnapshotCanvas(
+            environment: environment,
+            viewModel: context.viewModel,
+            activityRuntime: context.activityRuntime
+        )
+        .environment(\.colorScheme, .dark)
+        let renderer = ScreenSnapshotRenderer(size: ScreenSnapshotCanvas.size)
+        defer { renderer.close() }
+        let rendered = try renderer.render(canvas, scale: environment.backingScaleFactor)
+        let bitmap = try XCTUnwrap(NSBitmapImageRep(data: rendered.data))
+
+        let scale = environment.backingScaleFactor
+        let notchHalfWidth = configuration.notchWidth * scale / 2
+        let centerX = ScreenSnapshotCanvas.size.width * scale / 2
+        let notchMinimumX = Int((centerX - notchHalfWidth).rounded())
+        let notchMaximumX = Int((centerX + notchHalfWidth).rounded())
+
+        var iconMinimumX = bitmap.pixelsWide
+        var iconMaximumX = -1
+        var percentageMinimumX = bitmap.pixelsWide
+        var percentageMaximumX = -1
+        for y in 0..<bitmap.pixelsHigh {
+            for x in 0..<bitmap.pixelsWide {
+                guard let pixel = bitmap.colorAt(x: x, y: y),
+                      pixel.alphaComponent > 0.8,
+                      pixel.redComponent > 0.75,
+                      pixel.greenComponent > 0.75,
+                      pixel.blueComponent > 0.75 else { continue }
+                if x < notchMinimumX {
+                    iconMinimumX = min(iconMinimumX, x)
+                    iconMaximumX = max(iconMaximumX, x)
+                }
+                if x > notchMaximumX {
+                    percentageMinimumX = min(percentageMinimumX, x)
+                    percentageMaximumX = max(percentageMaximumX, x)
+                }
+            }
+        }
+
+        XCTAssertGreaterThanOrEqual(
+            iconMaximumX - iconMinimumX + 1,
+            28,
+            "The full volume icon must fit in the left display wing."
+        )
+        XCTAssertGreaterThanOrEqual(
+            notchMinimumX - iconMaximumX,
+            8,
+            "The volume icon needs clearance from the physical notch."
+        )
+        XCTAssertGreaterThanOrEqual(
+            percentageMaximumX - percentageMinimumX + 1,
+            46,
+            "The full 100% label must fit in the right display wing."
+        )
+        XCTAssertGreaterThanOrEqual(
+            percentageMinimumX - notchMaximumX,
+            8,
+            "The volume percentage needs clearance from the physical notch."
+        )
+    }
+
     func testGenerateSnapshotMatrix() async throws {
         guard ProcessInfo.processInfo.environment["SCREEN_MATRIX_GENERATE"] == "1" else {
             throw XCTSkip("Run Scripts/generate-screen-matrix.sh to generate the screenshot matrix.")
@@ -148,7 +282,7 @@ final class ScreenSnapshotMatrixTests: XCTestCase {
         let activityRuntime = IslandActivityRuntime(viewModel: viewModel)
         if scenario.usesVolumeActivity {
             try activityRuntime.manager.publish(VolumeActivityProvider.makeActivity(
-                for: VolumeActivityEvent(volume: 0.72, isMuted: false),
+                for: VolumeActivityEvent(volume: 1, isMuted: false),
                 createdAt: Date()
             ))
             try activityRuntime.manager.end(
@@ -381,18 +515,19 @@ private struct ScreenSnapshotCanvas: View {
                 .fill(Color.white.opacity(0.08))
                 .frame(height: min(topReservedHeight, 60))
 
-            if environment.hasNotch {
-                Rectangle()
-                    .fill(Color.black)
-                    .frame(width: notchWidth, height: environment.safeAreaInsets.top)
-            }
-
             IslandView(viewModel: viewModel, activityRuntime: activityRuntime)
                 .frame(
                     width: IslandPanelGeometry.expandedSize.width,
                     height: IslandPanelGeometry.expandedSize.height,
                     alignment: .top
                 )
+
+            if environment.hasNotch {
+                Rectangle()
+                    .fill(Color.black)
+                    .frame(width: notchWidth, height: environment.safeAreaInsets.top)
+                    .allowsHitTesting(false)
+            }
         }
         .frame(width: Self.size.width, height: Self.size.height, alignment: .top)
         .clipped()

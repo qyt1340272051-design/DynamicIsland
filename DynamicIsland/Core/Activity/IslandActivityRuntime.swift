@@ -42,6 +42,22 @@ public final class IslandActivityRuntime {
         manager.currentSnapshot?.activity.presentation.isCompactVisible == true
     }
 
+    /// Only the Host-owned Battery Activity needs enough side clearance to
+    /// keep both status groups outside a physical camera notch.
+    public var currentActivityUsesBatteryCompactLayout: Bool {
+        guard let activity = manager.currentSnapshot?.activity else { return false }
+        return activity.id == BatteryActivityProvider.activityID
+            && activity.source == BatteryActivityProvider.source
+    }
+
+    /// Volume keeps its glyph and widest percentage label in the two display
+    /// wings while the physical notch occupies the center of the shell.
+    public var currentActivityUsesVolumeCompactLayout: Bool {
+        guard let activity = manager.currentSnapshot?.activity else { return false }
+        return activity.id == VolumeActivityProvider.activityID
+            && activity.source == VolumeActivityProvider.source
+    }
+
     /// Transient and critical built-ins temporarily replace legacy timer or
     /// tray content. Persistent music remains tied to the selected music tab.
     public var prioritizesCurrentActivityOverLegacyContent: Bool {

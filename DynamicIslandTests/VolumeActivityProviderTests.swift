@@ -163,6 +163,27 @@ final class VolumeActivityProviderTests: XCTestCase {
         withExtendedLifetime(provider) {}
     }
 
+    func testCompactLayoutKeepsStatusAtEdgesWithoutObscuredProgressBar() {
+        let activity = VolumeActivityProvider.makeActivity(
+            for: VolumeActivityEvent(volume: 1, isMuted: false),
+            createdAt: start
+        )
+
+        XCTAssertEqual(
+            activity.presentation.compact,
+            .hStack(.init([
+                .icon(.init("speaker.wave.3.fill")),
+                .spacer(.init()),
+                .text(.init("100%"))
+            ]))
+        )
+
+        guard case .vStack(let expanded)? = activity.presentation.expanded else {
+            return XCTFail("Expected an expanded volume layout")
+        }
+        XCTAssertTrue(expanded.children.contains(.progress(.init(1))))
+    }
+
     private func makeModel(volume: VolumeActivityTestVolume) -> IslandViewModel {
         IslandViewModel(
             volumeService: volume,

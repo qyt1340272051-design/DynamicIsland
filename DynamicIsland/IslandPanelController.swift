@@ -106,7 +106,8 @@ final class IslandPanelController {
             hasCompactActivity: activityRuntime.isCompactActivityVisible,
             hasActiveTimer: viewModel.compactTimerMode != nil
                 && !(activityRuntime.prioritizesCurrentActivityOverLegacyContent
-                    && activityRuntime.isCompactActivityVisible)
+                    && activityRuntime.isCompactActivityVisible),
+            activityLayout: currentCompactActivityLayout
         )
 
         return CGRect(
@@ -115,6 +116,16 @@ final class IslandPanelController {
             width: presentationSize.width,
             height: presentationSize.height
         )
+    }
+
+    private var currentCompactActivityLayout: IslandVisualStyle.CompactActivityLayout {
+        if activityRuntime.currentActivityUsesBatteryCompactLayout {
+            return .battery
+        }
+        if activityRuntime.currentActivityUsesVolumeCompactLayout {
+            return .volume
+        }
+        return .standard
     }
 
     private func currentStablePanelFrame(in screen: ScreenEnvironment) -> CGRect {

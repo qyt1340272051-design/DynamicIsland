@@ -170,6 +170,7 @@ final class IslandRendererTests: XCTestCase {
         let shellSize = CGSize(width: 100, height: 24)
         let renderSize = IslandRenderer.contentSize(for: .compact, shellSize: shellSize)
         var fillCounts: [Int] = []
+        var centerFillWidths: [Int] = []
 
         for level in levels {
             let node: IslandNode = .progress(.init(
@@ -184,15 +185,21 @@ final class IslandRendererTests: XCTestCase {
             ), size: renderSize)
 
             fillCounts.append(successPixelCount(bitmap))
+            centerFillWidths.append(successRunWidth(bitmap, y: bitmap.pixelsHigh / 2))
             let bounds = try XCTUnwrap(visibleBounds(bitmap), "Battery outline should be visible")
-            XCTAssertGreaterThanOrEqual(bounds.width, 42, "compact battery width at \(level)")
-            XCTAssertGreaterThanOrEqual(bounds.height, 16, "compact battery height at \(level)")
+            XCTAssertGreaterThanOrEqual(bounds.width, 46, "compact battery width at \(level)")
+            XCTAssertGreaterThanOrEqual(bounds.height, 19, "compact battery height at \(level)")
+            XCTAssertLessThanOrEqual(neutralWhitePixelCount(bitmap), 1, "battery should not have a white outline")
         }
 
         XCTAssertEqual(fillCounts[0], 0)
         XCTAssertLessThan(fillCounts[0], fillCounts[1])
         XCTAssertLessThan(fillCounts[1], fillCounts[2])
         XCTAssertLessThan(fillCounts[2], fillCounts[3])
+        XCTAssertEqual(centerFillWidths[0], 0)
+        XCTAssertLessThanOrEqual(abs(centerFillWidths[1] - 21), 2)
+        XCTAssertLessThanOrEqual(abs(centerFillWidths[2] - 31), 2)
+        XCTAssertLessThanOrEqual(abs(centerFillWidths[3] - 42), 2)
     }
 
     func testSliderKeepsDragValueAcrossPresentationUpdatesAndCommitsFinalValue() {
@@ -255,9 +262,32 @@ final class IslandRendererTests: XCTestCase {
         (0..<bitmap.pixelsHigh).reduce(0) { count, y in
             count + (0..<bitmap.pixelsWide).filter { x in
                 guard let color = bitmap.colorAt(x: x, y: y) else { return false }
-                return color.alphaComponent > 0.2
+                return color.alphaComponent > 0.8
                     && color.greenComponent > color.redComponent + 0.15
                     && color.greenComponent > color.blueComponent + 0.10
+            }.count
+        }
+    }
+
+    private func successRunWidth(_ bitmap: NSBitmapImageRep, y: Int) -> Int {
+        let matching = (0..<bitmap.pixelsWide).filter { x in
+            guard let color = bitmap.colorAt(x: x, y: y) else { return false }
+            return color.alphaComponent > 0.8
+                && color.greenComponent > color.redComponent + 0.15
+                && color.greenComponent > color.blueComponent + 0.10
+        }
+        guard let first = matching.first, let last = matching.last else { return 0 }
+        return last - first + 1
+    }
+
+    private func neutralWhitePixelCount(_ bitmap: NSBitmapImageRep) -> Int {
+        (0..<bitmap.pixelsHigh).reduce(0) { count, y in
+            count + (0..<bitmap.pixelsWide).filter { x in
+                guard let color = bitmap.colorAt(x: x, y: y) else { return false }
+                return color.alphaComponent > 0.2
+                    && color.redComponent > 0.65
+                    && abs(color.redComponent - color.greenComponent) < 0.05
+                    && abs(color.greenComponent - color.blueComponent) < 0.05
             }.count
         }
     }

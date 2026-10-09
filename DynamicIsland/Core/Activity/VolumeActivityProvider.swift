@@ -77,7 +77,7 @@ public final class VolumeActivityProvider {
         let symbolName = symbolName(level: level, isMuted: event.isMuted)
         let compact: IslandNode = .hStack(.init([
             .icon(.init(symbolName)),
-            .progress(.init(level)),
+            .spacer(.init()),
             .text(.init(percentage))
         ]))
         let expanded: IslandNode = .vStack(.init([

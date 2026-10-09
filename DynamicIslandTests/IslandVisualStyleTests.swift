@@ -132,13 +132,93 @@ final class IslandVisualStyleTests: XCTestCase {
         let baseSize = CGSize(width: 216, height: 38)
         let idleSize = IslandVisualStyle.compactShellSize(baseSize: baseSize, hasCompactActivity: false)
         let activitySize = IslandVisualStyle.compactShellSize(baseSize: baseSize, hasCompactActivity: true)
+        let explicitStandardSize = IslandVisualStyle.compactShellSize(
+            baseSize: baseSize,
+            hasCompactActivity: true,
+            activityLayout: .standard
+        )
 
         XCTAssertEqual(idleSize, baseSize)
+        XCTAssertEqual(activitySize, explicitStandardSize)
         XCTAssertEqual(activitySize.height, baseSize.height)
         XCTAssertEqual(
             activitySize.width,
             baseSize.width + IslandVisualStyle.activityCompactHorizontalExpansion
         )
+    }
+
+    func testBatteryCompactActivityUsesDedicatedBoundedWidth() {
+        let baseSize = CGSize(width: IslandPanelGeometry.compactWidth, height: 38)
+        let standardSize = IslandVisualStyle.compactShellSize(
+            baseSize: baseSize,
+            hasCompactActivity: true
+        )
+        let batterySize = IslandVisualStyle.compactShellSize(
+            baseSize: baseSize,
+            hasCompactActivity: true,
+            activityLayout: .battery
+        )
+
+        XCTAssertEqual(
+            batterySize.width,
+            baseSize.width + IslandVisualStyle.batteryCompactHorizontalExpansion
+        )
+        XCTAssertEqual(batterySize.height, baseSize.height)
+        XCTAssertGreaterThan(batterySize.width, standardSize.width)
+        XCTAssertLessThanOrEqual(batterySize.width, IslandVisualStyle.expandedShellSize.width)
+        XCTAssertLessThanOrEqual(
+            batterySize.width * IslandExpansionAnimation.pointerHoverScale,
+            IslandVisualStyle.expandedShellSize.width
+        )
+        XCTAssertLessThanOrEqual(batterySize.width, IslandPanelGeometry.expandedSize.width)
+    }
+
+    func testVolumeCompactActivityFitsItsWidestEdgeContent() {
+        let baseSize = CGSize(width: 210, height: 36)
+        let standardSize = IslandVisualStyle.compactShellSize(
+            baseSize: baseSize,
+            hasCompactActivity: true
+        )
+        let volumeSize = IslandVisualStyle.compactShellSize(
+            baseSize: baseSize,
+            hasCompactActivity: true,
+            activityLayout: .volume
+        )
+
+        XCTAssertEqual(
+            volumeSize.width,
+            baseSize.width + IslandVisualStyle.volumeCompactHorizontalExpansion
+        )
+        XCTAssertEqual(volumeSize.height, baseSize.height)
+        XCTAssertGreaterThan(volumeSize.width, standardSize.width)
+        XCTAssertLessThan(volumeSize.width, IslandVisualStyle.expandedShellSize.width)
+    }
+
+    func testTimerWidthKeepsPrecedenceOverActivityLayout() {
+        let baseSize = CGSize(width: 216, height: 38)
+        let timerSize = IslandVisualStyle.compactShellSize(
+            baseSize: baseSize,
+            hasCompactActivity: true,
+            hasActiveTimer: true,
+            activityLayout: .battery
+        )
+
+        XCTAssertEqual(
+            timerSize.width,
+            baseSize.width + IslandVisualStyle.timerCompactHorizontalExpansion
+        )
+    }
+
+    func testCompactActivityWidthNeverExceedsExpandedShell() {
+        let baseSize = CGSize(width: 400, height: 38)
+        let batterySize = IslandVisualStyle.compactShellSize(
+            baseSize: baseSize,
+            hasCompactActivity: true,
+            activityLayout: .battery
+        )
+
+        XCTAssertEqual(batterySize.width, IslandVisualStyle.expandedShellSize.width)
+        XCTAssertLessThanOrEqual(batterySize.width, IslandPanelGeometry.expandedSize.width)
     }
 
     func testCompactShellUsesStraightTopAndRoundedBottomCorners() {

@@ -20,11 +20,11 @@ struct BatteryProgressView: View {
     private var configuration: Configuration {
         switch mode {
         case .minimal:
-            return .init(bodyWidth: 28, bodyHeight: 13, terminalWidth: 2, terminalGap: 1, inset: 1.5)
+            return .init(bodyWidth: 26, bodyHeight: 12, terminalWidth: 2, terminalHeight: 4, terminalGap: 1)
         case .compact:
-            return .init(bodyWidth: 40, bodyHeight: 18, terminalWidth: 3, terminalGap: 2, inset: 2)
+            return .init(bodyWidth: 42, bodyHeight: 20, terminalWidth: 3, terminalHeight: 7, terminalGap: 2)
         case .expanded:
-            return .init(bodyWidth: 48, bodyHeight: 22, terminalWidth: 4, terminalGap: 2, inset: 2.5)
+            return .init(bodyWidth: 50, bodyHeight: 24, terminalWidth: 4, terminalHeight: 9, terminalGap: 2)
         }
     }
 
@@ -32,36 +32,27 @@ struct BatteryProgressView: View {
         IslandDesignTokens.color(for: colorToken, colorScheme: colorScheme, contrast: contrast)
     }
 
-    private var outlineColor: Color {
-        IslandDesignTokens.color(for: .primary, colorScheme: colorScheme, contrast: contrast)
+    private var trackOpacity: Double {
+        contrast == .increased ? 0.56 : 0.42
     }
 
     var body: some View {
         let metrics = configuration
         HStack(spacing: metrics.terminalGap) {
-            GeometryReader { proxy in
-                let innerWidth = max(0, proxy.size.width - 2 * metrics.inset)
-                let innerHeight = max(0, proxy.size.height - 2 * metrics.inset)
+            ZStack(alignment: .leading) {
+                RoundedRectangle(cornerRadius: metrics.cornerRadius, style: .continuous)
+                    .fill(fillColor.opacity(trackOpacity))
 
-                ZStack(alignment: .leading) {
-                    RoundedRectangle(cornerRadius: metrics.bodyHeight * 0.27, style: .continuous)
-                        .fill(outlineColor.opacity(contrast == .increased ? 0.34 : 0.24))
-                        .padding(metrics.inset)
-
-                    RoundedRectangle(cornerRadius: innerHeight * 0.24, style: .continuous)
-                        .fill(fillColor)
-                        .frame(width: innerWidth * level, height: innerHeight)
-                        .offset(x: metrics.inset)
-
-                    RoundedRectangle(cornerRadius: metrics.bodyHeight * 0.3, style: .continuous)
-                        .stroke(outlineColor.opacity(contrast == .increased ? 0.9 : 0.72), lineWidth: 1)
-                }
+                Rectangle()
+                    .fill(fillColor)
+                    .frame(width: metrics.bodyWidth * level, height: metrics.bodyHeight)
             }
             .frame(width: metrics.bodyWidth, height: metrics.bodyHeight)
+            .clipShape(RoundedRectangle(cornerRadius: metrics.cornerRadius, style: .continuous))
 
             Capsule(style: .continuous)
-                .fill(outlineColor.opacity(contrast == .increased ? 0.9 : 0.72))
-                .frame(width: metrics.terminalWidth, height: metrics.bodyHeight * 0.38)
+                .fill(fillColor.opacity(trackOpacity))
+                .frame(width: metrics.terminalWidth, height: metrics.terminalHeight)
         }
         .frame(width: metrics.totalWidth, height: metrics.bodyHeight)
         .animation(reduceMotion ? nil : .easeOut(duration: 0.22), value: level)
@@ -74,9 +65,10 @@ struct BatteryProgressView: View {
         let bodyWidth: CGFloat
         let bodyHeight: CGFloat
         let terminalWidth: CGFloat
+        let terminalHeight: CGFloat
         let terminalGap: CGFloat
-        let inset: CGFloat
 
         var totalWidth: CGFloat { bodyWidth + terminalGap + terminalWidth }
+        var cornerRadius: CGFloat { bodyHeight * 0.28 }
     }
 }

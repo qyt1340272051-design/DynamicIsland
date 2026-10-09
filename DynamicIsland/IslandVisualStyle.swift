@@ -1,6 +1,12 @@
 import CoreGraphics
 
 public enum IslandVisualStyle {
+    public enum CompactActivityLayout: Equatable, Sendable {
+        case standard
+        case volume
+        case battery
+    }
+
     public static let expandedShellSize = CGSize(width: 480, height: 200)
     public static let expandedMusicHeight: CGFloat = 200
     public static let expandedTimerHeight: CGFloat = 190
@@ -12,6 +18,12 @@ public enum IslandVisualStyle {
     public static let expandedSurfaceSpacing: CGFloat = 8
     public static let expandedShellCornerRadius: CGFloat = 26
     public static let activityCompactHorizontalExpansion: CGFloat = 72
+    /// Leaves enough room in both display wings for the volume glyph and the
+    /// widest percentage label (`100%`) without touching a physical notch.
+    public static let volumeCompactHorizontalExpansion: CGFloat = 96
+    /// Adds a 100 pt display wing on each side of the physical notch. After
+    /// renderer insets, the right wing still fits `100%` and the battery gauge.
+    public static let batteryCompactHorizontalExpansion: CGFloat = 200
     public static let timerCompactHorizontalExpansion: CGFloat = 126
     public static let hoverShellShadowOpacity: Double = 0.28
     public static let hoverShellShadowRadius: CGFloat = 18
@@ -50,19 +62,29 @@ public enum IslandVisualStyle {
     public static func compactShellSize(
         baseSize: CGSize,
         hasCompactActivity: Bool,
-        hasActiveTimer: Bool = false
+        hasActiveTimer: Bool = false,
+        activityLayout: CompactActivityLayout = .standard
     ) -> CGSize {
         let horizontalExpansion: CGFloat
         if hasActiveTimer {
             horizontalExpansion = timerCompactHorizontalExpansion
         } else if hasCompactActivity {
-            horizontalExpansion = activityCompactHorizontalExpansion
+            switch activityLayout {
+            case .standard:
+                horizontalExpansion = activityCompactHorizontalExpansion
+            case .volume:
+                horizontalExpansion = volumeCompactHorizontalExpansion
+            case .battery:
+                horizontalExpansion = batteryCompactHorizontalExpansion
+            }
         } else {
             horizontalExpansion = 0
         }
 
         return CGSize(
-            width: baseSize.width + horizontalExpansion,
+            width: horizontalExpansion > 0
+                ? min(baseSize.width + horizontalExpansion, expandedShellSize.width)
+                : baseSize.width,
             height: baseSize.height
         )
     }

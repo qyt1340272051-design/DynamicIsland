@@ -87,6 +87,8 @@ final class IslandActivityRuntimeTests: XCTestCase {
         XCTAssertEqual(runtime.manager.current?.presentation.progress ?? -1, 0.4, accuracy: 0.000_1)
         XCTAssertTrue(runtime.isCompactActivityVisible)
         XCTAssertTrue(runtime.prioritizesCurrentActivityOverLegacyContent)
+        XCTAssertTrue(runtime.currentActivityUsesVolumeCompactLayout)
+        XCTAssertFalse(runtime.currentActivityUsesBatteryCompactLayout)
     }
 
     func testRuntimeForwardsOwnedArtworkToMusicProviderAndScopesOtherResources() async throws {
@@ -175,6 +177,8 @@ final class IslandActivityRuntimeTests: XCTestCase {
         XCTAssertEqual(runtime.manager.current?.priority, .critical)
         XCTAssertTrue(runtime.prioritizesCurrentActivityOverLegacyContent)
         XCTAssertTrue(runtime.isCompactActivityVisible)
+        XCTAssertTrue(runtime.currentActivityUsesBatteryCompactLayout)
+        XCTAssertFalse(runtime.currentActivityUsesVolumeCompactLayout)
         let critical = try XCTUnwrap(runtime.manager.currentSnapshot)
 
         battery.emit(BatteryState(
@@ -204,6 +208,8 @@ final class IslandActivityRuntimeTests: XCTestCase {
         XCTAssertEqual(runtime.manager.currentSnapshot?.instanceToken, music.instanceToken)
         XCTAssertNil(runtime.manager.activity(id: BatteryActivityProvider.activityID))
         XCTAssertFalse(runtime.prioritizesCurrentActivityOverLegacyContent)
+        XCTAssertFalse(runtime.currentActivityUsesBatteryCompactLayout)
+        XCTAssertFalse(runtime.currentActivityUsesVolumeCompactLayout)
     }
 
     func testTransientActivityPreservesTimerCompletionUntilLegacyToolsRestore() throws {
