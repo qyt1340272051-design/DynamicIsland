@@ -7,7 +7,7 @@ public nonisolated enum PluginRuntimeState: String, Equatable, Sendable {
 }
 
 public nonisolated enum PluginRuntimePhase: String, Equatable, Sendable {
-    case bootstrap, entry, start, stop, evaluation
+    case bootstrap, entry, start, stop, evaluation, bridge
 }
 
 public nonisolated enum PluginRuntimeErrorCode: String, Equatable, Sendable {
@@ -41,12 +41,14 @@ nonisolated enum PluginJavaScriptValue: Equatable, Sendable {
 public final class PluginRuntime: PluginLifecycleRuntime {
     public private(set) var snapshot = PluginRuntimeSnapshot(state: .idle, lastFailure: nil)
     private let package: ValidatedPluginPackage
+    private let bridge: PluginJSBridge
     private var worker: PluginJavaScriptWorker?
     private var didStart = false
     private var didTeardown = false
 
-    public init(package: ValidatedPluginPackage) {
+    public init(package: ValidatedPluginPackage, bridge: PluginJSBridge? = nil) {
         self.package = package
+        self.bridge = bridge ?? PluginJSBridge()
     }
 
     public func onStart(context: PluginExecutionContext) throws {
@@ -56,7 +58,8 @@ public final class PluginRuntime: PluginLifecycleRuntime {
         try context.perform {}
         didStart = true
         snapshot = .init(state: .starting, lastFailure: nil)
-        let worker = PluginJavaScriptWorker(package: package) { [weak self, context] event in
+        let transport = PluginBridgeTransport(bridge: bridge, package: package, context: context)
+        let worker = PluginJavaScriptWorker(package: package, transport: transport) { [weak self, context] event in
             Task { @MainActor [weak self] in
                 self?.receive(event)
                 if case .failed(let failure) = event {
@@ -119,6 +122,7 @@ private nonisolated final class PluginJavaScriptWorker: @unchecked Sendable {
     }
 
     private let package: ValidatedPluginPackage
+    private let transport: PluginBridgeTransport
     private let sink: @Sendable (Event) -> Void
     private let lock = NSLock()
     private var runLoop: CFRunLoop?
@@ -130,8 +134,9 @@ private nonisolated final class PluginJavaScriptWorker: @unchecked Sendable {
     private var engine: PluginJavaScriptEngine?
     private var startedHook = false
 
-    init(package: ValidatedPluginPackage, sink: @escaping @Sendable (Event) -> Void) {
+    init(package: ValidatedPluginPackage, transport: PluginBridgeTransport, sink: @escaping @Sendable (Event) -> Void) {
         self.package = package
+        self.transport = transport
         self.sink = sink
     }
 
@@ -144,6 +149,7 @@ private nonisolated final class PluginJavaScriptWorker: @unchecked Sendable {
     }
 
     func stop(reason: PluginStopReason) {
+        transport.revoke()
         lock.lock()
         guard !stopRequested, !teardownRequested else { lock.unlock(); return }
         stopRequested = true
@@ -160,6 +166,7 @@ private nonisolated final class PluginJavaScriptWorker: @unchecked Sendable {
     }
 
     func teardown() {
+        transport.revoke()
         lock.lock()
         guard !teardownRequested else { lock.unlock(); return }
         teardownRequested = true
@@ -242,7 +249,9 @@ private nonisolated final class PluginJavaScriptWorker: @unchecked Sendable {
     private func startOnWorker() {
         guard !isRevoked else { return }
         do {
-            let engine = try PluginJavaScriptEngine(package: package)
+            let engine = try PluginJavaScriptEngine(package: package) { [weak self] id, json in
+                self?.submitBridgeRequest(id: id, json: json)
+            }
             self.engine = engine
             guard !isRevoked else { return }
             try engine.loadEntry(package)
@@ -252,10 +261,42 @@ private nonisolated final class PluginJavaScriptWorker: @unchecked Sendable {
             guard !isRevoked else { return }
             sink(.ready)
         } catch let failure as PluginRuntimeFailure {
-            sink(.failed(failure))
+            fail(failure)
         } catch {
-            sink(.failed(.init(phase: .bootstrap, code: .contextUnavailable, message: "Runtime initialization failed.")))
+            fail(.init(phase: .bootstrap, code: .contextUnavailable, message: "Runtime initialization failed."))
         }
+    }
+
+    private func fail(_ failure: PluginRuntimeFailure) {
+        // Close queued Host work as soon as the worker detects failure,
+        // before the asynchronous MainActor lifecycle result is delivered.
+        transport.revoke()
+        lock.lock()
+        revoked = true
+        lock.unlock()
+        sink(.failed(failure))
+    }
+
+    private func submitBridgeRequest(id: Int, json: String) {
+        guard !isRevoked else { return }
+        let accepted = transport.submit(id: id, json: json) { [weak self] id, response in
+            self?.receiveBridgeResponse(id: id, json: response)
+        }
+        if !accepted {
+            receiveBridgeResponse(id: id, json: "{\"ok\":false,\"error\":{\"code\":\"quotaExceeded\",\"message\":\"A Host resource limit was exceeded.\"}}")
+        }
+    }
+
+    private func receiveBridgeResponse(id: Int, json: String) {
+        lock.lock()
+        guard !revoked else { lock.unlock(); return }
+        enqueueLocked { [self] in
+            guard !isRevoked, let engine else { return }
+            do { try engine.receiveBridgeResponse(id: id, json: json) }
+            catch let failure as PluginRuntimeFailure { fail(failure) }
+            catch { /* No native or JavaScript value escapes this worker. */ }
+        }
+        lock.unlock()
     }
 }
 
@@ -264,8 +305,11 @@ private nonisolated final class PluginJavaScriptEngine {
     private var virtualMachine: JSVirtualMachine?
     private var context: JSContext?
     private var exceptionMessage: String?
+    private var bridgeReceiver: JSValue?
+    private let submitRequest: @Sendable (Int, String) -> Void
 
-    init(package: ValidatedPluginPackage) throws {
+    init(package: ValidatedPluginPackage, submitRequest: @escaping @Sendable (Int, String) -> Void) throws {
+        self.submitRequest = submitRequest
         let vm = JSVirtualMachine()
         guard let vm, let context = JSContext(virtualMachine: vm) else {
             throw PluginRuntimeFailure(phase: .bootstrap, code: .contextUnavailable, message: "JavaScript context unavailable.")
@@ -286,14 +330,21 @@ private nonisolated final class PluginJavaScriptEngine {
         ]
         let bytes = try JSONSerialization.data(withJSONObject: metadata, options: [.sortedKeys])
         let json = String(decoding: bytes, as: UTF8.self)
-        _ = try evaluate("""
-        (() => {
-            const metadata = \(json);
-            const plugin = Object.freeze(Object.assign(Object.create(null), metadata.plugin));
-            const island = Object.freeze(Object.assign(Object.create(null), {apiVersion: metadata.apiVersion, plugin}));
-            Object.defineProperty(globalThis, 'island', {value: island, writable: false, configurable: false, enumerable: true});
-        })();
-        """, phase: .bootstrap)
+        let nativeKey = "__islandBridge_" + UUID().uuidString.replacingOccurrences(of: "-", with: "")
+        let native: @convention(block) (JSValue?, JSValue?) -> Void = { [weak self] id, payload in
+            // Exact primitive checks avoid Objective-C argument coercion
+            // invoking plugin getters or toString at the native boundary.
+            guard let self, let id, id.isNumber, let payload, payload.isString else { return }
+            let number = id.toDouble()
+            guard number.isFinite, number >= 1, number <= 9_007_199_254_740_991,
+                  number.rounded(.towardZero) == number, let json = payload.toString(),
+                  json.utf8.count <= 16_384 else { return }
+            self.submitRequest(Int(number), json)
+        }
+        context.setObject(native, forKeyedSubscript: nativeKey as NSString)
+        bridgeReceiver = try evaluate(
+            PluginJSBridgeBootstrap.script(metadataJSON: json, nativeKey: nativeKey), phase: .bootstrap
+        )
     }
 
     func loadEntry(_ package: ValidatedPluginPackage) throws {
@@ -331,7 +382,15 @@ private nonisolated final class PluginJavaScriptEngine {
         throw PluginRuntimeError.unsupportedValue
     }
 
+    func receiveBridgeResponse(id: Int, json: String) throws {
+        guard let bridgeReceiver else { throw PluginRuntimeError.inactiveExecution }
+        clearException()
+        _ = bridgeReceiver.call(withArguments: [id, json])
+        try checkException(.bridge)
+    }
+
     func dispose() {
+        bridgeReceiver = nil
         context?.exceptionHandler = nil
         context?.exception = nil
         context = nil

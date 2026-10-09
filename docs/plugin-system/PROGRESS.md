@@ -63,7 +63,7 @@
 | ID | 任务 | 前置依赖 | 状态 | 验收证据 |
 | --- | --- | --- | --- | --- |
 | T22 | JavaScriptCore Runtime | T20 | `verified` | [独立 VM/Context、工作线程、最小 island、异常与 teardown 验收](phase-5-t22-javascript-runtime.md)、[29 项 Runtime 测试](../../DynamicIslandTests/PluginRuntimeTests.swift)及[生产 factory 测试](../../DynamicIslandTests/IslandActivityRuntimeTests.swift)；CI 391 passed、1 skipped、0 failures、Release build passed；Release 定向 30 passed，实际签名核验通过。 |
-| T23 | JS Bridge | T22 | `pending` | 待补。 |
+| T23 | JS Bridge | T22 | `verified` | [受控 Promise API、严格双层验证、简单 Activity、日志及隔离内存 KV 验收](phase-5-t23-js-bridge.md)、[23 项 Bridge 测试](../../DynamicIslandTests/PluginJSBridgeTests.swift)与生产 factory 测试；CI 414 passed、1 skipped、0 failures、Release build passed；Release 定向 53 passed，普通 App 签名核验通过。 |
 | T24 | JS → Activity | T23 | `pending` | 待补。 |
 | T25 | JS → IslandNode | T23 | `pending` | 待补。 |
 | T26 | JS Action Bridge | T23 | `pending` | 待补。 |

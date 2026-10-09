@@ -12,6 +12,7 @@ public enum ActivityManagerError: Error, Equatable {
     case notFound
     case expired
     case disabledSource
+    case quotaExceeded
 }
 
 /// Host-owned identity for one admission of an Activity ID. An update keeps
@@ -63,6 +64,10 @@ public final class ActivityManager: ObservableObject {
     }
 
     public func activity(id: String) -> IslandActivity? { activities[id] }
+
+    func activityCount(for source: ActivitySource) -> Int {
+        activities.values.filter { $0.source == source }.count
+    }
 
     var diagnostics: ActivityManagerDiagnostics {
         ActivityManagerDiagnostics(

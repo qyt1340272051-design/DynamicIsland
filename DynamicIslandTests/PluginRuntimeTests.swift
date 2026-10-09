@@ -21,7 +21,8 @@ final class PluginRuntimeTests: XCTestCase {
             """)
         XCTAssertEqual(bootstrap, .boolean(true))
         let capabilities = try await runtime.evaluateForTesting("""
-            ['log', 'activity', 'storage', 'actions'].every(key => !(key in island)) &&
+            typeof island.log === 'function' && Object.isFrozen(island.activity) &&
+            Object.isFrozen(island.storage) && Object.isFrozen(island.actions) &&
             ['FileManager', 'NSFileManager', 'URLSession', 'NSURLSession', 'NSWorkspace',
              'ObjC', 'require', 'process', 'fetch', 'setTimeout', 'clearTimeout']
                 .every(key => typeof globalThis[key] === 'undefined')

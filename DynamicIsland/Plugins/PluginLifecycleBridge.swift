@@ -71,11 +71,15 @@ public final class PluginExecutionContext {
         try callback()
     }
 
-    public func publish(_ activity: IslandActivity) throws {
+    public func publish(_ activity: IslandActivity, maximumActivities: Int? = nil) throws {
         try perform {
             guard activity.source == source else { throw PluginExecutionError.sourceMismatch }
-            try bridge?.publish(activity)
+            try bridge?.publish(activity, maximumActivities: maximumActivities)
         }
+    }
+
+    public func endActivity(id: String) throws {
+        try perform { try bridge?.endActivity(id: id, source: source) }
     }
 
     public func registerActionHandler(_ handler: @escaping ActionRouter.Handler) throws {
@@ -239,8 +243,16 @@ public final class PluginLifecycleBridge: PluginManagerLifecycleHandling {
         return true
     }
 
-    fileprivate func publish(_ activity: IslandActivity) throws {
+    fileprivate func publish(_ activity: IslandActivity, maximumActivities: Int?) throws {
+        if let maximumActivities, activityManager.activity(id: activity.id) == nil,
+           activityManager.activityCount(for: activity.source) >= maximumActivities {
+            throw ActivityManagerError.quotaExceeded
+        }
         try activityManager.publish(activity)
+    }
+
+    fileprivate func endActivity(id: String, source: ActivitySource) throws {
+        try activityManager.end(id: id, source: source)
     }
 
     fileprivate func registerHandler(source: ActivitySource, handler: @escaping ActionRouter.Handler) {

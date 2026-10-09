@@ -2,6 +2,8 @@
 
 日期：2026-10-09。范围：为每个已验证插件建立独立的 JavaScriptCore 执行环境，将实际 JavaScript 启停接入 T21 生命周期，并注入 V1 最小 `island` 对象。入口仍来自 T19 的不可变 `ValidatedPluginPackage.entrySource`；Runtime 不重新读取入口文件。
 
+本记录保留 T22 完成时的最小元数据接口及验收证据。T23 随后加入日志、简单 Activity、私有内存 KV 和受控 Promise 通信，当前 API 见 [T23 JS Bridge 记录](phase-5-t23-js-bridge.md)。
+
 ## Runtime 与 Host 的责任
 
 [`PluginRuntime`](../../DynamicIsland/Plugins/PluginRuntime.swift) 实现 T21 的 `PluginLifecycleRuntime`。每个 Runtime 独立拥有专用线程、该线程的 CFRunLoop、一个 `JSVirtualMachine` 和一个 `JSContext`，所有 JS 操作都留在该执行线程。不同插件不复用 VM、Context、全局对象或 JSValue；同一插件暂停后恢复、重新启用或重载时也创建新 Runtime。
