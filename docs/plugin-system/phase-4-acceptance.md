@@ -9,7 +9,7 @@
 - T20：[Manager 记录](phase-4-t20-plugin-manager.md)实现受控目录中的发现、静态加载、独立启停、重载、卸载与 V1 状态恢复，包含状态提交及卸载回滚保护。
 - T21：[Lifecycle 记录](phase-4-t21-plugin-lifecycle.md)定义六个状态、Swift Runtime Bridge、每会话执行 token、Activity/action 清理、Manager hooks、FIFO 变更顺序及正式 App 环境接入。
 
-启用偏好与运行状态分别维护。生产组合根目前缺少 JavaScript Runtime factory；插件可被静态发现和登记，入口源码仍作为已验证数据保留。实际 JSContext 与第三方执行闭环由下一阶段 T22 开始建立。
+启用偏好与运行状态分别维护。Phase 4 完成时，生产组合根缺少 JavaScript Runtime factory；插件可被静态发现和登记，入口源码作为已验证数据保留。后续实际 JSContext 与执行闭环见 [T22 Runtime 记录](phase-5-t22-javascript-runtime.md)；本记录保留 Phase 4 当时的验收边界。
 
 ## 按计划统一检查
 

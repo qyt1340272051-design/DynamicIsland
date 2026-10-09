@@ -39,7 +39,8 @@ public nonisolated struct PluginLifecycleSnapshot: Equatable, Sendable {
 }
 
 /// T21 defines the Host contract; T22 supplies an isolated JavaScriptCore
-/// implementation. Teardown must synchronously revoke/cancel execution work.
+/// implementation. Teardown synchronously revokes admission and pending work;
+/// already executing JavaScript releases its VM after returning on its worker.
 @MainActor
 public protocol PluginLifecycleRuntime: AnyObject {
     func onStart(context: PluginExecutionContext) throws
@@ -84,6 +85,13 @@ public final class PluginExecutionContext {
             }
         }
     }
+
+    /// Worker results carry this session's token. A late failure from a removed
+    /// or restarted runtime must never stop the replacement execution.
+    @discardableResult
+    public func reportFailure(_ failure: PluginLifecycleFailure) -> Bool {
+        bridge?.reportFailure(id: id, token: token, failure: failure) ?? false
+    }
 }
 
 /// The production execution, Activity, and interaction boundary. Enablement
@@ -97,6 +105,7 @@ public final class PluginLifecycleBridge: PluginManagerLifecycleHandling {
         var lifecycle = PluginLifecycle()
         var isEnabled: Bool
         var token: UUID?
+        var lastExecutionToken: UUID?
         var runtime: (any PluginLifecycleRuntime)?
         var lastFailure: PluginLifecycleFailure?
         var isTransitioning = false
@@ -216,6 +225,20 @@ public final class PluginLifecycleBridge: PluginManagerLifecycleHandling {
         allowsExecution(id: id) && entries[id]?.token == token
     }
 
+    fileprivate func reportFailure(id: String, token: UUID, failure: PluginLifecycleFailure) -> Bool {
+        guard let entry = entries[id], entry.lastExecutionToken == token else { return false }
+        switch failure {
+        case .startFailed:
+            guard accepts(id: id, token: token) else { return false }
+            entry.lastFailure = .startFailed
+            endExecution(entry, event: .stop, reason: .startFailed)
+        case .stopFailed:
+            guard entry.token == nil else { return false }
+            entry.lastFailure = .stopFailed
+        }
+        return true
+    }
+
     fileprivate func publish(_ activity: IslandActivity) throws {
         try activityManager.publish(activity)
     }
@@ -250,6 +273,7 @@ public final class PluginLifecycleBridge: PluginManagerLifecycleHandling {
         let token = UUID()
         entry.runtime = runtime
         entry.token = token
+        entry.lastExecutionToken = token
         entry.lastFailure = nil
         _ = try? entry.lifecycle.transition(entry.lifecycle.state == .suspended ? .resume : .start)
         activityManager.setPluginSourceEnabled(true, for: entry.source)

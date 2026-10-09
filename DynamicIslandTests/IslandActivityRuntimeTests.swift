@@ -4,6 +4,38 @@ import XCTest
 
 @MainActor
 final class IslandActivityRuntimeTests: XCTestCase {
+    func testProductionRuntimeExecutesJavaScriptAndKeepsOtherPluginAdmissionOpen() async throws {
+        let runtime = IslandActivityRuntime(viewModel: .preview())
+        defer { runtime.pluginLifecycle.shutdown() }
+        func package(id: String, source: String) throws -> ValidatedPluginPackage {
+            let manifest = try PluginManifest(
+                id: id, name: "Production Runtime Test", version: SemanticVersion("1.0.0"),
+                engine: .javaScriptCore, entry: "index.js", minimumHostVersion: SemanticVersion("0.6.0"),
+                permissions: [], capabilities: []
+            )
+            return .init(
+                manifest: manifest,
+                canonicalRootURL: URL(fileURLWithPath: "/runtime-tests/\(id)", isDirectory: true),
+                entryRelativePath: "index.js", entrySource: Data(source.utf8),
+                regularFileCount: 2, totalFileBytes: UInt64(source.utf8.count)
+            )
+        }
+        let failedID = "com.example.production-failed"
+        let runningID = "com.example.production-running"
+        runtime.pluginLifecycle.pluginDidLoad(try package(id: runningID, source: ""), isEnabled: true)
+        runtime.pluginLifecycle.pluginDidLoad(
+            try package(id: failedID, source: "throw new Error('production execution');"), isEnabled: true
+        )
+        let deadline = ContinuousClock.now.advanced(by: .seconds(4))
+        while runtime.pluginLifecycle.snapshot(id: failedID)?.lastFailure == nil, ContinuousClock.now < deadline {
+            try await Task.sleep(for: .milliseconds(5))
+        }
+        XCTAssertEqual(runtime.pluginLifecycle.snapshot(id: failedID)?.lastFailure, .startFailed)
+        XCTAssertEqual(runtime.pluginLifecycle.snapshot(id: failedID)?.state, .stopped)
+        XCTAssertTrue(runtime.pluginLifecycle.allowsExecution(id: runningID))
+        XCTAssertEqual(runtime.manager.current?.source, MusicActivityProvider.source)
+    }
+
     func testProductionRuntimeSharesMusicActivityAndActionRouter() throws {
         let viewModel = IslandViewModel.preview()
         let runtime = IslandActivityRuntime(viewModel: viewModel)

@@ -107,7 +107,7 @@ Host hooks 必须同步完成，不能同步等待 Manager，也不能在 hook �
 
 App 退出先取消发现任务、停止环境观察，再同步 `Bridge.shutdown()`。shutdown 关闭新执行 admission，旧会话全部清理；迟到的发现和启用 hooks 无法启动 Runtime。
 
-生产 `IslandActivityRuntime` 当前没有提供 Runtime factory，因此已启用插件保持 loaded，不会进入 running。`JSContext` 尚未创建，入口 JavaScript 尚未执行。Swift 测试 Runtime 的 running 与回调验证属于 Host 合约验证；T22 将接入实际 JavaScriptCore。
+T21 完成时，生产 `IslandActivityRuntime` 尚未提供 Runtime factory，已启用插件因此保持 loaded；该阶段没有创建 `JSContext` 或执行入口 JavaScript。Swift 测试 Runtime 的 running 与回调验证属于 Host 合约验证。T22 已在生产组合根接入实际 JavaScriptCore factory，运行线程与异步会话结果边界见 [T22 Runtime 记录](phase-5-t22-javascript-runtime.md)。
 
 ## 失败与回滚
 
@@ -140,6 +140,6 @@ App 退出先取消发现任务、停止环境观察，再同步 `Bridge.shutdow
 - 结果包：`/tmp/dynamic-island-t21-final-ci/TestResults.xcresult`；日志：`/tmp/dynamic-island-t21-final-ci.log`。
 - 同次 CI 的 Release build 成功；产物：`/tmp/dynamic-island-t21-ci-derived/Build/Products/Release/Dynamic Island.app`。
 
-当前没有实际 JS Runtime、插件设置 UI、`.dip` Installer、权限 Broker、两个官方插件或 Watchdog 的端到端证据。
+T21 验证记录没有实际 JS Runtime 的执行证据；该项从 [T22 Runtime 记录](phase-5-t22-javascript-runtime.md) 继续验证。插件设置 UI、`.dip` Installer、权限 Broker、两个官方插件或 Watchdog 的端到端证据仍按后续任务验收。
 
 统一复核见 [Phase 4 阶段检查](phase-4-acceptance.md)。

@@ -21,7 +21,11 @@ public final class IslandActivityRuntime {
     ) {
         let manager = ActivityManager()
         let router = ActionRouter(manager: manager)
-        let pluginLifecycle = PluginLifecycleBridge(activityManager: manager, actionRouter: router)
+        let pluginLifecycle = PluginLifecycleBridge(
+            activityManager: manager,
+            actionRouter: router,
+            runtimeFactory: { PluginRuntime(package: $0) }
+        )
         let music = MusicActivityProvider(viewModel: viewModel, manager: manager)
         let volume = VolumeActivityProvider(viewModel: viewModel, manager: manager)
         let battery = batteryService.map {
