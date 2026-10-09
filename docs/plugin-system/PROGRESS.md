@@ -55,7 +55,7 @@
 | --- | --- | --- | --- | --- |
 | T18 | PluginManifest | T17 | `verified` | [V1 模型、严格解析、SemVer、JSON Schema 和验证记录](phase-4-t18-plugin-manifest.md)，以及 [15 项定向测试](../../DynamicIslandTests/PluginManifestTests.swift)；`./Scripts/ci.sh` 292 passed、1 skipped、0 failures，Release build passed。 |
 | T19 | PluginValidator | T18 | `verified` | [静态目录校验、不可变入口快照与安全边界记录](phase-4-t19-plugin-validator.md)，以及 [14 项定向测试](../../DynamicIslandTests/PluginValidatorTests.swift)；`./Scripts/ci.sh` 306 passed、1 skipped、0 failures，Release build passed。 |
-| T20 | PluginManager | T18–T19 | `pending` | 待补。 |
+| T20 | PluginManager | T18–T19 | `verified` | [actor 串行管理、受控目录、状态持久化及回滚](../../DynamicIsland/Plugins/PluginManager.swift)、[14 项发现/启停/恢复/并发/重载/卸载/安全测试](../../DynamicIslandTests/PluginManagerTests.swift)和 [T20 验收记录](phase-4-t20-plugin-manager.md)；`./Scripts/ci.sh` 334 passed、1 skipped、0 failures，Release build passed。 |
 | T21 | Plugin Lifecycle | T20 | `pending` | 待补。 |
 
 ## Phase 5 — JavaScriptCore Runtime
