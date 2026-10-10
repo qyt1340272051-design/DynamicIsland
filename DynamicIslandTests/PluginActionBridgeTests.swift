@@ -1,4 +1,5 @@
 import AppKit
+import CoreGraphics
 import Foundation
 import SwiftUI
 import XCTest
@@ -7,6 +8,10 @@ import XCTest
 @MainActor
 final class PluginActionBridgeTests: XCTestCase {
     func testActualActionMockSwiftUIButtonToggleSliderAndTypedCommitReachJavaScript() async throws {
+        if let session = CGSessionCopyCurrentDictionary() as? [String: Any],
+           session["CGSSessionScreenIsLocked"] as? Bool == true {
+            throw XCTSkip("Real AppKit mouse input requires an unlocked macOS session.")
+        }
         let fixture = ActionBridgeFixture()
         defer { fixture.shutdown() }
         let container = FileManager.default.temporaryDirectory.appendingPathComponent("t26-action-mock-\(UUID().uuidString)", isDirectory: true)
@@ -186,7 +191,7 @@ final class PluginActionBridgeTests: XCTestCase {
         XCTAssertNil(fixture.manager.current)
     }
 
-    func testHostWireRejectsInvalidAndMismatchedSessions() throws {
+    func testHostWireRejectsInvalidAndMismatchedSessions() async throws {
         let fixture = ActionBridgeFixture()
         defer { fixture.shutdown() }
         let alpha = try package()
@@ -200,12 +205,18 @@ final class PluginActionBridgeTests: XCTestCase {
             ["actionID": "fire", "registrationID": "r1", "handler": "native"],
             ["actionID": "bad:action", "registrationID": "r1"]
         ]
-        for params in invalidParams { XCTAssertEqual(errorCode(try request(fixture, package: alpha, context: context, session: session, method: "actions.on", params: params)), "invalidArguments") }
-        XCTAssertEqual(errorCode(try request(fixture, package: alpha, context: context, session: session, method: "actions.on", params: ["actionID": "fire", "registrationID": String(repeating: "r", count: 81)])), "quotaExceeded")
-        XCTAssertEqual(errorCode(try request(fixture, package: alpha, context: context, method: "actions.on", params: ["actionID": "fire", "registrationID": "r1"])), "inactiveExecution")
+        for params in invalidParams {
+            let response = try await request(fixture, package: alpha, context: context, session: session, method: "actions.on", params: params)
+            XCTAssertEqual(errorCode(response), "invalidArguments")
+        }
+        let oversized = try await request(fixture, package: alpha, context: context, session: session, method: "actions.on", params: ["actionID": "fire", "registrationID": String(repeating: "r", count: 81)])
+        XCTAssertEqual(errorCode(oversized), "quotaExceeded")
+        let missingSession = try await request(fixture, package: alpha, context: context, method: "actions.on", params: ["actionID": "fire", "registrationID": "r1"])
+        XCTAssertEqual(errorCode(missingSession), "inactiveExecution")
         let beta = try package(id: "com.example.other")
         let other = try fixture.loadHost(beta)
-        XCTAssertEqual(errorCode(try request(fixture, package: beta, context: other, session: session, method: "actions.on", params: ["actionID": "fire", "registrationID": "r1"])), "inactiveExecution")
+        let mismatchedSession = try await request(fixture, package: beta, context: other, session: session, method: "actions.on", params: ["actionID": "fire", "registrationID": "r1"])
+        XCTAssertEqual(errorCode(mismatchedSession), "inactiveExecution")
         XCTAssertThrowsError(try PluginActionSession(package: beta, context: context, deliver: { _ in }))
         XCTAssertTrue(captures.values.isEmpty)
     }
@@ -487,9 +498,9 @@ final class PluginActionBridgeTests: XCTestCase {
     }
 
     private func request(_ fixture: ActionBridgeFixture, package: ValidatedPluginPackage, context: PluginExecutionContext,
-                         session: PluginActionSession? = nil, method: String, params: [String: Any]) throws -> [String: Any] {
+                         session: PluginActionSession? = nil, method: String, params: [String: Any]) async throws -> [String: Any] {
         let data = try JSONSerialization.data(withJSONObject: ["apiVersion": "1.0.0", "method": method, "params": params])
-        return try decode(fixture.service.handle(String(decoding: data, as: UTF8.self), package: package, context: context, actionSession: session))
+        return try decode(await fixture.service.handle(String(decoding: data, as: UTF8.self), package: package, context: context, actionSession: session))
     }
     private func decode(_ json: String) throws -> [String: Any] { try XCTUnwrap(JSONSerialization.jsonObject(with: Data(json.utf8)) as? [String: Any]) }
     private func errorCode(_ response: [String: Any]) -> String? { (response["error"] as? [String: Any])?["code"] as? String }

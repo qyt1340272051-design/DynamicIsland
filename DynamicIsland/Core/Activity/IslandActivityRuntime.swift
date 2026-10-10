@@ -22,7 +22,7 @@ public final class IslandActivityRuntime {
     ) {
         let manager = ActivityManager()
         let router = ActionRouter(manager: manager)
-        let pluginBridge = PluginJSBridge()
+        let pluginBridge = PluginJSBridge(storage: .applicationSupport())
         let pluginLifecycle = PluginLifecycleBridge(
             activityManager: manager,
             actionRouter: router,

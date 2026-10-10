@@ -15,6 +15,7 @@ public nonisolated struct PluginLogEntry: Equatable, Sendable {
 public nonisolated enum PluginBridgeErrorCode: String, Error, Equatable, Sendable {
     case invalidArguments, unsupportedVersion, unsupportedMethod, inactiveExecution
     case capabilityRequired, permissionRequired, quotaExceeded, rateLimited, activityNotFound, coreRejected
+    case storageReadFailed, storageWriteFailed
 
     fileprivate var message: String {
         switch self {
@@ -28,28 +29,26 @@ public nonisolated enum PluginBridgeErrorCode: String, Error, Equatable, Sendabl
         case .rateLimited: "Activity updates exceed the Host rate limit."
         case .activityNotFound: "The plugin Activity was not found."
         case .coreRejected: "The Host rejected the operation."
+        case .storageReadFailed: "Plugin storage could not be read."
+        case .storageWriteFailed: "Plugin storage could not be written."
         }
     }
 }
 
 /// The sole data-only JS-to-Core boundary. Requests arrive serially on
 /// MainActor from one worker; replies never contain a JSValue or native object.
-/// Storage survives Runtime replacement in this Host instance, in memory only.
+/// Storage I/O is delegated to its own actor; no JavaScript reference or
+/// plugin-selected path reaches the filesystem.
 @MainActor
 public final class PluginJSBridge {
     public nonisolated static let apiVersion = "1.0.0"
-
-    private struct StoredValue {
-        let value: PluginBridgeJSON
-        let bytes: Int
-    }
 
     private enum Operation {
         case log(message: String, level: PluginLogLevel)
         case activity(PluginActivityConverter.Request)
         case end(id: String)
         case get(key: String)
-        case set(key: String, value: PluginBridgeJSON, bytes: Int)
+        case set(key: String, value: PluginBridgeJSON)
         case remove(key: String)
         case clear
         case registerAction(actionID: String, registrationID: String)
@@ -57,12 +56,14 @@ public final class PluginJSBridge {
     }
 
     private var logEntries: [String: [PluginLogEntry]] = [:]
-    private var storage: [String: [String: StoredValue]] = [:]
+    private let storage: PluginStorage
     private var activityRateLimiter = PluginActivityRateLimiter()
     private let activityRateClock: @MainActor () -> TimeInterval
     private let logger = Logger(subsystem: "DynamicIsland", category: "PluginJSBridge")
 
-    public init(activityRateClock: @escaping @MainActor () -> TimeInterval = { ProcessInfo.processInfo.systemUptime }) {
+    public init(storage: PluginStorage = PluginStorage(),
+                activityRateClock: @escaping @MainActor () -> TimeInterval = { ProcessInfo.processInfo.systemUptime }) {
+        self.storage = storage
         self.activityRateClock = activityRateClock
     }
 
@@ -75,13 +76,22 @@ public final class PluginJSBridge {
     /// Both wrapper validation and this independent Host validation are
     /// required. Plugin identity, source and declarations come from the Host.
     func handle(_ requestJSON: String, package: ValidatedPluginPackage,
-                context: PluginExecutionContext, actionSession: PluginActionSession? = nil) -> String {
+                context: PluginExecutionContext, actionSession: PluginActionSession? = nil) async -> String {
         do {
             let operation = try parseRequest(requestJSON)
             guard context.id == package.manifest.id else { throw PluginBridgeErrorCode.coreRejected }
             var result = PluginBridgeJSON.null
-            try context.perform {
-                result = try execute(operation, manifest: package.manifest, context: context, actionSession: actionSession)
+            switch operation {
+            case .get, .set, .remove, .clear:
+                try context.perform { try requireStorage(package.manifest) }
+                result = try await executeStorage(operation, context: context)
+                // The actor may have suspended this Host task while lifecycle
+                // revoked the session. Late replies cannot revive that session.
+                try context.perform {}
+            default:
+                try context.perform {
+                    result = try execute(operation, manifest: package.manifest, context: context, actionSession: actionSession)
+                }
             }
             return response(.object(["ok": .boolean(true), "value": result]))
         } catch let error as PluginBridgeErrorCode {
@@ -90,6 +100,14 @@ public final class PluginJSBridge {
             return failure(error == .limitExceeded ? .quotaExceeded : .invalidArguments)
         } catch let error as PluginExecutionError {
             return failure(error == .inactiveExecution ? .inactiveExecution : .coreRejected)
+        } catch let error as PluginStorageError {
+            switch error {
+            case .invalidArguments: return failure(.invalidArguments)
+            case .quotaExceeded: return failure(.quotaExceeded)
+            case .inactiveExecution: return failure(.inactiveExecution)
+            case .readFailed: return failure(.storageReadFailed)
+            case .writeFailed: return failure(.storageWriteFailed)
+            }
         } catch let error as ActivityManagerError {
             switch error {
             case .quotaExceeded: return failure(.quotaExceeded)
@@ -100,6 +118,23 @@ public final class PluginJSBridge {
         } catch {
             return failure(.coreRejected)
         }
+    }
+
+    private func executeStorage(_ operation: Operation, context: PluginExecutionContext) async throws -> PluginBridgeJSON {
+        let admission = context.storageAdmission
+        switch operation {
+        case .get(let key):
+            return try await storage.get(pluginID: context.id, key: key, admission: admission)
+        case .set(let key, let value):
+            try await storage.set(pluginID: context.id, key: key, value: value, admission: admission)
+        case .remove(let key):
+            try await storage.remove(pluginID: context.id, key: key, admission: admission)
+        case .clear:
+            try await storage.clear(pluginID: context.id, admission: admission)
+        default:
+            throw PluginBridgeErrorCode.coreRejected
+        }
+        return .null
     }
 
     private func execute(_ operation: Operation, manifest: PluginManifest,
@@ -141,25 +176,9 @@ public final class PluginJSBridge {
         case .end(let id):
             try require(.endActivity, manifest: manifest)
             try context.endActivity(id: Self.activityID(pluginID: pluginID, localID: id))
-        case .get(let key):
-            try requireStorage(manifest)
-            return storage[pluginID]?[key]?.value ?? .null
-        case .set(let key, let value, let bytes):
-            try requireStorage(manifest)
-            var values = storage[pluginID] ?? [:]
-            values[key] = StoredValue(value: value, bytes: bytes)
-            let totalBytes = values.reduce(0) { $0 + $1.key.utf8.count + $1.value.bytes }
-            guard values.count <= 128, totalBytes <= 65_536 else {
-                throw PluginBridgeErrorCode.quotaExceeded
-            }
-            storage[pluginID] = values
-        case .remove(let key):
-            try requireStorage(manifest)
-            storage[pluginID]?.removeValue(forKey: key)
-            if storage[pluginID]?.isEmpty == true { storage.removeValue(forKey: pluginID) }
-        case .clear:
-            try requireStorage(manifest)
-            storage.removeValue(forKey: pluginID)
+        case .get, .set, .remove, .clear:
+            // Storage is handled only by the async actor path above.
+            throw PluginBridgeErrorCode.coreRejected
         case .registerAction(let actionID, let registrationID):
             try require(.handleActions, manifest: manifest)
             guard let actionSession, actionSession.matches(context: context) else {
@@ -215,7 +234,7 @@ public final class PluginJSBridge {
             try value.validate(maximumDepth: 8, maximumNodes: 256, maximumStringBytes: 4_096)
             let bytes = try value.encodedData().count
             guard bytes <= 8_192 else { throw PluginBridgeErrorCode.quotaExceeded }
-            return .set(key: key, value: value, bytes: bytes)
+            return .set(key: key, value: value)
         case "storage.clear":
             _ = try object(params, required: [])
             return .clear

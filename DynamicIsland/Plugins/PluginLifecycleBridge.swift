@@ -54,13 +54,15 @@ public protocol PluginLifecycleRuntime: AnyObject {
 public final class PluginExecutionContext {
     public let id: String
     public let source: ActivitySource
+    let storageAdmission: PluginStorageAdmission
     private let token: UUID
     private weak var bridge: PluginLifecycleBridge?
 
-    fileprivate init(id: String, token: UUID, bridge: PluginLifecycleBridge) {
+    fileprivate init(id: String, token: UUID, storageAdmission: PluginStorageAdmission, bridge: PluginLifecycleBridge) {
         self.id = id
         source = ActivitySource(kind: .plugin, identifier: id)
         self.token = token
+        self.storageAdmission = storageAdmission
         self.bridge = bridge
     }
 
@@ -135,6 +137,7 @@ public final class PluginLifecycleBridge: PluginManagerLifecycleHandling {
         var lifecycle = PluginLifecycle()
         var isEnabled: Bool
         var token: UUID?
+        var storageAdmission: PluginStorageAdmission?
         var lastExecutionToken: UUID?
         var runtime: (any PluginLifecycleRuntime)?
         var lastFailure: PluginLifecycleFailure?
@@ -324,15 +327,18 @@ public final class PluginLifecycleBridge: PluginManagerLifecycleHandling {
             return
         }
         let token = UUID()
+        let storageAdmission = PluginStorageAdmission()
         entry.runtime = runtime
         entry.token = token
+        entry.storageAdmission = storageAdmission
         entry.lastExecutionToken = token
         entry.lastFailure = nil
         _ = try? entry.lifecycle.transition(entry.lifecycle.state == .suspended ? .resume : .start)
         activityManager.setPluginSourceEnabled(true, for: entry.source)
         actionRouter.setEnabled(true, for: entry.source)
         do {
-            try runtime.onStart(context: .init(id: entry.package.manifest.id, token: token, bridge: self))
+            try runtime.onStart(context: .init(id: entry.package.manifest.id, token: token,
+                                             storageAdmission: storageAdmission, bridge: self))
         } catch {
             guard entry.token == token else { return }
             entry.lastFailure = .startFailed
@@ -348,6 +354,8 @@ public final class PluginLifecycleBridge: PluginManagerLifecycleHandling {
     }
 
     private func endExecution(_ entry: Entry, event: PluginLifecycleEvent, reason: PluginStopReason) {
+        entry.storageAdmission?.revoke()
+        entry.storageAdmission = nil
         entry.isTransitioning = true
         defer { entry.isTransitioning = false }
         entry.token = nil

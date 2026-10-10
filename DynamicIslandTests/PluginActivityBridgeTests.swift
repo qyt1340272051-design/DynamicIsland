@@ -6,12 +6,12 @@ import XCTest
 
 @MainActor
 final class PluginActivityBridgeTests: XCTestCase {
-    func testPublishMapsDefaultsAndHostIdentityFromValidatedPackage() throws {
+    func testPublishMapsDefaultsAndHostIdentityFromValidatedPackage() async throws {
         let fixture = ActivityBridgeFixture()
         defer { fixture.shutdown() }
         let package = try package()
         let context = try fixture.load(package)
-        let response = try request(fixture, package: package, context: context, method: "activity.publish", params: [
+        let response = try await request(fixture, package: package, context: context, method: "activity.publish", params: [
             "id": "build", "presentation": ["title": "GitHub 构建", "progress": 0]
         ])
         XCTAssertEqual(response["ok"] as? Bool, true)
@@ -29,7 +29,7 @@ final class PluginActivityBridgeTests: XCTestCase {
         XCTAssertNil(activity.presentation.expanded)
     }
 
-    func testPriorityAndLifecycleRequestsUseHostDowngradePolicy() throws {
+    func testPriorityAndLifecycleRequestsUseHostDowngradePolicy() async throws {
         let fixture = ActivityBridgeFixture()
         defer { fixture.shutdown() }
         let package = try package()
@@ -38,7 +38,7 @@ final class PluginActivityBridgeTests: XCTestCase {
             ("background", .background), ("normal", .normal), ("important", .normal), ("critical", .normal)
         ]
         for (index, requestPriority) in priorities.enumerated() {
-            let response = try request(fixture, package: package, context: context, method: "activity.publish", params: [
+            let response = try await request(fixture, package: package, context: context, method: "activity.publish", params: [
                 "id": "priority\(index)", "priority": requestPriority.0,
                 "presentation": ["title": "Priority \(index)"]
             ])
@@ -49,7 +49,7 @@ final class PluginActivityBridgeTests: XCTestCase {
             ("transient", .transient), ("persistent", .persistent), ("progress", .progress), ("critical", .transient)
         ]
         for (index, policy) in policies.enumerated() {
-            let response = try request(fixture, package: package, context: context, method: "activity.publish", params: [
+            let response = try await request(fixture, package: package, context: context, method: "activity.publish", params: [
                 "id": "policy\(index)", "lifecycle": ["policy": policy.0],
                 "presentation": ["title": "Policy \(index)"]
             ])
@@ -59,19 +59,19 @@ final class PluginActivityBridgeTests: XCTestCase {
         }
     }
 
-    func testUpdatePatchesTopLevelFieldsReplacesPresentationAndPreservesInstance() throws {
+    func testUpdatePatchesTopLevelFieldsReplacesPresentationAndPreservesInstance() async throws {
         let fixture = ActivityBridgeFixture()
         defer { fixture.shutdown() }
         let package = try package()
         let context = try fixture.load(package)
-        try publish(fixture, package: package, context: context, params: [
+        try await publish(fixture, package: package, context: context, params: [
             "id": "build", "priority": "background", "lifecycle": ["policy": "progress"],
             "presentation": ["title": "开始构建", "subtitle": "main", "symbolName": "hammer.fill", "progress": 0],
             "actions": [["id": "open", "title": "查看构建"]]
         ])
         let original = try XCTUnwrap(fixture.activity("build"))
         let token = try XCTUnwrap(fixture.manager.currentSnapshot?.instanceToken)
-        let response = try request(fixture, package: package, context: context, method: "activity.update", params: [
+        let response = try await request(fixture, package: package, context: context, method: "activity.update", params: [
             "id": "build", "presentation": ["title": "构建进行中", "progress": 0.5]
         ])
         XCTAssertEqual(response["ok"] as? Bool, true)
@@ -86,7 +86,7 @@ final class PluginActivityBridgeTests: XCTestCase {
         XCTAssertNil(updated.presentation.subtitle)
         XCTAssertNil(updated.presentation.symbolName)
 
-        let clearActions = try request(fixture, package: package, context: context, method: "activity.update", params: [
+        let clearActions = try await request(fixture, package: package, context: context, method: "activity.update", params: [
             "id": "build", "priority": "important", "actions": []
         ])
         XCTAssertEqual(clearActions["ok"] as? Bool, true)
@@ -95,24 +95,24 @@ final class PluginActivityBridgeTests: XCTestCase {
         XCTAssertEqual(fixture.activity("build")?.presentation, updated.presentation)
     }
 
-    func testUpdatePreservesDismissedStateAndRejectsChangedPolicyAtomically() throws {
+    func testUpdatePreservesDismissedStateAndRejectsChangedPolicyAtomically() async throws {
         let fixture = ActivityBridgeFixture()
         defer { fixture.shutdown() }
         let package = try package()
         let context = try fixture.load(package)
-        try publish(fixture, package: package, context: context, params: [
+        try await publish(fixture, package: package, context: context, params: [
             "id": "build", "lifecycle": ["policy": "persistent"], "presentation": ["title": "Original"]
         ])
         try fixture.manager.dismiss(id: fixture.id("build"), source: context.source)
         let before = try XCTUnwrap(fixture.activity("build"))
         XCTAssertEqual(before.lifecycle.state, .dismissed)
-        let invalid = try request(fixture, package: package, context: context, method: "activity.update", params: [
+        let invalid = try await request(fixture, package: package, context: context, method: "activity.update", params: [
             "id": "build", "lifecycle": ["policy": "progress"],
             "presentation": ["title": "Must not commit"], "priority": "background"
         ])
         XCTAssertEqual(errorCode(invalid), "invalidArguments")
         XCTAssertEqual(fixture.activity("build"), before)
-        let valid = try request(fixture, package: package, context: context, method: "activity.update", params: [
+        let valid = try await request(fixture, package: package, context: context, method: "activity.update", params: [
             "id": "build", "lifecycle": ["policy": "persistent"], "presentation": ["title": "Still dismissed"]
         ])
         XCTAssertEqual(valid["ok"] as? Bool, true)
@@ -120,15 +120,15 @@ final class PluginActivityBridgeTests: XCTestCase {
         XCTAssertNil(fixture.manager.current)
     }
 
-    func testUpdateNormalizesCriticalPolicyBeforeCheckingImmutablePolicy() throws {
+    func testUpdateNormalizesCriticalPolicyBeforeCheckingImmutablePolicy() async throws {
         let fixture = ActivityBridgeFixture()
         defer { fixture.shutdown() }
         let package = try package()
         let context = try fixture.load(package)
-        try publish(fixture, package: package, context: context, params: [
+        try await publish(fixture, package: package, context: context, params: [
             "id": "build", "presentation": ["title": "Original"]
         ])
-        let response = try request(fixture, package: package, context: context, method: "activity.update", params: [
+        let response = try await request(fixture, package: package, context: context, method: "activity.update", params: [
             "id": "build", "lifecycle": ["policy": "critical"], "priority": "critical"
         ])
         XCTAssertEqual(response["ok"] as? Bool, true)
@@ -136,73 +136,73 @@ final class PluginActivityBridgeTests: XCTestCase {
         XCTAssertEqual(fixture.activity("build")?.priority, .normal)
     }
 
-    func testPublishAndUpdateHaveIndependentCapabilitiesAndRepublishCompatibility() throws {
+    func testPublishAndUpdateHaveIndependentCapabilitiesAndRepublishCompatibility() async throws {
         let fixture = ActivityBridgeFixture()
         defer { fixture.shutdown() }
         let publishOnly = try package(capabilities: [.publishActivity])
         let publishContext = try fixture.load(publishOnly)
-        try publish(fixture, package: publishOnly, context: publishContext, params: [
+        try await publish(fixture, package: publishOnly, context: publishContext, params: [
             "id": "build", "presentation": ["title": "Original"]
         ])
-        let deniedUpdate = try request(fixture, package: publishOnly, context: publishContext, method: "activity.update", params: [
+        let deniedUpdate = try await request(fixture, package: publishOnly, context: publishContext, method: "activity.update", params: [
             "id": "build", "presentation": ["title": "Denied"]
         ])
         XCTAssertEqual(errorCode(deniedUpdate), "capabilityRequired")
-        try publish(fixture, package: publishOnly, context: publishContext, params: [
+        try await publish(fixture, package: publishOnly, context: publishContext, params: [
             "id": "build", "presentation": ["title": "Republished"]
         ])
         XCTAssertEqual(fixture.activity("build")?.presentation.title, "Republished")
 
         let updateOnly = try package(id: "com.example.beta", capabilities: [.updateActivity])
         let updateContext = try fixture.load(updateOnly)
-        let deniedPublish = try request(fixture, package: updateOnly, context: updateContext, method: "activity.publish", params: [
+        let deniedPublish = try await request(fixture, package: updateOnly, context: updateContext, method: "activity.publish", params: [
             "id": "build", "presentation": ["title": "Denied"]
         ])
         XCTAssertEqual(errorCode(deniedPublish), "capabilityRequired")
-        let missing = try request(fixture, package: updateOnly, context: updateContext, method: "activity.update", params: [
+        let missing = try await request(fixture, package: updateOnly, context: updateContext, method: "activity.update", params: [
             "id": "build", "presentation": ["title": "Missing"]
         ])
         XCTAssertEqual(errorCode(missing), "activityNotFound")
         XCTAssertNil(fixture.activity("build", pluginID: updateOnly.manifest.id))
     }
 
-    func testActionsAreDataOnlyBoundedUniqueAndRequireCapability() throws {
+    func testActionsAreDataOnlyBoundedUniqueAndRequireCapability() async throws {
         let fixture = ActivityBridgeFixture()
         defer { fixture.shutdown() }
         let package = try package()
         let context = try fixture.load(package)
         let actions = (0..<8).map { ["id": "open\($0)", "title": "操作 \($0)"] }
-        try publish(fixture, package: package, context: context, params: [
+        try await publish(fixture, package: package, context: context, params: [
             "id": "build", "presentation": ["title": "Actions"], "actions": actions
         ])
         XCTAssertEqual(fixture.activity("build")?.actions, actions.map { .init(id: $0["id"]!, title: $0["title"]!) })
-        let tooMany = try request(fixture, package: package, context: context, method: "activity.update", params: [
+        let tooMany = try await request(fixture, package: package, context: context, method: "activity.update", params: [
             "id": "build", "actions": actions + [["id": "overflow", "title": "Overflow"]]
         ])
         XCTAssertEqual(errorCode(tooMany), "quotaExceeded")
-        let duplicates = try request(fixture, package: package, context: context, method: "activity.update", params: [
+        let duplicates = try await request(fixture, package: package, context: context, method: "activity.update", params: [
             "id": "build", "actions": [["id": "same", "title": "First"], ["id": "same", "title": "Second"]]
         ])
         XCTAssertEqual(errorCode(duplicates), "invalidArguments")
         XCTAssertEqual(fixture.activity("build")?.actions.count, 8)
         let noActions = try self.package(id: "com.example.beta", capabilities: [.publishActivity, .updateActivity])
         let beta = try fixture.load(noActions)
-        let denied = try request(fixture, package: noActions, context: beta, method: "activity.publish", params: [
+        let denied = try await request(fixture, package: noActions, context: beta, method: "activity.publish", params: [
             "id": "build", "presentation": ["title": "Denied"], "actions": [["id": "open", "title": "Open"]]
         ])
         XCTAssertEqual(errorCode(denied), "capabilityRequired")
         XCTAssertNil(fixture.activity("build", pluginID: noActions.manifest.id))
-        try publish(fixture, package: noActions, context: beta, params: [
+        try await publish(fixture, package: noActions, context: beta, params: [
             "id": "build", "presentation": ["title": "No callbacks"], "actions": []
         ])
     }
 
-    func testMalformedActivityFieldsAndUnsafeHostFieldsHaveNoSideEffects() throws {
+    func testMalformedActivityFieldsAndUnsafeHostFieldsHaveNoSideEffects() async throws {
         let fixture = ActivityBridgeFixture()
         defer { fixture.shutdown() }
         let package = try package()
         let context = try fixture.load(package)
-        try publish(fixture, package: package, context: context, params: ["id": "build", "presentation": ["title": "Original"]])
+        try await publish(fixture, package: package, context: context, params: ["id": "build", "presentation": ["title": "Original"]])
         let original = fixture.activity("build")
         let invalidValues: [[String: Any]] = [
             ["id": "build"],
@@ -230,13 +230,13 @@ final class PluginActivityBridgeTests: XCTestCase {
             ["id": "plugin:com.example.beta:build", "presentation": ["title": "Forgery"]]
         ]
         for params in invalidValues {
-            let response = try request(fixture, package: package, context: context, method: "activity.update", params: params)
+            let response = try await request(fixture, package: package, context: context, method: "activity.update", params: params)
             XCTAssertEqual(errorCode(response), "invalidArguments", "Unexpected response for \(params)")
             XCTAssertEqual(fixture.activity("build"), original)
             XCTAssertEqual(fixture.manager.diagnostics.activityCount, 1)
         }
         for field in ["source", "state", "createdAt", "expiresAt"] {
-            let response = try request(fixture, package: package, context: context, method: "activity.publish", params: [
+            let response = try await request(fixture, package: package, context: context, method: "activity.publish", params: [
                 "id": "attack", "presentation": ["title": "Attack"], field: 0
             ])
             XCTAssertEqual(errorCode(response), "invalidArguments")
@@ -244,7 +244,7 @@ final class PluginActivityBridgeTests: XCTestCase {
         }
     }
 
-    func testByteBoundariesAreAcceptedAndOversizedFieldsRejectedAtomically() throws {
+    func testByteBoundariesAreAcceptedAndOversizedFieldsRejectedAtomically() async throws {
         let fixture = ActivityBridgeFixture()
         defer { fixture.shutdown() }
         let package = try package()
@@ -254,7 +254,7 @@ final class PluginActivityBridgeTests: XCTestCase {
         XCTAssertEqual(maximumTitle.utf8.count, 256)
         let actionTitle = String(repeating: "界", count: 42) + "xx"
         XCTAssertEqual(actionTitle.utf8.count, 128)
-        try publish(fixture, package: package, context: context, params: [
+        try await publish(fixture, package: package, context: context, params: [
             "id": maximumID,
             "presentation": ["title": maximumTitle, "subtitle": String(repeating: "s", count: 256),
                              "symbolName": String(repeating: "s", count: 128), "progress": 1],
@@ -270,18 +270,18 @@ final class PluginActivityBridgeTests: XCTestCase {
             ["id": maximumID, "actions": [["id": "a", "title": actionTitle + "x"]]]
         ]
         for params in tooLarge {
-            let response = try request(fixture, package: package, context: context, method: "activity.update", params: params)
+            let response = try await request(fixture, package: package, context: context, method: "activity.update", params: params)
             XCTAssertEqual(errorCode(response), "quotaExceeded")
             XCTAssertEqual(fixture.activity(maximumID), original)
         }
     }
 
-    func testHostRejectsDuplicateKeysAndNonfiniteNumbersInUpdateJSON() throws {
+    func testHostRejectsDuplicateKeysAndNonfiniteNumbersInUpdateJSON() async throws {
         let fixture = ActivityBridgeFixture()
         defer { fixture.shutdown() }
         let package = try package()
         let context = try fixture.load(package)
-        try publish(fixture, package: package, context: context, params: ["id": "build", "presentation": ["title": "Original"]])
+        try await publish(fixture, package: package, context: context, params: ["id": "build", "presentation": ["title": "Original"]])
         let original = fixture.activity("build")
         for params in [
             #"{"id":"build","priority":"normal","priority":"critical"}"#,
@@ -289,7 +289,7 @@ final class PluginActivityBridgeTests: XCTestCase {
             #"{"id":"build","actions":[{"id":"open","title":"Open","title":"Changed"}]}"#,
             #"{"id":"build","presentation":{"title":"Bad","progress":1e400}}"#
         ] {
-            let response = try decode(fixture.service.handle(
+            let response = try decode(await fixture.service.handle(
                 "{\"apiVersion\":\"1.0.0\",\"method\":\"activity.update\",\"params\":\(params)}",
                 package: package, context: context
             ))
@@ -298,14 +298,14 @@ final class PluginActivityBridgeTests: XCTestCase {
         }
     }
 
-    func testPublishAndUpdateShareRateBudgetRejectWithoutMutationAndRefill() throws {
+    func testPublishAndUpdateShareRateBudgetRejectWithoutMutationAndRefill() async throws {
         let fixture = ActivityBridgeFixture()
         defer { fixture.shutdown() }
         let package = try package()
         let context = try fixture.load(package)
-        try publish(fixture, package: package, context: context, params: ["id": "build", "presentation": ["title": "0"]])
+        try await publish(fixture, package: package, context: context, params: ["id": "build", "presentation": ["title": "0"]])
         for index in 1..<20 {
-            let response = try request(fixture, package: package, context: context,
+            let response = try await request(fixture, package: package, context: context,
                                        method: index.isMultiple(of: 2) ? "activity.publish" : "activity.update", params: [
                 "id": "build", "presentation": ["title": "\(index)"]
             ])
@@ -313,77 +313,77 @@ final class PluginActivityBridgeTests: XCTestCase {
         }
         let original = fixture.activity("build")
         for method in ["activity.publish", "activity.update"] {
-            let denied = try request(fixture, package: package, context: context, method: method, params: [
+            let denied = try await request(fixture, package: package, context: context, method: method, params: [
                 "id": "build", "presentation": ["title": "Must not commit"]
             ])
             XCTAssertEqual(errorCode(denied), "rateLimited")
             XCTAssertEqual(fixture.activity("build"), original)
         }
         fixture.rateClock.now += 0.1
-        let recovered = try request(fixture, package: package, context: context, method: "activity.update", params: [
+        let recovered = try await request(fixture, package: package, context: context, method: "activity.update", params: [
             "id": "build", "presentation": ["title": "Recovered"]
         ])
         XCTAssertEqual(recovered["ok"] as? Bool, true)
         XCTAssertEqual(fixture.activity("build")?.presentation.title, "Recovered")
-        let exhausted = try request(fixture, package: package, context: context, method: "activity.update", params: ["id": "build", "priority": "normal"])
+        let exhausted = try await request(fixture, package: package, context: context, method: "activity.update", params: ["id": "build", "priority": "normal"])
         XCTAssertEqual(errorCode(exhausted), "rateLimited")
     }
 
-    func testRejectedRequestsDoNotConsumeWriteBudget() throws {
+    func testRejectedRequestsDoNotConsumeWriteBudget() async throws {
         let fixture = ActivityBridgeFixture()
         defer { fixture.shutdown() }
         let package = try package()
         let context = try fixture.load(package)
         for _ in 0..<30 {
-            let missing = try request(fixture, package: package, context: context, method: "activity.update", params: [
+            let missing = try await request(fixture, package: package, context: context, method: "activity.update", params: [
                 "id": "missing", "presentation": ["title": "Missing"]
             ])
             XCTAssertEqual(errorCode(missing), "activityNotFound")
-            let malformed = try request(fixture, package: package, context: context, method: "activity.publish", params: [
+            let malformed = try await request(fixture, package: package, context: context, method: "activity.publish", params: [
                 "id": "bad", "presentation": ["title": false]
             ])
             XCTAssertEqual(errorCode(malformed), "invalidArguments")
         }
-        try publish(fixture, package: package, context: context, params: ["id": "build", "presentation": ["title": "Original"]])
+        try await publish(fixture, package: package, context: context, params: ["id": "build", "presentation": ["title": "Original"]])
         for _ in 0..<30 {
-            let policyChange = try request(fixture, package: package, context: context, method: "activity.update", params: [
+            let policyChange = try await request(fixture, package: package, context: context, method: "activity.update", params: [
                 "id": "build", "lifecycle": ["policy": "persistent"]
             ])
             XCTAssertEqual(errorCode(policyChange), "invalidArguments")
         }
         for index in 1..<20 {
-            let response = try request(fixture, package: package, context: context, method: "activity.update", params: [
+            let response = try await request(fixture, package: package, context: context, method: "activity.update", params: [
                 "id": "build", "presentation": ["title": "\(index)"]
             ])
             XCTAssertEqual(response["ok"] as? Bool, true)
         }
-        let exhausted = try request(fixture, package: package, context: context, method: "activity.update", params: ["id": "build", "priority": "normal"])
+        let exhausted = try await request(fixture, package: package, context: context, method: "activity.update", params: ["id": "build", "priority": "normal"])
         XCTAssertEqual(errorCode(exhausted), "rateLimited")
     }
 
-    func testCoreQuotaFailureKeepsWriteAllowanceAndExpiredEventsCannotBeUpdated() throws {
+    func testCoreQuotaFailureKeepsWriteAllowanceAndExpiredEventsCannotBeUpdated() async throws {
         let fixture = ActivityBridgeFixture()
         defer { fixture.shutdown() }
         let package = try package()
         let context = try fixture.load(package)
         for index in 0..<16 {
-            try publish(fixture, package: package, context: context, params: [
+            try await publish(fixture, package: package, context: context, params: [
                 "id": "build\(index)", "presentation": ["title": "Build \(index)"]
             ])
         }
         for _ in 0..<30 {
-            let rejected = try request(fixture, package: package, context: context, method: "activity.publish", params: [
+            let rejected = try await request(fixture, package: package, context: context, method: "activity.publish", params: [
                 "id": "excess", "presentation": ["title": "Cannot commit"]
             ])
             XCTAssertEqual(errorCode(rejected), "quotaExceeded")
         }
         for index in 0..<4 {
-            let updated = try request(fixture, package: package, context: context, method: "activity.update", params: [
+            let updated = try await request(fixture, package: package, context: context, method: "activity.update", params: [
                 "id": "build0", "presentation": ["title": "Accepted \(index)"]
             ])
             XCTAssertEqual(updated["ok"] as? Bool, true)
         }
-        let exhausted = try request(fixture, package: package, context: context, method: "activity.update", params: [
+        let exhausted = try await request(fixture, package: package, context: context, method: "activity.update", params: [
             "id": "build0", "priority": "normal"
         ])
         XCTAssertEqual(errorCode(exhausted), "rateLimited")
@@ -392,98 +392,98 @@ final class PluginActivityBridgeTests: XCTestCase {
         // event whose data lifetime has ended, even when allowance returns.
         fixture.activityClock.advance(by: 60)
         fixture.rateClock.now += 2
-        let expired = try request(fixture, package: package, context: context, method: "activity.update", params: [
+        let expired = try await request(fixture, package: package, context: context, method: "activity.update", params: [
             "id": "build0", "presentation": ["title": "Must not reopen"]
         ])
         XCTAssertEqual(errorCode(expired), "activityNotFound")
         XCTAssertNil(fixture.activity("build0"))
-        try publish(fixture, package: package, context: context, params: [
+        try await publish(fixture, package: package, context: context, params: [
             "id": "afterexpiry", "presentation": ["title": "New event"]
         ])
         XCTAssertEqual(fixture.manager.diagnostics.activityCount, 1)
     }
 
-    func testEndBypassesRateLimitAndDoesNotResetBudgetForNewIDsOrReload() throws {
+    func testEndBypassesRateLimitAndDoesNotResetBudgetForNewIDsOrReload() async throws {
         let fixture = ActivityBridgeFixture()
         defer { fixture.shutdown() }
         let package = try package()
         let context = try fixture.load(package)
-        try publish(fixture, package: package, context: context, params: ["id": "build", "presentation": ["title": "0"]])
+        try await publish(fixture, package: package, context: context, params: ["id": "build", "presentation": ["title": "0"]])
         for index in 1..<20 {
-            let updated = try request(fixture, package: package, context: context, method: "activity.update", params: [
+            let updated = try await request(fixture, package: package, context: context, method: "activity.update", params: [
                 "id": "build", "presentation": ["title": "\(index)"]
             ])
             XCTAssertEqual(updated["ok"] as? Bool, true)
         }
-        let ended = try request(fixture, package: package, context: context, method: "activity.end", params: ["id": "build"])
+        let ended = try await request(fixture, package: package, context: context, method: "activity.end", params: ["id": "build"])
         XCTAssertEqual(ended["ok"] as? Bool, true)
         XCTAssertNil(fixture.activity("build"))
-        let newID = try request(fixture, package: package, context: context, method: "activity.publish", params: [
+        let newID = try await request(fixture, package: package, context: context, method: "activity.publish", params: [
             "id": "different", "presentation": ["title": "Denied"]
         ])
         XCTAssertEqual(errorCode(newID), "rateLimited")
         let replacement = try fixture.load(package)
-        let reloaded = try request(fixture, package: package, context: replacement, method: "activity.publish", params: [
+        let reloaded = try await request(fixture, package: package, context: replacement, method: "activity.publish", params: [
             "id": "afterreload", "presentation": ["title": "Denied"]
         ])
         XCTAssertEqual(errorCode(reloaded), "rateLimited")
         fixture.rateClock.now += 2
-        try publish(fixture, package: package, context: replacement, params: ["id": "afterreload", "presentation": ["title": "Recovered"]])
+        try await publish(fixture, package: package, context: replacement, params: ["id": "afterreload", "presentation": ["title": "Recovered"]])
     }
 
-    func testRateBudgetAndSameLocalIDAreSeparatedByTrustedPluginIdentity() throws {
+    func testRateBudgetAndSameLocalIDAreSeparatedByTrustedPluginIdentity() async throws {
         let fixture = ActivityBridgeFixture()
         defer { fixture.shutdown() }
         let alphaPackage = try package()
         let alpha = try fixture.load(alphaPackage)
-        try publish(fixture, package: alphaPackage, context: alpha, params: ["id": "same", "presentation": ["title": "Alpha"]])
+        try await publish(fixture, package: alphaPackage, context: alpha, params: ["id": "same", "presentation": ["title": "Alpha"]])
         for index in 1..<20 {
-            let response = try request(fixture, package: alphaPackage, context: alpha, method: "activity.update", params: [
+            let response = try await request(fixture, package: alphaPackage, context: alpha, method: "activity.update", params: [
                 "id": "same", "presentation": ["title": "Alpha \(index)"]
             ])
             XCTAssertEqual(response["ok"] as? Bool, true)
         }
         let betaPackage = try package(id: "com.example.beta")
         let beta = try fixture.load(betaPackage)
-        try publish(fixture, package: betaPackage, context: beta, params: ["id": "same", "presentation": ["title": "Beta"]])
-        let updated = try request(fixture, package: betaPackage, context: beta, method: "activity.update", params: [
+        try await publish(fixture, package: betaPackage, context: beta, params: ["id": "same", "presentation": ["title": "Beta"]])
+        let updated = try await request(fixture, package: betaPackage, context: beta, method: "activity.update", params: [
             "id": "same", "presentation": ["title": "Beta updated"]
         ])
         XCTAssertEqual(updated["ok"] as? Bool, true)
         XCTAssertEqual(fixture.activity("same")?.presentation.title, "Alpha 19")
         XCTAssertEqual(fixture.activity("same", pluginID: betaPackage.manifest.id)?.presentation.title, "Beta updated")
-        let forgedContext = try request(fixture, package: alphaPackage, context: beta, method: "activity.update", params: [
+        let forgedContext = try await request(fixture, package: alphaPackage, context: beta, method: "activity.update", params: [
             "id": "same", "presentation": ["title": "Forged identity"]
         ])
         XCTAssertEqual(errorCode(forgedContext), "coreRejected")
         XCTAssertEqual(fixture.activity("same")?.presentation.title, "Alpha 19")
     }
 
-    func testDisabledAndReplacedExecutionCannotUpdateActivitiesOrSpendNewSessionBudget() throws {
+    func testDisabledAndReplacedExecutionCannotUpdateActivitiesOrSpendNewSessionBudget() async throws {
         let fixture = ActivityBridgeFixture()
         defer { fixture.shutdown() }
         let package = try package()
         let old = try fixture.load(package)
-        try publish(fixture, package: package, context: old, params: ["id": "build", "presentation": ["title": "Original"]])
+        try await publish(fixture, package: package, context: old, params: ["id": "build", "presentation": ["title": "Original"]])
         fixture.lifecycle.pluginDidChangeEnablement(id: package.manifest.id, isEnabled: false)
-        let disabled = try request(fixture, package: package, context: old, method: "activity.update", params: [
+        let disabled = try await request(fixture, package: package, context: old, method: "activity.update", params: [
             "id": "build", "presentation": ["title": "Late disabled"]
         ])
         XCTAssertEqual(errorCode(disabled), "inactiveExecution")
         XCTAssertNil(fixture.activity("build"))
         fixture.lifecycle.pluginDidChangeEnablement(id: package.manifest.id, isEnabled: true)
         let replacement = try XCTUnwrap(fixture.contexts.last)
-        try publish(fixture, package: package, context: replacement, params: ["id": "build", "presentation": ["title": "Replacement"]])
+        try await publish(fixture, package: package, context: replacement, params: ["id": "build", "presentation": ["title": "Replacement"]])
         let before = fixture.activity("build")
         for _ in 0..<30 {
-            let late = try request(fixture, package: package, context: old, method: "activity.update", params: [
+            let late = try await request(fixture, package: package, context: old, method: "activity.update", params: [
                 "id": "build", "presentation": ["title": "Late replacement"]
             ])
             XCTAssertEqual(errorCode(late), "inactiveExecution")
             XCTAssertEqual(fixture.activity("build"), before)
         }
         for index in 2..<20 {
-            let valid = try request(fixture, package: package, context: replacement, method: "activity.update", params: [
+            let valid = try await request(fixture, package: package, context: replacement, method: "activity.update", params: [
                 "id": "build", "presentation": ["title": "\(index)"]
             ])
             XCTAssertEqual(valid["ok"] as? Bool, true)
@@ -603,15 +603,15 @@ final class PluginActivityBridgeTests: XCTestCase {
 
     private func publish(_ fixture: ActivityBridgeFixture, package: ValidatedPluginPackage,
                          context: PluginExecutionContext, params: [String: Any],
-                         file: StaticString = #filePath, line: UInt = #line) throws {
-        let response = try request(fixture, package: package, context: context, method: "activity.publish", params: params)
+                         file: StaticString = #filePath, line: UInt = #line) async throws {
+        let response = try await request(fixture, package: package, context: context, method: "activity.publish", params: params)
         XCTAssertEqual(response["ok"] as? Bool, true, "\(response)", file: file, line: line)
     }
 
     private func request(_ fixture: ActivityBridgeFixture, package: ValidatedPluginPackage,
-                         context: PluginExecutionContext, method: String, params: [String: Any]) throws -> [String: Any] {
+                         context: PluginExecutionContext, method: String, params: [String: Any]) async throws -> [String: Any] {
         let data = try JSONSerialization.data(withJSONObject: ["apiVersion": "1.0.0", "method": method, "params": params])
-        return try decode(fixture.service.handle(String(decoding: data, as: UTF8.self), package: package, context: context))
+        return try decode(await fixture.service.handle(String(decoding: data, as: UTF8.self), package: package, context: context))
     }
 
     private func decode(_ json: String) throws -> [String: Any] {

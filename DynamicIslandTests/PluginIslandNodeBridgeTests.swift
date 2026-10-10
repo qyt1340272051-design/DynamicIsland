@@ -146,12 +146,12 @@ final class PluginIslandNodeBridgeTests: XCTestCase {
         XCTAssertEqual(PluginIslandNodeConverter.actionIDs(in: tree), ["open", "loop", "seek"])
     }
 
-    func testHostPublishesAllLayoutsAndOwnsActivityIdentity() throws {
+    func testHostPublishesAllLayoutsAndOwnsActivityIdentity() async throws {
         let fixture = NodeBridgeFixture()
         defer { fixture.shutdown() }
         let package = try package()
         let context = try fixture.load(package)
-        try publish(fixture, package: package, context: context, presentation: [
+        try await publish(fixture, package: package, context: context, presentation: [
             "title": "Build", "minimal": ["type": "icon", "symbolName": "hammer"],
             "compact": ["type": "text", "content": "Building"],
             "expanded": ["type": "vStack", "children": [["type": "text", "content": "Build details"], ["type": "progress", "value": 0.5]]]
@@ -165,32 +165,32 @@ final class PluginIslandNodeBridgeTests: XCTestCase {
         XCTAssertEqual(activity.presentation.expanded, .vStack(.init([.text(.init("Build details")), .progress(.init(0.5))])))
     }
 
-    func testUILayoutCapabilityIsRequiredForEffectiveMergedPresentation() throws {
+    func testUILayoutCapabilityIsRequiredForEffectiveMergedPresentation() async throws {
         let fixture = NodeBridgeFixture()
         defer { fixture.shutdown() }
         let noUI = try package(capabilities: [.publishActivity, .updateActivity, .endActivity])
         let context = try fixture.load(noUI)
-        let denied = try request(fixture, package: noUI, context: context, params: ["id": "ui", "presentation": ["title": "Denied", "minimal": ["type": "text", "content": "Tree"]]])
+        let denied = try await request(fixture, package: noUI, context: context, params: ["id": "ui", "presentation": ["title": "Denied", "minimal": ["type": "text", "content": "Tree"]]])
         XCTAssertEqual(errorCode(denied), "capabilityRequired")
         XCTAssertNil(fixture.activity())
         try context.publish(IslandActivity(id: fixture.id(), source: context.source, priority: .normal,
             lifecycle: .init(policy: .persistent), presentation: .init(title: "Host tree", minimal: .text(.init("Tree"))), createdAt: fixture.activityClock.now()))
         let original = fixture.activity()
-        let effectiveTree = try request(fixture, package: noUI, context: context, method: "activity.update", params: ["id": "ui", "priority": "background"])
+        let effectiveTree = try await request(fixture, package: noUI, context: context, method: "activity.update", params: ["id": "ui", "priority": "background"])
         XCTAssertEqual(errorCode(effectiveTree), "capabilityRequired")
         XCTAssertEqual(fixture.activity(), original)
-        let removeTree = try request(fixture, package: noUI, context: context, method: "activity.update", params: ["id": "ui", "presentation": ["title": "Summary"]])
+        let removeTree = try await request(fixture, package: noUI, context: context, method: "activity.update", params: ["id": "ui", "presentation": ["title": "Summary"]])
         XCTAssertEqual(removeTree["ok"] as? Bool, true)
         XCTAssertNil(fixture.activity()?.presentation.minimal)
     }
 
-    func testInteractiveTreesRequireActionCapabilityAndDeclaredMetadata() throws {
+    func testInteractiveTreesRequireActionCapabilityAndDeclaredMetadata() async throws {
         let fixture = NodeBridgeFixture()
         defer { fixture.shutdown() }
         let tree: [String: Any] = ["type": "button", "actionID": "open", "label": ["type": "text", "content": "Open"]]
         let noActions = try package(capabilities: [.publishActivity, .updateActivity, .islandNodeUI])
         let noActionsContext = try fixture.load(noActions)
-        let capability = try request(fixture, package: noActions, context: noActionsContext, params: ["id": "ui", "presentation": ["title": "Button", "expanded": tree], "actions": [["id": "open", "title": "Open"]]])
+        let capability = try await request(fixture, package: noActions, context: noActionsContext, params: ["id": "ui", "presentation": ["title": "Button", "expanded": tree], "actions": [["id": "open", "title": "Open"]]])
         XCTAssertEqual(errorCode(capability), "capabilityRequired")
         try noActionsContext.publish(IslandActivity(
             id: fixture.id(), source: noActionsContext.source, priority: .normal, lifecycle: .init(policy: .persistent),
@@ -199,56 +199,56 @@ final class PluginIslandNodeBridgeTests: XCTestCase {
         ))
         let retainedBefore = fixture.activity()
         for _ in 0..<25 {
-            let retained = try request(fixture, package: noActions, context: noActionsContext, method: "activity.update", params: ["id": "ui", "priority": "background"])
+            let retained = try await request(fixture, package: noActions, context: noActionsContext, method: "activity.update", params: ["id": "ui", "priority": "background"])
             XCTAssertEqual(errorCode(retained), "capabilityRequired")
             XCTAssertEqual(fixture.activity(), retainedBefore)
         }
-        let removed = try request(fixture, package: noActions, context: noActionsContext, method: "activity.update", params: ["id": "ui", "presentation": ["title": "Summary"], "actions": []])
+        let removed = try await request(fixture, package: noActions, context: noActionsContext, method: "activity.update", params: ["id": "ui", "presentation": ["title": "Summary"], "actions": []])
         XCTAssertEqual(removed["ok"] as? Bool, true)
         XCTAssertNil(fixture.activity()?.presentation.expanded)
         XCTAssertTrue(fixture.activity()?.actions.isEmpty == true)
         for _ in 1..<20 {
-            let allowed = try request(fixture, package: noActions, context: noActionsContext, method: "activity.update", params: ["id": "ui", "priority": "background"])
+            let allowed = try await request(fixture, package: noActions, context: noActionsContext, method: "activity.update", params: ["id": "ui", "priority": "background"])
             XCTAssertEqual(allowed["ok"] as? Bool, true)
         }
         let complete = try package(id: "com.example.controls")
         let context = try fixture.load(complete)
         for metadata in [[], [["id": "other", "title": "Other"]]] as [[[String: String]]] {
-            let absent = try request(fixture, package: complete, context: context, params: ["id": "ui", "presentation": ["title": "Button", "expanded": tree], "actions": metadata])
+            let absent = try await request(fixture, package: complete, context: context, params: ["id": "ui", "presentation": ["title": "Button", "expanded": tree], "actions": metadata])
             XCTAssertEqual(errorCode(absent), "invalidArguments")
             XCTAssertNil(fixture.activity(pluginID: complete.manifest.id))
         }
-        try publish(fixture, package: complete, context: context, presentation: ["title": "Button", "expanded": tree], actions: [["id": "open", "title": "Open"]])
+        try await publish(fixture, package: complete, context: context, presentation: ["title": "Button", "expanded": tree], actions: [["id": "open", "title": "Open"]])
         XCTAssertEqual(fixture.activity(pluginID: complete.manifest.id)?.actions, [.init(id: "open", title: "Open")])
     }
 
-    func testPatchMergeRejectsRemovedReferencesAtomicallyAndReusesOmittedMetadata() throws {
+    func testPatchMergeRejectsRemovedReferencesAtomicallyAndReusesOmittedMetadata() async throws {
         let fixture = NodeBridgeFixture()
         defer { fixture.shutdown() }
         let package = try package()
         let context = try fixture.load(package)
-        try publish(fixture, package: package, context: context, presentation: ["title": "Button", "expanded": ["type": "button", "actionID": "open", "label": ["type": "text", "content": "Open"]]], actions: [["id": "open", "title": "Open"]])
+        try await publish(fixture, package: package, context: context, presentation: ["title": "Button", "expanded": ["type": "button", "actionID": "open", "label": ["type": "text", "content": "Open"]]], actions: [["id": "open", "title": "Open"]])
         let before = fixture.activity()
-        let rejected = try request(fixture, package: package, context: context, method: "activity.update", params: ["id": "ui", "priority": "background", "actions": []])
+        let rejected = try await request(fixture, package: package, context: context, method: "activity.update", params: ["id": "ui", "priority": "background", "actions": []])
         XCTAssertEqual(errorCode(rejected), "invalidArguments")
         XCTAssertEqual(fixture.activity(), before)
-        let replacement = try request(fixture, package: package, context: context, method: "activity.update", params: ["id": "ui", "presentation": ["title": "Toggle", "expanded": ["type": "toggle", "title": "Open", "isOn": false, "actionID": "open"]]])
+        let replacement = try await request(fixture, package: package, context: context, method: "activity.update", params: ["id": "ui", "presentation": ["title": "Toggle", "expanded": ["type": "toggle", "title": "Open", "isOn": false, "actionID": "open"]]])
         XCTAssertEqual(replacement["ok"] as? Bool, true)
         XCTAssertEqual(fixture.activity()?.actions, before?.actions)
-        let clear = try request(fixture, package: package, context: context, method: "activity.update", params: ["id": "ui", "presentation": ["title": "Summary"], "actions": []])
+        let clear = try await request(fixture, package: package, context: context, method: "activity.update", params: ["id": "ui", "presentation": ["title": "Summary"], "actions": []])
         XCTAssertEqual(clear["ok"] as? Bool, true)
         XCTAssertNil(fixture.activity()?.presentation.expanded)
         XCTAssertTrue(fixture.activity()?.actions.isEmpty == true)
     }
 
-    func testStructurallyValidOversizedFormsUseExistingHostFallback() throws {
+    func testStructurallyValidOversizedFormsUseExistingHostFallback() async throws {
         let fixture = NodeBridgeFixture()
         defer { fixture.shutdown() }
         let package = try package()
         let context = try fixture.load(package)
         let minimal: [String: Any] = ["type": "hStack", "children": [["type": "text", "content": "Too much for minimal"]]]
         let compact: [String: Any] = ["type": "vStack", "children": [["type": "text", "content": "Row one"], ["type": "text", "content": "Row two"]]]
-        try publish(fixture, package: package, context: context, presentation: ["title": "Safe summary", "minimal": minimal, "compact": compact, "expanded": countedTree(nodeCount: 128)])
+        try await publish(fixture, package: package, context: context, presentation: ["title": "Safe summary", "minimal": minimal, "compact": compact, "expanded": countedTree(nodeCount: 128)])
         let presentation = try XCTUnwrap(fixture.activity()?.presentation)
         XCTAssertNotNil(presentation.minimal)
         XCTAssertNotNil(presentation.compact)
@@ -260,47 +260,47 @@ final class PluginIslandNodeBridgeTests: XCTestCase {
         }
     }
 
-    func testMalformedTreeUpdatesDoNotMutateActivityOrConsumeWriteBudget() throws {
+    func testMalformedTreeUpdatesDoNotMutateActivityOrConsumeWriteBudget() async throws {
         let fixture = NodeBridgeFixture()
         defer { fixture.shutdown() }
         let package = try package()
         let context = try fixture.load(package)
-        try publish(fixture, package: package, context: context, presentation: ["title": "Original", "expanded": ["type": "text", "content": "Original"]])
+        try await publish(fixture, package: package, context: context, presentation: ["title": "Original", "expanded": ["type": "text", "content": "Original"]])
         let before = fixture.activity()
         for _ in 0..<25 {
-            let rejected = try request(fixture, package: package, context: context, method: "activity.update", params: ["id": "ui", "priority": "background", "presentation": ["title": "Must not commit", "expanded": ["type": "text", "content": "Evil", "selector": "perform:"]]])
+            let rejected = try await request(fixture, package: package, context: context, method: "activity.update", params: ["id": "ui", "priority": "background", "presentation": ["title": "Must not commit", "expanded": ["type": "text", "content": "Evil", "selector": "perform:"]]])
             XCTAssertEqual(errorCode(rejected), "invalidArguments")
             XCTAssertEqual(fixture.activity(), before)
         }
         for index in 1..<20 {
-            let admitted = try request(fixture, package: package, context: context, method: "activity.update", params: ["id": "ui", "presentation": ["title": "\(index)", "expanded": ["type": "text", "content": "\(index)"]]])
+            let admitted = try await request(fixture, package: package, context: context, method: "activity.update", params: ["id": "ui", "presentation": ["title": "\(index)", "expanded": ["type": "text", "content": "\(index)"]]])
             XCTAssertEqual(admitted["ok"] as? Bool, true)
         }
-        let exhausted = try request(fixture, package: package, context: context, method: "activity.update", params: ["id": "ui", "presentation": ["title": "Too fast", "expanded": ["type": "text", "content": "Too fast"]]])
+        let exhausted = try await request(fixture, package: package, context: context, method: "activity.update", params: ["id": "ui", "presentation": ["title": "Too fast", "expanded": ["type": "text", "content": "Too fast"]]])
         XCTAssertEqual(errorCode(exhausted), "rateLimited")
         XCTAssertEqual(fixture.activity()?.presentation.title, "19")
     }
 
-    func testRevokedNodeExecutionCannotReviveOwnedActivities() throws {
+    func testRevokedNodeExecutionCannotReviveOwnedActivities() async throws {
         let fixture = NodeBridgeFixture()
         defer { fixture.shutdown() }
         let package = try package()
         let context = try fixture.load(package)
-        try publish(fixture, package: package, context: context, presentation: ["title": "Owned", "minimal": ["type": "text", "content": "Owned"]])
+        try await publish(fixture, package: package, context: context, presentation: ["title": "Owned", "minimal": ["type": "text", "content": "Owned"]])
         fixture.lifecycle.pluginDidChangeEnablement(id: package.manifest.id, isEnabled: false)
-        let rejected = try request(fixture, package: package, context: context, method: "activity.update", params: ["id": "ui", "presentation": ["title": "Late", "minimal": ["type": "text", "content": "Late"]]])
+        let rejected = try await request(fixture, package: package, context: context, method: "activity.update", params: ["id": "ui", "presentation": ["title": "Late", "minimal": ["type": "text", "content": "Late"]]])
         XCTAssertEqual(errorCode(rejected), "inactiveExecution")
         XCTAssertNil(fixture.activity())
         XCTAssertNil(fixture.manager.current)
     }
 
-    func testNestedDuplicateJSONFieldsAreRejectedBeforeCore() throws {
+    func testNestedDuplicateJSONFieldsAreRejectedBeforeCore() async throws {
         let fixture = NodeBridgeFixture()
         defer { fixture.shutdown() }
         let package = try package()
         let context = try fixture.load(package)
         let source = #"{"apiVersion":"1.0.0","method":"activity.publish","params":{"id":"ui","presentation":{"title":"Duplicate","expanded":{"type":"image","source":{"type":"pluginAsset","id":"safe","id":"unsafe"}}}}}"#
-        let rejected = try decode(fixture.service.handle(source, package: package, context: context))
+        let rejected = try decode(await fixture.service.handle(source, package: package, context: context))
         XCTAssertEqual(errorCode(rejected), "invalidArguments")
         XCTAssertNil(fixture.activity())
     }
@@ -359,18 +359,18 @@ final class PluginIslandNodeBridgeTests: XCTestCase {
         XCTAssertEqual(fixture.activity()?.presentation.expanded, try parse(nested(["type": "image", "source": ["type": "pluginAsset", "id": "cover"], "size": "artwork"], depth: 8)))
     }
 
-    func testStorageDepthLimitRemainsIndependentOfExpandedUITransportLimit() throws {
+    func testStorageDepthLimitRemainsIndependentOfExpandedUITransportLimit() async throws {
         let fixture = NodeBridgeFixture()
         defer { fixture.shutdown() }
         let package = try package(capabilities: [.publishActivity, .updateActivity, .islandNodeUI, .localStorage], permissions: [.localStorage])
         let context = try fixture.load(package)
         var accepted: Any = 1
         for _ in 1..<8 { accepted = ["value": accepted] }
-        let written = try request(fixture, package: package, context: context, method: "storage.set", params: ["key": "depth", "value": accepted])
+        let written = try await request(fixture, package: package, context: context, method: "storage.set", params: ["key": "depth", "value": accepted])
         XCTAssertEqual(written["ok"] as? Bool, true)
-        let rejected = try request(fixture, package: package, context: context, method: "storage.set", params: ["key": "depth", "value": ["value": accepted]])
+        let rejected = try await request(fixture, package: package, context: context, method: "storage.set", params: ["key": "depth", "value": ["value": accepted]])
         XCTAssertEqual(errorCode(rejected), "quotaExceeded")
-        let read = try request(fixture, package: package, context: context, method: "storage.get", params: ["key": "depth"])
+        let read = try await request(fixture, package: package, context: context, method: "storage.get", params: ["key": "depth"])
         XCTAssertEqual(try json(try XCTUnwrap(read["value"])), try json(accepted))
     }
 
@@ -524,15 +524,15 @@ final class PluginIslandNodeBridgeTests: XCTestCase {
     }
 
     private func publish(_ fixture: NodeBridgeFixture, package: ValidatedPluginPackage, context: PluginExecutionContext,
-                         presentation: [String: Any], actions: [[String: String]] = [], file: StaticString = #filePath, line: UInt = #line) throws {
-        let result = try request(fixture, package: package, context: context, params: ["id": "ui", "lifecycle": ["policy": "persistent"], "presentation": presentation, "actions": actions])
+                         presentation: [String: Any], actions: [[String: String]] = [], file: StaticString = #filePath, line: UInt = #line) async throws {
+        let result = try await request(fixture, package: package, context: context, params: ["id": "ui", "lifecycle": ["policy": "persistent"], "presentation": presentation, "actions": actions])
         XCTAssertEqual(result["ok"] as? Bool, true, "\(result)", file: file, line: line)
     }
 
     private func request(_ fixture: NodeBridgeFixture, package: ValidatedPluginPackage, context: PluginExecutionContext,
-                         method: String = "activity.publish", params: [String: Any]) throws -> [String: Any] {
+                         method: String = "activity.publish", params: [String: Any]) async throws -> [String: Any] {
         let data = try JSONSerialization.data(withJSONObject: ["apiVersion": "1.0.0", "method": method, "params": params])
-        return try decode(fixture.service.handle(String(decoding: data, as: UTF8.self), package: package, context: context))
+        return try decode(await fixture.service.handle(String(decoding: data, as: UTF8.self), package: package, context: context))
     }
 
     private func decode(_ source: String) throws -> [String: Any] {

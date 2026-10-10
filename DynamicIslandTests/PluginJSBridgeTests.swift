@@ -401,18 +401,18 @@ final class PluginJSBridgeTests: XCTestCase {
             "{\"apiVersion\":\"1.0.0\",\"method\":\"storage.set\",\"params\":{\"key\":\"x\",\"value\":NaN}}"
         ]
         for request in invalidRequests {
-            let response = try decode(fixture.service.handle(request, package: package, context: context))
+            let response = try decode(await fixture.service.handle(request, package: package, context: context))
             XCTAssertEqual(response["ok"] as? Bool, false)
             XCTAssertNotNil((response["error"] as? [String: Any])?["code"] as? String)
         }
-        let version = try decode(fixture.service.handle("{\"apiVersion\":\"99.0.0\",\"method\":\"storage.clear\",\"params\":{}}", package: package, context: context))
+        let version = try decode(await fixture.service.handle("{\"apiVersion\":\"99.0.0\",\"method\":\"storage.clear\",\"params\":{}}", package: package, context: context))
         XCTAssertEqual(errorCode(version), "unsupportedVersion")
-        let unknown = try decode(fixture.service.handle("{\"apiVersion\":\"1.0.0\",\"method\":\"workspace.open\",\"params\":{}}", package: package, context: context))
+        let unknown = try decode(await fixture.service.handle("{\"apiVersion\":\"1.0.0\",\"method\":\"workspace.open\",\"params\":{}}", package: package, context: context))
         XCTAssertEqual(errorCode(unknown), "unsupportedMethod")
-        let oversized = try request(fixture, package: package, context: context, method: "log", params: ["message":String(repeating: "x", count: 20_000),"level":"info"])
+        let oversized = try await request(fixture, package: package, context: context, method: "log", params: ["message":String(repeating: "x", count: 20_000),"level":"info"])
         XCTAssertEqual(errorCode(oversized), "quotaExceeded")
         XCTAssertTrue(fixture.service.logs(for: package.manifest.id).isEmpty)
-        let missing = try decode(fixture.service.handle("{\"apiVersion\":\"1.0.0\",\"method\":\"storage.get\",\"params\":{\"key\":\"x\"}}", package: package, context: context))
+        let missing = try decode(await fixture.service.handle("{\"apiVersion\":\"1.0.0\",\"method\":\"storage.get\",\"params\":{\"key\":\"x\"}}", package: package, context: context))
         XCTAssertTrue(missing["value"] is NSNull)
     }
 
@@ -427,11 +427,11 @@ final class PluginJSBridgeTests: XCTestCase {
         try await ready(current)
         let currentContext = try XCTUnwrap(fixture.factory.contexts.last)
         let request = "{\"apiVersion\":\"1.0.0\",\"method\":\"storage.set\",\"params\":{\"key\":\"stale\",\"value\":1}}"
-        let revoked = try decode(fixture.service.handle(request, package: alpha, context: oldContext))
+        let revoked = try decode(await fixture.service.handle(request, package: alpha, context: oldContext))
         XCTAssertEqual(errorCode(revoked), "inactiveExecution")
-        let mismatched = try decode(fixture.service.handle(request, package: try package(id: "com.example.beta"), context: currentContext))
+        let mismatched = try decode(await fixture.service.handle(request, package: try package(id: "com.example.beta"), context: currentContext))
         XCTAssertEqual(mismatched["ok"] as? Bool, false)
-        let read = try decode(fixture.service.handle("{\"apiVersion\":\"1.0.0\",\"method\":\"storage.get\",\"params\":{\"key\":\"stale\"}}", package: alpha, context: currentContext))
+        let read = try decode(await fixture.service.handle("{\"apiVersion\":\"1.0.0\",\"method\":\"storage.get\",\"params\":{\"key\":\"stale\"}}", package: alpha, context: currentContext))
         XCTAssertTrue(read["value"] is NSNull)
         XCTAssertEqual(fixture.lifecycle.snapshot(id: alpha.manifest.id)?.state, .running)
     }
@@ -503,29 +503,29 @@ final class PluginJSBridgeTests: XCTestCase {
         try await ready(runtime)
         let context = try XCTUnwrap(fixture.factory.contexts.last)
         for index in 0..<128 {
-            let response = try request(fixture, package: package, context: context, method: "storage.set", params: ["key":"k\(index)","value":index])
+            let response = try await request(fixture, package: package, context: context, method: "storage.set", params: ["key":"k\(index)","value":index])
             XCTAssertEqual(response["ok"] as? Bool, true)
         }
-        let excess = try request(fixture, package: package, context: context, method: "storage.set", params: ["key":"overflow","value":true])
+        let excess = try await request(fixture, package: package, context: context, method: "storage.set", params: ["key":"overflow","value":true])
         XCTAssertEqual(excess["ok"] as? Bool, false)
-        let overwrite = try request(fixture, package: package, context: context, method: "storage.set", params: ["key":"k0","value":42])
+        let overwrite = try await request(fixture, package: package, context: context, method: "storage.set", params: ["key":"k0","value":42])
         XCTAssertEqual(overwrite["ok"] as? Bool, true)
-        let remove = try request(fixture, package: package, context: context, method: "storage.remove", params: ["key":"k1"])
+        let remove = try await request(fixture, package: package, context: context, method: "storage.remove", params: ["key":"k1"])
         XCTAssertEqual(remove["ok"] as? Bool, true)
-        let afterRemove = try request(fixture, package: package, context: context, method: "storage.set", params: ["key":"replacement","value":"ok"])
+        let afterRemove = try await request(fixture, package: package, context: context, method: "storage.set", params: ["key":"replacement","value":"ok"])
         XCTAssertEqual(afterRemove["ok"] as? Bool, true)
-        _ = try request(fixture, package: package, context: context, method: "storage.clear", params: [:])
-        let cleared = try request(fixture, package: package, context: context, method: "storage.get", params: ["key":"k0"])
+        _ = try await request(fixture, package: package, context: context, method: "storage.clear", params: [:])
+        let cleared = try await request(fixture, package: package, context: context, method: "storage.get", params: ["key":"k0"])
         XCTAssertTrue(cleared["value"] is NSNull)
-        let longKey = try request(fixture, package: package, context: context, method: "storage.set", params: ["key":String(repeating: "k", count: 129),"value":1])
+        let longKey = try await request(fixture, package: package, context: context, method: "storage.set", params: ["key":String(repeating: "k", count: 129),"value":1])
         XCTAssertEqual(longKey["ok"] as? Bool, false)
         for index in 0..<16 {
-            let stored = try request(fixture, package: package, context: context, method: "storage.set", params: ["key":"bulk\(index)","value":String(repeating: "x", count: 4_000)])
+            let stored = try await request(fixture, package: package, context: context, method: "storage.set", params: ["key":"bulk\(index)","value":String(repeating: "x", count: 4_000)])
             XCTAssertEqual(stored["ok"] as? Bool, true)
         }
-        let tooManyBytes = try request(fixture, package: package, context: context, method: "storage.set", params: ["key":"bulk16","value":String(repeating: "x", count: 4_000)])
+        let tooManyBytes = try await request(fixture, package: package, context: context, method: "storage.set", params: ["key":"bulk16","value":String(repeating: "x", count: 4_000)])
         XCTAssertEqual(errorCode(tooManyBytes), "quotaExceeded")
-        let unwritten = try request(fixture, package: package, context: context, method: "storage.get", params: ["key":"bulk16"])
+        let unwritten = try await request(fixture, package: package, context: context, method: "storage.get", params: ["key":"bulk16"])
         XCTAssertTrue(unwritten["value"] is NSNull)
     }
 
@@ -561,22 +561,22 @@ final class PluginJSBridgeTests: XCTestCase {
         try await ready(runtime)
         let context = try XCTUnwrap(fixture.factory.contexts.last)
         for index in 0..<105 {
-            let result = try request(fixture, package: package, context: context, method: "log", params: ["message":"log \(index)","level":"info"])
+            let result = try await request(fixture, package: package, context: context, method: "log", params: ["message":"log \(index)","level":"info"])
             XCTAssertEqual(result["ok"] as? Bool, true)
         }
         let logs = fixture.service.logs(for: package.manifest.id)
         XCTAssertEqual(logs.count, 100)
         XCTAssertEqual(logs.first?.message, "log 5")
         XCTAssertEqual(logs.last?.message, "log 104")
-        let oversized = try request(fixture, package: package, context: context, method: "log", params: ["message":String(repeating:"界",count:400),"level":"info"])
+        let oversized = try await request(fixture, package: package, context: context, method: "log", params: ["message":String(repeating:"界",count:400),"level":"info"])
         XCTAssertEqual(oversized["ok"] as? Bool, false)
         XCTAssertEqual(fixture.service.logs(for: package.manifest.id).count, 100)
 
         for index in 0..<16 {
-            let result = try request(fixture, package: package, context: context, method: "activity.publish", params: ["id":"a\(index)","presentation":["title":"Activity \(index)"]])
+            let result = try await request(fixture, package: package, context: context, method: "activity.publish", params: ["id":"a\(index)","presentation":["title":"Activity \(index)"]])
             XCTAssertEqual(result["ok"] as? Bool, true)
         }
-        let excess = try request(fixture, package: package, context: context, method: "activity.publish", params: ["id":"excess","presentation":["title":"excess"]])
+        let excess = try await request(fixture, package: package, context: context, method: "activity.publish", params: ["id":"excess","presentation":["title":"excess"]])
         XCTAssertEqual(excess["ok"] as? Bool, false)
         XCTAssertEqual(fixture.manager.diagnostics.activityCount, 16)
     }
@@ -644,9 +644,9 @@ final class PluginJSBridgeTests: XCTestCase {
     private func request(
         _ fixture: JSBridgeFixture, package: ValidatedPluginPackage, context: PluginExecutionContext,
         method: String, params: [String: Any]
-    ) throws -> [String: Any] {
+    ) async throws -> [String: Any] {
         let bytes = try JSONSerialization.data(withJSONObject: ["apiVersion":"1.0.0","method":method,"params":params])
-        return try decode(fixture.service.handle(String(decoding: bytes, as: UTF8.self), package: package, context: context))
+        return try decode(await fixture.service.handle(String(decoding: bytes, as: UTF8.self), package: package, context: context))
     }
 
     private func decode(_ json: String) throws -> [String: Any] {

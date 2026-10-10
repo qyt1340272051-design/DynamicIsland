@@ -10,7 +10,8 @@ nonisolated final class PluginBridgeTransport: @unchecked Sendable {
     }
 
     private let lock = NSLock()
-    private let process: @MainActor @Sendable (String) -> String
+    private let process: @MainActor @Sendable (String) async -> String
+    private let storageAdmission: PluginStorageAdmission
     private var requests: [Request] = []
     private var draining = false
     private var revoked = false
@@ -18,7 +19,8 @@ nonisolated final class PluginBridgeTransport: @unchecked Sendable {
     @MainActor
     init(bridge: PluginJSBridge, package: ValidatedPluginPackage, context: PluginExecutionContext,
          actionSession: PluginActionSession? = nil) {
-        process = { bridge.handle($0, package: package, context: context, actionSession: actionSession) }
+        storageAdmission = context.storageAdmission
+        process = { await bridge.handle($0, package: package, context: context, actionSession: actionSession) }
     }
 
     @discardableResult
@@ -34,6 +36,7 @@ nonisolated final class PluginBridgeTransport: @unchecked Sendable {
     }
 
     func revoke() {
+        storageAdmission.revoke()
         lock.lock()
         revoked = true
         requests.removeAll()
@@ -58,11 +61,16 @@ nonisolated final class PluginBridgeTransport: @unchecked Sendable {
 
     private func drain() async {
         while let request = next() {
-            let response: String? = await MainActor.run {
-                guard !self.isRevoked else { return nil }
-                return self.process(request.json)
-            }
+            let response = await processIfActive(request.json)
             if let response, !isRevoked { request.reply(request.id, response) }
         }
+    }
+
+    @MainActor
+    private func processIfActive(_ json: String) async -> String? {
+        // Check after the actor hop, covering requests already dequeued when
+        // direct teardown revokes a still-running lifecycle context.
+        guard !isRevoked else { return nil }
+        return await process(json)
     }
 }

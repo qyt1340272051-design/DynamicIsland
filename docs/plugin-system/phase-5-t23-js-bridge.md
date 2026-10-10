@@ -1,5 +1,7 @@
 # Phase 5 — T23 JS Bridge 实现与验收
 
+T27 后续实现：生产 KV 已改为独立 actor 的持久化存储，见 [T27](phase-5-t27-plugin-storage.md)。下文内存 KV 描述保留 T23 当时边界。
+
 后续契约：T24 已扩展 Activity 可选字段、独立 update 与发布/更新限频，见 [T24 实现与验收](phase-5-t24-js-activity.md)；T25 接入布局节点并调整 envelope 深度限制，见 [T25 实现与验收](phase-5-t25-js-island-node.md)。本文保留 T23 完成时的接口和验证记录。
 
 日期：2026-10-09。范围：在 T22 的独立 JavaScriptCore Runtime 中建立 JavaScript 与 Swift Core 的受控通信层，形成「记录日志、发布简单 Activity、读写插件私有 KV」的最小闭环。完整 Activity 转换、IslandNode 转换、动作回传、持久化 Storage 和用户权限状态分别按 T24–T28 继续实现。
