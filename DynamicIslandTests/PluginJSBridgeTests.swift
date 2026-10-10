@@ -14,7 +14,7 @@ final class PluginJSBridgeTests: XCTestCase {
         let result = try await runtime.evaluateForTesting("""
             Object.isFrozen(island) && Object.isFrozen(island.plugin) &&
             ['activity', 'storage', 'actions'].every(key => Object.isFrozen(island[key])) &&
-            [island.log, island.activity.publish, island.activity.end,
+            [island.log, island.activity.publish, island.activity.update, island.activity.end,
              island.storage.get, island.storage.set, island.storage.remove,
              island.storage.clear, island.actions.on, island.actions.off].every(method =>
                  typeof method === 'function' && Object.isFrozen(method) && method.apiVersion === '1.0.0') &&

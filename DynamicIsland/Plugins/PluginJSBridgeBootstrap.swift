@@ -140,6 +140,10 @@ nonisolated enum PluginJSBridgeBootstrap {
                 if (arguments.length !== 1) return rejected('invalidArguments');
                 return send('activity.publish', value);
             });
+            activity.update = method(function(value) {
+                if (arguments.length !== 1) return rejected('invalidArguments');
+                return send('activity.update', value);
+            });
             activity.end = method(function(id) {
                 if (arguments.length !== 1) return rejected('invalidArguments');
                 return send('activity.end', {id});

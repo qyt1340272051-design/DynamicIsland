@@ -14,7 +14,7 @@ public nonisolated struct PluginLogEntry: Equatable, Sendable {
 
 public nonisolated enum PluginBridgeErrorCode: String, Error, Equatable, Sendable {
     case invalidArguments, unsupportedVersion, unsupportedMethod, inactiveExecution
-    case capabilityRequired, permissionRequired, quotaExceeded, activityNotFound, coreRejected
+    case capabilityRequired, permissionRequired, quotaExceeded, rateLimited, activityNotFound, coreRejected
 
     fileprivate var message: String {
         switch self {
@@ -25,6 +25,7 @@ public nonisolated enum PluginBridgeErrorCode: String, Error, Equatable, Sendabl
         case .capabilityRequired: "The required capability is not declared."
         case .permissionRequired: "The required permission is not declared."
         case .quotaExceeded: "A Host resource limit was exceeded."
+        case .rateLimited: "Activity updates exceed the Host rate limit."
         case .activityNotFound: "The plugin Activity was not found."
         case .coreRejected: "The Host rejected the operation."
         }
@@ -45,7 +46,7 @@ public final class PluginJSBridge {
 
     private enum Operation {
         case log(message: String, level: PluginLogLevel)
-        case publish(id: String, presentation: ActivityPresentation)
+        case activity(PluginActivityConverter.Request)
         case end(id: String)
         case get(key: String)
         case set(key: String, value: PluginBridgeJSON, bytes: Int)
@@ -56,9 +57,13 @@ public final class PluginJSBridge {
 
     private var logEntries: [String: [PluginLogEntry]] = [:]
     private var storage: [String: [String: StoredValue]] = [:]
+    private var activityRateLimiter = PluginActivityRateLimiter()
+    private let activityRateClock: @MainActor () -> TimeInterval
     private let logger = Logger(subsystem: "DynamicIsland", category: "PluginJSBridge")
 
-    public init() {}
+    public init(activityRateClock: @escaping @MainActor () -> TimeInterval = { ProcessInfo.processInfo.systemUptime }) {
+        self.activityRateClock = activityRateClock
+    }
 
     public func logs(for pluginID: String) -> [PluginLogEntry] { logEntries[pluginID] ?? [] }
 
@@ -112,15 +117,20 @@ public final class PluginJSBridge {
             case .warning: logger.warning("plugin=\(pluginID, privacy: .private) \(message, privacy: .private)")
             case .error: logger.error("plugin=\(pluginID, privacy: .private) \(message, privacy: .private)")
             }
-        case .publish(let id, let presentation):
-            try require(.publishActivity, manifest: manifest)
-            let activity = IslandActivity(
-                id: Self.activityID(pluginID: pluginID, localID: id), source: context.source,
-                priority: .normal, lifecycle: .init(policy: .transient),
-                presentation: presentation, createdAt: Date()
-            )
-            try context.publish(activity, maximumActivities: 16)
-            return .object(["id": .string(id)])
+        case .activity(let request):
+            try require(request.isUpdate ? .updateActivity : .publishActivity, manifest: manifest)
+            if request.actions?.isEmpty == false { try require(.handleActions, manifest: manifest) }
+            let id = Self.activityID(pluginID: pluginID, localID: request.localID)
+            let existing = try context.activity(id: id)
+            let activity = try request.materialize(source: context.source, namespacedID: id, now: Date(), existing: existing)
+            let instant = activityRateClock()
+            guard activityRateLimiter.canAdmit(pluginID: pluginID, at: instant) else {
+                throw PluginBridgeErrorCode.rateLimited
+            }
+            if request.isUpdate { try context.updateActivity(activity) }
+            else { try context.publish(activity, maximumActivities: 16) }
+            activityRateLimiter.recordSuccess(pluginID: pluginID, at: instant)
+            return .object(["id": .string(request.localID)])
         case .end(let id):
             try require(.endActivity, manifest: manifest)
             try context.endActivity(id: Self.activityID(pluginID: pluginID, localID: id))
@@ -174,22 +184,8 @@ public final class PluginJSBridge {
                 throw PluginBridgeErrorCode.invalidArguments
             }
             return .log(message: message, level: level)
-        case "activity.publish":
-            let fields = try object(params, required: ["id", "presentation"])
-            let id = try identifier(fields["id"], maximumBytes: 80)
-            guard let rawPresentation = fields["presentation"] else { throw PluginBridgeErrorCode.invalidArguments }
-            let presentation = try object(rawPresentation, required: ["title"],
-                                          optional: ["subtitle", "symbolName", "progress"])
-            let title = try string(presentation["title"], maximumBytes: 256, nonempty: true)
-            let subtitle = try presentation["subtitle"].map { try string($0, maximumBytes: 256) }
-            let symbol = try presentation["symbolName"].map { try identifier($0, maximumBytes: 128, allowsColon: true) }
-            let progress = try presentation["progress"].map { value -> Double in
-                guard case .number(let number) = value, number.isFinite, (0...1).contains(number) else {
-                    throw PluginBridgeErrorCode.invalidArguments
-                }
-                return number
-            }
-            return .publish(id: id, presentation: .init(title: title, subtitle: subtitle, symbolName: symbol, progress: progress))
+        case "activity.publish", "activity.update":
+            return .activity(try PluginActivityConverter.parse(params, isUpdate: method == "activity.update"))
         case "activity.end":
             let fields = try object(params, required: ["id"])
             return .end(id: try identifier(fields["id"], maximumBytes: 80))

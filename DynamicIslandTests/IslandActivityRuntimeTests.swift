@@ -11,7 +11,7 @@ final class IslandActivityRuntimeTests: XCTestCase {
             let manifest = try PluginManifest(
                 id: id, name: "Production Runtime Test", version: SemanticVersion("1.0.0"),
                 engine: .javaScriptCore, entry: "index.js", minimumHostVersion: SemanticVersion("0.6.0"),
-                permissions: [], capabilities: [.publishActivity]
+                permissions: [], capabilities: [.publishActivity, .updateActivity]
             )
             return .init(
                 manifest: manifest,
@@ -24,7 +24,9 @@ final class IslandActivityRuntimeTests: XCTestCase {
         let runningID = "com.example.production-running"
         runtime.pluginLifecycle.pluginDidLoad(try package(id: runningID, source: """
             globalThis.onStart = function() {
-                void island.activity.publish({id:'hello', presentation:{title:'Production Bridge'}})
+                void island.activity.publish({id:'hello', lifecycle:{policy:'progress'},
+                    presentation:{title:'Production Bridge',progress:0.1}})
+                    .then(() => island.activity.update({id:'hello',presentation:{title:'Production Build Complete',progress:1}}))
                     .then(() => island.log('Production Bridge connected'));
             };
             """), isEnabled: true)
@@ -41,7 +43,9 @@ final class IslandActivityRuntimeTests: XCTestCase {
         XCTAssertTrue(runtime.pluginLifecycle.allowsExecution(id: runningID))
         let pluginActivity = runtime.manager.activity(id: PluginJSBridge.activityID(pluginID: runningID, localID: "hello"))
         XCTAssertEqual(pluginActivity?.source, .init(kind: .plugin, identifier: runningID))
-        XCTAssertEqual(pluginActivity?.presentation.title, "Production Bridge")
+        XCTAssertEqual(pluginActivity?.presentation.title, "Production Build Complete")
+        XCTAssertEqual(pluginActivity?.presentation.progress, 1)
+        XCTAssertEqual(pluginActivity?.lifecycle.policy, .progress)
         XCTAssertEqual(runtime.pluginBridge.logs(for: runningID).last?.message, "Production Bridge connected")
         runtime.pluginLifecycle.pluginDidChangeEnablement(id: runningID, isEnabled: false)
         XCTAssertEqual(runtime.manager.current?.source, MusicActivityProvider.source)

@@ -1,7 +1,7 @@
 import Foundation
 
-/// A finite set of Host-controlled priority levels. Plugin requests are still
-/// subject to the Host's permission and downgrade policy in a later phase.
+/// A finite set of Host-controlled priority levels. The plugin converter caps
+/// requests at normal until elevated Host grants are defined by a later phase.
 public nonisolated enum ActivityPriority: String, Codable, CaseIterable, Sendable {
     case background
     case normal

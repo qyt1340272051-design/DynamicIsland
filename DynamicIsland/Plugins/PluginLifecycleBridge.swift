@@ -82,6 +82,21 @@ public final class PluginExecutionContext {
         try perform { try bridge?.endActivity(id: id, source: source) }
     }
 
+    /// Host-only lookup used to apply a validated partial update. A plugin
+    /// cannot choose the source or obtain a native Activity reference in JS.
+    func activity(id: String) throws -> IslandActivity? {
+        var result: IslandActivity?
+        try perform { result = bridge?.activity(id: id, source: source) }
+        return result
+    }
+
+    func updateActivity(_ activity: IslandActivity) throws {
+        try perform {
+            guard activity.source == source else { throw PluginExecutionError.sourceMismatch }
+            try bridge?.updateActivity(activity)
+        }
+    }
+
     public func registerActionHandler(_ handler: @escaping ActionRouter.Handler) throws {
         try perform {
             bridge?.registerHandler(source: source) { [self] action in
@@ -244,11 +259,22 @@ public final class PluginLifecycleBridge: PluginManagerLifecycleHandling {
     }
 
     fileprivate func publish(_ activity: IslandActivity, maximumActivities: Int?) throws {
+        activityManager.processDeadlines()
         if let maximumActivities, activityManager.activity(id: activity.id) == nil,
            activityManager.activityCount(for: activity.source) >= maximumActivities {
             throw ActivityManagerError.quotaExceeded
         }
         try activityManager.publish(activity)
+    }
+
+    fileprivate func activity(id: String, source: ActivitySource) -> IslandActivity? {
+        activityManager.processDeadlines()
+        guard let activity = activityManager.activity(id: id), activity.source == source else { return nil }
+        return activity
+    }
+
+    fileprivate func updateActivity(_ activity: IslandActivity) throws {
+        try activityManager.update(activity)
     }
 
     fileprivate func endActivity(id: String, source: ActivitySource) throws {
