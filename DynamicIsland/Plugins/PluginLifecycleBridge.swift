@@ -155,6 +155,7 @@ public final class PluginLifecycleBridge: PluginManagerLifecycleHandling {
     private let activityManager: ActivityManager
     private let actionRouter: ActionRouter
     private let runtimeFactory: RuntimeFactory?
+    private let permissions: PermissionManager?
     private var entries: [String: Entry] = [:]
     private var isSleeping = false
     private var isLowBattery = false
@@ -163,11 +164,13 @@ public final class PluginLifecycleBridge: PluginManagerLifecycleHandling {
     public init(
         activityManager: ActivityManager,
         actionRouter: ActionRouter,
+        permissions: PermissionManager? = nil,
         runtimeFactory: RuntimeFactory? = nil
     ) {
         self.activityManager = activityManager
         self.actionRouter = actionRouter
         self.runtimeFactory = runtimeFactory
+        self.permissions = permissions
         activityManager.requirePluginActivation()
     }
 
@@ -185,6 +188,7 @@ public final class PluginLifecycleBridge: PluginManagerLifecycleHandling {
         let id = package.manifest.id
         if entries[id] != nil { pluginWillUnload(id: id) }
         guard !isShutdown else { return }
+        permissions?.request(package: package)
         let entry = Entry(package: package, isEnabled: isEnabled)
         entries[id] = entry
         _ = try? entry.lifecycle.transition(.load)
@@ -244,6 +248,7 @@ public final class PluginLifecycleBridge: PluginManagerLifecycleHandling {
     public func shutdown() {
         guard !isShutdown else { return }
         isShutdown = true
+        permissions?.revokeAll()
         for id in entries.keys.sorted() {
             guard let entry = entries[id] else { continue }
             if [.loaded, .running, .suspended].contains(entry.lifecycle.state) {

@@ -112,46 +112,49 @@ public actor PluginStorage {
         }
     }
 
-    func get(pluginID: String, key: String, admission: PluginStorageAdmission? = nil) throws -> PluginBridgeJSON {
+    func get(pluginID: String, key: String, admission: PluginStorageAdmission? = nil,
+             authorization: PluginPermissionLease? = nil) throws -> PluginBridgeJSON {
         try Self.validatePluginID(pluginID)
         try Self.validateKey(key)
-        try check(admission)
+        try check(admission, authorization, pluginID: pluginID)
         ioObserver()
         let values = try load(pluginID: pluginID)
-        return try admitted(admission) { values[key] ?? .null }
+        return try admitted(admission, authorization, pluginID: pluginID) { values[key] ?? .null }
     }
 
     func set(pluginID: String, key: String, value: PluginBridgeJSON,
-             admission: PluginStorageAdmission? = nil) throws {
+             admission: PluginStorageAdmission? = nil, authorization: PluginPermissionLease? = nil) throws {
         try Self.validatePluginID(pluginID)
         try Self.validateKey(key)
         try Self.validateValue(value)
-        try check(admission)
+        try check(admission, authorization, pluginID: pluginID)
         ioObserver()
         var values = try load(pluginID: pluginID)
         values[key] = value
         try Self.validateValues(values)
-        try save(values, pluginID: pluginID, admission: admission)
+        try save(values, pluginID: pluginID, admission: admission, authorization: authorization)
     }
 
-    func remove(pluginID: String, key: String, admission: PluginStorageAdmission? = nil) throws {
+    func remove(pluginID: String, key: String, admission: PluginStorageAdmission? = nil,
+                authorization: PluginPermissionLease? = nil) throws {
         try Self.validatePluginID(pluginID)
         try Self.validateKey(key)
-        try check(admission)
+        try check(admission, authorization, pluginID: pluginID)
         ioObserver()
         var values = try load(pluginID: pluginID)
         values.removeValue(forKey: key)
-        try save(values, pluginID: pluginID, admission: admission)
+        try save(values, pluginID: pluginID, admission: admission, authorization: authorization)
     }
 
-    func clear(pluginID: String, admission: PluginStorageAdmission? = nil) throws {
+    func clear(pluginID: String, admission: PluginStorageAdmission? = nil,
+               authorization: PluginPermissionLease? = nil) throws {
         try Self.validatePluginID(pluginID)
-        try check(admission)
+        try check(admission, authorization, pluginID: pluginID)
         ioObserver()
         // Even clear fails closed on an unreadable namespace; this API is not
         // an implicit repair mechanism for damaged or insecure Host files.
         _ = try load(pluginID: pluginID)
-        try save([:], pluginID: pluginID, admission: admission)
+        try save([:], pluginID: pluginID, admission: admission, authorization: authorization)
     }
 
     private func load(pluginID: String) throws -> [String: PluginBridgeJSON] {
@@ -160,24 +163,31 @@ public actor PluginStorage {
     }
 
     private func save(_ values: [String: PluginBridgeJSON], pluginID: String,
-                      admission: PluginStorageAdmission?) throws {
+                      admission: PluginStorageAdmission?, authorization: PluginPermissionLease?) throws {
         if let fileStore {
             try fileStore.save(values, pluginID: pluginID) { commit in
-                try self.admitted(admission, commit)
+                try self.admitted(admission, authorization, pluginID: pluginID, commit)
             }
         } else {
-            try admitted(admission) { memory[pluginID] = values.isEmpty ? nil : values }
+            try admitted(admission, authorization, pluginID: pluginID) { memory[pluginID] = values.isEmpty ? nil : values }
         }
     }
 
-    private func check(_ admission: PluginStorageAdmission?) throws {
+    private func check(_ admission: PluginStorageAdmission?, _ authorization: PluginPermissionLease?, pluginID: String) throws {
         guard !unavailable else { throw PluginStorageError.readFailed }
-        try admitted(admission) {}
+        try admitted(admission, authorization, pluginID: pluginID) {}
     }
 
-    private func admitted<T>(_ admission: PluginStorageAdmission?, _ body: () throws -> T) throws -> T {
-        if let admission { return try admission.perform(body) }
-        return try body()
+    private func admitted<T>(_ admission: PluginStorageAdmission?, _ authorization: PluginPermissionLease?,
+                             pluginID: String, _ body: () throws -> T) throws -> T {
+        // Shared order for all operations: lifecycle gate, then permission
+        // gate. Neither revocation path acquires the other gate's lock.
+        func authorized() throws -> T {
+            if let authorization { return try authorization.perform(pluginID: pluginID, permission: .localStorage, body) }
+            return try body()
+        }
+        if let admission { return try admission.perform(authorized) }
+        return try authorized()
     }
 
     fileprivate nonisolated static func validatePluginID(_ pluginID: String) throws {
@@ -338,6 +348,8 @@ private nonisolated struct PluginStorageFileStore: Sendable {
                                      directoryDescriptor: directory)
             }
         } catch let error as PluginStorageError where error == .inactiveExecution {
+            throw error
+        } catch let error as PluginPermissionError {
             throw error
         } catch {
             throw PluginStorageError.writeFailed

@@ -9,6 +9,7 @@ public final class IslandActivityRuntime {
     public let router: ActionRouter
     public let pluginLifecycle: PluginLifecycleBridge
     public let pluginBridge: PluginJSBridge
+    public let permissionManager: PermissionManager
     private let music: MusicActivityProvider
     private let volume: VolumeActivityProvider
     private let battery: BatteryActivityProvider?
@@ -22,10 +23,12 @@ public final class IslandActivityRuntime {
     ) {
         let manager = ActivityManager()
         let router = ActionRouter(manager: manager)
-        let pluginBridge = PluginJSBridge(storage: .applicationSupport())
+        let permissionManager = PermissionManager()
+        let pluginBridge = PluginJSBridge(storage: .applicationSupport(), permissions: permissionManager)
         let pluginLifecycle = PluginLifecycleBridge(
             activityManager: manager,
             actionRouter: router,
+            permissions: permissionManager,
             runtimeFactory: { PluginRuntime(package: $0, bridge: pluginBridge) }
         )
         let music = MusicActivityProvider(viewModel: viewModel, manager: manager)
@@ -42,6 +45,7 @@ public final class IslandActivityRuntime {
         self.router = router
         self.pluginLifecycle = pluginLifecycle
         self.pluginBridge = pluginBridge
+        self.permissionManager = permissionManager
         self.music = music
         self.volume = volume
         self.battery = battery

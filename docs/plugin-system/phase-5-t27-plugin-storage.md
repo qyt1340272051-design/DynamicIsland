@@ -1,5 +1,7 @@
 # Phase 5 — T27 Plugin Storage
 
+后续 T28 已将每次 JS 存储调用接入 Host grant / revoke 检查，见 [权限记录](phase-6-t28-permission-manager.md)。下文保留 T27 完成时的声明检查边界。
+
 日期：2026-10-10。依赖 T23 已验收。提供按 Host 验证的插件 ID 隔离的 KV，生产持久化，测试可明确注入内存模式。
 
 ## API 与隔离

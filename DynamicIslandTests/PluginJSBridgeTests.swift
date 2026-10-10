@@ -9,7 +9,7 @@ final class PluginJSBridgeTests: XCTestCase {
     func testBridgeNamespacesAndMethodsAreFrozenVersionedPureJavaScript() async throws {
         let fixture = JSBridgeFixture()
         defer { fixture.shutdown() }
-        let runtime = fixture.load(try package())
+        let runtime = try fixture.load(package())
         try await ready(runtime)
         let result = try await runtime.evaluateForTesting("""
             Object.isFrozen(island) && Object.isFrozen(island.plugin) &&
@@ -32,7 +32,7 @@ final class PluginJSBridgeTests: XCTestCase {
     func testRealJavaScriptLoggingReturnsPromisesAndReachesHostSink() async throws {
         let fixture = JSBridgeFixture()
         defer { fixture.shutdown() }
-        let runtime = fixture.load(try package(source: """
+        let runtime = try fixture.load(package(source: """
             globalThis.done = false;
             function onStart() {
                 const first = island.log('你好，Host');
@@ -56,7 +56,7 @@ final class PluginJSBridgeTests: XCTestCase {
     func testActivityPromisePublishesHostOwnedIdentityAndEndsIt() async throws {
         let fixture = JSBridgeFixture()
         defer { fixture.shutdown() }
-        let runtime = fixture.load(try package(source: """
+        let runtime = try fixture.load(package(source: """
             globalThis.published = false;
             function onStart() {
                 island.activity.publish({id: 'download', presentation: {
@@ -83,7 +83,7 @@ final class PluginJSBridgeTests: XCTestCase {
     func testActivityPublishedByJavaScriptRendersInExistingHostView() async throws {
         let fixture = JSBridgeFixture()
         defer { fixture.shutdown() }
-        let runtime = fixture.load(try package())
+        let runtime = try fixture.load(package())
         try await ready(runtime)
         let size = CGSize(width: 470, height: 150)
         let view = NSHostingView(rootView: BridgeRenderedActivityView(manager: fixture.manager))
@@ -116,8 +116,8 @@ final class PluginJSBridgeTests: XCTestCase {
                     .then(() => { globalThis.done = true; });
             }
             """
-        let alpha = fixture.load(try package(source: script))
-        let beta = fixture.load(try package(id: "com.example.beta", source: script))
+        let alpha = try fixture.load(package(source: script))
+        let beta = try fixture.load(package(id: "com.example.beta", source: script))
         try await marker(alpha, "done")
         try await marker(beta, "done")
         let alphaID = PluginJSBridge.activityID(pluginID: "com.example.alpha", localID: "same")
@@ -135,7 +135,7 @@ final class PluginJSBridgeTests: XCTestCase {
     func testStorageRoundTripsJSONAndMissingKeyIsNull() async throws {
         let fixture = JSBridgeFixture()
         defer { fixture.shutdown() }
-        let runtime = fixture.load(try package(source: """
+        let runtime = try fixture.load(package(source: """
             function onStart() {
                 island.storage.get('missing').then(value => {
                     globalThis.missingWasNull = value === null;
@@ -154,7 +154,7 @@ final class PluginJSBridgeTests: XCTestCase {
     func testStorageRequestsKeepSetGetOrderAndRemoveClearTheirOwnKeys() async throws {
         let fixture = JSBridgeFixture()
         defer { fixture.shutdown() }
-        let runtime = fixture.load(try package(source: """
+        let runtime = try fixture.load(package(source: """
             function onStart() {
                 const write = island.storage.set('counter', 1);
                 const read = island.storage.get('counter');
@@ -180,8 +180,8 @@ final class PluginJSBridgeTests: XCTestCase {
                 island.storage.set('same', island.plugin.id).then(() => { globalThis.done = true; });
             }
             """
-        let alpha = fixture.load(try package(source: write))
-        let beta = fixture.load(try package(id: "com.example.beta", source: write))
+        let alpha = try fixture.load(package(source: write))
+        let beta = try fixture.load(package(id: "com.example.beta", source: write))
         try await marker(alpha, "done")
         try await marker(beta, "done")
         let read = """
@@ -189,7 +189,7 @@ final class PluginJSBridgeTests: XCTestCase {
                 island.storage.get('same').then(value => { globalThis.saved = value; globalThis.done = true; });
             }
             """
-        let replacement = fixture.load(try package(source: read))
+        let replacement = try fixture.load(package(source: read))
         try await marker(replacement, "done")
         try await assertValue(replacement, "saved", equals: .string("com.example.alpha"))
         _ = try await value(beta, "island.storage.get('same').then(value => { globalThis.saved = value; globalThis.readDone = true; }); void 0")
@@ -201,7 +201,7 @@ final class PluginJSBridgeTests: XCTestCase {
     func testCapabilitiesAreCheckedBeforeHostEffects() async throws {
         let fixture = JSBridgeFixture()
         defer { fixture.shutdown() }
-        let runtime = fixture.load(try package(source: """
+        let runtime = try fixture.load(package(source: """
             function onStart() {
                 globalThis.codes = [];
                 const calls = [island.activity.publish({id:'bad',presentation:{title:'bad'}}),
@@ -222,7 +222,7 @@ final class PluginJSBridgeTests: XCTestCase {
     func testStoragePermissionIsSeparateFromCapability() async throws {
         let fixture = JSBridgeFixture()
         defer { fixture.shutdown() }
-        let runtime = fixture.load(try package(source: """
+        let runtime = try fixture.load(package(source: """
             function onStart() {
                 island.storage.set('forbidden', 1).catch(error => {
                     globalThis.code = error.code; globalThis.done = true;
@@ -236,7 +236,7 @@ final class PluginJSBridgeTests: XCTestCase {
     func testInvalidActivityTypesUnknownFieldsAndForgedSourceHaveNoEffects() async throws {
         let fixture = JSBridgeFixture()
         defer { fixture.shutdown() }
-        let runtime = fixture.load(try package(source: """
+        let runtime = try fixture.load(package(source: """
             function onStart() {
                 const calls = [
                     {id:'wrong',presentation:{title:42}},
@@ -260,7 +260,7 @@ final class PluginJSBridgeTests: XCTestCase {
     func testSerializationRejectsAccessorsAndToJSONWithoutInvokingThem() async throws {
         let fixture = JSBridgeFixture()
         defer { fixture.shutdown() }
-        let runtime = fixture.load(try package(source: """
+        let runtime = try fixture.load(package(source: """
             function onStart() {
                 globalThis.getterCalls = 0;
                 globalThis.toJSONCalls = 0;
@@ -290,7 +290,7 @@ final class PluginJSBridgeTests: XCTestCase {
     func testProxyDescriptorIsSnapshottedOnceWithoutInheritedValueGetter() async throws {
         let fixture = JSBridgeFixture()
         defer { fixture.shutdown() }
-        let runtime = fixture.load(try package(source: """
+        let runtime = try fixture.load(package(source: """
             globalThis.unsafeCalls = 0;
             globalThis.descriptorReads = 0;
             Object.defineProperty(Object.prototype, 'value', {
@@ -317,7 +317,7 @@ final class PluginJSBridgeTests: XCTestCase {
     func testCyclicDeepWideAndOversizedStorageValuesAreRejectedWithoutWrites() async throws {
         let fixture = JSBridgeFixture()
         defer { fixture.shutdown() }
-        let runtime = fixture.load(try package(source: """
+        let runtime = try fixture.load(package(source: """
             function onStart() {
                 const cycle = {}; cycle.self = cycle;
                 let deep = {}; for (let i=0;i<12;i++) deep = {child:deep};
@@ -339,7 +339,7 @@ final class PluginJSBridgeTests: XCTestCase {
     func testCapturedIntrinsicsKeepBridgeWorkingAfterPluginChangesBuiltIns() async throws {
         let fixture = JSBridgeFixture()
         defer { fixture.shutdown() }
-        let runtime = fixture.load(try package(source: """
+        let runtime = try fixture.load(package(source: """
             function onStart() {
                 globalThis.unsafeCalls = 0;
                 Object.defineProperty(Object.prototype, 'toJSON', {get() {
@@ -368,7 +368,7 @@ final class PluginJSBridgeTests: XCTestCase {
     func testActionsValidateArgumentsAndRegisterSupportedImplementation() async throws {
         let fixture = JSBridgeFixture()
         defer { fixture.shutdown() }
-        let runtime = fixture.load(try package(source: """
+        let runtime = try fixture.load(package(source: """
             function onStart() {
                 Promise.all([
                     island.actions.on('click', function(){}).catch(error => error.code),
@@ -390,7 +390,7 @@ final class PluginJSBridgeTests: XCTestCase {
         let fixture = JSBridgeFixture()
         defer { fixture.shutdown() }
         let package = try package()
-        let runtime = fixture.load(package)
+        let runtime = try fixture.load(package)
         try await ready(runtime)
         let context = try XCTUnwrap(fixture.factory.contexts.last)
         let invalidRequests = [
@@ -420,10 +420,10 @@ final class PluginJSBridgeTests: XCTestCase {
         let fixture = JSBridgeFixture()
         defer { fixture.shutdown() }
         let alpha = try package()
-        let first = fixture.load(alpha)
+        let first = try fixture.load(alpha)
         try await ready(first)
         let oldContext = try XCTUnwrap(fixture.factory.contexts.last)
-        let current = fixture.load(alpha)
+        let current = try fixture.load(alpha)
         try await ready(current)
         let currentContext = try XCTUnwrap(fixture.factory.contexts.last)
         let request = "{\"apiVersion\":\"1.0.0\",\"method\":\"storage.set\",\"params\":{\"key\":\"stale\",\"value\":1}}"
@@ -439,7 +439,7 @@ final class PluginJSBridgeTests: XCTestCase {
     func testImmediateDisableRevokesStartupBridgeAdmissionAndNewSessionStaysUsable() async throws {
         let fixture = JSBridgeFixture()
         defer { fixture.shutdown() }
-        let first = fixture.load(try package(source: """
+        let first = try fixture.load(package(source: """
             function onStart() {
                 const finish = Date.now() + 200;
                 while (Date.now() < finish) {}
@@ -449,7 +449,7 @@ final class PluginJSBridgeTests: XCTestCase {
             }
             """))
         fixture.lifecycle.pluginDidChangeEnablement(id: "com.example.alpha", isEnabled: false)
-        let current = fixture.load(try package(source: """
+        let current = try fixture.load(package(source: """
             function onStart() {
                 island.storage.get('stale').then(value => {
                     globalThis.clean = value === null; return island.log('current log');
@@ -468,7 +468,7 @@ final class PluginJSBridgeTests: XCTestCase {
         let fixture = JSBridgeFixture()
         defer { fixture.shutdown() }
         let package = try package()
-        let first = fixture.load(package)
+        let first = try fixture.load(package)
         try await ready(first)
         let oldContext = try XCTUnwrap(fixture.factory.contexts.last)
         let transport = PluginBridgeTransport(bridge: fixture.service, package: package, context: oldContext)
@@ -479,7 +479,7 @@ final class PluginJSBridgeTests: XCTestCase {
         XCTAssertTrue(transport.submit(id: 2, json: "{\"apiVersion\":\"1.0.0\",\"method\":\"storage.set\",\"params\":{\"key\":\"queued\",\"value\":1}}") { _, _ in replies.increment() })
         transport.revoke()
         fixture.lifecycle.pluginDidChangeEnablement(id: package.manifest.id, isEnabled: false)
-        let current = fixture.load(try self.package(source: """
+        let current = try fixture.load(self.package(source: """
             function onStart() {
                 island.storage.get('queued').then(value => {
                     globalThis.clean = value === null;
@@ -499,7 +499,7 @@ final class PluginJSBridgeTests: XCTestCase {
         let fixture = JSBridgeFixture()
         defer { fixture.shutdown() }
         let package = try package()
-        let runtime = fixture.load(package)
+        let runtime = try fixture.load(package)
         try await ready(runtime)
         let context = try XCTUnwrap(fixture.factory.contexts.last)
         for index in 0..<128 {
@@ -532,7 +532,7 @@ final class PluginJSBridgeTests: XCTestCase {
     func testOutstandingPromiseRequestsAreBoundedAndSettleExactlyOnce() async throws {
         let fixture = JSBridgeFixture()
         defer { fixture.shutdown() }
-        let runtime = fixture.load(try package(source: """
+        let runtime = try fixture.load(package(source: """
             function onStart() {
                 const requests = [];
                 globalThis.settlements = 0;
@@ -557,7 +557,7 @@ final class PluginJSBridgeTests: XCTestCase {
         let fixture = JSBridgeFixture()
         defer { fixture.shutdown() }
         let package = try package()
-        let runtime = fixture.load(package)
+        let runtime = try fixture.load(package)
         try await ready(runtime)
         let context = try XCTUnwrap(fixture.factory.contexts.last)
         for index in 0..<105 {
@@ -674,28 +674,35 @@ final class PluginJSBridgeTests: XCTestCase {
 
 @MainActor
 private final class JSBridgeFixture {
-    let service = PluginJSBridge()
+    let permissions = PermissionManager()
+    let service: PluginJSBridge
     let factory = JSBridgeTestFactory()
     let manager: ActivityManager
     let lifecycle: PluginLifecycleBridge
 
     init() {
+        let service = PluginJSBridge(permissions: permissions)
+        self.service = service
         // Raise the Core's independent queue bound so the Bridge's per-plugin
         // inventory limit can be exercised without Core eviction obscuring it.
         var configuration = ActivityScheduler.Configuration.immediate
         configuration.maximumQueuedNormal = 32
         let manager = ActivityManager(clock: TestActivityClock(Date(timeIntervalSinceReferenceDate: 90_000)), configuration: configuration)
         self.manager = manager
-        let service = service
         let factory = factory
-        lifecycle = PluginLifecycleBridge(activityManager: manager, actionRouter: ActionRouter(manager: manager)) { package in
+        lifecycle = PluginLifecycleBridge(activityManager: manager, actionRouter: ActionRouter(manager: manager), permissions: permissions) { package in
             let runtime = PluginRuntime(package: package, bridge: service)
             factory.runtimes.append(runtime)
             return JSBridgeTestForwarder(runtime: runtime, factory: factory)
         }
     }
 
-    func load(_ package: ValidatedPluginPackage) -> PluginRuntime {
+    func load(_ package: ValidatedPluginPackage) throws -> PluginRuntime {
+        let review = permissions.request(package: package)
+        if package.manifest.permissions.contains(.localStorage),
+           package.manifest.capabilities.contains(.localStorage) {
+            try permissions.applyHostDecision(decision: .granted, review: review, permission: .localStorage)
+        }
         lifecycle.pluginDidLoad(package, isEnabled: true)
         return factory.runtimes.last!
     }

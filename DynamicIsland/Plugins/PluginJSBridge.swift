@@ -16,6 +16,7 @@ public nonisolated enum PluginBridgeErrorCode: String, Error, Equatable, Sendabl
     case invalidArguments, unsupportedVersion, unsupportedMethod, inactiveExecution
     case capabilityRequired, permissionRequired, quotaExceeded, rateLimited, activityNotFound, coreRejected
     case storageReadFailed, storageWriteFailed
+    case permissionNotGranted, permissionDenied, permissionRevoked, stalePermissionReview
 
     fileprivate var message: String {
         switch self {
@@ -31,6 +32,10 @@ public nonisolated enum PluginBridgeErrorCode: String, Error, Equatable, Sendabl
         case .coreRejected: "The Host rejected the operation."
         case .storageReadFailed: "Plugin storage could not be read."
         case .storageWriteFailed: "Plugin storage could not be written."
+        case .permissionNotGranted: "The Host has not granted the requested permission."
+        case .permissionDenied: "The Host denied the requested permission."
+        case .permissionRevoked: "The Host revoked the permission or its previous authorization."
+        case .stalePermissionReview: "The permission review does not belong to the current plugin package."
         }
     }
 }
@@ -57,13 +62,16 @@ public final class PluginJSBridge {
 
     private var logEntries: [String: [PluginLogEntry]] = [:]
     private let storage: PluginStorage
+    private let permissions: PermissionManager
     private var activityRateLimiter = PluginActivityRateLimiter()
     private let activityRateClock: @MainActor () -> TimeInterval
     private let logger = Logger(subsystem: "DynamicIsland", category: "PluginJSBridge")
 
     public init(storage: PluginStorage = PluginStorage(),
+                permissions: PermissionManager? = nil,
                 activityRateClock: @escaping @MainActor () -> TimeInterval = { ProcessInfo.processInfo.systemUptime }) {
         self.storage = storage
+        self.permissions = permissions ?? PermissionManager()
         self.activityRateClock = activityRateClock
     }
 
@@ -84,10 +92,11 @@ public final class PluginJSBridge {
             switch operation {
             case .get, .set, .remove, .clear:
                 try context.perform { try requireStorage(package.manifest) }
-                result = try await executeStorage(operation, context: context)
+                let authorization = try permissions.require(permission: .localStorage, package: package)
+                result = try await executeStorage(operation, context: context, authorization: authorization)
                 // The actor may have suspended this Host task while lifecycle
                 // revoked the session. Late replies cannot revive that session.
-                try context.perform {}
+                try context.perform { try authorization.perform {} }
             default:
                 try context.perform {
                     result = try execute(operation, manifest: package.manifest, context: context, actionSession: actionSession)
@@ -108,6 +117,8 @@ public final class PluginJSBridge {
             case .readFailed: return failure(.storageReadFailed)
             case .writeFailed: return failure(.storageWriteFailed)
             }
+        } catch let error as PluginPermissionError {
+            return failure(PluginBridgeErrorCode(rawValue: error.code) ?? .coreRejected)
         } catch let error as ActivityManagerError {
             switch error {
             case .quotaExceeded: return failure(.quotaExceeded)
@@ -120,17 +131,18 @@ public final class PluginJSBridge {
         }
     }
 
-    private func executeStorage(_ operation: Operation, context: PluginExecutionContext) async throws -> PluginBridgeJSON {
+    private func executeStorage(_ operation: Operation, context: PluginExecutionContext,
+                                authorization: PluginPermissionLease) async throws -> PluginBridgeJSON {
         let admission = context.storageAdmission
         switch operation {
         case .get(let key):
-            return try await storage.get(pluginID: context.id, key: key, admission: admission)
+            return try await storage.get(pluginID: context.id, key: key, admission: admission, authorization: authorization)
         case .set(let key, let value):
-            try await storage.set(pluginID: context.id, key: key, value: value, admission: admission)
+            try await storage.set(pluginID: context.id, key: key, value: value, admission: admission, authorization: authorization)
         case .remove(let key):
-            try await storage.remove(pluginID: context.id, key: key, admission: admission)
+            try await storage.remove(pluginID: context.id, key: key, admission: admission, authorization: authorization)
         case .clear:
-            try await storage.clear(pluginID: context.id, admission: admission)
+            try await storage.clear(pluginID: context.id, admission: admission, authorization: authorization)
         default:
             throw PluginBridgeErrorCode.coreRejected
         }

@@ -56,8 +56,8 @@ final class PluginStorageTests: XCTestCase {
                     .then(() => { globalThis.done = true; });
             }
             """
-        let firstAlpha = first.load(try package(id: alpha, source: write))
-        let firstBeta = first.load(try package(id: beta, source: write))
+        let firstAlpha = try first.load(package(id: alpha, source: write))
+        let firstBeta = try first.load(package(id: beta, source: write))
         try await marker(firstAlpha, "done")
         try await marker(firstBeta, "done")
         first.shutdown()
@@ -73,8 +73,8 @@ final class PluginStorageTests: XCTestCase {
                 });
             }
             """
-        let restoredAlpha = second.load(try package(id: alpha, source: read))
-        let restoredBeta = second.load(try package(id: beta, source: read))
+        let restoredAlpha = try second.load(package(id: alpha, source: read))
+        let restoredBeta = try second.load(package(id: beta, source: read))
         try await marker(restoredAlpha, "done")
         try await marker(restoredBeta, "done")
         try await assertJavaScript(restoredAlpha, "restored", equals: .boolean(true))
@@ -91,7 +91,7 @@ final class PluginStorageTests: XCTestCase {
         defer { workspace.remove() }
         let fixture = StorageRuntimeFixture(store: PluginStorage(configuration: workspace.configuration))
         defer { fixture.shutdown() }
-        let runtime = fixture.load(try package(id: alpha, source: """
+        let runtime = try fixture.load(package(id: alpha, source: """
             function onStart() {
                 const requests = [island.storage.set('first', 1), island.storage.get('first'),
                     island.storage.set('second', 2), island.storage.remove('first'),
@@ -188,7 +188,7 @@ final class PluginStorageTests: XCTestCase {
         try workspace.seed(Data("{}".utf8), pluginID: alpha)
         let fixture = StorageRuntimeFixture(store: PluginStorage(configuration: workspace.configuration))
         defer { fixture.shutdown() }
-        let runtime = fixture.load(try package(id: alpha, source: """
+        let runtime = try fixture.load(package(id: alpha, source: """
             function onStart() {
                 island.storage.get('safe').catch(error => {
                     globalThis.code = error.code; globalThis.message = error.message; globalThis.done = true;
@@ -300,7 +300,7 @@ final class PluginStorageTests: XCTestCase {
 
         let fixture = StorageRuntimeFixture(store: failing)
         defer { fixture.shutdown() }
-        let runtime = fixture.load(try package(id: alpha, source: """
+        let runtime = try fixture.load(package(id: alpha, source: """
             function onStart() {
                 island.storage.set('safe', 'replacement').catch(error => {
                     globalThis.code = error.code; globalThis.message = error.message; globalThis.done = true;
@@ -352,7 +352,7 @@ final class PluginStorageTests: XCTestCase {
             function onStart() { globalThis.started = true; }
             function writeForTesting() { island.storage.set('stale', 1).catch(() => {}); }
             """)
-        let oldRuntime = fixture.load(package)
+        let oldRuntime = try fixture.load(package)
         try await marker(oldRuntime, "started")
         let oldContext = try XCTUnwrap(fixture.contexts.last)
         _ = try await oldRuntime.evaluateForTesting("writeForTesting(); void 0")
@@ -389,7 +389,7 @@ final class PluginStorageTests: XCTestCase {
             function onStart() { globalThis.started = true; }
             function writeForTesting() { island.storage.set('stale', 1).catch(() => {}); }
             """)
-        let runtime = fixture.load(package)
+        let runtime = try fixture.load(package)
         try await marker(runtime, "started")
         let context = try XCTUnwrap(fixture.contexts.last)
         _ = try await runtime.evaluateForTesting("writeForTesting(); void 0")
@@ -506,6 +506,7 @@ private struct StorageWorkspace {
 
 @MainActor
 private final class StorageRuntimeFixture {
+    let permissions = PermissionManager()
     let service: PluginJSBridge
     let lifecycle: PluginLifecycleBridge
     private let factory = StorageRuntimeFactory()
@@ -513,18 +514,20 @@ private final class StorageRuntimeFixture {
     var runtimes: [PluginRuntime] { factory.runtimes }
 
     init(store: PluginStorage) {
-        let service = PluginJSBridge(storage: store)
+        let service = PluginJSBridge(storage: store, permissions: permissions)
         self.service = service
         let manager = ActivityManager(clock: TestActivityClock(Date(timeIntervalSinceReferenceDate: 98_000)), configuration: .immediate)
         let factory = factory
-        lifecycle = PluginLifecycleBridge(activityManager: manager, actionRouter: ActionRouter(manager: manager)) { package in
+        lifecycle = PluginLifecycleBridge(activityManager: manager, actionRouter: ActionRouter(manager: manager), permissions: permissions) { package in
             let runtime = PluginRuntime(package: package, bridge: service)
             factory.runtimes.append(runtime)
             return StorageRuntimeForwarder(runtime: runtime, factory: factory)
         }
     }
 
-    func load(_ package: ValidatedPluginPackage) -> PluginRuntime {
+    func load(_ package: ValidatedPluginPackage) throws -> PluginRuntime {
+        let review = permissions.request(package: package)
+        try permissions.applyHostDecision(decision: .granted, review: review, permission: .localStorage)
         lifecycle.pluginDidLoad(package, isEnabled: true)
         return factory.runtimes.last!
     }

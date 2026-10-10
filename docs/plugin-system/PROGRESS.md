@@ -73,7 +73,7 @@
 
 | ID | 任务 | 前置依赖 | 状态 | 验收证据 |
 | --- | --- | --- | --- | --- |
-| T28 | PermissionManager | T23 | `pending` | 待补。 |
+| T28 | PermissionManager | T23 | `verified` | [四态授权、包 review scope、绑定插件 / 权限的可撤销 lease](phase-6-t28-permission-manager.md)及 [17 项权限测试](../../DynamicIslandTests/PluginPermissionManagerTests.swift)；CI 503 passed、2 skipped、0 failures，Release build / 签名通过；Release 定向 107 passed。生产默认 requested，批准 UI / 持久化按 T33 扩展。 |
 | T29 | NetworkBroker | T28 | `pending` | 待补。 |
 | T30 | File/Clipboard Broker | T28 | `pending` | 待补。 |
 | T31 | PluginScheduler | T22 | `pending` | 待补。 |

@@ -578,6 +578,7 @@ final class PluginIslandNodeBridgeTests: XCTestCase {
 private final class NodeBridgeFixture {
     let activityClock = TestActivityClock(Date(timeIntervalSinceReferenceDate: 95_000))
     let rateClock = NodeBridgeRateClock()
+    let permissions = PermissionManager()
     let service: PluginJSBridge
     let manager: ActivityManager
     let lifecycle: PluginLifecycleBridge
@@ -585,13 +586,13 @@ private final class NodeBridgeFixture {
 
     init() {
         let clock = rateClock
-        service = PluginJSBridge(activityRateClock: { clock.now })
+        service = PluginJSBridge(permissions: permissions, activityRateClock: { clock.now })
         var configuration = ActivityScheduler.Configuration.immediate
         configuration.maximumQueuedNormal = 32
         manager = ActivityManager(clock: activityClock, configuration: configuration)
         let factory = NodeBridgeFactory(service: service)
         self.factory = factory
-        lifecycle = PluginLifecycleBridge(activityManager: manager, actionRouter: ActionRouter(manager: manager)) { package in
+        lifecycle = PluginLifecycleBridge(activityManager: manager, actionRouter: ActionRouter(manager: manager), permissions: permissions) { package in
             let runtime = factory.usesJavaScript ? PluginRuntime(package: package, bridge: factory.service) : nil
             if let runtime { factory.runtimes.append(runtime) }
             return NodeBridgeTestRuntime(factory: factory, runtime: runtime)
@@ -599,15 +600,25 @@ private final class NodeBridgeFixture {
     }
 
     func load(_ package: ValidatedPluginPackage) throws -> PluginExecutionContext {
+        try approveLocalStorage(package)
         factory.usesJavaScript = false
         lifecycle.pluginDidLoad(package, isEnabled: true)
         return try XCTUnwrap(factory.contexts.last)
     }
 
     func loadJavaScript(_ package: ValidatedPluginPackage) throws -> PluginRuntime {
+        try approveLocalStorage(package)
         factory.usesJavaScript = true
         lifecycle.pluginDidLoad(package, isEnabled: true)
         return try XCTUnwrap(factory.runtimes.last)
+    }
+
+    private func approveLocalStorage(_ package: ValidatedPluginPackage) throws {
+        let review = permissions.request(package: package)
+        if package.manifest.permissions.contains(.localStorage),
+           package.manifest.capabilities.contains(.localStorage) {
+            try permissions.applyHostDecision(decision: .granted, review: review, permission: .localStorage)
+        }
     }
 
     func id(_ localID: String = "ui", pluginID: String = "com.example.node") -> String { PluginJSBridge.activityID(pluginID: pluginID, localID: localID) }
