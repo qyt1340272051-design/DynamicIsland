@@ -16,8 +16,9 @@ nonisolated final class PluginBridgeTransport: @unchecked Sendable {
     private var revoked = false
 
     @MainActor
-    init(bridge: PluginJSBridge, package: ValidatedPluginPackage, context: PluginExecutionContext) {
-        process = { bridge.handle($0, package: package, context: context) }
+    init(bridge: PluginJSBridge, package: ValidatedPluginPackage, context: PluginExecutionContext,
+         actionSession: PluginActionSession? = nil) {
+        process = { bridge.handle($0, package: package, context: context, actionSession: actionSession) }
     }
 
     @discardableResult

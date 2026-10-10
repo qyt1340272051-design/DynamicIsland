@@ -5,6 +5,7 @@ import Foundation
 public nonisolated struct RoutedActivityAction: Equatable, Sendable {
     public let activityID: String
     public let source: ActivitySource
+    public let instanceToken: ActivityInstanceToken
     public let actionID: String
     public let value: IslandRenderActionValue
 }
@@ -101,8 +102,24 @@ public final class ActionRouter {
               fresh.actions.contains(where: { $0.id == action.actionID }) else { return .inactiveActivity }
         guard !disabledSources.contains(source), sourceEnabled(source) else { return .disabledSource }
         guard let handler = registrations[source]?.handler else { return .missingHandler }
-        handler(RoutedActivityAction(activityID: id, source: source, actionID: action.actionID, value: action.value))
+        handler(RoutedActivityAction(activityID: id, source: source, instanceToken: instanceToken,
+                                     actionID: action.actionID, value: action.value))
         return .handled
+    }
+
+    /// Asynchronous consumers retain the rendered instance, then recheck it
+    /// when their execution queue is ready. This never invokes a handler.
+    func isAdmitted(_ action: RoutedActivityAction) -> Bool {
+        guard Self.isValidActionID(action.actionID), Self.isValidPayload(action.value),
+              let activity = manager.activeActionActivity(id: action.activityID, source: action.source,
+                                                         instanceToken: action.instanceToken),
+              activity.actions.contains(where: { $0.id == action.actionID }),
+              !disabledSources.contains(action.source), sourceEnabled(action.source),
+              authorizer(action.source, action.actionID) else { return false }
+        guard let fresh = manager.activeActionActivity(id: action.activityID, source: action.source,
+                                                      instanceToken: action.instanceToken) else { return false }
+        return fresh.actions.contains(where: { $0.id == action.actionID })
+            && !disabledSources.contains(action.source) && sourceEnabled(action.source)
     }
 
     private static func isValidActionID(_ id: String) -> Bool {

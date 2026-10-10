@@ -1,5 +1,7 @@
 # Phase 5 — T25 JS → IslandNode 实现与验收
 
+后续契约：T26 接入实际 JS callback 注册和回传，见 [T26 实现与验收](phase-5-t26-js-action-bridge.md)。本文保留 T25 完成时的接口与验证记录。
+
 日期：2026-10-10。范围：将 Activity 的 `minimal`、`compact`、`expanded` 声明式 JS 布局安全转换为既有 IslandNode，再交给 Host 的展示策略与 IslandRenderer。计划完成标准为「恶意或错误 UI Tree 不会导致 App 崩溃」；本步验证受控输入转换与实际 JavaScript 请求，完成记录以末尾验证表为准。
 
 ## 转换边界与接口兼容

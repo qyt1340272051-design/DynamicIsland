@@ -432,7 +432,7 @@ final class PluginIslandNodeBridgeTests: XCTestCase {
         }
         XCTAssertTrue(fixture.service.logs(for: package.manifest.id).allSatisfy { !$0.message.hasPrefix("node.error:") })
         let actionsSupported = try await runtime.evaluateForTesting("island.actions.supported")
-        XCTAssertEqual(actionsSupported, .boolean(false))
+        XCTAssertEqual(actionsSupported, .boolean(true))
         _ = try await runtime.evaluateForTesting("mockNodeEnd(); void 0")
         try await logMarker(fixture, pluginID: package.manifest.id, message: "node.ended")
         XCTAssertNil(fixture.activity("build", pluginID: package.manifest.id))

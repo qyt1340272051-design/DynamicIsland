@@ -52,7 +52,8 @@ public final class PluginJSBridge {
         case set(key: String, value: PluginBridgeJSON, bytes: Int)
         case remove(key: String)
         case clear
-        case unsupportedAction
+        case registerAction(actionID: String, registrationID: String)
+        case unregisterAction(actionID: String)
     }
 
     private var logEntries: [String: [PluginLogEntry]] = [:]
@@ -74,13 +75,13 @@ public final class PluginJSBridge {
     /// Both wrapper validation and this independent Host validation are
     /// required. Plugin identity, source and declarations come from the Host.
     func handle(_ requestJSON: String, package: ValidatedPluginPackage,
-                context: PluginExecutionContext) -> String {
+                context: PluginExecutionContext, actionSession: PluginActionSession? = nil) -> String {
         do {
             let operation = try parseRequest(requestJSON)
             guard context.id == package.manifest.id else { throw PluginBridgeErrorCode.coreRejected }
             var result = PluginBridgeJSON.null
             try context.perform {
-                result = try execute(operation, manifest: package.manifest, context: context)
+                result = try execute(operation, manifest: package.manifest, context: context, actionSession: actionSession)
             }
             return response(.object(["ok": .boolean(true), "value": result]))
         } catch let error as PluginBridgeErrorCode {
@@ -102,7 +103,7 @@ public final class PluginJSBridge {
     }
 
     private func execute(_ operation: Operation, manifest: PluginManifest,
-                         context: PluginExecutionContext) throws -> PluginBridgeJSON {
+                         context: PluginExecutionContext, actionSession: PluginActionSession?) throws -> PluginBridgeJSON {
         let pluginID = context.id
         switch operation {
         case .log(let message, let level):
@@ -159,10 +160,18 @@ public final class PluginJSBridge {
         case .clear:
             try requireStorage(manifest)
             storage.removeValue(forKey: pluginID)
-        case .unsupportedAction:
+        case .registerAction(let actionID, let registrationID):
             try require(.handleActions, manifest: manifest)
-            // Callback registration and SwiftUI dispatch are the T26 contract.
-            throw PluginBridgeErrorCode.unsupportedMethod
+            guard let actionSession, actionSession.matches(context: context) else {
+                throw PluginBridgeErrorCode.inactiveExecution
+            }
+            try actionSession.register(actionID: actionID, registrationID: registrationID)
+        case .unregisterAction(let actionID):
+            try require(.handleActions, manifest: manifest)
+            guard let actionSession, actionSession.matches(context: context) else {
+                throw PluginBridgeErrorCode.inactiveExecution
+            }
+            try actionSession.unregister(actionID: actionID)
         }
         return .null
     }
@@ -210,10 +219,13 @@ public final class PluginJSBridge {
         case "storage.clear":
             _ = try object(params, required: [])
             return .clear
-        case "actions.on", "actions.off":
+        case "actions.on":
+            let fields = try object(params, required: ["actionID", "registrationID"])
+            return .registerAction(actionID: try identifier(fields["actionID"], maximumBytes: 80),
+                                   registrationID: try identifier(fields["registrationID"], maximumBytes: 80))
+        case "actions.off":
             let fields = try object(params, required: ["actionID"])
-            _ = try identifier(fields["actionID"], maximumBytes: 80)
-            return .unsupportedAction
+            return .unregisterAction(actionID: try identifier(fields["actionID"], maximumBytes: 80))
         default:
             guard case .object = params else { throw PluginBridgeErrorCode.invalidArguments }
             throw PluginBridgeErrorCode.unsupportedMethod

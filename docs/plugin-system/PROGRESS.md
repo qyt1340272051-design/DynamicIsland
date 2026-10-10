@@ -66,7 +66,7 @@
 | T23 | JS Bridge | T22 | `verified` | [受控 Promise API、严格双层验证、简单 Activity、日志及隔离内存 KV 验收](phase-5-t23-js-bridge.md)、[23 项 Bridge 测试](../../DynamicIslandTests/PluginJSBridgeTests.swift)与生产 factory 测试；CI 414 passed、1 skipped、0 failures、Release build passed；Release 定向 53 passed，普通 App 签名核验通过。 |
 | T24 | JS → Activity | T23 | `verified` | [受限转换、Host 降级、部分更新、动作元数据与按插件限频验收](phase-5-t24-js-activity.md)、[18 项 Activity Bridge 测试](../../DynamicIslandTests/PluginActivityBridgeTests.swift)及[真实 GitHub Mock 包](examples/github-mock/README.md)；CI 432 passed、1 skipped、0 failures、Release build passed；Release 定向 42 passed，普通 App 签名核验通过。 |
 | T25 | JS → IslandNode | T23 | `verified` | [严格节点转换、三形态布局、capability/动作引用与渲染验收](phase-5-t25-js-island-node.md)、[20 项节点 Bridge 测试](../../DynamicIslandTests/PluginIslandNodeBridgeTests.swift)及[真实 Node Mock 包](examples/node-mock/README.md)；CI 452 passed、1 skipped、0 failures、Release build passed；Release 定向 44 passed，普通 App 签名核验通过。 |
-| T26 | JS Action Bridge | T23 | `pending` | 待补。 |
+| T26 | JS Action Bridge | T23 | `verified` | [会话注册、实例 / generation 绑定、有界回调与实际 SwiftUI 控件验收](phase-5-t26-js-action-bridge.md)、[18 项动作 Bridge 测试](../../DynamicIslandTests/PluginActionBridgeTests.swift)及[真实 Action Mock](examples/action-mock/README.md)；CI 470 passed、1 skipped、0 failures，Release build passed；Release 定向 91 passed，普通 App 签名通过。 |
 | T27 | Plugin Storage | T23 | `pending` | 待补。 |
 
 ## Phase 6 — 权限、安全、能耗与稳定性

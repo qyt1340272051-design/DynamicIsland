@@ -18,11 +18,19 @@ nonisolated enum PluginJSBridgeBootstrap {
             const isArray = Array.isArray, finite = Number.isFinite;
             const stringify = JSON.stringify, parse = JSON.parse;
             const PromiseType = Promise, MapType = Map;
+            const promiseThen = Promise.prototype.then;
             const mapGet = Map.prototype.get, mapSet = Map.prototype.set, mapDelete = Map.prototype.delete;
             const charCode = String.prototype.charCodeAt;
             const pending = new MapType();
+            const handlers = new MapType();
+            const promiseConstructor = create(null);
+            const speciesAttributes = create(null);
+            speciesAttributes.value = PromiseType;
+            define(promiseConstructor, Symbol.species, speciesAttributes);
+            freeze(promiseConstructor);
             const LIMIT = freeze(create(null));
             let outstanding = 0, nextID = 1;
+            let handlerCount = 0, nextRegistration = 1, pendingActions = 0;
             const version = '1.0.0';
 
             function failure(code) {
@@ -32,6 +40,14 @@ nonisolated enum PluginJSBridgeBootstrap {
                 return freeze(result);
             }
             function rejected(code) { return new PromiseType((_, reject) => reject(failure(code))); }
+            // Internal registration/log continuations must survive plugins
+            // changing Promise.prototype.then or its constructor/species.
+            function chainRequest(request, fulfilled, rejected) {
+                const attributes = create(null);
+                attributes.value = promiseConstructor;
+                define(request, 'constructor', attributes);
+                return apply(promiseThen, request, [fulfilled, rejected]);
+            }
             function utf8Bytes(text) {
                 let size = 0;
                 for (let i = 0; i < text.length; i++) {
@@ -132,6 +148,24 @@ nonisolated enum PluginJSBridgeBootstrap {
                 define(fn, 'apiVersion', attributes);
                 return freeze(fn);
             }
+            function validActionID(value) {
+                if (typeof value !== 'string' || value.length === 0) return false;
+                for (let i = 0; i < value.length; i++) {
+                    const code = apply(charCode, value, [i]);
+                    if (!((code >= 48 && code <= 57) || (code >= 65 && code <= 90) ||
+                          (code >= 97 && code <= 122) || code === 45 || code === 46 || code === 95)) return false;
+                }
+                return true;
+            }
+            function freezeTree(value) {
+                if (value === null || typeof value !== 'object') return value;
+                const keys = ownKeys(value);
+                for (let i = 0; i < keys.length; i++) {
+                    const field = descriptor(value, keys[i]);
+                    if (field) freezeTree(field.value);
+                }
+                return freeze(value);
+            }
             const log = method(function(message, level) {
                 if (arguments.length < 1 || arguments.length > 2) return rejected('invalidArguments');
                 return send('log', {message, level: level === undefined ? 'info' : level});
@@ -170,13 +204,47 @@ nonisolated enum PluginJSBridgeBootstrap {
             });
             const actions = create(null);
             actions.apiVersion = version;
-            actions.supported = false;
+            actions.supported = true;
             actions.on = method(function(actionID, handler) {
-                if (arguments.length !== 2 || typeof handler !== 'function') return rejected('invalidArguments');
-                return send('actions.on', {actionID});
+                if (arguments.length !== 2 || !validActionID(actionID) || typeof handler !== 'function') {
+                    return rejected('invalidArguments');
+                }
+                if (actionID.length > 80 || outstanding >= 64 || nextID > 9007199254740991) {
+                    return rejected('quotaExceeded');
+                }
+                const previous = apply(mapGet, handlers, [actionID]);
+                if ((!previous && handlerCount >= 128) || nextRegistration > 9007199254740991) {
+                    return rejected('quotaExceeded');
+                }
+                const registrationID = 'r' + nextRegistration++;
+                const record = create(null);
+                record.registrationID = registrationID;
+                record.handler = handler;
+                record.previous = previous;
+                record.failed = false;
+                if (!previous) handlerCount++;
+                apply(mapSet, handlers, [actionID, record]);
+                return chainRequest(send('actions.on', {actionID, registrationID}), function() {
+                    record.previous = undefined;
+                    return null;
+                }, function(error) {
+                    record.failed = true;
+                    if (apply(mapGet, handlers, [actionID]) === record) {
+                        let restored = record.previous;
+                        while (restored && restored.failed) restored = restored.previous;
+                        if (restored) apply(mapSet, handlers, [actionID, restored]);
+                        else {
+                            apply(mapDelete, handlers, [actionID]);
+                            handlerCount--;
+                        }
+                    }
+                    throw error;
+                });
             });
             actions.off = method(function(actionID) {
-                if (arguments.length !== 1) return rejected('invalidArguments');
+                if (arguments.length !== 1 || !validActionID(actionID)) return rejected('invalidArguments');
+                if (actionID.length > 80) return rejected('quotaExceeded');
+                if (apply(mapDelete, handlers, [actionID])) handlerCount--;
                 return send('actions.off', {actionID});
             });
             const plugin = create(null);
@@ -192,7 +260,7 @@ nonisolated enum PluginJSBridgeBootstrap {
             attributes.value = freeze(island);
             attributes.enumerable = true;
             define(globalThis, 'island', attributes);
-            return function receive(id, json) {
+            function receiveResponse(id, json) {
                 const pair = apply(mapGet, pending, [id]);
                 if (!pair) return;
                 apply(mapDelete, pending, [id]);
@@ -208,7 +276,56 @@ nonisolated enum PluginJSBridgeBootstrap {
                     error.message = response.error.message;
                     pair.reject(freeze(error));
                 }
-            };
+            }
+            function reportActionFailure(message) {
+                // Error objects are neither inspected nor coerced. A failed
+                // error log is handled without recursively logging again.
+                chainRequest(log(message, 'error'), function() {}, function() {});
+            }
+            function receiveAction(registrationID, json) {
+                let event;
+                try {
+                    event = freezeTree(snapshot(parse(json), 1, {count: 0}, []));
+                } catch (_) {
+                    reportActionFailure('Action handler failed.');
+                    return;
+                }
+                if (event === null || typeof event !== 'object') return;
+                const record = apply(mapGet, handlers, [event.actionID]);
+                if (!record || record.registrationID !== registrationID) return;
+                if (pendingActions >= 64) {
+                    reportActionFailure('Action handler limit exceeded.');
+                    return;
+                }
+                pendingActions++;
+                let result;
+                try {
+                    result = apply(record.handler, undefined, [event]);
+                } catch (_) {
+                    pendingActions--;
+                    reportActionFailure('Action handler failed.');
+                    return;
+                }
+                if (result !== null && typeof result === 'object') {
+                    try {
+                        // The captured native method checks the Promise brand
+                        // before reading properties. Ordinary return objects
+                        // and their then getters are ignored.
+                        apply(promiseThen, result, [function() {
+                            pendingActions--;
+                        }, function() {
+                            pendingActions--;
+                            reportActionFailure('Action handler failed.');
+                        }]);
+                        return;
+                    } catch (_) { /* An ordinary object is not a Promise. */ }
+                }
+                pendingActions--;
+            }
+            const receivers = create(null);
+            receivers.receiveResponse = receiveResponse;
+            receivers.receiveAction = receiveAction;
+            return freeze(receivers);
         })();
         """
     }

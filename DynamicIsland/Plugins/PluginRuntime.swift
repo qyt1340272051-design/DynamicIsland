@@ -42,6 +42,7 @@ public final class PluginRuntime: PluginLifecycleRuntime {
     public private(set) var snapshot = PluginRuntimeSnapshot(state: .idle, lastFailure: nil)
     private let package: ValidatedPluginPackage
     private let bridge: PluginJSBridge
+    private var actionSession: PluginActionSession?
     private var worker: PluginJavaScriptWorker?
     private var didStart = false
     private var didTeardown = false
@@ -56,9 +57,14 @@ public final class PluginRuntime: PluginLifecycleRuntime {
         guard !didTeardown else { throw PluginRuntimeError.inactiveExecution }
         guard context.id == package.manifest.id else { throw PluginExecutionError.sourceMismatch }
         try context.perform {}
+        let actionSession = try PluginActionSession(package: package, context: context) { [weak self] delivery in
+            self?.worker?.deliverAction(delivery)
+        }
+        self.actionSession = actionSession
         didStart = true
         snapshot = .init(state: .starting, lastFailure: nil)
-        let transport = PluginBridgeTransport(bridge: bridge, package: package, context: context)
+        let transport = PluginBridgeTransport(bridge: bridge, package: package, context: context,
+                                              actionSession: actionSession)
         let worker = PluginJavaScriptWorker(package: package, transport: transport) { [weak self, context] event in
             Task { @MainActor [weak self] in
                 self?.receive(event)
@@ -73,6 +79,7 @@ public final class PluginRuntime: PluginLifecycleRuntime {
 
     public func onStop(reason: PluginStopReason) throws {
         guard !didTeardown else { return }
+        actionSession?.revoke()
         snapshot = .init(state: .stopping, lastFailure: snapshot.lastFailure)
         worker?.stop(reason: reason)
     }
@@ -80,6 +87,7 @@ public final class PluginRuntime: PluginLifecycleRuntime {
     public func teardown() {
         guard !didTeardown else { return }
         didTeardown = true
+        actionSession?.revoke()
         guard let worker else {
             snapshot = .init(state: .tornDown, lastFailure: snapshot.lastFailure)
             return
@@ -104,6 +112,7 @@ public final class PluginRuntime: PluginLifecycleRuntime {
             guard !didTeardown, snapshot.state == .starting else { return }
             snapshot = .init(state: .running, lastFailure: nil)
         case .failed(let failure):
+            actionSession?.revoke()
             snapshot = .init(state: didTeardown ? snapshot.state : .failed, lastFailure: failure)
         case .stopped:
             guard !didTeardown else { return }
@@ -127,6 +136,8 @@ private nonisolated final class PluginJavaScriptWorker: @unchecked Sendable {
     private let lock = NSLock()
     private var runLoop: CFRunLoop?
     private var pending: [() -> Void] = []
+    private var actionQueue: [PluginActionDelivery] = []
+    private var actionInFlight = false
     private var revoked = false
     private var stopRequested = false
     private var teardownRequested = false
@@ -154,6 +165,7 @@ private nonisolated final class PluginJavaScriptWorker: @unchecked Sendable {
         guard !stopRequested, !teardownRequested else { lock.unlock(); return }
         stopRequested = true
         revoked = true
+        actionQueue.removeAll()
         enqueueLocked { [self] in
             if startedHook, let engine {
                 do { try engine.callLifecycle("onStop", phase: .stop, arguments: [reason.rawValue]) }
@@ -171,6 +183,7 @@ private nonisolated final class PluginJavaScriptWorker: @unchecked Sendable {
         guard !teardownRequested else { lock.unlock(); return }
         teardownRequested = true
         revoked = true
+        actionQueue.removeAll()
         enqueueLocked { [self] in
             engine?.dispose()
             engine = nil
@@ -197,6 +210,59 @@ private nonisolated final class PluginJavaScriptWorker: @unchecked Sendable {
                 continuation.resume(throwing: error)
             }
         }
+        lock.unlock()
+    }
+
+    /// Events carry only data and an actor-isolated Host validity check. The
+    /// single in-flight check preserves FIFO without blocking the VM thread.
+    func deliverAction(_ delivery: PluginActionDelivery) {
+        lock.lock()
+        guard !revoked, actionQueue.count + (actionInFlight ? 1 : 0) < 64 else {
+            lock.unlock()
+            return
+        }
+        actionQueue.append(delivery)
+        scheduleNextActionLocked()
+        lock.unlock()
+    }
+
+    private func scheduleNextActionLocked() {
+        guard !revoked, !actionInFlight, !actionQueue.isEmpty else { return }
+        actionInFlight = true
+        let delivery = actionQueue.removeFirst()
+        enqueueLocked { [self] in validateAction(delivery) }
+    }
+
+    private func validateAction(_ delivery: PluginActionDelivery) {
+        guard !isRevoked else { finishAction(); return }
+        Task { @MainActor [weak self] in
+            let valid = delivery.isValid()
+            self?.receiveValidatedAction(delivery, valid: valid)
+        }
+    }
+
+    private func receiveValidatedAction(_ delivery: PluginActionDelivery, valid: Bool) {
+        lock.lock()
+        guard !revoked else {
+            actionInFlight = false
+            lock.unlock()
+            return
+        }
+        enqueueLocked { [self] in
+            defer { finishAction() }
+            guard valid, !isRevoked, let engine else { return }
+            do { try engine.receiveAction(registrationID: delivery.registrationID, eventJSON: delivery.eventJSON) }
+            catch let failure as PluginRuntimeFailure { fail(failure) }
+            catch { /* No native or JavaScript value leaves the worker. */ }
+        }
+        lock.unlock()
+    }
+
+    private func finishAction() {
+        lock.lock()
+        actionInFlight = false
+        if revoked { actionQueue.removeAll() }
+        else { scheduleNextActionLocked() }
         lock.unlock()
     }
 
@@ -273,6 +339,7 @@ private nonisolated final class PluginJavaScriptWorker: @unchecked Sendable {
         transport.revoke()
         lock.lock()
         revoked = true
+        actionQueue.removeAll()
         lock.unlock()
         sink(.failed(failure))
     }
@@ -306,6 +373,7 @@ private nonisolated final class PluginJavaScriptEngine {
     private var context: JSContext?
     private var exceptionMessage: String?
     private var bridgeReceiver: JSValue?
+    private var actionReceiver: JSValue?
     private let submitRequest: @Sendable (Int, String) -> Void
 
     init(package: ValidatedPluginPackage, submitRequest: @escaping @Sendable (Int, String) -> Void) throws {
@@ -342,9 +410,17 @@ private nonisolated final class PluginJavaScriptEngine {
             self.submitRequest(Int(number), json)
         }
         context.setObject(native, forKeyedSubscript: nativeKey as NSString)
-        bridgeReceiver = try evaluate(
+        let receivers = try evaluate(
             PluginJSBridgeBootstrap.script(metadataJSON: json, nativeKey: nativeKey), phase: .bootstrap
         )
+        bridgeReceiver = receivers?.objectForKeyedSubscript("receiveResponse")
+        actionReceiver = receivers?.objectForKeyedSubscript("receiveAction")
+        guard let bridgeReceiver, let actionReceiver,
+              JSObjectIsFunction(context.jsGlobalContextRef, bridgeReceiver.jsValueRef),
+              JSObjectIsFunction(context.jsGlobalContextRef, actionReceiver.jsValueRef) else {
+            throw PluginRuntimeFailure(phase: .bootstrap, code: .contextUnavailable,
+                                       message: "Bridge receivers unavailable.")
+        }
     }
 
     func loadEntry(_ package: ValidatedPluginPackage) throws {
@@ -389,8 +465,16 @@ private nonisolated final class PluginJavaScriptEngine {
         try checkException(.bridge)
     }
 
+    func receiveAction(registrationID: String, eventJSON: String) throws {
+        guard let actionReceiver else { throw PluginRuntimeError.inactiveExecution }
+        clearException()
+        _ = actionReceiver.call(withArguments: [registrationID, eventJSON])
+        try checkException(.bridge)
+    }
+
     func dispose() {
         bridgeReceiver = nil
+        actionReceiver = nil
         context?.exceptionHandler = nil
         context?.exception = nil
         context = nil

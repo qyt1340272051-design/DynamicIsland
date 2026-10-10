@@ -18,7 +18,7 @@ final class PluginJSBridgeTests: XCTestCase {
              island.storage.get, island.storage.set, island.storage.remove,
              island.storage.clear, island.actions.on, island.actions.off].every(method =>
                  typeof method === 'function' && Object.isFrozen(method) && method.apiVersion === '1.0.0') &&
-            island.actions.supported === false &&
+            island.actions.supported === true &&
             [island.log, island.storage.get].every(method => {
                 try { void method.caller; return false; } catch (_) { return true; }
             }) &&
@@ -365,7 +365,7 @@ final class PluginJSBridgeTests: XCTestCase {
         XCTAssertEqual(fixture.service.logs(for: "com.example.alpha").map(\.message), ["survived"])
     }
 
-    func testActionsValidateArgumentsAndExplicitlyRejectDeferredImplementation() async throws {
+    func testActionsValidateArgumentsAndRegisterSupportedImplementation() async throws {
         let fixture = JSBridgeFixture()
         defer { fixture.shutdown() }
         let runtime = fixture.load(try package(source: """
@@ -376,14 +376,14 @@ final class PluginJSBridgeTests: XCTestCase {
                     island.actions.on('click', 'not a function').catch(error => error.code),
                     island.actions.off(42).catch(error => error.code)
                 ]).then(codes => {
-                    globalThis.valid = codes[0] === 'unsupportedMethod' && codes[1] === 'unsupportedMethod' &&
+                    globalThis.valid = codes[0] === null && codes[1] === null &&
                         codes[2] === 'invalidArguments' && codes[3] === 'invalidArguments';
                     globalThis.done = true;
                 });
             }
             """))
         try await marker(runtime, "done")
-        try await assertValue(runtime, "valid && island.actions.supported === false", equals: .boolean(true))
+        try await assertValue(runtime, "valid && island.actions.supported === true", equals: .boolean(true))
     }
 
     func testHostRejectsMalformedDuplicateVersionAndUnknownMethodRequests() async throws {

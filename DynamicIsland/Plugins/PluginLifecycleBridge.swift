@@ -105,6 +105,17 @@ public final class PluginExecutionContext {
         }
     }
 
+    /// Host-only delivery gate. The original render token must travel with
+    /// the action; resolving a fresh token by ID would authorize stale clicks.
+    func isActionActive(_ action: RoutedActivityAction) -> Bool {
+        var result = false
+        try? perform {
+            guard action.source == source else { return }
+            result = bridge?.isActionActive(action) ?? false
+        }
+        return result
+    }
+
     /// Worker results carry this session's token. A late failure from a removed
     /// or restarted runtime must never stop the replacement execution.
     @discardableResult
@@ -283,6 +294,10 @@ public final class PluginLifecycleBridge: PluginManagerLifecycleHandling {
 
     fileprivate func registerHandler(source: ActivitySource, handler: @escaping ActionRouter.Handler) {
         actionRouter.register(source: source, handler: handler)
+    }
+
+    fileprivate func isActionActive(_ action: RoutedActivityAction) -> Bool {
+        actionRouter.isAdmitted(action)
     }
 
     private func startIfAllowed(_ entry: Entry) {
