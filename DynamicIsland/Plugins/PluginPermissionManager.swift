@@ -101,6 +101,24 @@ public nonisolated struct PluginPermissionLease: Sendable {
         }
         return try perform(operation)
     }
+
+    /// Broker cancellation is notified after the permission lock is released.
+    public func observeRevocation(_ callback: @escaping @Sendable () -> Void) -> PluginPermissionObservation {
+        gate.observe(generation: generation, callback: callback)
+    }
+}
+
+public nonisolated final class PluginPermissionObservation: @unchecked Sendable {
+    private weak var gate: PluginPermissionGate?
+    private let id: UUID
+
+    fileprivate init(gate: PluginPermissionGate, id: UUID) {
+        self.gate = gate
+        self.id = id
+    }
+
+    public func cancel() { gate?.removeObserver(id) }
+    deinit { cancel() }
 }
 
 /// Central Host authorization for the current process only. A new manager has
@@ -280,6 +298,7 @@ fileprivate nonisolated final class PluginPermissionGate: @unchecked Sendable {
     private let lock = NSLock()
     private var currentState = PluginPermissionState.requested
     private var generation = UUID()
+    private var observers: [UUID: @Sendable () -> Void] = [:]
 
     var state: PluginPermissionState {
         lock.lock()
@@ -289,9 +308,28 @@ fileprivate nonisolated final class PluginPermissionGate: @unchecked Sendable {
 
     func update(_ state: PluginPermissionState) {
         lock.lock()
-        defer { lock.unlock() }
         currentState = state
         generation = UUID()
+        let callbacks = Array(observers.values)
+        observers.removeAll()
+        lock.unlock()
+        callbacks.forEach { $0() }
+    }
+
+    func observe(generation expected: UUID, callback: @escaping @Sendable () -> Void) -> PluginPermissionObservation {
+        let id = UUID()
+        lock.lock()
+        let active = currentState == .granted && generation == expected
+        if active { observers[id] = callback }
+        lock.unlock()
+        if !active { callback() }
+        return PluginPermissionObservation(gate: self, id: id)
+    }
+
+    func removeObserver(_ id: UUID) {
+        lock.lock()
+        observers.removeValue(forKey: id)
+        lock.unlock()
     }
 
     func lease(pluginID: String, permission: PluginPermission) throws -> PluginPermissionLease {

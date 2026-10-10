@@ -20,7 +20,7 @@ nonisolated enum PluginJSBridgeBootstrap {
             const PromiseType = Promise, MapType = Map;
             const promiseThen = Promise.prototype.then;
             const mapGet = Map.prototype.get, mapSet = Map.prototype.set, mapDelete = Map.prototype.delete;
-            const charCode = String.prototype.charCodeAt;
+            const charCode = String.prototype.charCodeAt, lowercase = String.prototype.toLowerCase;
             const pending = new MapType();
             const handlers = new MapType();
             const promiseConstructor = create(null);
@@ -36,7 +36,8 @@ nonisolated enum PluginJSBridgeBootstrap {
             function failure(code) {
                 const result = create(null);
                 result.code = code;
-                result.message = code === 'quotaExceeded' ? 'A Host resource limit was exceeded.' : 'Bridge arguments are invalid.';
+                result.message = code === 'quotaExceeded' ? 'A Host resource limit was exceeded.' :
+                    code === 'invalidResponse' ? 'The Host response is invalid.' : 'Bridge arguments are invalid.';
                 return freeze(result);
             }
             function rejected(code) { return new PromiseType((_, reject) => reject(failure(code))); }
@@ -62,17 +63,24 @@ nonisolated enum PluginJSBridgeBootstrap {
                 }
                 return size;
             }
+            function snapshotBudget(maximumNodes = 512, maximumStringBytes = 4096) {
+                const budget = create(null);
+                budget.count = 0;
+                budget.maximumNodes = maximumNodes;
+                budget.maximumStringBytes = maximumStringBytes;
+                return budget;
+            }
             function snapshot(value, depth, budget, ancestors) {
                 // Eight node levels can contain both a children array and a
                 // node object per level, plus image source and Activity data.
-                if (++budget.count > 512 || depth > 20) throw LIMIT;
+                if (++budget.count > budget.maximumNodes || depth > 20) throw LIMIT;
                 if (value === null || typeof value === 'boolean') return value;
                 if (typeof value === 'number') {
                     if (!finite(value)) throw null;
                     return value;
                 }
                 if (typeof value === 'string') {
-                    if (utf8Bytes(value) > 4096) throw LIMIT;
+                    if (utf8Bytes(value) > budget.maximumStringBytes) throw LIMIT;
                     return value;
                 }
                 if (typeof value !== 'object') throw null;
@@ -81,7 +89,7 @@ nonisolated enum PluginJSBridgeBootstrap {
                 const proto = prototype(value);
                 if (proto !== null && proto !== (array ? arrayPrototype : objectPrototype)) throw null;
                 const keys = ownKeys(value);
-                if (keys.length > 512) throw LIMIT;
+                if (keys.length > budget.maximumNodes) throw LIMIT;
                 const fields = create(null);
                 for (let i = 0; i < keys.length; i++) {
                     const key = keys[i];
@@ -102,7 +110,7 @@ nonisolated enum PluginJSBridgeBootstrap {
                 if (array) {
                     const length = fields.length;
                     if (typeof length !== 'number' || !finite(length) || length < 0 ||
-                        length % 1 !== 0 || length > 512 || keys.length !== length + 1) throw null;
+                        length % 1 !== 0 || length > budget.maximumNodes || keys.length !== length + 1) throw null;
                     const output = [];
                     setPrototype(output, null);
                     for (let i = 0; i < length; i++) {
@@ -127,12 +135,12 @@ nonisolated enum PluginJSBridgeBootstrap {
                         const request = create(null);
                         request.apiVersion = version;
                         request.method = method;
-                        request.params = snapshot(params, 1, {count: 0}, []);
+                        request.params = snapshot(params, 1, snapshotBudget(), []);
                         const json = stringify(request);
                         if (utf8Bytes(json) > 16384) throw LIMIT;
                         id = nextID++;
                         const pair = create(null);
-                        pair.resolve = resolve; pair.reject = reject;
+                        pair.resolve = resolve; pair.reject = reject; pair.method = method;
                         apply(mapSet, pending, [id, pair]);
                         outstanding++;
                         native(id, json);
@@ -165,6 +173,110 @@ nonisolated enum PluginJSBridgeBootstrap {
                     if (field) freezeTree(field.value);
                 }
                 return freeze(value);
+            }
+            function fieldsWithShape(value, required, optional = []) {
+                if (value === null || typeof value !== 'object' || isArray(value)) throw null;
+                const proto = prototype(value);
+                if (proto !== null && proto !== objectPrototype) throw null;
+                const keys = ownKeys(value), fields = create(null);
+                if (keys.length > required.length + optional.length) throw null;
+                for (let i = 0; i < keys.length; i++) {
+                    const key = keys[i];
+                    let allowed = false;
+                    for (let j = 0; j < required.length; j++) if (key === required[j]) allowed = true;
+                    for (let j = 0; j < optional.length; j++) if (key === optional[j]) allowed = true;
+                    if (!allowed) throw null;
+                    const field = descriptor(value, key);
+                    if (!field || !descriptor(field, 'value')) throw null;
+                    fields[key] = field.value;
+                }
+                for (let i = 0; i < required.length; i++) if (!descriptor(fields, required[i])) throw null;
+                return fields;
+            }
+            function hasHTTPSPrefix(url) {
+                const scheme = 'https://';
+                if (url.length <= scheme.length) return false;
+                for (let i = 0; i < scheme.length; i++) {
+                    const actual = apply(charCode, url, [i]), expected = apply(charCode, scheme, [i]);
+                    if (actual !== expected && !(i < 5 && actual + 32 === expected)) return false;
+                }
+                for (let i = scheme.length; i < url.length; i++) {
+                    const unit = apply(charCode, url, [i]);
+                    if (unit <= 32 || unit === 127) return false;
+                }
+                return true;
+            }
+            function validHeaderName(name) {
+                if (name.length === 0) return false;
+                for (let i = 0; i < name.length; i++) {
+                    const unit = apply(charCode, name, [i]);
+                    if (!((unit >= 48 && unit <= 57) || (unit >= 65 && unit <= 90) ||
+                          (unit >= 97 && unit <= 122) || unit === 33 || unit === 35 || unit === 36 ||
+                          unit === 37 || unit === 38 || unit === 39 || unit === 42 || unit === 43 ||
+                          unit === 45 || unit === 46 || unit === 94 || unit === 95 || unit === 96 ||
+                          unit === 124 || unit === 126)) return false;
+                }
+                return true;
+            }
+            function validatedHeaders(value, isRequest) {
+                if (value === null || typeof value !== 'object' || isArray(value)) throw null;
+                const proto = prototype(value);
+                if (proto !== null && proto !== objectPrototype) throw null;
+                const keys = ownKeys(value), output = create(null), seen = create(null);
+                if (keys.length > (isRequest ? 16 : 512)) throw LIMIT;
+                let bytes = 0;
+                for (let i = 0; i < keys.length; i++) {
+                    const name = keys[i];
+                    if (typeof name !== 'string' || !validHeaderName(name)) throw null;
+                    const nameBytes = utf8Bytes(name);
+                    if (isRequest && nameBytes > 64) throw LIMIT;
+                    const normalized = apply(lowercase, name, []);
+                    if (descriptor(seen, normalized)) throw null;
+                    seen[normalized] = true;
+                    if (isRequest && (normalized === 'host' || normalized === 'cookie' || normalized === 'connection' ||
+                        normalized === 'content-length' || normalized === 'transfer-encoding' || normalized === 'upgrade' ||
+                        (apply(charCode, normalized, [0]) === 112 && apply(charCode, normalized, [1]) === 114 &&
+                         apply(charCode, normalized, [2]) === 111 && apply(charCode, normalized, [3]) === 120 &&
+                         apply(charCode, normalized, [4]) === 121 && apply(charCode, normalized, [5]) === 45))) throw null;
+                    const field = descriptor(value, name);
+                    if (!field || !descriptor(field, 'value') || typeof field.value !== 'string') throw null;
+                    const text = field.value, valueBytes = utf8Bytes(text);
+                    if (isRequest && valueBytes > 1024) throw LIMIT;
+                    bytes += nameBytes + valueBytes;
+                    if (bytes > 4096) throw LIMIT;
+                    for (let j = 0; j < text.length; j++) {
+                        const unit = apply(charCode, text, [j]);
+                        if ((unit < 32 && unit !== 9) || unit === 127) throw null;
+                    }
+                    output[name] = text;
+                }
+                return freeze(output);
+            }
+            function networkResponse(value) {
+                const fields = fieldsWithShape(value, ['status', 'headers', 'body']);
+                if (typeof fields.status !== 'number' || !finite(fields.status) || fields.status % 1 !== 0 ||
+                    fields.status < 100 || fields.status > 599 || typeof fields.body !== 'string') throw null;
+                if (utf8Bytes(fields.body) > 65536) throw LIMIT;
+                const response = create(null);
+                response.status = fields.status;
+                response.ok = fields.status >= 200 && fields.status < 300;
+                response.headers = validatedHeaders(fields.headers, false);
+                const body = fields.body;
+                response.text = method(function() {
+                    if (arguments.length !== 0) return rejected('invalidArguments');
+                    return new PromiseType(resolve => resolve(body));
+                });
+                response.json = method(function() {
+                    if (arguments.length !== 0) return rejected('invalidArguments');
+                    return new PromiseType((resolve, reject) => {
+                        try {
+                            resolve(freezeTree(snapshot(parse(body), 1, snapshotBudget(4096, 65536), [])));
+                        } catch (error) {
+                            reject(failure(error === LIMIT ? 'quotaExceeded' : 'invalidResponse'));
+                        }
+                    });
+                });
+                return freeze(response);
             }
             const log = method(function(message, level) {
                 if (arguments.length < 1 || arguments.length > 2) return rejected('invalidArguments');
@@ -201,6 +313,40 @@ nonisolated enum PluginJSBridgeBootstrap {
             storage.clear = method(function() {
                 if (arguments.length !== 0) return rejected('invalidArguments');
                 return send('storage.clear', {});
+            });
+            const network = create(null);
+            network.apiVersion = version;
+            network.supported = true;
+            network.fetch = method(function(url, options) {
+                if (arguments.length < 1 || arguments.length > 2) return rejected('invalidArguments');
+                try {
+                    if (typeof url !== 'string') throw null;
+                    if (utf8Bytes(url) > 2048) throw LIMIT;
+                    if (!hasHTTPSPrefix(url)) throw null;
+                    const params = create(null);
+                    params.url = url;
+                    if (options !== undefined) {
+                        // Snapshot first so a plugin Proxy supplies each data
+                        // descriptor once. Host independently validates all
+                        // options and the approved HTTPS destination.
+                        const fields = fieldsWithShape(snapshot(options, 1, snapshotBudget(), []), [],
+                            ['method', 'headers', 'timeoutMs']);
+                        if (descriptor(fields, 'method')) {
+                            if (fields.method !== 'GET' && fields.method !== 'HEAD') throw null;
+                            params.method = fields.method;
+                        }
+                        if (descriptor(fields, 'headers')) params.headers = validatedHeaders(fields.headers, true);
+                        if (descriptor(fields, 'timeoutMs')) {
+                            const timeout = fields.timeoutMs;
+                            if (typeof timeout !== 'number' || !finite(timeout) || timeout % 1 !== 0 ||
+                                timeout < 100 || timeout > 30000) throw null;
+                            params.timeoutMs = timeout;
+                        }
+                    }
+                    return send('network.fetch', params);
+                } catch (error) {
+                    return rejected(error === LIMIT ? 'quotaExceeded' : 'invalidArguments');
+                }
             });
             const actions = create(null);
             actions.apiVersion = version;
@@ -255,6 +401,7 @@ nonisolated enum PluginJSBridgeBootstrap {
             island.log = log;
             island.activity = freeze(activity);
             island.storage = freeze(storage);
+            island.network = freeze(network);
             island.actions = freeze(actions);
             const attributes = create(null);
             attributes.value = freeze(island);
@@ -265,16 +412,27 @@ nonisolated enum PluginJSBridgeBootstrap {
                 if (!pair) return;
                 apply(mapDelete, pending, [id]);
                 outstanding--;
-                const response = parse(json);
-                if (response.ok) {
-                    // Null-prototype copies also prevent inherited "then"
-                    // getters from running during Promise resolution.
-                    pair.resolve(snapshot(response.value, 1, {count: 0}, []));
-                } else {
-                    const error = create(null);
-                    error.code = response.error.code;
-                    error.message = response.error.message;
-                    pair.reject(freeze(error));
+                try {
+                    // Never coerce a native object or pass it to JSON.parse.
+                    // Bound the wire before allocating parsed JS objects.
+                    if (typeof json !== 'string') throw null;
+                    if (json.length > 524288 || utf8Bytes(json) > 524288) throw LIMIT;
+                    const response = fieldsWithShape(parse(json), ['ok'], ['value', 'error']);
+                    if (response.ok === true) {
+                        if (!descriptor(response, 'value') || descriptor(response, 'error')) throw null;
+                        // Null-prototype copies prevent inherited "then"
+                        // getters from running during Promise resolution.
+                        const value = snapshot(response.value, 1,
+                            snapshotBudget(512, pair.method === 'network.fetch' ? 65536 : 4096), []);
+                        pair.resolve(pair.method === 'network.fetch' ? networkResponse(value) : value);
+                    } else if (response.ok === false) {
+                        if (!descriptor(response, 'error') || descriptor(response, 'value')) throw null;
+                        const fields = fieldsWithShape(snapshot(response.error, 1, snapshotBudget(), []), ['code', 'message']);
+                        if (typeof fields.code !== 'string' || typeof fields.message !== 'string') throw null;
+                        pair.reject(freeze(fields));
+                    } else throw null;
+                } catch (error) {
+                    pair.reject(failure(error === LIMIT ? 'quotaExceeded' : 'invalidResponse'));
                 }
             }
             function reportActionFailure(message) {
@@ -285,7 +443,7 @@ nonisolated enum PluginJSBridgeBootstrap {
             function receiveAction(registrationID, json) {
                 let event;
                 try {
-                    event = freezeTree(snapshot(parse(json), 1, {count: 0}, []));
+                    event = freezeTree(snapshot(parse(json), 1, snapshotBudget(), []));
                 } catch (_) {
                     reportActionFailure('Action handler failed.');
                     return;

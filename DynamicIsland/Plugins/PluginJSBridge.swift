@@ -63,15 +63,18 @@ public final class PluginJSBridge {
     private var logEntries: [String: [PluginLogEntry]] = [:]
     private let storage: PluginStorage
     private let permissions: PermissionManager
+    private let network: PluginNetworkBroker
     private var activityRateLimiter = PluginActivityRateLimiter()
     private let activityRateClock: @MainActor () -> TimeInterval
     private let logger = Logger(subsystem: "DynamicIsland", category: "PluginJSBridge")
 
     public init(storage: PluginStorage = PluginStorage(),
                 permissions: PermissionManager? = nil,
+                network: PluginNetworkBroker? = nil,
                 activityRateClock: @escaping @MainActor () -> TimeInterval = { ProcessInfo.processInfo.systemUptime }) {
         self.storage = storage
         self.permissions = permissions ?? PermissionManager()
+        self.network = network ?? PluginNetworkBroker()
         self.activityRateClock = activityRateClock
     }
 
@@ -85,6 +88,71 @@ public final class PluginJSBridge {
     /// required. Plugin identity, source and declarations come from the Host.
     func handle(_ requestJSON: String, package: ValidatedPluginPackage,
                 context: PluginExecutionContext, actionSession: PluginActionSession? = nil) async -> String {
+        await withCheckedContinuation { continuation in
+            Task { @MainActor in
+                await dispatch(requestJSON, package: package, context: context, actionSession: actionSession) {
+                    continuation.resume(returning: $0)
+                }
+            }
+        }
+    }
+
+    /// FIFO admission is separate from network completion. A slow fetch must
+    /// not retain the queue used by Activity actions and local storage.
+    func dispatch(_ requestJSON: String, package: ValidatedPluginPackage,
+                  context: PluginExecutionContext, actionSession: PluginActionSession? = nil,
+                  reply: @escaping @Sendable (String) -> Void) async {
+        do {
+            let envelope = try object(PluginBridgeJSON.parse(requestJSON), required: ["apiVersion", "method", "params"])
+            if envelope["method"] != .string("network.fetch") {
+                reply(await handleImmediate(requestJSON, package: package, context: context, actionSession: actionSession))
+                return
+            }
+            guard envelope["apiVersion"] == .string(Self.apiVersion) else { throw PluginBridgeErrorCode.unsupportedVersion }
+            guard context.id == package.manifest.id else { throw PluginBridgeErrorCode.coreRejected }
+            try context.perform {}
+            let request = try PluginNetworkRequest.parse(envelope["params"]!)
+            let authorization = try permissions.require(permission: .network, package: package)
+            let admission = context.networkAdmission
+            try network.start(request: request, pluginID: context.id, authorization: authorization, admission: admission) { result in
+                Task { @MainActor in
+                    let response: String
+                    do {
+                        try context.perform {}
+                        try admission.perform {
+                            try authorization.perform(pluginID: context.id, permission: .network) {}
+                        }
+                        switch result {
+                        case .success(let value):
+                            response = self.response(.object(["ok": .boolean(true), "value": .object([
+                                "status": .number(Double(value.status)), "body": .string(value.body),
+                                "headers": .object(value.headers.mapValues { .string($0) })
+                            ])]))
+                        case .failure(let error): response = self.networkFailure(error)
+                        }
+                    } catch let error as PluginPermissionError {
+                        response = self.failure(PluginBridgeErrorCode(rawValue: error.code) ?? .coreRejected)
+                    } catch {
+                        response = self.failure(.inactiveExecution)
+                    }
+                    reply(response)
+                }
+            }
+        } catch let error as PluginBridgeErrorCode { reply(failure(error)) }
+        catch let error as PluginBridgeJSON.ParseError { reply(failure(error == .limitExceeded ? .quotaExceeded : .invalidArguments)) }
+        catch let error as PluginPermissionError { reply(failure(PluginBridgeErrorCode(rawValue: error.code) ?? .coreRejected)) }
+        catch let error as PluginNetworkError { reply(networkFailure(error)) }
+        catch { reply(failure(.inactiveExecution)) }
+    }
+
+    private func networkFailure(_ error: PluginNetworkError) -> String {
+        response(.object(["ok": .boolean(false), "error": .object([
+            "code": .string(error.code), "message": .string(error.errorDescription ?? "Network request failed.")
+        ])]))
+    }
+
+    private func handleImmediate(_ requestJSON: String, package: ValidatedPluginPackage,
+                                 context: PluginExecutionContext, actionSession: PluginActionSession?) async -> String {
         do {
             let operation = try parseRequest(requestJSON)
             guard context.id == package.manifest.id else { throw PluginBridgeErrorCode.coreRejected }
