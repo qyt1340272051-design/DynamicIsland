@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "id": "com.example.node-mock",
+  "name": "Node Mock",
+  "version": "1.0.0",
+  "engine": "javascriptcore",
+  "entry": "index.js",
+  "minimumHostVersion": "0.6.0",
+  "permissions": [],
+  "capabilities": ["activity.publish", "activity.update", "activity.end", "ui.islandNode"]
+}

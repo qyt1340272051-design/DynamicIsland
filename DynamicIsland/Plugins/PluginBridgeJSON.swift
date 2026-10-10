@@ -13,7 +13,7 @@ nonisolated indirect enum PluginBridgeJSON: Equatable, Sendable {
     enum ParseError: Error { case invalidJSON, limitExceeded }
 
     static func parse(_ source: String, maximumBytes: Int = 16_384,
-                      maximumDepth: Int = 12, maximumNodes: Int = 512) throws -> Self {
+                      maximumDepth: Int = 22, maximumNodes: Int = 512) throws -> Self {
         guard source.utf8.count <= maximumBytes else { throw ParseError.limitExceeded }
         var parser = Parser(bytes: Array(source.utf8), maximumDepth: maximumDepth, maximumNodes: maximumNodes)
         let value = try parser.value(depth: 1)

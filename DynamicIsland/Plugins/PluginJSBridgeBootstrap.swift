@@ -47,7 +47,9 @@ nonisolated enum PluginJSBridgeBootstrap {
                 return size;
             }
             function snapshot(value, depth, budget, ancestors) {
-                if (++budget.count > 512 || depth > 10) throw LIMIT;
+                // Eight node levels can contain both a children array and a
+                // node object per level, plus image source and Activity data.
+                if (++budget.count > 512 || depth > 20) throw LIMIT;
                 if (value === null || typeof value === 'boolean') return value;
                 if (typeof value === 'number') {
                     if (!finite(value)) throw null;

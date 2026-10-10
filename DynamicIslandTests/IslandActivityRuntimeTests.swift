@@ -11,7 +11,7 @@ final class IslandActivityRuntimeTests: XCTestCase {
             let manifest = try PluginManifest(
                 id: id, name: "Production Runtime Test", version: SemanticVersion("1.0.0"),
                 engine: .javaScriptCore, entry: "index.js", minimumHostVersion: SemanticVersion("0.6.0"),
-                permissions: [], capabilities: [.publishActivity, .updateActivity]
+                permissions: [], capabilities: [.publishActivity, .updateActivity, .islandNodeUI]
             )
             return .init(
                 manifest: manifest,
@@ -25,8 +25,14 @@ final class IslandActivityRuntimeTests: XCTestCase {
         runtime.pluginLifecycle.pluginDidLoad(try package(id: runningID, source: """
             globalThis.onStart = function() {
                 void island.activity.publish({id:'hello', lifecycle:{policy:'progress'},
-                    presentation:{title:'Production Bridge',progress:0.1}})
-                    .then(() => island.activity.update({id:'hello',presentation:{title:'Production Build Complete',progress:1}}))
+                    presentation:{title:'Production Bridge',progress:0.1,
+                        minimal:{type:'icon',symbolName:'hammer'},
+                        expanded:{type:'vStack',children:[{type:'text',content:'Production Bridge'},
+                            {type:'progress',value:0.1}]}}})
+                    .then(() => island.activity.update({id:'hello',presentation:{title:'Production Build Complete',progress:1,
+                        minimal:{type:'icon',symbolName:'checkmark'},
+                        expanded:{type:'vStack',children:[{type:'text',content:'Production Build Complete'},
+                            {type:'progress',value:1}]}}}))
                     .then(() => island.log('Production Bridge connected'));
             };
             """), isEnabled: true)
@@ -46,6 +52,10 @@ final class IslandActivityRuntimeTests: XCTestCase {
         XCTAssertEqual(pluginActivity?.presentation.title, "Production Build Complete")
         XCTAssertEqual(pluginActivity?.presentation.progress, 1)
         XCTAssertEqual(pluginActivity?.lifecycle.policy, .progress)
+        XCTAssertEqual(pluginActivity?.presentation.minimal, .icon(.init("checkmark")))
+        XCTAssertEqual(pluginActivity?.presentation.expanded, .vStack(.init([
+            .text(.init("Production Build Complete")), .progress(.init(1))
+        ])))
         XCTAssertEqual(runtime.pluginBridge.logs(for: runningID).last?.message, "Production Bridge connected")
         runtime.pluginLifecycle.pluginDidChangeEnablement(id: runningID, isEnabled: false)
         XCTAssertEqual(runtime.manager.current?.source, MusicActivityProvider.source)

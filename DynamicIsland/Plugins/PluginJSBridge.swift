@@ -123,6 +123,12 @@ public final class PluginJSBridge {
             let id = Self.activityID(pluginID: pluginID, localID: request.localID)
             let existing = try context.activity(id: id)
             let activity = try request.materialize(source: context.source, namespacedID: id, now: Date(), existing: existing)
+            if PluginActivityConverter.hasLayouts(in: activity.presentation) {
+                try require(.islandNodeUI, manifest: manifest)
+            }
+            if !PluginActivityConverter.layoutActionIDs(in: activity.presentation).isEmpty {
+                try require(.handleActions, manifest: manifest)
+            }
             let instant = activityRateClock()
             guard activityRateLimiter.canAdmit(pluginID: pluginID, at: instant) else {
                 throw PluginBridgeErrorCode.rateLimited

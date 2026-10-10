@@ -28,15 +28,18 @@ nonisolated struct PluginActivityConverter: Sendable {
                 if let priority { activity.priority = priority }
                 if let presentation { activity.presentation = presentation }
                 if let actions { activity.actions = actions }
+                try PluginActivityConverter.validateLayoutActions(in: activity)
                 return activity
             }
 
             guard let presentation else { throw PluginBridgeErrorCode.invalidArguments }
-            return IslandActivity(
+            let activity = IslandActivity(
                 id: namespacedID, source: source, priority: priority ?? .normal,
                 lifecycle: .init(policy: policy ?? .transient),
                 presentation: presentation, createdAt: now, actions: actions ?? []
             )
+            try PluginActivityConverter.validateLayoutActions(in: activity)
+            return activity
         }
     }
 
@@ -67,7 +70,7 @@ nonisolated struct PluginActivityConverter: Sendable {
     }
 
     private static func parsePresentation(_ value: PluginBridgeJSON) throws -> ActivityPresentation {
-        let fields = try object(value, required: ["title"], optional: ["subtitle", "symbolName", "progress"])
+        let fields = try object(value, required: ["title"], optional: ["subtitle", "symbolName", "progress", "minimal", "compact", "expanded"])
         let title = try string(fields["title"], maximumBytes: 256, nonempty: true)
         let subtitle = try fields["subtitle"].map { try string($0, maximumBytes: 256) }
         let symbolName = try fields["symbolName"].map {
@@ -79,7 +82,30 @@ nonisolated struct PluginActivityConverter: Sendable {
             }
             return number
         }
-        return ActivityPresentation(title: title, subtitle: subtitle, symbolName: symbolName, progress: progress)
+        return ActivityPresentation(
+            title: title, subtitle: subtitle, symbolName: symbolName, progress: progress,
+            minimal: try fields["minimal"].map(PluginIslandNodeConverter.parse),
+            compact: try fields["compact"].map(PluginIslandNodeConverter.parse),
+            expanded: try fields["expanded"].map(PluginIslandNodeConverter.parse)
+        )
+    }
+
+    static func hasLayouts(in presentation: ActivityPresentation) -> Bool {
+        presentation.minimal != nil || presentation.compact != nil || presentation.expanded != nil
+    }
+
+    static func layoutActionIDs(in presentation: ActivityPresentation) -> Set<String> {
+        [presentation.minimal, presentation.compact, presentation.expanded]
+            .compactMap { $0 }.reduce(into: Set<String>()) { result, node in
+                result.formUnion(PluginIslandNodeConverter.actionIDs(in: node))
+            }
+    }
+
+    private static func validateLayoutActions(in activity: IslandActivity) throws {
+        let referenced = layoutActionIDs(in: activity.presentation)
+        guard referenced.isSubset(of: Set(activity.actions.map(\.id))) else {
+            throw PluginBridgeErrorCode.invalidArguments
+        }
     }
 
     private static func parseActions(_ value: PluginBridgeJSON) throws -> [ActivityAction] {

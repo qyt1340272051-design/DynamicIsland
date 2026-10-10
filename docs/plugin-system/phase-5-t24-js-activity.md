@@ -1,5 +1,7 @@
 # Phase 5 — T24 JS → Activity 实现与验收
 
+后续契约：T25 接入受控 minimal/compact/expanded IslandNode 布局，见 [T25 实现与验收](phase-5-t25-js-island-node.md)。本文保留 T24 完成时的接口边界与验证记录。
+
 日期：2026-10-10。范围：将插件传入的 `id`、`priority`、`lifecycle`、`presentation`、`actions` 转换为 IslandActivity；增加独立更新接口、Host 降级策略、source namespace 与写入频率限制。完成标准是正式 JavaScript Runtime 中的 GitHub Mock 能发布并更新同一构建 Activity。
 
 ## 数据边界与 API 版本
