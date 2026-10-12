@@ -25,6 +25,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     private var pluginEnvironment: PluginLifecycleEnvironment?
     private var pluginStartupTask: Task<Void, Never>?
     private var pluginLifecycle: PluginLifecycleBridge?
+    private var activityRuntime: IslandActivityRuntime?
     private let pluginLogger = Logger(subsystem: "DynamicIsland", category: "PluginLifecycle")
 #if DEBUG
     private var screenSimulatorWindowController: ScreenSimulatorWindowController?
@@ -53,6 +54,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         self.viewModel = viewModel
         self.screenManager = screenManager
         self.panelController = panelController
+        self.activityRuntime = activityRuntime
         configurePlugins(lifecycle: activityRuntime.pluginLifecycle, batteryService: batteryService)
         panelController.show()
         configureStatusItem()
@@ -62,7 +64,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         statusFeedbackTask?.cancel()
         pluginStartupTask?.cancel()
         pluginEnvironment?.stop()
-        pluginLifecycle?.shutdown()
+        activityRuntime?.shutdownPlugins()
         panelController?.hide()
     }
 

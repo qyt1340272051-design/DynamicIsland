@@ -4,6 +4,44 @@ import XCTest
 
 @MainActor
 final class IslandActivityRuntimeTests: XCTestCase {
+    func testProductionRuntimeSharesSchedulerAndShutdownRemovesPendingDeadline() async throws {
+        let runtime = IslandActivityRuntime(viewModel: .preview())
+        defer { runtime.shutdownPlugins() }
+        runtime.pluginScheduler.setPolicy(.active)
+        let id = "com.example.production-scheduler"
+        let manifest = try PluginManifest(
+            id: id, name: "Production Scheduler", version: SemanticVersion("1.0.0"),
+            engine: .javaScriptCore, entry: "index.js", minimumHostVersion: SemanticVersion("0.6.0"),
+            permissions: [], capabilities: [.scheduler, .publishActivity]
+        )
+        let source = """
+            function onStart() {
+                island.scheduler.requestRefresh(60000).then(() => island.activity.publish({
+                    id:'late', presentation:{title:'Late refresh'}
+                }));
+                island.log('Refresh requested');
+            }
+            """
+        let package = ValidatedPluginPackage(
+            manifest: manifest, canonicalRootURL: URL(fileURLWithPath: "/runtime-tests/\(id)", isDirectory: true),
+            entryRelativePath: "index.js", entrySource: Data(source.utf8),
+            regularFileCount: 2, totalFileBytes: UInt64(source.utf8.count)
+        )
+        runtime.pluginLifecycle.pluginDidLoad(package, isEnabled: true)
+        let deadline = ContinuousClock.now.advanced(by: .seconds(4))
+        while runtime.pluginScheduler.snapshot.pendingCount == 0, ContinuousClock.now < deadline {
+            try await Task.sleep(for: .milliseconds(5))
+        }
+        XCTAssertTrue(runtime.pluginLifecycle.allowsExecution(id: id))
+        XCTAssertEqual(runtime.pluginScheduler.snapshot.pendingCount, 1)
+        XCTAssertEqual(runtime.pluginScheduler.snapshot.timerCount, 1)
+        runtime.shutdownPlugins()
+        XCTAssertFalse(runtime.pluginLifecycle.allowsExecution(id: id))
+        XCTAssertEqual(runtime.pluginScheduler.snapshot.pendingCount, 0)
+        XCTAssertEqual(runtime.pluginScheduler.snapshot.timerCount, 0)
+        XCTAssertNil(runtime.manager.activity(id: PluginJSBridge.activityID(pluginID: id, localID: "late")))
+    }
+
     func testProductionRuntimeExecutesJavaScriptAndKeepsOtherPluginAdmissionOpen() async throws {
         let runtime = IslandActivityRuntime(viewModel: .preview())
         defer { runtime.pluginLifecycle.shutdown() }

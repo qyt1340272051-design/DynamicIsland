@@ -10,6 +10,8 @@ public final class IslandActivityRuntime {
     public let pluginLifecycle: PluginLifecycleBridge
     public let pluginBridge: PluginJSBridge
     public let permissionManager: PermissionManager
+    public let pluginScheduler: PluginScheduler
+    private let pluginSchedulerEnvironment: PluginSchedulerEnvironment
     private let music: MusicActivityProvider
     private let volume: VolumeActivityProvider
     private let battery: BatteryActivityProvider?
@@ -24,7 +26,9 @@ public final class IslandActivityRuntime {
         let manager = ActivityManager()
         let router = ActionRouter(manager: manager)
         let permissionManager = PermissionManager()
-        let pluginBridge = PluginJSBridge(storage: .applicationSupport(), permissions: permissionManager)
+        let pluginScheduler = PluginScheduler(policy: .background)
+        let pluginBridge = PluginJSBridge(storage: .applicationSupport(), permissions: permissionManager,
+                                          scheduler: pluginScheduler)
         let pluginLifecycle = PluginLifecycleBridge(
             activityManager: manager,
             actionRouter: router,
@@ -46,10 +50,19 @@ public final class IslandActivityRuntime {
         self.pluginLifecycle = pluginLifecycle
         self.pluginBridge = pluginBridge
         self.permissionManager = permissionManager
+        self.pluginScheduler = pluginScheduler
+        pluginSchedulerEnvironment = PluginSchedulerEnvironment(scheduler: pluginScheduler)
         self.music = music
         self.volume = volume
         self.battery = battery
         musicRegistration = music.registerActions(with: router)
+    }
+
+    /// App teardown also removes the scheduler's system observers and deadline.
+    public func shutdownPlugins() {
+        pluginSchedulerEnvironment.stop()
+        pluginLifecycle.shutdown()
+        pluginScheduler.shutdown()
     }
 
     public var isCompactActivityVisible: Bool {

@@ -68,6 +68,7 @@ public final class PluginJSBridge {
     private let network: PluginNetworkBroker
     private let files: PluginFileBroker
     private let clipboard: PluginClipboardBroker
+    private let scheduler: PluginScheduler
     private var activityRateLimiter = PluginActivityRateLimiter()
     private let activityRateClock: @MainActor () -> TimeInterval
     private let logger = Logger(subsystem: "DynamicIsland", category: "PluginJSBridge")
@@ -77,12 +78,14 @@ public final class PluginJSBridge {
                 network: PluginNetworkBroker? = nil,
                 files: PluginFileBroker? = nil,
                 clipboard: PluginClipboardBroker? = nil,
+                scheduler: PluginScheduler? = nil,
                 activityRateClock: @escaping @MainActor () -> TimeInterval = { ProcessInfo.processInfo.systemUptime }) {
         self.storage = storage
         self.permissions = permissions ?? PermissionManager()
         self.network = network ?? PluginNetworkBroker()
         self.files = files ?? PluginFileBroker()
         self.clipboard = clipboard ?? PluginClipboardBroker()
+        self.scheduler = scheduler ?? PluginScheduler()
         self.activityRateClock = activityRateClock
     }
 
@@ -112,6 +115,10 @@ public final class PluginJSBridge {
                   reply: @escaping @Sendable (String) -> Void) async {
         do {
             let envelope = try object(PluginBridgeJSON.parse(requestJSON), required: ["apiVersion", "method", "params"])
+            if envelope["method"] == .string("scheduler.requestRefresh") {
+                try dispatchRefresh(envelope, package: package, context: context, reply: reply)
+                return
+            }
             if envelope["method"] == .string("files.chooseText") {
                 try dispatchFile(envelope, package: package, context: context, reply: reply)
                 return
@@ -155,8 +162,38 @@ public final class PluginJSBridge {
         catch let error as PluginPermissionError { reply(failure(PluginBridgeErrorCode(rawValue: error.code) ?? .coreRejected)) }
         catch let error as PluginNetworkError { reply(networkFailure(error)) }
         catch let error as PluginFileError { reply(brokerFailure(code: error.code, message: error.errorDescription)) }
+        catch let error as PluginSchedulerError { reply(brokerFailure(code: error.code, message: error.errorDescription)) }
         catch let error as PluginResourceError { reply(failure(error == .inactiveExecution ? .inactiveExecution : .coreRejected)) }
         catch { reply(failure(.inactiveExecution)) }
+    }
+
+    private func dispatchRefresh(_ envelope: [String: PluginBridgeJSON], package: ValidatedPluginPackage,
+                                 context: PluginExecutionContext,
+                                 reply: @escaping @Sendable (String) -> Void) throws {
+        guard envelope["apiVersion"] == .string(Self.apiVersion) else { throw PluginBridgeErrorCode.unsupportedVersion }
+        guard context.id == package.manifest.id else { throw PluginBridgeErrorCode.coreRejected }
+        try context.perform {}
+        try require(.scheduler, manifest: package.manifest)
+        let request = try PluginRefreshRequest.parse(envelope["params"]!)
+        let admission = context.resourceAdmission
+        try scheduler.schedule(request: request, pluginID: context.id, admission: admission) { result in
+            Task { @MainActor in
+                let response: String
+                do {
+                    try context.perform {}
+                    try admission.perform {}
+                    switch result {
+                    case .success(let value):
+                        response = self.response(.object(["ok": .boolean(true), "value": .object([
+                            "policy": .string(value.policy.rawValue)
+                        ])]))
+                    case .failure(let error):
+                        response = self.brokerFailure(code: error.code, message: error.errorDescription)
+                    }
+                } catch { response = self.failure(.inactiveExecution) }
+                reply(response)
+            }
+        }
     }
 
     private func dispatchFile(_ envelope: [String: PluginBridgeJSON], package: ValidatedPluginPackage,

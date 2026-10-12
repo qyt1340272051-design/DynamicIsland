@@ -299,6 +299,11 @@ nonisolated enum PluginJSBridgeBootstrap {
                 if (fields.size !== utf8Bytes(fields.text)) throw null;
                 return freeze(fields);
             }
+            function schedulerResponse(value) {
+                const fields = fieldsWithShape(value, ['policy']);
+                if (fields.policy !== 'active' && fields.policy !== 'background' && fields.policy !== 'lowPower') throw null;
+                return freeze(fields);
+            }
             const log = method(function(message, level) {
                 if (arguments.length < 1 || arguments.length > 2) return rejected('invalidArguments');
                 return send('log', {message, level: level === undefined ? 'info' : level});
@@ -353,6 +358,14 @@ nonisolated enum PluginJSBridgeBootstrap {
             files.chooseText = method(function() {
                 if (arguments.length !== 0) return rejected('invalidArguments');
                 return send('files.chooseText', {});
+            });
+            const scheduler = create(null);
+            scheduler.apiVersion = version;
+            scheduler.supported = true;
+            scheduler.requestRefresh = method(function(delayMs) {
+                if (arguments.length !== 1 || typeof delayMs !== 'number' || !finite(delayMs) ||
+                    delayMs % 1 !== 0 || delayMs < 1000 || delayMs > 86400000) return rejected('invalidArguments');
+                return send('scheduler.requestRefresh', {delayMs});
             });
             const network = create(null);
             network.apiVersion = version;
@@ -444,6 +457,7 @@ nonisolated enum PluginJSBridgeBootstrap {
             island.clipboard = freeze(clipboard);
             island.files = freeze(files);
             island.network = freeze(network);
+            island.scheduler = freeze(scheduler);
             island.actions = freeze(actions);
             const attributes = create(null);
             attributes.value = freeze(island);
@@ -468,6 +482,7 @@ nonisolated enum PluginJSBridgeBootstrap {
                             snapshotBudget(512, pair.method === 'network.fetch' || pair.method === 'files.chooseText' ? 65536 : 4096), []);
                         if (pair.method === 'network.fetch') pair.resolve(networkResponse(value));
                         else if (pair.method === 'files.chooseText') pair.resolve(textFileResponse(value));
+                        else if (pair.method === 'scheduler.requestRefresh') pair.resolve(schedulerResponse(value));
                         else if (pair.method === 'clipboard.readText') {
                             if (value !== null && typeof value !== 'string') throw null;
                             pair.resolve(value);
