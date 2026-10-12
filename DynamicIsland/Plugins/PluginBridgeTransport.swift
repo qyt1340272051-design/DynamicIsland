@@ -13,6 +13,7 @@ nonisolated final class PluginBridgeTransport: @unchecked Sendable {
     private let process: @MainActor @Sendable (String, @escaping @Sendable (String) -> Void) async -> Void
     private let storageAdmission: PluginStorageAdmission
     private let networkAdmission: PluginNetworkAdmission
+    private let resourceAdmission: PluginResourceAdmission
     private var requests: [Request] = []
     private var draining = false
     private var revoked = false
@@ -22,6 +23,7 @@ nonisolated final class PluginBridgeTransport: @unchecked Sendable {
          actionSession: PluginActionSession? = nil) {
         storageAdmission = context.storageAdmission
         networkAdmission = context.networkAdmission
+        resourceAdmission = context.resourceAdmission
         process = { await bridge.dispatch($0, package: package, context: context, actionSession: actionSession, reply: $1) }
     }
 
@@ -42,6 +44,7 @@ nonisolated final class PluginBridgeTransport: @unchecked Sendable {
         revoked = true
         requests.removeAll()
         lock.unlock()
+        resourceAdmission.revoke()
         networkAdmission.revoke()
         storageAdmission.revoke()
     }

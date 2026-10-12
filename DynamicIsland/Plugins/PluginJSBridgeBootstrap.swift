@@ -278,6 +278,27 @@ nonisolated enum PluginJSBridgeBootstrap {
                 });
                 return freeze(response);
             }
+            function textFileResponse(value) {
+                if (value === null) return null;
+                const fields = fieldsWithShape(value, ['name', 'type', 'text', 'size']);
+                if (typeof fields.name !== 'string' || fields.name.length === 0 ||
+                    typeof fields.type !== 'string' || fields.type.length === 0 ||
+                    typeof fields.text !== 'string' || typeof fields.size !== 'number' ||
+                    !finite(fields.size) || fields.size % 1 !== 0 || fields.size < 0 || fields.size > 65536) throw null;
+                if (utf8Bytes(fields.name) > 255 || utf8Bytes(fields.type) > 128 ||
+                    utf8Bytes(fields.text) > 65536) throw LIMIT;
+                for (let i = 0; i < fields.name.length; i++) {
+                    const unit = apply(charCode, fields.name, [i]);
+                    if (unit < 32 || unit === 127 || unit === 47) throw null;
+                }
+                if (fields.type !== 'text/plain' && fields.type !== 'text/markdown' &&
+                    fields.type !== 'application/json' && fields.type !== 'text/csv') throw null;
+                for (let i = 0; i < fields.text.length; i++) {
+                    if (apply(charCode, fields.text, [i]) === 0) throw null;
+                }
+                if (fields.size !== utf8Bytes(fields.text)) throw null;
+                return freeze(fields);
+            }
             const log = method(function(message, level) {
                 if (arguments.length < 1 || arguments.length > 2) return rejected('invalidArguments');
                 return send('log', {message, level: level === undefined ? 'info' : level});
@@ -313,6 +334,25 @@ nonisolated enum PluginJSBridgeBootstrap {
             storage.clear = method(function() {
                 if (arguments.length !== 0) return rejected('invalidArguments');
                 return send('storage.clear', {});
+            });
+            const clipboard = create(null);
+            clipboard.apiVersion = version;
+            clipboard.supported = true;
+            clipboard.readText = method(function() {
+                if (arguments.length !== 0) return rejected('invalidArguments');
+                return send('clipboard.readText', {});
+            });
+            clipboard.writeText = method(function(text) {
+                if (arguments.length !== 1 || typeof text !== 'string') return rejected('invalidArguments');
+                if (utf8Bytes(text) > 4096) return rejected('quotaExceeded');
+                return send('clipboard.writeText', {text});
+            });
+            const files = create(null);
+            files.apiVersion = version;
+            files.supported = true;
+            files.chooseText = method(function() {
+                if (arguments.length !== 0) return rejected('invalidArguments');
+                return send('files.chooseText', {});
             });
             const network = create(null);
             network.apiVersion = version;
@@ -401,6 +441,8 @@ nonisolated enum PluginJSBridgeBootstrap {
             island.log = log;
             island.activity = freeze(activity);
             island.storage = freeze(storage);
+            island.clipboard = freeze(clipboard);
+            island.files = freeze(files);
             island.network = freeze(network);
             island.actions = freeze(actions);
             const attributes = create(null);
@@ -423,8 +465,16 @@ nonisolated enum PluginJSBridgeBootstrap {
                         // Null-prototype copies prevent inherited "then"
                         // getters from running during Promise resolution.
                         const value = snapshot(response.value, 1,
-                            snapshotBudget(512, pair.method === 'network.fetch' ? 65536 : 4096), []);
-                        pair.resolve(pair.method === 'network.fetch' ? networkResponse(value) : value);
+                            snapshotBudget(512, pair.method === 'network.fetch' || pair.method === 'files.chooseText' ? 65536 : 4096), []);
+                        if (pair.method === 'network.fetch') pair.resolve(networkResponse(value));
+                        else if (pair.method === 'files.chooseText') pair.resolve(textFileResponse(value));
+                        else if (pair.method === 'clipboard.readText') {
+                            if (value !== null && typeof value !== 'string') throw null;
+                            pair.resolve(value);
+                        } else if (pair.method === 'clipboard.writeText') {
+                            if (value !== null) throw null;
+                            pair.resolve(null);
+                        } else pair.resolve(value);
                     } else if (response.ok === false) {
                         if (!descriptor(response, 'error') || descriptor(response, 'value')) throw null;
                         const fields = fieldsWithShape(snapshot(response.error, 1, snapshotBudget(), []), ['code', 'message']);

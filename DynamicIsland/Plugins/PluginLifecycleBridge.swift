@@ -56,16 +56,19 @@ public final class PluginExecutionContext {
     public let source: ActivitySource
     let storageAdmission: PluginStorageAdmission
     let networkAdmission: PluginNetworkAdmission
+    let resourceAdmission: PluginResourceAdmission
     private let token: UUID
     private weak var bridge: PluginLifecycleBridge?
 
     fileprivate init(id: String, token: UUID, storageAdmission: PluginStorageAdmission,
-                     networkAdmission: PluginNetworkAdmission, bridge: PluginLifecycleBridge) {
+                     networkAdmission: PluginNetworkAdmission, resourceAdmission: PluginResourceAdmission,
+                     bridge: PluginLifecycleBridge) {
         self.id = id
         source = ActivitySource(kind: .plugin, identifier: id)
         self.token = token
         self.storageAdmission = storageAdmission
         self.networkAdmission = networkAdmission
+        self.resourceAdmission = resourceAdmission
         self.bridge = bridge
     }
 
@@ -142,6 +145,7 @@ public final class PluginLifecycleBridge: PluginManagerLifecycleHandling {
         var token: UUID?
         var storageAdmission: PluginStorageAdmission?
         var networkAdmission: PluginNetworkAdmission?
+        var resourceAdmission: PluginResourceAdmission?
         var lastExecutionToken: UUID?
         var runtime: (any PluginLifecycleRuntime)?
         var lastFailure: PluginLifecycleFailure?
@@ -338,10 +342,12 @@ public final class PluginLifecycleBridge: PluginManagerLifecycleHandling {
         let token = UUID()
         let storageAdmission = PluginStorageAdmission()
         let networkAdmission = PluginNetworkAdmission()
+        let resourceAdmission = PluginResourceAdmission()
         entry.runtime = runtime
         entry.token = token
         entry.storageAdmission = storageAdmission
         entry.networkAdmission = networkAdmission
+        entry.resourceAdmission = resourceAdmission
         entry.lastExecutionToken = token
         entry.lastFailure = nil
         _ = try? entry.lifecycle.transition(entry.lifecycle.state == .suspended ? .resume : .start)
@@ -349,7 +355,8 @@ public final class PluginLifecycleBridge: PluginManagerLifecycleHandling {
         actionRouter.setEnabled(true, for: entry.source)
         do {
             try runtime.onStart(context: .init(id: entry.package.manifest.id, token: token,
-                                             storageAdmission: storageAdmission, networkAdmission: networkAdmission, bridge: self))
+                                             storageAdmission: storageAdmission, networkAdmission: networkAdmission,
+                                             resourceAdmission: resourceAdmission, bridge: self))
         } catch {
             guard entry.token == token else { return }
             entry.lastFailure = .startFailed
@@ -365,6 +372,8 @@ public final class PluginLifecycleBridge: PluginManagerLifecycleHandling {
     }
 
     private func endExecution(_ entry: Entry, event: PluginLifecycleEvent, reason: PluginStopReason) {
+        entry.resourceAdmission?.revoke()
+        entry.resourceAdmission = nil
         entry.networkAdmission?.revoke()
         entry.networkAdmission = nil
         entry.storageAdmission?.revoke()

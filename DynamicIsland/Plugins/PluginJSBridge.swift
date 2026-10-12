@@ -56,6 +56,8 @@ public final class PluginJSBridge {
         case set(key: String, value: PluginBridgeJSON)
         case remove(key: String)
         case clear
+        case readClipboard
+        case writeClipboard(text: String)
         case registerAction(actionID: String, registrationID: String)
         case unregisterAction(actionID: String)
     }
@@ -64,6 +66,8 @@ public final class PluginJSBridge {
     private let storage: PluginStorage
     private let permissions: PermissionManager
     private let network: PluginNetworkBroker
+    private let files: PluginFileBroker
+    private let clipboard: PluginClipboardBroker
     private var activityRateLimiter = PluginActivityRateLimiter()
     private let activityRateClock: @MainActor () -> TimeInterval
     private let logger = Logger(subsystem: "DynamicIsland", category: "PluginJSBridge")
@@ -71,10 +75,14 @@ public final class PluginJSBridge {
     public init(storage: PluginStorage = PluginStorage(),
                 permissions: PermissionManager? = nil,
                 network: PluginNetworkBroker? = nil,
+                files: PluginFileBroker? = nil,
+                clipboard: PluginClipboardBroker? = nil,
                 activityRateClock: @escaping @MainActor () -> TimeInterval = { ProcessInfo.processInfo.systemUptime }) {
         self.storage = storage
         self.permissions = permissions ?? PermissionManager()
         self.network = network ?? PluginNetworkBroker()
+        self.files = files ?? PluginFileBroker()
+        self.clipboard = clipboard ?? PluginClipboardBroker()
         self.activityRateClock = activityRateClock
     }
 
@@ -97,13 +105,17 @@ public final class PluginJSBridge {
         }
     }
 
-    /// FIFO admission is separate from network completion. A slow fetch must
-    /// not retain the queue used by Activity actions and local storage.
+    /// FIFO admission is separate from network and file-selection completion.
+    /// User interaction cannot retain the queue used by actions and storage.
     func dispatch(_ requestJSON: String, package: ValidatedPluginPackage,
                   context: PluginExecutionContext, actionSession: PluginActionSession? = nil,
                   reply: @escaping @Sendable (String) -> Void) async {
         do {
             let envelope = try object(PluginBridgeJSON.parse(requestJSON), required: ["apiVersion", "method", "params"])
+            if envelope["method"] == .string("files.chooseText") {
+                try dispatchFile(envelope, package: package, context: context, reply: reply)
+                return
+            }
             if envelope["method"] != .string("network.fetch") {
                 reply(await handleImmediate(requestJSON, package: package, context: context, actionSession: actionSession))
                 return
@@ -142,12 +154,54 @@ public final class PluginJSBridge {
         catch let error as PluginBridgeJSON.ParseError { reply(failure(error == .limitExceeded ? .quotaExceeded : .invalidArguments)) }
         catch let error as PluginPermissionError { reply(failure(PluginBridgeErrorCode(rawValue: error.code) ?? .coreRejected)) }
         catch let error as PluginNetworkError { reply(networkFailure(error)) }
+        catch let error as PluginFileError { reply(brokerFailure(code: error.code, message: error.errorDescription)) }
+        catch let error as PluginResourceError { reply(failure(error == .inactiveExecution ? .inactiveExecution : .coreRejected)) }
         catch { reply(failure(.inactiveExecution)) }
     }
 
+    private func dispatchFile(_ envelope: [String: PluginBridgeJSON], package: ValidatedPluginPackage,
+                              context: PluginExecutionContext,
+                              reply: @escaping @Sendable (String) -> Void) throws {
+        guard envelope["apiVersion"] == .string(Self.apiVersion) else { throw PluginBridgeErrorCode.unsupportedVersion }
+        guard context.id == package.manifest.id else { throw PluginBridgeErrorCode.coreRejected }
+        try context.perform {}
+        let request = try PluginFileRequest.parse(envelope["params"]!)
+        let authorization = try permissions.require(permission: .userSelectedFiles, package: package)
+        let admission = context.resourceAdmission
+        try files.start(request: request, pluginID: context.id, displayName: package.manifest.name,
+                        authorization: authorization, admission: admission) { result in
+            Task { @MainActor in
+                let response: String
+                do {
+                    try context.perform {}
+                    try admission.perform {
+                        try authorization.perform(pluginID: context.id, permission: .userSelectedFiles) {}
+                    }
+                    switch result {
+                    case .success(let value):
+                        let data = value.map { value in PluginBridgeJSON.object([
+                            "name": .string(value.name), "type": .string(value.type),
+                            "text": .string(value.text), "size": .number(Double(value.size))
+                        ]) } ?? .null
+                        response = self.response(.object(["ok": .boolean(true), "value": data]))
+                    case .failure(let error):
+                        response = self.brokerFailure(code: error.code, message: error.errorDescription)
+                    }
+                } catch let error as PluginPermissionError {
+                    response = self.failure(PluginBridgeErrorCode(rawValue: error.code) ?? .coreRejected)
+                } catch { response = self.failure(.inactiveExecution) }
+                reply(response)
+            }
+        }
+    }
+
     private func networkFailure(_ error: PluginNetworkError) -> String {
+        brokerFailure(code: error.code, message: error.errorDescription)
+    }
+
+    private func brokerFailure(code: String, message: String?) -> String {
         response(.object(["ok": .boolean(false), "error": .object([
-            "code": .string(error.code), "message": .string(error.errorDescription ?? "Network request failed.")
+            "code": .string(code), "message": .string(message ?? "The Host rejected the operation.")
         ])]))
     }
 
@@ -165,6 +219,20 @@ public final class PluginJSBridge {
                 // The actor may have suspended this Host task while lifecycle
                 // revoked the session. Late replies cannot revive that session.
                 try context.perform { try authorization.perform {} }
+            case .readClipboard, .writeClipboard:
+                try context.perform {
+                    try context.resourceAdmission.perform {
+                        switch operation {
+                        case .readClipboard:
+                            let authorization = try permissions.require(permission: .readClipboard, package: package)
+                            result = try clipboard.readText(pluginID: context.id, authorization: authorization).map { .string($0) } ?? .null
+                        case .writeClipboard(let text):
+                            let authorization = try permissions.require(permission: .writeClipboard, package: package)
+                            try clipboard.writeText(text, pluginID: context.id, authorization: authorization)
+                        default: break
+                        }
+                    }
+                }
             default:
                 try context.perform {
                     result = try execute(operation, manifest: package.manifest, context: context, actionSession: actionSession)
@@ -187,6 +255,10 @@ public final class PluginJSBridge {
             }
         } catch let error as PluginPermissionError {
             return failure(PluginBridgeErrorCode(rawValue: error.code) ?? .coreRejected)
+        } catch let error as PluginClipboardError {
+            return brokerFailure(code: error.code, message: error.errorDescription)
+        } catch let error as PluginResourceError {
+            return failure(error == .inactiveExecution ? .inactiveExecution : .coreRejected)
         } catch let error as ActivityManagerError {
             switch error {
             case .quotaExceeded: return failure(.quotaExceeded)
@@ -256,8 +328,8 @@ public final class PluginJSBridge {
         case .end(let id):
             try require(.endActivity, manifest: manifest)
             try context.endActivity(id: Self.activityID(pluginID: pluginID, localID: id))
-        case .get, .set, .remove, .clear:
-            // Storage is handled only by the async actor path above.
+        case .get, .set, .remove, .clear, .readClipboard, .writeClipboard:
+            // Brokers are handled by their independently gated paths above.
             throw PluginBridgeErrorCode.coreRejected
         case .registerAction(let actionID, let registrationID):
             try require(.handleActions, manifest: manifest)
@@ -318,6 +390,12 @@ public final class PluginJSBridge {
         case "storage.clear":
             _ = try object(params, required: [])
             return .clear
+        case "clipboard.readText":
+            _ = try object(params, required: [])
+            return .readClipboard
+        case "clipboard.writeText":
+            let fields = try object(params, required: ["text"])
+            return .writeClipboard(text: try string(fields["text"], maximumBytes: 4_096))
         case "actions.on":
             let fields = try object(params, required: ["actionID", "registrationID"])
             return .registerAction(actionID: try identifier(fields["actionID"], maximumBytes: 80),
