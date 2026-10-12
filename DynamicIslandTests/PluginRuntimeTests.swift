@@ -604,11 +604,11 @@ private final class RuntimeTestFixture {
         let manager = ActivityManager()
         let router = ActionRouter(manager: manager)
         let factory = factory
-        bridge = PluginLifecycleBridge(activityManager: manager, actionRouter: router) { package in
+        bridge = PluginLifecycleBridge(activityManager: manager, actionRouter: router, runtimeFactory: { package in
             let runtime = PluginRuntime(package: package)
             factory.runtimes.append(runtime)
             return RuntimeTestForwarder(runtime: runtime, factory: factory)
-        }
+        })
     }
 
     func load(_ package: ValidatedPluginPackage) -> PluginRuntime {

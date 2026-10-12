@@ -11,6 +11,7 @@ public final class IslandActivityRuntime {
     public let pluginBridge: PluginJSBridge
     public let permissionManager: PermissionManager
     public let pluginScheduler: PluginScheduler
+    public let pluginDiagnostics: PluginDiagnosticsStore
     private let pluginSchedulerEnvironment: PluginSchedulerEnvironment
     private let music: MusicActivityProvider
     private let volume: VolumeActivityProvider
@@ -27,12 +28,14 @@ public final class IslandActivityRuntime {
         let router = ActionRouter(manager: manager)
         let permissionManager = PermissionManager()
         let pluginScheduler = PluginScheduler(policy: .background)
+        let pluginDiagnostics = PluginDiagnosticsStore()
         let pluginBridge = PluginJSBridge(storage: .applicationSupport(), permissions: permissionManager,
-                                          scheduler: pluginScheduler)
+                                          scheduler: pluginScheduler, diagnostics: pluginDiagnostics)
         let pluginLifecycle = PluginLifecycleBridge(
             activityManager: manager,
             actionRouter: router,
             permissions: permissionManager,
+            diagnostics: pluginDiagnostics,
             runtimeFactory: { PluginRuntime(package: $0, bridge: pluginBridge) }
         )
         let music = MusicActivityProvider(viewModel: viewModel, manager: manager)
@@ -51,6 +54,7 @@ public final class IslandActivityRuntime {
         self.pluginBridge = pluginBridge
         self.permissionManager = permissionManager
         self.pluginScheduler = pluginScheduler
+        self.pluginDiagnostics = pluginDiagnostics
         pluginSchedulerEnvironment = PluginSchedulerEnvironment(scheduler: pluginScheduler)
         self.music = music
         self.volume = volume

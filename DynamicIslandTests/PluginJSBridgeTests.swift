@@ -47,7 +47,7 @@ final class PluginJSBridgeTests: XCTestCase {
             """))
         try await marker(runtime, "done")
         let entries = fixture.service.logs(for: "com.example.alpha")
-        XCTAssertEqual(entries.map(\.message), ["你好，Host", "detail", "careful", "failure"])
+        XCTAssertEqual(entries.map(\.message), Array(repeating: "Plugin log message omitted.", count: 4))
         XCTAssertEqual(entries.map(\.pluginID), Array(repeating: "com.example.alpha", count: 4))
         XCTAssertEqual(entries.map(\.level), [.info, .debug, .warning, .error])
         try await assertValue(runtime, "isPromise && firstValueWasUndefined", equals: .boolean(true))
@@ -216,7 +216,7 @@ final class PluginJSBridgeTests: XCTestCase {
         try await marker(runtime, "done")
         try await assertValue(runtime, "allDenied", equals: .boolean(true))
         XCTAssertNil(fixture.manager.current)
-        XCTAssertEqual(fixture.service.logs(for: "com.example.alpha").map(\.message), ["still allowed"])
+        XCTAssertEqual(fixture.service.logs(for: "com.example.alpha").map(\.message), ["Plugin log message omitted."])
     }
 
     func testStoragePermissionIsSeparateFromCapability() async throws {
@@ -362,7 +362,7 @@ final class PluginJSBridgeTests: XCTestCase {
             """))
         try await marker(runtime, "done")
         try await assertValue(runtime, "valid === true && typeof errorCode === 'undefined' && unsafeCalls === 0", equals: .boolean(true))
-        XCTAssertEqual(fixture.service.logs(for: "com.example.alpha").map(\.message), ["survived"])
+        XCTAssertEqual(fixture.service.logs(for: "com.example.alpha").map(\.message), ["Plugin log message omitted."])
     }
 
     func testActionsValidateArgumentsAndRegisterSupportedImplementation() async throws {
@@ -459,7 +459,7 @@ final class PluginJSBridgeTests: XCTestCase {
         try await marker(current, "done")
         try await waitUntil { first.snapshot.state == .tornDown }
         try await assertValue(current, "clean", equals: .boolean(true))
-        XCTAssertEqual(fixture.service.logs(for: "com.example.alpha").map(\.message), ["current log"])
+        XCTAssertEqual(fixture.service.logs(for: "com.example.alpha").map(\.message), ["Plugin log message omitted."])
         XCTAssertNil(fixture.manager.current)
         XCTAssertEqual(fixture.lifecycle.snapshot(id: "com.example.alpha")?.state, .running)
     }
@@ -490,7 +490,7 @@ final class PluginJSBridgeTests: XCTestCase {
         try await marker(current, "done")
         try await assertValue(current, "clean", equals: .boolean(true))
         XCTAssertEqual(replies.count, 0)
-        XCTAssertEqual(fixture.service.logs(for: package.manifest.id).map(\.message), ["new session"])
+        XCTAssertEqual(fixture.service.logs(for: package.manifest.id).map(\.message), ["Plugin log message omitted."])
         XCTAssertFalse(transport.submit(id: 3, json: "{}") { _, _ in replies.increment() })
         XCTAssertEqual(fixture.lifecycle.snapshot(id: package.manifest.id)?.state, .running)
     }
@@ -566,8 +566,9 @@ final class PluginJSBridgeTests: XCTestCase {
         }
         let logs = fixture.service.logs(for: package.manifest.id)
         XCTAssertEqual(logs.count, 100)
-        XCTAssertEqual(logs.first?.message, "log 5")
-        XCTAssertEqual(logs.last?.message, "log 104")
+        XCTAssertEqual(logs.first?.sequence, 6)
+        XCTAssertTrue(logs.allSatisfy { $0.message == "Plugin log message omitted." })
+        XCTAssertEqual(logs.last?.sequence, 105)
         let oversized = try await request(fixture, package: package, context: context, method: "log", params: ["message":String(repeating:"界",count:400),"level":"info"])
         XCTAssertEqual(oversized["ok"] as? Bool, false)
         XCTAssertEqual(fixture.service.logs(for: package.manifest.id).count, 100)
@@ -690,11 +691,11 @@ private final class JSBridgeFixture {
         let manager = ActivityManager(clock: TestActivityClock(Date(timeIntervalSinceReferenceDate: 90_000)), configuration: configuration)
         self.manager = manager
         let factory = factory
-        lifecycle = PluginLifecycleBridge(activityManager: manager, actionRouter: ActionRouter(manager: manager), permissions: permissions) { package in
+        lifecycle = PluginLifecycleBridge(activityManager: manager, actionRouter: ActionRouter(manager: manager), permissions: permissions, runtimeFactory: { package in
             let runtime = PluginRuntime(package: package, bridge: service)
             factory.runtimes.append(runtime)
             return JSBridgeTestForwarder(runtime: runtime, factory: factory)
-        }
+        })
     }
 
     func load(_ package: ValidatedPluginPackage) throws -> PluginRuntime {

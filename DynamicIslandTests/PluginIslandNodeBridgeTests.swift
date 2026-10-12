@@ -384,6 +384,7 @@ final class PluginIslandNodeBridgeTests: XCTestCase {
         defer { try? FileManager.default.removeItem(at: exampleContainer) }
         let exampleRoot = exampleContainer.appendingPathComponent("node-mock", isDirectory: true)
         try FileManager.default.copyItem(at: exampleSource, to: exampleRoot)
+        try PluginLogTestWitness.instrumentTemporaryEntry(at: exampleRoot)
         let package = try PluginValidator().validateExpandedPackage(at: exampleRoot,
             context: .init(hostVersion: SemanticVersion("0.6.0"), occupiedPluginIDs: [], allowedContainerURL: exampleContainer))
         XCTAssertEqual(package.manifest.id, "com.example.node-mock")
@@ -430,7 +431,8 @@ final class PluginIslandNodeBridgeTests: XCTestCase {
             XCTAssertEqual(Set(images).count, 3)
             before = images
         }
-        XCTAssertTrue(fixture.service.logs(for: package.manifest.id).allSatisfy { !$0.message.hasPrefix("node.error:") })
+        let noNodeErrors = try await runtime.evaluateForTesting("__testLogWitness.every(value => !value.startsWith('node.error:'))")
+        XCTAssertEqual(noNodeErrors, .boolean(true))
         let actionsSupported = try await runtime.evaluateForTesting("island.actions.supported")
         XCTAssertEqual(actionsSupported, .boolean(true))
         _ = try await runtime.evaluateForTesting("mockNodeEnd(); void 0")
@@ -555,7 +557,7 @@ final class PluginIslandNodeBridgeTests: XCTestCase {
 
     private func logMarker(_ fixture: NodeBridgeFixture, pluginID: String, message: String) async throws {
         let deadline = ContinuousClock.now.advanced(by: .seconds(4))
-        while !fixture.service.logs(for: pluginID).contains(where: { $0.message == message }) {
+        while !(await PluginLogTestWitness.hasMarker(fixture.runtimes, pluginID: pluginID, message: message)) {
             guard ContinuousClock.now < deadline else {
                 XCTFail("Log \(message) did not arrive: \(fixture.service.logs(for: pluginID))")
                 throw NodeBridgeTestError.timedOut
@@ -583,6 +585,7 @@ private final class NodeBridgeFixture {
     let manager: ActivityManager
     let lifecycle: PluginLifecycleBridge
     private let factory: NodeBridgeFactory
+    var runtimes: [PluginRuntime] { factory.runtimes }
 
     init() {
         let clock = rateClock
@@ -592,11 +595,11 @@ private final class NodeBridgeFixture {
         manager = ActivityManager(clock: activityClock, configuration: configuration)
         let factory = NodeBridgeFactory(service: service)
         self.factory = factory
-        lifecycle = PluginLifecycleBridge(activityManager: manager, actionRouter: ActionRouter(manager: manager), permissions: permissions) { package in
+        lifecycle = PluginLifecycleBridge(activityManager: manager, actionRouter: ActionRouter(manager: manager), permissions: permissions, runtimeFactory: { package in
             let runtime = factory.usesJavaScript ? PluginRuntime(package: package, bridge: factory.service) : nil
             if let runtime { factory.runtimes.append(runtime) }
             return NodeBridgeTestRuntime(factory: factory, runtime: runtime)
-        }
+        })
     }
 
     func load(_ package: ValidatedPluginPackage) throws -> PluginExecutionContext {

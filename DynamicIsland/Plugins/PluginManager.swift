@@ -364,6 +364,22 @@ public actor PluginManager {
         return try await setEnabled(false, id: pluginID)
     }
 
+    /// A delayed watchdog write cannot target replacement code or an incident
+    /// the Host has explicitly cleared. Manager's FIFO also serializes user
+    /// restart (disable/reload/enable) against this persistence transaction.
+    public func disableIfCurrent(package: ValidatedPluginPackage,
+                                 isIncidentCurrent: @escaping @MainActor @Sendable () -> Bool) async throws -> PluginRecord? {
+        await beginMutation()
+        defer { endMutation() }
+        guard let current = entries[package.manifest.id],
+              current.package.manifest == package.manifest,
+              current.package.entrySource == package.entrySource,
+              current.package.entryRelativePath == package.entryRelativePath,
+              current.package.canonicalRootURL == package.canonicalRootURL,
+              await isIncidentCurrent() else { return nil }
+        return try await setEnabled(false, id: package.manifest.id)
+    }
+
     /// Revalidates the package and atomically replaces its immutable snapshot.
     /// A failed validation or state write leaves the previous record untouched.
     /// Manifest changes disable the plugin until the user enables it again.

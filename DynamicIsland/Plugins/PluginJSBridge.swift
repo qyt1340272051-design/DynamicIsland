@@ -10,6 +10,7 @@ public nonisolated struct PluginLogEntry: Equatable, Sendable {
     public let level: PluginLogLevel
     public let message: String
     public let timestamp: Date
+    public let sequence: UInt64
 }
 
 public nonisolated enum PluginBridgeErrorCode: String, Error, Equatable, Sendable {
@@ -60,9 +61,10 @@ public final class PluginJSBridge {
         case writeClipboard(text: String)
         case registerAction(actionID: String, registrationID: String)
         case unregisterAction(actionID: String)
+        case actionFailure(kind: String)
     }
 
-    private var logEntries: [String: [PluginLogEntry]] = [:]
+    public let diagnostics: PluginDiagnosticsStore
     private let storage: PluginStorage
     private let permissions: PermissionManager
     private let network: PluginNetworkBroker
@@ -79,6 +81,7 @@ public final class PluginJSBridge {
                 files: PluginFileBroker? = nil,
                 clipboard: PluginClipboardBroker? = nil,
                 scheduler: PluginScheduler? = nil,
+                diagnostics: PluginDiagnosticsStore? = nil,
                 activityRateClock: @escaping @MainActor () -> TimeInterval = { ProcessInfo.processInfo.systemUptime }) {
         self.storage = storage
         self.permissions = permissions ?? PermissionManager()
@@ -86,10 +89,16 @@ public final class PluginJSBridge {
         self.files = files ?? PluginFileBroker()
         self.clipboard = clipboard ?? PluginClipboardBroker()
         self.scheduler = scheduler ?? PluginScheduler()
+        self.diagnostics = diagnostics ?? PluginDiagnosticsStore()
         self.activityRateClock = activityRateClock
     }
 
-    public func logs(for pluginID: String) -> [PluginLogEntry] { logEntries[pluginID] ?? [] }
+    public func logs(for pluginID: String) -> [PluginLogEntry] {
+        diagnostics.records(for: pluginID).map {
+            PluginLogEntry(pluginID: $0.pluginID, level: $0.level, message: $0.message,
+                           timestamp: $0.timestamp, sequence: $0.sequence)
+        }
+    }
 
     public nonisolated static func activityID(pluginID: String, localID: String) -> String {
         "plugin:\(pluginID):\(localID)"
@@ -330,17 +339,13 @@ public final class PluginJSBridge {
                          context: PluginExecutionContext, actionSession: PluginActionSession?) throws -> PluginBridgeJSON {
         let pluginID = context.id
         switch operation {
-        case .log(let message, let level):
-            let entry = PluginLogEntry(pluginID: pluginID, level: level, message: message, timestamp: Date())
-            var entries = logEntries[pluginID] ?? []
-            if entries.count == 100 { entries.removeFirst() }
-            entries.append(entry)
-            logEntries[pluginID] = entries
+        case .log(_, let level):
+            diagnostics.recordPluginMessage(pluginID: pluginID, level: level)
             switch level {
-            case .debug: logger.debug("plugin=\(pluginID, privacy: .private) \(message, privacy: .private)")
-            case .info: logger.info("plugin=\(pluginID, privacy: .private) \(message, privacy: .private)")
-            case .warning: logger.warning("plugin=\(pluginID, privacy: .private) \(message, privacy: .private)")
-            case .error: logger.error("plugin=\(pluginID, privacy: .private) \(message, privacy: .private)")
+            case .debug: logger.debug("plugin=\(pluginID, privacy: .private) Plugin log message omitted.")
+            case .info: logger.info("plugin=\(pluginID, privacy: .private) Plugin log message omitted.")
+            case .warning: logger.warning("plugin=\(pluginID, privacy: .private) Plugin log message omitted.")
+            case .error: logger.error("plugin=\(pluginID, privacy: .private) Plugin log message omitted.")
             }
         case .activity(let request):
             try require(request.isUpdate ? .updateActivity : .publishActivity, manifest: manifest)
@@ -380,6 +385,20 @@ public final class PluginJSBridge {
                 throw PluginBridgeErrorCode.inactiveExecution
             }
             try actionSession.unregister(actionID: actionID)
+        case .actionFailure(let kind):
+            try require(.handleActions, manifest: manifest)
+            // This route is captured privately by the bootstrap. Public SDK
+            // log calls cannot enter it or choose a serious failure category.
+            if kind == "limit" {
+                diagnostics.record(pluginID: pluginID, level: .warning,
+                                   category: .actionLimit, code: .actionHandlerLimitExceeded)
+            } else {
+                diagnostics.record(pluginID: pluginID, level: .error,
+                                   category: .actionFailure, code: .actionHandlerFailed)
+                guard context.reportSeriousFailure(kind: kind == "exception" ? .actionException : .actionRejection) else {
+                    throw PluginBridgeErrorCode.inactiveExecution
+                }
+            }
         }
         return .null
     }
@@ -440,6 +459,11 @@ public final class PluginJSBridge {
         case "actions.off":
             let fields = try object(params, required: ["actionID"])
             return .unregisterAction(actionID: try identifier(fields["actionID"], maximumBytes: 80))
+        case "runtime.actionFailure":
+            let fields = try object(params, required: ["kind"])
+            let kind = try string(fields["kind"], maximumBytes: 16)
+            guard ["exception", "rejection", "limit"].contains(kind) else { throw PluginBridgeErrorCode.invalidArguments }
+            return .actionFailure(kind: kind)
         default:
             guard case .object = params else { throw PluginBridgeErrorCode.invalidArguments }
             throw PluginBridgeErrorCode.unsupportedMethod

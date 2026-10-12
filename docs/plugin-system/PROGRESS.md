@@ -77,7 +77,7 @@
 | T29 | NetworkBroker | T28 | `verified` | [有界 HTTPS fetch、Host 政策、可撤销准入及非阻塞 completion](phase-6-t29-network-broker.md)和 [12 项网络测试](../../DynamicIslandTests/PluginNetworkBrokerTests.swift)；CI 515 passed、2 skipped、0 failures，普通 Release build / 签名通过；Release 定向 154 passed、1 skipped（锁屏鼠标单项）。 |
 | T30 | File/Clipboard Broker | T28 | `verified` | [系统文本选择、剪贴板读写分权、数据 DTO 与会话撤销](phase-6-t30-file-clipboard-broker.md)及 [17 项资源测试](../../DynamicIslandTests/PluginUserResourceBrokerTests.swift)；CI 533 passed、1 skipped、0 failures，普通 Release build / 签名通过；Release 定向合计 113 passed、0 skipped。选择器使用 Host fixture、剪贴板使用私有命名实例，未声称真实系统选择器交互验收。 |
 | T31 | PluginScheduler | T22 | `in progress` | [集中刷新、三种策略、会话取消与 20 个真实 VM 的 CPU 观测](phase-6-t31-plugin-scheduler.md)；18 项调度测试及生产共享图测试通过，CI 552 passed、1 skipped、0 failures，普通 Release build / 签名通过，Release 定向 19 passed。10 秒基线 CPU 0.323%、20 VM 0.409%，额外调度唤醒 0；实际安装多插件后的长时 Energy Impact / 能耗仍待实测。 |
-| T32 | Crash Watchdog / Logging | T22 | `pending` | 待补。 |
+| T32 | Crash Watchdog / Logging | T22 | `verified` | [会话 / 包绑定的 60 秒隔离窗口、持久化、隐私日志及诊断 / 重启窗口](phase-6-t32-crash-watchdog-logging.md)；新增 45 项 Watchdog / diagnostics / persistence / UI / 实际 JS 集成测试，CI 597 passed、1 skipped、0 failures，普通 Release build / 签名通过；Release 定向 131 passed。无限循环 VM 的强制抢占不在本任务能力范围内。 |
 
 ## Phase 7 — 安装、管理与官方验证插件
 

@@ -500,6 +500,7 @@ final class PluginActivityBridgeTests: XCTestCase {
         defer { try? FileManager.default.removeItem(at: exampleContainer) }
         let exampleRoot = exampleContainer.appendingPathComponent("github-mock", isDirectory: true)
         try FileManager.default.copyItem(at: exampleSource, to: exampleRoot)
+        try PluginLogTestWitness.instrumentTemporaryEntry(at: exampleRoot)
         let example = try PluginValidator().validateExpandedPackage(
             at: exampleRoot,
             context: .init(hostVersion: SemanticVersion("0.6.0"), occupiedPluginIDs: [], allowedContainerURL: exampleContainer)
@@ -639,7 +640,7 @@ final class PluginActivityBridgeTests: XCTestCase {
 
     private func logMarker(_ fixture: ActivityBridgeFixture, pluginID: String, message: String) async throws {
         let deadline = ContinuousClock.now.advanced(by: .seconds(4))
-        while !fixture.service.logs(for: pluginID).contains(where: { $0.message == message }) {
+        while !(await PluginLogTestWitness.hasMarker(fixture.runtimes, pluginID: pluginID, message: message)) {
             guard ContinuousClock.now < deadline else {
                 XCTFail("Fixture log \(message) did not arrive: \(fixture.service.logs(for: pluginID))")
                 throw ActivityBridgeTestError.timedOut
@@ -670,6 +671,7 @@ private final class ActivityBridgeFixture {
     let manager: ActivityManager
     let lifecycle: PluginLifecycleBridge
     private let factory: ActivityBridgeFactory
+    var runtimes: [PluginRuntime] { factory.runtimes }
 
     var contexts: [PluginExecutionContext] { factory.contexts }
 
@@ -681,11 +683,11 @@ private final class ActivityBridgeFixture {
         manager = ActivityManager(clock: activityClock, configuration: configuration)
         let factory = ActivityBridgeFactory(service: service)
         self.factory = factory
-        lifecycle = PluginLifecycleBridge(activityManager: manager, actionRouter: ActionRouter(manager: manager)) { package in
+        lifecycle = PluginLifecycleBridge(activityManager: manager, actionRouter: ActionRouter(manager: manager), runtimeFactory: { package in
             let runtime = factory.usesJavaScript ? PluginRuntime(package: package, bridge: factory.service) : nil
             if let runtime { factory.runtimes.append(runtime) }
             return ActivityBridgeTestRuntime(factory: factory, runtime: runtime)
-        }
+        })
     }
 
     func load(_ package: ValidatedPluginPackage) throws -> PluginExecutionContext {

@@ -543,11 +543,11 @@ private final class NetworkRuntimeFixture {
         self.manager = manager
         let service = PluginJSBridge(storage: store, permissions: permissions, network: broker)
         let factory = factory
-        lifecycle = PluginLifecycleBridge(activityManager: manager, actionRouter: ActionRouter(manager: manager), permissions: permissions) { package in
+        lifecycle = PluginLifecycleBridge(activityManager: manager, actionRouter: ActionRouter(manager: manager), permissions: permissions, runtimeFactory: { package in
             let runtime = PluginRuntime(package: package, bridge: service)
             factory.runtimes.append(runtime)
             return NetworkRuntimeForwarder(runtime: runtime)
-        }
+        })
     }
 
     func load(_ package: ValidatedPluginPackage) -> PluginRuntime {

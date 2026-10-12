@@ -518,11 +518,11 @@ private final class StorageRuntimeFixture {
         self.service = service
         let manager = ActivityManager(clock: TestActivityClock(Date(timeIntervalSinceReferenceDate: 98_000)), configuration: .immediate)
         let factory = factory
-        lifecycle = PluginLifecycleBridge(activityManager: manager, actionRouter: ActionRouter(manager: manager), permissions: permissions) { package in
+        lifecycle = PluginLifecycleBridge(activityManager: manager, actionRouter: ActionRouter(manager: manager), permissions: permissions, runtimeFactory: { package in
             let runtime = PluginRuntime(package: package, bridge: service)
             factory.runtimes.append(runtime)
             return StorageRuntimeForwarder(runtime: runtime, factory: factory)
-        }
+        })
     }
 
     func load(_ package: ValidatedPluginPackage) throws -> PluginRuntime {

@@ -623,11 +623,11 @@ private final class UserResourceRuntimeFixture {
         let service = PluginJSBridge(storage: store, permissions: permissions, files: files, clipboard: clipboard)
         bridge = service
         let factory = factory
-        lifecycle = PluginLifecycleBridge(activityManager: manager, actionRouter: ActionRouter(manager: manager), permissions: permissions) { package in
+        lifecycle = PluginLifecycleBridge(activityManager: manager, actionRouter: ActionRouter(manager: manager), permissions: permissions, runtimeFactory: { package in
             let runtime = PluginRuntime(package: package, bridge: service)
             factory.runtimes.append(runtime)
             return ResourceRuntimeForwarder(runtime: runtime, factory: factory)
-        }
+        })
     }
 
     func grant(_ grants: [PluginPermission], package: ValidatedPluginPackage) throws {

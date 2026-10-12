@@ -26,6 +26,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     private var pluginStartupTask: Task<Void, Never>?
     private var pluginLifecycle: PluginLifecycleBridge?
     private var activityRuntime: IslandActivityRuntime?
+    private var pluginDiagnosticsModel: PluginDiagnosticsModel?
+    private var pluginDiagnosticsWindowController: PluginDiagnosticsWindowController?
     private let pluginLogger = Logger(subsystem: "DynamicIsland", category: "PluginLifecycle")
 #if DEBUG
     private var screenSimulatorWindowController: ScreenSimulatorWindowController?
@@ -55,7 +57,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         self.screenManager = screenManager
         self.panelController = panelController
         self.activityRuntime = activityRuntime
-        configurePlugins(lifecycle: activityRuntime.pluginLifecycle, batteryService: batteryService)
+        configurePlugins(lifecycle: activityRuntime.pluginLifecycle, diagnostics: activityRuntime.pluginDiagnostics,
+                         batteryService: batteryService)
         panelController.show()
         configureStatusItem()
     }
@@ -64,11 +67,13 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         statusFeedbackTask?.cancel()
         pluginStartupTask?.cancel()
         pluginEnvironment?.stop()
+        pluginDiagnosticsWindowController?.close()
         activityRuntime?.shutdownPlugins()
         panelController?.hide()
     }
 
-    private func configurePlugins(lifecycle: PluginLifecycleBridge, batteryService: any BatteryService) {
+    private func configurePlugins(lifecycle: PluginLifecycleBridge, diagnostics: PluginDiagnosticsStore,
+                                  batteryService: any BatteryService) {
         pluginLifecycle = lifecycle
         pluginEnvironment = PluginLifecycleEnvironment(batteryService: batteryService) { [weak lifecycle] state in
             lifecycle?.setEnvironment(isSleeping: state.isSleeping, isLowBattery: state.isLowBattery)
@@ -81,6 +86,23 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             )
             let manager = PluginManager(configuration: configuration, lifecycleHandler: lifecycle)
             pluginManager = manager
+            let model = PluginDiagnosticsModel(manager: manager, lifecycle: lifecycle, diagnostics: diagnostics)
+            pluginDiagnosticsModel = model
+            lifecycle.setAutomaticDisableHandler { [weak manager, weak lifecycle, weak model] package, incident in
+                guard let manager, let lifecycle else { return }
+                Task { @MainActor in
+                    do {
+                        _ = try await manager.disableIfCurrent(package: package) { [weak lifecycle] in
+                            lifecycle?.isCurrentAutomaticDisable(package: package, incident: incident) == true
+                        }
+                    } catch {
+                        if lifecycle.isCurrentAutomaticDisable(package: package, incident: incident) {
+                            diagnostics.recordPersistenceFailure(pluginID: package.manifest.id)
+                        }
+                    }
+                    await model?.refresh()
+                }
+            }
             pluginStartupTask = Task { [pluginLogger] in
                 let report = await manager.discover()
                 for failure in report.failures {
@@ -100,6 +122,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         let menu = NSMenu()
         menu.addItem(NSMenuItem(title: "显示 Dynamic Island", action: #selector(showIsland), keyEquivalent: ""))
         menu.addItem(NSMenuItem(title: "隐藏 Dynamic Island", action: #selector(hideIsland), keyEquivalent: ""))
+        menu.addItem(NSMenuItem(title: "插件诊断…", action: #selector(showPluginDiagnostics), keyEquivalent: ""))
         menu.addItem(.separator())
 
         let diagnosticsItem = NSMenuItem(
@@ -137,6 +160,14 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         item.menu = menu
 
         statusItem = item
+    }
+
+    @objc private func showPluginDiagnostics() {
+        guard let model = pluginDiagnosticsModel else { return }
+        let controller = pluginDiagnosticsWindowController ?? PluginDiagnosticsWindowController(model: model)
+        pluginDiagnosticsWindowController = controller
+        controller.show()
+        Task { await model.refresh() }
     }
 
     @objc private func showIsland() {

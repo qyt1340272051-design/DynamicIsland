@@ -554,11 +554,11 @@ private final class SchedulerRuntimeFixture {
         let service = PluginJSBridge(storage: store, permissions: permissions, scheduler: scheduler)
         bridge = service
         let factory = factory
-        lifecycle = PluginLifecycleBridge(activityManager: manager, actionRouter: ActionRouter(manager: manager), permissions: permissions) { package in
+        lifecycle = PluginLifecycleBridge(activityManager: manager, actionRouter: ActionRouter(manager: manager), permissions: permissions, runtimeFactory: { package in
             let runtime = PluginRuntime(package: package, bridge: service)
             factory.runtimes.append(runtime)
             return SchedulerRuntimeForwarder(runtime: runtime, factory: factory)
-        }
+        })
     }
     func load(_ package: ValidatedPluginPackage) -> PluginRuntime {
         lifecycle.pluginDidLoad(package, isEnabled: true)

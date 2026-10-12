@@ -500,24 +500,24 @@ nonisolated enum PluginJSBridgeBootstrap {
                     pair.reject(failure(error === LIMIT ? 'quotaExceeded' : 'invalidResponse'));
                 }
             }
-            function reportActionFailure(message) {
-                // Error objects are neither inspected nor coerced. A failed
-                // error log is handled without recursively logging again.
-                chainRequest(log(message, 'error'), function() {}, function() {});
+            function reportActionFailure(kind) {
+                // The private runtime channel contains only a Host-defined
+                // category. Never inspect, stringify or retain thrown values.
+                // A rejected diagnostic request must not recursively report.
+                chainRequest(send('runtime.actionFailure', {kind}), function() {}, function() {});
             }
             function receiveAction(registrationID, json) {
                 let event;
                 try {
                     event = freezeTree(snapshot(parse(json), 1, snapshotBudget(), []));
                 } catch (_) {
-                    reportActionFailure('Action handler failed.');
                     return;
                 }
                 if (event === null || typeof event !== 'object') return;
                 const record = apply(mapGet, handlers, [event.actionID]);
                 if (!record || record.registrationID !== registrationID) return;
                 if (pendingActions >= 64) {
-                    reportActionFailure('Action handler limit exceeded.');
+                    reportActionFailure('limit');
                     return;
                 }
                 pendingActions++;
@@ -526,7 +526,7 @@ nonisolated enum PluginJSBridgeBootstrap {
                     result = apply(record.handler, undefined, [event]);
                 } catch (_) {
                     pendingActions--;
-                    reportActionFailure('Action handler failed.');
+                    reportActionFailure('exception');
                     return;
                 }
                 if (result !== null && typeof result === 'object') {
@@ -538,7 +538,7 @@ nonisolated enum PluginJSBridgeBootstrap {
                             pendingActions--;
                         }, function() {
                             pendingActions--;
-                            reportActionFailure('Action handler failed.');
+                            reportActionFailure('rejection');
                         }]);
                         return;
                     } catch (_) { /* An ordinary object is not a Promise. */ }

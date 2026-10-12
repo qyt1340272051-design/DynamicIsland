@@ -94,7 +94,7 @@ final class IslandActivityRuntimeTests: XCTestCase {
         XCTAssertEqual(pluginActivity?.presentation.expanded, .vStack(.init([
             .text(.init("Production Build Complete")), .progress(.init(1))
         ])))
-        XCTAssertEqual(runtime.pluginBridge.logs(for: runningID).last?.message, "Production Bridge connected")
+        XCTAssertEqual(runtime.pluginBridge.logs(for: runningID).last?.message, "Plugin log message omitted.")
         runtime.pluginLifecycle.pluginDidChangeEnablement(id: runningID, isEnabled: false)
         XCTAssertEqual(runtime.manager.current?.source, MusicActivityProvider.source)
     }

@@ -20,9 +20,10 @@ final class PluginActionBridgeTests: XCTestCase {
         let repository = URL(fileURLWithPath: #filePath).deletingLastPathComponent().deletingLastPathComponent()
         let root = container.appendingPathComponent("action-mock", isDirectory: true)
         try FileManager.default.copyItem(at: repository.appendingPathComponent("docs/plugin-system/examples/action-mock"), to: root)
+        try PluginLogTestWitness.instrumentTemporaryEntry(at: root)
         let package = try PluginValidator().validateExpandedPackage(at: root,
             context: .init(hostVersion: SemanticVersion("0.6.0"), occupiedPluginIDs: [], allowedContainerURL: container))
-        _ = try fixture.load(package)
+        let runtime = try fixture.load(package)
         try await log(fixture, id: package.manifest.id, message: "action.ready")
         let original = try XCTUnwrap(fixture.manager.currentSnapshot)
         XCTAssertEqual(original.activity.id, PluginJSBridge.activityID(pluginID: package.manifest.id, localID: "controls"))
@@ -61,13 +62,14 @@ final class PluginActionBridgeTests: XCTestCase {
         // Mouse input proves both Binding and editing-end paths. A second
         // typed commit checks the exact value without reusing the first log.
         let snapshot = try XCTUnwrap(fixture.manager.currentSnapshot)
-        let commits = fixture.service.logs(for: package.manifest.id).filter { $0.message == "action.sliderCommit" }.count
+        let commits = try await PluginLogTestWitness.count(runtime, pluginID: package.manifest.id, message: "action.sliderCommit")
         XCTAssertEqual(fixture.dispatch(snapshot, id: "progress", value: .sliderCommit(0.75)), .handled)
         try await log(fixture, id: package.manifest.id, message: "action.sliderCommit", count: commits + 1)
         XCTAssertEqual(fixture.manager.current?.presentation.progress, 0.75)
         XCTAssertEqual(fixture.manager.currentSnapshot?.instanceToken, original.instanceToken)
         XCTAssertEqual(fixture.manager.current?.createdAt, original.activity.createdAt)
-        XCTAssertFalse(fixture.service.logs(for: package.manifest.id).contains { $0.message.hasPrefix("action.error:") })
+        let noCallbackErrors = try await runtime.evaluateForTesting("__testLogWitness.every(value => !value.startsWith('action.error:'))")
+        XCTAssertEqual(noCallbackErrors, .boolean(true))
     }
 
     func testFrozenLocalEventAndAllFourTypedPayloadsArriveInFIFO() async throws {
@@ -356,6 +358,7 @@ final class PluginActionBridgeTests: XCTestCase {
         XCTAssertEqual(unsafe, .number(0))
         XCTAssertEqual(fixture.service.logs(for: "com.example.action").map(\.message), ["Action handler failed.", "Action handler failed."])
         XCTAssertTrue(fixture.service.logs(for: "com.example.action").allSatisfy { $0.level == .error })
+        XCTAssertEqual(fixture.service.diagnostics.records(for: "com.example.action").map(\.category), [.actionFailure, .actionFailure])
         XCTAssertEqual(runtime.snapshot.state, .running)
         XCTAssertNil(runtime.snapshot.lastFailure)
     }
@@ -407,6 +410,7 @@ final class PluginActionBridgeTests: XCTestCase {
         try await predicate(runtime, "calls === 64")
         _ = fixture.dispatch(snapshot)
         try await log(fixture, message: "Action handler limit exceeded.")
+        XCTAssertEqual(fixture.service.diagnostics.records(for: "com.example.action").last?.category, .actionLimit)
         let before = try await runtime.evaluateForTesting("calls")
         XCTAssertEqual(before, .number(64))
         _ = try await runtime.evaluateForTesting("resolvers[0]();void 0")
@@ -461,7 +465,7 @@ final class PluginActionBridgeTests: XCTestCase {
     private func package(id: String = "com.example.action", source: String = "",
                          capabilities: [PluginCapability] = [.publishActivity, .updateActivity, .endActivity, .islandNodeUI, .handleActions]) throws -> ValidatedPluginPackage {
         let manifest = try PluginManifest(id: id, name: "Action Bridge Test", version: SemanticVersion("1.0.0"), engine: .javaScriptCore, entry: "index.js", minimumHostVersion: SemanticVersion("0.6.0"), permissions: [], capabilities: capabilities)
-        return .init(manifest: manifest, canonicalRootURL: URL(fileURLWithPath: "/action-bridge-tests/\(id)"), entryRelativePath: "index.js", entrySource: Data(source.utf8), regularFileCount: 2, totalFileBytes: UInt64(source.utf8.count))
+        return .init(manifest: manifest, canonicalRootURL: URL(fileURLWithPath: "/action-bridge-tests/\(id)"), entryRelativePath: "index.js", entrySource: Data(PluginLogTestWitness.source(source).utf8), regularFileCount: 2, totalFileBytes: UInt64(PluginLogTestWitness.source(source).utf8.count))
     }
 
     private func simpleSource(handler: String, globals: String = "") -> String {
@@ -488,7 +492,15 @@ final class PluginActionBridgeTests: XCTestCase {
     private func marker(_ runtime: PluginRuntime, _ name: String) async throws { try await predicate(runtime, "globalThis['\(name)'] === true") }
     private func log(_ fixture: ActionBridgeFixture, id: String = "com.example.action", message: String, count: Int = 1) async throws {
         let deadline = ContinuousClock.now.advanced(by: .seconds(6))
-        while fixture.service.logs(for: id).filter({ $0.message == message }).count < count {
+        while true {
+            let arrived: Bool
+            if message == "Action handler failed." || message == "Action handler limit exceeded." {
+                let category: PluginDiagnosticCategory = message == "Action handler failed." ? .actionFailure : .actionLimit
+                arrived = fixture.service.diagnostics.records(for: id).filter { $0.category == category && $0.message == message }.count >= count
+            } else {
+                arrived = await PluginLogTestWitness.hasMarker(fixture.runtimes, pluginID: id, message: message, count: count)
+            }
+            if arrived { return }
             guard ContinuousClock.now < deadline else {
                 XCTFail("Log missing \(message): \(fixture.service.logs(for: id))")
                 throw ActionBridgeTestError.timedOut
@@ -557,11 +569,11 @@ private final class ActionBridgeFixture {
         self.router = router
         let factory = ActionBridgeFactory(service: service)
         self.factory = factory
-        lifecycle = PluginLifecycleBridge(activityManager: manager, actionRouter: router) { package in
+        lifecycle = PluginLifecycleBridge(activityManager: manager, actionRouter: router, runtimeFactory: { package in
             let runtime = factory.usesJavaScript ? PluginRuntime(package: package, bridge: factory.service) : nil
             if let runtime { factory.runtimes.append(runtime) }
             return ActionBridgeTestRuntime(factory: factory, runtime: runtime)
-        }
+        })
     }
     func load(_ package: ValidatedPluginPackage) throws -> PluginRuntime {
         factory.usesJavaScript = true

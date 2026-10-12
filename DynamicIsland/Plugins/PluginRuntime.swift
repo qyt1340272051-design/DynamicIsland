@@ -42,14 +42,16 @@ public final class PluginRuntime: PluginLifecycleRuntime {
     public private(set) var snapshot = PluginRuntimeSnapshot(state: .idle, lastFailure: nil)
     private let package: ValidatedPluginPackage
     private let bridge: PluginJSBridge
+    public let diagnostics: PluginDiagnosticsStore
     private var actionSession: PluginActionSession?
     private var worker: PluginJavaScriptWorker?
     private var didStart = false
     private var didTeardown = false
 
-    public init(package: ValidatedPluginPackage, bridge: PluginJSBridge? = nil) {
+    public init(package: ValidatedPluginPackage, bridge: PluginJSBridge? = nil, diagnostics: PluginDiagnosticsStore? = nil) {
         self.package = package
         self.bridge = bridge ?? PluginJSBridge()
+        self.diagnostics = diagnostics ?? self.bridge.diagnostics
     }
 
     public func onStart(context: PluginExecutionContext) throws {
@@ -69,7 +71,9 @@ public final class PluginRuntime: PluginLifecycleRuntime {
             Task { @MainActor [weak self] in
                 self?.receive(event)
                 if case .failed(let failure) = event {
-                    context.reportFailure(failure.phase == .stop ? .stopFailed : .startFailed)
+                    if context.reportFailure(failure.phase == .stop ? .stopFailed : .startFailed) {
+                        self?.diagnostics.recordRuntimeFailure(pluginID: context.id, failure: failure)
+                    }
                 }
             }
         }
@@ -385,12 +389,10 @@ private nonisolated final class PluginJavaScriptEngine {
         virtualMachine = vm
         self.context = context
         context.name = package.manifest.id
-        context.exceptionHandler = { [weak self] _, exception in
-            // Reading object.message/stack/then or coercing an object can run
-            // arbitrary getters. Only primitive string exceptions are read.
-            self?.exceptionMessage = exception?.isString == true
-                ? String((exception?.toString() ?? "JavaScript exception.").prefix(256))
-                : "JavaScript exception."
+        context.exceptionHandler = { [weak self] _, _ in
+            // Exception contents can contain tokens, paths or user resources.
+            // Never stringify or inspect the exception, even when primitive.
+            self?.exceptionMessage = "JavaScript exception."
         }
         let metadata: [String: Any] = [
             "apiVersion": "1.0.0",

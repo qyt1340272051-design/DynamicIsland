@@ -589,11 +589,11 @@ private final class PermissionRuntimeFixture {
         self.service = service
         let manager = ActivityManager(clock: TestActivityClock(Date(timeIntervalSinceReferenceDate: 99_000)), configuration: .immediate)
         let factory = factory
-        lifecycle = PluginLifecycleBridge(activityManager: manager, actionRouter: ActionRouter(manager: manager), permissions: permissions) { package in
+        lifecycle = PluginLifecycleBridge(activityManager: manager, actionRouter: ActionRouter(manager: manager), permissions: permissions, runtimeFactory: { package in
             let runtime = PluginRuntime(package: package, bridge: service)
             factory.runtimes.append(runtime)
             return PermissionRuntimeForwarder(runtime: runtime)
-        }
+        })
     }
 
     func load(_ package: ValidatedPluginPackage) -> PluginRuntime {
