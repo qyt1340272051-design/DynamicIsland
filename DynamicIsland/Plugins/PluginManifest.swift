@@ -37,6 +37,7 @@ public nonisolated enum PluginManifestError: Error, Equatable, LocalizedError, S
     case unsupportedSchemaVersion(Int)
     case invalidPluginID(String)
     case invalidName
+    case invalidDeveloper
     case invalidSemanticVersion(field: String, value: String)
     case unsupportedEngine(String)
     case invalidEntry(String)
@@ -56,6 +57,7 @@ public nonisolated enum PluginManifestError: Error, Equatable, LocalizedError, S
         case .unsupportedSchemaVersion: "unsupportedSchemaVersion"
         case .invalidPluginID: "invalidPluginID"
         case .invalidName: "invalidName"
+        case .invalidDeveloper: "invalidDeveloper"
         case .invalidSemanticVersion: "invalidSemanticVersion"
         case .unsupportedEngine: "unsupportedEngine"
         case .invalidEntry: "invalidEntry"
@@ -74,6 +76,7 @@ public nonisolated enum PluginManifestError: Error, Equatable, LocalizedError, S
         case .unsupportedSchemaVersion: "$.schemaVersion"
         case .invalidPluginID: "$.id"
         case .invalidName: "$.name"
+        case .invalidDeveloper: "$.developer"
         case .invalidSemanticVersion(let field, _): "$.\(field)"
         case .unsupportedEngine: "$.engine"
         case .invalidEntry: "$.entry"
@@ -104,6 +107,8 @@ public nonisolated enum PluginManifestError: Error, Equatable, LocalizedError, S
             "Plugin ID \(value.debugDescription) must be a lowercase reverse-DNS identifier."
         case .invalidName:
             "Plugin name must be 1 to 80 printable characters without surrounding whitespace."
+        case .invalidDeveloper:
+            "Plugin developer must be 1 to 80 printable characters without surrounding whitespace."
         case .invalidSemanticVersion(let field, let value):
             "Manifest field \(field.debugDescription) has invalid semantic version \(value.debugDescription)."
         case .unsupportedEngine(let value):
@@ -144,6 +149,8 @@ public nonisolated struct PluginManifest: Codable, Equatable, Sendable {
     public let minimumHostVersion: SemanticVersion
     public let permissions: [PluginPermission]
     public let capabilities: [PluginCapability]
+    /// Self-reported display metadata; this is not publisher verification.
+    public let developer: String?
 
     public init(
         schemaVersion: Int = Self.currentSchemaVersion,
@@ -154,7 +161,8 @@ public nonisolated struct PluginManifest: Codable, Equatable, Sendable {
         entry: String,
         minimumHostVersion: SemanticVersion,
         permissions: [PluginPermission],
-        capabilities: [PluginCapability]
+        capabilities: [PluginCapability],
+        developer: String? = nil
     ) throws {
         self.schemaVersion = schemaVersion
         self.id = id
@@ -165,6 +173,7 @@ public nonisolated struct PluginManifest: Codable, Equatable, Sendable {
         self.minimumHostVersion = minimumHostVersion
         self.permissions = permissions
         self.capabilities = capabilities
+        self.developer = developer
         try validate()
     }
 
@@ -207,6 +216,7 @@ public nonisolated struct PluginManifest: Codable, Equatable, Sendable {
         }
         guard Self.isValidPluginID(id) else { throw PluginManifestError.invalidPluginID(id) }
         guard Self.isValidName(name) else { throw PluginManifestError.invalidName }
+        if let developer, !Self.isValidName(developer) { throw PluginManifestError.invalidDeveloper }
         guard Self.isValidEntry(entry) else { throw PluginManifestError.invalidEntry(entry) }
         try Self.rejectDuplicatePermissions(permissions)
         try Self.rejectDuplicateCapabilities(capabilities)
@@ -429,7 +439,7 @@ public nonisolated struct PluginManifest: Codable, Equatable, Sendable {
 
     private enum CodingKeys: String, CaseIterable {
         case schemaVersion, id, name, version, engine, entry, minimumHostVersion
-        case permissions, capabilities
+        case permissions, capabilities, developer
     }
 
     private struct DynamicCodingKey: CodingKey {
@@ -468,7 +478,7 @@ public nonisolated struct PluginManifest: Codable, Equatable, Sendable {
         if let unknown = received.subtracting(expected).sorted().first {
             throw PluginManifestError.unknownField(unknown)
         }
-        if let missing = expected.subtracting(received).sorted().first {
+        if let missing = expected.subtracting([CodingKeys.developer.rawValue]).subtracting(received).sorted().first {
             throw PluginManifestError.missingField(missing)
         }
 
@@ -476,6 +486,9 @@ public nonisolated struct PluginManifest: Codable, Equatable, Sendable {
         guard Self.isValidPluginID(id) else { throw PluginManifestError.invalidPluginID(id) }
         let name = try decode(String.self, .name, expected: "a string")
         guard Self.isValidName(name) else { throw PluginManifestError.invalidName }
+        let developer = received.contains(CodingKeys.developer.rawValue)
+            ? try decode(String.self, .developer, expected: "a string") : nil
+        if let developer, !Self.isValidName(developer) { throw PluginManifestError.invalidDeveloper }
 
         let versionRaw = try decode(String.self, .version, expected: "a semantic version string")
         let version: SemanticVersion
@@ -537,7 +550,8 @@ public nonisolated struct PluginManifest: Codable, Equatable, Sendable {
             entry: entry,
             minimumHostVersion: minimumHostVersion,
             permissions: permissions,
-            capabilities: capabilities
+            capabilities: capabilities,
+            developer: developer
         )
     }
 
@@ -556,5 +570,6 @@ public nonisolated struct PluginManifest: Codable, Equatable, Sendable {
         try container.encode(minimumHostVersion.description, forKey: key(.minimumHostVersion))
         try container.encode(permissions.map(\.rawValue), forKey: key(.permissions))
         try container.encode(capabilities.map(\.rawValue), forKey: key(.capabilities))
+        try container.encodeIfPresent(developer, forKey: key(.developer))
     }
 }

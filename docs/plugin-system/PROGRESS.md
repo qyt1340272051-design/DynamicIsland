@@ -83,7 +83,7 @@
 
 | ID | 任务 | 前置依赖 | 状态 | 验收证据 |
 | --- | --- | --- | --- | --- |
-| T33 | Extensions Settings UI | T20 | `pending` | 待补。 |
+| T33 | Extensions Settings UI | T20 | `verified` | [管理页与持久化分项授权验收](phase-7-t33-extensions-settings.md)；模型 / 存储 / 并发定向 91 passed，原生 UI 3 passed，完整 CI 647 passed、1 skipped、0 failures，普通 Release build / 签名通过；Release 定向合计 149 passed。Discover 按计划后置。 |
 | T34 | .dip Installer | T19、T28 | `pending` | 待补。 |
 | T35 | Pomodoro 官方插件 | T24–T34 | `pending` | 待补。 |
 | T36 | GitHub 官方插件 | T35 | `pending` | 待补。 |

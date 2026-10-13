@@ -82,6 +82,10 @@
       "items": {
         "$ref": "#/$defs/capability"
       }
+    },
+    "developer": {
+      "$ref": "#/properties/name",
+      "description": "Optional self-reported developer display name. This does not verify publisher identity."
     }
   },
   "$defs": {

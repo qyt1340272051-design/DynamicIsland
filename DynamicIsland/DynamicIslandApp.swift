@@ -1,4 +1,5 @@
 import AppKit
+import Combine
 import OSLog
 import SwiftUI
 
@@ -8,13 +9,20 @@ struct DynamicIslandApp: App {
 
     var body: some Scene {
         Settings {
-            EmptyView()
+            if let model = appDelegate.pluginExtensionsModel {
+                PluginExtensionsView(model: model, onShowDiagnostics: { appDelegate.showPluginDiagnostics() })
+            } else {
+                ContentUnavailableView("插件管理暂不可用", systemImage: "puzzlepiece.extension",
+                                       description: Text("请等待插件初始化完成。"))
+                    .frame(width: 800, height: 600)
+            }
         }
     }
 }
 
 @MainActor
-final class AppDelegate: NSObject, NSApplicationDelegate {
+final class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
+    @Published fileprivate var pluginExtensionsModel: PluginExtensionsModel?
     private var statusItem: NSStatusItem?
     private var panelController: IslandPanelController?
     private var screenManager: ScreenManager?
@@ -28,6 +36,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     private var activityRuntime: IslandActivityRuntime?
     private var pluginDiagnosticsModel: PluginDiagnosticsModel?
     private var pluginDiagnosticsWindowController: PluginDiagnosticsWindowController?
+    private var pluginExtensionsWindowController: PluginExtensionsWindowController?
     private let pluginLogger = Logger(subsystem: "DynamicIsland", category: "PluginLifecycle")
 #if DEBUG
     private var screenSimulatorWindowController: ScreenSimulatorWindowController?
@@ -58,6 +67,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         self.panelController = panelController
         self.activityRuntime = activityRuntime
         configurePlugins(lifecycle: activityRuntime.pluginLifecycle, diagnostics: activityRuntime.pluginDiagnostics,
+                         permissions: activityRuntime.permissionManager,
                          batteryService: batteryService)
         panelController.show()
         configureStatusItem()
@@ -68,11 +78,13 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         pluginStartupTask?.cancel()
         pluginEnvironment?.stop()
         pluginDiagnosticsWindowController?.close()
+        pluginExtensionsWindowController?.close()
         activityRuntime?.shutdownPlugins()
         panelController?.hide()
     }
 
     private func configurePlugins(lifecycle: PluginLifecycleBridge, diagnostics: PluginDiagnosticsStore,
+                                  permissions: PermissionManager,
                                   batteryService: any BatteryService) {
         pluginLifecycle = lifecycle
         pluginEnvironment = PluginLifecycleEnvironment(batteryService: batteryService) { [weak lifecycle] state in
@@ -88,7 +100,10 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             pluginManager = manager
             let model = PluginDiagnosticsModel(manager: manager, lifecycle: lifecycle, diagnostics: diagnostics)
             pluginDiagnosticsModel = model
-            lifecycle.setAutomaticDisableHandler { [weak manager, weak lifecycle, weak model] package, incident in
+            let extensionsModel = PluginExtensionsModel(manager: manager, lifecycle: lifecycle,
+                permissions: permissions, diagnostics: diagnostics, diagnosticsModel: model)
+            pluginExtensionsModel = extensionsModel
+            lifecycle.setAutomaticDisableHandler { [weak manager, weak lifecycle, weak model, weak extensionsModel] package, incident in
                 guard let manager, let lifecycle else { return }
                 Task { @MainActor in
                     do {
@@ -101,10 +116,13 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
                         }
                     }
                     await model?.refresh()
+                    await extensionsModel?.refresh()
                 }
             }
             pluginStartupTask = Task { [pluginLogger] in
                 let report = await manager.discover()
+                extensionsModel.setDiscoveryReport(report)
+                await extensionsModel.refresh()
                 for failure in report.failures {
                     pluginLogger.error("Plugin discovery rejected a candidate: \(failure.error.code, privacy: .public)")
                 }
@@ -122,6 +140,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         let menu = NSMenu()
         menu.addItem(NSMenuItem(title: "显示 Dynamic Island", action: #selector(showIsland), keyEquivalent: ""))
         menu.addItem(NSMenuItem(title: "隐藏 Dynamic Island", action: #selector(hideIsland), keyEquivalent: ""))
+        menu.addItem(NSMenuItem(title: "插件管理…", action: #selector(showPluginExtensions), keyEquivalent: ","))
         menu.addItem(NSMenuItem(title: "插件诊断…", action: #selector(showPluginDiagnostics), keyEquivalent: ""))
         menu.addItem(.separator())
 
@@ -162,7 +181,15 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         statusItem = item
     }
 
-    @objc private func showPluginDiagnostics() {
+    @objc private func showPluginExtensions() {
+        guard let model = pluginExtensionsModel else { return }
+        let controller = pluginExtensionsWindowController ?? PluginExtensionsWindowController(
+            model: model, onShowDiagnostics: { [weak self] in self?.showPluginDiagnostics() })
+        pluginExtensionsWindowController = controller
+        controller.show()
+    }
+
+    @objc fileprivate func showPluginDiagnostics() {
         guard let model = pluginDiagnosticsModel else { return }
         let controller = pluginDiagnosticsWindowController ?? PluginDiagnosticsWindowController(model: model)
         pluginDiagnosticsWindowController = controller

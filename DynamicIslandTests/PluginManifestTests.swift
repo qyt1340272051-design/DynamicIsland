@@ -52,11 +52,25 @@ final class PluginManifestTests: XCTestCase {
     }
 
     func testUnknownTopLevelFieldsFailThroughBothDecodeEntryPoints() throws {
-        let data = try fixtureData { $0["developer"] = "Example" }
-        assertManifestError(data, code: "unknownField", path: "$.developer")
+        let data = try fixtureData { $0["publisherVerified"] = true }
+        assertManifestError(data, code: "unknownField", path: "$.publisherVerified")
 
         XCTAssertThrowsError(try JSONDecoder().decode(PluginManifest.self, from: data)) { error in
-            XCTAssertEqual(error as? PluginManifestError, .unknownField("developer"))
+            XCTAssertEqual(error as? PluginManifestError, .unknownField("publisherVerified"))
+        }
+    }
+
+    func testOptionalDeveloperIsStrictDisplayMetadataAndPreservesLegacyEncoding() throws {
+        let legacy = try PluginManifest.decodeJSON(try fixtureData())
+        XCTAssertNil(legacy.developer)
+        let manifest = try PluginManifest.decodeJSON(try fixtureData { $0["developer"] = "Example 开发者" })
+        XCTAssertEqual(manifest.developer, "Example 开发者")
+        XCTAssertEqual(try PluginManifest.decodeJSON(manifest.encodeJSON()), manifest)
+        for text in ["", " leading", "trailing ", "bad\nname", "spoof\u{202E}publisher", String(repeating: "x", count: 81)] {
+            assertManifestError(try fixtureData { $0["developer"] = text }, code: "invalidDeveloper", path: "$.developer")
+        }
+        for value: Any in [NSNull(), 1, ["name": "Example"]] {
+            assertManifestError(try fixtureData { $0["developer"] = value }, code: "invalidType", path: "$.developer")
         }
     }
 
@@ -271,7 +285,8 @@ final class PluginManifestTests: XCTestCase {
         XCTAssertEqual(schema["$schema"] as? String, "https://json-schema.org/draft/2020-12/schema")
         XCTAssertEqual(schema["additionalProperties"] as? Bool, false)
         XCTAssertEqual(Set(try XCTUnwrap(schema["required"] as? [String])), requiredFields)
-        XCTAssertEqual(Set(properties.keys), requiredFields)
+        XCTAssertEqual(Set(properties.keys), requiredFields.union(["developer"]))
+        XCTAssertEqual((properties["developer"] as? [String: Any])?["$ref"] as? String, "#/properties/name")
 
         let schemaVersion = try XCTUnwrap(properties["schemaVersion"] as? [String: Any])
         XCTAssertEqual(schemaVersion["const"] as? Int, PluginManifest.currentSchemaVersion)

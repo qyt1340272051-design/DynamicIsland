@@ -1,12 +1,19 @@
 import Foundation
 
-/// PluginManager calls these synchronous Host hooks inside its serialized
-/// mutation transaction. Hooks must not await or synchronously wait on Manager.
+/// Manager holds its serialized mutation across Host hooks. Preparation may
+/// await permission storage; hooks must never call back into Manager mutations.
 @MainActor
 public protocol PluginManagerLifecycleHandling: AnyObject, Sendable {
+    func pluginWillLoad(_ package: ValidatedPluginPackage) async
+    func pluginDidUninstall(_ package: ValidatedPluginPackage) async
     func pluginDidLoad(_ package: ValidatedPluginPackage, isEnabled: Bool)
     func pluginDidChangeEnablement(id: String, isEnabled: Bool)
     func pluginWillUnload(id: String)
+}
+
+public extension PluginManagerLifecycleHandling {
+    func pluginWillLoad(_ package: ValidatedPluginPackage) async {}
+    func pluginDidUninstall(_ package: ValidatedPluginPackage) async {}
 }
 
 public nonisolated enum PluginStopReason: String, Equatable, Sendable {
@@ -244,6 +251,29 @@ public final class PluginLifecycleBridge: PluginManagerLifecycleHandling {
     public func allowsExecution(id: String) -> Bool {
         guard let entry = entries[id] else { return false }
         return !isShutdown && entry.isEnabled && entry.lifecycle.state.allowsExecution && entry.token != nil
+    }
+
+    public func pluginWillLoad(_ package: ValidatedPluginPackage) async {
+        guard !isShutdown else { return }
+        await permissions?.prepare(package: package)
+    }
+
+    public func pluginDidUninstall(_ package: ValidatedPluginPackage) async {
+        let id = package.manifest.id
+        guard forgetPluginHistory(id: id) else { return }
+        do { try await permissions?.forgetPersisted(pluginID: id) }
+        catch { diagnostics?.recordPersistenceFailure(pluginID: id) }
+        notifyChangeObservers()
+    }
+
+    /// Only a confirmed Manager uninstall may forget failure history. Ordinary
+    /// unload/reload must retain it, and cannot call this while registered.
+    @discardableResult
+    public func forgetPluginHistory(id: String) -> Bool {
+        guard entries[id] == nil else { return false }
+        watchdog.unregister(pluginID: id)
+        notifyChangeObservers()
+        return true
     }
 
     public func pluginDidLoad(_ package: ValidatedPluginPackage, isEnabled: Bool) {

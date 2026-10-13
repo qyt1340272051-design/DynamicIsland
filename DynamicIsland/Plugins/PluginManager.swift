@@ -302,6 +302,7 @@ public actor PluginManager {
 
         for id in entries.keys.sorted() {
             guard let entry = entries[id] else { continue }
+            await lifecycleHandler?.pluginWillLoad(entry.package)
             await lifecycleHandler?.pluginDidLoad(entry.package, isEnabled: entry.isEnabled)
         }
 
@@ -346,6 +347,7 @@ public actor PluginManager {
 
         persistedState = nextState
         entries[package.manifest.id] = loaded
+        await lifecycleHandler?.pluginWillLoad(package)
         await lifecycleHandler?.pluginDidLoad(package, isEnabled: isEnabled)
         return loaded.record
     }
@@ -355,6 +357,20 @@ public actor PluginManager {
         await beginMutation()
         defer { endMutation() }
         return try await setEnabled(true, id: pluginID)
+    }
+
+    public func enableIfCurrent(package: ValidatedPluginPackage) async throws -> PluginRecord? {
+        await beginMutation()
+        defer { endMutation() }
+        guard matchesCurrent(package) else { return nil }
+        return try await setEnabled(true, id: package.manifest.id)
+    }
+
+    private func matchesCurrent(_ package: ValidatedPluginPackage) -> Bool {
+        guard let current = entries[package.manifest.id]?.package else { return false }
+        return current.manifest == package.manifest && current.entrySource == package.entrySource
+            && current.entryRelativePath == package.entryRelativePath
+            && current.canonicalRootURL == package.canonicalRootURL
     }
 
     @discardableResult
@@ -421,6 +437,7 @@ public actor PluginManager {
         await lifecycleHandler?.pluginWillUnload(id: pluginID)
         persistedState = nextState
         entries[pluginID] = reloaded
+        await lifecycleHandler?.pluginWillLoad(package)
         await lifecycleHandler?.pluginDidLoad(package, isEnabled: isEnabled)
         return reloaded.record
     }
@@ -432,6 +449,17 @@ public actor PluginManager {
     public func uninstall(id pluginID: String) async throws -> PluginRecord {
         await beginMutation()
         defer { endMutation() }
+        return try await uninstallCurrent(id: pluginID)
+    }
+
+    public func uninstallIfCurrent(package: ValidatedPluginPackage) async throws -> PluginRecord? {
+        await beginMutation()
+        defer { endMutation() }
+        guard matchesCurrent(package) else { return nil }
+        return try await uninstallCurrent(id: package.manifest.id)
+    }
+
+    private func uninstallCurrent(id pluginID: String) async throws -> PluginRecord {
         try prepareManagedDirectories()
         try ensureStateLoaded()
         guard let existing = entries[pluginID] else {
@@ -489,6 +517,7 @@ public actor PluginManager {
                 try? FileManager.default.moveItem(at: quarantineURL, to: trashURL)
             }
         }
+        await lifecycleHandler?.pluginDidUninstall(existing.package)
         return existing.record
     }
 

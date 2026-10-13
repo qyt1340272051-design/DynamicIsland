@@ -26,7 +26,7 @@ public final class IslandActivityRuntime {
     ) {
         let manager = ActivityManager()
         let router = ActionRouter(manager: manager)
-        let permissionManager = PermissionManager()
+        let permissionManager = PermissionManager(decisionStore: .applicationSupport())
         let pluginScheduler = PluginScheduler(policy: .background)
         let pluginDiagnostics = PluginDiagnosticsStore()
         let pluginBridge = PluginJSBridge(storage: .applicationSupport(), permissions: permissionManager,

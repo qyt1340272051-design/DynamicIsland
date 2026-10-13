@@ -149,6 +149,7 @@ public final class PluginCrashWatchdog {
                 "schemaVersion": manifest.schemaVersion,
                 "id": manifest.id,
                 "name": manifest.name,
+                "developer": manifest.developer as Any? ?? NSNull(),
                 "version": manifest.version.description,
                 "engine": manifest.engine.rawValue,
                 "entry": manifest.entry,

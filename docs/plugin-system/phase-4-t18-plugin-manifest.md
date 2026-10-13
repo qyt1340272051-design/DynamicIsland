@@ -2,9 +2,11 @@
 
 日期：2026-09-29。范围：稳定、版本化的 V1 插件描述格式。包文件、真实路径、symlink、重复安装 ID 和 Host 兼容性门禁属于 T19。
 
+2026-10-12 T33 兼容扩展：增加可选 developer 自述信息，见 [管理界面与授权记录](phase-7-t33-extensions-settings.md)。原九个必需字段、旧包编码及下述历史验证仍保留。
+
 ## V1 契约
 
-Manifest 是只含数据的 `Codable`、`Sendable` 模型，九个字段全部必填：
+Manifest 是只含数据的 `Codable`、`Sendable` 模型，九个字段必填，developer 可选：
 
 | 字段 | V1 规则 |
 | --- | --- |
@@ -17,6 +19,7 @@ Manifest 是只含数据的 `Codable`、`Sendable` 模型，九个字段全部�
 | `minimumHostVersion` | SemVer 2.0.0 字符串。 |
 | `permissions` | T28 规划的 7 项闭集；未知项和重复项均拒绝。 |
 | `capabilities` | Activity publish/update/end、IslandNode UI、action、local storage 和 scheduler 共 7 项闭集；未知项和重复项均拒绝。 |
+| `developer` | 可选自述开发者，采用 name 的文本规则；不能表示已验证的发布者身份。 |
 
 `SemanticVersion` 保留 prerelease 与 build metadata。优先级按 SemVer 比较，build metadata 不参与优先级；核心数字用规范化十进制字符串比较，不受固定宽度整数溢出限制。
 
@@ -39,14 +42,14 @@ Manifest 是只含数据的 `Codable`、`Sendable` 模型，九个字段全部�
 ## 严格解析与错误
 
 - `PluginManifest.init(from:)` 使用动态 CodingKey 比对实际顶层 key，避免 `JSONDecoder` 默认忽略未知字段。
-- 解析先读取 `schemaVersion`，再检查九个字段的精确集合；未来 schema 的新增字段不会被错误报告成可兼容 V1。
+- 解析先读取 `schemaVersion`，再检查九个必需字段及 developer 可选字段；其他新增字段不能被猜测为兼容 V1。
 - `decodeJSON` 只接受无 BOM 的 UTF-8，并在 Foundation 丢失信息前扫描顶层字段名；普通形式或 Unicode escape 形式的重复 key 都会被拒绝，UTF-16/UTF-32 不能绕过扫描。
 - 权限和 capability 先按原始字符串数组解析，再逐项映射闭集并检测重复；不会过滤未知值后继续运行。
 - `decodeJSON` 限制输入为 64 KiB，并且是 T19 读取不可信 Manifest 字节的唯一入口。通用 `JSONDecoder` conformance 用于已经受边界约束的数据和 Codable round trip；Decoder 在调用模型前已经消费原始字节，模型无法从该接口恢复输入大小或重复 key 信息。
 - 公开错误提供稳定的 `code`、JSON `path` 和非空说明，覆盖格式、字段、重复字段、类型、版本、ID、入口、权限及 capability 问题。
 - [JSON Schema](schema/plugin-manifest-v1.schema.json) 使用 Draft 2020-12、`additionalProperties: false`、九个 required 字段、闭集 enum 和 `uniqueItems: true`，并与 Swift 运行时规则同步。
 
-例如，额外的 `developer` 字段返回 `unknownField` 和 `$.developer`；重复的 `id` 返回 `duplicateField` 和 `$.id`；`version: "1.2"` 返回 `invalidSemanticVersion` 和 `$.version`；`permissions: ["shell.execute"]` 返回 `unknownPermission` 和 `$.permissions[0]`。调用方可以显示稳定错误而无需解析 Foundation 的调试文字。
+例如，额外的 `publisherVerified` 字段返回 `unknownField` 和 `$.publisherVerified`；重复的 `id` 返回 `duplicateField` 和 `$.id`；`version: "1.2"` 返回 `invalidSemanticVersion` 和 `$.version`；`permissions: ["shell.execute"]` 返回 `unknownPermission` 和 `$.permissions[0]`。调用方可以显示稳定错误而无需解析 Foundation 的调试文字。
 
 ## 验证
 

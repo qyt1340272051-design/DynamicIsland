@@ -20,7 +20,7 @@ public nonisolated enum PluginPermissionDecision: String, CaseIterable, Equatabl
 }
 
 public nonisolated enum PluginPermissionError: Error, Equatable, LocalizedError, Sendable {
-    case notGranted, denied, revoked, undeclared, staleReview
+    case notGranted, denied, revoked, undeclared, staleReview, persistenceFailed
 
     public var code: String {
         switch self {
@@ -29,6 +29,7 @@ public nonisolated enum PluginPermissionError: Error, Equatable, LocalizedError,
         case .revoked: "permissionRevoked"
         case .undeclared: "permissionRequired"
         case .staleReview: "stalePermissionReview"
+        case .persistenceFailed: "permissionPersistenceFailed"
         }
     }
 
@@ -39,6 +40,7 @@ public nonisolated enum PluginPermissionError: Error, Equatable, LocalizedError,
         case .revoked: "The Host revoked the permission or its previous authorization."
         case .undeclared: "The permission is unknown or is not declared by this plugin."
         case .staleReview: "The permission review does not belong to the current plugin package."
+        case .persistenceFailed: "The Host could not save the permission decision."
         }
     }
 }
@@ -121,9 +123,8 @@ public nonisolated final class PluginPermissionObservation: @unchecked Sendable 
     deinit { cancel() }
 }
 
-/// Central Host authorization for the current process only. A new manager has
-/// no grants, and every package begins requested after App restart. T33 supplies
-/// a user approval UI and a separately reviewed persistence policy.
+/// Host authorization. Memory-only instances start requested; production loads
+/// saved decisions for the exact immutable package before Runtime startup.
 @MainActor
 public final class PermissionManager {
     private final class Entry {
@@ -132,9 +133,12 @@ public final class PermissionManager {
         let entrySource: Data
         let review: PluginPermissionReview
         let gates: [PluginPermission: PluginPermissionGate]
+        let mayRestore: Bool
+        var decisionGenerations: [PluginPermission: UUID] = [:]
 
-        init(package: ValidatedPluginPackage, fingerprint: PluginPermissionFingerprint) {
+        init(package: ValidatedPluginPackage, fingerprint: PluginPermissionFingerprint, mayRestore: Bool) {
             self.fingerprint = fingerprint
+            self.mayRestore = mayRestore
             manifest = package.manifest
             entrySource = package.entrySource
             review = PluginPermissionReview(manifest: package.manifest, scope: UUID())
@@ -156,8 +160,23 @@ public final class PermissionManager {
     }
 
     private var entries: [String: Entry] = [:]
+    private let decisionStore: PluginPermissionDecisionStore?
+    private var preparedScopes: [String: UUID] = [:]
+    private var forgottenIDs = Set<String>()
+    private var observers: [UUID: @MainActor () -> Void] = [:]
+    private var mutationInProgress = false
+    private var mutationWaiters: [CheckedContinuation<Void, Never>] = []
+    public private(set) var persistenceError: String?
 
-    public init() {}
+    public init(decisionStore: PluginPermissionDecisionStore? = nil) { self.decisionStore = decisionStore }
+
+    public func observeChanges(_ callback: @escaping @MainActor () -> Void) -> UUID {
+        let id = UUID(); observers[id] = callback; return id
+    }
+
+    public func removeChangeObserver(_ id: UUID) { observers.removeValue(forKey: id) }
+
+    private func notifyObservers() { Array(observers.values).forEach { $0() } }
 
     /// The input is the Host's immutable validated package, never JS metadata.
     /// Repeated registration preserves this package's current decisions. Any
@@ -170,10 +189,139 @@ public final class PermissionManager {
             return current.review
         }
         let fingerprint = PluginPermissionFingerprint(package: package)
-        entries[id]?.revoke()
-        let entry = Entry(package: package, fingerprint: fingerprint)
+        let previous = entries[id]
+        previous?.revoke()
+        let entry = Entry(package: package, fingerprint: fingerprint,
+                          mayRestore: previous == nil && !forgottenIDs.contains(id))
         entries[id] = entry
+        preparedScopes.removeValue(forKey: id)
+        notifyObservers()
         return entry.review
+    }
+
+    /// Manager awaits this step before starting JS. Returning to earlier code
+    /// within this process cannot restore a previous authorization scope.
+    public func prepare(package: ValidatedPluginPackage) async {
+        let review = request(package: package)
+        guard let decisionStore, preparedScopes[review.id] != review.scope,
+              let entry = entries[review.id] else { return }
+        await beginMutation()
+        defer { endMutation() }
+        guard entries[review.id] === entry, preparedScopes[review.id] != review.scope else { return }
+        let decisionGenerations = entry.decisionGenerations
+        do {
+            let fingerprint = try Self.persistenceFingerprint(package: package)
+            let saved = try await decisionStore.load()[review.id]
+            guard entries[review.id] === entry else { return }
+            if entry.mayRestore, let saved, saved.fingerprint == fingerprint,
+               Set(saved.states.keys) == Set(entry.gates.keys) {
+                for (permission, state) in saved.states
+                    where decisionGenerations[permission] == nil && entry.decisionGenerations[permission] == nil {
+                    entry.gates[permission]?.update(state)
+                }
+            } else {
+                let requested = PluginPermissionDecisionRecord(pluginID: review.id, fingerprint: fingerprint,
+                                                               states: entry.gates.mapValues { _ in .requested })
+                try await decisionStore.replace(record: requested)
+                guard entries[review.id] === entry else { return }
+            }
+            preparedScopes[review.id] = review.scope
+            persistenceError = nil
+        } catch {
+            // No grant is restored on unreadable, corrupt or unwritable state.
+            persistenceError = "授权记录无法读取或保存。未保存的批准不会生效。"
+        }
+        notifyObservers()
+    }
+
+    /// Approval commits to disk before becoming effective. Denial/revocation
+    /// closes existing leases synchronously, even while disk work is queued.
+    public func applyPersistentHostDecision(decision: PluginPermissionDecision,
+                                            review: PluginPermissionReview,
+                                            permission: PluginPermission) async throws {
+        guard let entry = entries[review.id], entry.review == review else { throw PluginPermissionError.staleReview }
+        guard let gate = entry.gates[permission] else { throw PluginPermissionError.undeclared }
+        guard let decisionStore else {
+            try applyHostDecision(decision: decision, review: review, permission: permission)
+            return
+        }
+        let generation = UUID()
+        entry.decisionGenerations[permission] = generation
+        if decision != .granted {
+            gate.update(decision.state)
+            notifyObservers()
+        }
+        await beginMutation()
+        defer { endMutation() }
+        guard entries[review.id] === entry, entry.decisionGenerations[permission] == generation else {
+            throw PluginPermissionError.staleReview
+        }
+        guard preparedScopes[review.id] == review.scope else { throw PluginPermissionError.persistenceFailed }
+        do {
+            let fingerprint = try Self.persistenceFingerprint(manifest: entry.manifest, entrySource: entry.entrySource)
+            try await decisionStore.setDecision(pluginID: review.id, fingerprint: fingerprint,
+                                                 permission: permission, state: decision.state)
+            guard entries[review.id] === entry else { throw PluginPermissionError.staleReview }
+            guard entry.decisionGenerations[permission] == generation else {
+                // A synchronous administrative revoke may have superseded a
+                // pending grant. Persist its current state before releasing FIFO.
+                try await decisionStore.setDecision(pluginID: review.id, fingerprint: fingerprint,
+                                                     permission: permission, state: gate.state)
+                throw PluginPermissionError.staleReview
+            }
+            if decision == .granted { gate.update(.granted) }
+            persistenceError = nil
+            notifyObservers()
+        } catch let error as PluginPermissionError { throw error }
+        catch {
+            persistenceError = decision == .granted
+                ? "授权记录保存失败，批准未生效。" : "本次授权已撤销，授权记录保存失败。"
+            notifyObservers()
+            throw PluginPermissionError.persistenceFailed
+        }
+    }
+
+    public func forgetPersisted(pluginID: String) async throws {
+        unregister(pluginID: pluginID)
+        guard let decisionStore else { return }
+        await beginMutation()
+        defer { endMutation() }
+        do {
+            try await decisionStore.remove(pluginID: pluginID)
+            persistenceError = nil
+        } catch {
+            persistenceError = "本次授权已撤销，授权记录移除失败。"
+            notifyObservers()
+            throw PluginPermissionError.persistenceFailed
+        }
+        notifyObservers()
+    }
+
+    public nonisolated static func persistenceFingerprint(package: ValidatedPluginPackage) throws -> String {
+        try persistenceFingerprint(manifest: package.manifest, entrySource: package.entrySource)
+    }
+
+    private nonisolated static func persistenceFingerprint(manifest m: PluginManifest, entrySource: Data) throws -> String {
+        let canonical = try PluginManifest(schemaVersion: m.schemaVersion, id: m.id, name: m.name,
+            version: m.version, engine: m.engine, entry: m.entry, minimumHostVersion: m.minimumHostVersion,
+            permissions: m.permissions.sorted { $0.rawValue < $1.rawValue },
+            capabilities: m.capabilities.sorted { $0.rawValue < $1.rawValue }, developer: m.developer)
+        var hash = SHA256()
+        hash.update(data: Data("DynamicIsland.PluginPermissionDecision.v1\0".utf8))
+        hash.update(data: try canonical.encodeJSON())
+        hash.update(data: Data([0]))
+        hash.update(data: Data(SHA256.hash(data: entrySource)))
+        return hash.finalize().map { String(format: "%02x", $0) }.joined()
+    }
+
+    private func beginMutation() async {
+        if !mutationInProgress { mutationInProgress = true; return }
+        await withCheckedContinuation { mutationWaiters.append($0) }
+    }
+
+    private func endMutation() {
+        if mutationWaiters.isEmpty { mutationInProgress = false }
+        else { mutationWaiters.removeFirst().resume() }
     }
 
     /// Called only after a Host approval or denial action. No default policy
@@ -188,6 +336,8 @@ public final class PermissionManager {
             throw PluginPermissionError.undeclared
         }
         gate.update(decision.state)
+        entry.decisionGenerations[permission] = UUID()
+        notifyObservers()
     }
 
     public func require(permission: PluginPermission,
@@ -227,11 +377,18 @@ public final class PermissionManager {
     /// calls request again instead, preserving decisions for unchanged code.
     public func unregister(pluginID: String) {
         entries.removeValue(forKey: pluginID)?.revoke()
+        preparedScopes.removeValue(forKey: pluginID)
+        forgottenIDs.insert(pluginID)
+        notifyObservers()
     }
 
     /// Synchronous shutdown/revocation boundary shared with outstanding leases.
     public func revokeAll() {
         entries.values.forEach { $0.revoke() }
+        entries.values.forEach { entry in
+            for permission in entry.gates.keys { entry.decisionGenerations[permission] = UUID() }
+        }
+        notifyObservers()
     }
 
     private func gate(permission: PluginPermission,
@@ -261,6 +418,7 @@ private nonisolated struct PluginPermissionFingerprint: Equatable {
     let schemaVersion: Int
     let id: String
     let name: String
+    let developer: String?
     let version: SemanticVersion
     let engine: PluginEngine
     let entry: String
@@ -274,6 +432,7 @@ private nonisolated struct PluginPermissionFingerprint: Equatable {
         schemaVersion = manifest.schemaVersion
         id = manifest.id
         name = manifest.name
+        developer = manifest.developer
         version = manifest.version
         engine = manifest.engine
         entry = manifest.entry
@@ -284,7 +443,7 @@ private nonisolated struct PluginPermissionFingerprint: Equatable {
     }
 
     func matches(manifest: PluginManifest) -> Bool {
-        schemaVersion == manifest.schemaVersion && id == manifest.id && name == manifest.name
+        schemaVersion == manifest.schemaVersion && id == manifest.id && name == manifest.name && developer == manifest.developer
             && version == manifest.version && engine == manifest.engine && entry == manifest.entry
             && minimumHostVersion == manifest.minimumHostVersion
             && permissions == manifest.permissions.map(\.rawValue).sorted()
