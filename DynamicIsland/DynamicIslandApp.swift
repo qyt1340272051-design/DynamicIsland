@@ -2,6 +2,7 @@ import AppKit
 import Combine
 import OSLog
 import SwiftUI
+import UniformTypeIdentifiers
 
 @main
 struct DynamicIslandApp: App {
@@ -9,13 +10,25 @@ struct DynamicIslandApp: App {
 
     var body: some Scene {
         Settings {
-            if let model = appDelegate.pluginExtensionsModel {
-                PluginExtensionsView(model: model, onShowDiagnostics: { appDelegate.showPluginDiagnostics() })
-            } else {
-                ContentUnavailableView("插件管理暂不可用", systemImage: "puzzlepiece.extension",
-                                       description: Text("请等待插件初始化完成。"))
-                    .frame(width: 800, height: 600)
-            }
+            PluginSettingsContent(appDelegate: appDelegate)
+        }
+    }
+}
+
+/// Observe startup from a View. The Settings scene builder itself does not
+/// subscribe to the delegate's later publication of the initialized model.
+@MainActor
+private struct PluginSettingsContent: View {
+    @ObservedObject var appDelegate: AppDelegate
+
+    var body: some View {
+        if let model = appDelegate.pluginExtensionsModel {
+            PluginExtensionsView(model: model, onShowDiagnostics: { appDelegate.showPluginDiagnostics() },
+                                 onImport: { appDelegate.importPlugin() })
+        } else {
+            ContentUnavailableView("插件管理暂不可用", systemImage: "puzzlepiece.extension",
+                                   description: Text("请等待插件初始化完成。"))
+                .frame(width: 800, height: 600)
         }
     }
 }
@@ -37,6 +50,12 @@ final class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
     private var pluginDiagnosticsModel: PluginDiagnosticsModel?
     private var pluginDiagnosticsWindowController: PluginDiagnosticsWindowController?
     private var pluginExtensionsWindowController: PluginExtensionsWindowController?
+    private var pluginInstallerModel: PluginInstallerModel?
+    private var pluginInstallerWindowController: PluginInstallerWindowController?
+    private lazy var pluginImportCoordinator = PluginImportCoordinator { [weak self] in
+        self?.showPluginInstaller()
+    }
+    private var pluginTerminationTask: Task<Void, Never>?
     private let pluginLogger = Logger(subsystem: "DynamicIsland", category: "PluginLifecycle")
 #if DEBUG
     private var screenSimulatorWindowController: ScreenSimulatorWindowController?
@@ -73,12 +92,31 @@ final class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
         configureStatusItem()
     }
 
+    func application(_ application: NSApplication, open urls: [URL]) {
+        pluginImportCoordinator.enqueue(urls)
+    }
+
+    func applicationShouldTerminate(_ sender: NSApplication) -> NSApplication.TerminateReply {
+        guard pluginInstallerModel != nil || pluginImportCoordinator.pendingCount > 0 else { return .terminateNow }
+        guard pluginTerminationTask == nil else { return .terminateLater }
+        pluginTerminationTask = Task { @MainActor [weak self] in
+            let cleaned = await self?.pluginImportCoordinator.shutdown() ?? true
+            if !cleaned {
+                self?.pluginTerminationTask = nil
+                self?.showPluginInstaller()
+            }
+            sender.reply(toApplicationShouldTerminate: cleaned)
+        }
+        return .terminateLater
+    }
+
     func applicationWillTerminate(_ notification: Notification) {
         statusFeedbackTask?.cancel()
         pluginStartupTask?.cancel()
         pluginEnvironment?.stop()
         pluginDiagnosticsWindowController?.close()
         pluginExtensionsWindowController?.close()
+        pluginInstallerWindowController?.finishClose()
         activityRuntime?.shutdownPlugins()
         panelController?.hide()
     }
@@ -103,6 +141,26 @@ final class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
             let extensionsModel = PluginExtensionsModel(manager: manager, lifecycle: lifecycle,
                 permissions: permissions, diagnostics: diagnostics, diagnosticsModel: model)
             pluginExtensionsModel = extensionsModel
+            let installer = PluginInstaller(manager: manager, configuration: configuration)
+            let installerModel = PluginInstallerModel(installer: installer, onInstalled: { [weak self, weak extensionsModel] record in
+                guard self?.pluginTerminationTask == nil else { return }
+                await extensionsModel?.refresh()
+                extensionsModel?.selectedID = record.id
+                self?.pluginInstallerWindowController?.finishClose()
+                self?.showPluginExtensions()
+            }, onInstallFailure: { [weak self, weak extensionsModel] review, code in
+                guard self?.pluginTerminationTask == nil else { return }
+                await extensionsModel?.refresh()
+                if code == "cleanupFailed", self?.pluginInstallerModel?.installedID == review.id {
+                    let installed = await manager.plugins()
+                    if installed.contains(where: { $0.id == review.id && $0.manifest.version == review.version }) {
+                        extensionsModel?.selectedID = review.id
+                    }
+                    self?.showPluginExtensions()
+                    self?.showPluginInstaller()
+                }
+            })
+            pluginInstallerModel = installerModel
             lifecycle.setAutomaticDisableHandler { [weak manager, weak lifecycle, weak model, weak extensionsModel] package, incident in
                 guard let manager, let lifecycle else { return }
                 Task { @MainActor in
@@ -123,6 +181,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
                 let report = await manager.discover()
                 extensionsModel.setDiscoveryReport(report)
                 await extensionsModel.refresh()
+                guard !Task.isCancelled else { return }
+                self.pluginImportCoordinator.configure(model: installerModel)
                 for failure in report.failures {
                     pluginLogger.error("Plugin discovery rejected a candidate: \(failure.error.code, privacy: .public)")
                 }
@@ -141,6 +201,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
         menu.addItem(NSMenuItem(title: "显示 Dynamic Island", action: #selector(showIsland), keyEquivalent: ""))
         menu.addItem(NSMenuItem(title: "隐藏 Dynamic Island", action: #selector(hideIsland), keyEquivalent: ""))
         menu.addItem(NSMenuItem(title: "插件管理…", action: #selector(showPluginExtensions), keyEquivalent: ","))
+        menu.addItem(NSMenuItem(title: "导入插件…", action: #selector(importPlugin), keyEquivalent: ""))
         menu.addItem(NSMenuItem(title: "插件诊断…", action: #selector(showPluginDiagnostics), keyEquivalent: ""))
         menu.addItem(.separator())
 
@@ -184,8 +245,44 @@ final class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
     @objc private func showPluginExtensions() {
         guard let model = pluginExtensionsModel else { return }
         let controller = pluginExtensionsWindowController ?? PluginExtensionsWindowController(
-            model: model, onShowDiagnostics: { [weak self] in self?.showPluginDiagnostics() })
+            model: model, onShowDiagnostics: { [weak self] in self?.showPluginDiagnostics() },
+            onImport: { [weak self] in self?.importPlugin() })
         pluginExtensionsWindowController = controller
+        controller.show()
+    }
+
+    @objc fileprivate func importPlugin() {
+        guard let model = pluginInstallerModel else {
+            let alert = NSAlert()
+            alert.messageText = "插件导入暂不可用"
+            alert.informativeText = "请等待插件初始化完成后重试。"
+            alert.addButton(withTitle: "好")
+            NSApp.activate()
+            alert.runModal()
+            return
+        }
+        guard !model.hasPendingImport else {
+            model.rejectBusy()
+            showPluginInstaller()
+            return
+        }
+        let panel = NSOpenPanel()
+        panel.title = "导入 Dynamic Island 插件"
+        panel.message = "选择一个 .dip 插件包，检查信息与权限后安装。"
+        panel.allowedContentTypes = [UTType(exportedAs: "com.rong5.dynamic-island.plugin", conformingTo: .zip)]
+        panel.canChooseFiles = true
+        panel.canChooseDirectories = false
+        panel.allowsMultipleSelection = false
+        panel.begin { [weak self] response in
+            guard response == .OK, let url = panel.url else { return }
+            self?.pluginImportCoordinator.enqueue([url])
+        }
+    }
+
+    private func showPluginInstaller() {
+        guard let model = pluginInstallerModel, pluginTerminationTask == nil else { return }
+        let controller = pluginInstallerWindowController ?? PluginInstallerWindowController(model: model)
+        pluginInstallerWindowController = controller
         controller.show()
     }
 

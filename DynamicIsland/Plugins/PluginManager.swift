@@ -23,6 +23,10 @@ public nonisolated struct PluginManagerConfiguration: Equatable, Sendable {
         rootDirectoryURL.appendingPathComponent("Installed", isDirectory: true)
     }
 
+    public var stagingDirectoryURL: URL {
+        rootDirectoryURL.appendingPathComponent("Staging", isDirectory: true)
+    }
+
     public var stateDirectoryURL: URL {
         rootDirectoryURL.appendingPathComponent("State", isDirectory: true)
     }
@@ -69,6 +73,13 @@ public nonisolated struct PluginRecord: Identifiable, Equatable, Sendable {
     public let totalFileBytes: UInt64
 }
 
+/// Confirms one installed generation, including same-version replacements
+/// whose resource contents are absent from the lightweight package DTO.
+public nonisolated struct PluginInstalledSnapshot: Equatable, Sendable {
+    public let package: ValidatedPluginPackage
+    public let generation: UUID
+}
+
 public nonisolated enum PluginManagerError: Error, Equatable, LocalizedError, Sendable {
     case invalidManagedDirectory(String)
     case insecureManagedDirectory(String)
@@ -83,6 +94,7 @@ public nonisolated enum PluginManagerError: Error, Equatable, LocalizedError, Se
     case validation(PluginValidationError)
     case stateReadFailed
     case stateWriteFailed
+    case installStaleReview, installFailed, installRollbackFailed, installCleanupFailed, installRecoveryRequired
     case uninstallFailed(String)
     case uninstallRollbackFailed(String)
 
@@ -101,6 +113,11 @@ public nonisolated enum PluginManagerError: Error, Equatable, LocalizedError, Se
         case .validation(let error): error.code
         case .stateReadFailed: "stateReadFailed"
         case .stateWriteFailed: "stateWriteFailed"
+        case .installStaleReview: "installStaleReview"
+        case .installFailed: "installFailed"
+        case .installRollbackFailed: "installRollbackFailed"
+        case .installCleanupFailed: "installCleanupFailed"
+        case .installRecoveryRequired: "installRecoveryRequired"
         case .uninstallFailed: "uninstallFailed"
         case .uninstallRollbackFailed: "uninstallRollbackFailed"
         }
@@ -134,6 +151,11 @@ public nonisolated enum PluginManagerError: Error, Equatable, LocalizedError, Se
             "Plugin enablement state could not be read; plugins remain disabled."
         case .stateWriteFailed:
             "Plugin enablement state could not be saved."
+        case .installStaleReview: "The reviewed package or installed snapshot is no longer current."
+        case .installFailed: "The plugin installation transaction failed."
+        case .installRollbackFailed: "Installation rollback failed; execution is stopped and recovery bytes are retained."
+        case .installCleanupFailed: "The plugin was committed disabled, but installation recovery metadata could not be removed."
+        case .installRecoveryRequired: "An interrupted installation was found. This plugin remains disabled."
         case .uninstallFailed(let id):
             "Plugin \(id.debugDescription) could not be moved to the uninstall quarantine."
         case .uninstallRollbackFailed(let id):
@@ -169,6 +191,7 @@ public actor PluginManager {
 
     private let validator: PluginValidator
     private let stateStore: any PluginManagerStatePersisting
+    private let installationMover: any PluginManagerInstallationMoving
     private let lifecycleHandler: (any PluginManagerLifecycleHandling)?
     private var entries: [String: LoadedPlugin] = [:]
     private var persistedState = PluginManagerStateFile.empty
@@ -185,18 +208,21 @@ public actor PluginManager {
         self.validator = validator
         stateStore = PluginManagerFileStateStore(fileURL: configuration.stateFileURL)
         self.lifecycleHandler = lifecycleHandler
+        installationMover = PluginManagerExclusiveInstallationMover()
     }
 
     init(
         configuration: PluginManagerConfiguration,
         validator: PluginValidator = PluginValidator(),
         stateStore: any PluginManagerStatePersisting,
-        lifecycleHandler: (any PluginManagerLifecycleHandling)? = nil
+        lifecycleHandler: (any PluginManagerLifecycleHandling)? = nil,
+        installationMover: any PluginManagerInstallationMoving = PluginManagerExclusiveInstallationMover()
     ) {
         self.configuration = configuration
         self.validator = validator
         self.stateStore = stateStore
         self.lifecycleHandler = lifecycleHandler
+        self.installationMover = installationMover
     }
 
     /// Rebuilds the registry from direct children of `Installed`. Every
@@ -223,6 +249,17 @@ public actor PluginManager {
         } catch {
             recoveredState = .empty
             failures.append(.init(candidateName: nil, error: .stateReadFailed))
+        }
+        var pendingMarkers: [PluginInstallationMarker] = []
+        var markerReadFailed = false
+        do { pendingMarkers = try PluginInstallationMarkerStore(directoryURL: configuration.stateDirectoryURL).readAll() }
+        catch {
+            markerReadFailed = true
+            failures.append(.init(candidateName: nil, error: .stateReadFailed))
+        }
+        let interruptedIDs = Set(pendingMarkers.map(\.pluginID))
+        for id in interruptedIDs.sorted() {
+            failures.append(.init(candidateName: nil, pluginID: id, error: .installRecoveryRequired))
         }
         persistedState = recoveredState
         hasLoadedState = true
@@ -280,8 +317,8 @@ public actor PluginManager {
             }
 
             let restored = recoveredState.plugins[pluginID]
-            let isEnabled = restored?.version == candidate.package.manifest.version
-                && restored?.isEnabled == true
+            let isEnabled = !markerReadFailed && !interruptedIDs.contains(pluginID)
+                && restored?.version == candidate.package.manifest.version && restored?.isEnabled == true
             nextEntries[pluginID] = LoadedPlugin(package: candidate.package, isEnabled: isEnabled)
             nextState.plugins[pluginID] = .init(
                 version: candidate.package.manifest.version,
@@ -296,6 +333,14 @@ public actor PluginManager {
         persistedState = nextState
         do {
             try stateStore.save(nextState)
+            // Crash recovery is conservative: do not execute an interrupted
+            // replacement. Once disabled state is durable, valid markers can
+            // be cleared; Recovery packages remain available for inspection.
+            let markerStore = PluginInstallationMarkerStore(directoryURL: configuration.stateDirectoryURL)
+            for marker in pendingMarkers {
+                do { try markerStore.remove(marker) }
+                catch { failures.append(.init(candidateName: nil, pluginID: marker.pluginID, error: .installCleanupFailed)) }
+            }
         } catch {
             failures.append(.init(candidateName: nil, error: .stateWriteFailed))
         }
@@ -539,9 +584,182 @@ public actor PluginManager {
         entries[pluginID]?.package
     }
 
+    public func installationSnapshot(id pluginID: String) -> PluginInstalledSnapshot? {
+        entries[pluginID].map { .init(package: $0.package, generation: $0.generation) }
+    }
+
+    /// Reserves no package identity and starts no Runtime. The extractor
+    /// creates its own fresh UUID child beneath this private Host directory.
+    public func prepareInstallationStaging() async throws -> URL {
+        await beginMutation()
+        defer { endMutation() }
+        try prepareManagedDirectories()
+        _ = try PluginInstallationMarkerStore(directoryURL: configuration.stateDirectoryURL).readAll()
+        try PluginInstallationSpace.check(configuration.stagingDirectoryURL, maximumRoots: 4, limits: configuration.limits)
+        try PluginInstallationSpace.check(configuration.recoveryDirectoryURL, maximumRoots: 16, limits: configuration.limits)
+        return configuration.stagingDirectoryURL.resolvingSymlinksInPath()
+    }
+
+    /// The FIFO covers validation, replacement, durable enablement and Host
+    /// registration. A confirmation never retargets different installed code.
+    /// Newly installed and upgraded packages are always committed disabled.
+    public func installIfCurrent(package: ValidatedPluginPackage,
+                                 expectedCurrent: PluginInstalledSnapshot?,
+                                 expectedFingerprint: String) async throws -> PluginRecord {
+        await beginMutation()
+        defer { endMutation() }
+        try prepareManagedDirectories()
+        try ensureStateLoaded()
+        let staging = configuration.stagingDirectoryURL.resolvingSymlinksInPath()
+        let installed = configuration.installedDirectoryURL.resolvingSymlinksInPath()
+        let source = package.canonicalRootURL.standardizedFileURL
+        let id = package.manifest.id
+        guard Self.isStrictLocalFileURL(source), source.deletingLastPathComponent() == staging,
+              UUID(uuidString: source.lastPathComponent) != nil,
+              expectedCurrent?.package.manifest.id == id || expectedCurrent == nil,
+              installationSnapshot(id: id) == expectedCurrent else { throw PluginManagerError.installStaleReview }
+        let old = entries[id]
+        let oldIdentity = try old.map { try PluginInstallationIdentity.read($0.package.canonicalRootURL) }
+        let target = installed.appendingPathComponent(id, isDirectory: true)
+        if Self.pathExistsWithoutFollowingSymlinks(target), old?.package.canonicalRootURL != target {
+            throw PluginManagerError.installStaleReview
+        }
+        try verifyInstallationVolumes()
+        try PluginInstallationSpace.check(configuration.stagingDirectoryURL, maximumRoots: 5, limits: configuration.limits)
+        try PluginInstallationSpace.check(configuration.recoveryDirectoryURL, maximumRoots: 16, limits: configuration.limits,
+                                           additionalBytes: old?.package.totalFileBytes ?? 0)
+        let checked = try validateInstallationStage(source)
+        guard checked == package,
+              try PluginInstallationFingerprint.read(source, limits: configuration.limits) == expectedFingerprint else {
+            throw PluginManagerError.installStaleReview
+        }
+        if let old {
+            let checkedOld = try validateForOperation(old.package.canonicalRootURL,
+                                                       occupiedPluginIDs: Set(entries.keys).subtracting([id]))
+            guard checkedOld == old.package else { throw PluginManagerError.installStaleReview }
+        }
+        let markerStore = PluginInstallationMarkerStore(directoryURL: configuration.stateDirectoryURL)
+        let priorMarkers = try markerStore.readAll().filter { $0.pluginID == id }
+        let marker = try markerStore.create(pluginID: id)
+        let recovery = configuration.recoveryDirectoryURL.resolvingSymlinksInPath()
+        let backup = recovery.appendingPathComponent(UUID().uuidString, isDirectory: true)
+        var oldMoved = false, newMoved = false
+        var committed: LoadedPlugin?
+        var nextState = persistedState
+        nextState.plugins[id] = .init(version: package.manifest.version, isEnabled: false)
+        if old != nil { await lifecycleHandler?.pluginWillUnload(id: id) }
+        do {
+            // Validate again after the MainActor stop hop, before moving bytes.
+            guard try validateInstallationStage(source) == package,
+                  try PluginInstallationFingerprint.read(source, limits: configuration.limits) == expectedFingerprint else {
+                throw PluginManagerError.installStaleReview
+            }
+            if let old {
+                try installationMover.move(source: old.package.canonicalRootURL, destination: backup)
+                oldMoved = true
+            }
+            try installationMover.move(source: source, destination: target)
+            newMoved = true
+            let validated = try validateInstallationPackage(target, container: configuration.installedDirectoryURL)
+            guard installationContentsMatch(validated, package),
+                  try PluginInstallationFingerprint.read(target, limits: configuration.limits) == expectedFingerprint else {
+                throw PluginManagerError.installStaleReview
+            }
+            try saveStateForOperation(nextState)
+            // No fallible step follows this durable commit in the rollback
+            // region. In particular, cleanup failure must not restore old
+            // bytes over an already committed state file.
+            committed = LoadedPlugin(package: validated, isEnabled: false)
+        } catch {
+            var rollbackFailed = false
+            if newMoved {
+                do { try installationMover.move(source: target, destination: source) }
+                catch {
+                    // Keep the rejected replacement outside Installed so old
+                    // same-version enablement can never execute it on restart.
+                    let rejected = recovery.appendingPathComponent(UUID().uuidString, isDirectory: true)
+                    do { try installationMover.move(source: target, destination: rejected) }
+                    catch { rollbackFailed = true }
+                }
+            }
+            if oldMoved, let old {
+                do { try installationMover.move(source: backup, destination: old.package.canonicalRootURL) }
+                catch { rollbackFailed = true }
+            }
+            if rollbackFailed {
+                entries.removeValue(forKey: id)
+                persistedState.plugins.removeValue(forKey: id)
+                try? stateStore.save(persistedState)
+                // Leave the marker and all Recovery bytes. Discovery will
+                // continue to force disabled state even if that save failed.
+                throw PluginManagerError.installRollbackFailed
+            }
+            if let old { await lifecycleHandler?.pluginDidLoad(old.package, isEnabled: old.isEnabled) }
+            try? markerStore.remove(marker)
+            throw error
+        }
+        guard let committed else { throw PluginManagerError.installFailed }
+        persistedState = nextState
+        entries[id] = committed
+        await lifecycleHandler?.pluginWillLoad(committed.package)
+        await lifecycleHandler?.pluginDidLoad(committed.package, isEnabled: false)
+        do {
+            for pending in priorMarkers + [marker] { try markerStore.remove(pending) }
+        } catch {
+            // The new package remains disabled and registered; backup remains
+            // in Recovery. The next discovery can retry valid marker cleanup.
+            throw PluginManagerError.installCleanupFailed
+        }
+        if oldMoved, let oldIdentity {
+            do { try oldIdentity.removeOwnedDirectory(backup) }
+            catch {
+                // State is already committed disabled. Keep Recovery and add
+                // another safe marker so the incomplete cleanup is observable.
+                _ = try? markerStore.create(pluginID: id)
+                throw PluginManagerError.installCleanupFailed
+            }
+        }
+        return committed.record
+    }
+
+    private func validateInstallationStage(_ url: URL) throws -> ValidatedPluginPackage {
+        try validateInstallationPackage(url, container: configuration.stagingDirectoryURL)
+    }
+
+    private func validateInstallationPackage(_ url: URL, container: URL) throws -> ValidatedPluginPackage {
+        do {
+            try validatePackageOwnership(url, candidateName: "staging")
+            return try validator.validateExpandedPackage(at: url, context: .init(
+                hostVersion: configuration.hostVersion, occupiedPluginIDs: [],
+                limits: try PluginInstallationLimits.bounded(configuration.limits), allowedContainerURL: container))
+        } catch let error as PluginValidationError { throw PluginManagerError.validation(error) }
+    }
+
+    private func installationContentsMatch(_ left: ValidatedPluginPackage, _ right: ValidatedPluginPackage) -> Bool {
+        left.manifest == right.manifest && left.entrySource == right.entrySource
+            && left.entryRelativePath == right.entryRelativePath && left.regularFileCount == right.regularFileCount
+            && left.totalFileBytes == right.totalFileBytes
+    }
+
+    private func verifyInstallationVolumes() throws {
+        let root = try PluginInstallationIdentity.read(configuration.rootDirectoryURL)
+        for url in [configuration.stagingDirectoryURL, configuration.installedDirectoryURL,
+                    configuration.stateDirectoryURL, configuration.recoveryDirectoryURL] {
+            guard try PluginInstallationIdentity.read(url).device == root.device else {
+                throw PluginManagerError.installFailed
+            }
+        }
+    }
+
     private func setEnabled(_ enabled: Bool, id pluginID: String) async throws -> PluginRecord {
         try prepareManagedDirectories()
         try ensureStateLoaded()
+        if enabled {
+            let markers = try PluginInstallationMarkerStore(directoryURL: configuration.stateDirectoryURL).readAll()
+            guard !markers.contains(where: { $0.pluginID == pluginID }) else {
+                throw PluginManagerError.installRecoveryRequired
+            }
+        }
         guard let current = entries[pluginID] else {
             throw PluginManagerError.pluginNotFound(pluginID)
         }
@@ -550,7 +768,7 @@ public actor PluginManager {
             return current.record
         }
 
-        let updated = LoadedPlugin(package: current.package, isEnabled: enabled)
+        let updated = LoadedPlugin(package: current.package, isEnabled: enabled, generation: current.generation)
         var nextState = persistedState
         nextState.plugins[pluginID] = .init(
             version: current.package.manifest.version,
@@ -662,6 +880,7 @@ public actor PluginManager {
         for (url, name) in [
             (configuration.rootDirectoryURL, "Plugins"),
             (configuration.installedDirectoryURL, "Installed"),
+            (configuration.stagingDirectoryURL, "Staging"),
             (configuration.stateDirectoryURL, "State"),
             (configuration.recoveryDirectoryURL, "Recovery"),
             (configuration.trashDirectoryURL, "Trash")
@@ -765,6 +984,13 @@ public actor PluginManager {
 private nonisolated struct LoadedPlugin: Sendable {
     let package: ValidatedPluginPackage
     let isEnabled: Bool
+    let generation: UUID
+
+    init(package: ValidatedPluginPackage, isEnabled: Bool, generation: UUID = UUID()) {
+        self.package = package
+        self.isEnabled = isEnabled
+        self.generation = generation
+    }
 
     var record: PluginRecord {
         PluginRecord(

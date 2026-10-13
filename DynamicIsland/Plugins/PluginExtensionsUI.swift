@@ -43,11 +43,14 @@ nonisolated enum PluginPermissionPresentation {
 public struct PluginExtensionsView: View {
     @Bindable private var model: PluginExtensionsModel
     private let onShowDiagnostics: (() -> Void)?
+    private let onImport: (() -> Void)?
     @State private var confirmation: Confirmation?
 
-    public init(model: PluginExtensionsModel, onShowDiagnostics: (() -> Void)? = nil) {
+    public init(model: PluginExtensionsModel, onShowDiagnostics: (() -> Void)? = nil,
+                onImport: (() -> Void)? = nil) {
         self.model = model
         self.onShowDiagnostics = onShowDiagnostics
+        self.onImport = onImport
     }
 
     public var body: some View {
@@ -149,6 +152,10 @@ public struct PluginExtensionsView: View {
                 }
                 Spacer(minLength: 0)
                 if model.isBusy { ProgressView().controlSize(.small).padding(.top, 5) }
+                if let onImport {
+                    Button(action: onImport) { Label("导入插件", systemImage: "square.and.arrow.down") }
+                        .accessibilityIdentifier("plugin-extensions-import")
+                }
                 Button { Task { await model.refresh() } } label: {
                     Label("刷新", systemImage: "arrow.clockwise")
                 }
@@ -374,7 +381,8 @@ public struct PluginExtensionsView: View {
 public final class PluginExtensionsWindowController: NSWindowController {
     private let model: PluginExtensionsModel
 
-    public init(model: PluginExtensionsModel, onShowDiagnostics: (() -> Void)? = nil) {
+    public init(model: PluginExtensionsModel, onShowDiagnostics: (() -> Void)? = nil,
+                onImport: (() -> Void)? = nil) {
         self.model = model
         let window = NSWindow(contentRect: CGRect(x: 0, y: 0, width: 860, height: 680),
                               styleMask: [.titled, .closable, .miniaturizable, .resizable],
@@ -383,7 +391,8 @@ public final class PluginExtensionsWindowController: NSWindowController {
         window.contentMinSize = CGSize(width: 800, height: 600)
         window.minSize = window.frameRect(forContentRect: CGRect(x: 0, y: 0, width: 800, height: 600)).size
         window.isReleasedWhenClosed = false
-        let hostingView = NSHostingView(rootView: PluginExtensionsView(model: model, onShowDiagnostics: onShowDiagnostics))
+        let hostingView = NSHostingView(rootView: PluginExtensionsView(model: model, onShowDiagnostics: onShowDiagnostics,
+                                                                     onImport: onImport))
         hostingView.frame = CGRect(x: 0, y: 0, width: 860, height: 680)
         hostingView.autoresizingMask = [.width, .height]
         window.contentView = hostingView

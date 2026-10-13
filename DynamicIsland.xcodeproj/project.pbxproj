@@ -21,9 +21,22 @@
 		462651512FF50D2A00AC1171 /* DynamicIslandTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DynamicIslandTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		C06000010000000000000034 /* Exceptions for "DynamicIsland" folder in "Dynamic Island" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 462651322FF50D2A00AC1171 /* Dynamic Island */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		462651352FF50D2A00AC1171 /* DynamicIsland */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				C06000010000000000000034 /* Exceptions for "DynamicIsland" folder in "Dynamic Island" target */,
+			);
 			path = DynamicIsland;
 			sourceTree = "<group>";
 		};
@@ -332,6 +345,7 @@
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SELECTED_FILES = readwrite;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = DynamicIsland/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Dynamic Island";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				INFOPLIST_KEY_LSUIElement = YES;
@@ -371,6 +385,7 @@
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SELECTED_FILES = readwrite;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = DynamicIsland/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Dynamic Island";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				INFOPLIST_KEY_LSUIElement = YES;
