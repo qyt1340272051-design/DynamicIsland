@@ -81,7 +81,7 @@ for phase in ['disabled', 'running']:
     assert abs(energy - summary['attributedCPUEnergyJoules']) < 1e-8
     with (OUT / f'{phase}-samples.csv').open('x', newline='') as stream:
         fields = [k for k in records[0] if k != 'identity']
-        writer = csv.DictWriter(stream, fieldnames=fields)
+        writer = csv.DictWriter(stream, fieldnames=fields, lineterminator='\n')
         writer.writeheader()
         writer.writerows({k: row[k] for k in fields} for row in records)
     summaries[phase] = summary
@@ -116,7 +116,7 @@ for plugin_id, plugin in sorted(full.items()):
     coverage.append({'id': plugin_id, 'windowINFOCount': len(infos), 'windowWARNINGOrERRORCount': 0, 'firstLocalTime': time_text(infos[0]), 'lastLocalTime': time_text(infos[-1]), 'minimumGapSeconds': min(gaps), 'maximumGapSeconds': max(gaps), 'firstDelaySeconds': infos[0] - start, 'lastMarginSeconds': end - infos[-1], 'decodedPages': len(plugin['pages']), 'runningAtCapture': True, 'coveragePassed': True})
     log_rows.extend({'pluginID': plugin_id, 'localTime': time_text(s), 'level': l, 'category': '插件日志', 'code': 'pluginMessage', 'message': 'Plugin log message omitted.'} for s, l in window)
 with (OUT / 'window-plugin-logs.csv').open('x', newline='') as stream:
-    writer = csv.DictWriter(stream, fieldnames=list(log_rows[0]))
+    writer = csv.DictWriter(stream, fieldnames=list(log_rows[0]), lineterminator='\n')
     writer.writeheader()
     writer.writerows(log_rows)
 save('log-coverage.json', {'schemaVersion': 1, 'timezone': 'Asia/Shanghai', 'windowStartLocal': time_text(start), 'windowEndLocal': time_text(end), 'method': 'Deduplicate actual AX rows by plugin ID, timestamp, level and fixed category/code; omit records outside the measured window. INFO meaning comes from audited fixture, not redacted message text.', 'coverageCriteria': {'minimumWindowINFOCount': 13, 'maximumGapOrBoundaryMarginSeconds': 75, 'minimumGapSeconds': 60, 'purpose': 'Experimental completeness check, not a new product acceptance threshold.'}, 'allTwentyPassed': True, 'totalWindowINFOCount': len(log_rows), 'plugins': coverage})
