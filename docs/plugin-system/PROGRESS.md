@@ -76,7 +76,7 @@
 | T28 | PermissionManager | T23 | `verified` | [四态授权、包 review scope、绑定插件 / 权限的可撤销 lease](phase-6-t28-permission-manager.md)及 [17 项权限测试](../../DynamicIslandTests/PluginPermissionManagerTests.swift)；CI 503 passed、2 skipped、0 failures，Release build / 签名通过；Release 定向 107 passed。生产默认 requested，批准 UI / 持久化按 T33 扩展。 |
 | T29 | NetworkBroker | T28 | `verified` | [有界 HTTPS fetch、Host 政策、可撤销准入及非阻塞 completion](phase-6-t29-network-broker.md)和 [12 项网络测试](../../DynamicIslandTests/PluginNetworkBrokerTests.swift)；CI 515 passed、2 skipped、0 failures，普通 Release build / 签名通过；Release 定向 154 passed、1 skipped（锁屏鼠标单项）。 |
 | T30 | File/Clipboard Broker | T28 | `verified` | [系统文本选择、剪贴板读写分权、数据 DTO 与会话撤销](phase-6-t30-file-clipboard-broker.md)及 [17 项资源测试](../../DynamicIslandTests/PluginUserResourceBrokerTests.swift)；CI 533 passed、1 skipped、0 failures，普通 Release build / 签名通过；Release 定向合计 113 passed、0 skipped。选择器使用 Host fixture、剪贴板使用私有命名实例，未声称真实系统选择器交互验收。 |
-| T31 | PluginScheduler | T22 | `in progress` | [集中刷新、三种策略、会话取消与 20 个真实 VM 的 CPU 观测](phase-6-t31-plugin-scheduler.md)；18 项调度测试及生产共享图测试通过，CI 552 passed、1 skipped、0 failures，普通 Release build / 签名通过，Release 定向 19 passed。10 秒基线 CPU 0.323%、20 VM 0.409%，额外调度唤醒 0；实际安装多插件后的长时 Energy Impact / 能耗仍待实测。 |
+| T31 | PluginScheduler | T22 | `in progress` | [集中刷新、三种策略、会话取消与 20 个真实 VM 的 CPU 观测](phase-6-t31-plugin-scheduler.md)；18 项调度测试及生产共享图测试通过，CI 552 passed、1 skipped、0 failures，普通 Release build / 签名通过，Release 定向 19 passed。10 秒基线 CPU 0.323%、20 VM 0.409%，额外调度唤醒 0；[2026-10-14 两段约 15 分钟实测](evidence/t31-energy-20261014.md)已保存；运行组日志为非 background 策略，验收未关闭，须先证明后台策略再重测。 |
 | T32 | Crash Watchdog / Logging | T22 | `verified` | [会话 / 包绑定的 60 秒隔离窗口、持久化、隐私日志及诊断 / 重启窗口](phase-6-t32-crash-watchdog-logging.md)；新增 45 项 Watchdog / diagnostics / persistence / UI / 实际 JS 集成测试，CI 597 passed、1 skipped、0 failures，普通 Release build / 签名通过；Release 定向 131 passed。无限循环 VM 的强制抢占不在本任务能力范围内。 |
 
 ## Phase 7 — 安装、管理与官方验证插件
@@ -85,7 +85,7 @@
 | --- | --- | --- | --- | --- |
 | T33 | Extensions Settings UI | T20 | `verified` | [管理页与持久化分项授权验收](phase-7-t33-extensions-settings.md)；模型 / 存储 / 并发定向 91 passed，原生 UI 3 passed，完整 CI 647 passed、1 skipped、0 failures，普通 Release build / 签名通过；Release 定向合计 149 passed。Discover 按计划后置。 |
 | T34 | .dip Installer | T19、T28 | `verified` | [.dip 格式](dip-format.md)与[验收记录](phase-7-t34-installer.md)：App 内导入 / 预览 / disabled 安装 / 实际启停卸载通过；解包 17、事务 19、UI model 12、UI 2，CI 698 passed、1 skipped、0 failures，Release 150 passed。[正常应用目录的 Finder 冷启动与预览取消验收通过](evidence/t34-finder-20261014.md)，临时构建目录的候选差异已查明，原 App 与默认设置保留。 |
-| T35 | Pomodoro 官方插件 | T24–T34 | `pending` | 待补。 |
+| T35 | Pomodoro 官方插件 | T24–T34 | `pending` | [迁移准备与公共能力缺口](t35-migration-preparation.md)已审计，尚未实施；先关闭 T31 的后台能耗验收。 |
 | T36 | GitHub 官方插件 | T35 | `pending` | 待补。 |
 
 ## Phase 8 — SuperIsland Compatibility

@@ -1,0 +1,55 @@
+{
+  "schemaVersion": 1,
+  "sourceRecovery": "Initial FileChange content plus only the 03:04:01 compile-fix diff; applying subsequent clock diff exactly matches current source. No compile/replay performed.",
+  "baselineSourcePath": "/tmp/dynamic-island-t31-energy-20261014/sources/EnergySamplerBaseline.swift",
+  "baselineSourceSHA256": "c942a225945d039b57e0e6f98508ca7cf52af6640d589c7037d7442e6cfe4ebc",
+  "currentSourceSHA256": "89525311f9a04ff669cac793fbedaa59a6f608733e842f8a7be48875cd7f8dad",
+  "baselineClock": "DispatchTime.now().uptimeNanoseconds",
+  "currentClock": "mach_continuous_time scaled to nanoseconds",
+  "clockChangeUTC": "2026-10-14T03:08:03.858Z",
+  "compileEvents": [
+    {
+      "completedUTC": "2026-10-14T02:58:41.092Z",
+      "command": [
+        "/bin/zsh",
+        "-lc",
+        "rg -n 'CodingKeys|minimumHostVersion|minHost' DynamicIsland/Plugins/PluginManifest.swift; xcrun swiftc -O -swift-version 5 -parse-as-library /tmp/dynamic-island-t31-energy-20261014/sources/EnergySampler.swift -o /tmp/dynamic-island-t31-energy-20261014/bin/energy-sampler"
+      ],
+      "exitCode": 1,
+      "duration": {
+        "secs": 1,
+        "nanos": 670387416
+      }
+    },
+    {
+      "completedUTC": "2026-10-14T03:04:03.228Z",
+      "command": [
+        "/bin/zsh",
+        "-lc",
+        "xcrun swiftc -O -swift-version 5 -parse-as-library /tmp/dynamic-island-t31-energy-20261014/sources/EnergySampler.swift -o /tmp/dynamic-island-t31-energy-20261014/bin/energy-sampler > /tmp/dynamic-island-t31-energy-20261014/sampler-build.log 2>&1"
+      ],
+      "exitCode": 0,
+      "duration": {
+        "secs": 1,
+        "nanos": 390917084
+      }
+    },
+    {
+      "completedUTC": "2026-10-14T03:08:05.838Z",
+      "command": [
+        "/bin/zsh",
+        "-lc",
+        "xcrun swiftc -O -swift-version 5 -parse-as-library /tmp/dynamic-island-t31-energy-20261014/sources/EnergySampler.swift -o /tmp/dynamic-island-t31-energy-20261014/bin/energy-sampler > /tmp/dynamic-island-t31-energy-20261014/sampler-build.log 2>&1"
+      ],
+      "exitCode": 0,
+      "duration": {
+        "secs": 1,
+        "nanos": 819672167
+      }
+    }
+  ],
+  "oldBinaryHashEvidence": [],
+  "oldBinaryHashAvailable": false,
+  "dataModified": false,
+  "currentToolModified": false
+}

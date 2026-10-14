@@ -1,0 +1,159 @@
+{
+  "date": "2026-10-14",
+  "acceptance": "incomplete: running window returned non-background policy; cannot accept T31",
+  "phases": {
+    "disabled": {
+      "metadata": {
+        "cpuUnit": "mach_timebase_ticks",
+        "energyUnit": "CPU_nanojoules_attributed_by_kernel_not_whole_device",
+        "identity": {
+          "executable": "/Users/rong5/Applications/Dynamic Island T31 Energy Acceptance.app/Contents/MacOS/Dynamic Island",
+          "executableUUIDBase64": "wYRY4I1TOXyphMTGnDdWVA==",
+          "pid": 69151,
+          "processStartMachTicks": 13220836706786,
+          "uid": 501
+        },
+        "intervalSeconds": 5,
+        "label": "installed-disabled",
+        "operatingSystem": "Version 26.6.2 (Build 25G83)",
+        "references": [
+          "https://github.com/apple-oss-distributions/xnu/blob/main/osfmk/kern/recount.h",
+          "https://github.com/apple-oss-distributions/xnu/blob/main/osfmk/kern/bsd_kern.c",
+          "https://support.apple.com/guide/activity-monitor/actmntr43697/mac"
+        ],
+        "requestedDurationSeconds": 900,
+        "rusageFlavor": 6,
+        "rusageStructBytes": 464,
+        "schemaVersion": 1,
+        "timebaseDenominator": 3,
+        "timebaseNumerator": 125,
+        "type": "metadata"
+      },
+      "summary": {
+        "attributedCPUEnergyJoules": 1.453970587,
+        "cpuEnergyCounterAdvanced": true,
+        "cpuSeconds": 14.204915666666665,
+        "diskReadBytes": 634880,
+        "diskWrittenBytes": 0,
+        "equivalentMeanCPUPowerMilliwatts": 1.6065812488054694,
+        "evidenceStatus": "valid_counter_window",
+        "identity": {
+          "executable": "/Users/rong5/Applications/Dynamic Island T31 Energy Acceptance.app/Contents/MacOS/Dynamic Island",
+          "executableUUIDBase64": "wYRY4I1TOXyphMTGnDdWVA==",
+          "pid": 69151,
+          "processStartMachTicks": 13220836706786,
+          "uid": 501
+        },
+        "interruptWakeups": 27711,
+        "interruptWakeupsPerMinute": 1837.1749765931834,
+        "label": "installed-disabled",
+        "maximumIntervalSingleCoreCPUPercent": 4.243218896557286,
+        "meanSingleCoreCPUPercent": 1.5695882265415944,
+        "measuredDurationSeconds": 905.00906075,
+        "p95IntervalSingleCoreCPUPercent": 1.9219650154130403,
+        "packageIdleWakeups": 8171,
+        "packageIdleWakeupsPerMinute": 541.7183332879687,
+        "peakPhysicalFootprintBytes": 41862056,
+        "requestedDurationSeconds": 900,
+        "sampleCount": 174,
+        "schemaVersion": 1,
+        "scope": "Process CPU energy attribution; does not measure full Energy Impact, GPU/display/network energy or whole-device battery draw.",
+        "type": "summary"
+      }
+    },
+    "running": {
+      "metadata": {
+        "cpuUnit": "mach_timebase_ticks",
+        "energyUnit": "CPU_nanojoules_attributed_by_kernel_not_whole_device",
+        "identity": {
+          "executable": "/Users/rong5/Applications/Dynamic Island T31 Energy Acceptance.app/Contents/MacOS/Dynamic Island",
+          "executableUUIDBase64": "wYRY4I1TOXyphMTGnDdWVA==",
+          "pid": 69724,
+          "processStartMachTicks": 13250199881200,
+          "uid": 501
+        },
+        "intervalSeconds": 5,
+        "label": "installed-running",
+        "observationClock": "mach_continuous_time_scaled_to_nanoseconds_includes_sleep",
+        "operatingSystem": "Version 26.6.2 (Build 25G83)",
+        "references": [
+          "https://github.com/apple-oss-distributions/xnu/blob/main/osfmk/kern/recount.h",
+          "https://github.com/apple-oss-distributions/xnu/blob/main/osfmk/kern/bsd_kern.c",
+          "https://support.apple.com/guide/activity-monitor/actmntr43697/mac"
+        ],
+        "requestedDurationSeconds": 900,
+        "rusageFlavor": 6,
+        "rusageStructBytes": 464,
+        "schemaVersion": 1,
+        "timebaseDenominator": 3,
+        "timebaseNumerator": 125,
+        "type": "metadata"
+      },
+      "summary": {
+        "attributedCPUEnergyJoules": 2.03965743,
+        "cpuEnergyCounterAdvanced": true,
+        "cpuSeconds": 15.663381916666665,
+        "diskReadBytes": 9465856,
+        "diskWrittenBytes": 0,
+        "equivalentMeanCPUPowerMilliwatts": 2.255123097783661,
+        "evidenceStatus": "valid_counter_window",
+        "identity": {
+          "executable": "/Users/rong5/Applications/Dynamic Island T31 Energy Acceptance.app/Contents/MacOS/Dynamic Island",
+          "executableUUIDBase64": "wYRY4I1TOXyphMTGnDdWVA==",
+          "pid": 69724,
+          "processStartMachTicks": 13250199881200,
+          "uid": 501
+        },
+        "interruptWakeups": 31166,
+        "interruptWakeupsPerMinute": 2067.4991427023774,
+        "label": "installed-running",
+        "maximumIntervalSingleCoreCPUPercent": 13.3677108849882,
+        "meanSingleCoreCPUPercent": 1.7318032837348525,
+        "measuredDurationSeconds": 904.455030417,
+        "p95IntervalSingleCoreCPUPercent": 2.218440336333896,
+        "packageIdleWakeups": 7679,
+        "packageIdleWakeupsPerMinute": 509.4117280630031,
+        "peakPhysicalFootprintBytes": 138871912,
+        "requestedDurationSeconds": 900,
+        "sampleCount": 174,
+        "schemaVersion": 1,
+        "scope": "Process CPU energy attribution; does not measure full Energy Impact, GPU/display/network energy or whole-device battery draw.",
+        "type": "summary"
+      }
+    }
+  },
+  "originalAppPid": 66831,
+  "acceptanceBundleId": "com.rong5.dynamic-island.t31-energy.20261014",
+  "system": "ProductName:\t\tmacOS\nProductVersion:\t\t26.6.2\nBuildVersion:\t\t25G83\n",
+  "hardware": "Mac16,12",
+  "diagnostics": {
+    "source": "actual CUA native PluginDiagnostics UI",
+    "selectedId": "com.example.t31.idle20",
+    "version": "1.0.1",
+    "state": "running",
+    "visibleRefreshRecords": 13,
+    "levels": "WARNING",
+    "visibleLocalTimes": [
+      "11:34:01",
+      "11:35:02",
+      "11:36:04",
+      "11:37:05",
+      "11:38:06",
+      "11:39:07",
+      "11:40:07",
+      "11:41:09",
+      "11:42:10",
+      "11:43:11",
+      "11:44:11",
+      "11:45:13",
+      "11:46:14"
+    ],
+    "meaning": "Audited fixture maps background success to INFO and active/lowPower success to WARNING; pmset lowpowermode was0. This invalidates background admission, even though counters completed."
+  },
+  "endEnergyImpact": 2.0,
+  "counterSources": {
+    "baseline": "DispatchTime uptime; old binary hash unavailable, recovered source matches recorded prior edit",
+    "running": "mach_continuous_time; final source 89525311f9a04ff669cac793fbedaa59a6f608733e842f8a7be48875cd7f8dad",
+    "externalCompileDuringBaselineSeconds": 1.819672167
+  }
+}

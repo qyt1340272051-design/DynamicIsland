@@ -1,0 +1,4 @@
+{"utc": "2026-10-14T03:13:32Z", "phase": "installed-disabled", "position": "middle", "app": "Dynamic Island T31 Energy Acceptance", "energyImpact": 1.8, "appNap": false, "preventsSleep": false, "source": "CUA actual Activity Monitor energy row; relative score"}
+{"utc": "2026-10-14T03:24:02Z", "phase": "installed-disabled", "position": "end", "app": "Dynamic Island T31 Energy Acceptance", "energyImpact": 1.3, "appNap": false, "preventsSleep": false, "source": "CUA actual Activity Monitor energy row; relative score"}
+{"phase": "installed-running", "position": "start", "app": "Dynamic Island T31 Energy Acceptance", "energyImpact": 3.3, "appNap": false, "preventsSleep": false, "utc": "2026-10-14T03:29:57Z"}
+{"utc": "2026-10-14T03:35:48Z", "phase": "installed-running", "position": "middle", "app": "Dynamic Island T31 Energy Acceptance", "energyImpact": 2.1, "appNap": false, "preventsSleep": false}

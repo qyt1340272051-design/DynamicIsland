@@ -38,3 +38,5 @@ ResourceAdmission 同步取消成功交付资格，MainActor 再移除该旧执�
 环境：arm64 MacBook Air、macOS 26.6.2（25G83）、SDK 26.5。CPU 数字来自 XCTest Host 进程的 getrusage，观察窗口内没有 VM 轮询或测试 eval；这能支持空闲 CPU 接近基线和没有额外周期唤醒，不能替代正式 App 安装多个插件后的长时 Energy Impact / 实际电耗测量。唯一 CI skip 为原截图生成，Release 测试宿主的注入 / library-validation 例外只在临时测试目录启用，普通 App 无该例外。
 
 因此 T31 状态保留 `in progress`，不把短 CPU 观测标作完整能耗验收。后续独立任务 T32 / T33 按其直接依赖继续，T35 的范围依赖应在剩余验收关闭后复核。
+
+2026-10-14 已执行实际安装 20 个插件的两段约 15 分钟观测，[原始计数与验收缺口](evidence/t31-energy-20261014.md)已保存。运行组日志返回非 background 策略，因此未关闭 T31；下一次先证明实际后台调度，再采样和逐插件核对整段刷新记录。T35 的[迁移准备](t35-migration-preparation.md)仅为审计方案，尚未实施。
