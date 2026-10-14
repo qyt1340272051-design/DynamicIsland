@@ -136,7 +136,17 @@ final class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
             )
             let manager = PluginManager(configuration: configuration, lifecycleHandler: lifecycle)
             pluginManager = manager
-            let model = PluginDiagnosticsModel(manager: manager, lifecycle: lifecycle, diagnostics: diagnostics)
+            let model = PluginDiagnosticsModel(manager: manager, lifecycle: lifecycle, diagnostics: diagnostics,
+                hostSchedulingProvider: { [weak self] in
+                    guard let runtime = self?.activityRuntime else { return nil }
+                    return PluginHostSchedulingSnapshot(
+                        policy: runtime.pluginScheduler.snapshot.policy,
+                        appActive: NSApp.isActive,
+                        appFrontmost: NSWorkspace.shared.frontmostApplication?.processIdentifier
+                            == ProcessInfo.processInfo.processIdentifier,
+                        lowPowerMode: ProcessInfo.processInfo.isLowPowerModeEnabled
+                    )
+                })
             pluginDiagnosticsModel = model
             let extensionsModel = PluginExtensionsModel(manager: manager, lifecycle: lifecycle,
                 permissions: permissions, diagnostics: diagnostics, diagnosticsModel: model)

@@ -3,6 +3,23 @@ import Foundation
 import Observation
 import SwiftUI
 
+/// Host-owned scheduling state read alongside a diagnostics refresh. The
+/// value contains no other application's identity or user/plugin content.
+public nonisolated struct PluginHostSchedulingSnapshot: Equatable, Sendable {
+    public let policy: PluginSchedulerPolicy
+    public let appActive: Bool
+    public let appFrontmost: Bool
+    public let lowPowerMode: Bool
+
+    public init(policy: PluginSchedulerPolicy, appActive: Bool,
+                appFrontmost: Bool, lowPowerMode: Bool) {
+        self.policy = policy
+        self.appActive = appActive
+        self.appFrontmost = appFrontmost
+        self.lowPowerMode = lowPowerMode
+    }
+}
+
 @MainActor
 @Observable
 public final class PluginDiagnosticsModel {
@@ -11,6 +28,7 @@ public final class PluginDiagnosticsModel {
     public private(set) var plugins: [PluginRecord] = []
     public private(set) var snapshots: [String: PluginLifecycleSnapshot] = [:]
     public private(set) var records: [PluginDiagnosticEntry] = []
+    public private(set) var hostSchedulingSnapshot: PluginHostSchedulingSnapshot?
     public var selectedID: String?
     public private(set) var isBusy = false
     public private(set) var error: String?
@@ -18,6 +36,7 @@ public final class PluginDiagnosticsModel {
     @ObservationIgnored private let manager: PluginManager
     @ObservationIgnored private let lifecycle: PluginLifecycleBridge
     @ObservationIgnored private let diagnostics: PluginDiagnosticsStore
+    @ObservationIgnored private let hostSchedulingProvider: (@MainActor @Sendable () -> PluginHostSchedulingSnapshot?)?
     @ObservationIgnored private var lifecycleObservationID: UUID?
     @ObservationIgnored private var diagnosticsObservationID: UUID?
     @ObservationIgnored private var refreshTask: Task<Void, Never>?
@@ -26,10 +45,12 @@ public final class PluginDiagnosticsModel {
     @ObservationIgnored private var idleWaiters: [CheckedContinuation<Void, Never>] = []
 
     public init(manager: PluginManager, lifecycle: PluginLifecycleBridge,
-                diagnostics: PluginDiagnosticsStore) {
+                diagnostics: PluginDiagnosticsStore,
+                hostSchedulingProvider: (@MainActor @Sendable () -> PluginHostSchedulingSnapshot?)? = nil) {
         self.manager = manager
         self.lifecycle = lifecycle
         self.diagnostics = diagnostics
+        self.hostSchedulingProvider = hostSchedulingProvider
         lifecycleObservationID = lifecycle.observeChanges { [weak self] in
             self?.requestSnapshotRefresh()
         }
@@ -143,6 +164,7 @@ public final class PluginDiagnosticsModel {
         for plugin in plugins { current[plugin.id] = lifecycle.snapshot(id: plugin.id) }
         snapshots = current
         records = diagnostics.allRecords()
+        hostSchedulingSnapshot = hostSchedulingProvider?()
         if !plugins.contains(where: { $0.id == selectedID }) { selectedID = plugins.first?.id }
         // These snapshots are read together on MainActor after Manager returns.
         // A signal received during that await is already included in this read.
@@ -271,6 +293,10 @@ public struct PluginDiagnosticsView: View {
                     .padding(.horizontal, 18).padding(.bottom, 12)
                     .accessibilityIdentifier("plugin-diagnostics-lifecycle-failure")
             }
+            if let snapshot = model.hostSchedulingSnapshot {
+                hostSchedulingDetail(snapshot)
+                    .padding(.horizontal, 18).padding(.bottom, 12)
+            }
             Text("仅保留固定的诊断类别和错误代码；插件原始日志与异常内容不会保存。记录仅在本次运行中保留。")
                 .font(.caption).foregroundStyle(.secondary)
                 .fixedSize(horizontal: false, vertical: true)
@@ -296,6 +322,26 @@ public struct PluginDiagnosticsView: View {
             }
         }
         .background(Color(nsColor: .windowBackgroundColor))
+    }
+
+    private func hostSchedulingDetail(_ snapshot: PluginHostSchedulingSnapshot) -> some View {
+        VStack(alignment: .leading, spacing: 7) {
+            Text("主程序调度策略：\(snapshot.policy.rawValue)")
+                .font(.callout.weight(.medium))
+            HStack(spacing: 16) {
+                Text("App 活跃（NSApp）：\(snapshot.appActive ? "是" : "否")")
+                Text("App 在前台：\(snapshot.appFrontmost ? "是" : "否")")
+                Text("低功耗模式：\(snapshot.lowPowerMode ? "开" : "关")")
+            }
+            .font(.caption).foregroundStyle(.secondary)
+            Text("这是刷新时的状态快照；点击刷新更新。读取状态不会改变调度策略。")
+                .font(.caption).foregroundStyle(.secondary)
+                .fixedSize(horizontal: false, vertical: true)
+        }
+        .padding(12)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(Color(nsColor: .controlBackgroundColor), in: RoundedRectangle(cornerRadius: 8))
+        .accessibilityIdentifier("plugin-diagnostics-host-scheduling")
     }
 
     private func logRow(_ entry: PluginDiagnosticEntry) -> some View {

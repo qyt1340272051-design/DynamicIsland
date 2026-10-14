@@ -172,10 +172,12 @@ final class PluginSchedulerTests: XCTestCase {
     func testEnvironmentUsesCurrentInjectedAppAndPowerStateAndStopsObservation() {
         let scheduler = PluginScheduler(automaticScheduling: false)
         let center = NotificationCenter()
+        let workspaceCenter = NotificationCenter()
         let state = SchedulerEnvironmentState()
         state.active = false
         let environment = PluginSchedulerEnvironment(scheduler: scheduler, notificationCenter: center,
-            isActive: { state.active }, isLowPowerModeEnabled: { state.lowPower })
+            workspaceCenter: workspaceCenter, isActive: { state.active }, isFrontmost: { true },
+            isLowPowerModeEnabled: { state.lowPower })
         defer { environment.stop() }
         XCTAssertEqual(scheduler.snapshot.policy, .background)
         state.active = true
@@ -205,10 +207,12 @@ final class PluginSchedulerTests: XCTestCase {
     func testQueuedEnvironmentNotificationCannotAffectRestartedObservation() async {
         let scheduler = PluginScheduler(automaticScheduling: false)
         let center = NotificationCenter()
+        let workspaceCenter = NotificationCenter()
         let state = SchedulerEnvironmentState()
         var powerReads = 0
         let environment = PluginSchedulerEnvironment(scheduler: scheduler, notificationCenter: center,
-            isActive: { state.active }, isLowPowerModeEnabled: { powerReads += 1; return state.lowPower })
+            workspaceCenter: workspaceCenter, isActive: { state.active }, isFrontmost: { true },
+            isLowPowerModeEnabled: { powerReads += 1; return state.lowPower })
         defer { environment.stop() }
         let delivered = DispatchSemaphore(value: 0)
         DispatchQueue.global().async {
@@ -225,6 +229,69 @@ final class PluginSchedulerTests: XCTestCase {
         for _ in 0..<5 { await Task.yield() }
         XCTAssertEqual(powerReads, readsAfterRestart)
         XCTAssertEqual(scheduler.snapshot.policy, .lowPower)
+    }
+
+    func testWorkspaceForegroundChangesRequireAppToBeActiveAndFrontmost() {
+        let scheduler = PluginScheduler(automaticScheduling: false)
+        let center = NotificationCenter()
+        let workspaceCenter = NotificationCenter()
+        let state = SchedulerEnvironmentState()
+        let environment = PluginSchedulerEnvironment(scheduler: scheduler, notificationCenter: center,
+            workspaceCenter: workspaceCenter, isActive: { state.active }, isFrontmost: { state.frontmost },
+            isLowPowerModeEnabled: { state.lowPower })
+        defer { environment.stop() }
+        XCTAssertEqual(scheduler.snapshot.policy, .active)
+
+        // A menu bar app may keep NSApp.isActive after another process becomes
+        // frontmost. Workspace changes must still select the background policy.
+        state.frontmost = false
+        workspaceCenter.post(name: NSWorkspace.didDeactivateApplicationNotification, object: nil)
+        XCTAssertTrue(state.active)
+        XCTAssertEqual(scheduler.snapshot.policy, .background)
+        center.post(name: NSApplication.didBecomeActiveNotification, object: nil)
+        workspaceCenter.post(name: NSWorkspace.didActivateApplicationNotification, object: nil)
+        XCTAssertEqual(scheduler.snapshot.policy, .background)
+
+        state.frontmost = true
+        workspaceCenter.post(name: NSWorkspace.didActivateApplicationNotification, object: nil)
+        XCTAssertEqual(scheduler.snapshot.policy, .active)
+        state.active = false
+        workspaceCenter.post(name: NSWorkspace.didActivateApplicationNotification, object: nil)
+        XCTAssertEqual(scheduler.snapshot.policy, .background)
+    }
+
+    func testQueuedWorkspaceNotificationCannotAffectRestartedObservation() async {
+        let scheduler = PluginScheduler(automaticScheduling: false)
+        let center = NotificationCenter()
+        let workspaceCenter = NotificationCenter()
+        let state = SchedulerEnvironmentState()
+        var foregroundReads = 0
+        let environment = PluginSchedulerEnvironment(scheduler: scheduler, notificationCenter: center,
+            workspaceCenter: workspaceCenter, isActive: { state.active },
+            isFrontmost: { foregroundReads += 1; return state.frontmost },
+            isLowPowerModeEnabled: { state.lowPower })
+        defer { environment.stop() }
+        let delivered = DispatchSemaphore(value: 0)
+        DispatchQueue.global().async {
+            workspaceCenter.post(name: NSWorkspace.didDeactivateApplicationNotification, object: nil)
+            delivered.signal()
+        }
+        XCTAssertEqual(delivered.wait(timeout: .now() + 1), .success)
+        environment.stop()
+        state.frontmost = false
+        environment.start()
+        let readsAfterRestart = foregroundReads
+        for _ in 0..<5 { await Task.yield() }
+        XCTAssertEqual(foregroundReads, readsAfterRestart)
+        XCTAssertEqual(scheduler.snapshot.policy, .background)
+
+        environment.stop()
+        state.frontmost = true
+        workspaceCenter.post(name: NSWorkspace.didActivateApplicationNotification, object: nil)
+        XCTAssertEqual(foregroundReads, readsAfterRestart)
+        XCTAssertEqual(scheduler.snapshot.policy, .background)
+        environment.start()
+        XCTAssertEqual(scheduler.snapshot.policy, .active)
     }
 
     func testRealJavaScriptRefreshResolvesFrozenResponseAndPublishesActivityAtDue() async throws {
@@ -521,6 +588,7 @@ private final class SchedulerTestClock {
 @MainActor
 private final class SchedulerEnvironmentState {
     var active = true
+    var frontmost = true
     var lowPower = false
 }
 

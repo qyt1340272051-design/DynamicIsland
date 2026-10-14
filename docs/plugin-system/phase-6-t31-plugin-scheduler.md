@@ -40,3 +40,5 @@ ResourceAdmission 同步取消成功交付资格，MainActor 再移除该旧执�
 因此 T31 状态保留 `in progress`，不把短 CPU 观测标作完整能耗验收。后续独立任务 T32 / T33 按其直接依赖继续，T35 的范围依赖应在剩余验收关闭后复核。
 
 2026-10-14 已执行实际安装 20 个插件的两段约 15 分钟观测，[原始计数与验收缺口](evidence/t31-energy-20261014.md)已保存。运行组日志返回非 background 策略，因此未关闭 T31；下一次先证明实际后台调度，再采样和逐插件核对整段刷新记录。T35 的[迁移准备](t35-migration-preparation.md)仅为审计方案，尚未实施。
+
+同日后续通过 [Host 状态诊断定位并修正前台判定](evidence/t31-foreground-policy-20261014.md)：NSApp 活跃标志为 true、实际前台为其他进程时已返回 background，实际 JS 连续 INFO。全量 CI 703 total / 702 passed / 1 skipped，Release build passed；长时重测仍待完成。

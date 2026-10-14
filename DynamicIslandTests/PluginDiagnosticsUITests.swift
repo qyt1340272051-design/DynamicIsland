@@ -36,6 +36,55 @@ final class PluginDiagnosticsUITests: XCTestCase {
         XCTAssertFalse(fixture.model.isBusy)
     }
 
+    func testRefreshReadsLatestHostSchedulingStateWithoutNormalizingOrChangingPolicy() async throws {
+        let scheduler = PluginScheduler(policy: .background, automaticScheduling: false)
+        defer { scheduler.shutdown() }
+        let state = DiagnosticsUISchedulingState()
+        // Preserve the inconsistency being diagnosed rather than deriving a
+        // different policy from the supplied active/frontmost flags.
+        state.snapshot = .init(policy: .active, appActive: false, appFrontmost: false, lowPowerMode: false)
+        let fixture = try await makeFixture(hostSchedulingProvider: {
+            state.reads += 1
+            return state.snapshot
+        })
+        defer { fixture.cleanup() }
+        XCTAssertNil(fixture.model.hostSchedulingSnapshot)
+        XCTAssertEqual(state.reads, 0)
+
+        await fixture.model.refresh()
+
+        XCTAssertEqual(fixture.model.hostSchedulingSnapshot, state.snapshot)
+        XCTAssertEqual(state.reads, 1)
+        XCTAssertEqual(scheduler.snapshot.policy, .background)
+        state.snapshot = .init(policy: .lowPower, appActive: true, appFrontmost: true, lowPowerMode: true)
+        for _ in 0..<5 { await Task.yield() }
+        XCTAssertEqual(state.reads, 1)
+        XCTAssertEqual(fixture.model.hostSchedulingSnapshot?.policy, .active)
+        await fixture.model.refresh()
+        XCTAssertEqual(fixture.model.hostSchedulingSnapshot, state.snapshot)
+        XCTAssertEqual(state.reads, 2)
+        XCTAssertEqual(scheduler.snapshot.policy, .background)
+    }
+
+    func testHostSignalRefreshesSchedulingSnapshotAndClearsUnavailableProviderState() async throws {
+        let state = DiagnosticsUISchedulingState()
+        state.snapshot = .init(policy: .background, appActive: false, appFrontmost: false, lowPowerMode: false)
+        let fixture = try await makeFixture(hostSchedulingProvider: { state.snapshot })
+        defer { fixture.cleanup() }
+        await fixture.model.refresh()
+        XCTAssertEqual(fixture.model.hostSchedulingSnapshot, state.snapshot)
+
+        state.snapshot = .init(policy: .active, appActive: true, appFrontmost: false, lowPowerMode: false)
+        fixture.diagnostics.recordPluginMessage(pluginID: fixture.id, level: .warning)
+        try await waitUntil { fixture.model.hostSchedulingSnapshot == state.snapshot }
+        XCTAssertEqual(fixture.model.hostSchedulingSnapshot?.appFrontmost, false)
+        state.snapshot = nil
+        fixture.diagnostics.recordPluginMessage(pluginID: fixture.id, level: .info)
+        try await waitUntil { fixture.model.hostSchedulingSnapshot == nil }
+        XCTAssertNil(fixture.model.hostSchedulingSnapshot)
+        XCTAssertEqual(fixture.model.selectedRecords.count, 2)
+    }
+
     func testRestartReloadsDiskCodeRevokesOldContextAndPersistsEnablement() async throws {
         let fixture = try await makeFixture()
         defer { fixture.cleanup() }
@@ -153,6 +202,7 @@ final class PluginDiagnosticsUITests: XCTestCase {
         XCTAssertNil(model.selectedID)
         XCTAssertNil(model.selectedPlugin)
         XCTAssertNil(model.selectedSnapshot)
+        XCTAssertNil(model.hostSchedulingSnapshot)
         XCTAssertTrue(model.selectedRecords.isEmpty)
         XCTAssertNil(model.error)
         XCTAssertFalse(model.isBusy)
@@ -195,7 +245,8 @@ final class PluginDiagnosticsUITests: XCTestCase {
         XCTAssertEqual(fixture.model.selectedRecords.first?.code, "automaticDisable")
     }
 
-    private func makeFixture(stateStore: DiagnosticsUIStateStore? = nil) async throws -> DiagnosticsUIFixture {
+    private func makeFixture(stateStore: DiagnosticsUIStateStore? = nil,
+                             hostSchedulingProvider: (@MainActor @Sendable () -> PluginHostSchedulingSnapshot?)? = nil) async throws -> DiagnosticsUIFixture {
         let root = FileManager.default.temporaryDirectory
             .appendingPathComponent("PluginDiagnosticsUI-SECRET-PATH-\(UUID().uuidString)", isDirectory: true)
         let configuration = PluginManagerConfiguration(rootDirectoryURL: root, hostVersion: try SemanticVersion("0.6.0"))
@@ -219,7 +270,8 @@ final class PluginDiagnosticsUITests: XCTestCase {
         let id = "com.example.diagnostics.alpha"
         let packageURL = try makePackage(in: configuration.installedDirectoryURL, id: id, name: "Weather Mock")
         _ = try await manager.load(at: packageURL)
-        let model = PluginDiagnosticsModel(manager: manager, lifecycle: lifecycle, diagnostics: diagnostics)
+        let model = PluginDiagnosticsModel(manager: manager, lifecycle: lifecycle, diagnostics: diagnostics,
+                                           hostSchedulingProvider: hostSchedulingProvider)
         return DiagnosticsUIFixture(id: id, configuration: configuration, entryURL: packageURL.appendingPathComponent("main.js"),
                                     manager: manager, lifecycle: lifecycle, diagnostics: diagnostics, watchdog: watchdog,
                                     runtimeContexts: runtimeContexts, model: model)
@@ -262,6 +314,12 @@ private struct DiagnosticsUIFixture {
         lifecycle.shutdown()
         try? FileManager.default.removeItem(at: configuration.rootDirectoryURL)
     }
+}
+
+@MainActor
+private final class DiagnosticsUISchedulingState {
+    var snapshot: PluginHostSchedulingSnapshot?
+    var reads = 0
 }
 
 @MainActor
