@@ -1,0 +1,7 @@
+{
+  "capturedUTC": "2026-10-14T14:12:37.971508+00:00",
+  "power": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=22544483)\t100%; charged; 0:00 remaining present: true\n",
+  "powerSettings": "Battery Power:\n Sleep On Power Button 1\n lowpowermode         0\n standby              1\n ttyskeepawake        1\n hibernatemode        3\n powernap             1\n hibernatefile        /var/vm/sleepimage\n displaysleep         10\n womp                 0\n networkoversleep     0\n sleep                1\n lessbright           0\n tcpkeepalive         1\n disksleep            10\nAC Power:\n Sleep On Power Button 1\n lowpowermode         0\n standby              1\n ttyskeepawake        1\n hibernatemode        3\n powernap             1\n hibernatefile        /var/vm/sleepimage\n displaysleep         10\n womp                 1\n networkoversleep     0\n sleep                1\n tcpkeepalive         1\n disksleep            10\n",
+  "process": "66831 01-10:20:03 /Users/rong5/Library/Developer/Xcode/DerivedData/DynamicIsland-akumdixgpeinlcgajmgpsellwlbf/Build/Products/Debug/Dynamic Island.app/Contents/MacOS/Dynamic Island -NSDocumentRevisionsDebugMode YES\n76335    01:10:16 /Users/rong5/Applications/Dynamic Island T31 Energy Acceptance.app/Contents/MacOS/Dynamic Island\n",
+  "executableSHA256": "9224ee6b7ccd071f8ad989d06db2b25a15193ea3e6581ae58985952c97bf43c4"
+}

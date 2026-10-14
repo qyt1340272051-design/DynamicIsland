@@ -1,0 +1,13 @@
+{
+  "result": "Passed",
+  "totalTestCount": 703,
+  "passedTests": 702,
+  "failedTests": 0,
+  "skippedTests": 1,
+  "startTime": 1791982711.356,
+  "finishTime": 1791982780.005,
+  "sourceCommit": "da52f69",
+  "testLog": "/tmp/dynamic-island-t31-corrected-ci.log",
+  "testResults": "/tmp/dynamic-island-t31-corrected-ci/TestResults.xcresult",
+  "ordinaryReleaseBuildPassed": true
+}

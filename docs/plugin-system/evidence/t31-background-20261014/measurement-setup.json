@@ -1,0 +1,12 @@
+{
+  "utc": "2026-10-14T13:10:48Z",
+  "pid": 76335,
+  "sourceCommit": "da52f69",
+  "installed": 20,
+  "enabled": 0,
+  "version": "1.0.1",
+  "samplerSHA256": "5d094778c41483f11c7443674c5310b00d7820d1e85aa43274505e8a448d5529",
+  "appSHA256": "9224ee6b7ccd071f8ad989d06db2b25a15193ea3e6581ae58985952c97bf43c4",
+  "power": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=22544483)\t100%; charged; 0:00 remaining present: true\n",
+  "settings": "Battery Power:\n Sleep On Power Button 1\n lowpowermode         0\n standby              1\n ttyskeepawake        1\n hibernatemode        3\n powernap             1\n hibernatefile        /var/vm/sleepimage\n displaysleep         10\n womp                 0\n networkoversleep     0\n sleep                1\n lessbright           0\n tcpkeepalive         1\n disksleep            10\nAC Power:\n Sleep On Power Button 1\n lowpowermode         0\n standby              1\n ttyskeepawake        1\n hibernatemode        3\n powernap             1\n hibernatefile        /var/vm/sleepimage\n displaysleep         10\n womp                 1\n networkoversleep     0\n sleep                1\n tcpkeepalive         1\n disksleep            10\n"
+}

@@ -1,6 +1,6 @@
 # Phase 6 — T31 PluginScheduler
 
-日期：2026-10-12。依赖 T22 已验收。实现与自动化验证完成；正式 App 多插件安装后的长时能耗验收保留。
+日期：2026-10-12，验收更新于 2026-10-14。依赖 T22 已验收。实现、自动化及正式 App 的 20 个低频后台插件空闲验收完成；适用范围与边界见下文。
 
 ## API、策略与准入
 
@@ -20,7 +20,7 @@ await island.activity.update({id: 'status', presentation: {title: 'Refreshed'}})
 
 最短间隔是 Host 强制下限，不是准点执行保证。切换到更严格策略会从切换时刻延后现有请求；恢复 active 保留已延后的截止时间，不突发补发错过的 tick。每插件 1 项、全局 128 项，没有等待队列、每 VM Timer、100 ms 轮询或 recurring catch-up。JavaScriptCore 没有提供 setTimeout / setInterval；绕过 SDK 的无限计算仍不在调度器的抢占范围内。
 
-所有插件共享一个最近截止时间的 Host Task，无待办时没有计时器。单调 systemUptime 是生产时钟；测试可注入时钟并手动 pump。App 活跃状态和系统 Low Power Mode 通知驱动策略，不增加轮询。ActivityScheduler 与此类独立：前者控制 Activity 过期，后者只控制插件请求的后台刷新。
+所有插件共享一个最近截止时间的 Host Task，无待办时没有计时器。单调 systemUptime 是生产时钟；测试可注入时钟并手动 pump。NSApp / Workspace 激活事件及系统 Low Power Mode 通知驱动策略，不增加轮询；active 同时要求 NSApp 活跃与 Workspace 前台进程为自身。ActivityScheduler 与此类独立：前者控制 Activity 过期，后者只控制插件请求的后台刷新。
 
 ResourceAdmission 同步取消成功交付资格，MainActor 再移除该旧执行的待办；停用、卸载、睡眠、低电池生命周期暂停和直接 teardown 都覆盖。旧任务不能触发替换 VM。Bridge 的 FIFO 只等待参数与准入，刷新未到期时 storage、Activity、动作继续处理。生产 IslandActivityRuntime 共享同一个 Scheduler；App 结束停止环境 observer、生命周期和截止任务。
 
@@ -37,8 +37,10 @@ ResourceAdmission 同步取消成功交付资格，MainActor 再移除该旧执�
 
 环境：arm64 MacBook Air、macOS 26.6.2（25G83）、SDK 26.5。CPU 数字来自 XCTest Host 进程的 getrusage，观察窗口内没有 VM 轮询或测试 eval；这能支持空闲 CPU 接近基线和没有额外周期唤醒，不能替代正式 App 安装多个插件后的长时 Energy Impact / 实际电耗测量。唯一 CI skip 为原截图生成，Release 测试宿主的注入 / library-validation 例外只在临时测试目录启用，普通 App 无该例外。
 
-因此 T31 状态保留 `in progress`，不把短 CPU 观测标作完整能耗验收。后续独立任务 T32 / T33 按其直接依赖继续，T35 的范围依赖应在剩余验收关闭后复核。
+上述短时观测当时不足以关闭 T31；后续独立任务 T32 / T33 按其直接依赖继续。
 
 2026-10-14 已执行实际安装 20 个插件的两段约 15 分钟观测，[原始计数与验收缺口](evidence/t31-energy-20261014.md)已保存。运行组日志返回非 background 策略，因此未关闭 T31；下一次先证明实际后台调度，再采样和逐插件核对整段刷新记录。T35 的[迁移准备](t35-migration-preparation.md)仅为审计方案，尚未实施。
 
-同日后续通过 [Host 状态诊断定位并修正前台判定](evidence/t31-foreground-policy-20261014.md)：NSApp 活跃标志为 true、实际前台为其他进程时已返回 background，实际 JS 连续 INFO。全量 CI 703 total / 702 passed / 1 skipped，Release build passed；长时重测仍待完成。
+同日后续通过 [Host 状态诊断定位并修正前台判定](evidence/t31-foreground-policy-20261014.md)：NSApp 活跃标志为 true、实际前台为其他进程时已返回 background，实际 JS 连续 INFO。全量 CI 703 total / 702 passed / 1 skipped，Release build passed。
+
+随后完成[同一普通 Release 进程的后台长时重测](evidence/t31-background-20261014.md)：两组各约 15 分钟 / 173 样本，20 项全停用再真实 UI 全启用；每项在运行窗口有 14 次 INFO、共 280 次，无 WARNING / ERROR，最大间隔 66 秒。CPU 1.5598% → 1.9437%（+0.3839 个百分点），归属 CPU 功率 1.6954 → 3.0869 mW（+1.3915 mW，相对约 82.1%）；内存、wakeups、读取和离散 Energy Impact 一并保留。计划无数值门限，本工作负载的绝对空闲增量支持关闭 T31，状态更新为 `verified`。单机顺序对照不代表任意插件、整机电耗、低功耗 / 电池 / 睡眠或长期内存验收；原失败证据没有删除。

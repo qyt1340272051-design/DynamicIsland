@@ -1,0 +1,7 @@
+{
+  "localStart": "2026-10-14 21:17:24",
+  "localEnd": "2026-10-14 21:56:29",
+  "command": "pmset -g log",
+  "matchingSleepWakeLines": [],
+  "noSleepWakeInCombinedWindow": true
+}

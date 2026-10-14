@@ -1,0 +1,61 @@
+{
+  "schemaVersion": 1,
+  "marker": "T31_RERUN_ENERGY",
+  "captures": [
+    {
+      "captureCompletedUTC": "2026-10-14T13:21:50.623Z",
+      "callID": "call_2199d1bfbae243d8af91cee8d78a02b9",
+      "rawJSONText": "{\"marker\":\"T31_RERUN_ENERGY\",\"phase\":\"disabled-middle\",\"captureUTC\":\"2026-10-14T13:21:50.620Z\",\"rawRow\":\"\\t\\t\\t3 row (selectable, collapsed) Secondary Actions: Expand, Value: Dynamic Island T31 Energy Acceptance\\n1.5\\n0.56\\n否\\n否\\nrong5\\n\\t\\t\\t\\t4 显示三角形 0\"}",
+      "value": {
+        "marker": "T31_RERUN_ENERGY",
+        "phase": "disabled-middle",
+        "captureUTC": "2026-10-14T13:21:50.620Z",
+        "rawRow": "\t\t\t3 row (selectable, collapsed) Secondary Actions: Expand, Value: Dynamic Island T31 Energy Acceptance\n1.5\n0.56\n否\n否\nrong5\n\t\t\t\t4 显示三角形 0"
+      }
+    },
+    {
+      "captureCompletedUTC": "2026-10-14T13:34:03.893Z",
+      "callID": "call_f704df498529408eb1c3f8f9c4063aed",
+      "rawJSONText": "{\"marker\":\"T31_RERUN_ENERGY\",\"phase\":\"disabled-end\",\"captureUTC\":\"2026-10-14T13:34:03.177Z\",\"rawRow\":\"\\t\\t\\t3 row (selectable, collapsed) Secondary Actions: Expand, Value: Dynamic Island T31 Energy Acceptance\\n1.9\\n0.60\\n否\\n否\\nrong5\\n\\t\\t\\t\\t4 显示三角形 0\"}",
+      "value": {
+        "marker": "T31_RERUN_ENERGY",
+        "phase": "disabled-end",
+        "captureUTC": "2026-10-14T13:34:03.177Z",
+        "rawRow": "\t\t\t3 row (selectable, collapsed) Secondary Actions: Expand, Value: Dynamic Island T31 Energy Acceptance\n1.9\n0.60\n否\n否\nrong5\n\t\t\t\t4 显示三角形 0"
+      }
+    },
+    {
+      "captureCompletedUTC": "2026-10-14T13:41:16.975Z",
+      "callID": "call_b895b2bcb0e84d82b35fa6e58124bc26",
+      "rawJSONText": "{\"marker\":\"T31_RERUN_ENERGY\",\"phase\":\"running-start\",\"captureUTC\":\"2026-10-14T13:41:16.655Z\",\"rawRow\":\"\\t\\t\\t3 row (selectable, collapsed) Secondary Actions: Expand, Value: Dynamic Island T31 Energy Acceptance\\n3.6\\n0.73\\n否\\n否\\nrong5\\n\\t\\t\\t\\t4 显示三角形 0\"}",
+      "value": {
+        "marker": "T31_RERUN_ENERGY",
+        "phase": "running-start",
+        "captureUTC": "2026-10-14T13:41:16.655Z",
+        "rawRow": "\t\t\t3 row (selectable, collapsed) Secondary Actions: Expand, Value: Dynamic Island T31 Energy Acceptance\n3.6\n0.73\n否\n否\nrong5\n\t\t\t\t4 显示三角形 0"
+      }
+    },
+    {
+      "captureCompletedUTC": "2026-10-14T13:47:34.291Z",
+      "callID": "call_cdc6c9d2b8cb47fdb7b46d5f0486deae",
+      "rawJSONText": "{\"marker\":\"T31_RERUN_ENERGY\",\"phase\":\"running-middle\",\"captureUTC\":\"2026-10-14T13:47:34.286Z\",\"rawRow\":\"\\t\\t\\t3 row (selectable, collapsed) Secondary Actions: Expand, Value: Dynamic Island T31 Energy Acceptance\\n5.0\\n0.77\\n否\\n否\\nrong5\\n\\t\\t\\t\\t4 显示三角形 0\"}",
+      "value": {
+        "marker": "T31_RERUN_ENERGY",
+        "phase": "running-middle",
+        "captureUTC": "2026-10-14T13:47:34.286Z",
+        "rawRow": "\t\t\t3 row (selectable, collapsed) Secondary Actions: Expand, Value: Dynamic Island T31 Energy Acceptance\n5.0\n0.77\n否\n否\nrong5\n\t\t\t\t4 显示三角形 0"
+      }
+    },
+    {
+      "captureCompletedUTC": "2026-10-14T13:58:03.142Z",
+      "callID": "call_d8b7a4b974cb4b7f8c21ccda744111ad",
+      "rawJSONText": "{\"marker\":\"T31_RERUN_ENERGY\",\"phase\":\"running-end\",\"captureUTC\":\"2026-10-14T13:58:01.827Z\",\"rawRow\":\"\\t\\t\\t3 row (selectable, collapsed) Secondary Actions: Expand, Value: Dynamic Island T31 Energy Acceptance\\n2.2\\n0.80\\n否\\n否\\nrong5\\n\\t\\t\\t\\t4 显示三角形 0\"}",
+      "value": {
+        "marker": "T31_RERUN_ENERGY",
+        "phase": "running-end",
+        "captureUTC": "2026-10-14T13:58:01.827Z",
+        "rawRow": "\t\t\t3 row (selectable, collapsed) Secondary Actions: Expand, Value: Dynamic Island T31 Energy Acceptance\n2.2\n0.80\n否\n否\nrong5\n\t\t\t\t4 显示三角形 0"
+      }
+    }
+  ]
+}
