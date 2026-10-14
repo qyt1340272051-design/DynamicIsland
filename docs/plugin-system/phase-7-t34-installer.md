@@ -1,6 +1,6 @@
 # Phase 7 — T34 .dip Installer
 
-日期：2026-10-13。依赖 T19、T28 已验收；整体验证进行中。
+日期：2026-10-13–14。依赖 T19、T28 已验收；实现与验收完成。
 
 ## 流程与职责
 
@@ -52,8 +52,8 @@ Manager 的既有 FIFO 覆盖确认时的全树 SHA256 重验、已安装快照�
 4. 实际点击启用后显示运行中；停用后确认卸载，两个共用模型的管理窗口都恢复已安装 0。
 5. 验收插件已卸载，临时验收 App 已退出；未批准真实剪贴板或网络权限。
 
-### 尚未关闭的 T34 项
+### Finder 关联验收补充 — 2026-10-14
 
 Finder 双击关联仍需修正 / 验收。实测 `.dip` 已解析为 `com.rong5.dynamic-island.plugin`，但 `LSCopyAllRoleHandlersForContentType` 返回归档实用工具 / Keka，没有本 App；Finder 打开将合法测试包解压到同名目录，没有进入安装预览。强制重新登记临时构建 App 后结果仍相同。没有改写用户的默认打开方式来掩盖问题，也没有将此路径记为通过。
 
-下一步检查 LaunchServices 对当前 bundle 的文档处理注册、临时构建与重复 bundle ID / 版本的影响及类型继承；让 Finder 打开实际进入 Host 预览，再关闭 T34。此时 T34 保留 `in progress`。T31 的正式 App 多插件长时 Energy Impact / 能耗也未完成，T35 尚不开始。
+本轮以完全相同的签名 Release 副本放到正常应用目录后，系统查询与 Finder 双击均选中本 App，冷启动准确进入权限预览，取消后没有执行或遗留暂存包。根因收敛到本机临时构建目录的候选选择；未更改 Info.plist 角色 / 继承或用户默认程序。详细对照、进程与清理证据见 [Finder 实际验收](evidence/t34-finder-20261014.md)。T34 标记 `verified`。T31 的正式 App 多插件长时 Energy Impact / 能耗仍未完成，T35 尚不开始。
