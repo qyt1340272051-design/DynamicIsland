@@ -27,6 +27,8 @@ final class PluginActivityBridgeTests: XCTestCase {
         XCTAssertNil(activity.presentation.minimal)
         XCTAssertNil(activity.presentation.compact)
         XCTAssertNil(activity.presentation.expanded)
+        XCTAssertNil(activity.presentation.showsCompact)
+        XCTAssertTrue(activity.presentation.isCompactVisible)
     }
 
     func testPriorityAndLifecycleRequestsUseHostDowngradePolicy() async throws {
@@ -66,10 +68,11 @@ final class PluginActivityBridgeTests: XCTestCase {
         let context = try fixture.load(package)
         try await publish(fixture, package: package, context: context, params: [
             "id": "build", "priority": "background", "lifecycle": ["policy": "progress"],
-            "presentation": ["title": "开始构建", "subtitle": "main", "symbolName": "hammer.fill", "progress": 0],
+            "presentation": ["title": "开始构建", "subtitle": "main", "symbolName": "hammer.fill", "progress": 0, "showsCompact": false],
             "actions": [["id": "open", "title": "查看构建"]]
         ])
         let original = try XCTUnwrap(fixture.activity("build"))
+        XCTAssertEqual(original.presentation.showsCompact, false)
         let token = try XCTUnwrap(fixture.manager.currentSnapshot?.instanceToken)
         let response = try await request(fixture, package: package, context: context, method: "activity.update", params: [
             "id": "build", "presentation": ["title": "构建进行中", "progress": 0.5]
@@ -85,6 +88,8 @@ final class PluginActivityBridgeTests: XCTestCase {
         XCTAssertEqual(updated.presentation, .init(title: "构建进行中", progress: 0.5))
         XCTAssertNil(updated.presentation.subtitle)
         XCTAssertNil(updated.presentation.symbolName)
+        XCTAssertNil(updated.presentation.showsCompact)
+        XCTAssertTrue(updated.presentation.isCompactVisible)
 
         let clearActions = try await request(fixture, package: package, context: context, method: "activity.update", params: [
             "id": "build", "priority": "important", "actions": []
@@ -213,7 +218,7 @@ final class PluginActivityBridgeTests: XCTestCase {
             ["id": "build", "presentation": ["title": "Bad", "progress": 1.1]],
             ["id": "build", "presentation": ["title": "Bad", "progress": true]],
             ["id": "build", "presentation": ["title": "Bad", "compact": ["type": "text", "text": "tree"]]],
-            ["id": "build", "presentation": ["title": "Bad", "showsCompact": false]],
+            ["id": "build", "presentation": ["title": "Bad", "showsCompact": NSNull()]],
             ["id": "build", "priority": 3],
             ["id": "build", "priority": "urgent"],
             ["id": "build", "lifecycle": "persistent"],
@@ -241,6 +246,37 @@ final class PluginActivityBridgeTests: XCTestCase {
             ])
             XCTAssertEqual(errorCode(response), "invalidArguments")
             XCTAssertNil(fixture.activity("attack"))
+        }
+    }
+
+    func testShowsCompactRejectsNonBooleanPublishAndUpdateWithoutHostMutation() async throws {
+        let fixture = ActivityBridgeFixture()
+        defer { fixture.shutdown() }
+        let package = try package()
+        let context = try fixture.load(package)
+        try await publish(fixture, package: package, context: context, params: [
+            "id": "build", "lifecycle": ["policy": "persistent"],
+            "presentation": ["title": "Original", "subtitle": "Keep", "showsCompact": true],
+            "actions": [["id": "open", "title": "Open"]]
+        ])
+        let original = try XCTUnwrap(fixture.activity("build"))
+        XCTAssertEqual(original.presentation.showsCompact, true)
+        let token = fixture.manager.currentSnapshot?.instanceToken
+        let invalidFlags: [Any] = [NSNull(), 0, 1, 0.5, "true", "false", [true], ["value": true]]
+        for flag in invalidFlags {
+            let update = try await request(fixture, package: package, context: context, method: "activity.update", params: [
+                "id": "build", "priority": "background", "actions": [],
+                "presentation": ["title": "Must not replace", "showsCompact": flag]
+            ])
+            XCTAssertEqual(errorCode(update), "invalidArguments")
+            XCTAssertEqual(fixture.activity("build"), original)
+            let publish = try await request(fixture, package: package, context: context, method: "activity.publish", params: [
+                "id": "invalid", "presentation": ["title": "Must not publish", "showsCompact": flag]
+            ])
+            XCTAssertEqual(errorCode(publish), "invalidArguments")
+            XCTAssertNil(fixture.activity("invalid"))
+            XCTAssertEqual(fixture.manager.diagnostics.activityCount, 1)
+            XCTAssertEqual(fixture.manager.currentSnapshot?.instanceToken, token)
         }
     }
 
@@ -287,6 +323,7 @@ final class PluginActivityBridgeTests: XCTestCase {
             #"{"id":"build","priority":"normal","priority":"critical"}"#,
             #"{"id":"build","lifecycle":{"policy":"transient","policy":"critical"}}"#,
             #"{"id":"build","actions":[{"id":"open","title":"Open","title":"Changed"}]}"#,
+            #"{"id":"build","presentation":{"title":"Bad","showsCompact":true,"showsCompact":false}}"#,
             #"{"id":"build","presentation":{"title":"Bad","progress":1e400}}"#
         ] {
             let response = try decode(await fixture.service.handle(
@@ -552,19 +589,72 @@ final class PluginActivityBridgeTests: XCTestCase {
         XCTAssertNil(fixture.manager.current)
     }
 
+    func testRealJavaScriptShowsCompactPublishUpdateAndOmittedReplacementReachHost() async throws {
+        let fixture = ActivityBridgeFixture()
+        defer { fixture.shutdown() }
+        let runtime = try fixture.loadJavaScript(package(source: """
+            function onStart() {
+                island.activity.publish({id:'build',lifecycle:{policy:'persistent'},
+                    presentation:{title:'Hidden',subtitle:'Old',showsCompact:false}})
+                    .then(() => { globalThis.published = true; });
+            }
+            """))
+        try await marker(runtime, "published")
+        let published = try XCTUnwrap(fixture.activity("build"))
+        XCTAssertEqual(published.presentation.showsCompact, false)
+        XCTAssertFalse(published.presentation.isCompactVisible)
+
+        _ = try await runtime.evaluateForTesting("""
+            island.activity.update({id:'build',presentation:{title:'Shown',showsCompact:true}})
+                .then(() => { globalThis.shown = true; }); void 0
+            """)
+        try await marker(runtime, "shown")
+        let shown = try XCTUnwrap(fixture.activity("build"))
+        XCTAssertEqual(shown.presentation.showsCompact, true)
+        XCTAssertTrue(shown.presentation.isCompactVisible)
+        XCTAssertNil(shown.presentation.subtitle)
+        XCTAssertEqual(shown.createdAt, published.createdAt)
+        XCTAssertEqual(shown.lifecycle, published.lifecycle)
+
+        _ = try await runtime.evaluateForTesting("""
+            island.activity.update({id:'build',priority:'background'})
+                .then(() => { globalThis.patched = true; }); void 0
+            """)
+        try await marker(runtime, "patched")
+        XCTAssertEqual(fixture.activity("build")?.presentation, shown.presentation)
+
+        _ = try await runtime.evaluateForTesting("""
+            island.activity.update({id:'build',presentation:{title:'Legacy default'}})
+                .then(() => { globalThis.replaced = true; }); void 0
+            """)
+        try await marker(runtime, "replaced")
+        let replaced = try XCTUnwrap(fixture.activity("build"))
+        XCTAssertEqual(replaced.presentation, .init(title: "Legacy default"))
+        XCTAssertNil(replaced.presentation.showsCompact)
+        XCTAssertTrue(replaced.presentation.isCompactVisible)
+        XCTAssertEqual(replaced.createdAt, published.createdAt)
+        XCTAssertEqual(replaced.lifecycle, published.lifecycle)
+    }
+
     func testRealJavaScriptUpdateRejectsUnsafeValuesAndMissingCapability() async throws {
         let fixture = ActivityBridgeFixture()
         defer { fixture.shutdown() }
         let source = """
             function onStart() {
-                island.activity.publish({id:'build',presentation:{title:'Original'}}).then(() => {
+                island.activity.publish({id:'build',presentation:{title:'Original',showsCompact:false}}).then(() => {
                     const getter = {id:'build'};
                     Object.defineProperty(getter,'presentation',{enumerable:true,get(){globalThis.getterCalls++;return {title:'Getter'};}});
+                    const compactGetter = {title:'Getter'};
+                    Object.defineProperty(compactGetter,'showsCompact',{enumerable:true,get(){globalThis.getterCalls++;return true;}});
                     globalThis.getterCalls = 0;
                     return Promise.all([
                         island.activity.update({id:'build',presentation:{title:'NaN',progress:NaN}}),
                         island.activity.update({id:'build',presentation:{title:'Function'},actions:[{id:'open',title:'Open',handler:function(){}}]}),
-                        island.activity.update(getter)
+                        island.activity.update(getter),
+                        island.activity.update({id:'build',presentation:compactGetter}),
+                        island.activity.update({id:'build',presentation:{title:'Unknown',showsCompact:true,unknown:false}}),
+                        ...[null,0,1,'false',[],{}].map(flag =>
+                            island.activity.update({id:'build',presentation:{title:'Must not replace',showsCompact:flag}}))
                     ].map(value => value.catch(error => error.code)));
                 }).then(codes => { globalThis.safe = codes.every(code => code === 'invalidArguments') && getterCalls === 0; globalThis.done = true; });
             }
@@ -574,6 +664,7 @@ final class PluginActivityBridgeTests: XCTestCase {
         let safe = try await runtime.evaluateForTesting("safe")
         XCTAssertEqual(safe, .boolean(true))
         XCTAssertEqual(fixture.activity("build")?.presentation.title, "Original")
+        XCTAssertEqual(fixture.activity("build")?.presentation.showsCompact, false)
         let noUpdate = try fixture.loadJavaScript(package(id: "com.example.beta", source: """
             function onStart() {
                 island.activity.update({id:'missing',presentation:{title:'Denied'}}).catch(error => {

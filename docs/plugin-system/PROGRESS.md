@@ -87,7 +87,7 @@
 | --- | --- | --- | --- | --- |
 | T33 | Extensions Settings UI | T20 | `verified` | [管理页与持久化分项授权验收](phase-7-t33-extensions-settings.md)；模型 / 存储 / 并发定向 91 passed，原生 UI 3 passed，完整 CI 647 passed、1 skipped、0 failures，普通 Release build / 签名通过；Release 定向合计 149 passed。Discover 按计划后置。 |
 | T34 | .dip Installer | T19、T28 | `verified` | [.dip 格式](dip-format.md)与[验收记录](phase-7-t34-installer.md)：App 内导入 / 预览 / disabled 安装 / 实际启停卸载通过；解包 17、事务 19、UI model 12、UI 2，CI 698 passed、1 skipped、0 failures，Release 150 passed。[正常应用目录的 Finder 冷启动与预览取消验收通过](evidence/t34-finder-20261014.md)，临时构建目录的候选差异已查明，原 App 与默认设置保留。 |
-| T35 | Pomodoro 官方插件 | T24–T34 | `pending` | [迁移准备与公共能力缺口](t35-migration-preparation.md)已审计，尚未实施；T31 已关闭，直接依赖 T24–T34 均已 verified，可以开始公共工具选择与计时能力。 |
+| T35 | Pomodoro 官方插件 | T24–T34 | `in progress` | [首个子步骤：公开 showsCompact 字段](phase-7-t35-pomodoro.md)已实现双侧校验与真实 JS 数据闭环测试；通用工具选择、计时能力、JS 官方包及专用 Swift 删除 / 实机验收仍待按[迁移准备](t35-migration-preparation.md)完成。 |
 | T36 | GitHub 官方插件 | T35 | `pending` | 待补。 |
 
 ## Phase 8 — SuperIsland Compatibility

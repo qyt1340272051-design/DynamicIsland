@@ -136,6 +136,9 @@ nonisolated enum PluginJSBridgeBootstrap {
                         request.apiVersion = version;
                         request.method = method;
                         request.params = snapshot(params, 1, snapshotBudget(), []);
+                        if (method === 'activity.publish' || method === 'activity.update') {
+                            validateActivityPresentation(request.params);
+                        }
                         const json = stringify(request);
                         if (utf8Bytes(json) > 16384) throw LIMIT;
                         id = nextID++;
@@ -192,6 +195,16 @@ nonisolated enum PluginJSBridgeBootstrap {
                 }
                 for (let i = 0; i < required.length; i++) if (!descriptor(fields, required[i])) throw null;
                 return fields;
+            }
+            function validateActivityPresentation(params) {
+                // Read only the safe snapshot. Host independently validates the
+                // whole Activity and never accepts coercion of an optional flag.
+                if (params === null || typeof params !== 'object' || isArray(params)) return;
+                const presentation = descriptor(params, 'presentation');
+                if (!presentation) return;
+                const fields = fieldsWithShape(presentation.value, ['title'],
+                    ['subtitle', 'symbolName', 'progress', 'minimal', 'compact', 'expanded', 'showsCompact']);
+                if (descriptor(fields, 'showsCompact') && typeof fields.showsCompact !== 'boolean') throw null;
             }
             function hasHTTPSPrefix(url) {
                 const scheme = 'https://';

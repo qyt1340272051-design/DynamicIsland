@@ -1,0 +1,23 @@
+{
+  "result": "Passed",
+  "totalTestCount": 705,
+  "passedTests": 701,
+  "failedTests": 0,
+  "skippedTests": 4,
+  "startTime": 1791987943.034,
+  "finishTime": 1791988003.526,
+  "baseCommit": "7e2d1c1",
+  "sourceSHA256": {
+    "DynamicIsland/Plugins/PluginActivityConverter.swift": "5f18c2611914b025e0f531ee232d128e8853afa46e4a7a4d0e8627b2cc01c9c8",
+    "DynamicIsland/Plugins/PluginJSBridgeBootstrap.swift": "d94d6c8cc25b0d914844b466897b41430133654608828b2c0990784c2a3dae96",
+    "DynamicIslandTests/PluginActivityBridgeTests.swift": "0b81dca7913541d78c9862e3f9bc9b9eca288cffc7469ed2ad030165d9f602d0"
+  },
+  "ordinaryReleaseBuildPassed": true,
+  "newTestsPassed": 2,
+  "skippedReasons": {
+    "requiresUnlockedRealAppKitMouseInput": 3,
+    "screenshotMatrixExplicitGeneration": 1
+  },
+  "testResults": "/tmp/dynamic-island-t35-compact-20261014/TestResults.xcresult",
+  "log": "/tmp/dynamic-island-t35-compact-20261014-ci.log"
+}

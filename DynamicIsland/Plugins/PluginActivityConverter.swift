@@ -70,7 +70,7 @@ nonisolated struct PluginActivityConverter: Sendable {
     }
 
     private static func parsePresentation(_ value: PluginBridgeJSON) throws -> ActivityPresentation {
-        let fields = try object(value, required: ["title"], optional: ["subtitle", "symbolName", "progress", "minimal", "compact", "expanded"])
+        let fields = try object(value, required: ["title"], optional: ["subtitle", "symbolName", "progress", "minimal", "compact", "expanded", "showsCompact"])
         let title = try string(fields["title"], maximumBytes: 256, nonempty: true)
         let subtitle = try fields["subtitle"].map { try string($0, maximumBytes: 256) }
         let symbolName = try fields["symbolName"].map {
@@ -82,11 +82,16 @@ nonisolated struct PluginActivityConverter: Sendable {
             }
             return number
         }
+        let showsCompact = try fields["showsCompact"].map { value -> Bool in
+            guard case .boolean(let flag) = value else { throw PluginBridgeErrorCode.invalidArguments }
+            return flag
+        }
         return ActivityPresentation(
             title: title, subtitle: subtitle, symbolName: symbolName, progress: progress,
             minimal: try fields["minimal"].map(PluginIslandNodeConverter.parse),
             compact: try fields["compact"].map(PluginIslandNodeConverter.parse),
-            expanded: try fields["expanded"].map(PluginIslandNodeConverter.parse)
+            expanded: try fields["expanded"].map(PluginIslandNodeConverter.parse),
+            showsCompact: showsCompact
         )
     }
 
