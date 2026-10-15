@@ -45,6 +45,13 @@ nonisolated struct ActivityManagerDiagnostics: Equatable, Sendable {
 /// The sole mutable boundary for Activity data and presentation state.
 @MainActor
 public final class ActivityManager: ObservableObject {
+    /// The Host supplies its actual presentation mode; plugin data cannot
+    /// expand the island or choose an expanded surface.
+    public nonisolated enum PresentationContext: Equatable, Sendable {
+        case compact
+        case expanded
+    }
+
     @Published public private(set) var current: IslandActivity?
     @Published public private(set) var currentSnapshot: ActivitySnapshot?
     @Published public private(set) var toolSnapshots: [ActivitySnapshot] = []
@@ -65,6 +72,7 @@ public final class ActivityManager: ObservableObject {
     private var activities: [String: IslandActivity] = [:]
     private var instanceTokens: [String: ActivityInstanceToken] = [:]
     private var selectedTool: ToolSelection?
+    private var presentationContext: PresentationContext = .expanded
     private var displayDeadlines: [String: Date] = [:]
     private var firstPresentedAt: [String: Date] = [:]
     private var currentSince: Date?
@@ -81,11 +89,20 @@ public final class ActivityManager: ObservableObject {
 
     public func activity(id: String) -> IslandActivity? { activities[id] }
 
+    /// Change candidate eligibility and clear a folded user choice in one
+    /// transaction. Expanded remains the default for existing Core callers.
+    public func setPresentationContext(_ context: PresentationContext) {
+        presentationContext = context
+        if context == .compact { selectedTool = nil }
+        reconcile()
+    }
+
     /// Only a Host user interaction can select a tool. Capture the original
     /// snapshot in the chooser; never resolve a replacement token by ID.
     /// Acceptance retains the choice while a higher-priority status is shown.
     @discardableResult
     public func selectTool(_ snapshot: ActivitySnapshot) -> Bool {
+        guard presentationContext == .expanded else { return false }
         reconcile()
         let selection = ToolSelection(snapshot)
         guard toolSnapshots.contains(where: { ToolSelection($0) == selection }) else { return false }
@@ -231,6 +248,9 @@ public final class ActivityManager: ObservableObject {
         if activity.isTool, activity.lifecycle.policy != .persistent, activity.lifecycle.policy != .progress {
             throw ActivityManagerError.invalidToolPolicy
         }
+        if !activity.isTool, activity.presentation.compactPolicy != nil {
+            throw ActivityManagerError.invalidToolPolicy
+        }
         if activity.source.kind == .plugin, requiresPluginActivation,
            !enabledPluginSources.contains(activity.source) {
             throw ActivityManagerError.disabledSource
@@ -335,16 +355,27 @@ public final class ActivityManager: ObservableObject {
         let now = scheduler.clock.now()
         refreshToolSnapshots(at: now)
         defer { refreshToolSnapshots(at: now) }
+        func isAutomaticCompactTool(_ activity: IslandActivity) -> Bool {
+            presentationContext == .compact && activity.isTool
+                && activity.presentation.compactPolicy == .automatic
+                && activity.presentation.isCompactVisible
+        }
+        // Inventory contains only live, admitted tool instances. An opt-in
+        // must not make a disabled or dismissed source eligible again.
+        let eligibleToolIDs = Set(toolSnapshots.filter {
+            $0.activity.id == selectedToolSnapshot?.activity.id || isAutomaticCompactTool($0.activity)
+        }.map { $0.activity.id })
         let activeCurrent = current.flatMap { activities[$0.id] }.flatMap {
             $0.lifecycle.state == .presented ? $0 : nil
         }
         let eligibleCurrent = activeCurrent.flatMap { activity in
-            !activity.isTool || selectedToolSnapshot?.activity.id == activity.id ? activity : nil
+            !activity.isTool || eligibleToolIDs.contains(activity.id) ? activity : nil
         }
         let eligibleActivities = activities.values.filter {
-            !$0.isTool || selectedToolSnapshot?.activity.id == $0.id
+            !$0.isTool || eligibleToolIDs.contains($0.id)
         }
         let ranked = ActivityQueue.ordered(eligibleActivities, at: now, currentlyPresentedID: eligibleCurrent?.id)
+        let automaticTools = ranked.filter(isAutomaticCompactTool)
         var rateDeadline: Date?
         func isRateEligible(_ activity: IslandActivity) -> Bool {
             if activity.id == eligibleCurrent?.id || activity.priority == .critical { return true }
@@ -358,9 +389,10 @@ public final class ActivityManager: ObservableObject {
         let candidate: IslandActivity?
         if let eligibleCurrent, !eligibleCurrent.lifecycle.policy.isInterruptible {
             candidate = eligibleCurrent
-        } else if let selected = selectedToolSnapshot {
-            // Explicit choice wins over ordinary persistent statuses, even
-            // their current-peer tie. Event statuses retain their ordering.
+        } else if selectedToolSnapshot != nil || !automaticTools.isEmpty {
+            // A selected or explicitly opted-in compact tool wins over
+            // ordinary persistent statuses, including music's current-peer
+            // tie. Event statuses retain their priority and source limits.
             let blockingStatus = ranked.first { activity in
                 !activity.isTool
                     && (activity.priority == .important || activity.priority == .critical
@@ -368,8 +400,11 @@ public final class ActivityManager: ObservableObject {
                     && isRateEligible(activity)
             }
             if let blockingStatus { candidate = blockingStatus }
-            else if userSelection == selectedTool || isRateEligible(selected.activity) {
+            else if let selected = selectedToolSnapshot,
+                    userSelection == selectedTool || isRateEligible(selected.activity) {
                 candidate = selected.activity
+            } else if let automatic = automaticTools.first(where: isRateEligible) {
+                candidate = automatic
             } else {
                 candidate = ranked.first { !$0.isTool && isRateEligible($0) }
             }

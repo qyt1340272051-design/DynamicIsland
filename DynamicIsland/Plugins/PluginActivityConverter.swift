@@ -70,7 +70,7 @@ nonisolated struct PluginActivityConverter: Sendable {
     }
 
     private static func parsePresentation(_ value: PluginBridgeJSON) throws -> ActivityPresentation {
-        let fields = try object(value, required: ["title"], optional: ["subtitle", "symbolName", "progress", "minimal", "compact", "expanded", "showsCompact", "role"])
+        let fields = try object(value, required: ["title"], optional: ["subtitle", "symbolName", "progress", "minimal", "compact", "expanded", "showsCompact", "role", "compactPolicy"])
         let title = try string(fields["title"], maximumBytes: 256, nonempty: true)
         let subtitle = try fields["subtitle"].map { try string($0, maximumBytes: 256) }
         let symbolName = try fields["symbolName"].map {
@@ -93,12 +93,19 @@ nonisolated struct PluginActivityConverter: Sendable {
             }
             return role
         }
+        let compactPolicy = try fields["compactPolicy"].map { value -> ActivityPresentation.CompactPolicy in
+            guard case .string(let rawValue) = value,
+                  let policy = ActivityPresentation.CompactPolicy(rawValue: rawValue) else {
+                throw PluginBridgeErrorCode.invalidArguments
+            }
+            return policy
+        }
         return ActivityPresentation(
             title: title, subtitle: subtitle, symbolName: symbolName, progress: progress,
             minimal: try fields["minimal"].map(PluginIslandNodeConverter.parse),
             compact: try fields["compact"].map(PluginIslandNodeConverter.parse),
             expanded: try fields["expanded"].map(PluginIslandNodeConverter.parse),
-            showsCompact: showsCompact, role: role
+            showsCompact: showsCompact, role: role, compactPolicy: compactPolicy
         )
     }
 
@@ -114,6 +121,9 @@ nonisolated struct PluginActivityConverter: Sendable {
     }
 
     private static func validatePresentation(in activity: inout IslandActivity) throws {
+        guard activity.presentation.compactPolicy == nil || activity.isTool else {
+            throw PluginBridgeErrorCode.invalidArguments
+        }
         let referenced = layoutActionIDs(in: activity.presentation)
         guard referenced.isSubset(of: Set(activity.actions.map(\.id))) else {
             throw PluginBridgeErrorCode.invalidArguments

@@ -84,3 +84,9 @@ View 与 Panel hover 共用 `runtime.expandedShellSize`；实际呈现工具时 
 新增节点、SDK、Bridge、生产 Runtime 和真实 NSHostingView 测试，验证时间 / 进度截图变化、同一 clock 一个 Task、隐藏页面与摘要回退没有残留订阅。公开无权限 countdown-demo 通过真实 VM、ActionRouter 和 Host display resolver 验证开始 / 暂停 / 继续 / 结束及收起重选；[结果和原始测试截图](evidence/t35-countdown-node-20261015/result.json)记录实际执行范围。下一步是官方 Pomodoro JS 包与完整迁移，T35 仍 in progress。
 
 2C1 完整 `./Scripts/ci.sh`：**835 total / 831 passed / 4 skipped / 0 failures**，普通 Release build passed。新增 35 项测试，公开示例另外完成真实 10 秒自然到期并保留同 generation、无自动重开。3 项既有 AppKit 鼠标测试因会话锁定跳过，1 项为显式截图矩阵生成，未将它们宣称为本轮通过。原始时间 / 进度 / 到期与摘要回退 PNG 来自真实 Debug NSHostingView 测试并已目视检查；没有把它们当成普通 Release 产品 UI 或实机睡眠验收。
+
+## 子步骤 2C2：自动 compact 与原生页面共存
+
+已增加显式 opt-in compactPolicy、Host 展示上下文和统一 compact 几何；旧工具保持手动选择，自动工具不覆盖展开后的音乐 / 拖盘 / 原生计时。队列、动作和生命周期仍走唯一 currentSnapshot。详见[合约](t35-countdown-api.md#子步骤-2c2自动-compact-工具与共享安全几何)。
+
+CI **868 total / 864 passed / 4 skipped / 0 failures**，普通 Release build passed。新增 33 项测试；[原始两翼截图与证据](evidence/t35-compact-policy-20261015/result.json)确认 210pt 中间相机区没有四种时间宽度的字形，不声称实机或普通 Release UI 已验收。公开 10 秒示例已采用 automatic，真实 VM 的 in-flight resume / 完成排序回归通过。接下来是官方 Pomodoro 包、Storage / Scheduler 验证与专用 Swift 删除 / 实际安装计时验收；T35 不提前 verified。

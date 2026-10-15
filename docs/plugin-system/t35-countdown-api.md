@@ -82,3 +82,17 @@ Activity 发布和更新要求 `ui.islandNode` 与 `countdown`，且每个引用
 Renderer 采用 Host metric / caption 字体、monospaced digits、semantic color 与既有线性进度，带可访问性值。未解析引用显示不可用占位并不订阅 tick。真实 NSHostingView 测试还确认 ViewThatFits 的超高树退回摘要时，没有隐藏倒计时订阅。
 
 本步骤是通用显示能力；官方 Pomodoro 包、旧专用 Swift 删除与实际安装计时验收仍未完成，T35 保持 in progress。无权限公开示例见[countdown-demo](examples/countdown-demo/README.md)，完整验证及原始测试图见[证据](evidence/t35-countdown-node-20261015/result.json)。
+
+## 子步骤 2C2：自动 compact 工具与共享安全几何
+
+`presentation.compactPolicy` 可选，闭集 selectedOnly / automatic。省略保持 1B 行为；旧工具即使 showsCompact:true 也不自动出现。非 nil policy 只允许 role:tool，Core Manager、Converter 最终状态（含 priority-only patch）和 SDK snapshot 都验证；API 显式 null、错误类型或未知值拒绝。工具仍仅 persistent / progress，插件优先级仍强制 background。
+
+Host Manager 维护 compact / expanded 展示上下文，Runtime 使用 ViewModel publisher 的交付值同步切换。收起在一次事务中清除展开选择；仅 automatic 且 compact 可见的工具取得 compact 候选资格。展开后未选工具立即退出，不能靠 dwell 留住展示；音乐、拖盘、原生计时和拖入文件仍可进入。始终只有 currentSnapshot 一条显示 / 动作授权通路，目录项不授权动作。
+
+排序先保护当前不可中断 Activity，再处理 important / critical 或 normal transient status，其次用户选择 / 自动 compact 工具，最后普通 status。多个自动工具沿用确定性排序；source rate / dwell / debounce 保留，只有既有显式选择有目标豁免。Volume / Battery 等提示结束后恢复有效自动工具。隐藏、过期、停用、结束、替换或改回 selectedOnly 均失效，不增加周期唤醒。
+
+View 与 Panel hover 统一调用 Runtime.compactShellSize；实际可见 compact tree 含倒计时节点时复用 Host 126pt 计时扩展，不按插件 ID 特判。只在 expanded 中出现的节点、拒绝的 compact tree 或 showsCompact:false 都不能扩大空岛。公开示例在 compact 使用 icon / Spacer / time 两翼，避免线性进度横跨摄像头；expanded 继续用 time + progress。
+
+新增 33 项测试。完整 CI：868 total / 864 passed / 4 skipped / 0 failures，普通 Release build passed；跳过项仍为三项锁屏鼠标测试和显式截图矩阵。实际 NSHostingView 336×32 原始 PNG 覆盖 00:15、59:59、1:00:00、24:00:00，中心 210pt 区域逐像素没有非黑字形，两翼均有可见内容；这是相机遮挡区模拟，不是实机刘海验收。[完整证据和图像](evidence/t35-compact-policy-20261015/result.json)。
+
+还补充了真实 JS 回归：人为延迟 resume 的 running render，再让 Host 到期；完成事件排入同一 Promise 工作链后 fresh get，不能被迟到的 running 响应覆盖。此工作链不创建 JS timer，不自动重开倒计时。

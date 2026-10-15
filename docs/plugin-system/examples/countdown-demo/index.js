@@ -18,10 +18,11 @@ function presentation() {
     const status = timer === null ? '等待开始' :
         timer.state === 'running' ? '进行中' : timer.state === 'paused' ? '已暂停' : '已完成';
     return {
-        role: 'tool', title: '10 秒倒计时', subtitle: status, symbolName: 'timer', showsCompact: false,
+        role: 'tool', title: '10 秒倒计时', subtitle: status, symbolName: 'timer', compactPolicy: 'automatic',
+        showsCompact: timer !== null && timer.state !== 'completed',
         minimal: timer ? countdownNode('time') : {type: 'icon', symbolName: 'timer'},
         compact: {type: 'hStack', children: [
-            {type: 'icon', symbolName: 'timer'},
+            {type: 'icon', symbolName: 'timer'}, {type: 'spacer'},
             timer ? countdownNode('time') : {type: 'text', content: '10 秒'}
         ]},
         expanded: {type: 'vStack', children: [
@@ -49,13 +50,15 @@ function action(command) {
     return event => {
         if (event.activityID !== clockID || event.value.type !== 'none' || handlingAction) return;
         handlingAction = true;
-        return command(event).then(value => {
+        const result = work.then(() => command(event)).then(value => {
             handlingAction = false;
             return remember(value);
-        }).catch(() => {
+        });
+        work = result.catch(() => {
             handlingAction = false;
             return island.log('Countdown demo action failed', 'warning').catch(() => {});
         });
+        return work;
     };
 }
 

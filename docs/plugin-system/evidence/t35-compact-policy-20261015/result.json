@@ -1,0 +1,103 @@
+{
+  "devicesAndConfigurations": [
+    {
+      "device": {
+        "architecture": "arm64",
+        "deviceId": "00008132-001E49513A0B801C",
+        "deviceName": "My Mac",
+        "modelName": "MacBook Air",
+        "osBuildNumber": "25G83",
+        "osVersion": "26.6.2",
+        "platform": "macOS"
+      },
+      "expectedFailures": 0,
+      "failedTests": 0,
+      "passedTests": 864,
+      "skippedTests": 4,
+      "testPlanConfiguration": {
+        "configurationId": "1",
+        "configurationName": "Test Scheme Action"
+      }
+    }
+  ],
+  "environmentDescription": "Dynamic Island · Built with macOS 26.6.2",
+  "expectedFailures": 0,
+  "failedTests": 0,
+  "finishTime": 1792068130.691,
+  "passedTests": 864,
+  "result": "Passed",
+  "skippedTests": 4,
+  "startTime": 1792068043.499,
+  "statistics": [
+    {
+      "subtitle": "1 test run",
+      "title": "1 test collected performance metrics"
+    }
+  ],
+  "testFailures": [],
+  "title": "Test - Dynamic Island",
+  "topInsights": [
+    {
+      "category": "Longest Test Runs",
+      "impact": "60% of duration",
+      "text": "6 longest test runs with outlier durations exceeding 2.54s (three standard deviations)"
+    }
+  ],
+  "totalTestCount": 868,
+  "baseCommit": "2910995",
+  "newTests": 33,
+  "ordinaryReleaseBuildPassed": true,
+  "testResults": "/tmp/dynamic-island-t35-compact-policy-20261015-final/TestResults.xcresult",
+  "log": "/tmp/dynamic-island-t35-compact-policy-20261015-final-ci.log",
+  "sourceSHA256": {
+    "DynamicIsland/Core/Activity/ActivityManager.swift": "9693af7142fc74741eb4e014d9da5d04f5e809c60d0e8f4f1d2a7830f6f6577a",
+    "DynamicIsland/Core/Activity/IslandActivity.swift": "8256cc0dbb3ea9d7bfcb9f8fe14bd8954712be7e5afb10f322b99ad83a9e231f",
+    "DynamicIsland/Core/Activity/IslandActivityRuntime.swift": "2a13a926dc2f6028c7b4f41ff3ad2bdaf0fa08570f0ec6fcf661e8aeb3b54cea",
+    "DynamicIsland/IslandPanelController.swift": "443e48be4b3aa6ee5048510439030e1a1cc866b0a64c36255ef79469ef276c0e",
+    "DynamicIsland/IslandView.swift": "c218bdbef03ada12e832afea9e9213d1d95b90304916596d0a7653343ba3e537",
+    "DynamicIsland/Plugins/PluginActivityConverter.swift": "06df058d004e39435c8c230320a3d147207a98ab8bdae76688f6adc17a46fdab",
+    "DynamicIsland/Plugins/PluginJSBridgeBootstrap.swift": "5325c2a53b17dab4ca7908e09a9152822769c712b4d6df6b4037d6d83f641ab5",
+    "DynamicIslandTests/ActivityAutomaticCompactTests.swift": "8fdffb908ee98ae32070069f6a1affefd87d28ddc15be7f413510ebbeea0a912",
+    "DynamicIslandTests/ActivityCompactPolicyTests.swift": "a09315cd7f3c3775fa5a328fcdc78ee5112a63e5959b7b872f6e59b231098e41",
+    "DynamicIslandTests/IslandActivityRuntimeTests.swift": "8a5d4e77d4dc3b6294185b9b1716fd806f4e2c90d10d8a30c1feb3d55fdb09df",
+    "DynamicIslandTests/IslandCountdownExampleTests.swift": "9730c1d8cfe028bb9f09ddece58eb77bacb10981fc7ebdd837e9ee5717934bd1",
+    "DynamicIslandTests/IslandCountdownCompactLayoutTests.swift": "6049348a62e7e296eabce03b8dc84d2c1dda61d76409b98068a9345ea7698b22",
+    "docs/plugin-system/examples/countdown-demo/index.js": "79898744b6ccb8000ffe65ab9c1c40fc4aca4a8e8b9682ce0efc01c6f8709a01",
+    "docs/plugin-system/examples/countdown-demo/README.md": "7b878e85de449f3d191ec44f341cb086a4f07d02df0b2424be056f0082159d86"
+  },
+  "images": [
+    {
+      "file": "compact-240000.png",
+      "source": "D3D4EC1B-3D46-4516-A981-87D06818FBA6.png",
+      "test": "IslandCountdownCompactLayoutTests/testCompactCountdownGlyphsRemainOutsidePhysicalNotchAtEveryTimeWidth()",
+      "sha256": "67b58158acf966a29ba07b0b78d74204a7177bc8e1c730d03f34bb00424a9797"
+    },
+    {
+      "file": "compact-10000.png",
+      "source": "EB3CD494-44BD-4FBD-9B65-54FBAFC63669.png",
+      "test": "IslandCountdownCompactLayoutTests/testCompactCountdownGlyphsRemainOutsidePhysicalNotchAtEveryTimeWidth()",
+      "sha256": "1f75c57c1baaaa4ed7c03d52f80b05ed5dd160bafb5198cb10f20f6e1743ecba"
+    },
+    {
+      "file": "compact-5959.png",
+      "source": "170BEE2F-0C1E-4133-B75E-B71A84178C63.png",
+      "test": "IslandCountdownCompactLayoutTests/testCompactCountdownGlyphsRemainOutsidePhysicalNotchAtEveryTimeWidth()",
+      "sha256": "223f0cb96d262c6ae47c4fa7f75dc816a25183528e3622f64a8ab3c39cd3e6e9"
+    },
+    {
+      "file": "compact-0015.png",
+      "source": "51CF4AFC-ABC8-4A6D-A67B-91B06E32916E.png",
+      "test": "IslandCountdownCompactLayoutTests/testCompactCountdownGlyphsRemainOutsidePhysicalNotchAtEveryTimeWidth()",
+      "sha256": "be9b2b1e97b5a8b0f896fca8c7d75cdbabe91bc74be1c45f629c714a3cdf379b"
+    }
+  ],
+  "skipReasons": [
+    "Three existing unlocked-session AppKit mouse tests",
+    "Explicit screenshot matrix generation"
+  ],
+  "pixelCheck": "Native 336x32 render, center x63..<273 has zero nonblack glyph pixels for all four time widths; both wings nonempty",
+  "limitations": [
+    "Synthetic 210pt camera clearance in real NSHostingView rendering, not physical device UI acceptance",
+    "Official Pomodoro package, storage and native Swift removal not verified by this substep"
+  ]
+}

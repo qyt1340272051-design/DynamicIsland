@@ -33,6 +33,11 @@ public nonisolated struct ActivityPresentation: Codable, Equatable, Sendable {
         case tool
     }
 
+    public nonisolated enum CompactPolicy: String, Codable, Sendable {
+        case selectedOnly
+        case automatic
+    }
+
     public var title: String
     public var subtitle: String?
     public var symbolName: String?
@@ -45,6 +50,8 @@ public nonisolated struct ActivityPresentation: Codable, Equatable, Sendable {
     public var showsCompact: Bool?
     /// Omitted roles retain the ordinary status presentation of older data.
     public var role: Role?
+    /// Omitted policies retain the existing requirement to select a tool.
+    public var compactPolicy: CompactPolicy?
 
     public init(
         title: String,
@@ -55,7 +62,8 @@ public nonisolated struct ActivityPresentation: Codable, Equatable, Sendable {
         compact: IslandNode? = nil,
         expanded: IslandNode? = nil,
         showsCompact: Bool? = nil,
-        role: Role? = nil
+        role: Role? = nil,
+        compactPolicy: CompactPolicy? = nil
     ) {
         self.title = title
         self.subtitle = subtitle
@@ -66,10 +74,12 @@ public nonisolated struct ActivityPresentation: Codable, Equatable, Sendable {
         self.expanded = expanded
         self.showsCompact = showsCompact
         self.role = role
+        self.compactPolicy = compactPolicy
     }
 
     public var isCompactVisible: Bool { showsCompact ?? true }
     public var effectiveRole: Role { role ?? .status }
+    public var effectiveCompactPolicy: CompactPolicy { compactPolicy ?? .selectedOnly }
 }
 
 /// The Host routes an action ID back to its source. No executable callback

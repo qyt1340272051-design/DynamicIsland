@@ -41,7 +41,7 @@ public struct IslandView: View {
         .animation(reduceMotion ? nil : IslandQuitAnimation.islandFade, value: isIslandFading)
         .animation(IslandExpansionAnimation.shell, value: isExpanded)
         .animation(reduceMotion ? nil : IslandExpansionAnimation.compactActivityShell, value: hasCompactActivity)
-        .animation(reduceMotion ? nil : IslandExpansionAnimation.compactActivityShell, value: compactActivityLayout)
+        .animation(reduceMotion ? nil : IslandExpansionAnimation.compactActivityShell, value: compactPresentationSize)
         .animation(reduceMotion ? nil : IslandExpansionAnimation.compactActivityShell, value: viewModel.compactTimerMode)
         .animation(IslandExpansionAnimation.pointerHover, value: viewModel.isPointerInside)
         .onDrop(
@@ -91,24 +91,7 @@ public struct IslandView: View {
     }
 
     private var compactPresentationSize: CGSize {
-        IslandVisualStyle.compactShellSize(
-            baseSize: viewModel.compactPanelSize,
-            hasCompactActivity: hasCompactActivity,
-            hasActiveTimer: viewModel.compactTimerMode != nil
-                && !(activityRuntime.prioritizesCurrentActivityOverLegacyContent
-                    && hasCompactActivity),
-            activityLayout: compactActivityLayout
-        )
-    }
-
-    private var compactActivityLayout: IslandVisualStyle.CompactActivityLayout {
-        if activityRuntime.currentActivityUsesBatteryCompactLayout {
-            return .battery
-        }
-        if activityRuntime.currentActivityUsesVolumeCompactLayout {
-            return .volume
-        }
-        return .standard
+        activityRuntime.compactShellSize(forBaseSize: viewModel.compactPanelSize)
     }
 
     private var hasCompactContent: Bool {

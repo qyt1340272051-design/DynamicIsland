@@ -83,6 +83,7 @@ public final class IslandActivityRuntime {
                     isDragging: dragging, isHovering: hovering,
                     isFileTrayLocked: trayLocked, isTimerCompletionPresented: hasCompletion
                 )
+                self?.manager.setPresentationContext(state == .compact ? .compact : .expanded)
                 if state != .expanded || surface != .tools || hasCompletion {
                     self?.manager.clearToolSelection()
                 }
@@ -124,6 +125,32 @@ public final class IslandActivityRuntime {
 
     public var currentActivityUsesToolLayout: Bool {
         manager.currentSnapshot?.activity.isTool == true
+    }
+
+    /// The current compact tree determines Host timer spacing. Plugin names
+    /// and hidden layouts cannot opt an unrelated Activity into this geometry.
+    public var currentActivityUsesCountdownCompactLayout: Bool {
+        guard let presentation = manager.currentSnapshot?.activity.presentation,
+              presentation.isCompactVisible else { return false }
+        return !IslandRenderer.resolvedNode(in: presentation, for: .compact).countdownReferences.isEmpty
+    }
+
+    /// The compact shell and pointer region share timer clearance and the
+    /// native Battery/Volume wing layouts selected by the current Activity.
+    public func compactShellSize(forBaseSize baseSize: CGSize) -> CGSize {
+        let layout: IslandVisualStyle.CompactActivityLayout
+        if currentActivityUsesBatteryCompactLayout { layout = .battery }
+        else if currentActivityUsesVolumeCompactLayout { layout = .volume }
+        else { layout = .standard }
+        let hasCompactActivity = isCompactActivityVisible
+        let hasNativeTimer = viewModel?.compactTimerMode != nil
+            && !(prioritizesCurrentActivityOverLegacyContent && hasCompactActivity)
+        return IslandVisualStyle.compactShellSize(
+            baseSize: baseSize,
+            hasCompactActivity: hasCompactActivity,
+            hasActiveTimer: currentActivityUsesCountdownCompactLayout || hasNativeTimer,
+            activityLayout: layout
+        )
     }
 
     /// The rendered shell and the panel's pointer region share all inputs.

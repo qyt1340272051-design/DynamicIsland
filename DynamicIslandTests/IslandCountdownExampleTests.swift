@@ -43,7 +43,9 @@ final class IslandCountdownExampleTests: XCTestCase {
         XCTAssertNil(runtime.manager.selectedToolSnapshot)
         XCTAssertEqual(runtime.pluginLifecycle.countdownBroker.diagnostics.runningCount, 1)
         XCTAssertEqual(runtime.pluginLifecycle.countdownBroker.diagnostics.recordCount, 1)
-        XCTAssertNil(runtime.resolveCountdown(runningReference, for: running))
+        let compact = try XCTUnwrap(runtime.manager.currentSnapshot)
+        XCTAssertEqual(compact.activity.id, running.activity.id)
+        XCTAssertTrue(try XCTUnwrap(runtime.resolveCountdown(runningReference, for: compact)).requiresTick)
         model.setHovering(true)
         let menuSnapshot = try XCTUnwrap(runtime.manager.toolSnapshots.first)
         XCTAssertTrue(runtime.selectTool(menuSnapshot))
@@ -128,6 +130,74 @@ final class IslandCountdownExampleTests: XCTestCase {
         })
     }
 
+    func testCompletionQueuedDuringResumeCannotBeOverwrittenByItsRunningResponse() async throws {
+        let clock = CountdownExampleManualClock()
+        let manager = ActivityManager(configuration: .immediate)
+        let router = ActionRouter(manager: manager)
+        let broker = PluginCountdownBroker(clock: { clock.now }, automaticScheduling: false)
+        var vm: PluginRuntime!
+        let lifecycle = PluginLifecycleBridge(activityManager: manager, actionRouter: router,
+                                               countdownBroker: broker, runtimeFactory: { package in
+            let runtime = PluginRuntime(package: package)
+            vm = runtime
+            return runtime
+        })
+        defer { lifecycle.shutdown() }
+        let root = URL(fileURLWithPath: #filePath).deletingLastPathComponent().deletingLastPathComponent()
+            .appendingPathComponent("docs/plugin-system/examples/countdown-demo", isDirectory: true)
+        let package = try PluginValidator().validateExpandedPackage(at: root,
+            context: .init(hostVersion: SemanticVersion("0.6.0"), occupiedPluginIDs: [],
+                           allowedContainerURL: root.deletingLastPathComponent()))
+        lifecycle.pluginDidLoad(package, isEnabled: true)
+        try await settled { manager.toolSnapshots.count == 1 }
+        XCTAssertTrue(manager.selectTool(try XCTUnwrap(manager.toolSnapshots.first)))
+        func act(_ id: String) throws {
+            let current = try XCTUnwrap(manager.currentSnapshot)
+            XCTAssertEqual(router.dispatch(id: current.activity.id, source: current.activity.source,
+                instanceToken: current.instanceToken, action: .init(actionID: id, value: .none)), .handled)
+        }
+        try act("start")
+        try await settled { manager.current?.presentation.subtitle == "进行中" }
+        clock.now = .seconds(10) - .nanoseconds(1)
+        try act("pause")
+        try await settled { manager.current?.presentation.subtitle == "已暂停" }
+        // Hold only this test's running-state render. The Host can now complete
+        // while the public resume command's Promise is still in flight.
+        _ = try await vm.evaluateForTesting("""
+            globalThis.releaseResume = null;
+            const originalRemember = remember;
+            remember = function(value) {
+                if (value && value.state === 'running') {
+                    return new Promise(resolve => {
+                        globalThis.releaseResume = () => originalRemember(value).then(resolve);
+                    });
+                }
+                return originalRemember(value);
+            };
+            void 0;
+            """)
+        try act("resume")
+        try await waitForJS(vm, "typeof releaseResume === 'function'")
+        _ = try await vm.evaluateForTesting("void (globalThis.workBeforeCompletion = work);")
+        clock.now = .seconds(10)
+        broker.processDue()
+        try await waitForJS(vm, "work !== workBeforeCompletion")
+        _ = try await vm.evaluateForTesting("void releaseResume();")
+        try await settled { manager.current?.presentation.subtitle == "已完成" }
+        XCTAssertEqual(broker.diagnostics.completedCount, 1)
+        XCTAssertEqual(broker.diagnostics.runningCount, 0)
+    }
+
+    private func waitForJS(_ vm: PluginRuntime, _ expression: String) async throws {
+        let limit = ContinuousClock.now.advanced(by: .seconds(3))
+        while ContinuousClock.now < limit {
+            if try await vm.evaluateForTesting(expression) == .boolean(true) { return }
+            try await Task.sleep(for: .milliseconds(5))
+        }
+        XCTFail("Countdown example JavaScript did not settle")
+        throw CountdownExampleError.unsettled
+    }
+
     private func references(in snapshot: ActivitySnapshot?) -> [IslandNode.Countdown] {
         guard let presentation = snapshot?.activity.presentation else { return [] }
         return [presentation.minimal, presentation.compact, presentation.expanded]
@@ -156,3 +226,6 @@ final class IslandCountdownExampleTests: XCTestCase {
 }
 
 private enum CountdownExampleError: Error { case unsettled }
+
+@MainActor
+private final class CountdownExampleManualClock { var now: Duration = .zero }

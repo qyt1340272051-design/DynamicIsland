@@ -208,9 +208,11 @@ nonisolated enum PluginJSBridgeBootstrap {
                 const presentation = descriptor(params, 'presentation');
                 if (!presentation) return;
                 const fields = fieldsWithShape(presentation.value, ['title'],
-                    ['subtitle', 'symbolName', 'progress', 'minimal', 'compact', 'expanded', 'showsCompact', 'role']);
+                    ['subtitle', 'symbolName', 'progress', 'minimal', 'compact', 'expanded', 'showsCompact', 'role', 'compactPolicy']);
                 if (descriptor(fields, 'showsCompact') && typeof fields.showsCompact !== 'boolean') throw null;
                 if (descriptor(fields, 'role') && fields.role !== 'status' && fields.role !== 'tool') throw null;
+                if (descriptor(fields, 'compactPolicy') && (fields.role !== 'tool' ||
+                    (fields.compactPolicy !== 'selectedOnly' && fields.compactPolicy !== 'automatic'))) throw null;
                 const layouts = ['minimal', 'compact', 'expanded'];
                 for (let i = 0; i < layouts.length; i++) {
                     const layout = descriptor(fields, layouts[i]);

@@ -30,6 +30,169 @@ final class IslandActivityRuntimeTests: XCTestCase {
         XCTAssertEqual(broker.diagnostics.recordCount, 0)
     }
 
+    func testAutomaticToolUsesCompactContextAndPreservesExpandedLegacyChoices() async throws {
+        let service = MusicActivityTestService(info: NowPlayingInfo(
+            isPlaying: true, title: "Playing music", artist: "Artist", album: "Album", trackIdentifier: "automatic-tool-track"
+        ))
+        let model = makeMusicActivityTestModel(music: service)
+        await model.refreshNowPlaying()
+        let runtime = IslandActivityRuntime(viewModel: model)
+        defer { runtime.shutdownPlugins() }
+        let music = try XCTUnwrap(runtime.manager.currentSnapshot)
+        XCTAssertTrue(runtime.isCompactActivityVisible)
+        let activity = automaticCompactTool()
+        var actions: [RoutedActivityAction] = []
+        runtime.router.register(source: activity.source) { actions.append($0) }
+        try runtime.manager.publish(activity)
+        try await waitForTool { runtime.manager.current?.id == activity.id }
+        let compact = try XCTUnwrap(runtime.manager.currentSnapshot)
+        XCTAssertNil(runtime.manager.selectedToolSnapshot)
+        XCTAssertTrue(runtime.currentActivityUsesCountdownCompactLayout)
+        XCTAssertEqual(dispatchTool(compact, in: runtime), .handled)
+        XCTAssertEqual(actions.last?.instanceToken, compact.instanceToken)
+
+        // @Published emits before isHovering is stored: this must still switch
+        // eligibility synchronously using the delivered expansion state.
+        model.setHovering(true)
+        XCTAssertEqual(runtime.manager.currentSnapshot?.instanceToken, music.instanceToken)
+        XCTAssertFalse(runtime.currentActivityUsesCountdownCompactLayout)
+        XCTAssertEqual(dispatchTool(compact, in: runtime), .inactiveActivity)
+        let inventory = try XCTUnwrap(runtime.manager.toolSnapshots.first)
+        XCTAssertTrue(runtime.selectTool(inventory))
+        XCTAssertEqual(runtime.manager.currentSnapshot?.instanceToken, compact.instanceToken)
+        XCTAssertEqual(dispatchTool(compact, in: runtime), .handled)
+
+        for surface in [IslandExpandedSurface.music, .fileTray, .tools] {
+            XCTAssertTrue(runtime.selectTool(inventory))
+            runtime.selectLegacySurface(surface)
+            XCTAssertEqual(model.expandedSurface, surface)
+            XCTAssertNil(runtime.manager.selectedToolSnapshot)
+            XCTAssertEqual(runtime.manager.currentSnapshot?.instanceToken, music.instanceToken)
+            XCTAssertEqual(dispatchTool(compact, in: runtime), .inactiveActivity)
+        }
+        model.endHovering()
+        try await waitForTool { runtime.manager.currentSnapshot?.instanceToken == compact.instanceToken }
+        XCTAssertNil(runtime.manager.selectedToolSnapshot)
+        XCTAssertTrue(runtime.currentActivityUsesCountdownCompactLayout)
+        XCTAssertEqual(dispatchTool(compact, in: runtime), .handled)
+
+        // Ending and reusing an ID must never authorize the old captured view.
+        try runtime.manager.end(id: activity.id, source: activity.source)
+        try runtime.manager.publish(automaticCompactTool())
+        try await waitForTool { runtime.manager.current?.id == activity.id }
+        let replacement = try XCTUnwrap(runtime.manager.currentSnapshot)
+        XCTAssertNotEqual(replacement.instanceToken, compact.instanceToken)
+        XCTAssertEqual(dispatchTool(compact, in: runtime), .inactiveActivity)
+        XCTAssertEqual(dispatchTool(replacement, in: runtime), .handled)
+    }
+
+    func testAutomaticCompactToolRestoresSameInstanceAfterTransientPreemption() async throws {
+        let model = IslandViewModel.preview()
+        let runtime = IslandActivityRuntime(viewModel: model)
+        defer { runtime.shutdownPlugins() }
+        let activity = automaticCompactTool()
+        runtime.router.register(source: activity.source) { _ in }
+        try runtime.manager.publish(activity)
+        try await waitForTool { runtime.manager.current?.id == activity.id }
+        let tool = try XCTUnwrap(runtime.manager.currentSnapshot)
+
+        try publishTransientOverride(in: runtime)
+        let prompt = try XCTUnwrap(runtime.manager.currentSnapshot)
+        XCTAssertEqual(prompt.activity.source, BatteryActivityProvider.source)
+        XCTAssertFalse(runtime.currentActivityUsesCountdownCompactLayout)
+        XCTAssertNil(runtime.manager.selectedToolSnapshot)
+        XCTAssertEqual(dispatchTool(tool, in: runtime), .inactiveActivity)
+        try runtime.manager.end(id: prompt.activity.id, source: prompt.activity.source)
+        try await waitForTool { runtime.manager.currentSnapshot?.instanceToken == tool.instanceToken }
+        XCTAssertTrue(runtime.currentActivityUsesCountdownCompactLayout)
+        XCTAssertEqual(dispatchTool(tool, in: runtime), .handled)
+    }
+
+    func testAutomaticToolContextTracksInitialExpansionDragTrayLockAndNativeCompletion() async throws {
+        let model = IslandViewModel.preview()
+        model.setHovering(true)
+        let runtime = IslandActivityRuntime(viewModel: model)
+        defer { runtime.shutdownPlugins() }
+        let music = try XCTUnwrap(runtime.manager.currentSnapshot)
+        let activity = automaticCompactTool()
+        try runtime.manager.publish(activity)
+        XCTAssertEqual(runtime.manager.currentSnapshot?.instanceToken, music.instanceToken,
+                       "The initial sink must preserve an already expanded Host.")
+        let inventory = try XCTUnwrap(runtime.manager.toolSnapshots.first)
+        XCTAssertTrue(runtime.selectTool(inventory))
+        model.setDragging(true)
+        XCTAssertNil(runtime.manager.selectedToolSnapshot)
+        XCTAssertEqual(runtime.manager.currentSnapshot?.instanceToken, music.instanceToken)
+        XCTAssertEqual(model.expandedSurface, .fileTray)
+        model.endHovering()
+        XCTAssertEqual(runtime.manager.currentSnapshot?.instanceToken, music.instanceToken,
+                       "Dragging remains expanded even after hover ends.")
+        model.setDragging(false)
+        try await waitForTool { runtime.manager.current?.id == activity.id }
+
+        model.toggleFileTrayLock()
+        XCTAssertEqual(runtime.manager.currentSnapshot?.instanceToken, music.instanceToken)
+        XCTAssertNil(runtime.manager.selectedToolSnapshot)
+        model.toggleFileTrayLock()
+        try await waitForTool { runtime.manager.current?.id == activity.id }
+
+        let startedAt = Date()
+        model.timerTools.selectedMode = .countdown
+        model.timerTools.startSelectedTimer(at: startedAt)
+        model.timerTools.refresh(at: startedAt.addingTimeInterval(model.timerTools.countdownDuration + 1))
+        XCTAssertTrue(model.isTimerCompletionPresented)
+        XCTAssertEqual(runtime.manager.currentSnapshot?.instanceToken, music.instanceToken)
+        XCTAssertNil(runtime.manager.selectedToolSnapshot)
+        XCTAssertFalse(runtime.selectTool(inventory))
+        model.acknowledgeTimerCompletion()
+        try await waitForTool { runtime.manager.current?.id == activity.id }
+        XCTAssertTrue(runtime.currentActivityUsesCountdownCompactLayout)
+    }
+
+    func testCountdownCompactGeometryUsesOnlyCurrentResolvedCompactTree() throws {
+        let model = IslandViewModel.preview()
+        let runtime = IslandActivityRuntime(viewModel: model)
+        defer { runtime.shutdownPlugins() }
+        var activity = automaticCompactTool()
+        activity.priority = .critical
+        activity.lifecycle = .init(policy: .critical)
+        activity.presentation.role = .status
+        activity.presentation.compactPolicy = nil
+        try runtime.manager.publish(activity)
+        XCTAssertTrue(runtime.currentActivityUsesCountdownCompactLayout)
+        let base = CGSize(width: 216, height: 38)
+        let shell = runtime.compactShellSize(forBaseSize: base)
+        XCTAssertEqual(shell.width, base.width + 126)
+        XCTAssertEqual(shell.height, base.height)
+
+        // A valid countdown in an expanded layout does not widen compact UI.
+        activity.presentation.compact = .text(.init("Ordinary compact"))
+        try runtime.manager.update(activity)
+        XCTAssertFalse(runtime.currentActivityUsesCountdownCompactLayout)
+        XCTAssertEqual(runtime.compactShellSize(forBaseSize: base).width,
+                       base.width + IslandVisualStyle.activityCompactHorizontalExpansion)
+        // Nor does an oversized compact tree rejected by HostPolicy.
+        let countdown = countdownTimeNode()
+        activity.presentation.compact = .vStack(.init([countdown, countdown]))
+        try runtime.manager.update(activity)
+        XCTAssertFalse(runtime.currentActivityUsesCountdownCompactLayout)
+        activity.presentation.compact = nil
+        activity.presentation.minimal = countdown
+        try runtime.manager.update(activity)
+        XCTAssertTrue(runtime.currentActivityUsesCountdownCompactLayout,
+                      "A compact layout legitimately falling back to minimal uses the same resolver.")
+        activity.presentation.showsCompact = false
+        try runtime.manager.update(activity)
+        XCTAssertFalse(runtime.currentActivityUsesCountdownCompactLayout)
+        XCTAssertEqual(runtime.compactShellSize(forBaseSize: base).width, base.width,
+                       "A hidden compact layout cannot widen an otherwise empty island.")
+        try runtime.manager.end(id: activity.id, source: activity.source)
+        model.timerTools.selectedMode = .countdown
+        model.timerTools.startSelectedTimer(at: Date())
+        XCTAssertEqual(runtime.compactShellSize(forBaseSize: base).width, base.width + 126,
+                       "The same production resolver preserves native timer clearance.")
+    }
+
     func testPublicToolExampleRequiresHostSelectionAndRoutesOnlyVisibleInstance() async throws {
         let model = IslandViewModel.preview()
         let runtime = IslandActivityRuntime(viewModel: model)
@@ -138,6 +301,26 @@ final class IslandActivityRuntimeTests: XCTestCase {
         .init(id: "host-test-tool", source: .init(kind: .builtIn, identifier: "host-test-tool"),
               priority: .background, lifecycle: .init(policy: .persistent),
               presentation: .init(title: "Host Test Tool", showsCompact: false, role: .tool), createdAt: Date())
+    }
+
+    private func automaticCompactTool() -> IslandActivity {
+        .init(id: "host-test-automatic-countdown", source: .init(kind: .builtIn, identifier: "automatic-countdown"),
+              priority: .background, lifecycle: .init(policy: .persistent),
+              presentation: .init(title: "Automatic Countdown",
+                                  compact: .hStack(.init([.icon(.init("timer")), .spacer(.init()), countdownTimeNode()])),
+                                  expanded: .vStack(.init([countdownTimeNode(),
+                                      .button(.init(actionID: "pause", label: .text(.init("Pause"))))])),
+                                  showsCompact: true, role: .tool, compactPolicy: .automatic),
+              createdAt: Date(), actions: [.init(id: "pause", title: "Pause")])
+    }
+
+    private func countdownTimeNode() -> IslandNode {
+        .countdown(.init(id: "focus", generation: "12345678-1234-1234-1234-123456789abc", style: .time))
+    }
+
+    private func dispatchTool(_ snapshot: ActivitySnapshot, in runtime: IslandActivityRuntime) -> ActionDispatchResult {
+        runtime.router.dispatch(id: snapshot.activity.id, source: snapshot.activity.source,
+                                instanceToken: snapshot.instanceToken, action: .init(actionID: "pause", value: .none))
     }
 
     private func waitForTool(_ condition: @escaping @MainActor () -> Bool) async throws {
