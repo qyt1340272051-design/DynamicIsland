@@ -1,6 +1,6 @@
 # Phase 7 — T35 Pomodoro 官方插件
 
-日期：2026-10-14。直接依赖 T24–T34 均已 verified；T31 的真实后台空闲证据已提交。T35 状态为 `in progress`，总体迁移顺序见[准备记录](t35-migration-preparation.md)。
+日期：2026-10-14，更新于 2026-10-15。直接依赖 T24–T34 均已 verified；T31 的真实后台空闲证据已提交。T35 状态为 `in progress`，总体迁移顺序见[准备记录](t35-migration-preparation.md)。
 
 ## 子步骤 1A：公开 compact 可见性字段
 
@@ -25,9 +25,44 @@ update 只修改 priority 等顶层字段时保留原 presentation；提交新�
 
 ## 下一步与完成边界
 
-1. 实现通用工具角色、按实例选择及 Host 几何，验证音乐 / 瞬时事件抢占和恢复。
+1. 通用工具角色、按实例选择及 Host 几何已完成，见下方子步骤 1B。
 2. 实现通用倒计时记录、声明式秒级显示和真实动作的一次性启动凭证，保持后台刷新下限。
 3. 完成 JS 官方包的开始、暂停、继续、结束、预设及存储权限处理。
 4. 删除生产番茄钟专用 Swift；从 `.dip` 安装并完成真实 UI / 计时、旧功能回归验收。
 
-本子步骤只完成公开字段的数据闭环，工具选择和计时功能尚未实现，不能将 T35 标为 verified。原生番茄钟继续保留至完整替换验收，T36 仍 pending。
+子步骤 1A / 1B 已完成工具选择闭环，精确计时和官方插件仍未实现，不能将 T35 标为 verified。原生番茄钟继续保留至完整替换验收，T36 仍 pending。
+
+## 子步骤 1B：工具角色、实例选择与共享几何
+
+### 公共数据与 Host 仲裁
+
+`presentation.role` 可选，闭集为 `status` / `tool`；省略为 nil，旧 Codable 数据和显示行为沿用 status。JS 在安全快照上检查精确字段和类型，Host 独立验证最终 Activity。tool 只允许 persistent / progress；插件工具优先级强制降为 background，priority-only 更新也不能抬升。presentation 更新仍整体替换，切回 status 或省略 role 会退出工具目录。
+
+Host 管理 `toolSnapshots` 与按 id / source / instance token 绑定的选择。未选工具不参与自动展示，用户选择可以切入工具；原有非中断 critical policy 先保留，important / critical 或 normal transient 状态仍可临时抢占，结束后恢复同一选择。暂停音乐的 showsCompact=false 不受全局过滤，原实例可恢复。普通 source rate / dwell 继续适用，显式选择仅豁免目标工具，未新增轮询或每工具 Timer。
+
+动作仍只使用 `currentSnapshot` 经 ActionRouter；工具目录不是动作授权。旧 token、错误来源、失效 / 结束 / 过期 / 执行撤销 / 角色改变的项不能选中替代实例。失效或清除后立即移除旧工具展示，不保留 fallback / dwell。停用后重新启用需要新选择。Renderer identity 绑定 instance token，同 ID 重建会清除旧控件状态。
+
+### 展示与交互
+
+「计时」原位置在有工具时显示菜单，包含「内置计时」与工具项，不增加内容行。菜单捕获完整 snapshot；音乐、拖盘、内置计时、拖入文件、原生计时完成或收起岛体会同步清除工具选择。普通提示抢占保留选择。再次展开后显示内置页面，工具需重新选择。
+
+View 与 Panel hover 共用 `runtime.expandedShellSize`；实际呈现工具时 Host 固定 480×200，扣除 chrome 后有 140 pt 内容，隐藏的原生 tab 不再决定其裁切。原生秒表 152、倒计时 / 番茄钟 190、音乐 200 的尺寸保留，Reduce Motion 关闭新增动画。
+
+### 自动化与普通 Release 实测
+
+新增 28 项测试：Core 工具选择 17、角色 / Bridge 7、生产 Runtime / 生命周期交互 3、几何 1。首轮编译修正了测试 fixture 的必需参数；最终 `./Scripts/ci.sh` 为 **733 total / 732 passed / 1 skipped / 0 failures**，普通 Release build passed。唯一 skip 为显式截图矩阵生成。此前因锁屏跳过的三项鼠标测试本轮均通过。[CI 及源码 SHA256](evidence/t35-tools-20261015/ci-summary.json)。
+
+普通 Release 隔离副本保留 Sandbox / hardened runtime / JIT，无测试注入例外，strict / deep 签名验证通过。通过真实导入预览安装[无权限工具示例](examples/tool-demo/README.md)，确认安装后停用，再由管理 UI 启用。实际验证了菜单、工具 0→1 点击回传、同 VM 再选择保留计数、内置秒表 / 倒计时、音乐及空拖盘切换。工具壳 / 原生壳内容完整可见。
+
+窗口定向自动化无法改变 Host 所读的全局鼠标位置，因此用户协助了物理悬停展开，以及移出再移回；所有菜单、按钮、安装 / 启用及退出由 CUA 操作。重新展开后的真实 AX 和截图确认显示内置倒计时，工具焦点已清除。没有把定向点击当作全局 hover 证据。
+
+| 场景 | 实际截图 |
+| --- | --- |
+| 同位菜单 | [菜单](evidence/t35-tools-20261015/tool-menu.jpg) |
+| 工具与 JS 按钮回传 | [工具](evidence/t35-tools-20261015/tool-selected.jpg)、[点击后](evidence/t35-tools-20261015/tool-incremented.jpg) |
+| 内置计时与旧页面 | [秒表](evidence/t35-tools-20261015/native-stopwatch.jpg)、[倒计时](evidence/t35-tools-20261015/native-countdown.jpg)、[音乐](evidence/t35-tools-20261015/music-restored.jpg)、[拖盘](evidence/t35-tools-20261015/tray-restored.jpg) |
+| 收起并重新展开 | [内置页恢复](evidence/t35-tools-20261015/fold-reexpanded.jpg) |
+
+[13 个实际 AX 观察](evidence/t35-tools-20261015/ui-observations.json)、[截图来源及 SHA256](evidence/t35-tools-20261015/screenshots.json)、[完整证据索引](evidence/t35-tools-20261015/result.json)已保存，截图为本任务实际工具输出的原始 JPEG。自动化另覆盖提示抢占、禁用、过期、角色改变、旧实例动作和原生计时完成；本轮不声称实机低电池或真实 Volume 交错已复测。
+
+验收副本已正常退出、注销并连同独立插件数据归档。原 App PID 66831 仍运行，原 Installed / Staging 为空；默认 `.dip` handler 未更改，见[清理记录](evidence/t35-tools-20261015/cleanup.json)。本子步骤没有实现倒计时 API、移除原生番茄钟或接受 T36。

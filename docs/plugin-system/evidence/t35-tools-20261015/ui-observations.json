@@ -1,0 +1,152 @@
+{
+  "schemaVersion": 1,
+  "manualPointerAssistance": [
+    "User confirmed physical pointer hover expansion",
+    "User confirmed pointer exit and re-expansion; subsequent actual AX and image captured"
+  ],
+  "captures": [
+    {
+      "captureCompletedUTC": "2026-10-15T06:15:53.022Z",
+      "callID": "call_8667537f0a584d64b5d12153d5006964",
+      "rawJSONText": "{\"marker\":\"T35_TOOL_UI\",\"phase\":\"install-preview\",\"utc\":\"2026-10-15T06:15:52.399Z\",\"axText\":\"Window: \\\"安装插件\\\", App: Dynamic Island T35 Tool Acceptance.\\n0 standard window 安装插件, Secondary Actions: Raise\\n\\t1 container\\n\\t\\t2 image puzzlepiece.extension\\n\\t\\t3 text 安装插件 检查插件信息与权限\\n\\t\\t4 scroll area\\n\\t\\t\\t5 text 工具选择示例 版本：1.0.0 开发者：未提供（插件自行声明，未验证） 插件 ID：com.example.tool-demo 插件声明的权限 此插件未申请权限。\\n\\t\\t6 text 安装不会授予权限或自动运行插件。\\n\\t\\t7 button Description: 取消, ID: plugin-installer-cancel\\n\\t\\t8 button Description: 安装插件, ID: plugin-installer-confirm\\n\\t9 close button\\n\\t10 zoom button\\n\\t11 minimize button\\n\\t12 text 安装插件\\n13 menu bar\\n\\t14 Dynamic Island T35 Tool Acceptance\\n\\t15 Edit\\n\\t16 View\\n\\t17 Window\\n\\t18 Help\\n\\nThe focused UI element is 0 standard window 安装插件, Secondary Actions: Raise\"}",
+      "value": {
+        "marker": "T35_TOOL_UI",
+        "phase": "install-preview",
+        "utc": "2026-10-15T06:15:52.399Z",
+        "axText": "Window: \"安装插件\", App: Dynamic Island T35 Tool Acceptance.\n0 standard window 安装插件, Secondary Actions: Raise\n\t1 container\n\t\t2 image puzzlepiece.extension\n\t\t3 text 安装插件 检查插件信息与权限\n\t\t4 scroll area\n\t\t\t5 text 工具选择示例 版本：1.0.0 开发者：未提供（插件自行声明，未验证） 插件 ID：com.example.tool-demo 插件声明的权限 此插件未申请权限。\n\t\t6 text 安装不会授予权限或自动运行插件。\n\t\t7 button Description: 取消, ID: plugin-installer-cancel\n\t\t8 button Description: 安装插件, ID: plugin-installer-confirm\n\t9 close button\n\t10 zoom button\n\t11 minimize button\n\t12 text 安装插件\n13 menu bar\n\t14 Dynamic Island T35 Tool Acceptance\n\t15 Edit\n\t16 View\n\t17 Window\n\t18 Help\n\nThe focused UI element is 0 standard window 安装插件, Secondary Actions: Raise"
+      }
+    },
+    {
+      "captureCompletedUTC": "2026-10-15T06:16:01.006Z",
+      "callID": "call_f54d9c205cb341cf91ee0aadde27eeec",
+      "rawJSONText": "{\"marker\":\"T35_TOOL_UI\",\"phase\":\"installed-disabled\",\"utc\":\"2026-10-15T06:16:00.481Z\",\"axText\":\"Window: \\\"插件管理\\\", App: Dynamic Island T35 Tool Acceptance.\\n0 standard window 插件管理, Secondary Actions: Raise\\n\\t1 container\\n\\t\\t2 text 已安装 1 工具选择示例\\n\\t\\t3 button Description: 导入插件, ID: plugin-extensions-import\\n\\t\\t4 button Description: 刷新, ID: plugin-extensions-refresh\\n\\t\\t5 scroll area\\n\\t\\t\\t6 list Secondary Actions: AXScrollToTop, AXScrollToBottom\\n\\t\\t\\t\\t7 button Description: 工具选择示例, v1.0.0, 已停用, ID: plugin-extensions-plugin-com.example.tool-demo\\n\\t\\t8 text v1.0.0 · 已停用\\n\\t\\t9 scroll area plugin-extensions-detail\\n\\t\\t\\t10 text Value: 开发者：未提供（插件自行声明，未验证） 原生 JavaScriptCore 最低主程序版本 0.6.0, ID: plugin-extensions-developer\\n\\t\\t\\t11 button Description: 启用插件, ID: plugin-extensions-enable\\n\\t\\t\\t12 button Description: 查看诊断, ID: plugin-extensions-diagnostics\\n\\t\\t\\t13 button Description: 卸载…, ID: plugin-extensions-uninstall\\n\\t\\t\\t14 text 权限 启用插件不会自动授权。授权仅适用于当前代码，并保存在本机；代码或权限声明变化后需重新确认。撤销立即生效。 此插件未请求额外权限。\\n\\t15 close button\\n\\t16 zoom button\\n\\t17 minimize button\\n\\t18 text 插件管理\\n19 menu bar\\n\\t20 Dynamic Island T35 Tool Acceptance\\n\\t21 Edit\\n\\t22 View\\n\\t23 Window\\n\\t24 Help\\n\\nThe focused UI element is 0 standard window 插件管理, Secondary Actions: Raise\"}",
+      "value": {
+        "marker": "T35_TOOL_UI",
+        "phase": "installed-disabled",
+        "utc": "2026-10-15T06:16:00.481Z",
+        "axText": "Window: \"插件管理\", App: Dynamic Island T35 Tool Acceptance.\n0 standard window 插件管理, Secondary Actions: Raise\n\t1 container\n\t\t2 text 已安装 1 工具选择示例\n\t\t3 button Description: 导入插件, ID: plugin-extensions-import\n\t\t4 button Description: 刷新, ID: plugin-extensions-refresh\n\t\t5 scroll area\n\t\t\t6 list Secondary Actions: AXScrollToTop, AXScrollToBottom\n\t\t\t\t7 button Description: 工具选择示例, v1.0.0, 已停用, ID: plugin-extensions-plugin-com.example.tool-demo\n\t\t8 text v1.0.0 · 已停用\n\t\t9 scroll area plugin-extensions-detail\n\t\t\t10 text Value: 开发者：未提供（插件自行声明，未验证） 原生 JavaScriptCore 最低主程序版本 0.6.0, ID: plugin-extensions-developer\n\t\t\t11 button Description: 启用插件, ID: plugin-extensions-enable\n\t\t\t12 button Description: 查看诊断, ID: plugin-extensions-diagnostics\n\t\t\t13 button Description: 卸载…, ID: plugin-extensions-uninstall\n\t\t\t14 text 权限 启用插件不会自动授权。授权仅适用于当前代码，并保存在本机；代码或权限声明变化后需重新确认。撤销立即生效。 此插件未请求额外权限。\n\t15 close button\n\t16 zoom button\n\t17 minimize button\n\t18 text 插件管理\n19 menu bar\n\t20 Dynamic Island T35 Tool Acceptance\n\t21 Edit\n\t22 View\n\t23 Window\n\t24 Help\n\nThe focused UI element is 0 standard window 插件管理, Secondary Actions: Raise"
+      }
+    },
+    {
+      "captureCompletedUTC": "2026-10-15T06:16:14.874Z",
+      "callID": "call_81aec2a8ee824612ace726fcb32d3b5c",
+      "rawJSONText": "{\"marker\":\"T35_TOOL_UI\",\"phase\":\"running\",\"utc\":\"2026-10-15T06:16:14.143Z\",\"axText\":\"Window: \\\"插件管理\\\", App: Dynamic Island T35 Tool Acceptance.\\n0 standard window 插件管理, Secondary Actions: Raise\\n\\t1 container\\n\\t\\t2 text 已安装 1 工具选择示例\\n\\t\\t3 button Description: 导入插件, ID: plugin-extensions-import\\n\\t\\t4 button Description: 刷新, ID: plugin-extensions-refresh\\n\\t\\t5 scroll area\\n\\t\\t\\t6 list Secondary Actions: AXScrollToTop, AXScrollToBottom\\n\\t\\t\\t\\t7 button Description: 工具选择示例, v1.0.0, 运行中, ID: plugin-extensions-plugin-com.example.tool-demo\\n\\t\\t8 text v1.0.0 · 运行中\\n\\t\\t9 scroll area plugin-extensions-detail\\n\\t\\t\\t10 text Value: 开发者：未提供（插件自行声明，未验证） 原生 JavaScriptCore 最低主程序版本 0.6.0, ID: plugin-extensions-developer\\n\\t\\t\\t11 button Description: 停用插件, ID: plugin-extensions-enable\\n\\t\\t\\t12 button Description: 查看诊断, ID: plugin-extensions-diagnostics\\n\\t\\t\\t13 button Description: 卸载…, ID: plugin-extensions-uninstall\\n\\t\\t\\t14 text 权限 启用插件不会自动授权。授权仅适用于当前代码，并保存在本机；代码或权限声明变化后需重新确认。撤销立即生效。 此插件未请求额外权限。\\n\\t15 close button\\n\\t16 zoom button\\n\\t17 minimize button\\n\\t18 text 插件管理\\n19 menu bar\\n\\t20 Dynamic Island T35 Tool Acceptance\\n\\t21 Edit\\n\\t22 View\\n\\t23 Window\\n\\t24 Help\\n\\nThe focused UI element is 0 standard window 插件管理, Secondary Actions: Raise\"}",
+      "value": {
+        "marker": "T35_TOOL_UI",
+        "phase": "running",
+        "utc": "2026-10-15T06:16:14.143Z",
+        "axText": "Window: \"插件管理\", App: Dynamic Island T35 Tool Acceptance.\n0 standard window 插件管理, Secondary Actions: Raise\n\t1 container\n\t\t2 text 已安装 1 工具选择示例\n\t\t3 button Description: 导入插件, ID: plugin-extensions-import\n\t\t4 button Description: 刷新, ID: plugin-extensions-refresh\n\t\t5 scroll area\n\t\t\t6 list Secondary Actions: AXScrollToTop, AXScrollToBottom\n\t\t\t\t7 button Description: 工具选择示例, v1.0.0, 运行中, ID: plugin-extensions-plugin-com.example.tool-demo\n\t\t8 text v1.0.0 · 运行中\n\t\t9 scroll area plugin-extensions-detail\n\t\t\t10 text Value: 开发者：未提供（插件自行声明，未验证） 原生 JavaScriptCore 最低主程序版本 0.6.0, ID: plugin-extensions-developer\n\t\t\t11 button Description: 停用插件, ID: plugin-extensions-enable\n\t\t\t12 button Description: 查看诊断, ID: plugin-extensions-diagnostics\n\t\t\t13 button Description: 卸载…, ID: plugin-extensions-uninstall\n\t\t\t14 text 权限 启用插件不会自动授权。授权仅适用于当前代码，并保存在本机；代码或权限声明变化后需重新确认。撤销立即生效。 此插件未请求额外权限。\n\t15 close button\n\t16 zoom button\n\t17 minimize button\n\t18 text 插件管理\n19 menu bar\n\t20 Dynamic Island T35 Tool Acceptance\n\t21 Edit\n\t22 View\n\t23 Window\n\t24 Help\n\nThe focused UI element is 0 standard window 插件管理, Secondary Actions: Raise"
+      }
+    },
+    {
+      "captureCompletedUTC": "2026-10-15T06:19:15.594Z",
+      "callID": "call_d35fa1306c23453e8185a8b83937e0b6",
+      "rawJSONText": "{\"marker\":\"T35_TOOL_UI\",\"phase\":\"expanded-unselected\",\"utc\":\"2026-10-15T06:19:15.026Z\",\"axText\":\"Window: \\\"\\\", App: Dynamic Island T35 Tool Acceptance.\\n0 system dialog Secondary Actions: Raise\\n\\t1 container\\n\\t\\t2 button Description: 音乐, ID: island-surface-music\\n\\t\\t3 button Description: 拖盘, ID: island-surface-tray\\n\\t\\t4 menu button Description: 计时, Help: 计时与插件工具, ID: island-tool-selector\\n\\t\\t5 button Description: 退出 Dynamic Island, ID: power\\n\\t\\t6 image Description: Image unavailable, ID: music.note\\n\\t\\t7 text 未在播放 在 Apple Music 播放后显示曲目信息 0:00 --:--\\n\\t\\t8 button Description: 上一首, ID: backward.fill\\n\\t\\t9 button Description: 播放, ID: play.fill\\n\\t\\t10 button Description: 下一首, ID: forward.fill\\n\\t\\t11 button Description: 取消静音, ID: speaker.slash.fill\\n\\t\\t12 button Description: 减小音量, ID: minus\\n\\t\\t13 slider Description: 音量, Value: 0, Secondary Actions: Increment, Decrement\\n\\t\\t\\t14 value indicator 0\\n\\t\\t15 button Description: 增大音量, ID: plus\\n\\t\\t16 text 静音\\n17 menu bar\\n\\t18 Dynamic Island T35 Tool Acceptance\\n\\t19 Edit\\n\\t20 View\\n\\t21 Window\\n\\t22 Help\\n\"}",
+      "value": {
+        "marker": "T35_TOOL_UI",
+        "phase": "expanded-unselected",
+        "utc": "2026-10-15T06:19:15.026Z",
+        "axText": "Window: \"\", App: Dynamic Island T35 Tool Acceptance.\n0 system dialog Secondary Actions: Raise\n\t1 container\n\t\t2 button Description: 音乐, ID: island-surface-music\n\t\t3 button Description: 拖盘, ID: island-surface-tray\n\t\t4 menu button Description: 计时, Help: 计时与插件工具, ID: island-tool-selector\n\t\t5 button Description: 退出 Dynamic Island, ID: power\n\t\t6 image Description: Image unavailable, ID: music.note\n\t\t7 text 未在播放 在 Apple Music 播放后显示曲目信息 0:00 --:--\n\t\t8 button Description: 上一首, ID: backward.fill\n\t\t9 button Description: 播放, ID: play.fill\n\t\t10 button Description: 下一首, ID: forward.fill\n\t\t11 button Description: 取消静音, ID: speaker.slash.fill\n\t\t12 button Description: 减小音量, ID: minus\n\t\t13 slider Description: 音量, Value: 0, Secondary Actions: Increment, Decrement\n\t\t\t14 value indicator 0\n\t\t15 button Description: 增大音量, ID: plus\n\t\t16 text 静音\n17 menu bar\n\t18 Dynamic Island T35 Tool Acceptance\n\t19 Edit\n\t20 View\n\t21 Window\n\t22 Help\n"
+      }
+    },
+    {
+      "captureCompletedUTC": "2026-10-15T06:19:26.363Z",
+      "callID": "call_77e427bb006a455ea341335134410bff",
+      "rawJSONText": "{\"marker\":\"T35_TOOL_UI\",\"phase\":\"tool-menu\",\"utc\":\"2026-10-15T06:19:25.857Z\",\"axText\":\"Window: \\\"\\\", App: Dynamic Island T35 Tool Acceptance.\\n0 system dialog Secondary Actions: Raise\\n\\t1 container\\n\\t\\t2 button Description: 音乐, ID: island-surface-music\\n\\t\\t3 button Description: 拖盘, ID: island-surface-tray\\n\\t\\t4 menu button Description: 计时, Help: 计时与插件工具, ID: island-tool-selector\\n\\t\\t\\t5 menu Secondary Actions: Cancel\\n\\t\\t\\t\\t6 内置计时, ID: island-tool-native\\n\\t\\t\\t\\t7 工具选择示例, ID: island-tool-plugin:com.example.tool-demo:counter\\n\\t\\t8 button Description: 退出 Dynamic Island, ID: power\\n\\t\\t9 image Description: Image unavailable, ID: music.note\\n\\t\\t10 text 未在播放 在 Apple Music 播放后显示曲目信息 0:00 --:--\\n\\t\\t11 button Description: 上一首, ID: backward.fill\\n\\t\\t12 button Description: 播放, ID: play.fill\\n\\t\\t13 button Description: 下一首, ID: forward.fill\\n\\t\\t14 button Description: 取消静音, ID: speaker.slash.fill\\n\\t\\t15 button Description: 减小音量, ID: minus\\n\\t\\t16 slider Description: 音量, Value: 0, Secondary Actions: Increment, Decrement\\n\\t\\t\\t17 value indicator 0\\n\\t\\t18 button Description: 增大音量, ID: plus\\n\\t\\t19 text 静音\\n20 menu bar\\n\\t21 Dynamic Island T35 Tool Acceptance\\n\\t22 Edit\\n\\t23 View\\n\\t24 Window\\n\\t25 Help\\n\"}",
+      "value": {
+        "marker": "T35_TOOL_UI",
+        "phase": "tool-menu",
+        "utc": "2026-10-15T06:19:25.857Z",
+        "axText": "Window: \"\", App: Dynamic Island T35 Tool Acceptance.\n0 system dialog Secondary Actions: Raise\n\t1 container\n\t\t2 button Description: 音乐, ID: island-surface-music\n\t\t3 button Description: 拖盘, ID: island-surface-tray\n\t\t4 menu button Description: 计时, Help: 计时与插件工具, ID: island-tool-selector\n\t\t\t5 menu Secondary Actions: Cancel\n\t\t\t\t6 内置计时, ID: island-tool-native\n\t\t\t\t7 工具选择示例, ID: island-tool-plugin:com.example.tool-demo:counter\n\t\t8 button Description: 退出 Dynamic Island, ID: power\n\t\t9 image Description: Image unavailable, ID: music.note\n\t\t10 text 未在播放 在 Apple Music 播放后显示曲目信息 0:00 --:--\n\t\t11 button Description: 上一首, ID: backward.fill\n\t\t12 button Description: 播放, ID: play.fill\n\t\t13 button Description: 下一首, ID: forward.fill\n\t\t14 button Description: 取消静音, ID: speaker.slash.fill\n\t\t15 button Description: 减小音量, ID: minus\n\t\t16 slider Description: 音量, Value: 0, Secondary Actions: Increment, Decrement\n\t\t\t17 value indicator 0\n\t\t18 button Description: 增大音量, ID: plus\n\t\t19 text 静音\n20 menu bar\n\t21 Dynamic Island T35 Tool Acceptance\n\t22 Edit\n\t23 View\n\t24 Window\n\t25 Help\n"
+      }
+    },
+    {
+      "captureCompletedUTC": "2026-10-15T06:19:47.965Z",
+      "callID": "call_9b94a4686fba4c7a9a9f8ce81e7694f9",
+      "rawJSONText": "{\"marker\":\"T35_TOOL_UI\",\"phase\":\"selected-tool-zero\",\"utc\":\"2026-10-15T06:19:47.526Z\",\"axText\":\"Window: \\\"\\\", App: Dynamic Island T35 Tool Acceptance.\\n0 system dialog Secondary Actions: Raise\\n\\t1 container\\n\\t\\t2 button Description: 音乐, ID: island-surface-music\\n\\t\\t3 button Description: 拖盘, ID: island-surface-tray\\n\\t\\t4 menu button Alarm, Description: 计时, Help: 计时与插件工具, ID: island-tool-selector\\n\\t\\t5 button Description: 退出 Dynamic Island, ID: power\\n\\t\\t6 text 已点击 0 次\\n\\t\\t7 button 增加一次\\n8 menu bar\\n\\t9 Dynamic Island T35 Tool Acceptance\\n\\t10 Edit\\n\\t11 View\\n\\t12 Window\\n\\t13 Help\\n\"}",
+      "value": {
+        "marker": "T35_TOOL_UI",
+        "phase": "selected-tool-zero",
+        "utc": "2026-10-15T06:19:47.526Z",
+        "axText": "Window: \"\", App: Dynamic Island T35 Tool Acceptance.\n0 system dialog Secondary Actions: Raise\n\t1 container\n\t\t2 button Description: 音乐, ID: island-surface-music\n\t\t3 button Description: 拖盘, ID: island-surface-tray\n\t\t4 menu button Alarm, Description: 计时, Help: 计时与插件工具, ID: island-tool-selector\n\t\t5 button Description: 退出 Dynamic Island, ID: power\n\t\t6 text 已点击 0 次\n\t\t7 button 增加一次\n8 menu bar\n\t9 Dynamic Island T35 Tool Acceptance\n\t10 Edit\n\t11 View\n\t12 Window\n\t13 Help\n"
+      }
+    },
+    {
+      "captureCompletedUTC": "2026-10-15T06:19:59.865Z",
+      "callID": "call_a604a3be24a4490fa179925dbc87994a",
+      "rawJSONText": "{\"marker\":\"T35_TOOL_UI\",\"phase\":\"incremented-tool\",\"utc\":\"2026-10-15T06:19:58.869Z\",\"axText\":\"Window: \\\"\\\", App: Dynamic Island T35 Tool Acceptance.\\n0 system dialog Secondary Actions: Raise\\n\\t1 container\\n\\t\\t2 button Description: 音乐, ID: island-surface-music\\n\\t\\t3 button Description: 拖盘, ID: island-surface-tray\\n\\t\\t4 menu button Alarm, Description: 计时, Help: 计时与插件工具, ID: island-tool-selector\\n\\t\\t5 button Description: 退出 Dynamic Island, ID: power\\n\\t\\t6 text 已点击 1 次\\n\\t\\t7 button 增加一次\\n8 menu bar\\n\\t9 Dynamic Island T35 Tool Acceptance\\n\\t10 Edit\\n\\t11 View\\n\\t12 Window\\n\\t13 Help\\n\"}",
+      "value": {
+        "marker": "T35_TOOL_UI",
+        "phase": "incremented-tool",
+        "utc": "2026-10-15T06:19:58.869Z",
+        "axText": "Window: \"\", App: Dynamic Island T35 Tool Acceptance.\n0 system dialog Secondary Actions: Raise\n\t1 container\n\t\t2 button Description: 音乐, ID: island-surface-music\n\t\t3 button Description: 拖盘, ID: island-surface-tray\n\t\t4 menu button Alarm, Description: 计时, Help: 计时与插件工具, ID: island-tool-selector\n\t\t5 button Description: 退出 Dynamic Island, ID: power\n\t\t6 text 已点击 1 次\n\t\t7 button 增加一次\n8 menu bar\n\t9 Dynamic Island T35 Tool Acceptance\n\t10 Edit\n\t11 View\n\t12 Window\n\t13 Help\n"
+      }
+    },
+    {
+      "captureCompletedUTC": "2026-10-15T06:20:33.003Z",
+      "callID": "call_2a4b3f53e42d414488e457e536638a79",
+      "rawJSONText": "{\"marker\":\"T35_TOOL_UI\",\"phase\":\"native-stopwatch\",\"utc\":\"2026-10-15T06:20:32.424Z\",\"axText\":\"Window: \\\"\\\", App: Dynamic Island T35 Tool Acceptance.\\n0 system dialog Secondary Actions: Raise\\n\\t1 container\\n\\t\\t2 button Description: 音乐, ID: island-surface-music\\n\\t\\t3 button Description: 拖盘, ID: island-surface-tray\\n\\t\\t4 menu button Alarm, Description: 计时, Help: 计时与插件工具, ID: island-tool-selector\\n\\t\\t5 button Description: 退出 Dynamic Island, ID: power\\n\\t\\t6 计时工具\\n\\t\\t\\t7 radio button Description: 秒表, Value: 1\\n\\t\\t\\t8 radio button Description: 番茄钟, Value: 0\\n\\t\\t\\t9 radio button Description: 倒计时, Value: 0\\n\\t\\t10 text 准备计时 00:00.0\\n\\t\\t11 button Description: 重置, ID: arrow.counterclockwise\\n\\t\\t12 button Description: 开始, ID: play.fill\\n13 menu bar\\n\\t14 Dynamic Island T35 Tool Acceptance\\n\\t15 Edit\\n\\t16 View\\n\\t17 Window\\n\\t18 Help\\n\"}",
+      "value": {
+        "marker": "T35_TOOL_UI",
+        "phase": "native-stopwatch",
+        "utc": "2026-10-15T06:20:32.424Z",
+        "axText": "Window: \"\", App: Dynamic Island T35 Tool Acceptance.\n0 system dialog Secondary Actions: Raise\n\t1 container\n\t\t2 button Description: 音乐, ID: island-surface-music\n\t\t3 button Description: 拖盘, ID: island-surface-tray\n\t\t4 menu button Alarm, Description: 计时, Help: 计时与插件工具, ID: island-tool-selector\n\t\t5 button Description: 退出 Dynamic Island, ID: power\n\t\t6 计时工具\n\t\t\t7 radio button Description: 秒表, Value: 1\n\t\t\t8 radio button Description: 番茄钟, Value: 0\n\t\t\t9 radio button Description: 倒计时, Value: 0\n\t\t10 text 准备计时 00:00.0\n\t\t11 button Description: 重置, ID: arrow.counterclockwise\n\t\t12 button Description: 开始, ID: play.fill\n13 menu bar\n\t14 Dynamic Island T35 Tool Acceptance\n\t15 Edit\n\t16 View\n\t17 Window\n\t18 Help\n"
+      }
+    },
+    {
+      "captureCompletedUTC": "2026-10-15T06:20:43.528Z",
+      "callID": "call_c8ca91f610f84fc5a8b0dc2b4784c539",
+      "rawJSONText": "{\"marker\":\"T35_TOOL_UI\",\"phase\":\"native-countdown\",\"utc\":\"2026-10-15T06:20:42.533Z\",\"axText\":\"Window: \\\"\\\", App: Dynamic Island T35 Tool Acceptance.\\n0 system dialog Secondary Actions: Raise\\n\\t1 container\\n\\t\\t2 button Description: 音乐, ID: island-surface-music\\n\\t\\t3 button Description: 拖盘, ID: island-surface-tray\\n\\t\\t4 menu button Alarm, Description: 计时, Help: 计时与插件工具, ID: island-tool-selector\\n\\t\\t5 button Description: 退出 Dynamic Island, ID: power\\n\\t\\t6 计时工具\\n\\t\\t\\t7 radio button Description: 秒表, Value: 0\\n\\t\\t\\t8 radio button Description: 番茄钟, Value: 0\\n\\t\\t\\t9 radio button Description: 倒计时, Value: 1\\n\\t\\t10 text 按住加减按钮可快速调整 设置时长\\n\\t\\t11 button Description: 减少一分钟, Help: 按住可连续调整, ID: minus\\n\\t\\t12 text 5 分钟\\n\\t\\t13 button Description: 增加一分钟, Help: 按住可连续调整, ID: plus\\n\\t\\t14 text 05:00\\n\\t\\t15 button Description: 重置, ID: arrow.counterclockwise\\n\\t\\t16 button Description: 开始, ID: play.fill\\n17 menu bar\\n\\t18 Dynamic Island T35 Tool Acceptance\\n\\t19 Edit\\n\\t20 View\\n\\t21 Window\\n\\t22 Help\\n\"}",
+      "value": {
+        "marker": "T35_TOOL_UI",
+        "phase": "native-countdown",
+        "utc": "2026-10-15T06:20:42.533Z",
+        "axText": "Window: \"\", App: Dynamic Island T35 Tool Acceptance.\n0 system dialog Secondary Actions: Raise\n\t1 container\n\t\t2 button Description: 音乐, ID: island-surface-music\n\t\t3 button Description: 拖盘, ID: island-surface-tray\n\t\t4 menu button Alarm, Description: 计时, Help: 计时与插件工具, ID: island-tool-selector\n\t\t5 button Description: 退出 Dynamic Island, ID: power\n\t\t6 计时工具\n\t\t\t7 radio button Description: 秒表, Value: 0\n\t\t\t8 radio button Description: 番茄钟, Value: 0\n\t\t\t9 radio button Description: 倒计时, Value: 1\n\t\t10 text 按住加减按钮可快速调整 设置时长\n\t\t11 button Description: 减少一分钟, Help: 按住可连续调整, ID: minus\n\t\t12 text 5 分钟\n\t\t13 button Description: 增加一分钟, Help: 按住可连续调整, ID: plus\n\t\t14 text 05:00\n\t\t15 button Description: 重置, ID: arrow.counterclockwise\n\t\t16 button Description: 开始, ID: play.fill\n17 menu bar\n\t18 Dynamic Island T35 Tool Acceptance\n\t19 Edit\n\t20 View\n\t21 Window\n\t22 Help\n"
+      }
+    },
+    {
+      "captureCompletedUTC": "2026-10-15T06:20:55.584Z",
+      "callID": "call_c65cbd186ebd4c768780d6649eeeb67c",
+      "rawJSONText": "{\"marker\":\"T35_TOOL_UI\",\"phase\":\"reselected-same-tool\",\"utc\":\"2026-10-15T06:20:54.888Z\",\"axText\":\"Window: \\\"\\\", App: Dynamic Island T35 Tool Acceptance.\\n0 system dialog Secondary Actions: Raise\\n\\t1 container\\n\\t\\t2 button Description: 音乐, ID: island-surface-music\\n\\t\\t3 button Description: 拖盘, ID: island-surface-tray\\n\\t\\t4 menu button Alarm, Description: 计时, Help: 计时与插件工具, ID: island-tool-selector\\n\\t\\t5 button Description: 退出 Dynamic Island, ID: power\\n\\t\\t6 text 已点击 1 次\\n\\t\\t7 button 增加一次\\n8 menu bar\\n\\t9 Dynamic Island T35 Tool Acceptance\\n\\t10 Edit\\n\\t11 View\\n\\t12 Window\\n\\t13 Help\\n\"}",
+      "value": {
+        "marker": "T35_TOOL_UI",
+        "phase": "reselected-same-tool",
+        "utc": "2026-10-15T06:20:54.888Z",
+        "axText": "Window: \"\", App: Dynamic Island T35 Tool Acceptance.\n0 system dialog Secondary Actions: Raise\n\t1 container\n\t\t2 button Description: 音乐, ID: island-surface-music\n\t\t3 button Description: 拖盘, ID: island-surface-tray\n\t\t4 menu button Alarm, Description: 计时, Help: 计时与插件工具, ID: island-tool-selector\n\t\t5 button Description: 退出 Dynamic Island, ID: power\n\t\t6 text 已点击 1 次\n\t\t7 button 增加一次\n8 menu bar\n\t9 Dynamic Island T35 Tool Acceptance\n\t10 Edit\n\t11 View\n\t12 Window\n\t13 Help\n"
+      }
+    },
+    {
+      "captureCompletedUTC": "2026-10-15T06:21:08.098Z",
+      "callID": "call_198b9c3b976e4e98a8d1fb2ff493500f",
+      "rawJSONText": "{\"marker\":\"T35_TOOL_UI\",\"phase\":\"music-restored\",\"utc\":\"2026-10-15T06:21:07.422Z\",\"axText\":\"Window: \\\"\\\", App: Dynamic Island T35 Tool Acceptance.\\n0 system dialog Secondary Actions: Raise\\n\\t1 container\\n\\t\\t2 button Description: 音乐, ID: island-surface-music\\n\\t\\t3 button Description: 拖盘, ID: island-surface-tray\\n\\t\\t4 menu button Alarm, Description: 计时, Help: 计时与插件工具, ID: island-tool-selector\\n\\t\\t5 button Description: 退出 Dynamic Island, ID: power\\n\\t\\t6 image Description: Image unavailable, ID: music.note\\n\\t\\t7 text 未在播放 在 Apple Music 播放后显示曲目信息 0:00 --:--\\n\\t\\t8 button Description: 上一首, ID: backward.fill\\n\\t\\t9 button Description: 播放, ID: play.fill\\n\\t\\t10 button Description: 下一首, ID: forward.fill\\n\\t\\t11 button Description: 取消静音, ID: speaker.slash.fill\\n\\t\\t12 button Description: 减小音量, ID: minus\\n\\t\\t13 slider Description: 音量, Value: 0, Secondary Actions: Increment, Decrement\\n\\t\\t\\t14 value indicator 0\\n\\t\\t15 button Description: 增大音量, ID: plus\\n\\t\\t16 text 静音\\n17 menu bar\\n\\t18 Dynamic Island T35 Tool Acceptance\\n\\t19 Edit\\n\\t20 View\\n\\t21 Window\\n\\t22 Help\\n\"}",
+      "value": {
+        "marker": "T35_TOOL_UI",
+        "phase": "music-restored",
+        "utc": "2026-10-15T06:21:07.422Z",
+        "axText": "Window: \"\", App: Dynamic Island T35 Tool Acceptance.\n0 system dialog Secondary Actions: Raise\n\t1 container\n\t\t2 button Description: 音乐, ID: island-surface-music\n\t\t3 button Description: 拖盘, ID: island-surface-tray\n\t\t4 menu button Alarm, Description: 计时, Help: 计时与插件工具, ID: island-tool-selector\n\t\t5 button Description: 退出 Dynamic Island, ID: power\n\t\t6 image Description: Image unavailable, ID: music.note\n\t\t7 text 未在播放 在 Apple Music 播放后显示曲目信息 0:00 --:--\n\t\t8 button Description: 上一首, ID: backward.fill\n\t\t9 button Description: 播放, ID: play.fill\n\t\t10 button Description: 下一首, ID: forward.fill\n\t\t11 button Description: 取消静音, ID: speaker.slash.fill\n\t\t12 button Description: 减小音量, ID: minus\n\t\t13 slider Description: 音量, Value: 0, Secondary Actions: Increment, Decrement\n\t\t\t14 value indicator 0\n\t\t15 button Description: 增大音量, ID: plus\n\t\t16 text 静音\n17 menu bar\n\t18 Dynamic Island T35 Tool Acceptance\n\t19 Edit\n\t20 View\n\t21 Window\n\t22 Help\n"
+      }
+    },
+    {
+      "captureCompletedUTC": "2026-10-15T06:21:21.747Z",
+      "callID": "call_d7436add29fe4281ac007f7225d151a8",
+      "rawJSONText": "{\"marker\":\"T35_TOOL_UI\",\"phase\":\"tray-restored\",\"utc\":\"2026-10-15T06:21:20.728Z\",\"axText\":\"Window: \\\"\\\", App: Dynamic Island T35 Tool Acceptance.\\n0 system dialog Secondary Actions: Raise\\n\\t1 container\\n\\t\\t2 button Description: 音乐, ID: island-surface-music\\n\\t\\t3 button Description: 拖盘, ID: island-surface-tray\\n\\t\\t4 menu button Alarm, Description: 计时, Help: 计时与插件工具, ID: island-tool-selector\\n\\t\\t5 button Description: 退出 Dynamic Island, ID: power\\n\\t\\t6 text 文件托盘\\n\\t\\t7 button Description: 锁定文件托盘, ID: lock.open\\n\\t\\t8 text 拖入文件后可暂存并通过 AirDrop 分享\\n9 menu bar\\n\\t10 Dynamic Island T35 Tool Acceptance\\n\\t11 Edit\\n\\t12 View\\n\\t13 Window\\n\\t14 Help\\n\"}",
+      "value": {
+        "marker": "T35_TOOL_UI",
+        "phase": "tray-restored",
+        "utc": "2026-10-15T06:21:20.728Z",
+        "axText": "Window: \"\", App: Dynamic Island T35 Tool Acceptance.\n0 system dialog Secondary Actions: Raise\n\t1 container\n\t\t2 button Description: 音乐, ID: island-surface-music\n\t\t3 button Description: 拖盘, ID: island-surface-tray\n\t\t4 menu button Alarm, Description: 计时, Help: 计时与插件工具, ID: island-tool-selector\n\t\t5 button Description: 退出 Dynamic Island, ID: power\n\t\t6 text 文件托盘\n\t\t7 button Description: 锁定文件托盘, ID: lock.open\n\t\t8 text 拖入文件后可暂存并通过 AirDrop 分享\n9 menu bar\n\t10 Dynamic Island T35 Tool Acceptance\n\t11 Edit\n\t12 View\n\t13 Window\n\t14 Help\n"
+      }
+    },
+    {
+      "captureCompletedUTC": "2026-10-15T06:24:19.946Z",
+      "callID": "call_2e9b7b78858245bbb51769dc64523ab4",
+      "rawJSONText": "{\"marker\":\"T35_TOOL_UI\",\"phase\":\"after-user-fold-and-reexpand\",\"utc\":\"2026-10-15T06:24:19.663Z\",\"axText\":\"Window: \\\"\\\", App: Dynamic Island T35 Tool Acceptance.\\n0 system dialog Secondary Actions: Raise\\n\\t1 container\\n\\t\\t2 button Description: 音乐, ID: island-surface-music\\n\\t\\t3 button Description: 拖盘, ID: island-surface-tray\\n\\t\\t4 menu button Description: 计时, Help: 计时与插件工具, ID: island-tool-selector\\n\\t\\t5 button Description: 退出 Dynamic Island, ID: power\\n\\t\\t6 计时工具\\n\\t\\t\\t7 radio button Description: 秒表, Value: 0\\n\\t\\t\\t8 radio button Description: 番茄钟, Value: 0\\n\\t\\t\\t9 radio button Description: 倒计时, Value: 1\\n\\t\\t10 text 按住加减按钮可快速调整 设置时长\\n\\t\\t11 button Description: 减少一分钟, Help: 按住可连续调整, ID: minus\\n\\t\\t12 text 5 分钟\\n\\t\\t13 button Description: 增加一分钟, Help: 按住可连续调整, ID: plus\\n\\t\\t14 text 05:00\\n\\t\\t15 button Description: 重置, ID: arrow.counterclockwise\\n\\t\\t16 button Description: 开始, ID: play.fill\\n17 menu bar\\n\\t18 Dynamic Island T35 Tool Acceptance\\n\\t19 Edit\\n\\t20 View\\n\\t21 Window\\n\\t22 Help\\n\"}",
+      "value": {
+        "marker": "T35_TOOL_UI",
+        "phase": "after-user-fold-and-reexpand",
+        "utc": "2026-10-15T06:24:19.663Z",
+        "axText": "Window: \"\", App: Dynamic Island T35 Tool Acceptance.\n0 system dialog Secondary Actions: Raise\n\t1 container\n\t\t2 button Description: 音乐, ID: island-surface-music\n\t\t3 button Description: 拖盘, ID: island-surface-tray\n\t\t4 menu button Description: 计时, Help: 计时与插件工具, ID: island-tool-selector\n\t\t5 button Description: 退出 Dynamic Island, ID: power\n\t\t6 计时工具\n\t\t\t7 radio button Description: 秒表, Value: 0\n\t\t\t8 radio button Description: 番茄钟, Value: 0\n\t\t\t9 radio button Description: 倒计时, Value: 1\n\t\t10 text 按住加减按钮可快速调整 设置时长\n\t\t11 button Description: 减少一分钟, Help: 按住可连续调整, ID: minus\n\t\t12 text 5 分钟\n\t\t13 button Description: 增加一分钟, Help: 按住可连续调整, ID: plus\n\t\t14 text 05:00\n\t\t15 button Description: 重置, ID: arrow.counterclockwise\n\t\t16 button Description: 开始, ID: play.fill\n17 menu bar\n\t18 Dynamic Island T35 Tool Acceptance\n\t19 Edit\n\t20 View\n\t21 Window\n\t22 Help\n"
+      }
+    }
+  ]
+}

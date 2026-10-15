@@ -28,6 +28,11 @@ public nonisolated struct ActivityPresentation: Codable, Equatable, Sendable {
         case expanded
     }
 
+    public nonisolated enum Role: String, Codable, Sendable {
+        case status
+        case tool
+    }
+
     public var title: String
     public var subtitle: String?
     public var symbolName: String?
@@ -38,6 +43,8 @@ public nonisolated struct ActivityPresentation: Codable, Equatable, Sendable {
     /// `nil` preserves the legacy default of showing a compact presentation.
     /// Providers may suppress a persistent background activity while idle.
     public var showsCompact: Bool?
+    /// Omitted roles retain the ordinary status presentation of older data.
+    public var role: Role?
 
     public init(
         title: String,
@@ -47,7 +54,8 @@ public nonisolated struct ActivityPresentation: Codable, Equatable, Sendable {
         minimal: IslandNode? = nil,
         compact: IslandNode? = nil,
         expanded: IslandNode? = nil,
-        showsCompact: Bool? = nil
+        showsCompact: Bool? = nil,
+        role: Role? = nil
     ) {
         self.title = title
         self.subtitle = subtitle
@@ -57,9 +65,11 @@ public nonisolated struct ActivityPresentation: Codable, Equatable, Sendable {
         self.compact = compact
         self.expanded = expanded
         self.showsCompact = showsCompact
+        self.role = role
     }
 
     public var isCompactVisible: Bool { showsCompact ?? true }
+    public var effectiveRole: Role { role ?? .status }
 }
 
 /// The Host routes an action ID back to its source. No executable callback
@@ -105,6 +115,8 @@ public nonisolated struct IslandActivity: Codable, Equatable, Sendable, Identifi
         self.expiresAt = expiresAt
         self.actions = actions
     }
+
+    public var isTool: Bool { presentation.effectiveRole == .tool }
 
     public func isExpired(at date: Date) -> Bool {
         guard let expiresAt else { return false }

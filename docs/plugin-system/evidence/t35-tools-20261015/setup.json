@@ -1,0 +1,20 @@
+{
+  "captureUTC": "2026-10-15T06:14:19.565890+00:00",
+  "baseCommit": "a30b75e",
+  "bundleID": "com.rong5.dynamic-island.t35-tools.20261015",
+  "appExecutableSHA256": "34d2bc96bee1a254338efd0712dde1b8dfd36383eabd2af88c9f794ea7cd4868",
+  "sourceSHA256": {
+    "DynamicIsland/IslandVisualStyle.swift": "672faa523671d7944031b74191a2e588210ca8f7e57171d88dd3c2f0ae74733d",
+    "DynamicIsland/IslandPanelController.swift": "3a1558a0f68255477719788fc21083557273090e9f7ac68a4f62b17b37802c3a",
+    "DynamicIsland/IslandView.swift": "2b5fc26b4d4feb3e4ebee35ad9fdfb82f6e48e05c622aba1ffe5de811bcbfeb2",
+    "DynamicIsland/Core/Activity/IslandActivity.swift": "eb08488f2220b4ae24c9164bea85d55b19edbfaf9e9869a8d3805c37419ed054",
+    "DynamicIsland/Core/Activity/IslandActivityRuntime.swift": "181a79fea560354e92d7edb06877db0578ebb061cc7862957842578d2872cb70",
+    "DynamicIsland/Core/Activity/ActivityManager.swift": "d74d5eb1dd1bf63b2841bc7074854bd340838de0607d9ea69828403280d54cf5",
+    "DynamicIsland/Plugins/PluginJSBridgeBootstrap.swift": "8a429afca8719df0e7177ed14400e93597b38f1c7328f75ed18d3e980be31abe",
+    "DynamicIsland/Plugins/PluginActivityConverter.swift": "1858e47bcb05a1dc2e18817c1174d627df65eb7dca362cdc6f9bb63c58497c79"
+  },
+  "sandbox": true,
+  "jit": true,
+  "testOnlyEntitlements": false,
+  "selfCopyHasDocumentTypeDeclarations": false
+}

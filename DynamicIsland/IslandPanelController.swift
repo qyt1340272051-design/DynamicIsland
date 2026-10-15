@@ -207,13 +207,7 @@ final class IslandPanelController {
             compactFrame: currentCompactPresentationFrame(in: screen),
             presentationState: viewModel.presentationState,
             isPointerInside: isPointerInsidePanel,
-            expandedShellSize: IslandVisualStyle.expandedShellSize(
-                for: viewModel.expandedSurface,
-                timerMode: viewModel.timerTools.selectedMode,
-                hasTrayItems: !viewModel.trayItems.isEmpty,
-                hasError: viewModel.lastErrorMessage != nil,
-                hasTimerCompletion: viewModel.timerTools.completedMode != nil
-            )
+            expandedShellSize: activityRuntime.expandedShellSize
         )
     }
 }

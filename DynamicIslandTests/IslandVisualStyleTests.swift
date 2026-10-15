@@ -73,6 +73,23 @@ final class IslandVisualStyleTests: XCTestCase {
         XCTAssertEqual(completedStopwatch.height, IslandVisualStyle.expandedTimerHeight)
     }
 
+    func testPresentedToolHasFullHostShellAnd140PointContentRegardlessOfLegacyTab() {
+        for surface in [IslandExpandedSurface.music, .fileTray, .tools] {
+            for mode in IslandTimerToolMode.allCases {
+                let shell = IslandVisualStyle.expandedShellSize(
+                    for: surface, timerMode: mode, hasTrayItems: true,
+                    hasError: true, hasTimerCompletion: true, hasPresentedTool: true
+                )
+                XCTAssertEqual(shell, CGSize(width: 480, height: 200))
+                XCTAssertEqual(
+                    ActivityPresentation.HostPolicy.expandedContentHeight(forHostShellHeight: Double(shell.height)),
+                    140
+                )
+                XCTAssertLessThan(shell.height, IslandPanelGeometry.expandedSize.height)
+            }
+        }
+    }
+
     func testExpandedCanvasContainsEverySurfaceShell() {
         let sizes = [IslandExpandedSurface.music, .fileTray, .tools].flatMap { surface in
             IslandTimerToolMode.allCases.map { mode in

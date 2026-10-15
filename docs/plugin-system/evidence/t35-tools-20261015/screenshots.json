@@ -1,0 +1,58 @@
+[
+  {
+    "file": "tool-menu.jpg",
+    "captureCompletedUTC": "2026-10-15T06:19:15.594Z",
+    "callID": "call_d35fa1306c23453e8185a8b83937e0b6",
+    "SHA256": "08ae62d4c3af675fa6f68b4f42b46945bd5f8f60df24b9915fb116d84594f306",
+    "source": "Unmodified JPEG from this task actual CUA image output"
+  },
+  {
+    "file": "tool-selected.jpg",
+    "captureCompletedUTC": "2026-10-15T06:19:36.743Z",
+    "callID": "call_98f972a0585346bca868f0738dc51e71",
+    "SHA256": "a8a41c24e141d14d8823b11f9fe51de2da2ee59ccb123b7986fbe7fdd74abe1f",
+    "source": "Unmodified JPEG from this task actual CUA image output"
+  },
+  {
+    "file": "tool-incremented.jpg",
+    "captureCompletedUTC": "2026-10-15T06:19:47.965Z",
+    "callID": "call_9b94a4686fba4c7a9a9f8ce81e7694f9",
+    "SHA256": "57bcf7ef4b76d6c24ad3125c014602115a2761c9a139a8a6e3f8470cd29eb041",
+    "source": "Unmodified JPEG from this task actual CUA image output"
+  },
+  {
+    "file": "native-stopwatch.jpg",
+    "captureCompletedUTC": "2026-10-15T06:20:08.521Z",
+    "callID": "call_bb5c0178218040878535fc3e64b9c7b1",
+    "SHA256": "d198481fdec80bbf3d0dd9facb65ed3e1ce5710cedf273f2f89ddf320ca285f4",
+    "source": "Unmodified JPEG from this task actual CUA image output"
+  },
+  {
+    "file": "native-countdown.jpg",
+    "captureCompletedUTC": "2026-10-15T06:20:33.003Z",
+    "callID": "call_2a4b3f53e42d414488e457e536638a79",
+    "SHA256": "6ec26e83b30897084f24d16d38dbb82f29bbac03f4129429ed4e95e79dd93243",
+    "source": "Unmodified JPEG from this task actual CUA image output"
+  },
+  {
+    "file": "music-restored.jpg",
+    "captureCompletedUTC": "2026-10-15T06:20:55.584Z",
+    "callID": "call_c65cbd186ebd4c768780d6649eeeb67c",
+    "SHA256": "1379800c2f15fb3022537319c86c9a79ebca5725fdf8b59e7adf98f22b94399c",
+    "source": "Unmodified JPEG from this task actual CUA image output"
+  },
+  {
+    "file": "tray-restored.jpg",
+    "captureCompletedUTC": "2026-10-15T06:21:08.098Z",
+    "callID": "call_198b9c3b976e4e98a8d1fb2ff493500f",
+    "SHA256": "d50687b96a6e7a4fd30d96caf4666de603301d49c41e95be9c7570df46d95135",
+    "source": "Unmodified JPEG from this task actual CUA image output"
+  },
+  {
+    "file": "fold-reexpanded.jpg",
+    "captureCompletedUTC": "2026-10-15T06:24:19.946Z",
+    "callID": "call_2e9b7b78858245bbb51769dc64523ab4",
+    "SHA256": "61d8fc778e47babc6b6bb1191a6871e16c6b90bd9f785663567f413a7fb13582",
+    "source": "Unmodified JPEG from this task actual CUA image output"
+  }
+]

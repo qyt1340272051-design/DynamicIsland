@@ -28,17 +28,17 @@ nonisolated struct PluginActivityConverter: Sendable {
                 if let priority { activity.priority = priority }
                 if let presentation { activity.presentation = presentation }
                 if let actions { activity.actions = actions }
-                try PluginActivityConverter.validateLayoutActions(in: activity)
+                try PluginActivityConverter.validatePresentation(in: &activity)
                 return activity
             }
 
             guard let presentation else { throw PluginBridgeErrorCode.invalidArguments }
-            let activity = IslandActivity(
+            var activity = IslandActivity(
                 id: namespacedID, source: source, priority: priority ?? .normal,
                 lifecycle: .init(policy: policy ?? .transient),
                 presentation: presentation, createdAt: now, actions: actions ?? []
             )
-            try PluginActivityConverter.validateLayoutActions(in: activity)
+            try PluginActivityConverter.validatePresentation(in: &activity)
             return activity
         }
     }
@@ -70,7 +70,7 @@ nonisolated struct PluginActivityConverter: Sendable {
     }
 
     private static func parsePresentation(_ value: PluginBridgeJSON) throws -> ActivityPresentation {
-        let fields = try object(value, required: ["title"], optional: ["subtitle", "symbolName", "progress", "minimal", "compact", "expanded", "showsCompact"])
+        let fields = try object(value, required: ["title"], optional: ["subtitle", "symbolName", "progress", "minimal", "compact", "expanded", "showsCompact", "role"])
         let title = try string(fields["title"], maximumBytes: 256, nonempty: true)
         let subtitle = try fields["subtitle"].map { try string($0, maximumBytes: 256) }
         let symbolName = try fields["symbolName"].map {
@@ -86,12 +86,19 @@ nonisolated struct PluginActivityConverter: Sendable {
             guard case .boolean(let flag) = value else { throw PluginBridgeErrorCode.invalidArguments }
             return flag
         }
+        let role = try fields["role"].map { value -> ActivityPresentation.Role in
+            guard case .string(let rawValue) = value,
+                  let role = ActivityPresentation.Role(rawValue: rawValue) else {
+                throw PluginBridgeErrorCode.invalidArguments
+            }
+            return role
+        }
         return ActivityPresentation(
             title: title, subtitle: subtitle, symbolName: symbolName, progress: progress,
             minimal: try fields["minimal"].map(PluginIslandNodeConverter.parse),
             compact: try fields["compact"].map(PluginIslandNodeConverter.parse),
             expanded: try fields["expanded"].map(PluginIslandNodeConverter.parse),
-            showsCompact: showsCompact
+            showsCompact: showsCompact, role: role
         )
     }
 
@@ -106,10 +113,16 @@ nonisolated struct PluginActivityConverter: Sendable {
             }
     }
 
-    private static func validateLayoutActions(in activity: IslandActivity) throws {
+    private static func validatePresentation(in activity: inout IslandActivity) throws {
         let referenced = layoutActionIDs(in: activity.presentation)
         guard referenced.isSubset(of: Set(activity.actions.map(\.id))) else {
             throw PluginBridgeErrorCode.invalidArguments
+        }
+        if activity.isTool {
+            guard activity.lifecycle.policy == .persistent || activity.lifecycle.policy == .progress else {
+                throw PluginBridgeErrorCode.invalidArguments
+            }
+            activity.priority = .background
         }
     }
 

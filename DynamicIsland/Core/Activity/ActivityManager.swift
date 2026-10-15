@@ -13,6 +13,7 @@ public enum ActivityManagerError: Error, Equatable {
     case expired
     case disabledSource
     case quotaExceeded
+    case invalidToolPolicy
 }
 
 /// Host-owned identity for one admission of an Activity ID. An update keeps
@@ -46,9 +47,24 @@ nonisolated struct ActivityManagerDiagnostics: Equatable, Sendable {
 public final class ActivityManager: ObservableObject {
     @Published public private(set) var current: IslandActivity?
     @Published public private(set) var currentSnapshot: ActivitySnapshot?
+    @Published public private(set) var toolSnapshots: [ActivitySnapshot] = []
+    @Published public private(set) var selectedToolSnapshot: ActivitySnapshot?
+
+    private nonisolated struct ToolSelection: Equatable {
+        let id: String
+        let source: ActivitySource
+        let instanceToken: ActivityInstanceToken
+
+        init(_ snapshot: ActivitySnapshot) {
+            id = snapshot.activity.id
+            source = snapshot.activity.source
+            instanceToken = snapshot.instanceToken
+        }
+    }
 
     private var activities: [String: IslandActivity] = [:]
     private var instanceTokens: [String: ActivityInstanceToken] = [:]
+    private var selectedTool: ToolSelection?
     private var displayDeadlines: [String: Date] = [:]
     private var firstPresentedAt: [String: Date] = [:]
     private var currentSince: Date?
@@ -64,6 +80,24 @@ public final class ActivityManager: ObservableObject {
     }
 
     public func activity(id: String) -> IslandActivity? { activities[id] }
+
+    /// Only a Host user interaction can select a tool. Capture the original
+    /// snapshot in the chooser; never resolve a replacement token by ID.
+    /// Acceptance retains the choice while a higher-priority status is shown.
+    @discardableResult
+    public func selectTool(_ snapshot: ActivitySnapshot) -> Bool {
+        reconcile()
+        let selection = ToolSelection(snapshot)
+        guard toolSnapshots.contains(where: { ToolSelection($0) == selection }) else { return false }
+        selectedTool = selection
+        reconcile(userSelection: selection)
+        return true
+    }
+
+    public func clearToolSelection() {
+        selectedTool = nil
+        reconcile()
+    }
 
     func activityCount(for source: ActivitySource) -> Int {
         activities.values.filter { $0.source == source }.count
@@ -154,7 +188,11 @@ public final class ActivityManager: ObservableObject {
     func setPluginSourceEnabled(_ enabled: Bool, for source: ActivitySource) {
         guard source.kind == .plugin else { return }
         if enabled { enabledPluginSources.insert(source) }
-        else { enabledPluginSources.remove(source) }
+        else {
+            enabledPluginSources.remove(source)
+            if selectedTool?.source == source { selectedTool = nil }
+        }
+        reconcile()
     }
 
     /// Host-only signal for ongoing user interaction such as volume dragging.
@@ -190,6 +228,9 @@ public final class ActivityManager: ObservableObject {
               !activity.source.identifier.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
             throw ActivityManagerError.invalidIdentifier
         }
+        if activity.isTool, activity.lifecycle.policy != .persistent, activity.lifecycle.policy != .progress {
+            throw ActivityManagerError.invalidToolPolicy
+        }
         if activity.source.kind == .plugin, requiresPluginActivation,
            !enabledPluginSources.contains(activity.source) {
             throw ActivityManagerError.disabledSource
@@ -209,6 +250,7 @@ public final class ActivityManager: ObservableObject {
     }
 
     private func remove(id: String) {
+        if selectedTool?.id == id { selectedTool = nil }
         activities.removeValue(forKey: id)
         instanceTokens.removeValue(forKey: id)
         displayDeadlines.removeValue(forKey: id)
@@ -267,31 +309,83 @@ public final class ActivityManager: ObservableObject {
         }
     }
 
-    private func reconcile() {
+    private func refreshToolSnapshots(at now: Date) {
+        let snapshots = activities.values.filter { activity in
+            activity.isTool && !activity.isExpired(at: now)
+                && [.queued, .presented, .background].contains(activity.lifecycle.state)
+                && (!requiresPluginActivation || activity.source.kind != .plugin
+                    || enabledPluginSources.contains(activity.source))
+        }.sorted {
+            ($0.source.kind.rawValue, $0.source.identifier, $0.id)
+                < ($1.source.kind.rawValue, $1.source.identifier, $1.id)
+        }.compactMap { activity in
+            instanceTokens[activity.id].map { ActivitySnapshot(activity: activity, instanceToken: $0) }
+        }
+        let selected = selectedTool.flatMap { selection in
+            snapshots.first { ToolSelection($0) == selection }
+        }
+        if selected == nil { selectedTool = nil }
+        if toolSnapshots != snapshots { toolSnapshots = snapshots }
+        if selectedToolSnapshot != selected { selectedToolSnapshot = selected }
+    }
+
+    private func reconcile(userSelection: ToolSelection? = nil) {
         expireDue()
         trimNormalQueue()
         let now = scheduler.clock.now()
+        refreshToolSnapshots(at: now)
+        defer { refreshToolSnapshots(at: now) }
         let activeCurrent = current.flatMap { activities[$0.id] }.flatMap {
             $0.lifecycle.state == .presented ? $0 : nil
         }
-        let ranked = ActivityQueue.ordered(Array(activities.values), at: now, currentlyPresentedID: activeCurrent?.id)
+        let eligibleCurrent = activeCurrent.flatMap { activity in
+            !activity.isTool || selectedToolSnapshot?.activity.id == activity.id ? activity : nil
+        }
+        let eligibleActivities = activities.values.filter {
+            !$0.isTool || selectedToolSnapshot?.activity.id == $0.id
+        }
+        let ranked = ActivityQueue.ordered(eligibleActivities, at: now, currentlyPresentedID: eligibleCurrent?.id)
         var rateDeadline: Date?
+        func isRateEligible(_ activity: IslandActivity) -> Bool {
+            if activity.id == eligibleCurrent?.id || activity.priority == .critical { return true }
+            let minimum = max(0, scheduler.configuration.minimumIntervalBySource[activity.source] ?? 0)
+            guard minimum > 0, let last = lastPresentedAt[activity.source] else { return true }
+            let eligibleAt = last.addingTimeInterval(minimum)
+            if eligibleAt <= now { return true }
+            rateDeadline = minDate(rateDeadline, eligibleAt)
+            return false
+        }
         let candidate: IslandActivity?
-        if let activeCurrent, !activeCurrent.lifecycle.policy.isInterruptible {
-            candidate = activeCurrent
-        } else {
-            candidate = ranked.first { activity in
-                if activity.id == activeCurrent?.id || activity.priority == .critical { return true }
-                let minimum = max(0, scheduler.configuration.minimumIntervalBySource[activity.source] ?? 0)
-                guard minimum > 0, let last = lastPresentedAt[activity.source] else { return true }
-                let eligibleAt = last.addingTimeInterval(minimum)
-                if eligibleAt <= now { return true }
-                rateDeadline = minDate(rateDeadline, eligibleAt)
-                return false
+        if let eligibleCurrent, !eligibleCurrent.lifecycle.policy.isInterruptible {
+            candidate = eligibleCurrent
+        } else if let selected = selectedToolSnapshot {
+            // Explicit choice wins over ordinary persistent statuses, even
+            // their current-peer tie. Event statuses retain their ordering.
+            let blockingStatus = ranked.first { activity in
+                !activity.isTool
+                    && (activity.priority == .important || activity.priority == .critical
+                        || (activity.priority == .normal && activity.lifecycle.policy == .transient))
+                    && isRateEligible(activity)
             }
+            if let blockingStatus { candidate = blockingStatus }
+            else if userSelection == selectedTool || isRateEligible(selected.activity) {
+                candidate = selected.activity
+            } else {
+                candidate = ranked.first { !$0.isTool && isRateEligible($0) }
+            }
+        } else {
+            candidate = ranked.first(where: isRateEligible)
         }
         guard let next = candidate else {
-            setCurrent(activeCurrent)
+            if let activeCurrent, activeCurrent.isTool, var stored = activities[activeCurrent.id],
+               let background = try? stored.lifecycle.applying(.moveToBackground) {
+                stored.lifecycle = background
+                activities[stored.id] = stored
+                log(stored, from: .presented, to: .background, reason: "toolSelectionCleared")
+            }
+            setCurrent(nil)
+            currentSince = nil
+            ordinaryDebounceUntil = nil
             armNextWake(rateDeadline: rateDeadline)
             return
         }
@@ -303,7 +397,8 @@ public final class ActivityManager: ObservableObject {
         }
 
         let urgent = next.priority == .critical || next.priority == .important
-        if !urgent, activeCurrent != nil {
+        let explicitToolSelection = next.isTool && userSelection != nil && userSelection == selectedTool
+        if !urgent, !explicitToolSelection, eligibleCurrent != nil {
             if ordinaryDebounceUntil == nil {
                 ordinaryDebounceUntil = now.addingTimeInterval(max(0, scheduler.configuration.ordinaryDebounce))
             }

@@ -75,16 +75,11 @@ public struct IslandView: View {
     }
 
     private var expandedShellSize: CGSize {
-        IslandVisualStyle.expandedShellSize(
-            for: viewModel.expandedSurface,
-            timerMode: viewModel.timerShellMode,
-            hasTrayItems: !viewModel.trayItems.isEmpty,
-            hasError: viewModel.lastErrorMessage != nil,
-            hasTimerCompletion: viewModel.isTimerCompletionPresented
-        )
+        activityRuntime.expandedShellSize
     }
 
-    private var expandedShellResizeAnimation: Animation {
+    private var expandedShellResizeAnimation: Animation? {
+        guard !reduceMotion else { return nil }
         guard isExpanded, viewModel.expandedSurface == .tools else {
             return IslandExpansionAnimation.shell
         }
@@ -280,10 +275,50 @@ public struct IslandView: View {
     private var surfaceSwitcher: some View {
         HStack(spacing: 8) {
             surfaceButton(surface: .music, title: "音乐", systemName: "music.note")
+                .accessibilityIdentifier("island-surface-music")
             surfaceButton(surface: .fileTray, title: "拖盘", systemName: "tray.full")
-            surfaceButton(surface: .tools, title: "计时", systemName: "alarm.fill")
+                .accessibilityIdentifier("island-surface-tray")
+            toolsSurfaceSelector
             Spacer(minLength: 0)
             quitButton
+        }
+    }
+
+    @ViewBuilder
+    private var toolsSurfaceSelector: some View {
+        if activityManager.toolSnapshots.isEmpty {
+            surfaceButton(surface: .tools, title: "计时", systemName: "alarm.fill")
+                .accessibilityIdentifier("island-surface-tools")
+        } else {
+            let isSelected = viewModel.expandedSurface == .tools
+            Menu {
+                Button {
+                    activityRuntime.selectLegacySurface(.tools)
+                } label: {
+                    Label("内置计时", systemImage: "alarm.fill")
+                }
+                .accessibilityIdentifier("island-tool-native")
+                Divider()
+                ForEach(activityManager.toolSnapshots, id: \.activity.id) { snapshot in
+                    Button {
+                        _ = activityRuntime.selectTool(snapshot)
+                    } label: {
+                        Label(snapshot.activity.presentation.title,
+                              systemImage: snapshot.activity.presentation.symbolName ?? "puzzlepiece.extension")
+                    }
+                    .accessibilityIdentifier("island-tool-\(snapshot.activity.id)")
+                }
+            } label: {
+                surfaceIcon(surface: .tools, systemName: "alarm.fill")
+            }
+            .menuStyle(.borderlessButton)
+            .menuIndicator(.hidden)
+            .frame(width: 28, height: 28)
+            .foregroundStyle(isSelected ? .white : .white.opacity(0.68))
+            .animation(reduceMotion ? nil : IslandSurfaceTransition.animation, value: isSelected)
+            .help("计时与插件工具")
+            .accessibilityLabel("计时")
+            .accessibilityIdentifier("island-tool-selector")
         }
     }
 
@@ -368,6 +403,7 @@ public struct IslandView: View {
             },
             onAction: { action in route(action, from: snapshot) }
         )
+        .id(snapshot.instanceToken)
     }
 
     private var fileTrayExpandedContent: some View {
@@ -526,22 +562,27 @@ public struct IslandView: View {
     private func surfaceButton(surface: IslandExpandedSurface, title: String, systemName: String) -> some View {
         let isSelected = viewModel.expandedSurface == surface
         return Button {
-            viewModel.selectExpandedSurface(surface)
+            activityRuntime.selectLegacySurface(surface)
         } label: {
-            Image(systemName: systemName)
-                .font(.system(size: 12, weight: .semibold))
-                .frame(width: 28, height: 28)
-                .background(Color.white.opacity(isSelected ? 0.18 : 0.08), in: Circle())
-                .overlay {
-                    Circle()
-                        .stroke(Color.white.opacity(isSelected ? 0.22 : 0.08), lineWidth: 0.5)
-                }
+            surfaceIcon(surface: surface, systemName: systemName)
         }
         .buttonStyle(.plain)
         .foregroundStyle(isSelected ? .white : .white.opacity(0.68))
-        .animation(IslandSurfaceTransition.animation, value: isSelected)
+        .animation(reduceMotion ? nil : IslandSurfaceTransition.animation, value: isSelected)
         .help(title)
         .accessibilityLabel(title)
+    }
+
+    private func surfaceIcon(surface: IslandExpandedSurface, systemName: String) -> some View {
+        let isSelected = viewModel.expandedSurface == surface
+        return Image(systemName: systemName)
+            .font(.system(size: 12, weight: .semibold))
+            .frame(width: 28, height: 28)
+            .background(Color.white.opacity(isSelected ? 0.18 : 0.08), in: Circle())
+            .overlay {
+                Circle()
+                    .stroke(Color.white.opacity(isSelected ? 0.22 : 0.08), lineWidth: 0.5)
+            }
     }
 
     private func finderIcon(for item: TrayFileItem) -> some View {

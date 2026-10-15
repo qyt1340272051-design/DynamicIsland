@@ -198,13 +198,14 @@ nonisolated enum PluginJSBridgeBootstrap {
             }
             function validateActivityPresentation(params) {
                 // Read only the safe snapshot. Host independently validates the
-                // whole Activity and never accepts coercion of an optional flag.
+                // whole Activity and never coerces optional presentation fields.
                 if (params === null || typeof params !== 'object' || isArray(params)) return;
                 const presentation = descriptor(params, 'presentation');
                 if (!presentation) return;
                 const fields = fieldsWithShape(presentation.value, ['title'],
-                    ['subtitle', 'symbolName', 'progress', 'minimal', 'compact', 'expanded', 'showsCompact']);
+                    ['subtitle', 'symbolName', 'progress', 'minimal', 'compact', 'expanded', 'showsCompact', 'role']);
                 if (descriptor(fields, 'showsCompact') && typeof fields.showsCompact !== 'boolean') throw null;
+                if (descriptor(fields, 'role') && fields.role !== 'status' && fields.role !== 'tool') throw null;
             }
             function hasHTTPSPrefix(url) {
                 const scheme = 'https://';

@@ -1,4 +1,5 @@
 import AppKit
+import Combine
 import Foundation
 
 /// One Host-owned Activity graph for the production island. Providers publish
@@ -16,6 +17,8 @@ public final class IslandActivityRuntime {
     private let music: MusicActivityProvider
     private let volume: VolumeActivityProvider
     private let battery: BatteryActivityProvider?
+    private weak var viewModel: IslandViewModel?
+    private var toolContextObservation: AnyCancellable?
 
     private let musicRegistration: UUID
 
@@ -59,11 +62,30 @@ public final class IslandActivityRuntime {
         self.music = music
         self.volume = volume
         self.battery = battery
+        self.viewModel = viewModel
         musicRegistration = music.registerActions(with: router)
+        // Use the values delivered by the publishers: @Published emits before
+        // the ViewModel's stored properties have changed. No delayed callback
+        // may leave a folded or displaced tool temporarily interactive.
+        toolContextObservation = Publishers.CombineLatest4(
+            viewModel.$isHovering, viewModel.$isDragging,
+            viewModel.$isFileTrayLocked, viewModel.$expandedSurface
+        ).combineLatest(viewModel.$isTimerCompletionPresented)
+            .sink { [weak self] context, hasCompletion in
+                let (hovering, dragging, trayLocked, surface) = context
+                let state = IslandViewModel.presentationState(
+                    isDragging: dragging, isHovering: hovering,
+                    isFileTrayLocked: trayLocked, isTimerCompletionPresented: hasCompletion
+                )
+                if state != .expanded || surface != .tools || hasCompletion {
+                    self?.manager.clearToolSelection()
+                }
+            }
     }
 
     /// App teardown also removes the scheduler's system observers and deadline.
     public func shutdownPlugins() {
+        manager.clearToolSelection()
         pluginSchedulerEnvironment.stop()
         pluginLifecycle.shutdown()
         pluginScheduler.shutdown()
@@ -71,6 +93,39 @@ public final class IslandActivityRuntime {
 
     public var isCompactActivityVisible: Bool {
         manager.currentSnapshot?.activity.presentation.isCompactVisible == true
+    }
+
+    /// A user chooses the exact item captured by the Host menu. Inventory
+    /// snapshots never authorize renderer actions; only currentSnapshot does.
+    @discardableResult
+    public func selectTool(_ snapshot: ActivitySnapshot) -> Bool {
+        guard let viewModel, viewModel.presentationState == .expanded,
+              !viewModel.isDragging, !viewModel.isTimerCompletionPresented else { return false }
+        guard manager.selectTool(snapshot) else { return false }
+        viewModel.selectExpandedSurface(.tools)
+        return true
+    }
+
+    public func selectLegacySurface(_ surface: IslandExpandedSurface) {
+        manager.clearToolSelection()
+        viewModel?.selectExpandedSurface(surface)
+    }
+
+    public var currentActivityUsesToolLayout: Bool {
+        manager.currentSnapshot?.activity.isTool == true
+    }
+
+    /// The rendered shell and the panel's pointer region share all inputs.
+    public var expandedShellSize: CGSize {
+        guard let viewModel else { return IslandVisualStyle.expandedShellSize }
+        return IslandVisualStyle.expandedShellSize(
+            for: viewModel.expandedSurface,
+            timerMode: viewModel.timerShellMode,
+            hasTrayItems: !viewModel.trayItems.isEmpty,
+            hasError: viewModel.lastErrorMessage != nil,
+            hasTimerCompletion: viewModel.isTimerCompletionPresented,
+            hasPresentedTool: currentActivityUsesToolLayout
+        )
     }
 
     /// Only the Host-owned Battery Activity needs enough side clearance to

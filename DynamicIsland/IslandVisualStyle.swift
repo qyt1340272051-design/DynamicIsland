@@ -36,8 +36,12 @@ public enum IslandVisualStyle {
         timerMode: IslandTimerToolMode,
         hasTrayItems: Bool,
         hasError: Bool,
-        hasTimerCompletion: Bool
+        hasTimerCompletion: Bool,
+        hasPresentedTool: Bool = false
     ) -> CGSize {
+        // The currently presented tool owns the full Host canvas. Hidden
+        // legacy tab state must not shorten its validated content budget.
+        if hasPresentedTool { return expandedShellSize }
         let height: CGFloat
         if hasTimerCompletion || (surface == .fileTray && hasError) {
             height = expandedTimerHeight

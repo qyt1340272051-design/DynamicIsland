@@ -4,6 +4,124 @@ import XCTest
 
 @MainActor
 final class IslandActivityRuntimeTests: XCTestCase {
+    func testPublicToolExampleRequiresHostSelectionAndRoutesOnlyVisibleInstance() async throws {
+        let model = IslandViewModel.preview()
+        let runtime = IslandActivityRuntime(viewModel: model)
+        defer { runtime.shutdownPlugins() }
+        let root = URL(fileURLWithPath: #filePath).deletingLastPathComponent().deletingLastPathComponent()
+            .appendingPathComponent("docs/plugin-system/examples/tool-demo", isDirectory: true)
+        let package = try PluginValidator().validateExpandedPackage(
+            at: root, context: .init(hostVersion: SemanticVersion("0.6.0"), occupiedPluginIDs: [],
+                                    allowedContainerURL: root.deletingLastPathComponent())
+        )
+        runtime.pluginLifecycle.pluginDidLoad(package, isEnabled: true)
+        try await waitForTool { runtime.manager.toolSnapshots.count == 1 }
+        let tool = try XCTUnwrap(runtime.manager.toolSnapshots.first)
+        let source = tool.activity.source
+        XCTAssertNotEqual(runtime.manager.current?.id, tool.activity.id)
+        XCTAssertFalse(runtime.selectTool(tool), "A folded island cannot choose a tool.")
+        XCTAssertEqual(runtime.router.dispatch(id: tool.activity.id, source: source, instanceToken: tool.instanceToken,
+                                               action: .init(actionID: "increment", value: .none)), .inactiveActivity)
+
+        model.setHovering(true)
+        XCTAssertTrue(runtime.selectTool(tool))
+        XCTAssertEqual(model.expandedSurface, .tools)
+        XCTAssertEqual(runtime.manager.currentSnapshot?.instanceToken, tool.instanceToken)
+        XCTAssertEqual(runtime.expandedShellSize, CGSize(width: 480, height: 200))
+        XCTAssertEqual(runtime.router.dispatch(id: tool.activity.id, source: source, instanceToken: tool.instanceToken,
+                                               action: .init(actionID: "increment", value: .none)), .handled)
+        try await waitForTool {
+            runtime.manager.current?.presentation.expanded == .vStack(.init([
+                .text(.init("已点击 1 次")),
+                .button(.init(actionID: "increment", label: .text(.init("增加一次")), accessibilityLabel: "增加一次"))
+            ]))
+        }
+
+        try publishTransientOverride(in: runtime)
+        XCTAssertFalse(runtime.currentActivityUsesToolLayout)
+        XCTAssertEqual(runtime.manager.selectedToolSnapshot?.instanceToken, tool.instanceToken)
+        XCTAssertEqual(runtime.router.dispatch(id: tool.activity.id, source: source, instanceToken: tool.instanceToken,
+                                               action: .init(actionID: "increment", value: .none)), .inactiveActivity)
+        let prompt = try XCTUnwrap(runtime.manager.current)
+        try runtime.manager.end(id: prompt.id, source: prompt.source)
+        try await waitForTool { runtime.manager.currentSnapshot?.instanceToken == tool.instanceToken }
+
+        runtime.pluginLifecycle.pluginDidChangeEnablement(id: package.manifest.id, isEnabled: false)
+        XCTAssertTrue(runtime.manager.toolSnapshots.isEmpty)
+        XCTAssertNil(runtime.manager.selectedToolSnapshot)
+        XCTAssertEqual(runtime.router.dispatch(id: tool.activity.id, source: source, instanceToken: tool.instanceToken,
+                                               action: .init(actionID: "increment", value: .none)), .inactiveActivity)
+    }
+
+    func testToolSelectionClearsSynchronouslyOnFoldDragAndLegacySurfaceChoice() throws {
+        let model = IslandViewModel.preview()
+        let runtime = IslandActivityRuntime(viewModel: model)
+        defer { runtime.shutdownPlugins() }
+        try runtime.manager.publish(hostTool())
+        let tool = try XCTUnwrap(runtime.manager.toolSnapshots.first)
+
+        model.setHovering(true)
+        XCTAssertTrue(runtime.selectTool(tool))
+        model.endHovering()
+        XCTAssertNil(runtime.manager.selectedToolSnapshot)
+        XCTAssertFalse(runtime.currentActivityUsesToolLayout)
+
+        model.setHovering(true)
+        XCTAssertTrue(runtime.selectTool(tool))
+        model.selectExpandedSurface(.music)
+        XCTAssertNil(runtime.manager.selectedToolSnapshot)
+
+        XCTAssertTrue(runtime.selectTool(tool))
+        runtime.selectLegacySurface(.tools)
+        XCTAssertEqual(model.expandedSurface, .tools)
+        XCTAssertNil(runtime.manager.selectedToolSnapshot)
+
+        XCTAssertTrue(runtime.selectTool(tool))
+        model.setDragging(true)
+        XCTAssertNil(runtime.manager.selectedToolSnapshot)
+        XCTAssertEqual(model.expandedSurface, .fileTray)
+        XCTAssertFalse(runtime.selectTool(tool))
+        model.setDragging(false)
+
+        try runtime.manager.end(id: tool.activity.id, source: tool.activity.source)
+        model.selectExpandedSurface(.music)
+        XCTAssertFalse(runtime.selectTool(tool))
+        XCTAssertEqual(model.expandedSurface, .music, "A stale menu must not change the selected surface.")
+    }
+
+    func testNativeTimerCompletionClearsToolChoiceAndKeepsItsLegacyGeometry() throws {
+        let model = IslandViewModel.preview()
+        let runtime = IslandActivityRuntime(viewModel: model)
+        defer { runtime.shutdownPlugins() }
+        try runtime.manager.publish(hostTool())
+        let tool = try XCTUnwrap(runtime.manager.toolSnapshots.first)
+        model.setHovering(true)
+        XCTAssertTrue(runtime.selectTool(tool))
+        let start = Date()
+        model.timerTools.selectedMode = .countdown
+        model.timerTools.startSelectedTimer(at: start)
+        model.timerTools.refresh(at: start.addingTimeInterval(model.timerTools.countdownDuration + 1))
+        XCTAssertTrue(model.isTimerCompletionPresented)
+        XCTAssertNil(runtime.manager.selectedToolSnapshot)
+        XCTAssertFalse(runtime.selectTool(tool))
+        XCTAssertEqual(runtime.expandedShellSize.height, IslandVisualStyle.expandedTimerHeight)
+        model.acknowledgeTimerCompletion()
+    }
+
+    private func hostTool() -> IslandActivity {
+        .init(id: "host-test-tool", source: .init(kind: .builtIn, identifier: "host-test-tool"),
+              priority: .background, lifecycle: .init(policy: .persistent),
+              presentation: .init(title: "Host Test Tool", showsCompact: false, role: .tool), createdAt: Date())
+    }
+
+    private func waitForTool(_ condition: @escaping @MainActor () -> Bool) async throws {
+        let deadline = ContinuousClock.now.advanced(by: .seconds(4))
+        while !condition(), ContinuousClock.now < deadline {
+            try await Task.sleep(for: .milliseconds(5))
+        }
+        XCTAssertTrue(condition(), "Tool state did not settle before the deadline.")
+    }
+
     func testProductionRuntimeSharesSchedulerAndShutdownRemovesPendingDeadline() async throws {
         let runtime = IslandActivityRuntime(viewModel: .preview())
         defer { runtime.shutdownPlugins() }

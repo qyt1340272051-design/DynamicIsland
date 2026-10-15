@@ -2,7 +2,7 @@
 
 日期：2026-10-14。本页是只读审计和方案候选，不是已实现的 Plugin API 合约。T31 的[实际后台空闲验收](evidence/t31-background-20261014.md)已关闭，T24–T34 直接依赖均已 verified，可以开始实施。
 
-实施进度见 [T35 记录](phase-7-t35-pomodoro.md)。首个子步骤已公开已有 showsCompact 字段；其余公共能力仍为下文候选，尚未实现。
+实施进度见 [T35 记录](phase-7-t35-pomodoro.md)。子步骤 1A / 1B 已实现 showsCompact、工具角色、实例选择与共享几何，自动化及实际普通 Release UI 验收完成；精确计时公共能力仍为下文候选，尚未实现。
 
 ## 必须迁移的生产代码
 

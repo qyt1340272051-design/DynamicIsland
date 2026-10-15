@@ -14,6 +14,8 @@ final class ActivityPresentationTests: XCTestCase {
         XCTAssertNil(presentation.minimal)
         XCTAssertNil(presentation.compact)
         XCTAssertNil(presentation.expanded)
+        XCTAssertNil(presentation.role)
+        XCTAssertEqual(presentation.effectiveRole, .status)
         XCTAssertTrue(presentation.isCompactVisible)
         XCTAssertEqual(presentation.resolvedNode(for: .minimal), .icon(.init("timer")))
         XCTAssertEqual(presentation.resolvedNode(for: .compact), .hStack(.init([
@@ -32,6 +34,38 @@ final class ActivityPresentationTests: XCTestCase {
         XCTAssertNil(object["compact"])
         XCTAssertNil(object["expanded"])
         XCTAssertNil(object["showsCompact"])
+        XCTAssertNil(object["role"])
+    }
+
+    func testExplicitRolesRoundTripAndOnlyToolClassifiesActivityAsTool() throws {
+        for role in [ActivityPresentation.Role.status, .tool] {
+            let presentation = ActivityPresentation(title: "Tool", role: role)
+            let data = try JSONEncoder().encode(presentation)
+            XCTAssertEqual(try JSONDecoder().decode(ActivityPresentation.self, from: data), presentation)
+            let object = try XCTUnwrap(JSONSerialization.jsonObject(with: data) as? [String: Any])
+            XCTAssertEqual(object["role"] as? String, role.rawValue)
+
+            for kind in [ActivitySource.Kind.builtIn, .plugin, .external] {
+                var activity = IslandActivity(
+                    id: "tool", source: .init(kind: kind, identifier: "example"), priority: .background,
+                    lifecycle: .init(policy: .persistent), presentation: presentation,
+                    createdAt: Date(timeIntervalSinceReferenceDate: 1_000)
+                )
+                XCTAssertEqual(activity.isTool, role == .tool)
+                let encoded = try JSONEncoder().encode(activity)
+                XCTAssertEqual(try JSONDecoder().decode(IslandActivity.self, from: encoded), activity)
+                activity.presentation.role = nil
+                XCTAssertFalse(activity.isTool)
+                XCTAssertEqual(activity.presentation.effectiveRole, .status)
+            }
+        }
+    }
+
+    func testUnknownOrNonStringRoleCannotDecode() {
+        for roleJSON in [#""unknown""#, #""Tool""#, #"" tool""#, "false", "0", "[]", "{}"] {
+            let json = Data("{\"title\":\"Tool\",\"role\":\(roleJSON)}".utf8)
+            XCTAssertThrowsError(try JSONDecoder().decode(ActivityPresentation.self, from: json), roleJSON)
+        }
     }
 
     func testProviderCanSuppressCompactPresentationAndRoundTripIt() throws {

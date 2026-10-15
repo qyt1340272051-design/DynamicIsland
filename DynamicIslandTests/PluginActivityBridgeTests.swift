@@ -1,5 +1,6 @@
 import AppKit
 import Foundation
+import JavaScriptCore
 import SwiftUI
 import XCTest
 @testable import DynamicIsland
@@ -28,6 +29,9 @@ final class PluginActivityBridgeTests: XCTestCase {
         XCTAssertNil(activity.presentation.compact)
         XCTAssertNil(activity.presentation.expanded)
         XCTAssertNil(activity.presentation.showsCompact)
+        XCTAssertNil(activity.presentation.role)
+        XCTAssertEqual(activity.presentation.effectiveRole, .status)
+        XCTAssertFalse(activity.isTool)
         XCTAssertTrue(activity.presentation.isCompactVisible)
     }
 
@@ -59,6 +63,110 @@ final class PluginActivityBridgeTests: XCTestCase {
             XCTAssertEqual(fixture.activity("policy\(index)")?.lifecycle.policy, policy.1)
             XCTAssertTrue(fixture.activity("policy\(index)")?.lifecycle.policy.isInterruptible == true)
         }
+    }
+
+    func testToolPublishRequiresPersistentOrProgressAndCapsEveryPriorityAtBackground() async throws {
+        let fixture = ActivityBridgeFixture()
+        defer { fixture.shutdown() }
+        let package = try package()
+        let context = try fixture.load(package)
+        for (policyIndex, policy) in ["persistent", "progress"].enumerated() {
+            for (priorityIndex, priority) in ["background", "normal", "important", "critical"].enumerated() {
+                let id = "tool\(policyIndex)\(priorityIndex)"
+                try await publish(fixture, package: package, context: context, params: [
+                    "id": id, "priority": priority, "lifecycle": ["policy": policy],
+                    "presentation": ["title": "Tool", "role": "tool"]
+                ])
+                let activity = try XCTUnwrap(fixture.activity(id))
+                XCTAssertTrue(activity.isTool)
+                XCTAssertEqual(activity.presentation.role, .tool)
+                XCTAssertEqual(activity.priority, .background)
+                XCTAssertEqual(activity.lifecycle.policy.rawValue, policy)
+            }
+        }
+        for policy in [nil, "transient", "critical"] as [String?] {
+            var params: [String: Any] = ["id": "invalid", "presentation": ["title": "Invalid", "role": "tool"]]
+            if let policy { params["lifecycle"] = ["policy": policy] }
+            let rejected = try await request(fixture, package: package, context: context, method: "activity.publish", params: params)
+            XCTAssertEqual(errorCode(rejected), "invalidArguments")
+            XCTAssertNil(fixture.activity("invalid"))
+        }
+        XCTAssertEqual(fixture.manager.diagnostics.activityCount, 8)
+    }
+
+    func testHostRejectsInvalidRolesWithoutPartiallyPublishingOrUpdating() async throws {
+        let fixture = ActivityBridgeFixture()
+        defer { fixture.shutdown() }
+        let package = try package()
+        let context = try fixture.load(package)
+        try await publish(fixture, package: package, context: context, params: [
+            "id": "original", "lifecycle": ["policy": "persistent"], "priority": "normal",
+            "presentation": ["title": "Original", "role": "status", "progress": 0.25],
+            "actions": [["id": "open", "title": "Open"]]
+        ])
+        let before = try XCTUnwrap(fixture.activity("original"))
+        let token = fixture.manager.currentSnapshot?.instanceToken
+        let invalidRoles: [Any] = [NSNull(), true, 0, 1.5, ["tool"], ["role": "tool"], "", "Tool", " tool", "unknown"]
+        for role in invalidRoles {
+            let update = try await request(fixture, package: package, context: context, method: "activity.update", params: [
+                "id": "original", "priority": "background", "actions": [],
+                "presentation": ["title": "Must not replace", "role": role]
+            ])
+            XCTAssertEqual(errorCode(update), "invalidArguments")
+            XCTAssertEqual(fixture.activity("original"), before)
+            let invalidPublish = try await request(fixture, package: package, context: context, method: "activity.publish", params: [
+                "id": "invalid", "lifecycle": ["policy": "persistent"],
+                "presentation": ["title": "Must not publish", "role": role]
+            ])
+            XCTAssertEqual(errorCode(invalidPublish), "invalidArguments")
+            XCTAssertNil(fixture.activity("invalid"))
+            XCTAssertEqual(fixture.manager.diagnostics.activityCount, 1)
+            XCTAssertEqual(fixture.manager.currentSnapshot?.instanceToken, token)
+        }
+    }
+
+    func testToolUpdateChecksFinalPolicyWithoutChangingExistingLifetimeOrOtherFields() async throws {
+        let fixture = ActivityBridgeFixture()
+        defer { fixture.shutdown() }
+        let package = try package()
+        let context = try fixture.load(package)
+        for (id, policy) in [("transient", "transient"), ("persistent", "persistent")] {
+            try await publish(fixture, package: package, context: context, params: [
+                "id": id, "priority": "normal", "lifecycle": ["policy": policy],
+                "presentation": ["title": "Original", "role": "status"],
+                "actions": [["id": "open", "title": "Open"]]
+            ])
+        }
+        let transient = try XCTUnwrap(fixture.activity("transient"))
+        for lifecycle in [nil, "persistent", "progress"] as [String?] {
+            var params: [String: Any] = [
+                "id": "transient", "priority": "background", "actions": [],
+                "presentation": ["title": "Must not commit", "role": "tool"]
+            ]
+            if let lifecycle { params["lifecycle"] = ["policy": lifecycle] }
+            let rejected = try await request(fixture, package: package, context: context, method: "activity.update", params: params)
+            XCTAssertEqual(errorCode(rejected), "invalidArguments")
+            XCTAssertEqual(fixture.activity("transient"), transient)
+        }
+
+        let persistent = try XCTUnwrap(fixture.activity("persistent"))
+        let immutablePolicy = try await request(fixture, package: package, context: context, method: "activity.update", params: [
+            "id": "persistent", "lifecycle": ["policy": "progress"], "actions": [],
+            "presentation": ["title": "Must not change policy", "role": "tool"]
+        ])
+        XCTAssertEqual(errorCode(immutablePolicy), "invalidArguments")
+        XCTAssertEqual(fixture.activity("persistent"), persistent)
+
+        let toolUpdate = try await request(fixture, package: package, context: context, method: "activity.update", params: [
+            "id": "persistent", "presentation": ["title": "Tool", "role": "tool"]
+        ])
+        XCTAssertEqual(toolUpdate["ok"] as? Bool, true)
+        let tool = try XCTUnwrap(fixture.activity("persistent"))
+        XCTAssertTrue(tool.isTool)
+        XCTAssertEqual(tool.priority, .background)
+        XCTAssertEqual(tool.lifecycle.policy, persistent.lifecycle.policy)
+        XCTAssertEqual(tool.createdAt, persistent.createdAt)
+        XCTAssertEqual(tool.actions, persistent.actions)
     }
 
     func testUpdatePatchesTopLevelFieldsReplacesPresentationAndPreservesInstance() async throws {
@@ -676,6 +784,114 @@ final class PluginActivityBridgeTests: XCTestCase {
         let code = try await noUpdate.evaluateForTesting("code")
         XCTAssertEqual(code, .string("capabilityRequired"))
         XCTAssertNil(fixture.activity("missing", pluginID: "com.example.beta"))
+    }
+
+    func testJavaScriptSnapshotRejectsInvalidRolesBeforeNativeDispatchWithoutInvokingGetters() throws {
+        let context = try XCTUnwrap(JSContext())
+        _ = context.evaluateScript("""
+            globalThis.roleRequests = [];
+            globalThis.getterCalls = 0;
+            globalThis.roleNative = function(id, payload) { roleRequests.push(payload); };
+            """)
+        _ = context.evaluateScript(PluginJSBridgeBootstrap.script(
+            metadataJSON: #"{"apiVersion":"1.0.0","plugin":{"id":"com.example.alpha","name":"Role Test","version":"1.0.0"}}"#,
+            nativeKey: "roleNative"
+        ))
+        XCTAssertNil(context.exception)
+        _ = context.evaluateScript("""
+            for (const role of [null, undefined, false, 0, 1.5, [], {}, '', 'Tool', ' tool', 'unknown']) {
+                for (const method of ['publish', 'update']) {
+                    island.activity[method]({id:'tool',lifecycle:{policy:'persistent'},
+                        presentation:{title:'Invalid',role:role}}).catch(function() {});
+                }
+            }
+            const getterPresentation = {title:'Getter'};
+            Object.defineProperty(getterPresentation, 'role', {enumerable:true,
+                get:function(){ getterCalls++; return 'tool'; }});
+            island.activity.publish({id:'tool',lifecycle:{policy:'persistent'},
+                presentation:getterPresentation}).catch(function() {});
+            island.activity.update({id:'tool',presentation:{title:'Coercion',
+                role:{toString:function(){ getterCalls++; return 'tool'; }}}}).catch(function() {});
+            """)
+        XCTAssertNil(context.exception)
+        XCTAssertEqual(context.evaluateScript("roleRequests.length")?.toInt32(), 0)
+        XCTAssertEqual(context.evaluateScript("getterCalls")?.toInt32(), 0)
+
+        _ = context.evaluateScript("""
+            island.activity.publish({id:'tool',lifecycle:{policy:'persistent'},
+                presentation:{title:'Tool',role:'tool'}}).catch(function() {});
+            island.activity.update({id:'tool',presentation:{title:'Status',role:'status'}}).catch(function() {});
+            """)
+        XCTAssertNil(context.exception)
+        let serialized = try XCTUnwrap(context.evaluateScript("JSON.stringify(roleRequests)")?.toString())
+        let requests = try XCTUnwrap(JSONSerialization.jsonObject(with: Data(serialized.utf8)) as? [String])
+        XCTAssertEqual(requests.count, 2)
+        for (payload, role) in zip(requests, ["tool", "status"]) {
+            let envelope = try decode(payload)
+            let params = try XCTUnwrap(envelope["params"] as? [String: Any])
+            let presentation = try XCTUnwrap(params["presentation"] as? [String: Any])
+            XCTAssertEqual(presentation["role"] as? String, role)
+        }
+    }
+
+    func testRealJavaScriptToolPublishAndRoleUpdatesApplyFinalHostPolicy() async throws {
+        let fixture = ActivityBridgeFixture()
+        defer { fixture.shutdown() }
+        let runtime = try fixture.loadJavaScript(package(source: """
+            function onStart() {
+                island.activity.publish({id:'tool',priority:'critical',lifecycle:{policy:'progress'},
+                    presentation:{title:'Tool',role:'tool',progress:0.25}})
+                    .then(function(){ globalThis.published = true; });
+            }
+            """))
+        try await marker(runtime, "published")
+        let published = try XCTUnwrap(fixture.activity("tool"))
+        XCTAssertTrue(published.isTool)
+        XCTAssertEqual(published.presentation.role, .tool)
+        XCTAssertEqual(published.lifecycle.policy, .progress)
+        XCTAssertEqual(published.priority, .background)
+
+        _ = try await runtime.evaluateForTesting("""
+            island.activity.update({id:'tool',priority:'important'})
+                .then(function(){ globalThis.patched = true; }); void 0
+            """)
+        try await marker(runtime, "patched")
+        XCTAssertEqual(fixture.activity("tool")?.presentation, published.presentation)
+        XCTAssertEqual(fixture.activity("tool")?.priority, .background)
+
+        _ = try await runtime.evaluateForTesting("""
+            island.activity.update({id:'tool',priority:'normal',
+                presentation:{title:'Status',role:'status'}})
+                .then(function(){ globalThis.status = true; }); void 0
+            """)
+        try await marker(runtime, "status")
+        let status = try XCTUnwrap(fixture.activity("tool"))
+        XCTAssertFalse(status.isTool)
+        XCTAssertEqual(status.presentation.role, .status)
+        XCTAssertEqual(status.priority, .normal)
+        XCTAssertEqual(status.lifecycle.policy, published.lifecycle.policy)
+        XCTAssertEqual(status.createdAt, published.createdAt)
+
+        _ = try await runtime.evaluateForTesting("""
+            island.activity.update({id:'tool',presentation:{title:'Tool again',role:'tool'}})
+                .then(function(){ globalThis.toolAgain = true; }); void 0
+            """)
+        try await marker(runtime, "toolAgain")
+        XCTAssertTrue(fixture.activity("tool")?.isTool == true)
+        XCTAssertEqual(fixture.activity("tool")?.priority, .background)
+
+        _ = try await runtime.evaluateForTesting("""
+            island.activity.update({id:'tool',priority:'normal',presentation:{title:'Legacy status'}})
+                .then(function(){ globalThis.legacy = true; }); void 0
+            """)
+        try await marker(runtime, "legacy")
+        let legacy = try XCTUnwrap(fixture.activity("tool"))
+        XCTAssertFalse(legacy.isTool)
+        XCTAssertNil(legacy.presentation.role)
+        XCTAssertEqual(legacy.presentation.effectiveRole, .status)
+        XCTAssertEqual(legacy.priority, .normal)
+        XCTAssertEqual(legacy.lifecycle.policy, published.lifecycle.policy)
+        XCTAssertEqual(legacy.createdAt, published.createdAt)
     }
 
     // MARK: Helpers
