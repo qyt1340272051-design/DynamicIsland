@@ -1,0 +1,21 @@
+{
+  "date": "2026-10-15",
+  "baseCommit": "f0231b4",
+  "scope": "T35 2C0 Host-only read-only display projection and formatting",
+  "result": "Passed",
+  "totalTests": 27,
+  "failures": 0,
+  "newTests": 5,
+  "testResults": "/tmp/dynamic-island-t35-display-20261015/TestResults.xcresult",
+  "log": "/tmp/dynamic-island-t35-display-20261015.log",
+  "sourceSHA256": {
+    "DynamicIsland/Plugins/PluginCountdownBroker.swift": "4b21d43d282c9c26c5c3914115eeea62c5ac42a88fbb1d2fb2d513dbc29686de",
+    "DynamicIsland/Plugins/PluginCountdownDisplay.swift": "e275bafa6bed29c172971fa81d6ca8c634647a74729f583036d2b49a7d0ea74c",
+    "DynamicIslandTests/PluginCountdownDisplayTests.swift": "2c6ed608b2be91ab10765ca68d5a3648cc118e5c71a5a5be054e60ca58292cac"
+  },
+  "limitations": [
+    "Renderer not connected yet",
+    "No visible shared ticker yet",
+    "No UI or Release build claimed for this small unwired Host-only change"
+  ]
+}

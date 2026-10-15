@@ -74,3 +74,5 @@ View 与 Panel hover 共用 `runtime.expandedShellSize`；实际呈现工具时 
 详见[公开合约与生命周期说明](t35-countdown-api.md)及[CI 和源码证据](evidence/t35-countdown-20261015.json)。本子步骤的 Host/API 自动化不能替代真实睡眠、低功耗、能耗或最终 Pomodoro UI 验收。下一步从通用声明式时间节点和仅可见节点的共享显示 tick 开始，再实现官方 JS 包、删除专用 Swift 及完成实际安装计时验收。T35 保持 in progress，T36 pending。
 
 本子步骤完整 `./Scripts/ci.sh`：**795 total / 794 passed / 1 skipped / 0 failures**，普通 Release build passed。新增 62 项 countdown 测试；唯一 skip 是既有显式截图矩阵生成。首轮修正测试 helper 与诊断属性名，资源准入包装按 Void context.perform 的真实签名拆分后通过；无新增编译错误。
+
+子步骤 2C0 已增加[Host 只读显示快照与时间格式化](t35-countdown-api.md#子步骤-2c0只读显示底座)，防止绘制时触发完成 observer。Renderer / 节点 / 可见共享 ticker 的接入仍是下一步，未宣称秒级 UI 已完成。

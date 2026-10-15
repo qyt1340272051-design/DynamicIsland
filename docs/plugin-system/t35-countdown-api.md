@@ -55,3 +55,11 @@ Broker 使用 [ContinuousClock](https://developer.apple.com/documentation/swift/
 新增 Broker、activation、typed delivery、真实 JavaScript / Lifecycle 集成、SDK 安全边界测试。证据汇总见 [CI 与源码 SHA256](evidence/t35-countdown-20261015.json)。覆盖精确暂停、截止边界、owner / generation / 注册替换、未接收补发、资源撤销原子性、factory 重入睡眠、双 owner 隔离及不可信回调。
 
 确定性时钟和真实 VM 测试验证 Host/API；本子步骤没有实机睡眠、低功耗或能耗结论。下一步是通用声明式时间节点及仅可见节点的共享显示 tick，然后官方 JS 包、存储拒绝 / 撤销处理、完整原生迁移和实际 `.dip` / UI 计时验收。T36 仍 pending。
+
+## 子步骤 2C0：只读显示底座
+
+2026-10-15：新增 Host 内部 `snapshotForDisplay(owner:id:generation:)`，仅解析活跃 owner 与精确代次。读取按当前连续时钟投影剩余时间和到期状态，不结算业务记录、不调用 JS observer；真正完成仍由原 Broker alarm / processDue 处理。错误 owner、代次、ID、暂停执行或非法时钟返回 nil，避免 Renderer 复用旧 VM 的显示绑定。
+
+纯显示值提供向上取整秒的 MM:SS / H:MM:SS、精确 Duration 的 elapsedFraction 和 requiresDisplayTick。暂停 / 到期不请求显示 tick。这只是后续 Renderer 的底座：尚未公开 countdown IslandNode，尚未创建可见节点共享 ticker，T35 状态不变。验证见[独立 CI 证据](evidence/t35-countdown-display-20261015.json)。
+
+2C0 定向回归：5 项新增 display 测试 + 22 项 Broker 测试，27 passed / 0 failures。未接入 UI 的本步骤没有声称新的 Release 或视觉验收。

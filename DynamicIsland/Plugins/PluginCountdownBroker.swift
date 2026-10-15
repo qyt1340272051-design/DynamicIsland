@@ -267,6 +267,21 @@ final class PluginCountdownBroker {
         return record.snapshot(at: try instant())
     }
 
+    /// Rendering may project the deadline, but must not settle business state
+    /// or synchronously call a VM observer during SwiftUI evaluation.
+    func snapshotForDisplay(owner: PluginCountdownOwner, id: String,
+                            generation: PluginCountdownGeneration) -> PluginCountdownSnapshot? {
+        guard (try? requireOwner(owner)) != nil,
+              let record = records[owner.pluginID], record.owner == owner,
+              record.id == id, record.generation == generation,
+              let now = try? instant() else { return nil }
+        if record.state == .running, let deadline = record.deadline, deadline <= now {
+            return .init(id: id, generation: generation, state: .completed,
+                         durationMilliseconds: record.durationMilliseconds, remaining: .zero)
+        }
+        return record.snapshot(at: now)
+    }
+
     func pause(owner: PluginCountdownOwner, id: String,
                generation: PluginCountdownGeneration) throws -> PluginCountdownSnapshot {
         let record = try requireRecord(owner: owner, id: id, generation: generation)
