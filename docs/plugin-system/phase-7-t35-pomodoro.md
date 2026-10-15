@@ -90,3 +90,17 @@ View 与 Panel hover 共用 `runtime.expandedShellSize`；实际呈现工具时 
 已增加显式 opt-in compactPolicy、Host 展示上下文和统一 compact 几何；旧工具保持手动选择，自动工具不覆盖展开后的音乐 / 拖盘 / 原生计时。队列、动作和生命周期仍走唯一 currentSnapshot。详见[合约](t35-countdown-api.md#子步骤-2c2自动-compact-工具与共享安全几何)。
 
 CI **868 total / 864 passed / 4 skipped / 0 failures**，普通 Release build passed。新增 33 项测试；[原始两翼截图与证据](evidence/t35-compact-policy-20261015/result.json)确认 210pt 中间相机区没有四种时间宽度的字形，不声称实机或普通 Release UI 已验收。公开 10 秒示例已采用 automatic，真实 VM 的 in-flight resume / 完成排序回归通过。接下来是官方 Pomodoro 包、Storage / Scheduler 验证与专用 Swift 删除 / 实际安装计时验收；T35 不提前 verified。
+
+## 子步骤 3A：官方 Pomodoro 计时 / 预设 / 通知闭环
+
+新增[官方验证包](examples/pomodoro/README.md)，ID com.dynamicisland.pomodoro，版本 0.1.0，仅用公开 Plugin API。实现默认 25 分钟与 15 / 25 / 45 / 60 预设、开始 / 暂停 / 继续 / 结束、compact 两翼时间与 expanded time / progress / 控件，完成另发单次 transient Activity，不使用系统通知权限或 JS timer。运行时忽略预设变更；暂停后切预设先停止旧记录回 idle，与现原生语义对齐。动作和完成通过 Promise FIFO、fresh Host get 与 generation 去重处理。
+
+权限暂为空，此子步骤明确不含 Storage / Scheduler；不是最终发行包。onStart 同步返回，只读取当前 Host 记录恢复同一计时，没有记录时回 idle，不靠存储或完成回调自动开始。
+
+7 项新增真实 Validator / JavaScriptCore VM / Router 集成测试，连同 3 项公开示例回归为 **10 passed / 0 failures**；[证据与源码 SHA256](evidence/t35-pomodoro-3a-20261015.json)。四预设和完成边界使用可控 Host 时间，不冒充实机 15 分钟验收。上一步完整 Host CI 868 total / 864 passed / 4 skipped、Release build passed；本笔仅包与测试，未重复声称新的完整 CI 或产品 UI。
+
+### 继续位置
+
+下一子步骤 3B：Storage 明示授权、拒绝 / 撤销不阻塞计时、非法设置回退、重启只恢复设置不自动重开；通过公开 Scheduler 做一次有界对账，保持 30 / 60 秒下限。随后完成实际 .dip 安装、逐项授权、普通 Release UI / 真实 15 分钟计时，再删除 Model/View/DEBUG/Provider 与预设动画中的全部 Pomodoro 专用 Swift。保留秒表、倒计时和共享时间格式化。T35 仍 in progress，T36 pending。
+
+本轮在 5 小时额度已用 91% 时收尾。没有推送、发布、打 tag、制作 DMG 或改写记忆。
