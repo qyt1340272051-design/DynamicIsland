@@ -410,6 +410,30 @@ public final class PluginLifecycleBridge: PluginManagerLifecycleHandling {
         countdownBroker.shutdown()
     }
 
+    /// Rendering may inspect only the current Activity instance and the
+    /// currently admitted execution's Host-issued owner. No VM callback runs.
+    public func resolveCountdown(_ reference: IslandNode.Countdown,
+                                 for snapshot: ActivitySnapshot) -> IslandCountdownDisplayValue? {
+        guard activityManager.currentSnapshot == snapshot,
+              snapshot.activity.source.kind == .plugin,
+              let entry = entries[snapshot.activity.source.identifier],
+              entry.source == snapshot.activity.source,
+              entry.package.manifest.capabilities.contains(.countdown),
+              entry.package.manifest.capabilities.contains(.islandNodeUI),
+              let token = entry.token, accepts(id: entry.package.manifest.id, token: token),
+              let admission = entry.resourceAdmission,
+              let owner = entry.countdownOwner,
+              let generation = PluginCountdownGeneration(rawValue: reference.generation),
+              (try? IslandNode.countdown(reference).validate()) != nil,
+              (try? admission.perform {}) != nil,
+              let value = countdownBroker.snapshotForDisplay(owner: owner, id: reference.id, generation: generation),
+              accepts(id: entry.package.manifest.id, token: token),
+              activityManager.currentSnapshot == snapshot,
+              (try? admission.perform {}) != nil else { return nil }
+        return .init(text: value.displayText, progress: value.elapsedFraction,
+                     requiresTick: value.requiresDisplayTick)
+    }
+
     fileprivate func accepts(id: String, token: UUID) -> Bool {
         allowsExecution(id: id) && entries[id]?.token == token
     }
@@ -512,6 +536,17 @@ public final class PluginLifecycleBridge: PluginManagerLifecycleHandling {
                 recordStartFailure(entry)
                 return
             }
+        }
+        // Reactivation can synchronously offer an overdue completion to Host
+        // code. Recheck after that callback before issuing execution resources.
+        guard entries[entry.package.manifest.id] === entry,
+              !isShutdown, entry.isEnabled, !isSleeping, !isLowBattery,
+              [.loaded, .suspended].contains(entry.lifecycle.state) else {
+            if entries[entry.package.manifest.id] === entry, let owner = entry.countdownOwner {
+                try? countdownBroker.suspendOwner(owner)
+            }
+            runtime.teardown()
+            return
         }
         let token = UUID()
         let storageAdmission = PluginStorageAdmission()

@@ -57,11 +57,15 @@ public nonisolated struct IslandRenderAction: Equatable, Sendable {
 /// identifiers are resolved by the caller; this view never opens a path or URL.
 public struct IslandRenderer: View {
     public typealias ImageResolver = (IslandNode.ImageSource) -> NSImage?
+    public typealias CountdownResolver = (IslandNode.Countdown) -> IslandCountdownDisplayValue?
 
     public let presentation: ActivityPresentation
     public let mode: ActivityPresentation.Mode
     public let shellSize: CGSize
     private let imageResolver: ImageResolver
+    private let countdownResolver: CountdownResolver
+    private let isVisible: Bool
+    private let displayClock: IslandCountdownDisplayClock
     private let onAction: (IslandRenderAction) -> Void
 
     @Environment(\.colorScheme) private var colorScheme
@@ -76,12 +80,18 @@ public struct IslandRenderer: View {
         mode: ActivityPresentation.Mode,
         shellSize: CGSize,
         imageResolver: @escaping ImageResolver = { _ in nil },
+        countdownResolver: @escaping CountdownResolver = { _ in nil },
+        isVisible: Bool = true,
+        displayClock: IslandCountdownDisplayClock? = nil,
         onAction: @escaping (IslandRenderAction) -> Void = { _ in }
     ) {
         self.presentation = presentation
         self.mode = mode
         self.shellSize = shellSize
         self.imageResolver = imageResolver
+        self.countdownResolver = countdownResolver
+        self.isVisible = isVisible
+        self.displayClock = displayClock ?? .shared
         self.onAction = onAction
     }
 
@@ -168,6 +178,10 @@ public struct IslandRenderer: View {
                 .lineLimit(1)
                 .minimumScaleFactor(0.8)
                 .accessibilityLabel(value.content))
+        case .countdown(let value):
+            return AnyView(IslandCountdownNodeView(reference: value, mode: mode,
+                                                  tint: color(value.color), isVisible: isVisible,
+                                                  resolve: countdownResolver, clock: displayClock))
         case .icon(let value):
             let isCompactWaveform = mode == .compact && value.symbolName == "waveform"
             return AnyView(Image(systemName: value.symbolName)
@@ -347,6 +361,7 @@ public struct IslandRenderer: View {
     private func accessibleLabel(for node: IslandNode) -> String {
         switch node {
         case .text(let value): return value.content
+        case .countdown: return "Countdown"
         case .icon(let value): return accessibleIdentifier(value.symbolName)
         case .image: return "Image"
         case .hStack(let stack), .vStack(let stack), .zStack(let stack):

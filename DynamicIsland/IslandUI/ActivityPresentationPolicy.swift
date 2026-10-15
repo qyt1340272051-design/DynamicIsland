@@ -84,6 +84,8 @@ public extension ActivityPresentation {
                 guard metrics.nonIconImageCount == 0 else { return false }
                 switch node {
                 case .text, .icon, .image: break
+                case .countdown(let countdown):
+                    guard countdown.style == .time else { return false }
                 default: return false
                 }
                 return metrics.nodeCount <= 1 && metrics.depth <= 1 && metrics.textBytes <= 40
@@ -120,6 +122,11 @@ public extension ActivityPresentation {
                     hasVisibleContent = !value.content.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
                 case .icon, .progress:
                     hasVisibleContent = true
+                case .countdown(let value):
+                    hasVisibleContent = true
+                    // The Host's widest time string is 24:00:00. Neither the
+                    // local ID nor generation is displayed as plugin text.
+                    textBytes = value.style == .time ? 8 : 0
                 case .image(let value):
                     hasVisibleContent = true
                     artworkCount = value.size == .artwork ? 1 : 0

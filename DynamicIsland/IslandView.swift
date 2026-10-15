@@ -401,6 +401,11 @@ public struct IslandView: View {
             imageResolver: { image in
                 activityRuntime.resolveImage(image, for: snapshot.activity.source)
             },
+            countdownResolver: { reference in
+                activityRuntime.resolveCountdown(reference, for: snapshot)
+            },
+            isVisible: viewModel.isIslandPanelVisible && !isQuitting && (mode == .expanded ? isExpanded : !isExpanded),
+            displayClock: activityRuntime.countdownDisplayClock,
             onAction: { action in route(action, from: snapshot) }
         )
         .id(snapshot.instanceToken)

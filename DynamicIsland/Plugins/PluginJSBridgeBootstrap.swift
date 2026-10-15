@@ -211,6 +211,35 @@ nonisolated enum PluginJSBridgeBootstrap {
                     ['subtitle', 'symbolName', 'progress', 'minimal', 'compact', 'expanded', 'showsCompact', 'role']);
                 if (descriptor(fields, 'showsCompact') && typeof fields.showsCompact !== 'boolean') throw null;
                 if (descriptor(fields, 'role') && fields.role !== 'status' && fields.role !== 'tool') throw null;
+                const layouts = ['minimal', 'compact', 'expanded'];
+                for (let i = 0; i < layouts.length; i++) {
+                    const layout = descriptor(fields, layouts[i]);
+                    if (layout) validateCountdownNode(layout.value);
+                }
+            }
+            function validateCountdownNode(value) {
+                // Only follow the finite node edges of the existing safe
+                // snapshot. Other node validation remains the Host's job.
+                if (value === null || typeof value !== 'object' || isArray(value)) return;
+                const type = descriptor(value, 'type');
+                if (!type) return;
+                if (type.value === 'countdown') {
+                    const fields = fieldsWithShape(value, ['type', 'id', 'generation'], ['style', 'color']);
+                    if (!validActionID(fields.id) || fields.id.length > 80 ||
+                        !validCountdownGeneration(fields.generation)) throw null;
+                    if (descriptor(fields, 'style') && fields.style !== 'time' && fields.style !== 'progress') throw null;
+                    if (descriptor(fields, 'color') && fields.color !== 'primary' && fields.color !== 'secondary' &&
+                        fields.color !== 'accent' && fields.color !== 'success' && fields.color !== 'warning' &&
+                        fields.color !== 'danger') throw null;
+                } else if (type.value === 'hStack' || type.value === 'vStack' || type.value === 'zStack') {
+                    const children = descriptor(value, 'children');
+                    if (!children || !isArray(children.value)) return;
+                    const nodes = children.value;
+                    for (let i = 0; i < nodes.length; i++) validateCountdownNode(nodes[i]);
+                } else if (type.value === 'button') {
+                    const label = descriptor(value, 'label');
+                    if (label) validateCountdownNode(label.value);
+                }
             }
             function hasHTTPSPrefix(url) {
                 const scheme = 'https://';

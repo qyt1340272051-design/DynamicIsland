@@ -46,6 +46,7 @@ final class IslandPanelController {
     }
 
     func show() {
+        viewModel.setIslandPanelVisible(true)
         screenManager.startMonitoring()
         let panel = panel ?? makePanel()
         self.panel = panel
@@ -56,6 +57,7 @@ final class IslandPanelController {
     }
 
     func hide() {
+        viewModel.setIslandPanelVisible(false)
         stopHoverTracking()
         stabilityMonitor.stop()
         screenManager.stopMonitoring()

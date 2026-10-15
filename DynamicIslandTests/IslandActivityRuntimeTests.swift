@@ -4,6 +4,32 @@ import XCTest
 
 @MainActor
 final class IslandActivityRuntimeTests: XCTestCase {
+    func testCountdownBusinessChangesInvalidateHostDisplayAndShutdownClosesItsClock() async throws {
+        let model = IslandViewModel.preview()
+        let runtime = IslandActivityRuntime(viewModel: model)
+        let clock = runtime.countdownDisplayClock
+        defer { runtime.shutdownPlugins() }
+        let broker = runtime.pluginLifecycle.countdownBroker
+        let owner = try broker.registerOwner(pluginID: "com.example.runtime-display")
+        let revision = clock.revision
+        _ = try broker.start(owner: owner, id: "focus", durationMilliseconds: 60_000)
+        try await Task.sleep(for: .milliseconds(20))
+        XCTAssertGreaterThan(clock.revision, revision)
+        XCTAssertEqual(clock.timerCount, 0, "Business invalidation must not create a display timer")
+        let consumer = UUID()
+        clock.setNeedsTicks(true, for: consumer)
+        XCTAssertEqual(clock.timerCount, 1)
+        runtime.shutdownPlugins()
+        XCTAssertEqual(clock.consumerCount, 0)
+        XCTAssertEqual(clock.timerCount, 0)
+        let stoppedRevision = clock.revision
+        clock.setNeedsTicks(true, for: UUID())
+        clock.invalidate()
+        XCTAssertEqual(clock.timerCount, 0)
+        XCTAssertEqual(clock.revision, stoppedRevision)
+        XCTAssertEqual(broker.diagnostics.recordCount, 0)
+    }
+
     func testPublicToolExampleRequiresHostSelectionAndRoutesOnlyVisibleInstance() async throws {
         let model = IslandViewModel.preview()
         let runtime = IslandActivityRuntime(viewModel: model)

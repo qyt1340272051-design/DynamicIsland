@@ -13,6 +13,8 @@ public final class IslandActivityRuntime {
     public let permissionManager: PermissionManager
     public let pluginScheduler: PluginScheduler
     public let pluginDiagnostics: PluginDiagnosticsStore
+    let countdownDisplayClock = IslandCountdownDisplayClock()
+    private var countdownDisplayObservation: UUID?
     private let pluginSchedulerEnvironment: PluginSchedulerEnvironment
     private let music: MusicActivityProvider
     private let volume: VolumeActivityProvider
@@ -63,6 +65,10 @@ public final class IslandActivityRuntime {
         self.volume = volume
         self.battery = battery
         self.viewModel = viewModel
+        let displayClock = countdownDisplayClock
+        countdownDisplayObservation = pluginLifecycle.countdownBroker.observeChanges { [weak displayClock] in
+            displayClock?.invalidate()
+        }
         musicRegistration = music.registerActions(with: router)
         // Use the values delivered by the publishers: @Published emits before
         // the ViewModel's stored properties have changed. No delayed callback
@@ -85,6 +91,11 @@ public final class IslandActivityRuntime {
 
     /// App teardown also removes the scheduler's system observers and deadline.
     public func shutdownPlugins() {
+        countdownDisplayClock.shutdown()
+        if let countdownDisplayObservation {
+            pluginLifecycle.countdownBroker.removeChangeObserver(countdownDisplayObservation)
+            self.countdownDisplayObservation = nil
+        }
         manager.clearToolSelection()
         pluginSchedulerEnvironment.stop()
         pluginLifecycle.shutdown()
@@ -149,6 +160,11 @@ public final class IslandActivityRuntime {
     public var prioritizesCurrentActivityOverLegacyContent: Bool {
         guard let snapshot = manager.currentSnapshot else { return false }
         return snapshot.activity.source != MusicActivityProvider.source
+    }
+
+    public func resolveCountdown(_ reference: IslandNode.Countdown,
+                                 for snapshot: ActivitySnapshot) -> IslandCountdownDisplayValue? {
+        pluginLifecycle.resolveCountdown(reference, for: snapshot)
     }
 
     /// Resources are resolved by the Host for the owning source. Providers do

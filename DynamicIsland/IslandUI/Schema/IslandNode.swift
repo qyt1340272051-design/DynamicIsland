@@ -15,6 +15,13 @@ public nonisolated enum IslandProgressStyleToken: String, Codable, CaseIterable,
     case battery
 }
 
+/// Countdown values reference a Host record; no deadline or elapsed state is
+/// embedded in the node. The Host owns the appearance of both finite styles.
+public nonisolated enum IslandCountdownStyleToken: String, Codable, CaseIterable, Sendable {
+    case time
+    case progress
+}
+
 /// Data-only UI description. The Host owns rendering and action dispatch.
 public nonisolated indirect enum IslandNode: Codable, Equatable, Sendable {
     case text(Text)
@@ -26,6 +33,7 @@ public nonisolated indirect enum IslandNode: Codable, Equatable, Sendable {
     case spacer(Spacer)
     case divider(Divider)
     case progress(Progress)
+    case countdown(Countdown)
     case button(Button)
     case toggle(Toggle)
     case slider(Slider)
@@ -126,6 +134,53 @@ public nonisolated indirect enum IslandNode: Codable, Equatable, Sendable {
             try container.encode(value, forKey: .value)
             if style != .linear { try container.encode(style, forKey: .style) }
             if color != .accent { try container.encode(color, forKey: .color) }
+        }
+    }
+
+    public nonisolated struct Countdown: Codable, Equatable, Sendable {
+        public var id: String
+        public var generation: String
+        public var style: IslandCountdownStyleToken
+        public var color: IslandSemanticColorToken
+
+        private enum CodingKeys: String, CodingKey { case id, generation, style, color }
+
+        public init(id: String, generation: String, style: IslandCountdownStyleToken = .time,
+                    color: IslandSemanticColorToken = .accent) {
+            self.id = id
+            self.generation = generation
+            self.style = style
+            self.color = color
+        }
+
+        public init(from decoder: Decoder) throws {
+            try IslandNode.checkCountdownFields(decoder, allowed: ["id", "generation", "style", "color"])
+            let container = try decoder.container(keyedBy: CodingKeys.self)
+            id = try container.decode(String.self, forKey: .id)
+            generation = try container.decode(String.self, forKey: .generation)
+            style = container.contains(.style) ? try container.decode(IslandCountdownStyleToken.self, forKey: .style) : .time
+            color = container.contains(.color) ? try container.decode(IslandSemanticColorToken.self, forKey: .color) : .accent
+            try validate()
+        }
+
+        public func encode(to encoder: Encoder) throws {
+            try validate()
+            var container = encoder.container(keyedBy: CodingKeys.self)
+            try container.encode(id, forKey: .id)
+            try container.encode(generation, forKey: .generation)
+            if style != .time { try container.encode(style, forKey: .style) }
+            if color != .accent { try container.encode(color, forKey: .color) }
+        }
+
+        fileprivate func validate() throws {
+            guard !id.isEmpty, id.utf8.count <= Limits.maxActionIDBytes,
+                  id.utf8.allSatisfy({ byte in
+                      (48...57).contains(byte) || (65...90).contains(byte) || (97...122).contains(byte)
+                          || byte == 45 || byte == 46 || byte == 95
+                  }), generation.utf8.count == 36,
+                  let uuid = UUID(uuidString: generation), uuid.uuidString.lowercased() == generation else {
+                throw ValidationError.invalidIdentifier
+            }
         }
     }
 
@@ -269,6 +324,26 @@ public nonisolated indirect enum IslandNode: Codable, Equatable, Sendable {
         try validate(depth: 1, count: &count)
     }
 
+    /// Read-only references in authored order, including button labels. A
+    /// malformed tree yields no partial inventory. Validation bounds the walk
+    /// to maxDepth / maxNodes before any references are collected.
+    public var countdownReferences: [Countdown] {
+        guard (try? validate()) != nil else { return [] }
+        var result: [Countdown] = []
+        collectCountdownReferences(into: &result)
+        return result
+    }
+
+    private func collectCountdownReferences(into result: inout [Countdown]) {
+        switch self {
+        case .countdown(let countdown): result.append(countdown)
+        case .hStack(let stack), .vStack(let stack), .zStack(let stack):
+            for child in stack.children { child.collectCountdownReferences(into: &result) }
+        case .button(let button): button.label.collectCountdownReferences(into: &result)
+        case .text, .icon, .image, .spacer, .divider, .progress, .toggle, .slider: break
+        }
+    }
+
     private func validate(depth: Int, count: inout Int) throws {
         guard depth <= Limits.maxDepth else { throw ValidationError.depthExceeded }
         count += 1
@@ -282,6 +357,7 @@ public nonisolated indirect enum IslandNode: Codable, Equatable, Sendable {
             for child in stack.children { try child.validate(depth: depth + 1, count: &count) }
         case .spacer, .divider: break
         case .progress(let node): try Self.checkNormalized(node.value)
+        case .countdown(let node): try node.validate()
         case .button(let node):
             try Self.checkIdentifier(node.actionID, maxBytes: Limits.maxActionIDBytes)
             if let accessibilityLabel = node.accessibilityLabel {
@@ -314,12 +390,27 @@ public nonisolated indirect enum IslandNode: Codable, Equatable, Sendable {
         guard value.isFinite, (0...1).contains(value) else { throw ValidationError.invalidNumber }
     }
 
+    private struct CountdownFieldKey: CodingKey {
+        let stringValue: String
+        var intValue: Int? { nil }
+        init?(stringValue: String) { self.stringValue = stringValue }
+        init?(intValue: Int) { return nil }
+    }
+
+    private static func checkCountdownFields(_ decoder: Decoder, allowed: Set<String>) throws {
+        let container = try decoder.container(keyedBy: CountdownFieldKey.self)
+        guard Set(container.allKeys.map(\.stringValue)).isSubset(of: allowed) else {
+            throw DecodingError.dataCorrupted(.init(codingPath: decoder.codingPath,
+                                                    debugDescription: "Unknown countdown field"))
+        }
+    }
+
     private enum CodingKeys: String, CodingKey {
         case type, content, symbolName, source, size, children, value, actionID, label
-        case accessibilityLabel, title, isOn, showsTitle, style, color
+        case accessibilityLabel, title, isOn, showsTitle, style, color, id, generation
     }
     private enum Kind: String, Codable {
-        case text, icon, image, hStack, vStack, zStack, spacer, divider, progress, button, toggle, slider
+        case text, icon, image, hStack, vStack, zStack, spacer, divider, progress, countdown, button, toggle, slider
     }
 
     public init(from decoder: Decoder) throws {
@@ -367,6 +458,14 @@ public nonisolated indirect enum IslandNode: Codable, Equatable, Sendable {
             style: try container.decodeIfPresent(IslandProgressStyleToken.self, forKey: .style) ?? .linear,
             color: try container.decodeIfPresent(IslandSemanticColorToken.self, forKey: .color) ?? .accent
         ))
+        case .countdown:
+            try Self.checkCountdownFields(decoder, allowed: ["type", "id", "generation", "style", "color"])
+            self = .countdown(.init(
+                id: try container.decode(String.self, forKey: .id),
+                generation: try container.decode(String.self, forKey: .generation),
+                style: container.contains(.style) ? try container.decode(IslandCountdownStyleToken.self, forKey: .style) : .time,
+                color: container.contains(.color) ? try container.decode(IslandSemanticColorToken.self, forKey: .color) : .accent
+            ))
         case .button: self = .button(.init(
             actionID: try container.decode(String.self, forKey: .actionID),
             label: try container.decode(IslandNode.self, forKey: .label),
@@ -422,6 +521,12 @@ public nonisolated indirect enum IslandNode: Codable, Equatable, Sendable {
             try container.encode(Kind.progress, forKey: .type)
             try container.encode(node.value, forKey: .value)
             if node.style != .linear { try container.encode(node.style, forKey: .style) }
+            if node.color != .accent { try container.encode(node.color, forKey: .color) }
+        case .countdown(let node):
+            try container.encode(Kind.countdown, forKey: .type)
+            try container.encode(node.id, forKey: .id)
+            try container.encode(node.generation, forKey: .generation)
+            if node.style != .time { try container.encode(node.style, forKey: .style) }
             if node.color != .accent { try container.encode(node.color, forKey: .color) }
         case .button(let node):
             try container.encode(Kind.button, forKey: .type)

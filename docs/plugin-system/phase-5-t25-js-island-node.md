@@ -134,3 +134,5 @@ Release XCTest 使用单独的 `/tmp/dynamic-island-t25-release-derived`：以 `
 T25 标记为 `verified`：有界错误 / 恶意 UI Tree 在转换与准入阶段拒绝，失败不修改 Core 或消耗成功写入额度；有效布局经真实 JS、Runtime、Bridge、Core 和 Renderer 完成更新与结束闭环。
 
 T22 的进程内 JavaScriptCore Runtime 边界保持：没有为任意恶意 JS 无限循环、进程级 OOM 或引擎崩溃新增隔离保证。T25 的范围是有界 UI 数据转换、准入和 Host 渲染；T26 动作回传、T27 KV 持久化、T28 用户 grant、T29 Broker、T31/T32 调度和 Watchdog 按计划继续推进。
+
+T35 扩展：新增纯数据 countdown 引用节点、严格 SDK / Converter 校验和 Host 显示绑定，见[公开合约](t35-countdown-api.md#子步骤-2c1声明式节点与可见共享显示-tick)。既有十二类节点维持原合约。

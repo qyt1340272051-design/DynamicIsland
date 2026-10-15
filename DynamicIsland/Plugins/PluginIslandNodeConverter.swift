@@ -1,3 +1,5 @@
+import Foundation
+
 /// Strict data-only conversion into the Host's finite UI vocabulary. The
 /// traversal is bounded before descending, independently of Bridge JSON limits.
 nonisolated struct PluginIslandNodeConverter: Sendable {
@@ -26,6 +28,10 @@ nonisolated struct PluginIslandNodeConverter: Sendable {
         var nodeCount = 0
         collectActionIDs(in: node, depth: 1, nodeCount: &nodeCount, result: &result)
         return result
+    }
+
+    static func countdownNodes(in node: IslandNode) -> [IslandNode.Countdown] {
+        node.countdownReferences
     }
 
     private static func parse(_ value: PluginBridgeJSON, depth: Int,
@@ -86,6 +92,14 @@ nonisolated struct PluginIslandNodeConverter: Sendable {
             return .progress(.init(
                 try normalized(fields["value"]),
                 style: try fields["style"].map { try token($0, as: IslandProgressStyleToken.self) } ?? .linear,
+                color: try fields["color"].map { try token($0, as: IslandSemanticColorToken.self) } ?? .accent
+            ))
+        case "countdown":
+            try checkFields(fields, required: ["type", "id", "generation"], optional: ["style", "color"])
+            return .countdown(.init(
+                id: try identifier(fields["id"], maximumBytes: IslandNode.Limits.maxActionIDBytes),
+                generation: try countdownGeneration(fields["generation"]),
+                style: try fields["style"].map { try token($0, as: IslandCountdownStyleToken.self) } ?? .time,
                 color: try fields["color"].map { try token($0, as: IslandSemanticColorToken.self) } ?? .accent
             ))
         case "button":
@@ -169,6 +183,14 @@ nonisolated struct PluginIslandNodeConverter: Sendable {
         try identifier(value, maximumBytes: IslandNode.Limits.maxActionIDBytes)
     }
 
+    private static func countdownGeneration(_ value: PluginBridgeJSON?) throws -> String {
+        guard case .string(let string) = value, string.utf8.count == 36,
+              let uuid = UUID(uuidString: string), uuid.uuidString.lowercased() == string else {
+            throw PluginBridgeErrorCode.invalidArguments
+        }
+        return string
+    }
+
     private static func token<T: RawRepresentable>(_ value: PluginBridgeJSON,
                                                   as type: T.Type) throws -> T where T.RawValue == String {
         guard case .string(let string) = value, let token = type.init(rawValue: string) else {
@@ -203,7 +225,7 @@ nonisolated struct PluginIslandNodeConverter: Sendable {
             collectActionIDs(in: button.label, depth: depth + 1, nodeCount: &nodeCount, result: &result)
         case .toggle(let toggle): result.insert(toggle.actionID)
         case .slider(let slider): result.insert(slider.actionID)
-        case .text, .icon, .image, .spacer, .divider, .progress: break
+        case .text, .icon, .image, .spacer, .divider, .progress, .countdown: break
         }
     }
 }

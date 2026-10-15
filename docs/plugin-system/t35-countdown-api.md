@@ -54,12 +54,31 @@ Broker 使用 [ContinuousClock](https://developer.apple.com/documentation/swift/
 
 新增 Broker、activation、typed delivery、真实 JavaScript / Lifecycle 集成、SDK 安全边界测试。证据汇总见 [CI 与源码 SHA256](evidence/t35-countdown-20261015.json)。覆盖精确暂停、截止边界、owner / generation / 注册替换、未接收补发、资源撤销原子性、factory 重入睡眠、双 owner 隔离及不可信回调。
 
-确定性时钟和真实 VM 测试验证 Host/API；本子步骤没有实机睡眠、低功耗或能耗结论。下一步是通用声明式时间节点及仅可见节点的共享显示 tick，然后官方 JS 包、存储拒绝 / 撤销处理、完整原生迁移和实际 `.dip` / UI 计时验收。T36 仍 pending。
+确定性时钟和真实 VM 测试验证 Host/API；本子步骤没有实机睡眠、低功耗或能耗结论。2A / 2B 当时的下一步是声明式时间节点；当前实现见下方 2C1。后续仍为官方 JS 包、存储拒绝 / 撤销处理、完整原生迁移和实际 `.dip` / UI 计时验收。T36 仍 pending。
 
 ## 子步骤 2C0：只读显示底座
 
 2026-10-15：新增 Host 内部 `snapshotForDisplay(owner:id:generation:)`，仅解析活跃 owner 与精确代次。读取按当前连续时钟投影剩余时间和到期状态，不结算业务记录、不调用 JS observer；真正完成仍由原 Broker alarm / processDue 处理。错误 owner、代次、ID、暂停执行或非法时钟返回 nil，避免 Renderer 复用旧 VM 的显示绑定。
 
-纯显示值提供向上取整秒的 MM:SS / H:MM:SS、精确 Duration 的 elapsedFraction 和 requiresDisplayTick。暂停 / 到期不请求显示 tick。这只是后续 Renderer 的底座：尚未公开 countdown IslandNode，尚未创建可见节点共享 ticker，T35 状态不变。验证见[独立 CI 证据](evidence/t35-countdown-display-20261015.json)。
+纯显示值提供向上取整秒的 MM:SS / H:MM:SS、精确 Duration 的 elapsedFraction 和 requiresDisplayTick。暂停 / 到期不请求显示 tick。该独立提交只增加底座，未公开节点或创建 ticker；之后的接入见下方 2C1，T35 状态不变。验证见[独立 CI 证据](evidence/t35-countdown-display-20261015.json)。
 
 2C0 定向回归：5 项新增 display 测试 + 22 项 Broker 测试，27 passed / 0 failures。未接入 UI 的本步骤没有声称新的 Release 或视觉验收。
+
+## 子步骤 2C1：声明式节点与可见共享显示 tick
+
+新增通用纯数据节点，generation 必须来自当前 Host 倒计时快照：
+
+```javascript
+const time = {type: 'countdown', id: snapshot.id, generation: snapshot.generation};
+const progress = {...time, style: 'progress', color: 'success'};
+```
+
+精确字段为 `type`、`id`、`generation`，可选 `style`（time 默认 / progress）和 `color`（accent 默认，既有六种 semantic token）。禁止传入 deadline、duration、remaining、activation、owner、窗口尺寸及额外字段。ID 和 generation 沿用本页的闭集校验；Core Codable、SDK 安全快照和 Host Converter 分别验证。引用遍历有界并包含 button.label。time 是单行、最多 8 字符，支持 minimal / compact / expanded；progress 不支持 minimal。
+
+Activity 发布和更新要求 `ui.islandNode` 与 `countdown`，且每个引用都必须属于当前执行的 Host owner 和精确 generation，缺失 / 外来 / 旧记录原子拒绝。仅修改 priority 的 patch 也验证最终保留布局。显示时另核对完整 current ActivitySnapshot、source、执行 token、资源准入及 Host owner，不能用目录项或按 ID 重新取得一个替代实例。
+
+生产 Runtime 持有一个显示 clock。仅实际挂载、显式可见且仍在运行的 countdown 叶节点订阅它，所有 time / progress 叶共享一个 1 秒 Task，不给 VM 发 tick。compact / expanded 的 opacity 隐藏态、Panel orderOut 和退出动画均显式关闭需求；暂停、失效、到期、卸载叶节点或最后订阅释放后取消 Task。Runtime shutdown 同步关闭 clock。Brokers 的业务修改异步合并为一次 Host 显示失效，保持已暂停 / 已停止状态及时更新；纯显示读取和拒绝的命令不触发失效，不降低普通 Scheduler 的 30 / 60 秒下限。
+
+Renderer 采用 Host metric / caption 字体、monospaced digits、semantic color 与既有线性进度，带可访问性值。未解析引用显示不可用占位并不订阅 tick。真实 NSHostingView 测试还确认 ViewThatFits 的超高树退回摘要时，没有隐藏倒计时订阅。
+
+本步骤是通用显示能力；官方 Pomodoro 包、旧专用 Swift 删除与实际安装计时验收仍未完成，T35 保持 in progress。无权限公开示例见[countdown-demo](examples/countdown-demo/README.md)，完整验证及原始测试图见[证据](evidence/t35-countdown-node-20261015/result.json)。

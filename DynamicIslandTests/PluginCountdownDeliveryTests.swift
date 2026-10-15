@@ -442,6 +442,30 @@ final class PluginCountdownDeliveryTests: XCTestCase {
         XCTAssertEqual(resumed.generation, started.generation)
     }
 
+    func testOverdueCompletionReenteringSleepCannotStartNewExecutionOrLeaveActiveOwner() throws {
+        let fixture = CountdownDeliveryFixture()
+        defer { fixture.shutdown() }
+        let package = try package()
+        let context = try fixture.load(package)
+        let owner = try XCTUnwrap(context.countdownOwner)
+        _ = try fixture.broker.start(owner: owner, id: "focus", durationMilliseconds: 1_000)
+        fixture.lifecycle.setEnvironment(isSleeping: true, isLowBattery: false)
+        _ = try fixture.broker.observeCompletions(owner: owner) { _ in
+            fixture.lifecycle.setEnvironment(isSleeping: true, isLowBattery: false)
+        }
+        fixture.clock.now = .seconds(2)
+        fixture.lifecycle.setEnvironment(isSleeping: false, isLowBattery: false)
+        XCTAssertFalse(fixture.lifecycle.allowsExecution(id: context.id))
+        XCTAssertTrue(try fixture.context(id: context.id) === context)
+        XCTAssertThrowsError(try fixture.broker.get(owner: owner, id: "focus")) {
+            XCTAssertEqual($0 as? PluginCountdownError, .inactiveOwner)
+        }
+        XCTAssertNil(fixture.broker.diagnostics.nextDeadline)
+        fixture.lifecycle.setEnvironment(isSleeping: false, isLowBattery: false)
+        XCTAssertFalse(try fixture.context(id: context.id) === context)
+        XCTAssertEqual(try fixture.broker.get(owner: owner, id: "focus")?.state, .completed)
+    }
+
     private func session(_ package: ValidatedPluginPackage, context: PluginExecutionContext,
                          capture: CountdownDeliveryCapture) throws -> PluginCountdownSession {
         try PluginCountdownSession(package: package, context: context) { capture.events.append($0) }

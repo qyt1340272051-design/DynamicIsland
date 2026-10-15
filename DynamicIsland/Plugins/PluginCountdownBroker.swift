@@ -110,6 +110,8 @@ final class PluginCountdownBroker {
     private var alarmDeadline: Duration?
     private var alarmGeneration: UUID?
     private var isShutdown = false
+    private var changeObservers: [UUID: @MainActor () -> Void] = [:]
+    private var changeTask: Task<Void, Never>?
 
     init(clock: Clock? = nil, automaticScheduling: Bool = true,
          sleep: @escaping Sleep = { try await Task.sleep(for: $0, clock: .continuous) }) {
@@ -119,7 +121,7 @@ final class PluginCountdownBroker {
         self.automaticScheduling = automaticScheduling
     }
 
-    deinit { alarmTask?.cancel() }
+    deinit { alarmTask?.cancel(); changeTask?.cancel() }
 
     var diagnostics: Diagnostics {
         .init(ownerCount: owners.count, recordCount: records.count,
@@ -127,6 +129,25 @@ final class PluginCountdownBroker {
               pausedCount: records.values.filter { $0.state == .paused }.count,
               completedCount: records.values.filter { $0.state == .completed }.count,
               alarmCount: alarmTask == nil ? 0 : 1, nextDeadline: nextDeadline)
+    }
+
+    /// Host display invalidation only. Batched asynchronously so a mutation's
+    /// transaction and observer callbacks finish before SwiftUI reads state.
+    func observeChanges(_ callback: @escaping @MainActor () -> Void) -> UUID {
+        let token = UUID()
+        changeObservers[token] = callback
+        return token
+    }
+
+    func removeChangeObserver(_ token: UUID) { changeObservers.removeValue(forKey: token) }
+
+    private func notifyChange() {
+        guard !isShutdown, !changeObservers.isEmpty, changeTask == nil else { return }
+        changeTask = Task { @MainActor [weak self] in
+            guard let self, !Task.isCancelled, !self.isShutdown else { return }
+            self.changeTask = nil
+            for callback in Array(self.changeObservers.values) { callback() }
+        }
     }
 
     /// Only the Host load boundary creates owners. No caller-supplied epoch is
@@ -149,13 +170,16 @@ final class PluginCountdownBroker {
         observers.removeValue(forKey: owner.pluginID)
         owners[owner.pluginID] = OwnerEntry(owner: replacement)
         rescheduleAlarm()
+        notifyChange()
         return replacement
     }
 
     func suspendOwner(_ owner: PluginCountdownOwner) throws {
         try requireOwner(owner, active: false)
+        guard owners[owner.pluginID]?.isActive == true else { return }
         owners[owner.pluginID]?.isActive = false
         rescheduleAlarm()
+        notifyChange()
     }
 
     /// Reconcile the retained continuous deadline only after this owner becomes
@@ -163,8 +187,10 @@ final class PluginCountdownBroker {
     func reactivateOwner(_ owner: PluginCountdownOwner) throws {
         try requireOwner(owner, active: false)
         let now = try instant()
+        let wasActive = owners[owner.pluginID]?.isActive == true
         owners[owner.pluginID]?.isActive = true
         processDue(at: now)
+        if !wasActive { notifyChange() }
     }
 
     func removeOwner(_ owner: PluginCountdownOwner) throws {
@@ -173,6 +199,7 @@ final class PluginCountdownBroker {
         observers.removeValue(forKey: owner.pluginID)
         owners.removeValue(forKey: owner.pluginID)
         rescheduleAlarm()
+        notifyChange()
     }
 
     /// Replacing a listener cannot change the business record. A completed
@@ -253,6 +280,7 @@ final class PluginCountdownBroker {
                             remaining: duration, deadline: now + duration)
         records[owner.pluginID] = record
         armAlarm(at: now)
+        notifyChange()
         return record.snapshot(at: now)
     }
 
@@ -298,6 +326,7 @@ final class PluginCountdownBroker {
                             remaining: deadline - now, deadline: nil)
         records[owner.pluginID] = paused
         armAlarm(at: now)
+        notifyChange()
         return paused.snapshot(at: now)
     }
 
@@ -313,6 +342,7 @@ final class PluginCountdownBroker {
                              remaining: record.remaining, deadline: now + record.remaining)
         records[owner.pluginID] = resumed
         armAlarm(at: now)
+        notifyChange()
         return resumed.snapshot(at: now)
     }
 
@@ -320,14 +350,16 @@ final class PluginCountdownBroker {
         _ = try requireRecord(owner: owner, id: id, generation: generation)
         records.removeValue(forKey: owner.pluginID)
         rescheduleAlarm()
+        notifyChange()
     }
 
     /// Host execution teardown may clear business work without unregistering
     /// the current package owner or its independently managed observer scope.
     func clearRecord(owner: PluginCountdownOwner) throws {
         try requireOwner(owner)
-        records.removeValue(forKey: owner.pluginID)
+        guard records.removeValue(forKey: owner.pluginID) != nil else { return }
         rescheduleAlarm()
+        notifyChange()
     }
 
     /// Manual deterministic pump; production uses the same path for its one
@@ -340,6 +372,9 @@ final class PluginCountdownBroker {
     func shutdown() {
         guard !isShutdown else { return }
         isShutdown = true
+        changeTask?.cancel()
+        changeTask = nil
+        changeObservers.removeAll()
         cancelAlarm()
         records.removeAll()
         owners.removeAll()
@@ -395,6 +430,7 @@ final class PluginCountdownBroker {
             record.remaining = .zero
             record.deadline = nil
             records[key] = record
+            notifyChange()
         }
         armAlarm(at: now)
         let completions = records.values.filter {

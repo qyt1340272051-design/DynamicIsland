@@ -26,11 +26,11 @@ update 只修改 priority 等顶层字段时保留原 presentation；提交新�
 ## 下一步与完成边界
 
 1. 通用工具角色、按实例选择及 Host 几何已完成，见下方子步骤 1B。
-2. 通用 Host 倒计时记录、公开 API 和真实动作一次性启动凭证已实现；声明式秒级显示仍待实施，后台刷新下限保持原值。
+2. 通用 Host 倒计时记录、公开 API、一次性启动凭证和声明式秒级显示均已实现，后台刷新下限保持原值。
 3. 完成 JS 官方包的开始、暂停、继续、结束、预设及存储权限处理。
 4. 删除生产番茄钟专用 Swift；从 `.dip` 安装并完成真实 UI / 计时、旧功能回归验收。
 
-子步骤 1A / 1B 已完成工具选择闭环，声明式秒级显示和官方插件仍未实现，不能将 T35 标为 verified。原生番茄钟继续保留至完整替换验收，T36 仍 pending。
+子步骤 1A / 1B 与 2A–2C1 已完成工具选择、计时和显示底座；官方插件与完整迁移尚未实现，不能将 T35 标为 verified。原生番茄钟继续保留至完整替换验收，T36 仍 pending。
 
 ## 子步骤 1B：工具角色、实例选择与共享几何
 
@@ -75,4 +75,12 @@ View 与 Panel hover 共用 `runtime.expandedShellSize`；实际呈现工具时 
 
 本子步骤完整 `./Scripts/ci.sh`：**795 total / 794 passed / 1 skipped / 0 failures**，普通 Release build passed。新增 62 项 countdown 测试；唯一 skip 是既有显式截图矩阵生成。首轮修正测试 helper 与诊断属性名，资源准入包装按 Void context.perform 的真实签名拆分后通过；无新增编译错误。
 
-子步骤 2C0 已增加[Host 只读显示快照与时间格式化](t35-countdown-api.md#子步骤-2c0只读显示底座)，防止绘制时触发完成 observer。Renderer / 节点 / 可见共享 ticker 的接入仍是下一步，未宣称秒级 UI 已完成。
+子步骤 2C0 已增加[Host 只读显示快照与时间格式化](t35-countdown-api.md#子步骤-2c0只读显示底座)，防止绘制时触发完成 observer。该独立提交尚未接入 Renderer；后续完整节点 / 可见共享 ticker 接入见下方 2C1。
+
+## 子步骤 2C1：通用倒计时节点与可见显示
+
+纯数据 countdown 节点（time / progress）、当前执行 / Activity 实例绑定解析、生产 Renderer 和 Host 共享秒级显示 clock 已接入，详见[公开合约](t35-countdown-api.md#子步骤-2c1声明式节点与可见共享显示-tick)。SDK / Host / Core 独立拒绝无效引用及多余字段，priority-only 更新不能绕过检查。静态叶不观察 tick；隐藏、暂停、失效、到期或 Runtime shutdown 释放需求。Broker 只发事件型合并失效，绘制不会结算业务状态或调用 JS observer。
+
+新增节点、SDK、Bridge、生产 Runtime 和真实 NSHostingView 测试，验证时间 / 进度截图变化、同一 clock 一个 Task、隐藏页面与摘要回退没有残留订阅。公开无权限 countdown-demo 通过真实 VM、ActionRouter 和 Host display resolver 验证开始 / 暂停 / 继续 / 结束及收起重选；[结果和原始测试截图](evidence/t35-countdown-node-20261015/result.json)记录实际执行范围。下一步是官方 Pomodoro JS 包与完整迁移，T35 仍 in progress。
+
+2C1 完整 `./Scripts/ci.sh`：**835 total / 831 passed / 4 skipped / 0 failures**，普通 Release build passed。新增 35 项测试，公开示例另外完成真实 10 秒自然到期并保留同 generation、无自动重开。3 项既有 AppKit 鼠标测试因会话锁定跳过，1 项为显式截图矩阵生成，未将它们宣称为本轮通过。原始时间 / 进度 / 到期与摘要回退 PNG 来自真实 Debug NSHostingView 测试并已目视检查；没有把它们当成普通 Release 产品 UI 或实机睡眠验收。

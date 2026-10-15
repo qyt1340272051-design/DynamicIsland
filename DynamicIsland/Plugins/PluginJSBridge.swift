@@ -481,6 +481,19 @@ public final class PluginJSBridge {
             if !PluginActivityConverter.layoutActionIDs(in: activity.presentation).isEmpty {
                 try require(.handleActions, manifest: manifest)
             }
+            let countdowns = [activity.presentation.minimal, activity.presentation.compact, activity.presentation.expanded]
+                .compactMap { $0 }.flatMap { PluginIslandNodeConverter.countdownNodes(in: $0) }
+            if !countdowns.isEmpty {
+                try require(.countdown, manifest: manifest)
+                guard let owner = context.countdownOwner else { throw PluginBridgeErrorCode.inactiveExecution }
+                for reference in countdowns {
+                    guard let generation = PluginCountdownGeneration(rawValue: reference.generation),
+                          context.countdownBroker.snapshotForDisplay(owner: owner, id: reference.id,
+                                                                     generation: generation) != nil else {
+                        throw PluginBridgeErrorCode.staleCountdown
+                    }
+                }
+            }
             let instant = activityRateClock()
             guard activityRateLimiter.canAdmit(pluginID: pluginID, at: instant) else {
                 throw PluginBridgeErrorCode.rateLimited

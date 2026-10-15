@@ -28,6 +28,10 @@ public nonisolated struct VolumeActivityEvent: Equatable, Sendable {
 
 @MainActor
 public final class IslandViewModel: ObservableObject {
+    @Published private(set) var isIslandPanelVisible = true
+
+    func setIslandPanelVisible(_ visible: Bool) { isIslandPanelVisible = visible }
+
     @Published public private(set) var isPointerInside = false
     @Published public private(set) var isHovering = false
     @Published public private(set) var isDragging = false
