@@ -74,18 +74,22 @@ public final class PluginExecutionContext {
     let storageAdmission: PluginStorageAdmission
     let networkAdmission: PluginNetworkAdmission
     let resourceAdmission: PluginResourceAdmission
+    let countdownBroker: PluginCountdownBroker
+    let countdownOwner: PluginCountdownOwner?
     private let token: UUID
     private weak var bridge: PluginLifecycleBridge?
 
     fileprivate init(id: String, token: UUID, storageAdmission: PluginStorageAdmission,
                      networkAdmission: PluginNetworkAdmission, resourceAdmission: PluginResourceAdmission,
-                     bridge: PluginLifecycleBridge) {
+                     bridge: PluginLifecycleBridge, countdownOwner: PluginCountdownOwner? = nil) {
         self.id = id
         source = ActivitySource(kind: .plugin, identifier: id)
         self.token = token
         self.storageAdmission = storageAdmission
         self.networkAdmission = networkAdmission
         self.resourceAdmission = resourceAdmission
+        countdownBroker = bridge.countdownBroker
+        self.countdownOwner = countdownOwner
         self.bridge = bridge
     }
 
@@ -170,6 +174,7 @@ public final class PluginLifecycleBridge: PluginManagerLifecycleHandling {
         var storageAdmission: PluginStorageAdmission?
         var networkAdmission: PluginNetworkAdmission?
         var resourceAdmission: PluginResourceAdmission?
+        var countdownOwner: PluginCountdownOwner?
         var lastExecutionToken: UUID?
         var runtime: (any PluginLifecycleRuntime)?
         var lastFailure: PluginLifecycleFailure?
@@ -186,6 +191,7 @@ public final class PluginLifecycleBridge: PluginManagerLifecycleHandling {
     }
 
     private let activityManager: ActivityManager
+    let countdownBroker: PluginCountdownBroker
     private let actionRouter: ActionRouter
     private let runtimeFactory: RuntimeFactory?
     private let permissions: PermissionManager?
@@ -207,6 +213,7 @@ public final class PluginLifecycleBridge: PluginManagerLifecycleHandling {
         onAutomaticDisable: (@MainActor (ValidatedPluginPackage, PluginCrashIncident) -> Void)? = nil,
         runtimeFactory: RuntimeFactory? = nil
     ) {
+        countdownBroker = PluginCountdownBroker()
         self.activityManager = activityManager
         self.actionRouter = actionRouter
         self.runtimeFactory = runtimeFactory
@@ -214,6 +221,21 @@ public final class PluginLifecycleBridge: PluginManagerLifecycleHandling {
         self.watchdog = watchdog ?? PluginCrashWatchdog()
         self.diagnostics = diagnostics
         self.onAutomaticDisable = onAutomaticDisable
+        activityManager.requirePluginActivation()
+    }
+
+    /// Internal Host composition accepts the same shared store with an injected
+    /// continuous clock. The JavaScript boundary cannot replace this graph.
+    init(activityManager: ActivityManager, actionRouter: ActionRouter,
+         countdownBroker: PluginCountdownBroker, runtimeFactory: RuntimeFactory? = nil) {
+        self.countdownBroker = countdownBroker
+        self.activityManager = activityManager
+        self.actionRouter = actionRouter
+        self.runtimeFactory = runtimeFactory
+        permissions = nil
+        watchdog = PluginCrashWatchdog()
+        diagnostics = nil
+        onAutomaticDisable = nil
         activityManager.requirePluginActivation()
     }
 
@@ -385,6 +407,7 @@ public final class PluginLifecycleBridge: PluginManagerLifecycleHandling {
                 closeSource(entry.source)
             }
         }
+        countdownBroker.shutdown()
     }
 
     fileprivate func accepts(id: String, token: UUID) -> Bool {
@@ -454,6 +477,16 @@ public final class PluginLifecycleBridge: PluginManagerLifecycleHandling {
               [.loaded, .suspended].contains(entry.lifecycle.state), let runtimeFactory else { return }
         entry.isStarting = true
         defer { entry.isStarting = false }
+        if entry.package.manifest.capabilities.contains(.countdown) {
+            do {
+                if entry.countdownOwner == nil {
+                    entry.countdownOwner = try countdownBroker.registerOwner(pluginID: entry.package.manifest.id)
+                }
+            } catch {
+                recordStartFailure(entry)
+                return
+            }
+        }
         let runtime: any PluginLifecycleRuntime
         do {
             runtime = try runtimeFactory(entry.package)
@@ -469,6 +502,16 @@ public final class PluginLifecycleBridge: PluginManagerLifecycleHandling {
               [.loaded, .suspended].contains(entry.lifecycle.state) else {
             runtime.teardown()
             return
+        }
+        // Reactivate only after the factory's synchronous Host callbacks have
+        // passed admission. A factory may put a suspended execution back to sleep.
+        if let owner = entry.countdownOwner {
+            do { try countdownBroker.reactivateOwner(owner) }
+            catch {
+                runtime.teardown()
+                recordStartFailure(entry)
+                return
+            }
         }
         let token = UUID()
         let storageAdmission = PluginStorageAdmission()
@@ -487,7 +530,8 @@ public final class PluginLifecycleBridge: PluginManagerLifecycleHandling {
         do {
             try runtime.onStart(context: .init(id: entry.package.manifest.id, token: token,
                                              storageAdmission: storageAdmission, networkAdmission: networkAdmission,
-                                             resourceAdmission: resourceAdmission, bridge: self))
+                                             resourceAdmission: resourceAdmission, bridge: self,
+                                             countdownOwner: entry.countdownOwner))
         } catch {
             guard entry.token == token else { return }
             recordStartFailure(entry)
@@ -525,6 +569,22 @@ public final class PluginLifecycleBridge: PluginManagerLifecycleHandling {
 
     private func endExecution(_ entry: Entry, event: PluginLifecycleEvent, reason: PluginStopReason) {
         defer { notifyChangeObservers() }
+        if let owner = entry.countdownOwner {
+            switch reason {
+            case .suspended:
+                try? countdownBroker.suspendOwner(owner)
+            case .unloaded, .shutdown:
+                try? countdownBroker.removeOwner(owner)
+                entry.countdownOwner = nil
+            case .disabled, .stopped, .startFailed:
+                // A stopped execution cannot keep a business record or reuse
+                // an old load handle after a later enable/start.
+                entry.countdownOwner = try? countdownBroker.replaceOwner(owner)
+                if let replacement = entry.countdownOwner {
+                    try? countdownBroker.suspendOwner(replacement)
+                }
+            }
+        }
         entry.resourceAdmission?.revoke()
         entry.resourceAdmission = nil
         entry.networkAdmission?.revoke()

@@ -120,7 +120,8 @@
         "ui.islandNode",
         "actions.handle",
         "storage.local",
-        "scheduler"
+          "scheduler",
+          "countdown"
       ]
     }
   }

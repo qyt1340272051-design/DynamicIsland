@@ -18,6 +18,7 @@ public nonisolated enum PluginBridgeErrorCode: String, Error, Equatable, Sendabl
     case capabilityRequired, permissionRequired, quotaExceeded, rateLimited, activityNotFound, coreRejected
     case storageReadFailed, storageWriteFailed
     case permissionNotGranted, permissionDenied, permissionRevoked, stalePermissionReview
+    case activationRequired, countdownNotFound, staleCountdown
 
     fileprivate var message: String {
         switch self {
@@ -37,6 +38,9 @@ public nonisolated enum PluginBridgeErrorCode: String, Error, Equatable, Sendabl
         case .permissionDenied: "The Host denied the requested permission."
         case .permissionRevoked: "The Host revoked the permission or its previous authorization."
         case .stalePermissionReview: "The permission review does not belong to the current plugin package."
+        case .activationRequired: "A fresh user action is required."
+        case .countdownNotFound: "The plugin countdown was not found."
+        case .staleCountdown: "The countdown generation is no longer current."
         }
     }
 }
@@ -107,10 +111,12 @@ public final class PluginJSBridge {
     /// Both wrapper validation and this independent Host validation are
     /// required. Plugin identity, source and declarations come from the Host.
     func handle(_ requestJSON: String, package: ValidatedPluginPackage,
-                context: PluginExecutionContext, actionSession: PluginActionSession? = nil) async -> String {
+                context: PluginExecutionContext, actionSession: PluginActionSession? = nil,
+                countdownSession: PluginCountdownSession? = nil) async -> String {
         await withCheckedContinuation { continuation in
             Task { @MainActor in
-                await dispatch(requestJSON, package: package, context: context, actionSession: actionSession) {
+                await dispatch(requestJSON, package: package, context: context, actionSession: actionSession,
+                               countdownSession: countdownSession) {
                     continuation.resume(returning: $0)
                 }
             }
@@ -121,9 +127,15 @@ public final class PluginJSBridge {
     /// User interaction cannot retain the queue used by actions and storage.
     func dispatch(_ requestJSON: String, package: ValidatedPluginPackage,
                   context: PluginExecutionContext, actionSession: PluginActionSession? = nil,
+                  countdownSession: PluginCountdownSession? = nil,
                   reply: @escaping @Sendable (String) -> Void) async {
         do {
             let envelope = try object(PluginBridgeJSON.parse(requestJSON), required: ["apiVersion", "method", "params"])
+            if case .string(let method)? = envelope["method"], method.hasPrefix("countdown.") {
+                reply(handleCountdown(envelope, package: package, context: context,
+                                      actionSession: actionSession, countdownSession: countdownSession))
+                return
+            }
             if envelope["method"] == .string("scheduler.requestRefresh") {
                 try dispatchRefresh(envelope, package: package, context: context, reply: reply)
                 return
@@ -174,6 +186,116 @@ public final class PluginJSBridge {
         catch let error as PluginSchedulerError { reply(brokerFailure(code: error.code, message: error.errorDescription)) }
         catch let error as PluginResourceError { reply(failure(error == .inactiveExecution ? .inactiveExecution : .coreRejected)) }
         catch { reply(failure(.inactiveExecution)) }
+    }
+
+    /// A countdown mutation, including gesture consumption, is one synchronous
+    /// MainActor transaction. It never waits in the ordinary refresh queue.
+    private func handleCountdown(_ envelope: [String: PluginBridgeJSON], package: ValidatedPluginPackage,
+                                 context: PluginExecutionContext, actionSession: PluginActionSession?,
+                                 countdownSession: PluginCountdownSession?) -> String {
+        do {
+            guard envelope["apiVersion"] == .string(Self.apiVersion) else { throw PluginBridgeErrorCode.unsupportedVersion }
+            guard context.id == package.manifest.id else { throw PluginBridgeErrorCode.coreRejected }
+            try context.perform {}
+            try require(.countdown, manifest: package.manifest)
+            guard let owner = context.countdownOwner else { throw PluginBridgeErrorCode.inactiveExecution }
+            let method = try string(envelope["method"], maximumBytes: 64)
+            guard let params = envelope["params"] else { throw PluginBridgeErrorCode.invalidArguments }
+            // Do not hold the admission lock while a Host completion observer
+            // runs. No await occurs; fresh gates surround the synchronous work.
+            try context.resourceAdmission.perform {}
+            let value: PluginBridgeJSON = try {
+                let broker = context.countdownBroker
+                switch method {
+                case "countdown.onComplete":
+                    let fields = try object(params, required: ["registrationID"])
+                    let registrationID = try identifier(fields["registrationID"], maximumBytes: 80)
+                    guard let countdownSession, countdownSession.matches(context: context) else {
+                        throw PluginBridgeErrorCode.inactiveExecution
+                    }
+                    try countdownSession.register(registrationID: registrationID)
+                    return .null
+                case "countdown.offComplete":
+                    _ = try object(params, required: [])
+                    guard let countdownSession, countdownSession.matches(context: context) else {
+                        throw PluginBridgeErrorCode.inactiveExecution
+                    }
+                    try countdownSession.unregister()
+                    return .null
+                case "countdown.get":
+                    let fields = try object(params, required: ["id"])
+                    let id = try identifier(fields["id"], maximumBytes: 80)
+                    return try broker.get(owner: owner, id: id)?.bridgeJSON ?? .null
+                case "countdown.start":
+                    let fields = try object(params, required: ["id", "durationMs", "activation"])
+                    let id = try identifier(fields["id"], maximumBytes: 80)
+                    guard case .number(let duration)? = fields["durationMs"], duration.isFinite,
+                          duration.rounded(.towardZero) == duration, (1_000...86_400_000).contains(duration) else {
+                        throw PluginBridgeErrorCode.invalidArguments
+                    }
+                    let activation = try identifier(fields["activation"], maximumBytes: 80)
+                    guard let actionSession, actionSession.matches(context: context) else {
+                        throw PluginBridgeErrorCode.activationRequired
+                    }
+                    try actionSession.consumeCountdownActivation(activation)
+                    return try context.resourceAdmission.perform {
+                        try context.perform {}
+                        return try broker.start(owner: owner, id: id, durationMilliseconds: Int(duration)).bridgeJSON
+                    }
+                case "countdown.pause", "countdown.resume", "countdown.stop":
+                    let fields = try object(params, required: method == "countdown.resume"
+                                            ? ["id", "generation", "activation"] : ["id", "generation"])
+                    let id = try identifier(fields["id"], maximumBytes: 80)
+                    let generationString = try string(fields["generation"], maximumBytes: 36)
+                    guard let generation = PluginCountdownGeneration(rawValue: generationString) else {
+                        throw PluginBridgeErrorCode.invalidArguments
+                    }
+                    if method == "countdown.resume" {
+                        let activation = try identifier(fields["activation"], maximumBytes: 80)
+                        guard let actionSession, actionSession.matches(context: context) else {
+                            throw PluginBridgeErrorCode.activationRequired
+                        }
+                        try actionSession.consumeCountdownActivation(activation)
+                        return try context.resourceAdmission.perform {
+                            try context.perform {}
+                            return try broker.resume(owner: owner, id: id, generation: generation).bridgeJSON
+                        }
+                    }
+                    if method == "countdown.pause" {
+                        return try broker.pause(owner: owner, id: id, generation: generation).bridgeJSON
+                    }
+                    try broker.stop(owner: owner, id: id, generation: generation)
+                    return .null
+                case "countdown.failure":
+                    let fields = try object(params, required: ["kind"])
+                    let kind = try string(fields["kind"], maximumBytes: 16)
+                    guard ["exception", "rejection", "limit"].contains(kind) else { throw PluginBridgeErrorCode.invalidArguments }
+                    if kind == "limit" {
+                        diagnostics.record(pluginID: context.id, level: .warning,
+                                           category: .actionLimit, code: .actionHandlerLimitExceeded)
+                    } else {
+                        diagnostics.record(pluginID: context.id, level: .error,
+                                           category: .actionFailure, code: .actionHandlerFailed)
+                        _ = context.reportSeriousFailure(kind: kind == "exception" ? .actionException : .actionRejection)
+                    }
+                    return .null
+                default: throw PluginBridgeErrorCode.unsupportedMethod
+                }
+            }()
+            try context.perform {}
+            try context.resourceAdmission.perform {}
+            return response(.object(["ok": .boolean(true), "value": value]))
+        } catch let error as PluginBridgeErrorCode { return failure(error) }
+        catch is PluginCountdownActivationError { return failure(.activationRequired) }
+        catch let error as PluginCountdownError {
+            switch error {
+            case .invalidArguments, .invalidState: return failure(.invalidArguments)
+            case .quotaExceeded: return failure(.quotaExceeded)
+            case .countdownNotFound: return failure(.countdownNotFound)
+            case .staleGeneration: return failure(.staleCountdown)
+            case .inactiveOwner, .ownerAlreadyRegistered: return failure(.inactiveExecution)
+            }
+        } catch { return failure(.inactiveExecution) }
     }
 
     private func dispatchRefresh(_ envelope: [String: PluginBridgeJSON], package: ValidatedPluginPackage,

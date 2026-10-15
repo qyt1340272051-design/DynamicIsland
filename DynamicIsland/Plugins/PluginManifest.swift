@@ -25,6 +25,7 @@ public nonisolated enum PluginCapability: String, Codable, CaseIterable, Sendabl
     case handleActions = "actions.handle"
     case localStorage = "storage.local"
     case scheduler
+    case countdown
 }
 
 public nonisolated enum PluginManifestError: Error, Equatable, LocalizedError, Sendable {

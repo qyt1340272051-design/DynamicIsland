@@ -20,11 +20,14 @@ nonisolated final class PluginBridgeTransport: @unchecked Sendable {
 
     @MainActor
     init(bridge: PluginJSBridge, package: ValidatedPluginPackage, context: PluginExecutionContext,
-         actionSession: PluginActionSession? = nil) {
+         actionSession: PluginActionSession? = nil, countdownSession: PluginCountdownSession? = nil) {
         storageAdmission = context.storageAdmission
         networkAdmission = context.networkAdmission
         resourceAdmission = context.resourceAdmission
-        process = { await bridge.dispatch($0, package: package, context: context, actionSession: actionSession, reply: $1) }
+        process = {
+            await bridge.dispatch($0, package: package, context: context,
+                                  actionSession: actionSession, countdownSession: countdownSession, reply: $1)
+        }
     }
 
     @discardableResult

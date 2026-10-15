@@ -44,6 +44,7 @@ public final class PluginRuntime: PluginLifecycleRuntime {
     private let bridge: PluginJSBridge
     public let diagnostics: PluginDiagnosticsStore
     private var actionSession: PluginActionSession?
+    private var countdownSession: PluginCountdownSession?
     private var worker: PluginJavaScriptWorker?
     private var didStart = false
     private var didTeardown = false
@@ -62,11 +63,15 @@ public final class PluginRuntime: PluginLifecycleRuntime {
         let actionSession = try PluginActionSession(package: package, context: context) { [weak self] delivery in
             self?.worker?.deliverAction(delivery)
         }
+        let countdownSession = try PluginCountdownSession(package: package, context: context) { [weak self] delivery in
+            self?.worker?.deliverAction(delivery)
+        }
         self.actionSession = actionSession
+        self.countdownSession = countdownSession
         didStart = true
         snapshot = .init(state: .starting, lastFailure: nil)
         let transport = PluginBridgeTransport(bridge: bridge, package: package, context: context,
-                                              actionSession: actionSession)
+                                              actionSession: actionSession, countdownSession: countdownSession)
         let worker = PluginJavaScriptWorker(package: package, transport: transport) { [weak self, context] event in
             Task { @MainActor [weak self] in
                 self?.receive(event)
@@ -84,6 +89,7 @@ public final class PluginRuntime: PluginLifecycleRuntime {
     public func onStop(reason: PluginStopReason) throws {
         guard !didTeardown else { return }
         actionSession?.revoke()
+        countdownSession?.revoke()
         snapshot = .init(state: .stopping, lastFailure: snapshot.lastFailure)
         worker?.stop(reason: reason)
     }
@@ -91,7 +97,9 @@ public final class PluginRuntime: PluginLifecycleRuntime {
     public func teardown() {
         guard !didTeardown else { return }
         didTeardown = true
+        countdownSession?.discardRecordIfExecutionStillActive()
         actionSession?.revoke()
+        countdownSession?.revoke()
         guard let worker else {
             snapshot = .init(state: .tornDown, lastFailure: snapshot.lastFailure)
             return
@@ -117,6 +125,7 @@ public final class PluginRuntime: PluginLifecycleRuntime {
             snapshot = .init(state: .running, lastFailure: nil)
         case .failed(let failure):
             actionSession?.revoke()
+            countdownSession?.revoke()
             snapshot = .init(state: didTeardown ? snapshot.state : .failed, lastFailure: failure)
         case .stopped:
             guard !didTeardown else { return }
@@ -169,7 +178,7 @@ private nonisolated final class PluginJavaScriptWorker: @unchecked Sendable {
         guard !stopRequested, !teardownRequested else { lock.unlock(); return }
         stopRequested = true
         revoked = true
-        actionQueue.removeAll()
+        rejectQueuedActionsLocked()
         enqueueLocked { [self] in
             if startedHook, let engine {
                 do { try engine.callLifecycle("onStop", phase: .stop, arguments: [reason.rawValue]) }
@@ -187,7 +196,7 @@ private nonisolated final class PluginJavaScriptWorker: @unchecked Sendable {
         guard !teardownRequested else { lock.unlock(); return }
         teardownRequested = true
         revoked = true
-        actionQueue.removeAll()
+        rejectQueuedActionsLocked()
         enqueueLocked { [self] in
             engine?.dispose()
             engine = nil
@@ -217,12 +226,13 @@ private nonisolated final class PluginJavaScriptWorker: @unchecked Sendable {
         lock.unlock()
     }
 
-    /// Events carry only data and an actor-isolated Host validity check. The
-    /// single in-flight check preserves FIFO without blocking the VM thread.
+    /// Actions and countdown completions share this bounded FIFO. Events carry
+    /// only data and an actor-isolated Host validity check, never a JS callback.
     func deliverAction(_ delivery: PluginActionDelivery) {
         lock.lock()
         guard !revoked, actionQueue.count + (actionInFlight ? 1 : 0) < 64 else {
             lock.unlock()
+            rejectDelivery(delivery)
             return
         }
         actionQueue.append(delivery)
@@ -238,7 +248,7 @@ private nonisolated final class PluginJavaScriptWorker: @unchecked Sendable {
     }
 
     private func validateAction(_ delivery: PluginActionDelivery) {
-        guard !isRevoked else { finishAction(); return }
+        guard !isRevoked else { rejectDelivery(delivery); finishAction(); return }
         Task { @MainActor [weak self] in
             let valid = delivery.isValid()
             self?.receiveValidatedAction(delivery, valid: valid)
@@ -250,22 +260,38 @@ private nonisolated final class PluginJavaScriptWorker: @unchecked Sendable {
         guard !revoked else {
             actionInFlight = false
             lock.unlock()
+            rejectDelivery(delivery)
             return
         }
         enqueueLocked { [self] in
             defer { finishAction() }
-            guard valid, !isRevoked, let engine else { return }
-            do { try engine.receiveAction(registrationID: delivery.registrationID, eventJSON: delivery.eventJSON) }
-            catch let failure as PluginRuntimeFailure { fail(failure) }
-            catch { /* No native or JavaScript value leaves the worker. */ }
+            guard valid, !isRevoked, let engine else { rejectDelivery(delivery); return }
+            do {
+                if try engine.receiveDelivery(delivery) {
+                    if let didReceive = delivery.didReceive { Task { @MainActor in didReceive() } }
+                } else { rejectDelivery(delivery) }
+            }
+            catch let failure as PluginRuntimeFailure { rejectDelivery(delivery); fail(failure) }
+            catch { rejectDelivery(delivery) }
         }
         lock.unlock()
+    }
+
+    private func rejectDelivery(_ delivery: PluginActionDelivery) {
+        guard let didNotReceive = delivery.didNotReceive else { return }
+        Task { @MainActor in didNotReceive() }
+    }
+
+    private func rejectQueuedActionsLocked() {
+        let dropped = actionQueue
+        actionQueue.removeAll()
+        for delivery in dropped { rejectDelivery(delivery) }
     }
 
     private func finishAction() {
         lock.lock()
         actionInFlight = false
-        if revoked { actionQueue.removeAll() }
+        if revoked { rejectQueuedActionsLocked() }
         else { scheduleNextActionLocked() }
         lock.unlock()
     }
@@ -343,7 +369,7 @@ private nonisolated final class PluginJavaScriptWorker: @unchecked Sendable {
         transport.revoke()
         lock.lock()
         revoked = true
-        actionQueue.removeAll()
+        rejectQueuedActionsLocked()
         lock.unlock()
         sink(.failed(failure))
     }
@@ -378,6 +404,7 @@ private nonisolated final class PluginJavaScriptEngine {
     private var exceptionMessage: String?
     private var bridgeReceiver: JSValue?
     private var actionReceiver: JSValue?
+    private var countdownReceiver: JSValue?
     private let submitRequest: @Sendable (Int, String) -> Void
 
     init(package: ValidatedPluginPackage, submitRequest: @escaping @Sendable (Int, String) -> Void) throws {
@@ -417,9 +444,11 @@ private nonisolated final class PluginJavaScriptEngine {
         )
         bridgeReceiver = receivers?.objectForKeyedSubscript("receiveResponse")
         actionReceiver = receivers?.objectForKeyedSubscript("receiveAction")
-        guard let bridgeReceiver, let actionReceiver,
+        countdownReceiver = receivers?.objectForKeyedSubscript("receiveCountdown")
+        guard let bridgeReceiver, let actionReceiver, let countdownReceiver,
               JSObjectIsFunction(context.jsGlobalContextRef, bridgeReceiver.jsValueRef),
-              JSObjectIsFunction(context.jsGlobalContextRef, actionReceiver.jsValueRef) else {
+              JSObjectIsFunction(context.jsGlobalContextRef, actionReceiver.jsValueRef),
+              JSObjectIsFunction(context.jsGlobalContextRef, countdownReceiver.jsValueRef) else {
             throw PluginRuntimeFailure(phase: .bootstrap, code: .contextUnavailable,
                                        message: "Bridge receivers unavailable.")
         }
@@ -467,16 +496,23 @@ private nonisolated final class PluginJavaScriptEngine {
         try checkException(.bridge)
     }
 
-    func receiveAction(registrationID: String, eventJSON: String) throws {
-        guard let actionReceiver else { throw PluginRuntimeError.inactiveExecution }
+    func receiveDelivery(_ delivery: PluginActionDelivery) throws -> Bool {
+        let receiver: JSValue?
+        switch delivery.kind {
+        case .action: receiver = actionReceiver
+        case .countdown: receiver = countdownReceiver
+        }
+        guard let receiver else { throw PluginRuntimeError.inactiveExecution }
         clearException()
-        _ = actionReceiver.call(withArguments: [registrationID, eventJSON])
+        let result = receiver.call(withArguments: [delivery.registrationID, delivery.eventJSON])
         try checkException(.bridge)
+        return delivery.kind == .action || (result?.isBoolean == true && result?.toBool() == true)
     }
 
     func dispose() {
         bridgeReceiver = nil
         actionReceiver = nil
+        countdownReceiver = nil
         context?.exceptionHandler = nil
         context?.exception = nil
         context = nil

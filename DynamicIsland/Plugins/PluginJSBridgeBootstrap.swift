@@ -21,6 +21,7 @@ nonisolated enum PluginJSBridgeBootstrap {
             const promiseThen = Promise.prototype.then;
             const mapGet = Map.prototype.get, mapSet = Map.prototype.set, mapDelete = Map.prototype.delete;
             const charCode = String.prototype.charCodeAt, lowercase = String.prototype.toLowerCase;
+            const sliceString = String.prototype.slice;
             const pending = new MapType();
             const handlers = new MapType();
             const promiseConstructor = create(null);
@@ -31,6 +32,7 @@ nonisolated enum PluginJSBridgeBootstrap {
             const LIMIT = freeze(create(null));
             let outstanding = 0, nextID = 1;
             let handlerCount = 0, nextRegistration = 1, pendingActions = 0;
+            let countdownHandler;
             const version = '1.0.0';
 
             function failure(code) {
@@ -138,6 +140,9 @@ nonisolated enum PluginJSBridgeBootstrap {
                         request.params = snapshot(params, 1, snapshotBudget(), []);
                         if (method === 'activity.publish' || method === 'activity.update') {
                             validateActivityPresentation(request.params);
+                        }
+                        if (method.length > 10 && apply(sliceString, method, [0, 10]) === 'countdown.') {
+                            validateCountdownParams(method, request.params);
                         }
                         const json = stringify(request);
                         if (utf8Bytes(json) > 16384) throw LIMIT;
@@ -318,6 +323,52 @@ nonisolated enum PluginJSBridgeBootstrap {
                 if (fields.policy !== 'active' && fields.policy !== 'background' && fields.policy !== 'lowPower') throw null;
                 return freeze(fields);
             }
+            function validCountdownGeneration(value) {
+                if (typeof value !== 'string' || value.length !== 36) return false;
+                for (let i = 0; i < value.length; i++) {
+                    const code = apply(charCode, value, [i]);
+                    if (i === 8 || i === 13 || i === 18 || i === 23) {
+                        if (code !== 45) return false;
+                    } else if (!((code >= 48 && code <= 57) || (code >= 97 && code <= 102))) return false;
+                }
+                return true;
+            }
+            function validateCountdownParams(name, value) {
+                let required;
+                switch (name) {
+                    case 'countdown.get': required = ['id']; break;
+                    case 'countdown.start': required = ['id', 'durationMs', 'activation']; break;
+                    case 'countdown.pause': case 'countdown.stop': required = ['id', 'generation']; break;
+                    case 'countdown.resume': required = ['id', 'generation', 'activation']; break;
+                    case 'countdown.onComplete': required = ['registrationID']; break;
+                    case 'countdown.offComplete': required = []; break;
+                    case 'countdown.failure': required = ['kind']; break;
+                    default: throw null;
+                }
+                const fields = fieldsWithShape(value, required);
+                const identifiers = ['id', 'activation', 'registrationID'];
+                for (let i = 0; i < identifiers.length; i++) {
+                    const key = identifiers[i];
+                    if (descriptor(fields, key) && (!validActionID(fields[key]) || fields[key].length > 80)) throw null;
+                }
+                if (descriptor(fields, 'generation') && !validCountdownGeneration(fields.generation)) throw null;
+                if (descriptor(fields, 'durationMs') && (typeof fields.durationMs !== 'number' ||
+                    !finite(fields.durationMs) || fields.durationMs % 1 !== 0 ||
+                    fields.durationMs < 1000 || fields.durationMs > 86400000)) throw null;
+                if (descriptor(fields, 'kind') && fields.kind !== 'exception' && fields.kind !== 'rejection' && fields.kind !== 'limit') throw null;
+            }
+            function countdownResponse(value, nullable) {
+                if (value === null && nullable) return null;
+                const fields = fieldsWithShape(value, ['id', 'generation', 'state', 'durationMs', 'remainingMs']);
+                if (!validActionID(fields.id) || fields.id.length > 80 || !validCountdownGeneration(fields.generation)) throw null;
+                if (fields.state !== 'running' && fields.state !== 'paused' && fields.state !== 'completed') throw null;
+                if (typeof fields.durationMs !== 'number' || !finite(fields.durationMs) || fields.durationMs % 1 !== 0 ||
+                    fields.durationMs < 1000 || fields.durationMs > 86400000 ||
+                    typeof fields.remainingMs !== 'number' || !finite(fields.remainingMs) || fields.remainingMs % 1 !== 0 ||
+                    fields.remainingMs < 0 || fields.remainingMs > fields.durationMs ||
+                    (fields.state === 'completed' && fields.remainingMs !== 0)) throw null;
+                return freeze(fields);
+            }
             const log = method(function(message, level) {
                 if (arguments.length < 1 || arguments.length > 2) return rejected('invalidArguments');
                 return send('log', {message, level: level === undefined ? 'info' : level});
@@ -380,6 +431,56 @@ nonisolated enum PluginJSBridgeBootstrap {
                 if (arguments.length !== 1 || typeof delayMs !== 'number' || !finite(delayMs) ||
                     delayMs % 1 !== 0 || delayMs < 1000 || delayMs > 86400000) return rejected('invalidArguments');
                 return send('scheduler.requestRefresh', {delayMs});
+            });
+            const countdown = create(null);
+            countdown.apiVersion = version;
+            countdown.supported = true;
+            countdown.get = method(function(id) {
+                if (arguments.length !== 1) return rejected('invalidArguments');
+                return send('countdown.get', {id});
+            });
+            countdown.start = method(function(options) {
+                if (arguments.length !== 1) return rejected('invalidArguments');
+                return send('countdown.start', options);
+            });
+            countdown.pause = method(function(options) {
+                if (arguments.length !== 1) return rejected('invalidArguments');
+                return send('countdown.pause', options);
+            });
+            countdown.resume = method(function(options) {
+                if (arguments.length !== 1) return rejected('invalidArguments');
+                return send('countdown.resume', options);
+            });
+            countdown.stop = method(function(options) {
+                if (arguments.length !== 1) return rejected('invalidArguments');
+                return send('countdown.stop', options);
+            });
+            countdown.onComplete = method(function(handler) {
+                if (arguments.length !== 1 || typeof handler !== 'function') return rejected('invalidArguments');
+                if (nextRegistration > 9007199254740991) return rejected('quotaExceeded');
+                const record = create(null);
+                record.registrationID = 'c' + nextRegistration++;
+                record.handler = handler;
+                record.previous = countdownHandler;
+                record.failed = false;
+                countdownHandler = record;
+                return chainRequest(send('countdown.onComplete', {registrationID: record.registrationID}), function() {
+                    record.previous = undefined;
+                    return null;
+                }, function(error) {
+                    record.failed = true;
+                    if (countdownHandler === record) {
+                        let previous = record.previous;
+                        while (previous && previous.failed) previous = previous.previous;
+                        countdownHandler = previous;
+                    }
+                    throw error;
+                });
+            });
+            countdown.offComplete = method(function() {
+                if (arguments.length !== 0) return rejected('invalidArguments');
+                countdownHandler = undefined;
+                return send('countdown.offComplete', {});
             });
             const network = create(null);
             network.apiVersion = version;
@@ -472,6 +573,7 @@ nonisolated enum PluginJSBridgeBootstrap {
             island.files = freeze(files);
             island.network = freeze(network);
             island.scheduler = freeze(scheduler);
+            island.countdown = freeze(countdown);
             island.actions = freeze(actions);
             const attributes = create(null);
             attributes.value = freeze(island);
@@ -497,6 +599,14 @@ nonisolated enum PluginJSBridgeBootstrap {
                         if (pair.method === 'network.fetch') pair.resolve(networkResponse(value));
                         else if (pair.method === 'files.chooseText') pair.resolve(textFileResponse(value));
                         else if (pair.method === 'scheduler.requestRefresh') pair.resolve(schedulerResponse(value));
+                        else if (pair.method === 'countdown.get' || pair.method === 'countdown.start' ||
+                                 pair.method === 'countdown.pause' || pair.method === 'countdown.resume') {
+                            pair.resolve(countdownResponse(value, pair.method === 'countdown.get'));
+                        } else if (pair.method === 'countdown.stop' || pair.method === 'countdown.onComplete' ||
+                                   pair.method === 'countdown.offComplete' || pair.method === 'countdown.failure') {
+                            if (value !== null) throw null;
+                            pair.resolve(null);
+                        }
                         else if (pair.method === 'clipboard.readText') {
                             if (value !== null && typeof value !== 'string') throw null;
                             pair.resolve(value);
@@ -559,9 +669,38 @@ nonisolated enum PluginJSBridgeBootstrap {
                 }
                 pendingActions--;
             }
+            function reportCountdownFailure(kind) {
+                chainRequest(send('countdown.failure', {kind}), function() {}, function() {});
+            }
+            function receiveCountdown(registrationID, json) {
+                const record = countdownHandler;
+                if (!record || record.registrationID !== registrationID) return;
+                let event;
+                try {
+                    if (typeof json !== 'string' || json.length > 4096) throw null;
+                    event = countdownResponse(snapshot(parse(json), 1, snapshotBudget(), []), false);
+                    if (event.state !== 'completed') throw null;
+                } catch (_) { return; }
+                if (pendingActions >= 64) { reportCountdownFailure('limit'); return; }
+                pendingActions++;
+                let result;
+                try { result = apply(record.handler, undefined, [event]); }
+                catch (_) { pendingActions--; reportCountdownFailure('exception'); return true; }
+                if (result !== null && typeof result === 'object') {
+                    try {
+                        apply(promiseThen, result, [function() { pendingActions--; }, function() {
+                            pendingActions--; reportCountdownFailure('rejection');
+                        }]);
+                        return true;
+                    } catch (_) { /* Ignore unbranded thenable objects. */ }
+                }
+                pendingActions--;
+                return true;
+            }
             const receivers = create(null);
             receivers.receiveResponse = receiveResponse;
             receivers.receiveAction = receiveAction;
+            receivers.receiveCountdown = receiveCountdown;
             return freeze(receivers);
         })();
         """

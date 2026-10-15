@@ -26,11 +26,11 @@ update 只修改 priority 等顶层字段时保留原 presentation；提交新�
 ## 下一步与完成边界
 
 1. 通用工具角色、按实例选择及 Host 几何已完成，见下方子步骤 1B。
-2. 实现通用倒计时记录、声明式秒级显示和真实动作的一次性启动凭证，保持后台刷新下限。
+2. 通用 Host 倒计时记录、公开 API 和真实动作一次性启动凭证已实现；声明式秒级显示仍待实施，后台刷新下限保持原值。
 3. 完成 JS 官方包的开始、暂停、继续、结束、预设及存储权限处理。
 4. 删除生产番茄钟专用 Swift；从 `.dip` 安装并完成真实 UI / 计时、旧功能回归验收。
 
-子步骤 1A / 1B 已完成工具选择闭环，精确计时和官方插件仍未实现，不能将 T35 标为 verified。原生番茄钟继续保留至完整替换验收，T36 仍 pending。
+子步骤 1A / 1B 已完成工具选择闭环，声明式秒级显示和官方插件仍未实现，不能将 T35 标为 verified。原生番茄钟继续保留至完整替换验收，T36 仍 pending。
 
 ## 子步骤 1B：工具角色、实例选择与共享几何
 
@@ -66,3 +66,11 @@ View 与 Panel hover 共用 `runtime.expandedShellSize`；实际呈现工具时 
 [13 个实际 AX 观察](evidence/t35-tools-20261015/ui-observations.json)、[截图来源及 SHA256](evidence/t35-tools-20261015/screenshots.json)、[完整证据索引](evidence/t35-tools-20261015/result.json)已保存，截图为本任务实际工具输出的原始 JPEG。自动化另覆盖提示抢占、禁用、过期、角色改变、旧实例动作和原生计时完成；本轮不声称实机低电池或真实 Volume 交错已复测。
 
 验收副本已正常退出、注销并连同独立插件数据归档。原 App PID 66831 仍运行，原 Installed / Staging 为空；默认 `.dip` handler 未更改，见[清理记录](evidence/t35-tools-20261015/cleanup.json)。本子步骤没有实现倒计时 API、移除原生番茄钟或接受 T36。
+
+## 子步骤 2A / 2B：Host 倒计时与动作凭证
+
+已实现通用 `countdown` capability、公开 countdown namespace、精确 Duration 截止 / 暂停 / 继续、单一最近 alarm，以及真实 Action 的 5 秒一次性启动凭证。睡眠和低电池保留业务记录，恢复使用新执行上下文；完成事件经 typed FIFO 和 VM receipt ACK 投递，防止排队后暂停丢通知。审查补齐了未接收补发、factory 重入睡眠、凭证消费时资源撤销三个边界。
+
+详见[公开合约与生命周期说明](t35-countdown-api.md)及[CI 和源码证据](evidence/t35-countdown-20261015.json)。本子步骤的 Host/API 自动化不能替代真实睡眠、低功耗、能耗或最终 Pomodoro UI 验收。下一步从通用声明式时间节点和仅可见节点的共享显示 tick 开始，再实现官方 JS 包、删除专用 Swift 及完成实际安装计时验收。T35 保持 in progress，T36 pending。
+
+本子步骤完整 `./Scripts/ci.sh`：**795 total / 794 passed / 1 skipped / 0 failures**，普通 Release build passed。新增 62 项 countdown 测试；唯一 skip 是既有显式截图矩阵生成。首轮修正测试 helper 与诊断属性名，资源准入包装按 Void context.perform 的真实签名拆分后通过；无新增编译错误。
