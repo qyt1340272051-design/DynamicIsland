@@ -1,6 +1,6 @@
 # 番茄钟官方插件 — T35 3B
 
-包 ID：`com.dynamicisland.pomodoro`；开发者：DynamicIsland；版本：0.2.0；最低 Host：0.6.0。
+包 ID：`com.dynamicisland.pomodoro`；开发者：DynamicIsland；版本：0.2.1；最低 Host：0.6.0。
 
 本步骤在 3A 的预设、Host 倒计时与应用内完成提示之上，增加公开 Storage 和一次 Scheduler 对账。权限仅为 `storage.local`，需要用户明确批准才能保存设置；拒绝或撤销后，计时和应用内完成提示仍可使用。没有系统通知、网络或其他权限。
 
@@ -10,7 +10,9 @@
 
 工具 Activity 的本地 ID 为 `session`，保持 persistent / tool / automatic compact 策略。运行和暂停时允许 compact 显示，准备和完成时隐藏 compact；展开布局最多五行，时间与进度都引用 Host 的精确 generation。布局使用 Host tokens，不请求窗口大小。收起或隐藏工具不会结束业务计时；重新展开时需按 Host 工具选择规则选择该工具。
 
-Host 完成事件通过串行 Promise work 链，再调用 `countdown.get('session')` 核对当前 completed generation。工具显示完成状态，并对该 generation 发出一次本地 ID 为 `completion` 的 transient Activity：「专注完成 / 本轮专注已结束」。这是应用内 Activity 提示，不是系统通知，也没有系统通知权限；完成事件不能自动重新开表。
+Host 完成事件通过串行 Promise work 链，再调用 `countdown.get('session')` 核对当前 completed generation。工具显示完成状态，并对该 generation 发出一次本地 ID 为 `completion` 的 transient Activity。compact 使用「完成图标 / 间隔 / 完成」两翼布局，避免完整四字标题侵入相机区域；expanded 显式保留图标、「专注完成」标题和「本轮专注已结束」副标题。这是应用内 Activity 提示，不是系统通知，也没有系统通知权限；完成事件不能自动重新开表。
+
+0.2.1 通过上述公开节点修正完成提示布局。包源码和版本已改变，原版本的存储授权不适用于新代码；升级后仍需由 Host 重新审核并明确授权，不沿用旧批准。
 
 `onStart` 同步返回。恢复时通过公开 `countdown.get` 接回当前 Host 记录，并仅在 durationMs 对应合法预设时恢复分钟数；没有 Host 记录就回到准备状态。开始和继续首先提交真实动作的一次性 activation，之后才清理旧提示。JavaScript 不持有时钟、定时器或秒级刷新；时间、进度与到期由 Host 负责。
 

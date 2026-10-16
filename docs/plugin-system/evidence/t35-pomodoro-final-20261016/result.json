@@ -17,7 +17,8 @@
     "Actual compact physical notch shows timer icon left and time right; 04:41 to 04:31 advances without center text",
     "Native stopwatch start/pause/reset",
     "Native countdown duration decrement/start/pause/reset",
-    "Music and empty tray switching; reselected Pomodoro still running at 13:30"
+    "Music and empty tray switching; reselected Pomodoro still running at 13:30",
+    "Physical fold and re-expansion restores native countdown 4:00; explicit reselection shows completed Pomodoro 00:00 and 100%"
   ],
   "naturalRun": {
     "clickBeforeEpochMs": 1792146463345,
@@ -43,20 +44,21 @@
   },
   "noticeEvidence": {
     "accepted": false,
-    "reason": "First actual UI capture was at 10:42:50.896Z, 7.258 seconds after completed storage observation. It shows an empty compact island, not the short-lived completion Activity. Actual visibility remains unverified."
+    "oldVersionActivityCaptured": true,
+    "firstNoticeUTC": "2026-10-16T11:04:05.265Z",
+    "reason": "0.2.0 actual completion Activity is centered inside physical camera region. Fixed public-node package 0.2.1 passes VM and pixel tests; actual installation and completion acceptance still pending."
   },
   "pending": [
-    "Capture actual short-lived completion Activity",
-    "Re-expand after physical fold and verify native surface restored; plugin requires explicit reselection"
+    "Install/review 0.2.1 and capture actual completion with safe compact wings"
   ],
   "continuation": {
     "appPath": "/Users/rong5/Applications/Dynamic Island T35 Pomodoro.app",
-    "running": true,
+    "running": false,
     "samePID": 11953,
     "isolatedDataRetained": true,
     "lastSession": "completed",
     "selectedMinutes": 15,
-    "next": "Await physical re-expansion, verify native restored page, then explicitly reselect Pomodoro and start another natural run to capture completion Activity inside one CUA call."
+    "next": "Import 0.2.1 package, review changed code and explicitly grant storage, enable, then perform actual natural completion capture."
   },
   "limits": [
     "Single actual MacBook Air and ordinary Release build; inherits existing automated lifecycle/permission/generation coverage",

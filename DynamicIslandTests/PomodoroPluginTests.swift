@@ -9,7 +9,7 @@ final class PomodoroPluginTests: XCTestCase {
         let f = try PomodoroPluginFixture()
         defer { f.shutdown() }
         XCTAssertEqual(f.package.manifest.id, "com.dynamicisland.pomodoro")
-        XCTAssertEqual(f.package.manifest.version, try SemanticVersion("0.2.0"))
+        XCTAssertEqual(f.package.manifest.version, try SemanticVersion("0.2.1"))
         XCTAssertEqual(f.package.manifest.permissions, [.localStorage])
         XCTAssertEqual(Set(f.package.manifest.capabilities), Set([
             .publishActivity, .updateActivity, .endActivity, .islandNodeUI, .handleActions, .countdown,
@@ -130,6 +130,20 @@ final class PomodoroPluginTests: XCTestCase {
         XCTAssertEqual(completion.activity.source, try f.context().source)
         XCTAssertEqual(completion.activity.presentation.title, "专注完成")
         XCTAssertEqual(completion.activity.presentation.subtitle, "本轮专注已结束")
+        let compact: IslandNode = .hStack(.init([
+            .icon(.init("checkmark.circle.fill")), .spacer(.init()), .text(.init("完成"))
+        ]))
+        let expanded: IslandNode = .vStack(.init([
+            .hStack(.init([.icon(.init("checkmark.circle.fill")), .text(.init("专注完成"))])),
+            .text(.init("本轮专注已结束"))
+        ]))
+        XCTAssertEqual(completion.activity.presentation.compact, compact)
+        XCTAssertEqual(completion.activity.presentation.expanded, expanded,
+                       "Expanded must keep the full message instead of falling back to the shorter compact tree.")
+        XCTAssertTrue(ActivityPresentation.HostPolicy.accepts(compact, for: .compact))
+        XCTAssertTrue(ActivityPresentation.HostPolicy.accepts(expanded, for: .expanded))
+        XCTAssertEqual(IslandRenderer.resolvedNode(in: completion.activity.presentation, for: .compact), compact)
+        XCTAssertEqual(IslandRenderer.resolvedNode(in: completion.activity.presentation, for: .expanded), expanded)
         XCTAssertEqual(completion.activity.presentation.effectiveRole, .status)
         XCTAssertEqual(completion.activity.lifecycle.policy, .transient)
         XCTAssertEqual(completion.activity.priority, .normal)

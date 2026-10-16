@@ -4,7 +4,7 @@
 
 实施进度见 [T35 记录](phase-7-t35-pomodoro.md)。子步骤 1A / 1B 和 2A–2C2 已实现 showsCompact、工具角色、实例选择、共享几何、Host 倒计时、点击凭证，以及声明式节点与仅可见节点的共享秒级显示。3A / 3B 已完成官方 JS 包的计时、预设、完成 Activity、Storage 和一次 Scheduler 对账；3C 已删除全部专用生产 Swift。
 
-当前正在最终普通 Release 实机验收：非法设置回退且动作前不覆盖原值、旧原生页面和物理 compact 两翼已确认，收起后的时间实际由 04:41 变为 04:31。PID 11953 于 10:27:43.345Z 开始的 15 分钟计时，在 10:42:43.637672Z 首次观察到 completed，10:44:12Z 仍保持完成且未自动重开；但首帧提示截图晚到 7.258 秒，未拍到短时完成 Activity，不能将提示可见性视为通过。剩余两项是实际短时完成提示补录、重新展开恢复。最终结果与证据由 [T35 记录](phase-7-t35-pomodoro.md)及[最终实测索引](evidence/t35-pomodoro-final-20261016/result.json)汇总，T35 仍为 in progress。下文候选与实施顺序保留为历史背景，以公开合约和当前验收记录为准。
+最终实机已通过无效设置、旧页面、物理 compact 与收起重展开；两轮实际 900 秒自然到期均完成。第二轮捕获到旧版完成提示位于相机区域，官方包 0.2.1 已修正并通过 VM / 像素测试和完整 CI（891 passed / 1 skipped / 0 failures，Release build passed）。当前仅待 0.2.1 实际升级、重新审核授权及安全两翼完成提示验收。见[T35 当前继续位置](phase-7-t35-pomodoro.md)与[修复证据](evidence/t35-completion-layout-20261016/result.json)。T35 仍 in progress，下文保留初始历史。
 
 ## 初始生产迁移范围（3C 已完成）
 

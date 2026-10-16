@@ -205,7 +205,20 @@ function complete(value) {
             if (!shouldNotify) return;
             return island.activity.publish({
                 id: completionID, priority: 'normal', lifecycle: {policy: 'transient'},
-                presentation: {title: '专注完成', subtitle: '本轮专注已结束', symbolName: 'checkmark.circle.fill'}
+                presentation: {
+                    title: '专注完成', subtitle: '本轮专注已结束', symbolName: 'checkmark.circle.fill',
+                    compact: {type: 'hStack', children: [
+                        {type: 'icon', symbolName: 'checkmark.circle.fill'},
+                        {type: 'spacer'}, {type: 'text', content: '完成'}
+                    ]},
+                    expanded: {type: 'vStack', children: [
+                        {type: 'hStack', children: [
+                            {type: 'icon', symbolName: 'checkmark.circle.fill'},
+                            {type: 'text', content: '专注完成'}
+                        ]},
+                        {type: 'text', content: '本轮专注已结束'}
+                    ]}
+                }
             });
         });
     });

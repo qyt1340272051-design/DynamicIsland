@@ -3,7 +3,7 @@
   "id": "com.dynamicisland.pomodoro",
   "name": "番茄钟",
   "developer": "DynamicIsland",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "engine": "javascriptcore",
   "entry": "index.js",
   "minimumHostVersion": "0.6.0",

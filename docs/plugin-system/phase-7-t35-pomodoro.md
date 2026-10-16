@@ -8,7 +8,7 @@
 
 普通 Release 隔离副本已完成实际 `.dip` 导入、权限拒绝 / 撤销 / 明确授权、设置保存、真实新进程恢复预设且不自动开始，以及菜单 / 动画退出的 PID 消失验证。首次退出卡住后撤回的重启结论及后续修复均保留在[部分验收证据](evidence/t35-pomodoro-ui-20261016/result.json)和文末记录中。
 
-最终副本已确认非法设置回退且动作前不覆盖原值、真实 900 秒自然到期及随后不自动重开、物理 compact 两翼，以及内置秒表 / 倒计时 / 音乐 / 空拖盘回归。自然到期的首次提示截图晚到，未拍到短时完成 Activity，因此该提示的实际可见性尚未验收。当前只剩两项：补录真实短时完成提示、重新展开恢复；详见文末[最终实测证据](evidence/t35-pomodoro-final-20261016/result.json)。完成并记录这两项之前，T35 不标为 verified，T36 保持 pending。下文按实施顺序保留各子步骤当时的实现范围、结果与限制；历史「下一步」不表示当前仍未实现。
+最终副本已通过无效设置回退、两轮真实 900 秒自然到期、无自动重开、物理 compact 两翼、旧页面和收起重展开恢复。第二轮实际捕获到 0.2.0 完成提示，但居中摘要位于相机区域，未接受该可见性。官方包 0.2.1 已修正两形态，最新 CI **892 total / 891 passed / 1 skipped / 0 failures**、Release build passed。当前仅待 0.2.1 实际升级、重新审核授权及安全两翼完成提示验收，T35 in progress，T36 pending。见[修复证据](evidence/t35-completion-layout-20261016/result.json)和[实测](evidence/t35-pomodoro-final-20261016/result.json)。历史进度保留如下。
 
 ## 子步骤 1A：公开 compact 可见性字段
 
@@ -174,3 +174,34 @@ CI **868 total / 864 passed / 4 skipped / 0 failures**，普通 Release build pa
 物理 compact 两翼已确认，时间实际由 **04:41 → 04:31**。内置秒表的开始 / 暂停 / 重置、内置倒计时调整为 4 分钟后的开始 / 暂停 / 重置，以及音乐 / 空拖盘切换均已通过；切回番茄钟时显示 **13:30**，计时连续。原始记录由[最终实测证据](evidence/t35-pomodoro-final-20261016/result.json)汇总。
 
 剩余两项为：**真实短时完成提示补录**、**重新展开恢复**。后者仍待用户物理悬停，以确认收起后的选择清除和再次展开行为。T35 保持 in progress，T36 pending。
+
+
+## T35 范围统一检查
+
+本表仅覆盖 T35，不表示 Phase 7 已全部完成。第二轮真实完成提示补录与结束清理仍在进行；T36 保持 pending。
+
+| 类别 | 结论与证据 | 验收范围 |
+| --- | --- | --- |
+| 旧功能 | 最终 Release 的秒表开始 / 暂停 / 重置、4 分钟倒计时调整 / 开始 / 暂停 / 重置、音乐 / 空拖盘切换通过；返回番茄钟时 13:30 连续。物理重新展开恢复内置倒计时 4:00，明确重选后才显示番茄钟已完成。见[实际 UI](evidence/t35-pomodoro-final-20261016/result.json)。 | 完成 Activity 的真实可见性待第二轮补录。 |
+| 架构 | 专用生产 Swift 已删除，官方包只使用公开 Activity / Node / Action / Storage / Scheduler / countdown；选择、窗口、几何、截止和显示 tick 仍由 Host 持有。见[迁移](evidence/t35-pomodoro-migration-20261016.json)与[合约](t35-countdown-api.md)。 | 不接受 T36、SDK 或整个 Phase 7。 |
+| 并发 | 实例 / execution / owner / generation、一次性 activation、完成 receipt ACK 拒绝旧回调；Storage / 交互双 FIFO 共用 64 项在途准入。慢写、撤销和满队列回补测试通过。见[3B](evidence/t35-pomodoro-3b-20261016.json)。 | 单机实测与自动化各自保留范围。 |
+| 性能 | 可见运行叶共享一个秒级显示 Task；静态、hidden、paused、invalid、completed 和 shutdown 释放需求。真实 NSHostingView 验证单任务和最终释放。见[显示节点](evidence/t35-countdown-node-20261015/result.json)。 | 本轮未新增 CPU / 内存 / 帧率量化。 |
+| 能耗 | 无每 VM Timer 或 JS 每秒 tick；每执行一次 requestRefresh，后台 30 秒 / 低功耗 60 秒下限保留。集中 Scheduler 继承 [T31 双 15 分钟真实后台测量](evidence/t31-background-20261014.md)。 | T31 是既定工作负载，本轮未测 Pomodoro 专属耗电。 |
+| 安全 | storage.local 必须明确批准，启用不授权；实际拒绝 / 撤销仍可计时。非法 selectedMinutes 回 25 分钟 idle，动作前原字节不变。清理失败拒删替换目录、保留 review 并禁用安装。见[实际 UI](evidence/t35-pomodoro-final-20261016/result.json)与[清理恢复](evidence/t35-quit-cancellation-20261016/result.json)。 | 畸形输入、包事务及权限竞态继承既有自动化。 |
+| 隐私 | 只保存预设和 lastSession 元数据，不申请网络、系统通知或额外敏感权限；固定失败提示和诊断边界继承 T27 / T32。 | 普通 KV 是本地 JSON，不能保存秘密。 |
+| 兼容 | 共享 Host 屏幕 / 面板 resolver；真实物理刘海两翼 04:41 → 04:31 可见，离屏四宽度相机区检查通过。见[compact](evidence/t35-compact-policy-20261015/result.json)和[实际 UI](evidence/t35-pomodoro-final-20261016/result.json)。 | 本轮未重跑多屏、无刘海设备、合盖、低电量、Reduce Motion 全矩阵，继承既有 Host 设备 / 生命周期结果。 |
+| 测试 | 最新完整 CI 890 total / 889 passed / 1 skipped / 0 failures，普通 Release build passed。见[退出取消恢复](evidence/t35-quit-cancellation-20261016/result.json)。 | 唯一 skip 为显式截图矩阵生成；未宣称本轮生成 12×8 新截图。 |
+| 回滚 | 停用 / 卸载 / 升级 / 退出撤销旧执行并释放资源，设置不自动恢复业务计时；实际 cleanupFailed 可恢复重试，原 installed 插件和授权保留。 | 本轮补录后还需记录 PID 正常退出与隔离数据保留；用户原 App 和默认 .dip handler 保留。 |
+
+
+## 第二轮复现与 0.2.1 修复（当前继续位置）
+
+用户物理重新展开后恢复内置倒计时 4:00；明确重选番茄钟显示本轮已完成 00:00 / 100%，选择清除验收通过。第二轮于 10:49:04.308Z 开始，连续抓帧在 11:04:05.265Z 捕获真实 completion。原 0.2.0 的居中摘要落在相机区域，不能接受为安全可见提示。
+
+0.2.1 仅通过公开节点增加 compact 的图标 / spacer / 两字「完成」，并显式提供 expanded 完整标题和副标题，避免 expanded 回退为简短 compact。真实 VM 完成测试保留单次通知 / generation / 不自动重开断言；两项真实 Renderer 像素测试确认实际 312pt 和历史 210pt 相机区零字形、两翼有内容，旧摘要对照正确检测中心字形。原始 PNG 已目视检查。
+
+首轮修正测试夹具对只读 Reduce Motion 环境的写入，第二轮修正截图输出为沙盒临时目录，未扩大权限。最终完整 CI 为 **892 total / 891 passed / 1 skipped / 0 failures**，普通 Release build passed，见[证据](evidence/t35-completion-layout-20261016/result.json)。
+
+实际副本仍安装 0.2.0，已正常菜单退出，PID 11953 消失，Staging 为空，隔离 App / Installed / 授权数据保留，见[清理记录](evidence/t35-pomodoro-final-20261016/cleanup.json)。新包位于 `/tmp/dynamic-island-t35-completion-layout-20261016/pomodoro-0.2.1.dip`。下次从管理 UI 升级并重新审核 / 明确授权改变后的代码，再完成实际自然到期两翼提示验收；不能把旧版本画面或离屏测试当作新版本实机验收。T35 保持 in progress，T36 pending。
+
+按用户要求，在 5 小时额度已用 96% 时收尾。

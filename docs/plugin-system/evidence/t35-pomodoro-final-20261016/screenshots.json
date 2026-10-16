@@ -58,5 +58,241 @@
   "after-completion-7s.jpg": {
     "source": "/tmp/dynamic-island-t35-final-20261016/natural-completion-activity.jpg",
     "sha256": "fb8bada4a111160bbc3c844ef89886b5397d2faed40eed22bfe0021f662692d7"
+  },
+  "run2-deadline-burst-008.jpg": {
+    "source": "/tmp/dynamic-island-t35-final-20261016/run2-deadline-burst-008.jpg",
+    "sha256": "bf9c76af18be0fbd503cd30fb779a0909b913819c38472ed377a98bb01f86f7a"
+  },
+  "run2-deadline-burst-034.jpg": {
+    "source": "/tmp/dynamic-island-t35-final-20261016/run2-deadline-burst-034.jpg",
+    "sha256": "27be042e52d3273f7fe9a4d59c17785d0e164d46738c426f32ea89d80b60586c"
+  },
+  "run2-deadline-burst-020.jpg": {
+    "source": "/tmp/dynamic-island-t35-final-20261016/run2-deadline-burst-020.jpg",
+    "sha256": "9759109dc977e481329f93790bd42e7ed7e0fe6c239df46d0bee661e73eaf50d"
+  },
+  "run2-deadline-burst-021.jpg": {
+    "source": "/tmp/dynamic-island-t35-final-20261016/run2-deadline-burst-021.jpg",
+    "sha256": "b23710e991357dfe5820a7e1ba89eb514b7e91b646aa588eafc1449c25a8ec7d"
+  },
+  "run2-deadline-burst-035.jpg": {
+    "source": "/tmp/dynamic-island-t35-final-20261016/run2-deadline-burst-035.jpg",
+    "sha256": "015ffe899691314b207cd4ef1b8d459082a8e3ae315ecf3c6954d8b6a956d5e2"
+  },
+  "run2-deadline-burst-009.jpg": {
+    "source": "/tmp/dynamic-island-t35-final-20261016/run2-deadline-burst-009.jpg",
+    "sha256": "558ef1f0a1219a68713a9effed4ee7a082722f608eaba625f33b40eeabd022a7"
+  },
+  "run2-deadline-burst-023.jpg": {
+    "source": "/tmp/dynamic-island-t35-final-20261016/run2-deadline-burst-023.jpg",
+    "sha256": "19e561ada63bd296a87331461db7b6d0f74ee87dd26d735319f89b6c47b80bfc"
+  },
+  "run2-deadline-burst-037.jpg": {
+    "source": "/tmp/dynamic-island-t35-final-20261016/run2-deadline-burst-037.jpg",
+    "sha256": "c86b0f2c3efc67367299a36fb47a8f04976e2bab527884718defe5f3c16bf6af"
+  },
+  "run2-deadline-burst-036.jpg": {
+    "source": "/tmp/dynamic-island-t35-final-20261016/run2-deadline-burst-036.jpg",
+    "sha256": "6afd6777386e6d5a19990bd74532449b66987b4b74398a9f97ffba888acd99ae"
+  },
+  "run2-deadline-burst-022.jpg": {
+    "source": "/tmp/dynamic-island-t35-final-20261016/run2-deadline-burst-022.jpg",
+    "sha256": "bdf831212832a3065020a2f09b7c5ff0114a6a0f2d097c143637345b2395906e"
+  },
+  "run2-deadline-burst-026.jpg": {
+    "source": "/tmp/dynamic-island-t35-final-20261016/run2-deadline-burst-026.jpg",
+    "sha256": "1115fb95bd2892fa5570661243a38d9f46ba3107ad45cc1c5499cb0bff256cf4"
+  },
+  "run2-deadline-burst-032.jpg": {
+    "source": "/tmp/dynamic-island-t35-final-20261016/run2-deadline-burst-032.jpg",
+    "sha256": "760f341a2dc8f5e21b931953e721c1bde47e115ca5165934231116323e44f140"
+  },
+  "run2-deadline-burst-033.jpg": {
+    "source": "/tmp/dynamic-island-t35-final-20261016/run2-deadline-burst-033.jpg",
+    "sha256": "b203ef22acc2218a9a96f29856377462eb286aec09640a750a63b4d510544447"
+  },
+  "run2-deadline-burst-027.jpg": {
+    "source": "/tmp/dynamic-island-t35-final-20261016/run2-deadline-burst-027.jpg",
+    "sha256": "7eb6c0818f1c37d4e63387da7245d61ef98bc296a85b5c0fd9d11efb8236bdc0"
+  },
+  "run2-deadline-burst-031.jpg": {
+    "source": "/tmp/dynamic-island-t35-final-20261016/run2-deadline-burst-031.jpg",
+    "sha256": "d91d189a4fca41f867bc6c1fe5373c0f6363c7e93149cbd31b2b3b7ea53bd42f"
+  },
+  "run2-deadline-burst-025.jpg": {
+    "source": "/tmp/dynamic-island-t35-final-20261016/run2-deadline-burst-025.jpg",
+    "sha256": "cbc901fabb541ac3c80bd2c1c4c754bb8c4253fdefc89c4e154a7f5b37893244"
+  },
+  "run2-deadline-burst-019.jpg": {
+    "source": "/tmp/dynamic-island-t35-final-20261016/run2-deadline-burst-019.jpg",
+    "sha256": "49ab62275245577fe8cef89c5d547f59badf7a047b67ccb59ce17dbf582ec0d8"
+  },
+  "run2-deadline-burst-018.jpg": {
+    "source": "/tmp/dynamic-island-t35-final-20261016/run2-deadline-burst-018.jpg",
+    "sha256": "46feec69558a34cf3aa17553e2239705e1521018852df02df6ffeb406ac34287"
+  },
+  "run2-deadline-burst-024.jpg": {
+    "source": "/tmp/dynamic-island-t35-final-20261016/run2-deadline-burst-024.jpg",
+    "sha256": "db9a2fcc2a2ddb8f46aae6fbc42b41a8f932978bc9880f1e8b3b295cd75bb65b"
+  },
+  "run2-deadline-burst-030.jpg": {
+    "source": "/tmp/dynamic-island-t35-final-20261016/run2-deadline-burst-030.jpg",
+    "sha256": "1c35dc5dc17d7f7a2e9cf0227d180545303760f2538a37601f49857c6f3b0d1e"
+  },
+  "run2-deadline-burst-043.jpg": {
+    "source": "/tmp/dynamic-island-t35-final-20261016/run2-deadline-burst-043.jpg",
+    "sha256": "52b7b4dd344dd75fc8543d84b658922114bec6e6b11f7dfb8b1c4b9fc1685837"
+  },
+  "run2-deadline-burst-042.jpg": {
+    "source": "/tmp/dynamic-island-t35-final-20261016/run2-deadline-burst-042.jpg",
+    "sha256": "52b7b4dd344dd75fc8543d84b658922114bec6e6b11f7dfb8b1c4b9fc1685837"
+  },
+  "run2-deadline-burst-040.jpg": {
+    "source": "/tmp/dynamic-island-t35-final-20261016/run2-deadline-burst-040.jpg",
+    "sha256": "52b7b4dd344dd75fc8543d84b658922114bec6e6b11f7dfb8b1c4b9fc1685837"
+  },
+  "run2-deadline-burst-054.jpg": {
+    "source": "/tmp/dynamic-island-t35-final-20261016/run2-deadline-burst-054.jpg",
+    "sha256": "52b7b4dd344dd75fc8543d84b658922114bec6e6b11f7dfb8b1c4b9fc1685837"
+  },
+  "run2-after-transient-no-restart.jpg": {
+    "source": "/tmp/dynamic-island-t35-final-20261016/run2-after-transient-no-restart.jpg",
+    "sha256": "298256f10c3a471455657fa4ce3aa2e34cb5aa63c848033aedf38f34c0a20cfa"
+  },
+  "run2-deadline-burst-055.jpg": {
+    "source": "/tmp/dynamic-island-t35-final-20261016/run2-deadline-burst-055.jpg",
+    "sha256": "52b7b4dd344dd75fc8543d84b658922114bec6e6b11f7dfb8b1c4b9fc1685837"
+  },
+  "run2-deadline-burst-041.jpg": {
+    "source": "/tmp/dynamic-island-t35-final-20261016/run2-deadline-burst-041.jpg",
+    "sha256": "52b7b4dd344dd75fc8543d84b658922114bec6e6b11f7dfb8b1c4b9fc1685837"
+  },
+  "run2-deadline-burst-045.jpg": {
+    "source": "/tmp/dynamic-island-t35-final-20261016/run2-deadline-burst-045.jpg",
+    "sha256": "52b7b4dd344dd75fc8543d84b658922114bec6e6b11f7dfb8b1c4b9fc1685837"
+  },
+  "run2-deadline-burst-051.jpg": {
+    "source": "/tmp/dynamic-island-t35-final-20261016/run2-deadline-burst-051.jpg",
+    "sha256": "52b7b4dd344dd75fc8543d84b658922114bec6e6b11f7dfb8b1c4b9fc1685837"
+  },
+  "run2-deadline-burst-050.jpg": {
+    "source": "/tmp/dynamic-island-t35-final-20261016/run2-deadline-burst-050.jpg",
+    "sha256": "52b7b4dd344dd75fc8543d84b658922114bec6e6b11f7dfb8b1c4b9fc1685837"
+  },
+  "run2-deadline-burst-044.jpg": {
+    "source": "/tmp/dynamic-island-t35-final-20261016/run2-deadline-burst-044.jpg",
+    "sha256": "52b7b4dd344dd75fc8543d84b658922114bec6e6b11f7dfb8b1c4b9fc1685837"
+  },
+  "run2-deadline-burst-052.jpg": {
+    "source": "/tmp/dynamic-island-t35-final-20261016/run2-deadline-burst-052.jpg",
+    "sha256": "52b7b4dd344dd75fc8543d84b658922114bec6e6b11f7dfb8b1c4b9fc1685837"
+  },
+  "run2-deadline-burst-046.jpg": {
+    "source": "/tmp/dynamic-island-t35-final-20261016/run2-deadline-burst-046.jpg",
+    "sha256": "52b7b4dd344dd75fc8543d84b658922114bec6e6b11f7dfb8b1c4b9fc1685837"
+  },
+  "reselected-after-natural-completion.jpg": {
+    "source": "/tmp/dynamic-island-t35-final-20261016/reselected-after-natural-completion.jpg",
+    "sha256": "b09eab26cb14eab82e1e435f33695061769e4d56b4bcc06e59217d45ae5c5d27"
+  },
+  "run2-deadline-burst-047.jpg": {
+    "source": "/tmp/dynamic-island-t35-final-20261016/run2-deadline-burst-047.jpg",
+    "sha256": "52b7b4dd344dd75fc8543d84b658922114bec6e6b11f7dfb8b1c4b9fc1685837"
+  },
+  "run2-deadline-burst-053.jpg": {
+    "source": "/tmp/dynamic-island-t35-final-20261016/run2-deadline-burst-053.jpg",
+    "sha256": "52b7b4dd344dd75fc8543d84b658922114bec6e6b11f7dfb8b1c4b9fc1685837"
+  },
+  "run2-deadline-burst-049.jpg": {
+    "source": "/tmp/dynamic-island-t35-final-20261016/run2-deadline-burst-049.jpg",
+    "sha256": "52b7b4dd344dd75fc8543d84b658922114bec6e6b11f7dfb8b1c4b9fc1685837"
+  },
+  "run2-deadline-burst-048.jpg": {
+    "source": "/tmp/dynamic-island-t35-final-20261016/run2-deadline-burst-048.jpg",
+    "sha256": "52b7b4dd344dd75fc8543d84b658922114bec6e6b11f7dfb8b1c4b9fc1685837"
+  },
+  "run2-deadline-burst-029.jpg": {
+    "source": "/tmp/dynamic-island-t35-final-20261016/run2-deadline-burst-029.jpg",
+    "sha256": "d9a15c34b2e5365137abbd54b10bfcc5ad08e8545622ff96b875f4615b6d40b4"
+  },
+  "run2-deadline-burst-015.jpg": {
+    "source": "/tmp/dynamic-island-t35-final-20261016/run2-deadline-burst-015.jpg",
+    "sha256": "613d0c42a6da158db5cb0d9e40be54e9589709ac771daf594a3235e6c659a112"
+  },
+  "run2-deadline-burst-001.jpg": {
+    "source": "/tmp/dynamic-island-t35-final-20261016/run2-deadline-burst-001.jpg",
+    "sha256": "49bd87033a535c4ebdd595d4214fa79d043cab3fa264f666ce62d7103f900bb8"
+  },
+  "run2-deadline-burst-000.jpg": {
+    "source": "/tmp/dynamic-island-t35-final-20261016/run2-deadline-burst-000.jpg",
+    "sha256": "d951a3db4861479fc2cf2d8ce1e15b0f29a27149f360fd5ce84ada79c6c46d86"
+  },
+  "run2-deadline-burst-014.jpg": {
+    "source": "/tmp/dynamic-island-t35-final-20261016/run2-deadline-burst-014.jpg",
+    "sha256": "16dd2e38c7d8b523d3ec70a66dd36c372376281494ab0c39be5ce315977025bc"
+  },
+  "run2-deadline-burst-028.jpg": {
+    "source": "/tmp/dynamic-island-t35-final-20261016/run2-deadline-burst-028.jpg",
+    "sha256": "df009f289de3b1d4e1717218d2f08caa0badc0f3c59f9620accc088fe1bd8c81"
+  },
+  "run2-deadline-burst-002.jpg": {
+    "source": "/tmp/dynamic-island-t35-final-20261016/run2-deadline-burst-002.jpg",
+    "sha256": "98f2aea086fb3c2d101ba246bf0ded4a10d46010ada3a12f942428972d1f25ea"
+  },
+  "run2-deadline-burst-016.jpg": {
+    "source": "/tmp/dynamic-island-t35-final-20261016/run2-deadline-burst-016.jpg",
+    "sha256": "bfb4911cffb52fea0074aefde29fe30c6471a949ee42e6a091c59d592210892e"
+  },
+  "fold-reexpanded-native-restored.jpg": {
+    "source": "/tmp/dynamic-island-t35-final-20261016/fold-reexpanded-native-restored.jpg",
+    "sha256": "4b034b9f25652de492fa51800c13d747ccfbb351cb605217a2c1cee8835fb9e2"
+  },
+  "run2-deadline-burst-017.jpg": {
+    "source": "/tmp/dynamic-island-t35-final-20261016/run2-deadline-burst-017.jpg",
+    "sha256": "692a6787d99fddfdb535ed5ec88524ce7c6c1a6ffd78275558cab2bcd99c8706"
+  },
+  "run2-deadline-burst-003.jpg": {
+    "source": "/tmp/dynamic-island-t35-final-20261016/run2-deadline-burst-003.jpg",
+    "sha256": "a03cdaa326beb0be9081e5a3cbc11dce3742606907c1dda138a8e6ec063cb2a5"
+  },
+  "run2-deadline-burst-007.jpg": {
+    "source": "/tmp/dynamic-island-t35-final-20261016/run2-deadline-burst-007.jpg",
+    "sha256": "79ebb78feab9cbcb3562419f0e8144f4a50726e829b4f0ba49f644c08b57dfd2"
+  },
+  "run2-deadline-burst-013.jpg": {
+    "source": "/tmp/dynamic-island-t35-final-20261016/run2-deadline-burst-013.jpg",
+    "sha256": "cc35c7a0cfc42994cfc0e1c63f3b5598dd1d971522b189444734fd0bc497a106"
+  },
+  "run2-deadline-burst-012.jpg": {
+    "source": "/tmp/dynamic-island-t35-final-20261016/run2-deadline-burst-012.jpg",
+    "sha256": "bab07b8805bec05b4fd5b7cc4dc5765a152e699ec07bc015482b0a62eb967ff8"
+  },
+  "run2-deadline-burst-006.jpg": {
+    "source": "/tmp/dynamic-island-t35-final-20261016/run2-deadline-burst-006.jpg",
+    "sha256": "c4e5e9855b08b245b1c7f8d1b626906364234e34a457e84c9d86beb30a4600c0"
+  },
+  "run2-deadline-burst-010.jpg": {
+    "source": "/tmp/dynamic-island-t35-final-20261016/run2-deadline-burst-010.jpg",
+    "sha256": "5428ffd9bb1ab2ce36e2342bf64ba1993f3c7eb5caba69f317528d3f8a08d675"
+  },
+  "run2-deadline-burst-004.jpg": {
+    "source": "/tmp/dynamic-island-t35-final-20261016/run2-deadline-burst-004.jpg",
+    "sha256": "7f862c9c1fa84fa4648c7571614fe73b966702614329a673bd33d3891e8a0fcb"
+  },
+  "run2-deadline-burst-038.jpg": {
+    "source": "/tmp/dynamic-island-t35-final-20261016/run2-deadline-burst-038.jpg",
+    "sha256": "52b7b4dd344dd75fc8543d84b658922114bec6e6b11f7dfb8b1c4b9fc1685837"
+  },
+  "run2-deadline-burst-039.jpg": {
+    "source": "/tmp/dynamic-island-t35-final-20261016/run2-deadline-burst-039.jpg",
+    "sha256": "52b7b4dd344dd75fc8543d84b658922114bec6e6b11f7dfb8b1c4b9fc1685837"
+  },
+  "run2-deadline-burst-005.jpg": {
+    "source": "/tmp/dynamic-island-t35-final-20261016/run2-deadline-burst-005.jpg",
+    "sha256": "65e727bbef3b4d308b72e47e269e8e7be14808cd5f15374f77d3e575678ec241"
+  },
+  "run2-deadline-burst-011.jpg": {
+    "source": "/tmp/dynamic-island-t35-final-20261016/run2-deadline-burst-011.jpg",
+    "sha256": "ef5b8d208bef9c163dc06d6957bc1c7135690d2b5b0e590894cd1e88a2ed8144"
   }
 }
