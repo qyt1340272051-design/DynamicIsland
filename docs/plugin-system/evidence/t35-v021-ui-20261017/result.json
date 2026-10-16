@@ -1,0 +1,33 @@
+{
+  "status": "partial; T35 remains in progress",
+  "utc": "2026-10-16T17:10:36.853971+00:00",
+  "version": "0.2.1",
+  "pid": 17040,
+  "verified": [
+    "Actual import preview shows replacement 0.2.0 to 0.2.1 and no implicit execution or permission grant",
+    "Installed 0.2.1 remains disabled and storage requested",
+    "Enable starts the plugin while storage remains requested",
+    "Actual per-permission dialog explicitly confirms current 0.2.1 code",
+    "Storage becomes granted after explicit confirmation",
+    "Installed manifest, script and README exactly match source and archive",
+    "Ordinary Release signature verification passed"
+  ],
+  "pending": [
+    "Physical hover to expand and start actual 15-minute countdown",
+    "Natural completion Activity shows safe compact wings",
+    "Completion disappears with no automatic restart",
+    "Normal exit and final staging/data retention record"
+  ],
+  "inheritedCI": "../t35-completion-layout-20261016/result.json",
+  "inheritedActualOldVersion": "../t35-pomodoro-final-20261016/result.json",
+  "continuation": {
+    "appPath": "/Users/rong5/Applications/Dynamic Island T35 Pomodoro.app",
+    "running": true,
+    "pid": 17040,
+    "lastObservedUI": "collapsed",
+    "countdownStarted": false,
+    "next": "User physically hovers top notch; select Pomodoro, choose 15 minutes, click Start and record exact click bounds. Capture completion within one CUA call before natural deadline."
+  },
+  "productionAppPID": 66831,
+  "productionAppAndDataUntouched": true
+}
