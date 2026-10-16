@@ -43,10 +43,6 @@ final class IslandVisualStyleTests: XCTestCase {
             for: .tools, timerMode: .stopwatch, hasTrayItems: false,
             hasError: false, hasTimerCompletion: false
         )
-        let pomodoro = IslandVisualStyle.expandedShellSize(
-            for: .tools, timerMode: .pomodoro, hasTrayItems: false,
-            hasError: false, hasTimerCompletion: false
-        )
         let countdown = IslandVisualStyle.expandedShellSize(
             for: .tools, timerMode: .countdown, hasTrayItems: false,
             hasError: false, hasTimerCompletion: false
@@ -55,7 +51,6 @@ final class IslandVisualStyleTests: XCTestCase {
         XCTAssertEqual(emptyTray.height, IslandVisualStyle.expandedCompactContentHeight)
         XCTAssertEqual(filledTray.height, IslandVisualStyle.expandedFileTrayHeight)
         XCTAssertEqual(stopwatch.height, IslandVisualStyle.expandedCompactContentHeight)
-        XCTAssertEqual(pomodoro.height, IslandVisualStyle.expandedTimerHeight)
         XCTAssertEqual(countdown.height, IslandVisualStyle.expandedTimerHeight)
     }
 

@@ -184,9 +184,9 @@ final class IslandViewModelTests: XCTestCase {
             XCTAssertEqual(model.presentationState, .expanded)
 
             let start = Date(timeIntervalSinceReferenceDate: 750)
-            model.timerTools.selectedMode = .pomodoro
+            model.timerTools.selectedMode = .countdown
             model.timerTools.startSelectedTimer(at: start)
-            model.timerTools.refresh(at: start.addingTimeInterval(model.timerTools.pomodoroDuration))
+            model.timerTools.refresh(at: start.addingTimeInterval(model.timerTools.countdownDuration))
             XCTAssertTrue(model.isTimerCompletionPresented)
             XCTAssertEqual(model.expandedSurface, .tools)
 
@@ -241,9 +241,9 @@ final class IslandViewModelTests: XCTestCase {
         await MainActor.run {
             let model = IslandViewModel.preview()
             let start = Date(timeIntervalSinceReferenceDate: 750)
-            model.timerTools.selectedMode = .pomodoro
+            model.timerTools.selectedMode = .countdown
             model.timerTools.startSelectedTimer(at: start)
-            model.timerTools.refresh(at: start.addingTimeInterval(model.timerTools.pomodoroDuration))
+            model.timerTools.refresh(at: start.addingTimeInterval(model.timerTools.countdownDuration))
 
             XCTAssertTrue(model.isTimerCompletionPresented)
             XCTAssertEqual(model.expandedSurface, .tools)
@@ -257,7 +257,10 @@ final class IslandViewModelTests: XCTestCase {
             XCTAssertFalse(model.isTimerCompletionPresented)
             XCTAssertEqual(model.presentationState, .compact)
             XCTAssertNil(model.compactTimerMode)
-            XCTAssertEqual(model.timerTools.pomodoroRemaining, model.timerTools.pomodoroDuration)
+            XCTAssertNil(model.timerTools.runningMode)
+            XCTAssertNil(model.timerTools.sessionMode)
+            XCTAssertNil(model.timerTools.completedMode)
+            XCTAssertEqual(model.timerTools.countdownRemaining, model.timerTools.countdownDuration)
 
             model.setHovering(true)
             XCTAssertEqual(model.presentationState, .compact)

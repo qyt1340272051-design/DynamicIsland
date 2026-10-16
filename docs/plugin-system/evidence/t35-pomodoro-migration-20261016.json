@@ -1,0 +1,80 @@
+{
+  "captureUTC": "2026-10-16T02:53:42.298118+00:00",
+  "baseCommit": "955ac0c",
+  "status": "native Swift migration complete; real .dip and UI acceptance in progress",
+  "ciSummary": {
+    "devicesAndConfigurations": [
+      {
+        "device": {
+          "architecture": "arm64",
+          "deviceId": "00008132-001E49513A0B801C",
+          "deviceName": "My Mac",
+          "modelName": "MacBook Air",
+          "osBuildNumber": "25G83",
+          "osVersion": "26.6.2",
+          "platform": "macOS"
+        },
+        "expectedFailures": 0,
+        "failedTests": 0,
+        "passedTests": 887,
+        "skippedTests": 1,
+        "testPlanConfiguration": {
+          "configurationId": "1",
+          "configurationName": "Test Scheme Action"
+        }
+      }
+    ],
+    "environmentDescription": "Dynamic Island · Built with macOS 26.6.2",
+    "expectedFailures": 0,
+    "failedTests": 0,
+    "finishTime": 1792118872.427,
+    "passedTests": 887,
+    "result": "Passed",
+    "skippedTests": 1,
+    "startTime": 1792118769.618,
+    "statistics": [
+      {
+        "subtitle": "1 test run",
+        "title": "1 test collected performance metrics"
+      }
+    ],
+    "testFailures": [],
+    "title": "Test - Dynamic Island",
+    "topInsights": [
+      {
+        "category": "Longest Test Runs",
+        "impact": "60% of duration",
+        "text": "7 longest test runs with outlier durations exceeding 2.60s (three standard deviations)"
+      }
+    ],
+    "totalTestCount": 888
+  },
+  "normalReleaseBuild": "passed",
+  "log": "/tmp/dynamic-island-t35-pomodoro-migration-20261016-ci.log",
+  "resultBundle": "/tmp/dynamic-island-t35-pomodoro-migration-20261016/TestResults.xcresult",
+  "sourceSHA256": {
+    "DynamicIsland/Core/Activity/ActivityDebugPanel.swift": "a87fd759523aeda945bed93b7f17875d0968b84bbd6a04572cb2c853841fb0fd",
+    "DynamicIsland/IslandTimerToolsModel.swift": "2f83e4eee2f3124df9c8dc4d56d20ef7325c5ba7d80b332b4b14d0dd6ac33df7",
+    "DynamicIsland/IslandTimerToolsView.swift": "ddae6b281ecdaddd301bd099b99ffca3997db93235940d228e015d116f4f400d",
+    "DynamicIsland/IslandView.swift": "ef0bfc33a456c1fdbbfceba32dce2994cd8499033cfc0aed5386660b1a2b6b18",
+    "DynamicIsland/Plugins/PluginBridgeTransport.swift": "a35992279f4bc54cb74e1bfcd466183889cb027dd0529211ec3ac292bd6a0a82",
+    "DynamicIslandTests/IslandActivityRuntimeTests.swift": "ae288bf61062a74c6fa09d1e869bcc3ea06fb22dde7dd47c2c57b0cf8fd4c6f2",
+    "DynamicIslandTests/IslandDesignTokensTests.swift": "b8001c697890b0a2a0708dab40913234a0f42556dda0b29124c80cd506afdd99",
+    "DynamicIslandTests/IslandTimerShellRenderingTests.swift": "4613b885033cf0dd194008d0fc223c1ae66aca5b39b925977a668861fe3e74c9",
+    "DynamicIslandTests/IslandTimerToolsModelTests.swift": "484bacc8714c877222781ff62b6a10c8fb86ba750e414de5b49fe3adf4c45f2d",
+    "DynamicIslandTests/IslandViewModelTests.swift": "172c89defa851134f97dae5e66240f7c03794a64b93eee9d5acfdaece2973b8f",
+    "DynamicIslandTests/IslandVisualStyleTests.swift": "f7f03bd2c2c29d27e81428807be56b4f8720d16be7e01412c93cf25542a5b8da",
+    "DynamicIslandTests/ScreenSnapshotMatrixTests.swift": "092d6d3f8f04bb8841355522e84591fc1b2d75bac1b8186ba5a11cb0b6f8843a",
+    "DynamicIslandTests/PomodoroPluginTransportTests.swift": "5e3a354a230a662c718293b378622eaeea5e33d275407975e1a50f71c5c4dcfa"
+  },
+  "deletedProductionFiles": [
+    "DynamicIsland/Core/Activity/PomodoroActivityProvider.swift",
+    "DynamicIsland/IslandPomodoroPresetAnimation.swift"
+  ],
+  "deletedObsoleteTests": [
+    "DynamicIslandTests/PomodoroActivityProviderTests.swift",
+    "DynamicIslandTests/IslandPomodoroPresetAnimationTests.swift"
+  ],
+  "nativePomodoroProductionSwiftMatches": 0,
+  "additionalRegression": "Transport releases each UUID admission before replying; dispatch-return fallback is idempotent so a settled consumer can synchronously replace a full queue slot."
+}

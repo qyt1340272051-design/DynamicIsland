@@ -659,8 +659,6 @@ private struct CompactTimerStatus: View {
         switch mode {
         case .stopwatch:
             return .cyan
-        case .pomodoro:
-            return .red
         case .countdown:
             return .orange
         }

@@ -54,7 +54,7 @@ final class IslandDesignTokensTests: XCTestCase {
             (IslandExpandedSurface.music, IslandTimerToolMode.stopwatch, IslandVisualStyle.expandedMusicHeight),
             (.fileTray, .stopwatch, IslandVisualStyle.expandedCompactContentHeight),
             (.tools, .stopwatch, IslandVisualStyle.expandedCompactContentHeight),
-            (.tools, .pomodoro, IslandVisualStyle.expandedTimerHeight)
+            (.tools, .countdown, IslandVisualStyle.expandedTimerHeight)
         ] {
             let size = IslandDesignTokens.expandedShellSize(
                 for: surface,

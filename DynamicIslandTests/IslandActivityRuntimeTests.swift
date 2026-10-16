@@ -637,24 +637,27 @@ final class IslandActivityRuntimeTests: XCTestCase {
     func testTransientActivityPreservesTimerCompletionUntilLegacyToolsRestore() throws {
         let model = IslandViewModel.preview()
         let completedAt = Date(timeIntervalSinceReferenceDate: 120_000)
-        model.timerTools.selectedMode = .pomodoro
+        model.timerTools.selectedMode = .countdown
         model.timerTools.startSelectedTimer(at: completedAt)
         model.timerTools.refresh(
-            at: completedAt.addingTimeInterval(model.timerTools.pomodoroDuration)
+            at: completedAt.addingTimeInterval(model.timerTools.countdownDuration)
         )
         XCTAssertTrue(model.isTimerCompletionPresented)
-        XCTAssertEqual(model.timerTools.completedMode, .pomodoro)
+        XCTAssertEqual(model.timerTools.completedMode, .countdown)
+        XCTAssertNil(model.timerTools.runningMode)
+        XCTAssertEqual(model.timerTools.countdownRemaining, 0)
         XCTAssertEqual(model.expandedSurface, .tools)
         XCTAssertEqual(model.presentationState, .expanded)
 
         let runtime = IslandActivityRuntime(viewModel: model)
+        defer { runtime.shutdownPlugins() }
         let music = try XCTUnwrap(runtime.manager.currentSnapshot)
         try publishTransientOverride(in: runtime)
 
         XCTAssertEqual(runtime.manager.current?.id, BatteryActivityProvider.activityID)
         XCTAssertTrue(runtime.prioritizesCurrentActivityOverLegacyContent)
         XCTAssertTrue(model.isTimerCompletionPresented)
-        XCTAssertEqual(model.timerTools.completedMode, .pomodoro)
+        XCTAssertEqual(model.timerTools.completedMode, .countdown)
         XCTAssertEqual(model.expandedSurface, .tools)
         XCTAssertEqual(model.presentationState, .expanded)
 
@@ -667,13 +670,17 @@ final class IslandActivityRuntimeTests: XCTestCase {
         XCTAssertEqual(runtime.manager.currentSnapshot?.instanceToken, music.instanceToken)
         XCTAssertFalse(runtime.prioritizesCurrentActivityOverLegacyContent)
         XCTAssertTrue(model.isTimerCompletionPresented)
-        XCTAssertEqual(model.timerTools.completedMode, .pomodoro)
+        XCTAssertEqual(model.timerTools.completedMode, .countdown)
         XCTAssertEqual(model.expandedSurface, .tools)
         XCTAssertEqual(model.presentationState, .expanded)
 
         model.acknowledgeTimerCompletion()
         XCTAssertFalse(model.isTimerCompletionPresented)
+        XCTAssertNil(model.timerTools.runningMode)
+        XCTAssertNil(model.timerTools.sessionMode)
         XCTAssertNil(model.timerTools.completedMode)
+        XCTAssertNil(model.compactTimerMode)
+        XCTAssertEqual(model.timerTools.countdownRemaining, model.timerTools.countdownDuration)
         XCTAssertEqual(model.presentationState, .compact)
     }
 

@@ -118,3 +118,11 @@ CI **868 total / 864 passed / 4 skipped / 0 failures**，普通 Release build pa
 定向 Pomodoro / Storage / Bridge 测试 64 passed / 0 failures。首轮容量测试发现出队但未处理的两条请求可能绕过排队计数，已按全部在途准入计数修正并重跑通过。完整 CI 和普通 Release 构建的最终结果见本节后续证据；本节尚不代表 T35 完整迁移或实机验收完成。
 
 3B 完整 `./Scripts/ci.sh`：**892 total / 891 passed / 1 skipped / 0 failures**，普通 Release build passed。此前锁屏跳过的三项 AppKit 鼠标测试本轮均通过；唯一 skip 为显式截图矩阵生成。[CI 与源码 SHA256](evidence/t35-pomodoro-3b-20261016.json)已保存。接下来删除专用 Swift，再在隔离的普通 Release 副本中完成实际安装、分项授权、UI 和真实计时验收。
+
+## 子步骤 3C：删除专用 Swift
+
+已删除生产 Pomodoro Provider、预设动画，以及 Model / View / compact 颜色 / DEBUG 入口中的所有专用状态和分支。生产 Swift 中 `pomodoro` / `番茄` 零命中；不按官方包 ID 特判。秒表、倒计时、共享格式化、Host 倒计时和工具仲裁继续保留。原生完成 / ACK / 锁盘 / hover 抑制与 transient 抢占回归改用内置倒计时覆盖；删除仅依赖被移除实现的 Provider 和预设动画测试，截图矩阵去掉已删除的原生页面，现为 12 状态 × 8 屏幕配置。历史 Phase 3 截图数量仍是当时的实际结果。
+
+复核补齐了 Transport 满队列回复边界：每请求 UUID 准入在回复前释放，dispatch 返回后幂等清理，防止消费者收到已完成回复后立即提交下一条却被旧计数误拒。新增同一回复调用栈的满队列回补测试。
+
+完整 `./Scripts/ci.sh` 为 **888 total / 887 passed / 1 skipped / 0 failures**，普通 Release build passed；唯一 skip 为显式截图矩阵生成。[源码和 CI 证据](evidence/t35-pomodoro-migration-20261016.json)已保存。实际 .dip 导入、授权和普通 Release UI / 真实计时验收正在独立沙盒副本中进行，T35 保持 in progress。

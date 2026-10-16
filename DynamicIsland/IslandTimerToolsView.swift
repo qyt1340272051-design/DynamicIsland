@@ -3,7 +3,6 @@ import SwiftUI
 struct IslandTimerToolsView: View {
     @ObservedObject var model: IslandTimerToolsModel
     let onAcknowledgeCompletion: () -> Void
-    @Namespace private var pomodoroPresetSelection
 
     var body: some View {
         Group {
@@ -40,10 +39,6 @@ struct IslandTimerToolsView: View {
 
     private var selectedTimerContent: some View {
         VStack(spacing: 8) {
-            if model.selectedMode == .pomodoro {
-                pomodoroPresetPicker
-            }
-
             HStack(alignment: .center, spacing: 14) {
                 VStack(alignment: .leading, spacing: 3) {
                     Label(model.statusText, systemImage: model.selectedMode.systemImage)
@@ -56,7 +51,6 @@ struct IslandTimerToolsView: View {
                         .lineLimit(1)
                         .minimumScaleFactor(0.72)
                         .contentTransition(.numericText())
-                        .animation(IslandPomodoroPresetAnimation.animation, value: model.pomodoroMinutes)
                         .animation(IslandCountdownDurationAnimation.animation, value: model.countdownMinutes)
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -116,50 +110,6 @@ struct IslandTimerToolsView: View {
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
         .transition(.opacity.combined(with: .scale(scale: 0.88)))
-    }
-
-    private var pomodoroPresetPicker: some View {
-        HStack(spacing: 6) {
-            ForEach(IslandTimerToolsModel.pomodoroPresetMinutes, id: \.self) { minutes in
-                let isSelected = model.pomodoroMinutes == minutes
-                Button {
-                    withAnimation(IslandPomodoroPresetAnimation.animation) {
-                        model.selectPomodoroMinutes(minutes)
-                    }
-                } label: {
-                    Text("\(minutes) 分")
-                        .font(.system(size: 10, weight: .semibold))
-                        .monospacedDigit()
-                        .foregroundStyle(.white.opacity(isSelected ? 1 : 0.72))
-                        .frame(width: 42, height: 22)
-                        .background {
-                            RoundedRectangle(cornerRadius: 6, style: .continuous)
-                                .fill(Color.white.opacity(0.09))
-
-                            if isSelected {
-                                RoundedRectangle(cornerRadius: 6, style: .continuous)
-                                    .fill(modeTint.opacity(0.78))
-                                    .matchedGeometryEffect(
-                                        id: "pomodoro-preset-selection",
-                                        in: pomodoroPresetSelection
-                                    )
-                            }
-                        }
-                        .overlay {
-                            RoundedRectangle(cornerRadius: 6, style: .continuous)
-                                .stroke(Color.white.opacity(isSelected ? 0.2 : 0.08), lineWidth: 0.5)
-                        }
-                }
-                .buttonStyle(.plain)
-                .disabled(!model.canSelectPomodoroPreset)
-                .opacity(model.canSelectPomodoroPreset || isSelected ? 1 : 0.45)
-                .animation(IslandPomodoroPresetAnimation.animation, value: isSelected)
-                .help("设置为 \(minutes) 分钟")
-                .accessibilityLabel("\(minutes) 分钟")
-            }
-
-            Spacer(minLength: 0)
-        }
     }
 
     private var countdownDurationControl: some View {
@@ -228,8 +178,6 @@ struct IslandTimerToolsView: View {
         switch mode {
         case .stopwatch:
             return .cyan
-        case .pomodoro:
-            return .red
         case .countdown:
             return .orange
         }

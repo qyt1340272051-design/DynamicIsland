@@ -120,9 +120,6 @@ final class ActivityDebugWindowController: NSWindowController {
         let manager = ActivityManager()
         let provider = ActivityDebugProvider(manager: manager)
         let router = ActionRouter(manager: manager)
-        let timerModel = IslandTimerToolsModel()
-        let pomodoro = PomodoroActivityProvider(model: timerModel, manager: manager)
-        pomodoro.registerActions(with: router)
         self.manager = manager
         self.provider = provider
         self.router = router
@@ -142,14 +139,7 @@ final class ActivityDebugWindowController: NSWindowController {
             rootView: ActivityDebugView(
                 manager: manager,
                 provider: provider,
-                router: router,
-                startPomodoro: {
-                    timerModel.selectedMode = .pomodoro
-                    if timerModel.runningMode != .pomodoro {
-                        timerModel.toggleSelectedTimer()
-                    }
-                    try? pomodoro.synchronize()
-                }
+                router: router
             )
         )
         super.init(window: panel)
@@ -171,20 +161,17 @@ struct ActivityDebugView: View {
     @ObservedObject var manager: ActivityManager
     let provider: ActivityDebugProvider
     let router: ActionRouter
-    let startPomodoro: (() -> Void)?
     @State private var errorText: String?
     @State private var previewMode: ActivityPresentation.Mode = .expanded
 
     init(
         manager: ActivityManager,
         provider: ActivityDebugProvider,
-        router: ActionRouter? = nil,
-        startPomodoro: (() -> Void)? = nil
+        router: ActionRouter? = nil
     ) {
         self.manager = manager
         self.provider = provider
         self.router = router ?? ActionRouter(manager: manager)
-        self.startPomodoro = startPomodoro
     }
 
     var body: some View {
@@ -202,10 +189,6 @@ struct ActivityDebugView: View {
                         Button("End") { perform { try provider.end(sample) } }
                         Spacer(minLength: 0)
                     }
-                }
-
-                if let startPomodoro {
-                    Button("Start Pomodoro") { startPomodoro() }
                 }
 
                 Divider()

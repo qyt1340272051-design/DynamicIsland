@@ -118,6 +118,29 @@ final class PomodoroPluginTransportTests: XCTestCase {
         XCTAssertFalse(transport.submit(id: 65, json: "{}") { replies.add($0, $1) })
     }
 
+    func testFullQueueReleasesReplySlotBeforeAConsumerImmediatelySubmitsAgain() async throws {
+        let f = try PomodoroPluginFixture()
+        defer { f.shutdown() }
+        try await f.load()
+        let transport = PluginBridgeTransport(bridge: f.bridge, package: f.package, context: try f.context())
+        defer { transport.revoke() }
+        let replies = PomodoroTransportReplies()
+        let json = request("log", params: ["message": "bounded", "level": "info"])
+        for index in 0..<64 {
+            XCTAssertTrue(transport.submit(id: index, json: json) { id, response in
+                replies.add(id, response)
+                if id == 0 {
+                    // Same call stack as delivery, before drain can return.
+                    let admitted = transport.submit(id: 64, json: json) { replies.add($0, $1) }
+                    replies.add(100, admitted ? "admitted" : "rejected")
+                }
+            })
+        }
+        try await f.waitUntil { replies.ids.count == 66 }
+        XCTAssertEqual(replies.response(100), "admitted")
+        XCTAssertNotNil(replies.response(64))
+    }
+
     private func settings(minutes: Int, state: String) -> PluginBridgeJSON {
         .object(["schemaVersion": .number(1), "selectedMinutes": .number(Double(minutes)), "lastSession": .string(state)])
     }

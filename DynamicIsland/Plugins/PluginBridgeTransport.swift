@@ -7,6 +7,7 @@ import Foundation
 nonisolated final class PluginBridgeTransport: @unchecked Sendable {
     private enum Lane: Hashable, Sendable { case storage, interactive }
     private struct Request: Sendable {
+        let admissionID = UUID()
         let id: Int
         let json: String
         let reply: @Sendable (Int, String) -> Void
@@ -19,7 +20,7 @@ nonisolated final class PluginBridgeTransport: @unchecked Sendable {
     private let resourceAdmission: PluginResourceAdmission
     private var requests: [Lane: [Request]] = [:]
     private var draining: Set<Lane> = []
-    private var admittedCount = 0
+    private var admissions: Set<UUID> = []
     private var revoked = false
 
     @MainActor
@@ -38,9 +39,10 @@ nonisolated final class PluginBridgeTransport: @unchecked Sendable {
     func submit(id: Int, json: String, reply: @escaping @Sendable (Int, String) -> Void) -> Bool {
         let lane = Self.lane(for: json)
         lock.lock()
-        guard !revoked, admittedCount < 64 else { lock.unlock(); return false }
-        admittedCount += 1
-        requests[lane, default: []].append(.init(id: id, json: json, reply: reply))
+        guard !revoked, admissions.count < 64 else { lock.unlock(); return false }
+        let request = Request(id: id, json: json, reply: reply)
+        admissions.insert(request.admissionID)
+        requests[lane, default: []].append(request)
         let shouldDrain = draining.insert(lane).inserted
         lock.unlock()
         if shouldDrain { Task { await drain(lane) } }
@@ -61,7 +63,7 @@ nonisolated final class PluginBridgeTransport: @unchecked Sendable {
         lock.lock()
         revoked = true
         requests.removeAll()
-        admittedCount = 0
+        admissions.removeAll()
         lock.unlock()
         resourceAdmission.revoke()
         networkAdmission.revoke()
@@ -87,10 +89,14 @@ nonisolated final class PluginBridgeTransport: @unchecked Sendable {
     private func drain(_ lane: Lane) async {
         while let request = next(lane) {
             await processIfActive(request)
-            lock.withLock {
-                if !revoked { admittedCount -= 1 }
-            }
+            // Network / file / refresh dispatch returns after admission and
+            // replies later. Immediate replies release before reaching the VM.
+            release(request)
         }
+    }
+
+    private func release(_ request: Request) {
+        lock.withLock { _ = admissions.remove(request.admissionID) }
     }
 
     @MainActor
@@ -100,6 +106,9 @@ nonisolated final class PluginBridgeTransport: @unchecked Sendable {
         guard !isRevoked else { return }
         await process(request.json) { [weak self] response in
             guard let self, !self.isRevoked else { return }
+            // A settled SDK Promise may immediately submit its next request.
+            // Free its Host slot first; the drain's fallback is idempotent.
+            self.release(request)
             request.reply(request.id, response)
         }
     }

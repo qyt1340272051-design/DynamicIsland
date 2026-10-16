@@ -6,7 +6,7 @@
 
 ## 必须迁移的生产代码
 
-生产番茄钟仍在 `IslandTimerToolsModel` / `IslandTimerToolsView` 中，使用原生 100 ms ticker；`PomodoroActivityProvider` 只用于 DEBUG。仅删除 Provider 不能达到计划的完成标准。
+初始审计时，生产番茄钟位于 `IslandTimerToolsModel` / `IslandTimerToolsView`，使用原生 100 ms ticker；`PomodoroActivityProvider` 只用于 DEBUG。2026-10-16 的 3C 已删除这些专用实现和分支，生产 Swift 零命中，见 [迁移证据](evidence/t35-pomodoro-migration-20261016.json)。下列清单保留迁移范围，实际 .dip / UI / 计时验收完成后才能接受 T35。
 
 - 移除 `PomodoroActivityProvider.swift`、`IslandPomodoroPresetAnimation.swift` 和 DEBUG 番茄钟入口。
 - 从计时 Model/View、IslandView 移除 `.pomodoro`、专用预设、状态、动作及颜色分支。

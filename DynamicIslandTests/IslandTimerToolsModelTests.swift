@@ -23,21 +23,21 @@ final class IslandTimerToolsModelTests: XCTestCase {
         }
     }
 
-    func testPomodoroCompletesAfterTwentyFiveMinutes() async {
+    func testCountdownCompletesAfterItsConfiguredDuration() async {
         let model = await MainActor.run {
             IslandTimerToolsModel(tickIntervalNanoseconds: 60_000_000_000)
         }
         let start = Date(timeIntervalSinceReferenceDate: 2_000)
 
         await MainActor.run {
-            model.selectedMode = .pomodoro
+            model.selectedMode = .countdown
             model.startSelectedTimer(at: start)
-            model.refresh(at: start.addingTimeInterval(IslandTimerToolsModel.defaultPomodoroDuration))
+            model.refresh(at: start.addingTimeInterval(model.countdownDuration))
 
-            XCTAssertEqual(model.pomodoroRemaining, 0)
+            XCTAssertEqual(model.countdownRemaining, 0)
             XCTAssertNil(model.runningMode)
-            XCTAssertEqual(model.sessionMode, .pomodoro)
-            XCTAssertEqual(model.completedMode, .pomodoro)
+            XCTAssertEqual(model.sessionMode, .countdown)
+            XCTAssertEqual(model.completedMode, .countdown)
             XCTAssertEqual(model.statusText, "已完成")
             XCTAssertEqual(model.selectedProgress, 1)
         }
@@ -61,6 +61,7 @@ final class IslandTimerToolsModelTests: XCTestCase {
 
             model.resetSelectedTimer()
             XCTAssertEqual(model.countdownRemaining, 7 * 60)
+            XCTAssertNil(model.runningMode)
             XCTAssertNil(model.sessionMode)
             XCTAssertEqual(model.statusText, "设置时长")
         }
@@ -88,25 +89,33 @@ final class IslandTimerToolsModelTests: XCTestCase {
         }
     }
 
-    func testPomodoroPresetChangesDurationAndCannotChangeWhileRunning() async {
+    func testCountdownDurationCannotChangeWhileRunning() async {
         let model = await MainActor.run {
             IslandTimerToolsModel(tickIntervalNanoseconds: 60_000_000_000)
         }
         let start = Date(timeIntervalSinceReferenceDate: 3_500)
 
         await MainActor.run {
-            model.selectedMode = .pomodoro
-            model.selectPomodoroMinutes(45)
+            model.selectedMode = .countdown
+            model.adjustCountdownMinutes(by: 2)
 
-            XCTAssertEqual(model.pomodoroMinutes, 45)
-            XCTAssertEqual(model.pomodoroRemaining, 45 * 60)
-            XCTAssertEqual(model.statusText, "45 分钟专注")
+            XCTAssertEqual(model.countdownMinutes, 7)
+            XCTAssertEqual(model.countdownRemaining, 7 * 60)
 
             model.startSelectedTimer(at: start)
-            model.selectPomodoroMinutes(15)
+            model.adjustCountdownMinutes(by: -3)
 
-            XCTAssertEqual(model.pomodoroMinutes, 45)
-            XCTAssertFalse(model.canSelectPomodoroPreset)
+            XCTAssertEqual(model.countdownMinutes, 7)
+            XCTAssertEqual(model.countdownRemaining, 7 * 60)
+            XCTAssertEqual(model.runningMode, .countdown)
+            XCTAssertFalse(model.canIncreaseCountdown)
+            XCTAssertFalse(model.canDecreaseCountdown)
+
+            model.pauseSelectedTimer(at: start.addingTimeInterval(60))
+            model.adjustCountdownMinutes(by: 1)
+            XCTAssertEqual(model.countdownMinutes, 8)
+            XCTAssertEqual(model.countdownRemaining, 8 * 60)
+            XCTAssertNil(model.sessionMode)
         }
     }
 
@@ -122,6 +131,7 @@ final class IslandTimerToolsModelTests: XCTestCase {
             model.refresh(at: start.addingTimeInterval(model.countdownDuration))
             model.acknowledgeCompletion()
 
+            XCTAssertNil(model.runningMode)
             XCTAssertNil(model.completedMode)
             XCTAssertNil(model.sessionMode)
             XCTAssertEqual(model.countdownRemaining, model.countdownDuration)

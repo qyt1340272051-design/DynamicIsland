@@ -6,10 +6,10 @@ import XCTest
 final class ScreenSnapshotMatrixTests: XCTestCase {
     func testMatrixCoversEveryProfileAndRequiredIslandState() {
         XCTAssertEqual(SimulatedScreenProfile.allCases.count, 8)
-        XCTAssertEqual(ScreenSnapshotScenario.allCases.count, 13)
+        XCTAssertEqual(ScreenSnapshotScenario.allCases.count, 12)
         XCTAssertEqual(
             SimulatedScreenProfile.allCases.count * ScreenSnapshotScenario.allCases.count,
-            104
+            96
         )
         XCTAssertTrue(ScreenSnapshotScenario.allCases.contains(.compactVolume))
         XCTAssertTrue(ScreenSnapshotScenario.allCases.contains(.expandedVolume))
@@ -19,7 +19,6 @@ final class ScreenSnapshotMatrixTests: XCTestCase {
         XCTAssertTrue(ScreenSnapshotScenario.allCases.contains(.expandedMusic))
         XCTAssertTrue(ScreenSnapshotScenario.allCases.contains(.expandedFileTray))
         XCTAssertTrue(ScreenSnapshotScenario.allCases.contains(.expandedToolsStopwatch))
-        XCTAssertTrue(ScreenSnapshotScenario.allCases.contains(.expandedToolsPomodoro))
         XCTAssertTrue(ScreenSnapshotScenario.allCases.contains(.expandedToolsCountdown))
     }
 
@@ -225,7 +224,7 @@ final class ScreenSnapshotMatrixTests: XCTestCase {
             }
         }
 
-        XCTAssertEqual(records.count, 104)
+        XCTAssertEqual(records.count, 96)
         try writeManifest(records: records, to: outputDirectory)
         try writeIndex(records: records, to: outputDirectory)
     }
@@ -267,10 +266,6 @@ final class ScreenSnapshotMatrixTests: XCTestCase {
             viewModel.setDragging(true)
         case .expandedToolsStopwatch:
             viewModel.timerTools.selectedMode = .stopwatch
-            viewModel.setHovering(true)
-            viewModel.selectExpandedSurface(.tools)
-        case .expandedToolsPomodoro:
-            viewModel.timerTools.selectedMode = .pomodoro
             viewModel.setHovering(true)
             viewModel.selectExpandedSurface(.tools)
         case .expandedToolsCountdown:
@@ -405,7 +400,6 @@ private enum ScreenSnapshotScenario: String, CaseIterable {
     case expandedFileTray = "expanded-file-tray"
     case draggingFile = "dragging-file"
     case expandedToolsStopwatch = "expanded-tools-stopwatch"
-    case expandedToolsPomodoro = "expanded-tools-pomodoro"
     case expandedToolsCountdown = "expanded-tools-countdown"
 
     var displayName: String {
@@ -432,8 +426,6 @@ private enum ScreenSnapshotScenario: String, CaseIterable {
             return "展开 · 文件拖入"
         case .expandedToolsStopwatch:
             return "展开 · 秒表"
-        case .expandedToolsPomodoro:
-            return "展开 · 番茄钟"
         case .expandedToolsCountdown:
             return "展开 · 倒计时"
         }

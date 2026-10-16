@@ -30,4 +30,4 @@ Host 完成事件通过串行 Promise work 链，再调用 `countdown.get('sessi
 
 ## 当前边界
 
-这是 T35 的 **3B**，不代表整个 T35 完成：尚未删除旧专用 Swift 计时实现，也没有正式 `.dip` 安装与实机 UI 验收。Host 倒计时记录不跨应用重启持久化；保存的 lastSession 不能恢复业务计时。仍需完整迁移和实机验收，T35 保持 in progress。
+这是 T35 的 **3B**，不代表整个 T35 完成：已删除旧专用 Swift 计时实现并通过完整 CI；正式 `.dip` 安装与实机 UI 验收仍在进行中。Host 倒计时记录不跨应用重启持久化；保存的 lastSession 不能恢复业务计时。仍需完整迁移和实机验收，T35 保持 in progress。

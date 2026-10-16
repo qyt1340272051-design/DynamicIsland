@@ -33,7 +33,6 @@ final class IslandTimerShellRenderingTests: XCTestCase {
         // miss a stale shell after an in-place picker selection.
         for (mode, expectedHeight) in [
             (IslandTimerToolMode.stopwatch, IslandVisualStyle.expandedCompactContentHeight),
-            (.pomodoro, IslandVisualStyle.expandedTimerHeight),
             (.countdown, IslandVisualStyle.expandedTimerHeight),
             (.stopwatch, IslandVisualStyle.expandedCompactContentHeight)
         ] {
