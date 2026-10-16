@@ -1,0 +1,73 @@
+{
+  "captureUTC": "2026-10-16T03:13:57.143860+00:00",
+  "baseCommit": "15bccf9",
+  "source": "DynamicIsland/DynamicIslandApp.swift",
+  "sourceSHA256": "fee9a11027f3141fefa3c48e48d68c7edea05a6fde1b9b82446d3636cd38fcee",
+  "resultBundle": "/tmp/dynamic-island-t35-quit-fix-20261016-final/TestResults.xcresult",
+  "log": "/tmp/dynamic-island-t35-quit-fix-20261016-final-ci.log",
+  "normalReleaseBuild": "passed",
+  "ciSummary": {
+    "devicesAndConfigurations": [
+      {
+        "device": {
+          "architecture": "arm64",
+          "deviceId": "00008132-001E49513A0B801C",
+          "deviceName": "My Mac",
+          "modelName": "MacBook Air",
+          "osBuildNumber": "25G83",
+          "osVersion": "26.6.2",
+          "platform": "macOS"
+        },
+        "expectedFailures": 0,
+        "failedTests": 0,
+        "passedTests": 887,
+        "skippedTests": 1,
+        "testPlanConfiguration": {
+          "configurationId": "1",
+          "configurationName": "Test Scheme Action"
+        }
+      }
+    ],
+    "environmentDescription": "Dynamic Island · Built with macOS 26.6.2",
+    "expectedFailures": 0,
+    "failedTests": 0,
+    "finishTime": 1792120191.155,
+    "passedTests": 887,
+    "result": "Passed",
+    "skippedTests": 1,
+    "startTime": 1792120092.931,
+    "statistics": [
+      {
+        "subtitle": "1 test run",
+        "title": "1 test collected performance metrics"
+      }
+    ],
+    "testFailures": [],
+    "title": "Test - Dynamic Island",
+    "topInsights": [
+      {
+        "category": "Longest Test Runs",
+        "impact": "61% of duration",
+        "text": "7 longest test runs with outlier durations exceeding 2.59s (three standard deviations)"
+      }
+    ],
+    "totalTestCount": 888
+  },
+  "finding": "Animated quit called NSApplication.terminate synchronously inside a Swift MainActor job. terminateLater nested the modal loop before that job returned, so asynchronous plugin cleanup could not run. Initial restart assertion was withdrawn after PID and start-time verification.",
+  "fix": "First termination attempt returns terminateCancel while existing coordinator cleanup runs. Only successful cleanup approves a second attempt returning terminateNow. Failures preserve the existing installer cleanup error and allow retry.",
+  "stalledPID": 99942,
+  "stalledPIDStoppedByUser": true,
+  "fixedMenuQuitPID": 1059,
+  "fixedMenuQuitProcessAbsent": true,
+  "pending": [
+    "Actual 15-minute natural completion",
+    "Remaining ordinary Release UI regression"
+  ],
+  "fixedAnimatedQuitPID": 1244,
+  "fixedAnimatedQuitProcessAbsent": true,
+  "genuineRestartVisibleSettings": {
+    "selectedMinutes": 15,
+    "state": "idle",
+    "autoStarted": false
+  }
+}

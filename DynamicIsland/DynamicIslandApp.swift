@@ -56,6 +56,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
         self?.showPluginInstaller()
     }
     private var pluginTerminationTask: Task<Void, Never>?
+    private var pluginTerminationApproved = false
     private let pluginLogger = Logger(subsystem: "DynamicIsland", category: "PluginLifecycle")
 #if DEBUG
     private var screenSimulatorWindowController: ScreenSimulatorWindowController?
@@ -97,17 +98,24 @@ final class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
     }
 
     func applicationShouldTerminate(_ sender: NSApplication) -> NSApplication.TerminateReply {
+        if pluginTerminationApproved { return .terminateNow }
         guard pluginInstallerModel != nil || pluginImportCoordinator.pendingCount > 0 else { return .terminateNow }
-        guard pluginTerminationTask == nil else { return .terminateLater }
+        guard pluginTerminationTask == nil else { return .terminateCancel }
         pluginTerminationTask = Task { @MainActor [weak self] in
             let cleaned = await self?.pluginImportCoordinator.shutdown() ?? true
-            if !cleaned {
+            if cleaned {
+                self?.pluginTerminationApproved = true
+                sender.terminate(nil)
+            } else {
                 self?.pluginTerminationTask = nil
                 self?.showPluginInstaller()
             }
-            sender.reply(toApplicationShouldTerminate: cleaned)
         }
-        return .terminateLater
+        // A Swift MainActor job can call terminate (the animated quit button
+        // does). terminateLater nests AppKit's modal loop inside that job and
+        // prevents the cleanup Task from acquiring the same executor. Cancel
+        // this attempt, clean up after the job returns, then terminateNow.
+        return .terminateCancel
     }
 
     func applicationWillTerminate(_ notification: Notification) {

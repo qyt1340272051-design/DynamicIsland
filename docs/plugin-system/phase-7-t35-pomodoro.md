@@ -126,3 +126,19 @@ CI **868 total / 864 passed / 4 skipped / 0 failures**，普通 Release build pa
 复核补齐了 Transport 满队列回复边界：每请求 UUID 准入在回复前释放，dispatch 返回后幂等清理，防止消费者收到已完成回复后立即提交下一条却被旧计数误拒。新增同一回复调用栈的满队列回补测试。
 
 完整 `./Scripts/ci.sh` 为 **888 total / 887 passed / 1 skipped / 0 failures**，普通 Release build passed；唯一 skip 为显式截图矩阵生成。[源码和 CI 证据](evidence/t35-pomodoro-migration-20261016.json)已保存。实际 .dip 导入、授权和普通 Release UI / 真实计时验收正在独立沙盒副本中进行，T35 保持 in progress。
+
+## 普通 Release 部分验收与退出修复（2026-10-16）
+
+使用独立 Bundle ID `com.rong5.dynamic-island.t35-pomodoro.20261016` 的普通 Release 副本，保留 Sandbox / hardened runtime / JIT 和原 Release entitlements；未增加测试注入权限，也未注册 .dip 默认处理程序。实际从管理页导入 0.2.0 包，安装后停用、存储待授权，启用仍不授权。实际拒绝存储后开始 / 暂停 / 结束正常；运行中撤销存储后暂停 / 继续正常。随后逐项确认本地设置权限，60 分钟预设写入独立存储并显示 `1:00:00`。展开的时间、进度、预设和按钮完整可见。
+
+首次点击动画退出后岛体淡出，但 PID 99942 仍存活；用户指出尚未重启，随后进程启动时间确认了该失败。已撤回该次重启验收标记。采样显示动画 Task 同步进入 NSApplication terminateLater 的嵌套事件循环，后续 MainActor 插件清理 Task 无法运行。活动监视器确认窗口触发 CUA 截图错误，用户协助强制退出了确切隔离 PID；原 App PID 66831 未被停止。
+
+修复为两阶段退出：首次返回 terminateCancel，让当前 MainActor job 返回并完成既有 Coordinator 清理；仅清理成功后批准第二次 terminateNow，清理失败保留原错误与重试入口。没有跳过暂存包清理或放宽权限。修正版完整 CI **888 total / 887 passed / 1 skipped / 0 failures**，普通 Release build passed；[退出修复证据](evidence/t35-quit-fix-20261016.json)。实际菜单退出后 PID 1059 消失；再次启动的 PID 1244 中，番茄钟恢复为 **15 分钟、准备专注、15:00**，即使存储 lastSession 为 running 也不自动开表。再点击原动画退出按钮，PID 1244 同样消失。
+
+[实际 AX、原始截图、签名与进程记录](evidence/t35-pomodoro-ui-20261016/result.json)保留成功与失败范围。真实 15 分钟自然到期、最终 compact 物理刘海与旧页面回归仍未完成；非法设置已有 12 类 VM 自动化验证，普通 Release 错误设置截图尚未补齐。T35 继续 in progress，T36 pending。
+
+### 下一次继续
+
+修正版隔离 App 位于 `/Users/rong5/Applications/Dynamic Island T35 Pomodoro.app`，已退出，独立插件数据和授权保留，当前设置为 15 分钟。启动后先确认新 PID；请用户物理悬停展开，选择番茄钟，开始真实 15 分钟计时并记录开始 / 到期实际时间。验证 compact 两翼、原生秒表 / 倒计时、音乐 / 拖盘与收起重选；补齐到期通知和不自动重开。确认上述验收后再更新 T35 状态。旧卡住副本与完整采样保留在 `/tmp/dynamic-island-t35-pomodoro-ui-20261016`，不要再启动其中 `stalled-app.app`。
+
+按用户先前的额度要求，本轮在 5 小时额度接近用完时收尾。未推送、发布、打 tag、制作 DMG 或改写记忆。

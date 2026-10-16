@@ -1,0 +1,95 @@
+Analysis of sampling Dynamic Island (pid 99942) every 1 millisecond
+Process:         Dynamic Island [99942]
+Path:            /Users/USER/*/Dynamic Island T35 Pomodoro.app/Contents/MacOS/Dynamic Island
+Load Address:    0x102ba0000
+Identifier:      com.rong5.dynamic-island.t35-pomodoro.20261016
+Version:         0.5.0 (2)
+Code Type:       ARM64
+Platform:        macOS
+Parent Process:  launchd [1]
+Target Type:     live task
+
+Date/Time:       2026-10-16 11:04:03.242 +0800
+Launch Time:     2026-10-16 10:49:19.181 +0800
+OS Version:      macOS 26.6.2 (25G83)
+Report Version:  7
+Analysis Tool:   /usr/bin/sample
+
+Physical footprint:         57.8M
+Physical footprint (peak):  105.8M
+Idle exit:                  untracked
+----
+
+Call graph:
+    859 Thread_11400888   DispatchQueue_1: com.apple.main-thread  (serial)
+    + 859 completeTaskWithClosure(swift::AsyncContext*, swift::SwiftError*)  (in libswift_Concurrency.dylib) + 1  [0x294bfbec5]
+    +   859 <deduplicated_symbol>  (in Dynamic Island) + 1  [0x102bc83e9]
+    +     859 ???  (in Dynamic Island)  load address 0x102ba0000 + 0x27d39  [0x102bc7d39]
+    +       859 <deduplicated_symbol>  (in Dynamic Island) + 1  [0x102bc83e9]
+    +         859 closure #1 in closure #1 in IslandView.quitButton.getter  (in Dynamic Island) + 52  [0x102d9026c]  IslandView.swift:325
+    +           859 -[NSApplication terminate:]  (in AppKit) + 780  [0x193bd3578]
+    +             859 -[NSApplication _shouldTerminate]  (in AppKit) + 1188  [0x193be182c]
+    +               859 -[NSApplication(NSEventRouting) nextEventMatchingMask:untilDate:inMode:dequeue:]  (in AppKit) + 72  [0x194567678]
+    +                 859 -[NSApplication(NSEventRouting) _nextEventMatchingEventMask:untilDate:inMode:dequeue:]  (in AppKit) + 688  [0x19456796c]
+    +                   859 _DPSNextEvent  (in AppKit) + 576  [0x1939d2084]
+    +                     859 _DPSBlockUntilNextEventMatchingListInMode  (in AppKit) + 228  [0x19407e3d0]
+    +                       859 _BlockUntilNextEventMatchingListInMode  (in HIToolbox) + 48  [0x19c51414c]
+    +                         859 ReceiveNextEventCommon  (in HIToolbox) + 488  [0x19c38a8bc]
+    +                           859 RunCurrentEventLoopInMode  (in HIToolbox) + 320  [0x19c387560]
+    +                             859 _CFRunLoopRunSpecificWithOptions  (in CoreFoundation) + 532  [0x18f66e264]
+    +                               859 __CFRunLoopRun  (in CoreFoundation) + 1188  [0x18f59b9f4]
+    +                                 859 __CFRunLoopServiceMachPort  (in CoreFoundation) + 160  [0x18f59d108]
+    +                                   859 mach_msg  (in libsystem_kernel.dylib) + 24  [0x18f49bfc0]
+    +                                     859 mach_msg_overwrite  (in libsystem_kernel.dylib) + 480  [0x18f4a49c0]
+    +                                       859 mach_msg2_internal  (in libsystem_kernel.dylib) + 76  [0x18f4ae5a4]
+    +                                         859 mach_msg2_trap  (in libsystem_kernel.dylib) + 8  [0x18f49bc34]
+    859 Thread_11400973: com.apple.NSEventThread
+    + 859 thread_start  (in libsystem_pthread.dylib) + 8  [0x18f4dac1c]
+    +   859 _pthread_start  (in libsystem_pthread.dylib) + 136  [0x18f4dfc58]
+    +     859 _NSEventThread  (in AppKit) + 184  [0x193af3cac]
+    +       859 _CFRunLoopRunSpecificWithOptions  (in CoreFoundation) + 532  [0x18f66e264]
+    +         859 __CFRunLoopRun  (in CoreFoundation) + 1188  [0x18f59b9f4]
+    +           859 __CFRunLoopServiceMachPort  (in CoreFoundation) + 160  [0x18f59d108]
+    +             859 mach_msg  (in libsystem_kernel.dylib) + 24  [0x18f49bfc0]
+    +               859 mach_msg_overwrite  (in libsystem_kernel.dylib) + 480  [0x18f4a49c0]
+    +                 859 mach_msg2_internal  (in libsystem_kernel.dylib) + 76  [0x18f4ae5a4]
+    +                   859 mach_msg2_trap  (in libsystem_kernel.dylib) + 8  [0x18f49bc34]
+    859 Thread_11400979: caulk.messenger.shared:17
+    + 859 thread_start  (in libsystem_pthread.dylib) + 8  [0x18f4dac1c]
+    +   859 _pthread_start  (in libsystem_pthread.dylib) + 136  [0x18f4dfc58]
+    +     859 caulk::thread_proxy<std::tuple<caulk::thread::attributes, void (caulk::concurrent::details::worker_thread::*)(), std::tuple<caulk::concurrent::details::worker_thread*>>>(void*)  (in caulk) + 96  [0x19be2f94c]
+    +       859 caulk::concurrent::details::worker_thread::run()  (in caulk) + 32  [0x19be2fcac]
+    +         859 caulk::semaphore::timed_wait(double)  (in caulk) + 224  [0x19be2fe00]
+    +           859 semaphore_wait_trap  (in libsystem_kernel.dylib) + 8  [0x18f49bbb0]
+    859 Thread_11400980: caulk.messenger.shared:high
+    + 859 thread_start  (in libsystem_pthread.dylib) + 8  [0x18f4dac1c]
+    +   859 _pthread_start  (in libsystem_pthread.dylib) + 136  [0x18f4dfc58]
+    +     859 caulk::thread_proxy<std::tuple<caulk::thread::attributes, void (caulk::concurrent::details::worker_thread::*)(), std::tuple<caulk::concurrent::details::worker_thread*>>>(void*)  (in caulk) + 96  [0x19be2f94c]
+    +       859 caulk::concurrent::details::worker_thread::run()  (in caulk) + 32  [0x19be2fcac]
+    +         859 caulk::semaphore::timed_wait(double)  (in caulk) + 224  [0x19be2fe00]
+    +           859 semaphore_wait_trap  (in libsystem_kernel.dylib) + 8  [0x18f49bbb0]
+    859 Thread_11404102
+    + 859 start_wqthread  (in libsystem_pthread.dylib) + 8  [0x18f4dac10]
+    +   859 _pthread_wqthread  (in libsystem_pthread.dylib) + 368  [0x18f4dbf0c]
+    +     859 __workq_kernreturn  (in libsystem_kernel.dylib) + 8  [0x18f49d9f0]
+    859 Thread_11404423: DynamicIsland.Plugin.com.dynamicisland.pomodoro
+    + 859 thread_start  (in libsystem_pthread.dylib) + 8  [0x18f4dac1c]
+    +   859 _pthread_start  (in libsystem_pthread.dylib) + 136  [0x18f4dfc58]
+    +     859 __NSThread__start__  (in Foundation) + 732  [0x190de1b7c]
+    +       859 ???  (in Dynamic Island)  load address 0x102ba0000 + 0x16bf54  [0x102d0bf54]
+    +         859 closure #2 in PluginJavaScriptWorker.start()  (in Dynamic Island) + 76  [0x102d3e680]  PluginRuntime.swift:169
+    +           859 closure #1 in PluginJavaScriptWorker.threadMain()  (in Dynamic Island) + 944  [0x102d40bf0]  PluginRuntime.swift:335
+    +             859 CFRunLoopRun  (in CoreFoundation) + 64  [0x18f611b24]
+    +               859 _CFRunLoopRunSpecificWithOptions  (in CoreFoundation) + 532  [0x18f66e264]
+    +                 859 __CFRunLoopRun  (in CoreFoundation) + 1188  [0x18f59b9f4]
+    +                   859 __CFRunLoopServiceMachPort  (in CoreFoundation) + 160  [0x18f59d108]
+    +                     859 mach_msg  (in libsystem_kernel.dylib) + 24  [0x18f49bfc0]
+    +                       859 mach_msg_overwrite  (in libsystem_kernel.dylib) + 480  [0x18f4a49c0]
+    +                         859 mach_msg2_internal  (in libsystem_kernel.dylib) + 76  [0x18f4ae5a4]
+    +                           859 mach_msg2_trap  (in libsystem_kernel.dylib) + 8  [0x18f49bc34]
+    859 Thread_11411284
+      859 start_wqthread  (in libsystem_pthread.dylib) + 8  [0x18f4dac10]
+        859 _pthread_wqthread  (in libsystem_pthread.dylib) + 368  [0x18f4dbf0c]
+          859 __workq_kernreturn  (in libsystem_kernel.dylib) + 8  [0x18f49d9f0]
+
+Total number in stack (recursive counted multiple, when >=5):
