@@ -104,3 +104,17 @@ CI **868 total / 864 passed / 4 skipped / 0 failures**，普通 Release build pa
 下一子步骤 3B：Storage 明示授权、拒绝 / 撤销不阻塞计时、非法设置回退、重启只恢复设置不自动重开；通过公开 Scheduler 做一次有界对账，保持 30 / 60 秒下限。随后完成实际 .dip 安装、逐项授权、普通 Release UI / 真实 15 分钟计时，再删除 Model/View/DEBUG/Provider 与预设动画中的全部 Pomodoro 专用 Swift。保留秒表、倒计时和共享时间格式化。T35 仍 in progress，T36 pending。
 
 本轮在 5 小时额度已用 91% 时收尾。没有推送、发布、打 tag、制作 DMG 或改写记忆。
+
+## 子步骤 3B：设置持久化与单次对账
+
+官方验证包更新为 0.2.0，声明 `storage.local` 权限及 Storage / Scheduler capability。安装、启用均不批准存储；Host 仍逐项确认，代码或 Manifest 改变后旧授权不适用。设置仅占 `settings` 一个 key，精确 schema 为 `{schemaVersion:1, selectedMinutes:15|25|45|60, lastSession:idle|running|paused|completed}`。缺失、错误类型、多余字段、未知版本或非法值回默认 25 分钟，不主动覆盖原值。上一轮状态只作元数据，重启读取设置后等待开始，不能重建 Host 计时记录或自动继续。
+
+动作和完成时生成最新设置，最多一个在途写和一个合并草稿。存储链独立于计时动作与渲染；失败保留草稿，等待新动作或唯一 refresh 重试，不无限重试。拒绝、撤销、读写错误显示「设置未保存」，不计为插件故障。设置变化在动作时保存，不依赖资源已撤销的 onStop。
+
+每个执行只请求一次 `requestRefresh(30000)`，由 Host 保留后台 30 秒、低功耗 60 秒下限和合并规则。对账重新读取 Host 记录，不重新开始、继续或安排下一次 refresh。初次未获存储权限时，只有尚未接受任何用户动作才能采用一次延迟重读；单调 user revision 防止用户改回默认后被旧设置覆盖。睡眠恢复的新 VM 可有自己的一次请求，旧执行待办已撤销。
+
+集成发现慢磁盘会占住原 Transport FIFO，消耗开始 / 继续动作的 5 秒凭证。因此 Host 将存储与交互分为两个 FIFO，存储 set/get 顺序保留，共用 64 项准入容量（包括已出队、等待 MainActor 或磁盘的请求）。两队列都保留执行、权限和最终副作用检查；跨队列的数据依赖应 await Promise。阻塞磁盘的真实 Router 测试覆盖开始 / 暂停 / 继续 / 结束及 Activity 回复、存储 FIFO 和撤销未提交写入。
+
+定向 Pomodoro / Storage / Bridge 测试 64 passed / 0 failures。首轮容量测试发现出队但未处理的两条请求可能绕过排队计数，已按全部在途准入计数修正并重跑通过。完整 CI 和普通 Release 构建的最终结果见本节后续证据；本节尚不代表 T35 完整迁移或实机验收完成。
+
+3B 完整 `./Scripts/ci.sh`：**892 total / 891 passed / 1 skipped / 0 failures**，普通 Release build passed。此前锁屏跳过的三项 AppKit 鼠标测试本轮均通过；唯一 skip 为显式截图矩阵生成。[CI 与源码 SHA256](evidence/t35-pomodoro-3b-20261016.json)已保存。接下来删除专用 Swift，再在隔离的普通 Release 副本中完成实际安装、分项授权、UI 和真实计时验收。

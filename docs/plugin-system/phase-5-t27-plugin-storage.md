@@ -21,7 +21,7 @@ await island.storage.clear();
 
 ## 文件与并发
 
-[`PluginStorage`](../../DynamicIsland/Plugins/PluginStorage.swift) actor 串行拥有 KV 和同步文件 I/O，位于 MainActor 之外。Bridge 在 MainActor 校验纯数据、声明和会话；Transport 按会话 FIFO await actor 完成后处理下一条请求，不阻塞 VM 或 UI。请求进入 MainActor 后再次检查 transport 撤销，过滤 direct teardown 后已出队但尚未执行的请求。
+[`PluginStorage`](../../DynamicIsland/Plugins/PluginStorage.swift) actor 串行拥有 KV 和同步文件 I/O，位于 MainActor 之外。Bridge 在 MainActor 校验纯数据、声明和会话；Transport 的存储队列按会话 FIFO await actor 完成后处理下一条存储请求。T35 将交互请求分到独立 FIFO，避免磁盘延迟消耗倒计时动作凭证的有效期；两队列共用 64 项待处理上限，数据依赖通过 await Promise 表达。请求进入 MainActor 后再次检查 transport 撤销，过滤 direct teardown 后已出队但尚未执行的请求。
 
 每次读取重新检查磁盘，拒绝坏 UTF-8、重复 JSON 字段、未知 schema / 字段、身份不匹配、超限值和损坏结构，不把坏文件视为空数据。文件最多 128 KiB，解析 envelope 后逐值验证。损坏文件的 set / remove / clear 同样失败，不隐式修复或覆盖。JS 只收到固定 `storageReadFailed` / `storageWriteFailed`，无路径或内容。
 

@@ -12,7 +12,7 @@ T27 后续实现：生产 KV 已改为独立 actor 的持久化存储，见 [T27
 
 隐藏的原生入口仅接收 JSON 请求与请求 ID。请求包含 `apiVersion`、`method`、`params`；Host 重新验证版本、方法、参数类型、字段、数值和容量，再进入 Core。JavaScript 包装层的验证用于尽早返回错误，Swift 验证仍是 Host 边界；插件不能借修改包装层省略 Host 校验。
 
-同一 Runtime 的 [`PluginBridgeTransport`](../../DynamicIsland/Plugins/PluginBridgeTransport.swift) 按 FIFO 处理 Host 请求，因此连续发出的 `storage.set` 与 `storage.get` 按发出顺序执行。Host 使用该会话的 `PluginExecutionContext.perform` 检查当前 token，随后才调用 Activity、日志或 KV 服务；回复排队返回原插件线程，不通过 MainActor 同步等待 JavaScript。
+同一 Runtime 的 [`PluginBridgeTransport`](../../DynamicIsland/Plugins/PluginBridgeTransport.swift) 将存储与交互请求分别按 FIFO 处理，共用 64 项待处理上限。连续发出的 `storage.set` 与 `storage.get` 保持顺序，慢磁盘不会占住倒计时动作与 Activity 请求。跨队列存在数据依赖时插件应 await 对应 Promise。Host 使用该会话的 `PluginExecutionContext.perform` 检查当前 token，随后才调用 Activity、日志或 KV 服务；回复排队返回原插件线程，不通过 MainActor 同步等待 JavaScript。此拆分在 T35 官方插件接入存储时加入。
 
 禁用、暂停、停止、卸载、重载和启动失败会撤销会话。旧 Runtime 的排队请求不得写入新会话的数据或重新发布 Activity，撤销后的回复不得再次执行 JavaScript。T22 的 `onStop` 仍可在原线程清理 JavaScript 自有资源，但此时普通 Host Bridge 请求已无执行资格。
 

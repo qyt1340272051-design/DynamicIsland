@@ -8,7 +8,7 @@
 | --- | --- |
 | 功能 | 真 JS 测试覆盖注册、发布、部分更新、节点三态、四种动作和两个插件相同 key 的持久化恢复。原 Music / Volume / Battery 等测试包含于完整 CI。真实控件鼠标闭环已在 T26 解锁会话成功；当前锁屏自动跳过该单项。 |
 | 架构 | JS 仅有受控 island；数据进入 Host 校验后由 ActivityManager / Renderer / Router 处理。插件不能取得 NSWindow、SwiftUI View、文件路径或自行决定壳尺寸与优先级。生产 factory 和存储注入已验证。 |
-| 并发 | VM / Context / JSValue 归各自工作线程；Bridge / Activity 在 MainActor，KV I/O 在独立 actor。Transport FIFO await，动作表与工作队列有界；停止撤销执行、注册、请求和最终 KV 提交资格。regrant 等权限行为由 T28 扩展。 |
+| 并发 | VM / Context / JSValue 归各自工作线程；Bridge / Activity 在 MainActor，KV I/O 在独立 actor。Transport 存储 FIFO await、交互 FIFO 独立（T35），共用待处理容量；动作表与工作队列有界；停止撤销执行、注册、请求和最终 KV 提交资格。regrant 等权限行为由 T28 扩展。 |
 | 性能 | JSON、树复杂度、Activity 数量 / 更新频率、64 请求 / 动作 / callback、128 注册 / key、64 KiB KV 均有边界测试。当前未记录正式 App 的空闲 CPU / 内存、动画帧率与同设备性能基线比较，继续保留 T02 / T08 等证据缺口。 |
 | 能耗 | T22–T27 没有新增周期 Timer / polling；请求、回调和磁盘写入由事件触发。睡眠 / 低电量沿用环境关闭执行。实际新增插件能耗及后台调度按 T31 验收。 |
 | 安全 | 参数在 JS wrapper / Host 双重验证；声明与 capability、执行 token、渲染实例、注册 generation 和 KV admission 由 Host 强制检查。JavaScriptCore 不承诺无限循环、进程级 OOM 或 VM 崩溃隔离；授权及 Broker / Watchdog 按 T28–T32。 |

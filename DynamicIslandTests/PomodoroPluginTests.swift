@@ -9,10 +9,11 @@ final class PomodoroPluginTests: XCTestCase {
         let f = try PomodoroPluginFixture()
         defer { f.shutdown() }
         XCTAssertEqual(f.package.manifest.id, "com.dynamicisland.pomodoro")
-        XCTAssertEqual(f.package.manifest.version, try SemanticVersion("0.1.0"))
-        XCTAssertTrue(f.package.manifest.permissions.isEmpty)
+        XCTAssertEqual(f.package.manifest.version, try SemanticVersion("0.2.0"))
+        XCTAssertEqual(f.package.manifest.permissions, [.localStorage])
         XCTAssertEqual(Set(f.package.manifest.capabilities), Set([
-            .publishActivity, .updateActivity, .endActivity, .islandNodeUI, .handleActions, .countdown
+            .publishActivity, .updateActivity, .endActivity, .islandNodeUI, .handleActions, .countdown,
+            .localStorage, .scheduler
         ]))
         try await f.load()
         XCTAssertNil(f.manager.currentSnapshot)
@@ -247,15 +248,19 @@ final class PomodoroPluginTests: XCTestCase {
 }
 
 @MainActor
-private final class PomodoroPluginFixture {
+final class PomodoroPluginFixture {
     let id = "com.dynamicisland.pomodoro"
     let package: ValidatedPluginPackage
-    let clock = PomodoroPluginManualClock()
+    let clock: PomodoroPluginManualClock
+    let storage: PluginStorage
+    let permissions: PermissionManager
+    let scheduler: PluginScheduler
     let activityClock = TestActivityClock(Date(timeIntervalSinceReferenceDate: 39_000))
     lazy var manager = ActivityManager(clock: activityClock, configuration: .immediate)
     lazy var router = ActionRouter(manager: manager)
     lazy var broker = PluginCountdownBroker(clock: { [clock] in clock.now }, automaticScheduling: false)
-    lazy var bridge = PluginJSBridge(activityRateClock: { [clock] in
+    lazy var bridge = PluginJSBridge(storage: storage, permissions: permissions, scheduler: scheduler,
+                                    activityRateClock: { [clock] in
         clock.publicationCount += 1
         return TimeInterval(clock.publicationCount)
     })
@@ -268,12 +273,20 @@ private final class PomodoroPluginFixture {
             return PomodoroPluginCapturingRuntime(runtime: runtime) { [weak self] in self?.contexts.append($0) }
         })
 
-    init() throws {
+    init(storage: PluginStorage? = nil, permissions: PermissionManager? = nil,
+         scheduler: PluginScheduler? = nil) throws {
+        let clock = PomodoroPluginManualClock()
+        self.clock = clock
+        self.storage = storage ?? PluginStorage()
+        self.permissions = permissions ?? PermissionManager()
+        self.scheduler = scheduler ?? PluginScheduler(policy: .background, clock: { clock.schedulerNow },
+                                                       automaticScheduling: false)
         let root = URL(fileURLWithPath: #filePath).deletingLastPathComponent().deletingLastPathComponent()
             .appendingPathComponent("docs/plugin-system/examples/pomodoro", isDirectory: true)
         package = try PluginValidator().validateExpandedPackage(at: root,
             context: .init(hostVersion: SemanticVersion("0.6.0"), occupiedPluginIDs: [],
                            allowedContainerURL: root.deletingLastPathComponent()))
+        self.permissions.request(package: package)
     }
 
     var completionID: String { PluginJSBridge.activityID(pluginID: id, localID: "completion") }
@@ -284,10 +297,29 @@ private final class PomodoroPluginFixture {
             .flatMap { $0.countdownReferences }
     }
 
-    func load() async throws {
-        lifecycle.pluginDidLoad(package, isEnabled: true)
-        try await waitForState("准备专注")
+    var hasUnsavedSettingsHint: Bool {
+        guard let expanded = tool?.presentation.expanded, case .vStack(let stack) = expanded,
+              let first = stack.children.first, case .text(let heading) = first else { return false }
+        return heading.content.contains("设置未保存")
     }
+
+    func load(minutes: Int = 25) async throws {
+        lifecycle.pluginDidLoad(package, isEnabled: true)
+        try await waitForState("准备专注", minutes: minutes)
+        if try permissions.state(permission: .localStorage, package: package) != .granted {
+            try await waitUntil { self.hasUnsavedSettingsHint }
+        }
+    }
+
+    /// A test's explicit Host decision always captures this validated package's
+    /// current review. Fixture construction and load never grant permissions.
+    func decideStorage(_ decision: PluginPermissionDecision) throws {
+        let review = try permissions.snapshot(package: package).review
+        try permissions.applyHostDecision(decision: decision, review: review, permission: .localStorage)
+    }
+
+    func grantStorage() throws { try decideStorage(.granted) }
+    func revokeStorage() throws { try decideStorage(.revoked) }
 
     func context() throws -> PluginExecutionContext { try XCTUnwrap(contexts.last) }
     func owner() throws -> PluginCountdownOwner { try XCTUnwrap(context().countdownOwner) }
@@ -333,13 +365,18 @@ private final class PomodoroPluginFixture {
                       file: file, line: line)
     }
 
-    func shutdown() { lifecycle.shutdown() }
+    func shutdown() {
+        lifecycle.shutdown()
+        scheduler.shutdown()
+        permissions.revokeAll()
+    }
 }
 
 @MainActor
-private final class PomodoroPluginManualClock {
+final class PomodoroPluginManualClock {
     var now: Duration = .zero
     var publicationCount = 0
+    var schedulerNow: TimeInterval = 0
 }
 
 @MainActor

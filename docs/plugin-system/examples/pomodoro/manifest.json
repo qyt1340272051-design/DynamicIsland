@@ -3,10 +3,10 @@
   "id": "com.dynamicisland.pomodoro",
   "name": "番茄钟",
   "developer": "DynamicIsland",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "engine": "javascriptcore",
   "entry": "index.js",
   "minimumHostVersion": "0.6.0",
-  "permissions": [],
-  "capabilities": ["activity.publish", "activity.update", "activity.end", "ui.islandNode", "actions.handle", "countdown"]
+  "permissions": ["storage.local"],
+  "capabilities": ["activity.publish", "activity.update", "activity.end", "ui.islandNode", "actions.handle", "countdown", "storage.local", "scheduler"]
 }

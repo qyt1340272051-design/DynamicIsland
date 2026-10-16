@@ -1,8 +1,11 @@
 import Foundation
 
-/// One FIFO per execution session. No JavaScript reference enters this queue.
-/// MainActor work is asynchronous; the VM never waits for the UI thread.
+/// Two bounded FIFOs per execution session: storage and interactive requests.
+/// Storage keeps its read/write order without holding time-sensitive actions
+/// behind disk I/O. Await a storage Promise when another operation depends on it.
+/// No JavaScript reference enters either queue; the VM never waits for UI work.
 nonisolated final class PluginBridgeTransport: @unchecked Sendable {
+    private enum Lane: Hashable, Sendable { case storage, interactive }
     private struct Request: Sendable {
         let id: Int
         let json: String
@@ -14,8 +17,9 @@ nonisolated final class PluginBridgeTransport: @unchecked Sendable {
     private let storageAdmission: PluginStorageAdmission
     private let networkAdmission: PluginNetworkAdmission
     private let resourceAdmission: PluginResourceAdmission
-    private var requests: [Request] = []
-    private var draining = false
+    private var requests: [Lane: [Request]] = [:]
+    private var draining: Set<Lane> = []
+    private var admittedCount = 0
     private var revoked = false
 
     @MainActor
@@ -32,34 +36,46 @@ nonisolated final class PluginBridgeTransport: @unchecked Sendable {
 
     @discardableResult
     func submit(id: Int, json: String, reply: @escaping @Sendable (Int, String) -> Void) -> Bool {
+        let lane = Self.lane(for: json)
         lock.lock()
-        guard !revoked, requests.count < 64 else { lock.unlock(); return false }
-        requests.append(.init(id: id, json: json, reply: reply))
-        let shouldDrain = !draining
-        draining = true
+        guard !revoked, admittedCount < 64 else { lock.unlock(); return false }
+        admittedCount += 1
+        requests[lane, default: []].append(.init(id: id, json: json, reply: reply))
+        let shouldDrain = draining.insert(lane).inserted
         lock.unlock()
-        if shouldDrain { Task { await drain() } }
+        if shouldDrain { Task { await drain(lane) } }
         return true
+    }
+
+    private static func lane(for json: String) -> Lane {
+        // Classification grants no capability or authorization. The Bridge
+        // independently parses and validates the complete request in both lanes.
+        guard case .object(let fields)? = try? PluginBridgeJSON.parse(json),
+              case .string(let method)? = fields["method"],
+              ["storage.get", "storage.set", "storage.remove", "storage.clear"].contains(method)
+        else { return .interactive }
+        return .storage
     }
 
     func revoke() {
         lock.lock()
         revoked = true
         requests.removeAll()
+        admittedCount = 0
         lock.unlock()
         resourceAdmission.revoke()
         networkAdmission.revoke()
         storageAdmission.revoke()
     }
 
-    private func next() -> Request? {
+    private func next(_ lane: Lane) -> Request? {
         lock.lock()
         defer { lock.unlock() }
-        guard !revoked, !requests.isEmpty else {
-            draining = false
+        guard !revoked, requests[lane]?.isEmpty == false else {
+            draining.remove(lane)
             return nil
         }
-        return requests.removeFirst()
+        return requests[lane]!.removeFirst()
     }
 
     private var isRevoked: Bool {
@@ -68,9 +84,12 @@ nonisolated final class PluginBridgeTransport: @unchecked Sendable {
         return revoked
     }
 
-    private func drain() async {
-        while let request = next() {
+    private func drain(_ lane: Lane) async {
+        while let request = next(lane) {
             await processIfActive(request)
+            lock.withLock {
+                if !revoked { admittedCount -= 1 }
+            }
         }
     }
 
