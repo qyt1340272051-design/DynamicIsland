@@ -1,0 +1,62 @@
+{
+  "invalid-settings-25min-idle.jpg": {
+    "source": "/tmp/dynamic-island-t35-final-20261016/invalid-settings-25min-idle.jpg",
+    "sha256": "a6796ce5ff415fcf1ebbf18335cce3c0bebb570a4e2b21ba43c45571621c60d4"
+  },
+  "valid-15min-preset.jpg": {
+    "source": "/tmp/dynamic-island-t35-final-20261016/valid-15min-preset.jpg",
+    "sha256": "f26756da8d4f350d47a380e9072122d81c54a56fe4bd577c2f38fe400cbb7a52"
+  },
+  "natural-15min-started.jpg": {
+    "source": "/tmp/dynamic-island-t35-final-20261016/natural-15min-started.jpg",
+    "sha256": "63d5cbe8f088b95227e0bd0e99929a0ec62751c9b6f92c39b7ec74716e4032c7"
+  },
+  "native-music-during-countdown.jpg": {
+    "source": "/tmp/dynamic-island-t35-final-20261016/native-music-during-countdown.jpg",
+    "sha256": "d1e5b04ecc51ba1cdd955337b74c9d1d5442aa63a21bdce7b8d13864f5ce2541"
+  },
+  "native-tray-during-countdown.jpg": {
+    "source": "/tmp/dynamic-island-t35-final-20261016/native-tray-during-countdown.jpg",
+    "sha256": "be943ee2e68e7e6d84a8658bb45f18defc31293b89919e9bd0c8b9ecb11dd10e"
+  },
+  "native-stopwatch-running.jpg": {
+    "source": "/tmp/dynamic-island-t35-final-20261016/native-stopwatch-running.jpg",
+    "sha256": "f278254ea4a42bef65ec339d89e6693f6cc4ed318e1310307015073b835ed7f4"
+  },
+  "native-stopwatch-paused.jpg": {
+    "source": "/tmp/dynamic-island-t35-final-20261016/native-stopwatch-paused.jpg",
+    "sha256": "6c06553b984bdb7f7094080760376a85de9e86061a07503abb333f2a5f2c6375"
+  },
+  "native-countdown-configure.jpg": {
+    "source": "/tmp/dynamic-island-t35-final-20261016/native-countdown-configure.jpg",
+    "sha256": "6306016106f4c0f2b52f94afbd524c4212beb95b8536e48128af9f0a05d862f3"
+  },
+  "native-countdown-running.jpg": {
+    "source": "/tmp/dynamic-island-t35-final-20261016/native-countdown-running.jpg",
+    "sha256": "39afab70175b6156dd688a834fcc423015f59baf7483dca3e7c048beaeee6971"
+  },
+  "native-countdown-paused.jpg": {
+    "source": "/tmp/dynamic-island-t35-final-20261016/native-countdown-paused.jpg",
+    "sha256": "a5fd2c70c680da6d9e10183087969cf9732c172a1111c646502547fc6eaf7198"
+  },
+  "native-countdown-reset.jpg": {
+    "source": "/tmp/dynamic-island-t35-final-20261016/native-countdown-reset.jpg",
+    "sha256": "972a39e78865892ef0ac8776280a2fe40827a04410ecb276a752ce7911b789e5"
+  },
+  "pomodoro-selected.jpg": {
+    "source": "/tmp/dynamic-island-t35-final-20261016/pomodoro-selected.jpg",
+    "sha256": "87c317618129f9ac08b6d69e2cae4349b7cf6b408d96b046a22cb9d62b044593"
+  },
+  "compact-physical-countdown-a.jpg": {
+    "source": "/tmp/dynamic-island-t35-final-20261016/compact-physical-countdown-a.jpg",
+    "sha256": "60e6e9003c502d7140b40610ec1c1d83fa3c65daf4b04122ac5a2648a79b6573"
+  },
+  "compact-physical-countdown-b.jpg": {
+    "source": "/tmp/dynamic-island-t35-final-20261016/compact-physical-countdown-b.jpg",
+    "sha256": "01e339905491638205af1691814d0b8e8d1566697a0268b5f10ce88ce98d2405"
+  },
+  "after-completion-7s.jpg": {
+    "source": "/tmp/dynamic-island-t35-final-20261016/natural-completion-activity.jpg",
+    "sha256": "fb8bada4a111160bbc3c844ef89886b5397d2faed40eed22bfe0021f662692d7"
+  }
+}

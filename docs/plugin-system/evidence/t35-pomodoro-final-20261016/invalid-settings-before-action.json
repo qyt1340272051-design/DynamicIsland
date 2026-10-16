@@ -1,0 +1,16 @@
+{
+  "unchangedBeforeUserAction": true,
+  "sha256": "c09d404a0a8dcb8476d579cce0264e66f4e317f3241723c8b50fc1401b150e54",
+  "settings": {
+    "pluginID": "com.dynamicisland.pomodoro",
+    "schemaVersion": 1,
+    "values": {
+      "settings": {
+        "schemaVersion": 1,
+        "selectedMinutes": "45",
+        "lastSession": "running"
+      }
+    }
+  },
+  "process": "11953 02:16:37 /Users/rong5/Applications/Dynamic Island T35 Pomodoro.app/Contents/MacOS/Dynamic Island"
+}

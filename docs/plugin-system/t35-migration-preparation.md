@@ -1,21 +1,25 @@
 # T35 — Pomodoro 迁移准备
 
-日期：2026-10-14。本页记录初始审计和迁移顺序；已实现接口以[公开合约](t35-countdown-api.md)为准。T31 的[实际后台空闲验收](evidence/t31-background-20261014.md)已关闭，T24–T34 直接依赖均已 verified，可以开始实施。
+日期：2026-10-14，更新于 2026-10-16。本页保留初始审计和迁移顺序；通用 API 已按[公开合约](t35-countdown-api.md)冻结并实现。T31 的[实际后台空闲验收](evidence/t31-background-20261014.md)已关闭，T24–T34 直接依赖均已 verified。
 
-实施进度见 [T35 记录](phase-7-t35-pomodoro.md)。子步骤 1A / 1B 已实现 showsCompact、工具角色、实例选择与共享几何，自动化及实际普通 Release UI 验收完成；通用 Host 倒计时与点击凭证 API 已完成，见[公开合约](t35-countdown-api.md)；声明式节点与可见共享秒级显示也已完成。下文候选表保留原始设计背景，以公开合约为准。
+实施进度见 [T35 记录](phase-7-t35-pomodoro.md)。子步骤 1A / 1B 和 2A–2C2 已实现 showsCompact、工具角色、实例选择、共享几何、Host 倒计时、点击凭证，以及声明式节点与仅可见节点的共享秒级显示。3A / 3B 已完成官方 JS 包的计时、预设、完成 Activity、Storage 和一次 Scheduler 对账；3C 已删除全部专用生产 Swift。
 
-## 必须迁移的生产代码
+当前正在最终普通 Release 实机验收：非法设置回退且动作前不覆盖原值、旧原生页面和物理 compact 两翼已确认，收起后的时间实际由 04:41 变为 04:31。PID 11953 于 10:27:43.345Z 开始的 15 分钟计时，在 10:42:43.637672Z 首次观察到 completed，10:44:12Z 仍保持完成且未自动重开；但首帧提示截图晚到 7.258 秒，未拍到短时完成 Activity，不能将提示可见性视为通过。剩余两项是实际短时完成提示补录、重新展开恢复。最终结果与证据由 [T35 记录](phase-7-t35-pomodoro.md)及[最终实测索引](evidence/t35-pomodoro-final-20261016/result.json)汇总，T35 仍为 in progress。下文候选与实施顺序保留为历史背景，以公开合约和当前验收记录为准。
+
+## 初始生产迁移范围（3C 已完成）
 
 初始审计时，生产番茄钟位于 `IslandTimerToolsModel` / `IslandTimerToolsView`，使用原生 100 ms ticker；`PomodoroActivityProvider` 只用于 DEBUG。2026-10-16 的 3C 已删除这些专用实现和分支，生产 Swift 零命中，见 [迁移证据](evidence/t35-pomodoro-migration-20261016.json)。下列清单保留迁移范围，实际 .dip / UI / 计时验收完成后才能接受 T35。
 
 - 移除 `PomodoroActivityProvider.swift`、`IslandPomodoroPresetAnimation.swift` 和 DEBUG 番茄钟入口。
 - 从计时 Model/View、IslandView 移除 `.pomodoro`、专用预设、状态、动作及颜色分支。
 - 保留秒表、倒计时、共享时间格式化、`alarm.fill` 计时入口与 Host 窗口动画。
-- 当前原生番茄钟没有持久化设置需要迁移。插件设置使用公开 Storage API，仅申请 `storage.local`，遵守拒绝、撤销及代码改变后重新确认规则。
+- 初始原生番茄钟没有持久化设置需要迁移。插件设置使用公开 Storage API，仅申请 `storage.local`，遵守拒绝、撤销及代码改变后重新确认规则。
 
 状态与设置应在动作发生时保存。生命周期在调用 `onStop` 前已关闭资源准入，不能依赖 `onStop` 保存；`onStart` / `onStop` 也不能返回异步 Promise。
 
-## 公共能力缺口
+## 初始公共能力缺口与候选
+
+以下是实施前的审计表，所列缺口现已通过通用公开 API 实现补齐，并非待实施接口。
 
 | 缺口 | 最小方案候选 | 主要修改面 |
 | --- | --- | --- |
@@ -25,9 +29,11 @@
 
 精确倒计时不能简单开放任意 `waitUntil`，否则插件可以每秒重登记而绕过 T31。候选方案要求 start / resume 消耗真实 Action 的一次性 activation，限制每插件和全局计时记录；完成回调不能自行重开一秒倒计时。只为可见运行节点启用共享渲染 tick，不给每个 VM 一个 Timer，也不向 VM 每秒发 tick。
 
-上述新增 namespace、字段、capability 和节点名称尚未冻结。实施时先复核现有 Bridge / Scheduler / 生命周期契约，选取最小公共接口；不能给官方番茄钟特殊私有接口，或把现有秒级显示和完成时机降为 30 / 60 秒刷新。
+上述 namespace、字段、capability 和节点的最终名称、限制与生命周期语义已冻结在[公开合约](t35-countdown-api.md)中，表内措辞仅保留最初候选。实现沿用既有 Bridge / Scheduler / 生命周期边界；官方番茄钟只使用公开接口，秒级显示和完成时机不依赖 30 / 60 秒 refresh。
 
 ## 实施顺序与验收
+
+以下顺序保留迁移过程的依赖关系。实现与专用 Swift 删除已完成，最终实机验收仍按第 4 项收尾。
 
 1. 通用工具选择和几何：旧实例、卸载、替换时拒绝；音乐、拖盘、秒表和倒计时仍可进入；瞬时事件后恢复；真实刘海无裁切、Reduce Motion 有效。
 2. 通用计时能力：暂停冻结、继续准确、停止和新 generation 拒绝旧完成；后台及低功耗不延迟截止状态；墙钟调整不影响计时。睡眠期间不绕过执行准入，恢复后交付完成，不复活旧 VM / lease。

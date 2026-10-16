@@ -1,0 +1,16 @@
+{
+  "utc": "2026-10-16T10:44:12.366931+00:00",
+  "namespace": {
+    "pluginID": "com.dynamicisland.pomodoro",
+    "schemaVersion": 1,
+    "values": {
+      "settings": {
+        "lastSession": "completed",
+        "schemaVersion": 1,
+        "selectedMinutes": 15
+      }
+    }
+  },
+  "process": "11953 02:33:22 /Users/rong5/Applications/Dynamic Island T35 Pomodoro.app/Contents/MacOS/Dynamic Island",
+  "completionNoticeScreenshot": "Not captured: first AX snapshot at 10:42:50.896Z, 7.258 seconds after completed Storage observation. Blank compact screenshot is not accepted as completion Activity evidence."
+}

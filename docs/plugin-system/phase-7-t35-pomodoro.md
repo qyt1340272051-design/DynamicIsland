@@ -4,11 +4,11 @@
 
 ## 当前进度与验收边界
 
-官方 JS 包的计时、预设、完成 Activity、Storage 和一次 Scheduler 对账均已实现；3C 已删除全部 Pomodoro 专用生产 Swift，保留秒表、倒计时和通用 Host 能力。[迁移 CI](evidence/t35-pomodoro-migration-20261016.json)与[退出修复 CI](evidence/t35-quit-fix-20261016.json)均为 888 total / 887 passed / 1 skipped / 0 failures，普通 Release build passed。
+官方 JS 包的计时、预设、完成 Activity、Storage 和一次 Scheduler 对账均已实现；3C 已删除全部 Pomodoro 专用生产 Swift，保留秒表、倒计时和通用 Host 能力。[迁移 CI](evidence/t35-pomodoro-migration-20261016.json)与[退出修复 CI](evidence/t35-quit-fix-20261016.json)保留当时的 888 total / 887 passed / 1 skipped / 0 failures；最新[退出取消恢复验证](evidence/t35-quit-cancellation-20261016/result.json)为 **890 total / 889 passed / 1 skipped / 0 failures**，普通 Release build passed。
 
 普通 Release 隔离副本已完成实际 `.dip` 导入、权限拒绝 / 撤销 / 明确授权、设置保存、真实新进程恢复预设且不自动开始，以及菜单 / 动画退出的 PID 消失验证。首次退出卡住后撤回的重启结论及后续修复均保留在[部分验收证据](evidence/t35-pomodoro-ui-20261016/result.json)和文末记录中。
 
-尚待真实 15 分钟自然到期及单次完成提示、最终 compact 物理刘海与原生秒表 / 倒计时 / 音乐 / 拖盘回归，以及普通 Release 非法设置回退验收。完成并记录这些项目之前，T35 不标为 verified，T36 保持 pending。下文按实施顺序保留各子步骤当时的实现范围、结果与限制；历史「下一步」不表示当前仍未实现。
+最终副本已确认非法设置回退且动作前不覆盖原值、真实 900 秒自然到期及随后不自动重开、物理 compact 两翼，以及内置秒表 / 倒计时 / 音乐 / 空拖盘回归。自然到期的首次提示截图晚到，未拍到短时完成 Activity，因此该提示的实际可见性尚未验收。当前只剩两项：补录真实短时完成提示、重新展开恢复；详见文末[最终实测证据](evidence/t35-pomodoro-final-20261016/result.json)。完成并记录这两项之前，T35 不标为 verified，T36 保持 pending。下文按实施顺序保留各子步骤当时的实现范围、结果与限制；历史「下一步」不表示当前仍未实现。
 
 ## 子步骤 1A：公开 compact 可见性字段
 
@@ -145,9 +145,11 @@ CI **868 total / 864 passed / 4 skipped / 0 failures**，普通 Release build pa
 
 修复为两阶段退出：首次返回 terminateCancel，让当前 MainActor job 返回并完成既有 Coordinator 清理；仅清理成功后批准第二次 terminateNow，清理失败保留原错误与重试入口。没有跳过暂存包清理或放宽权限。修正版完整 CI **888 total / 887 passed / 1 skipped / 0 failures**，普通 Release build passed；[退出修复证据](evidence/t35-quit-fix-20261016.json)。实际菜单退出后 PID 1059 消失；再次启动的 PID 1244 中，番茄钟恢复为 **15 分钟、准备专注、15:00**，即使存储 lastSession 为 running 也不自动开表。再点击原动画退出按钮，PID 1244 同样消失。
 
-[实际 AX、原始截图、签名与进程记录](evidence/t35-pomodoro-ui-20261016/result.json)保留成功与失败范围。真实 15 分钟自然到期、最终 compact 物理刘海与旧页面回归仍未完成；非法设置已有 12 类 VM 自动化验证，普通 Release 错误设置截图尚未补齐。T35 继续 in progress，T36 pending。
+[实际 AX、原始截图、签名与进程记录](evidence/t35-pomodoro-ui-20261016/result.json)保留成功与失败范围。截至该次退出修复，真实 15 分钟自然到期、最终 compact 物理刘海与旧页面回归尚未完成；非法设置已有 12 类 VM 自动化验证，普通 Release 错误设置截图尚未补齐。此处保留当时边界，后续进度见文末最终实机验收记录。
 
-### 下一次继续
+### 历史继续位置（退出修复后）
+
+以下保留当时的继续位置；当前进度见文末。
 
 修正版隔离 App 位于 `/Users/rong5/Applications/Dynamic Island T35 Pomodoro.app`，已退出，独立插件数据和授权保留，当前设置为 15 分钟。启动后先确认新 PID；请用户物理悬停展开，选择番茄钟，开始真实 15 分钟计时并记录开始 / 到期实际时间。验证 compact 两翼、原生秒表 / 倒计时、音乐 / 拖盘与收起重选；补齐到期通知和不自动重开。确认上述验收后再更新 T35 状态。旧卡住副本与完整采样保留在 `/tmp/dynamic-island-t35-pomodoro-ui-20261016`，不要再启动其中 `stalled-app.app`。
 
@@ -161,4 +163,14 @@ CI **868 total / 864 passed / 4 skipped / 0 failures**，普通 Release build pa
 
 普通 Release 副本还实际打开待安装预览，在受控目录身份不匹配下请求菜单退出：Host 拒绝清理替换目录，保留原暂存包与预览，显示 cleanupFailed 并禁用安装。恢复原身份后，重试取消成功；原已安装插件继续运行且授权保留，再次退出成功、Staging 为空。[完整 CI、原始测试截图与实际故障记录](evidence/t35-quit-cancellation-20261016/result.json)已保存。该实际故障场景使用标准菜单，动画取消的显示 / 点击恢复由上述真实渲染测试覆盖。
 
-当前新版隔离副本已重新启动；已为最后一项存储验收备份原值并放入仅 selectedMinutes 类型非法的 settings 样本。Host namespace 仍合法，启动数分钟后核对原非法值仍未被覆盖。仍需物理悬停后从界面确认 25 分钟待开始状态，再选择 15 分钟完成真实自然到期、compact 两翼与旧页面回归。计时尚未开始，T35 仍 in progress。
+## 最终实机验收进度（2026-10-16）
+
+新版隔离副本 PID 11953 已实际确认：合法 Host namespace 中仅 selectedMinutes 类型非法的 settings，启动后回到 **25 分钟、准备专注、设置未保存**；用户动作前，文件字节保持原样。随后选择 15 分钟，并于 **2026-10-16T10:27:43.345Z** 通过真实界面开始计时。
+
+同一 PID 中，文件只读观察在 **10:42:43.637672Z** 首次记录 completed；以点击前 / 后采样时刻计算，分别经过 **900292 ms / 900282 ms**。到 **10:44:12Z** 仍为 completed，收起后计时图标和时间消失，没有自动重开。这证明了本轮实际 900 秒自然到期及后续保持完成状态。
+
+完成提示的首帧截图在 **10:42:50.896Z** 才取得，比 completed 观察晚 **7.258 秒**，画面只见收起的空刘海，没有捕获短时提示。因此不将该截图或存储 completed 状态当成实际完成 Activity 可见性验收；这一项仍需补录。
+
+物理 compact 两翼已确认，时间实际由 **04:41 → 04:31**。内置秒表的开始 / 暂停 / 重置、内置倒计时调整为 4 分钟后的开始 / 暂停 / 重置，以及音乐 / 空拖盘切换均已通过；切回番茄钟时显示 **13:30**，计时连续。原始记录由[最终实测证据](evidence/t35-pomodoro-final-20261016/result.json)汇总。
+
+剩余两项为：**真实短时完成提示补录**、**重新展开恢复**。后者仍待用户物理悬停，以确认收起后的选择清除和再次展开行为。T35 保持 in progress，T36 pending。

@@ -1,0 +1,20 @@
+{
+  "utc": "2026-10-16T10:35:56.348375+00:00",
+  "commit": "0b96caba42f6ea124ada40765820115d79a2d6d1",
+  "pid": 11953,
+  "executableSHA256": "bf0ee3f884598a0ab8b5adc1b5fd794797b71ac62437f213773894572dc221d0",
+  "matchesSetupExecutable": true,
+  "sourceMatchesSetup": {
+    "DynamicIsland/DynamicIslandApp.swift": true,
+    "DynamicIsland/IslandQuitAnimation.swift": true,
+    "DynamicIsland/IslandView.swift": true,
+    "DynamicIsland/Core/Activity/IslandActivityRuntime.swift": true,
+    "DynamicIsland/Plugins/PluginCountdownBroker.swift": true,
+    "DynamicIsland/Plugins/PluginCountdownSession.swift": true,
+    "DynamicIsland/Plugins/PluginJSBridge.swift": true,
+    "DynamicIsland/Plugins/PluginBridgeTransport.swift": true,
+    "docs/plugin-system/examples/pomodoro/index.js": true,
+    "docs/plugin-system/examples/pomodoro/manifest.json": true
+  },
+  "process": "11953 Fri Oct 16 16:10:50 2026     /Users/rong5/Applications/Dynamic Island T35 Pomodoro.app/Contents/MacOS/Dynamic Island"
+}

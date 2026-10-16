@@ -1,0 +1,7 @@
+{
+  "utc": "2026-10-16T08:01:04.883129+00:00",
+  "appConfirmedStopped": true,
+  "scope": "Only the isolated test namespace",
+  "mode": "0o600",
+  "representativeInvalidField": "settings.selectedMinutes is a string; Host envelope remains valid."
+}

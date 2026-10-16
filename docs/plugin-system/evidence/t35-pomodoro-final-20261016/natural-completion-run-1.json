@@ -1,0 +1,13 @@
+{
+  "observedUTC": "2026-10-16T10:42:43.637672+00:00",
+  "observedEpochMs": 1792147363637,
+  "millisecondsAfterClickBefore": 900292,
+  "millisecondsAfterClickAfter": 900282,
+  "watchDurationSeconds": 893.371,
+  "settings": {
+    "lastSession": "completed",
+    "schemaVersion": 1,
+    "selectedMinutes": 15
+  },
+  "method": "Read-only observation of the isolated plugin Storage; no Host clock changes or private VM calls."
+}

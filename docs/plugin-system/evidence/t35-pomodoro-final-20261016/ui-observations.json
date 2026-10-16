@@ -1,0 +1,172 @@
+[
+  {
+    "phase": "startup-current-state",
+    "utc": "2026-10-16T07:54:00.542Z",
+    "ax": "Window: \"\", App: Dynamic Island T35 Pomodoro.\n0 system dialog Secondary Actions: Raise\n1 menu bar\n\t2 Dynamic Island T35 Pomodoro\n\t3 Edit\n\t4 View\n\t5 Window\n\t6 Help\n"
+  },
+  {
+    "phase": "pending-import-review",
+    "utc": "2026-10-16T08:08:21.086Z",
+    "ax": "Window: \"安装插件\", App: Dynamic Island T35 Pomodoro.\n0 standard window 安装插件, Secondary Actions: Raise\n\t1 container\n\t\t2 image puzzlepiece.extension\n\t\t3 text 安装插件 检查插件信息与权限\n\t\t4 scroll area\n\t\t\t5 text 番茄钟 版本：0.2.0 开发者：DynamicIsland（插件自行声明，未验证） 插件 ID：com.dynamicisland.pomodoro 将替换当前版本 0.2.0。 替换后插件保持停用，代码或权限声明变化后的授权需要重新确认。 插件声明的权限 保存插件数据 安装后另行授权 在本机保存此插件的数据和偏好设置，与其他插件分开存放。\n\t\t6 text 安装不会授予权限或自动运行插件。\n\t\t7 button Description: 取消, ID: plugin-installer-cancel\n\t\t8 button Description: 替换并安装, ID: plugin-installer-confirm\n\t9 close button\n\t10 zoom button\n\t11 minimize button\n\t12 text 安装插件\n13 menu bar\n\t14 Dynamic Island T35 Pomodoro\n\t15 Edit\n\t16 View\n\t17 Window\n\t18 Help\n\nThe focused UI element is 0 standard window 安装插件, Secondary Actions: Raise",
+    "screenshot": "pending-import-review.jpg"
+  },
+  {
+    "phase": "cleanup-refused-exit-remains-reviewing",
+    "utc": "2026-10-16T08:09:30.691Z",
+    "ax": "Window: \"安装插件\", App: Dynamic Island T35 Pomodoro.\n0 standard window 安装插件, Secondary Actions: Raise\n\t1 container\n\t\t2 image puzzlepiece.extension\n\t\t3 text 安装插件 检查插件信息与权限\n\t\t4 scroll area\n\t\t\t5 text 临时插件包无法清理，请重试取消。 错误代码：cleanupFailed 番茄钟 版本：0.2.0 开发者：DynamicIsland（插件自行声明，未验证） 插件 ID：com.dynamicisland.pomodoro 将替换当前版本 0.2.0。 替换后插件保持停用，代码或权限声明变化后的授权需要重新确认。 插件声明的权限 保存插件数据 安装后另行授权 在本机保存此插件的数据和偏好设置，与其他插件分开存放。\n\t\t6 text 安装不会授予权限或自动运行插件。\n\t\t7 button Description: 重试取消, ID: plugin-installer-cancel\n\t\t8 button (disabled) Description: 替换并安装, ID: plugin-installer-confirm\n\t9 close button\n\t10 zoom button\n\t11 minimize button\n\t12 text 安装插件\n13 menu bar\n\t14 Dynamic Island T35 Pomodoro\n\t15 Edit\n\t16 View\n\t17 Window\n\t18 Help\n\nThe focused UI element is 0 standard window 安装插件, Secondary Actions: Raise",
+    "screenshot": "cleanup-refused-exit-remains-reviewing.jpg"
+  },
+  {
+    "phase": "cleanup-retry-cancel-succeeded",
+    "utc": "2026-10-16T08:09:52.832Z",
+    "ax": "Window: \"Dynamic Island T35 Pomodoro Settings\", App: Dynamic Island T35 Pomodoro.\n0 standard window Dynamic Island T35 Pomodoro Settings, ID: com_apple_SwiftUI_Settings_window, Secondary Actions: Raise\n\t1 container\n\t\t2 text 已安装 1 番茄钟\n\t\t3 button Description: 导入插件, ID: plugin-extensions-import\n\t\t4 button Description: 刷新, ID: plugin-extensions-refresh\n\t\t5 scroll area\n\t\t\t6 list Secondary Actions: AXScrollToTop, AXScrollToBottom\n\t\t\t\t7 button Description: 番茄钟, v0.2.0, 运行中, ID: plugin-extensions-plugin-com.dynamicisland.pomodoro\n\t\t8 text v0.2.0 · 运行中\n\t\t9 scroll area plugin-extensions-detail\n\t\t\t10 text Value: 开发者：DynamicIsland（插件自行声明，未验证） 原生 JavaScriptCore 最低主程序版本 0.6.0, ID: plugin-extensions-developer\n\t\t\t11 button Description: 停用插件, ID: plugin-extensions-enable\n\t\t\t12 button Description: 查看诊断, ID: plugin-extensions-diagnostics\n\t\t\t13 button Description: 卸载…, ID: plugin-extensions-uninstall\n\t\t\t14 text 权限 启用插件不会自动授权。授权仅适用于当前代码，并保存在本机；代码或权限声明变化后需重新确认。撤销立即生效。\n\t\t\t15 container plugin-extensions-permission-storage.local\n\t\t\t\t16 text 保存插件数据 已允许\n\t\t\t\t17 button Description: 撤销, ID: plugin-extensions-revoke-storage.local\n\t\t\t\t18 text 在本机保存此插件的数据和偏好设置，与其他插件分开存放。\n\t19 close button\n\t20 zoom button (disabled)\n\t21 text Dynamic Island T35 Pomodoro Settings\n22 menu bar\n\t23 Dynamic Island T35 Pomodoro\n\t24 Edit\n\t25 View\n\t26 Window\n\t27 Help\n"
+  },
+  {
+    "phase": "post-cleanup-island-state",
+    "utc": "2026-10-16T08:10:02.356Z",
+    "ax": "Window: \"\", App: Dynamic Island T35 Pomodoro.\n0 system dialog Secondary Actions: Raise\n1 menu bar\n\t2 Dynamic Island T35 Pomodoro\n\t3 Edit\n\t4 View\n\t5 Window\n\t6 Help\n"
+  },
+  {
+    "phase": "quit-after-cleanup-recovery-requested",
+    "utc": "2026-10-16T08:10:30.024Z",
+    "pid": 11849
+  },
+  {
+    "phase": "pomodoro-selected",
+    "utc": "2026-10-16T10:27:17.972Z",
+    "ax": "Window: \"\", App: Dynamic Island T35 Pomodoro.\n0 system dialog Secondary Actions: Raise\n\t1 container\n\t\t2 button Description: 音乐, ID: island-surface-music\n\t\t3 button Description: 拖盘, ID: island-surface-tray\n\t\t4 menu button Alarm, Description: 计时, Help: 计时与插件工具, ID: island-tool-selector\n\t\t5 button Description: 退出 Dynamic Island, ID: power\n\t\t6 text 25 分钟 · 准备专注 · 设置未保存 25:00\n\t\t7 progress indicator Description: Progress, Value: 0, Details: 0 percent\n\t\t8 button 15 分钟\n\t\t9 button 25 分钟，当前预设\n\t\t10 button 45 分钟\n\t\t11 button 60 分钟\n\t\t12 button 开始\n\t\t13 button 结束\n14 menu bar\n\t15 Dynamic Island T35 Pomodoro\n\t16 Edit\n\t17 View\n\t18 Window\n\t19 Help\n",
+    "screenshot": "pomodoro-selected.jpg"
+  },
+  {
+    "phase": "invalid-settings-25min-idle",
+    "utc": "2026-10-16T10:27:35.293Z",
+    "ax": "Window: \"\", App: Dynamic Island T35 Pomodoro.\n0 system dialog Secondary Actions: Raise\n\t1 container\n\t\t2 button Description: 音乐, ID: island-surface-music\n\t\t3 button Description: 拖盘, ID: island-surface-tray\n\t\t4 menu button Alarm, Description: 计时, Help: 计时与插件工具, ID: island-tool-selector\n\t\t5 button Description: 退出 Dynamic Island, ID: power\n\t\t6 text 25 分钟 · 准备专注 · 设置未保存 25:00\n\t\t7 progress indicator Description: Progress, Value: 0, Details: 0 percent\n\t\t8 button 15 分钟\n\t\t9 button 25 分钟，当前预设\n\t\t10 button 45 分钟\n\t\t11 button 60 分钟\n\t\t12 button 开始\n\t\t13 button 结束\n14 menu bar\n\t15 Dynamic Island T35 Pomodoro\n\t16 Edit\n\t17 View\n\t18 Window\n\t19 Help\n",
+    "screenshot": "invalid-settings-25min-idle.jpg"
+  },
+  {
+    "phase": "valid-15min-preset",
+    "utc": "2026-10-16T10:27:35.846Z",
+    "ax": "Window: \"\", App: Dynamic Island T35 Pomodoro.\n0 system dialog Secondary Actions: Raise\n\t1 container\n\t\t2 button Description: 音乐, ID: island-surface-music\n\t\t3 button Description: 拖盘, ID: island-surface-tray\n\t\t4 menu button Alarm, Description: 计时, Help: 计时与插件工具, ID: island-tool-selector\n\t\t5 button Description: 退出 Dynamic Island, ID: power\n\t\t6 text 15 分钟 · 准备专注 15:00\n\t\t7 progress indicator Description: Progress, Value: 0, Details: 0 percent\n\t\t8 button 15 分钟，当前预设\n\t\t9 button 25 分钟\n\t\t10 button 45 分钟\n\t\t11 button 60 分钟\n\t\t12 button 开始\n\t\t13 button 结束\n14 menu bar\n\t15 Dynamic Island T35 Pomodoro\n\t16 Edit\n\t17 View\n\t18 Window\n\t19 Help\n",
+    "screenshot": "valid-15min-preset.jpg"
+  },
+  {
+    "phase": "natural-15min-started",
+    "utc": "2026-10-16T10:27:44.034Z",
+    "ax": "Window: \"\", App: Dynamic Island T35 Pomodoro.\n0 system dialog Secondary Actions: Raise\n\t1 container\n\t\t2 button Description: 音乐, ID: island-surface-music\n\t\t3 button Description: 拖盘, ID: island-surface-tray\n\t\t4 menu button Alarm, Description: 计时, Help: 计时与插件工具, ID: island-tool-selector\n\t\t5 button Description: 退出 Dynamic Island, ID: power\n\t\t6 text 15 分钟 · 专注中 15:00\n\t\t7 progress indicator Description: Countdown progress, Value: 4.867513888884289e-05, Details: 0 percent\n\t\t8 button 15 分钟，当前预设\n\t\t9 button 25 分钟\n\t\t10 button 45 分钟\n\t\t11 button 60 分钟\n\t\t12 button 暂停\n\t\t13 button 结束\n14 menu bar\n\t15 Dynamic Island T35 Pomodoro\n\t16 Edit\n\t17 View\n\t18 Window\n\t19 Help\n",
+    "screenshot": "natural-15min-started.jpg"
+  },
+  {
+    "phase": "native-music-during-countdown",
+    "utc": "2026-10-16T10:28:07.517Z",
+    "ax": "Window: \"\", App: Dynamic Island T35 Pomodoro.\n0 system dialog Secondary Actions: Raise\n\t1 container\n\t\t2 button Description: 音乐, ID: island-surface-music\n\t\t3 button Description: 拖盘, ID: island-surface-tray\n\t\t4 menu button Alarm, Description: 计时, Help: 计时与插件工具, ID: island-tool-selector\n\t\t5 button Description: 退出 Dynamic Island, ID: power\n\t\t6 image Description: Image unavailable, ID: music.note\n\t\t7 text 未在播放 在 Apple Music 播放后显示曲目信息 0:00 --:--\n\t\t8 button Description: 上一首, ID: backward.fill\n\t\t9 button Description: 播放, ID: play.fill\n\t\t10 button Description: 下一首, ID: forward.fill\n\t\t11 button Description: 取消静音, ID: speaker.slash.fill\n\t\t12 button Description: 减小音量, ID: minus\n\t\t13 slider Description: 音量, Value: 0, Secondary Actions: Increment, Decrement\n\t\t\t14 value indicator 0\n\t\t15 button Description: 增大音量, ID: plus\n\t\t16 text 静音\n17 menu bar\n\t18 Dynamic Island T35 Pomodoro\n\t19 Edit\n\t20 View\n\t21 Window\n\t22 Help\n",
+    "screenshot": "native-music-during-countdown.jpg"
+  },
+  {
+    "phase": "native-tray-during-countdown",
+    "utc": "2026-10-16T10:28:17.080Z",
+    "ax": "Window: \"\", App: Dynamic Island T35 Pomodoro.\n0 system dialog Secondary Actions: Raise\n\t1 container\n\t\t2 button Description: 音乐, ID: island-surface-music\n\t\t3 button Description: 拖盘, ID: island-surface-tray\n\t\t4 menu button Alarm, Description: 计时, Help: 计时与插件工具, ID: island-tool-selector\n\t\t5 button Description: 退出 Dynamic Island, ID: power\n\t\t6 text 文件托盘\n\t\t7 button Description: 锁定文件托盘, ID: lock.open\n\t\t8 text 拖入文件后可暂存并通过 AirDrop 分享\n9 menu bar\n\t10 Dynamic Island T35 Pomodoro\n\t11 Edit\n\t12 View\n\t13 Window\n\t14 Help\n",
+    "screenshot": "native-tray-during-countdown.jpg"
+  },
+  {
+    "phase": "native-timer-during-countdown",
+    "utc": "2026-10-16T10:28:18.813Z",
+    "ax": "Window: \"\", App: Dynamic Island T35 Pomodoro.\n0 system dialog Secondary Actions: Raise\n\t1 container\n\t\t2 button Description: 音乐, ID: island-surface-music\n\t\t3 button Description: 拖盘, ID: island-surface-tray\n\t\t4 menu button Alarm, Description: 计时, Help: 计时与插件工具, ID: island-tool-selector\n\t\t5 button Description: 退出 Dynamic Island, ID: power\n\t\t6 计时工具\n\t\t\t7 radio button Description: 秒表, Value: 1\n\t\t\t8 radio button Description: 倒计时, Value: 0\n\t\t9 text 准备计时 00:00.0\n\t\t10 button Description: 重置, ID: arrow.counterclockwise\n\t\t11 button Description: 开始, ID: play.fill\n12 menu bar\n\t13 Dynamic Island T35 Pomodoro\n\t14 Edit\n\t15 View\n\t16 Window\n\t17 Help\n",
+    "screenshot": "native-timer-during-countdown.jpg"
+  },
+  {
+    "phase": "native-stopwatch-running",
+    "utc": "2026-10-16T10:28:25.044Z",
+    "ax": "Window: \"\", App: Dynamic Island T35 Pomodoro.\n0 system dialog Secondary Actions: Raise\n\t1 container\n\t\t2 button Description: 音乐, ID: island-surface-music\n\t\t3 button Description: 拖盘, ID: island-surface-tray\n\t\t4 menu button Alarm, Description: 计时, Help: 计时与插件工具, ID: island-tool-selector\n\t\t5 button Description: 退出 Dynamic Island, ID: power\n\t\t6 计时工具\n\t\t\t7 radio button Description: 秒表, Value: 1\n\t\t\t8 radio button Description: 倒计时, Value: 0\n\t\t9 text 计时中 00:00.3\n\t\t10 button Description: 重置, ID: arrow.counterclockwise\n\t\t11 button Description: 暂停, ID: pause.fill\n12 menu bar\n\t13 Dynamic Island T35 Pomodoro\n\t14 Edit\n\t15 View\n\t16 Window\n\t17 Help\n",
+    "screenshot": "native-stopwatch-running.jpg"
+  },
+  {
+    "phase": "native-stopwatch-paused",
+    "utc": "2026-10-16T10:28:46.600Z",
+    "ax": "Window: \"\", App: Dynamic Island T35 Pomodoro.\n0 system dialog Secondary Actions: Raise\n\t1 container\n\t\t2 button Description: 音乐, ID: island-surface-music\n\t\t3 button Description: 拖盘, ID: island-surface-tray\n\t\t4 menu button Alarm, Description: 计时, Help: 计时与插件工具, ID: island-tool-selector\n\t\t5 button Description: 退出 Dynamic Island, ID: power\n\t\t6 计时工具\n\t\t\t7 radio button Description: 秒表, Value: 1\n\t\t\t8 radio button Description: 倒计时, Value: 0\n\t\t9 text 已暂停 00:21.5\n\t\t10 button Description: 重置, ID: arrow.counterclockwise\n\t\t11 button Description: 开始, ID: play.fill\n12 menu bar\n\t13 Dynamic Island T35 Pomodoro\n\t14 Edit\n\t15 View\n\t16 Window\n\t17 Help\n",
+    "screenshot": "native-stopwatch-paused.jpg"
+  },
+  {
+    "phase": "native-countdown-configure",
+    "utc": "2026-10-16T10:28:47.831Z",
+    "ax": "Window: \"\", App: Dynamic Island T35 Pomodoro.\n0 system dialog Secondary Actions: Raise\n\t1 container\n\t\t2 button Description: 音乐, ID: island-surface-music\n\t\t3 button Description: 拖盘, ID: island-surface-tray\n\t\t4 menu button Alarm, Description: 计时, Help: 计时与插件工具, ID: island-tool-selector\n\t\t5 button Description: 退出 Dynamic Island, ID: power\n\t\t6 计时工具\n\t\t\t7 radio button Description: 秒表, Value: 0\n\t\t\t8 radio button Description: 倒计时, Value: 1\n\t\t9 text 按住加减按钮可快速调整 设置时长\n\t\t10 button Description: 减少一分钟, Help: 按住可连续调整, ID: minus\n\t\t11 text 5 分钟\n\t\t12 button Description: 增加一分钟, Help: 按住可连续调整, ID: plus\n\t\t13 text 05:00\n\t\t14 button Description: 重置, ID: arrow.counterclockwise\n\t\t15 button Description: 开始, ID: play.fill\n16 menu bar\n\t17 Dynamic Island T35 Pomodoro\n\t18 Edit\n\t19 View\n\t20 Window\n\t21 Help\n",
+    "screenshot": "native-countdown-configure.jpg"
+  },
+  {
+    "phase": "native-countdown-running",
+    "utc": "2026-10-16T10:28:56.495Z",
+    "ax": "Window: \"\", App: Dynamic Island T35 Pomodoro.\n0 system dialog Secondary Actions: Raise\n\t1 container\n\t\t2 button Description: 音乐, ID: island-surface-music\n\t\t3 button Description: 拖盘, ID: island-surface-tray\n\t\t4 menu button Alarm, Description: 计时, Help: 计时与插件工具, ID: island-tool-selector\n\t\t5 button Description: 退出 Dynamic Island, ID: power\n\t\t6 计时工具\n\t\t\t7 radio button Description: 秒表, Value: 0\n\t\t\t8 radio button Description: 倒计时, Value: 1\n\t\t9 text 按住加减按钮可快速调整 计时中\n\t\t10 button (disabled) Description: 减少一分钟, Help: 按住可连续调整, ID: minus\n\t\t11 text 4 分钟\n\t\t12 button (disabled) Description: 增加一分钟, Help: 按住可连续调整, ID: plus\n\t\t13 text 04:00\n\t\t14 button Description: 重置, ID: arrow.counterclockwise\n\t\t15 button Description: 暂停, ID: pause.fill\n16 menu bar\n\t17 Dynamic Island T35 Pomodoro\n\t18 Edit\n\t19 View\n\t20 Window\n\t21 Help\n",
+    "screenshot": "native-countdown-running.jpg"
+  },
+  {
+    "phase": "native-countdown-paused",
+    "utc": "2026-10-16T10:29:12.715Z",
+    "ax": "Window: \"\", App: Dynamic Island T35 Pomodoro.\n0 system dialog Secondary Actions: Raise\n\t1 container\n\t\t2 button Description: 音乐, ID: island-surface-music\n\t\t3 button Description: 拖盘, ID: island-surface-tray\n\t\t4 menu button Alarm, Description: 计时, Help: 计时与插件工具, ID: island-tool-selector\n\t\t5 button Description: 退出 Dynamic Island, ID: power\n\t\t6 计时工具\n\t\t\t7 radio button Description: 秒表, Value: 0\n\t\t\t8 radio button Description: 倒计时, Value: 1\n\t\t9 text 按住加减按钮可快速调整 已暂停\n\t\t10 button Description: 减少一分钟, Help: 按住可连续调整, ID: minus\n\t\t11 text 4 分钟\n\t\t12 button Description: 增加一分钟, Help: 按住可连续调整, ID: plus\n\t\t13 text 03:44\n\t\t14 button Description: 重置, ID: arrow.counterclockwise\n\t\t15 button Description: 开始, ID: play.fill\n16 menu bar\n\t17 Dynamic Island T35 Pomodoro\n\t18 Edit\n\t19 View\n\t20 Window\n\t21 Help\n",
+    "screenshot": "native-countdown-paused.jpg"
+  },
+  {
+    "phase": "native-countdown-reset",
+    "utc": "2026-10-16T10:29:13.314Z",
+    "ax": "Window: \"\", App: Dynamic Island T35 Pomodoro.\n0 system dialog Secondary Actions: Raise\n\t1 container\n\t\t2 button Description: 音乐, ID: island-surface-music\n\t\t3 button Description: 拖盘, ID: island-surface-tray\n\t\t4 menu button Alarm, Description: 计时, Help: 计时与插件工具, ID: island-tool-selector\n\t\t5 button Description: 退出 Dynamic Island, ID: power\n\t\t6 计时工具\n\t\t\t7 radio button Description: 秒表, Value: 0\n\t\t\t8 radio button Description: 倒计时, Value: 1\n\t\t9 text 按住加减按钮可快速调整 设置时长\n\t\t10 button Description: 减少一分钟, Help: 按住可连续调整, ID: minus\n\t\t11 text 4 分钟\n\t\t12 button Description: 增加一分钟, Help: 按住可连续调整, ID: plus\n\t\t13 text 04:00\n\t\t14 button Description: 重置, ID: arrow.counterclockwise\n\t\t15 button Description: 开始, ID: play.fill\n16 menu bar\n\t17 Dynamic Island T35 Pomodoro\n\t18 Edit\n\t19 View\n\t20 Window\n\t21 Help\n",
+    "screenshot": "native-countdown-reset.jpg"
+  },
+  {
+    "phase": "pomodoro-selected",
+    "utc": "2026-10-16T10:29:15.046Z",
+    "ax": "Window: \"\", App: Dynamic Island T35 Pomodoro.\n0 system dialog Secondary Actions: Raise\n\t1 container\n\t\t2 button Description: 音乐, ID: island-surface-music\n\t\t3 button Description: 拖盘, ID: island-surface-tray\n\t\t4 menu button Alarm, Description: 计时, Help: 计时与插件工具, ID: island-tool-selector\n\t\t5 button Description: 退出 Dynamic Island, ID: power\n\t\t6 text 15 分钟 · 专注中 13:30\n\t\t7 progress indicator Description: Countdown progress, Value: 0.1011006464355555, Details: 10 percent\n\t\t8 button 15 分钟，当前预设\n\t\t9 button 25 分钟\n\t\t10 button 45 分钟\n\t\t11 button 60 分钟\n\t\t12 button 暂停\n\t\t13 button 结束\n14 menu bar\n\t15 Dynamic Island T35 Pomodoro\n\t16 Edit\n\t17 View\n\t18 Window\n\t19 Help\n",
+    "screenshot": "pomodoro-selected.jpg"
+  },
+  {
+    "phase": "compact-check-current",
+    "utc": "2026-10-16T10:30:44.772Z",
+    "ax": "Window: \"\", App: Dynamic Island T35 Pomodoro.\n0 system dialog Secondary Actions: Raise\n\t1 container\n\t\t2 button Description: 音乐, ID: island-surface-music\n\t\t3 button Description: 拖盘, ID: island-surface-tray\n\t\t4 menu button Alarm, Description: 计时, Help: 计时与插件工具, ID: island-tool-selector\n\t\t5 button Description: 退出 Dynamic Island, ID: power\n\t\t6 text 15 分钟 · 专注中 12:00\n\t\t7 progress indicator Description: Countdown progress, Value: 0.2004826901855555, Details: 20 percent\n\t\t8 button 15 分钟，当前预设\n\t\t9 button 25 分钟\n\t\t10 button 45 分钟\n\t\t11 button 60 分钟\n\t\t12 button 暂停\n\t\t13 button 结束\n14 menu bar\n\t15 Dynamic Island T35 Pomodoro\n\t16 Edit\n\t17 View\n\t18 Window\n\t19 Help\n",
+    "screenshot": "compact-check-current.jpg"
+  },
+  {
+    "phase": "running-after-4min",
+    "utc": "2026-10-16T10:32:33.072Z",
+    "ax": "Window: \"\", App: Dynamic Island T35 Pomodoro.\n0 system dialog Secondary Actions: Raise\n\t1 container\n\t\t2 button Description: 音乐, ID: island-surface-music\n\t\t3 button Description: 拖盘, ID: island-surface-tray\n\t\t4 menu button Alarm, Description: 计时, Help: 计时与插件工具, ID: island-tool-selector\n\t\t5 button Description: 退出 Dynamic Island, ID: power\n\t\t6 text 15 分钟 · 专注中 10:11\n\t\t7 progress indicator Description: Countdown progress, Value: 0.3212655791666668, Details: 32 percent\n\t\t8 button 15 分钟，当前预设\n\t\t9 button 25 分钟\n\t\t10 button 45 分钟\n\t\t11 button 60 分钟\n\t\t12 button 暂停\n\t\t13 button 结束\n14 menu bar\n\t15 Dynamic Island T35 Pomodoro\n\t16 Edit\n\t17 View\n\t18 Window\n\t19 Help\n",
+    "screenshot": "running-after-4min.jpg"
+  },
+  {
+    "phase": "running-after-6min",
+    "utc": "2026-10-16T10:34:20.666Z",
+    "ax": "Window: \"\", App: Dynamic Island T35 Pomodoro.\n0 system dialog Secondary Actions: Raise\n\t1 container\n\t\t2 button Description: 音乐, ID: island-surface-music\n\t\t3 button Description: 拖盘, ID: island-surface-tray\n\t\t4 menu button Alarm, Description: 计时, Help: 计时与插件工具, ID: island-tool-selector\n\t\t5 button Description: 退出 Dynamic Island, ID: power\n\t\t6 text 15 分钟 · 专注中 08:24\n\t\t7 progress indicator Description: Countdown progress, Value: 0.4407409431022222, Details: 44 percent\n\t\t8 button 15 分钟，当前预设\n\t\t9 button 25 分钟\n\t\t10 button 45 分钟\n\t\t11 button 60 分钟\n\t\t12 button 暂停\n\t\t13 button 结束\n14 menu bar\n\t15 Dynamic Island T35 Pomodoro\n\t16 Edit\n\t17 View\n\t18 Window\n\t19 Help\n",
+    "screenshot": "running-after-6min.jpg"
+  },
+  {
+    "phase": "running-after-9min",
+    "utc": "2026-10-16T10:36:45.140Z",
+    "ax": "Window: \"\", App: Dynamic Island T35 Pomodoro.\n0 system dialog Secondary Actions: Raise\n\t1 container\n\t\t2 button Description: 音乐, ID: island-surface-music\n\t\t3 button Description: 拖盘, ID: island-surface-tray\n\t\t4 menu button Alarm, Description: 计时, Help: 计时与插件工具, ID: island-tool-selector\n\t\t5 button Description: 退出 Dynamic Island, ID: power\n\t\t6 text 15 分钟 · 专注中 06:00\n\t\t7 progress indicator Description: Countdown progress, Value: 0.6008931734255556, Details: 60 percent\n\t\t8 button 15 分钟，当前预设\n\t\t9 button 25 分钟\n\t\t10 button 45 分钟\n\t\t11 button 60 分钟\n\t\t12 button 暂停\n\t\t13 button 结束\n14 menu bar\n\t15 Dynamic Island T35 Pomodoro\n\t16 Edit\n\t17 View\n\t18 Window\n\t19 Help\n",
+    "screenshot": "running-after-9min.jpg"
+  },
+  {
+    "phase": "compact-physical-countdown-a",
+    "utc": "2026-10-16T10:38:03.223Z",
+    "ax": "Window: \"\", App: Dynamic Island T35 Pomodoro.\n0 system dialog Secondary Actions: Raise\n\t1 container\n\t\t2 image timer\n\t\t3 text Description: Countdown, Value: 04:41\n4 menu bar\n\t5 Dynamic Island T35 Pomodoro\n\t6 Edit\n\t7 View\n\t8 Window\n\t9 Help\n",
+    "screenshot": "compact-physical-countdown-a.jpg"
+  },
+  {
+    "phase": "compact-physical-countdown-b",
+    "utc": "2026-10-16T10:38:12.748Z",
+    "ax": "Window: \"\", App: Dynamic Island T35 Pomodoro.\n0 system dialog Secondary Actions: Raise\n\t1 container\n\t\t2 image timer\n\t\t3 text Description: Countdown, Value: 04:31\n4 menu bar\n\t5 Dynamic Island T35 Pomodoro\n\t6 Edit\n\t7 View\n\t8 Window\n\t9 Help\n",
+    "screenshot": "compact-physical-countdown-b.jpg"
+  },
+  {
+    "phase": "pre-completion-current",
+    "utc": "2026-10-16T10:39:40.099Z",
+    "ax": "Window: \"\", App: Dynamic Island T35 Pomodoro.\n0 system dialog Secondary Actions: Raise\n\t1 container\n\t\t2 image timer\n\t\t3 text Description: Countdown, Value: 03:04\n4 menu bar\n\t5 Dynamic Island T35 Pomodoro\n\t6 Edit\n\t7 View\n\t8 Window\n\t9 Help\n",
+    "screenshot": "pre-completion-current.jpg"
+  },
+  {
+    "phase": "natural-completion-activity",
+    "utc": "2026-10-16T10:42:50.896Z",
+    "ax": "Window: \"\", App: Dynamic Island T35 Pomodoro.\n0 system dialog Secondary Actions: Raise\n1 menu bar\n\t2 Dynamic Island T35 Pomodoro\n\t3 Edit\n\t4 View\n\t5 Window\n\t6 Help\n",
+    "screenshot": "natural-completion-activity.jpg"
+  },
+  {
+    "phase": "after-completion-current",
+    "utc": "2026-10-16T10:44:29.521Z",
+    "ax": "Window: \"\", App: Dynamic Island T35 Pomodoro.\n0 system dialog Secondary Actions: Raise\n1 menu bar\n\t2 Dynamic Island T35 Pomodoro\n\t3 Edit\n\t4 View\n\t5 Window\n\t6 Help\n",
+    "screenshot": "after-completion-current.jpg"
+  }
+]

@@ -1,0 +1,66 @@
+{
+  "status": "partial acceptance; T35 remains in progress",
+  "capturedUTC": "2026-10-16T10:45:29.736895+00:00",
+  "scope": "Final ordinary Release isolated sandbox app; public Pomodoro 0.2.0 and no test entitlements",
+  "codeCommit": "0b96caba42f6ea124ada40765820115d79a2d6d1",
+  "bundleID": "com.rong5.dynamic-island.t35-pomodoro.20261016",
+  "pid": 11953,
+  "inherited": {
+    "installationPermissionsRestart": "../t35-pomodoro-ui-20261016/result.json",
+    "quitCancellationAndCI": "../t35-quit-cancellation-20261016/result.json"
+  },
+  "verifiedThisRun": [
+    "Invalid selectedMinutes string restores default 25-minute idle state with settings-not-saved hint; does not start",
+    "Invalid settings file bytes unchanged until actual user preset action",
+    "Actual 15-minute run completes naturally after 900.282 to 900.292 seconds from Start click bounds",
+    "Same process remains completed; no automatic compact countdown restarts",
+    "Actual compact physical notch shows timer icon left and time right; 04:41 to 04:31 advances without center text",
+    "Native stopwatch start/pause/reset",
+    "Native countdown duration decrement/start/pause/reset",
+    "Music and empty tray switching; reselected Pomodoro still running at 13:30"
+  ],
+  "naturalRun": {
+    "clickBeforeEpochMs": 1792146463345,
+    "clickAfterEpochMs": 1792146463355,
+    "startUTC": "2026-10-16T10:27:43.345Z",
+    "pid": 11953,
+    "expectedDurationSeconds": 900,
+    "commit": "0b96cab",
+    "method": "Actual ordinary Release UI preset 15 minutes and Start click"
+  },
+  "naturalCompletion": {
+    "observedUTC": "2026-10-16T10:42:43.637672+00:00",
+    "observedEpochMs": 1792147363637,
+    "millisecondsAfterClickBefore": 900292,
+    "millisecondsAfterClickAfter": 900282,
+    "watchDurationSeconds": 893.371,
+    "settings": {
+      "lastSession": "completed",
+      "schemaVersion": 1,
+      "selectedMinutes": 15
+    },
+    "method": "Read-only observation of the isolated plugin Storage; no Host clock changes or private VM calls."
+  },
+  "noticeEvidence": {
+    "accepted": false,
+    "reason": "First actual UI capture was at 10:42:50.896Z, 7.258 seconds after completed storage observation. It shows an empty compact island, not the short-lived completion Activity. Actual visibility remains unverified."
+  },
+  "pending": [
+    "Capture actual short-lived completion Activity",
+    "Re-expand after physical fold and verify native surface restored; plugin requires explicit reselection"
+  ],
+  "continuation": {
+    "appPath": "/Users/rong5/Applications/Dynamic Island T35 Pomodoro.app",
+    "running": true,
+    "samePID": 11953,
+    "isolatedDataRetained": true,
+    "lastSession": "completed",
+    "selectedMinutes": 15,
+    "next": "Await physical re-expansion, verify native restored page, then explicitly reselect Pomodoro and start another natural run to capture completion Activity inside one CUA call."
+  },
+  "limits": [
+    "Single actual MacBook Air and ordinary Release build; inherits existing automated lifecycle/permission/generation coverage",
+    "No real sleep or low-power retest in this run",
+    "No production app/data or .dip default handler changed"
+  ]
+}
