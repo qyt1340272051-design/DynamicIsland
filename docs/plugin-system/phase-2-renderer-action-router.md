@@ -10,10 +10,12 @@
 
 ## T13：实例绑定的动作闭环
 
+本节保留 2026-09-22 的实际验证范围。下述原生计时适配器及其专用测试已在 T35 的 3C 迁移中删除；当前实现与回归证据为 [ActionRouter](../../DynamicIsland/IslandUI/ActionRouter.swift)、[路由测试](../../DynamicIslandTests/ActionRouterTests.swift)及[公开 Pomodoro VM / Router 集成测试](../../DynamicIslandTests/PomodoroPluginTests.swift)。删除范围和对应 CI 见 [T35 记录](phase-7-t35-pomodoro.md)。
+
 - `ActivityManager.currentSnapshot` 将当前 Activity 与 Host 生成的实例令牌一起发布。同一 Activity 更新保留令牌；结束后即使用相同 ID、相同内容和同一时钟重新发布，也换新令牌。
 - `ActionRouter` 验证 actionID、有限类型 payload、当前展示状态、来源、实例令牌、到期时间、动作声明、来源启用状态和 Host 授权，然后才调用已注册的来源处理器。旧视图动作、已结束或被抢占的 Activity、禁用来源和非法值均被拒绝。
-- `PomodoroActivityProvider` 复用现有 `IslandTimerToolsModel`，发布 persistent Activity，并由 actionID 执行真实的暂停、继续和停止。定向测试从 Activity 快照经 Router 到计时器模型和 Activity 更新/结束完成闭环。
-- DEBUG Activity 观察窗口可发布样例、启动番茄钟、切换三种展示形态，并把 Renderer 事件连到 Router；这是开发验证入口，正式岛体的内置功能迁移属于 T14–T16。
+- 当时的 `PomodoroActivityProvider` 复用 `IslandTimerToolsModel`，发布 persistent Activity，并由 actionID 执行真实的暂停、继续和停止。定向测试从 Activity 快照经 Router 到计时器模型和 Activity 更新/结束完成闭环。
+- 当时的 DEBUG Activity 观察窗口可发布样例、启动番茄钟、切换三种展示形态，并把 Renderer 事件连到 Router；这是开发验证入口，正式岛体的内置功能迁移属于 T14–T16。
 
 ## 验证结果与边界
 

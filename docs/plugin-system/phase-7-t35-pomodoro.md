@@ -1,6 +1,14 @@
 # Phase 7 — T35 Pomodoro 官方插件
 
-日期：2026-10-14，更新于 2026-10-15。直接依赖 T24–T34 均已 verified；T31 的真实后台空闲证据已提交。T35 状态为 `in progress`，总体迁移顺序见[准备记录](t35-migration-preparation.md)。
+日期：2026-10-14，更新于 2026-10-16。直接依赖 T24–T34 均已 verified；T31 的真实后台空闲证据已提交。T35 状态为 `in progress`，总体迁移顺序见[准备记录](t35-migration-preparation.md)。
+
+## 当前进度与验收边界
+
+官方 JS 包的计时、预设、完成 Activity、Storage 和一次 Scheduler 对账均已实现；3C 已删除全部 Pomodoro 专用生产 Swift，保留秒表、倒计时和通用 Host 能力。[迁移 CI](evidence/t35-pomodoro-migration-20261016.json)与[退出修复 CI](evidence/t35-quit-fix-20261016.json)均为 888 total / 887 passed / 1 skipped / 0 failures，普通 Release build passed。
+
+普通 Release 隔离副本已完成实际 `.dip` 导入、权限拒绝 / 撤销 / 明确授权、设置保存、真实新进程恢复预设且不自动开始，以及菜单 / 动画退出的 PID 消失验证。首次退出卡住后撤回的重启结论及后续修复均保留在[部分验收证据](evidence/t35-pomodoro-ui-20261016/result.json)和文末记录中。
+
+尚待真实 15 分钟自然到期及单次完成提示、最终 compact 物理刘海与原生秒表 / 倒计时 / 音乐 / 拖盘回归，以及普通 Release 非法设置回退验收。完成并记录这些项目之前，T35 不标为 verified，T36 保持 pending。下文按实施顺序保留各子步骤当时的实现范围、结果与限制；历史「下一步」不表示当前仍未实现。
 
 ## 子步骤 1A：公开 compact 可见性字段
 
@@ -23,14 +31,16 @@ update 只修改 priority 等顶层字段时保留原 presentation；提交新�
 
 `./Scripts/ci.sh` 完整 CI 为 **705 total / 701 passed / 4 skipped / 0 failures**，普通 Release build passed；两项新增测试均通过。[汇总与源码 SHA256](evidence/t35-showscompact-20261014.json)已保存。3 项鼠标测试因当前 macOS 会话锁定跳过，另 1 项为既有截图矩阵生成；没有将跳过项宣称为本轮通过。日志 `/tmp/dynamic-island-t35-compact-20261014-ci.log`，结果 `/tmp/dynamic-island-t35-compact-20261014/TestResults.xcresult`。
 
-## 下一步与完成边界
+## 历史完成边界（子步骤 2C1 完成时）
+
+以下为官方包实施前的迁移顺序；第 3 项的官方包实现与第 4 项中的 Swift 删除，现已分别由 3A / 3B 和 3C 完成，当前剩余实测范围见开头。
 
 1. 通用工具角色、按实例选择及 Host 几何已完成，见下方子步骤 1B。
 2. 通用 Host 倒计时记录、公开 API、一次性启动凭证和声明式秒级显示均已实现，后台刷新下限保持原值。
 3. 完成 JS 官方包的开始、暂停、继续、结束、预设及存储权限处理。
 4. 删除生产番茄钟专用 Swift；从 `.dip` 安装并完成真实 UI / 计时、旧功能回归验收。
 
-子步骤 1A / 1B 与 2A–2C1 已完成工具选择、计时和显示底座；官方插件与完整迁移尚未实现，不能将 T35 标为 verified。原生番茄钟继续保留至完整替换验收，T36 仍 pending。
+当时子步骤 1A / 1B 与 2A–2C1 已完成工具选择、计时和显示底座，官方插件与完整迁移尚未实现，原生番茄钟仍保留，因此不能将 T35 标为 verified。后续实现与原生删除结果见 3A–3C；当前验收仍未全部完成。
 
 ## 子步骤 1B：工具角色、实例选择与共享几何
 
@@ -142,3 +152,13 @@ CI **868 total / 864 passed / 4 skipped / 0 failures**，普通 Release build pa
 修正版隔离 App 位于 `/Users/rong5/Applications/Dynamic Island T35 Pomodoro.app`，已退出，独立插件数据和授权保留，当前设置为 15 分钟。启动后先确认新 PID；请用户物理悬停展开，选择番茄钟，开始真实 15 分钟计时并记录开始 / 到期实际时间。验证 compact 两翼、原生秒表 / 倒计时、音乐 / 拖盘与收起重选；补齐到期通知和不自动重开。确认上述验收后再更新 T35 状态。旧卡住副本与完整采样保留在 `/tmp/dynamic-island-t35-pomodoro-ui-20261016`，不要再启动其中 `stalled-app.app`。
 
 按用户先前的额度要求，本轮在 5 小时额度接近用完时收尾。未推送、发布、打 tag、制作 DMG 或改写记忆。
+
+## 退出被取消后的岛体恢复（2026-10-16）
+
+继续审查发现，清理失败会取消退出并保留安装预览，但岛体局部的退出 / 缩放 / 淡出状态此前没有复位。Host 现在在退出被取消时发送内部通知，IslandView 无动画恢复三项状态，并取消仍未结束的退出动画 Task，避免后续旧任务再次淡出或发起退出。公开 initializer、插件 API 与权限策略保持原合约。
+
+新增两项真实 NSHostingView 渲染和鼠标事件测试：先看到完全淡出的像素，再取消退出，原 View 恢复像素和音乐 / 拖盘点击，且可再次退出；动画途中取消则等待超过原 670ms，证明旧任务不再晚到退出。定向 6 项通过，完整 CI **890 total / 889 passed / 1 skipped / 0 failures**，普通 Release build passed。唯一 skip 仍为显式截图矩阵生成。截图为原始测试 PNG，已目视检查；不把离屏测试当作普通 Release 产品验收。
+
+普通 Release 副本还实际打开待安装预览，在受控目录身份不匹配下请求菜单退出：Host 拒绝清理替换目录，保留原暂存包与预览，显示 cleanupFailed 并禁用安装。恢复原身份后，重试取消成功；原已安装插件继续运行且授权保留，再次退出成功、Staging 为空。[完整 CI、原始测试截图与实际故障记录](evidence/t35-quit-cancellation-20261016/result.json)已保存。该实际故障场景使用标准菜单，动画取消的显示 / 点击恢复由上述真实渲染测试覆盖。
+
+当前新版隔离副本已重新启动；已为最后一项存储验收备份原值并放入仅 selectedMinutes 类型非法的 settings 样本。Host namespace 仍合法，启动数分钟后核对原非法值仍未被覆盖。仍需物理悬停后从界面确认 25 分钟待开始状态，再选择 15 分钟完成真实自然到期、compact 两翼与旧页面回归。计时尚未开始，T35 仍 in progress。

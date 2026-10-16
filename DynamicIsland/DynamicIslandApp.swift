@@ -108,6 +108,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
                 sender.terminate(nil)
             } else {
                 self?.pluginTerminationTask = nil
+                NotificationCenter.default.post(name: .islandQuitCancelled, object: nil)
                 self?.showPluginInstaller()
             }
         }

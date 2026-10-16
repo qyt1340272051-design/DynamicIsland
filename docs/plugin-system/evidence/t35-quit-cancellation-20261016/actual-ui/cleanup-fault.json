@@ -1,0 +1,9 @@
+{
+  "utc": "2026-10-16T08:09:15.959258+00:00",
+  "stagePath": "/Users/rong5/Library/Containers/com.rong5.dynamic-island.t35-pomodoro.20261016/Data/Library/Application Support/DynamicIsland/Plugins/Staging/E2B569A3-A9F5-461E-8728-C754BDAB1E07",
+  "heldOriginalPath": "/tmp/dynamic-island-t35-final-20261016/held-stage-original",
+  "originalDevice": 16777234,
+  "originalInode": 218145454,
+  "replacementInode": 218145512,
+  "fault": "Controlled directory identity mismatch, no package install or user data deletion."
+}

@@ -1,0 +1,71 @@
+{
+  "captureUTC": "2026-10-16T08:05:57.809903+00:00",
+  "baseCommit": "b61ced4",
+  "appPath": "/Users/rong5/Applications/Dynamic Island T35 Pomodoro.app",
+  "bundleID": "com.rong5.dynamic-island.t35-pomodoro.20261016",
+  "executableSHA256": "bf0ee3f884598a0ab8b5adc1b5fd794797b71ac62437f213773894572dc221d0",
+  "sourceSHA256": {
+    "DynamicIsland/DynamicIslandApp.swift": "ba4e11ab35448cb59e2589940d2649ac3e9494e007e3a61de6be75b308e97637",
+    "DynamicIsland/IslandQuitAnimation.swift": "7a38aedc1c35108da586e74efc9552d3a1f4b6429abcd8c4cfc0f65146dc5ec7",
+    "DynamicIsland/IslandView.swift": "66790be54325fdf44a2896c17819fc9af10b981b8c45c602d309b6e199083b6a",
+    "DynamicIsland/Core/Activity/IslandActivityRuntime.swift": "2a13a926dc2f6028c7b4f41ff3ad2bdaf0fa08570f0ec6fcf661e8aeb3b54cea",
+    "DynamicIsland/Plugins/PluginCountdownBroker.swift": "053e76bf6535b7122999d4a5d5b5f1df1fc189f08719835add64e44f542c9df5",
+    "DynamicIsland/Plugins/PluginCountdownSession.swift": "eb90d7af9991ec8115817bc765d2937778e57ac242bcc8bc990f2fdaa7d22dfa",
+    "DynamicIsland/Plugins/PluginJSBridge.swift": "d8eff91676020fc0e69785daf0a6f6410b7be26002f977d5dac607c3e24e884e",
+    "DynamicIsland/Plugins/PluginBridgeTransport.swift": "a35992279f4bc54cb74e1bfcd466183889cb027dd0529211ec3ac292bd6a0a82",
+    "docs/plugin-system/examples/pomodoro/index.js": "2ab2fa95b4d1de34a045596b4683f3acda10590a287b98643ae0e6fb358d2274",
+    "docs/plugin-system/examples/pomodoro/manifest.json": "72e28bac33acf3030e09aadbfabccf6d712bb039c63b633c386694ee6a300110"
+  },
+  "sandbox": true,
+  "hardenedRuntime": true,
+  "JIT": true,
+  "testOnlyEntitlements": false,
+  "documentTypeDeclarations": false,
+  "CI": {
+    "devicesAndConfigurations": [
+      {
+        "device": {
+          "architecture": "arm64",
+          "deviceId": "00008132-001E49513A0B801C",
+          "deviceName": "My Mac",
+          "modelName": "MacBook Air",
+          "osBuildNumber": "25G83",
+          "osVersion": "26.6.2",
+          "platform": "macOS"
+        },
+        "expectedFailures": 0,
+        "failedTests": 0,
+        "passedTests": 889,
+        "skippedTests": 1,
+        "testPlanConfiguration": {
+          "configurationId": "1",
+          "configurationName": "Test Scheme Action"
+        }
+      }
+    ],
+    "environmentDescription": "Dynamic Island · Built with macOS 26.6.2",
+    "expectedFailures": 0,
+    "failedTests": 0,
+    "finishTime": 1792137869.687,
+    "passedTests": 889,
+    "result": "Passed",
+    "skippedTests": 1,
+    "startTime": 1792137768.893,
+    "statistics": [
+      {
+        "subtitle": "1 test run",
+        "title": "1 test collected performance metrics"
+      }
+    ],
+    "testFailures": [],
+    "title": "Test - Dynamic Island",
+    "topInsights": [
+      {
+        "category": "Longest Test Runs",
+        "impact": "58% of duration",
+        "text": "7 longest test runs with outlier durations exceeding 2.61s (three standard deviations)"
+      }
+    ],
+    "totalTestCount": 890
+  }
+}

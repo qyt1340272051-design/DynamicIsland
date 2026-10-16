@@ -1,4 +1,5 @@
 import AppKit
+import Combine
 import SwiftUI
 import UniformTypeIdentifiers
 
@@ -6,18 +7,28 @@ public struct IslandView: View {
     @ObservedObject private var viewModel: IslandViewModel
     @ObservedObject private var activityManager: ActivityManager
     private let activityRuntime: IslandActivityRuntime
+    private let requestTermination: @MainActor () -> Void
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @State private var hoveredTrayItemID: UUID?
     @State private var isQuitting = false
     @State private var isQuitImpacting = false
     @State private var isIslandFading = false
+    @State private var quitAnimationTask: Task<Void, Never>?
     private static let trayIconSize = CGSize(width: 74, height: 74)
 
     public init(viewModel: IslandViewModel, activityRuntime: IslandActivityRuntime? = nil) {
+        self.init(viewModel: viewModel, activityRuntime: activityRuntime,
+                  requestTermination: { NSApp.terminate(nil) })
+    }
+
+    /// Host tests can exercise the real quit control without ending XCTest.
+    init(viewModel: IslandViewModel, activityRuntime: IslandActivityRuntime? = nil,
+         requestTermination: @escaping @MainActor () -> Void) {
         self.viewModel = viewModel
         let runtime = activityRuntime ?? IslandActivityRuntime(viewModel: viewModel)
         self.activityRuntime = runtime
         self.activityManager = runtime.manager
+        self.requestTermination = requestTermination
     }
 
     public var body: some View {
@@ -49,6 +60,9 @@ public struct IslandView: View {
             delegate: IslandFileDropDelegate(viewModel: viewModel)
         )
         .allowsHitTesting(!isQuitting)
+        .onReceive(NotificationCenter.default.publisher(for: .islandQuitCancelled)) { _ in
+            restoreAfterCancelledQuit()
+        }
     }
 
     private var shellSize: CGSize {
@@ -310,19 +324,23 @@ public struct IslandView: View {
             guard !isQuitting else { return }
             isQuitting = true
             if reduceMotion {
-                NSApp.terminate(nil)
+                requestTermination()
                 return
             }
 
             isQuitImpacting = true
-            Task { @MainActor in
+            quitAnimationTask = Task { @MainActor in
                 do {
                     try await Task.sleep(nanoseconds: IslandQuitAnimation.impactHoldNanoseconds)
+                    guard !Task.isCancelled else { return }
                     isQuitImpacting = false
                     try await Task.sleep(nanoseconds: IslandQuitAnimation.reboundWaitNanoseconds)
+                    guard !Task.isCancelled else { return }
                     isIslandFading = true
                     try await Task.sleep(nanoseconds: IslandQuitAnimation.fadeWaitNanoseconds)
-                    NSApp.terminate(nil)
+                    guard !Task.isCancelled else { return }
+                    quitAnimationTask = nil
+                    requestTermination()
                 } catch {
                     return
                 }
@@ -344,6 +362,19 @@ public struct IslandView: View {
         .animation(reduceMotion ? nil : IslandQuitAnimation.impact, value: isQuitImpacting)
         .help("退出 Dynamic Island")
         .accessibilityLabel("退出 Dynamic Island")
+    }
+
+    private func restoreAfterCancelledQuit() {
+        guard isQuitting else { return }
+        quitAnimationTask?.cancel()
+        quitAnimationTask = nil
+        var transaction = Transaction(animation: nil)
+        transaction.disablesAnimations = true
+        withTransaction(transaction) {
+            isQuitting = false
+            isQuitImpacting = false
+            isIslandFading = false
+        }
     }
 
     private var musicExpandedContent: some View {

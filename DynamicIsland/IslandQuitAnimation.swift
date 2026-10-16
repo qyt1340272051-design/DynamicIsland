@@ -1,4 +1,10 @@
+import Foundation
 import SwiftUI
+
+extension Notification.Name {
+    /// The Host kept the application open after its cleanup could not finish.
+    static let islandQuitCancelled = Notification.Name("DynamicIsland.islandQuitCancelled")
+}
 
 public enum IslandQuitAnimation {
     public static let impactHoldNanoseconds: UInt64 = 120_000_000
