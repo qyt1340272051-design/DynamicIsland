@@ -22,12 +22,24 @@
   "inheritedActualOldVersion": "../t35-pomodoro-final-20261016/result.json",
   "continuation": {
     "appPath": "/Users/rong5/Applications/Dynamic Island T35 Pomodoro.app",
-    "running": true,
+    "running": false,
     "pid": 17040,
     "lastObservedUI": "collapsed",
     "countdownStarted": false,
-    "next": "User physically hovers top notch; select Pomodoro, choose 15 minutes, click Start and record exact click bounds. Capture completion within one CUA call before natural deadline."
+    "next": "Deferred by user; follow MANUAL_ACCEPTANCE.md M01. Launch isolated app, confirm new PID, then request physical pointer actions together."
   },
   "productionAppPID": 66831,
-  "productionAppAndDataUntouched": true
+  "productionAppAndDataUntouched": true,
+  "manualDeferral": {
+    "utc": "2026-10-16T17:19:48.653428+00:00",
+    "userRequest": "需要我操作的部分先跳过,统计好下次我再来处理",
+    "ledger": "../../MANUAL_ACCEPTANCE.md",
+    "countdownStarted": false,
+    "userActions": 2
+  },
+  "deferredCleanup": {
+    "pid17040Alive": false,
+    "stagingEntries": [],
+    "method": "Actual standard menu Quit via CUA; isolated app and plugin data retained"
+  }
 }
