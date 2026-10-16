@@ -102,7 +102,7 @@ public final class PluginExtensionsModel {
     /// granted. Denial and revocation remain available for every declaration.
     public nonisolated static func supports(_ permission: PluginPermission) -> Bool {
         switch permission {
-        case .network, .localStorage, .readClipboard, .writeClipboard, .userSelectedFiles: true
+        case .network, .localStorage, .openLinks, .readClipboard, .writeClipboard, .userSelectedFiles: true
         case .publishNotifications, .readCalendar: false
         }
     }

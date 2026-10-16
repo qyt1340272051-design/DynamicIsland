@@ -9,6 +9,7 @@ nonisolated enum PluginPermissionPresentation {
         switch permission {
         case .network: "访问网络"
         case .localStorage: "保存插件数据"
+        case .openLinks: "打开网页"
         case .readClipboard: "读取剪贴板"
         case .writeClipboard: "写入剪贴板"
         case .userSelectedFiles: "读取你选择的文件"
@@ -21,6 +22,7 @@ nonisolated enum PluginPermissionPresentation {
         switch permission {
         case .network: "允许访问受限制的 HTTPS 服务，读取在线数据。"
         case .localStorage: "在本机保存此插件的数据和偏好设置，与其他插件分开存放。"
+        case .openLinks: "在你点击插件按钮后，用默认浏览器打开主程序允许的 HTTPS 网页。当前仅允许 github.com；浏览器打开后的网站跳转由浏览器处理。"
         case .readClipboard: "可读取剪贴板中的文字，其中可能包含密码、验证码或其他敏感内容。请仅向你信任的插件授权。"
         case .writeClipboard: "可用插件生成的文字替换剪贴板内容。此权限不会允许读取剪贴板。"
         case .userSelectedFiles: "通过系统对话框读取你明确选择的文件；每次选择都需要你确认。"

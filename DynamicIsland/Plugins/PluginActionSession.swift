@@ -28,9 +28,11 @@ nonisolated struct PluginActionDelivery: Sendable {
     }
 }
 
-nonisolated enum PluginCountdownActivationError: Error, Equatable, Sendable {
+nonisolated enum PluginActionActivationError: Error, Equatable, Sendable {
     case invalidActivation
 }
+
+typealias PluginCountdownActivationError = PluginActionActivationError
 
 /// One execution owns one registration table. No function or JSValue is held
 /// here, and an old session cannot deliver to a replacement Runtime.
@@ -39,18 +41,23 @@ final class PluginActionSession {
     private let context: PluginExecutionContext
     private let canHandleActions: Bool
     private let canActivateCountdown: Bool
+    private let canOpenLinks: Bool
     private let now: @MainActor () -> ContinuousClock.Instant
     private let deliver: @MainActor (PluginActionDelivery) -> Void
     private var registrations: [String: String] = [:]
     private var isRevoked = false
-    private var countdownActivation: CountdownActivation?
+    private var userActivation: UserActivation?
 
-    private struct CountdownActivation {
+    private struct UserActivation {
         let token: String
         let registrationID: String
         let action: RoutedActivityAction
         let expiresAt: ContinuousClock.Instant
+        var isConsumed = false
     }
+
+    private enum ActivationPurpose { case countdown, openLink }
+    typealias ActivationValidation = @MainActor () throws -> Void
 
     init(package: ValidatedPluginPackage, context: PluginExecutionContext,
          now: @escaping @MainActor () -> ContinuousClock.Instant = { ContinuousClock.now },
@@ -59,6 +66,8 @@ final class PluginActionSession {
         self.context = context
         canHandleActions = package.manifest.capabilities.contains(.handleActions)
         canActivateCountdown = package.manifest.capabilities.contains(.countdown)
+            && package.manifest.capabilities.contains(.handleActions)
+        canOpenLinks = package.manifest.capabilities.contains(.openLinks)
             && package.manifest.capabilities.contains(.handleActions)
         self.now = now
         self.deliver = deliver
@@ -73,19 +82,19 @@ final class PluginActionSession {
         guard registrations[actionID] != nil || registrations.count < 128 else {
             throw PluginBridgeErrorCode.quotaExceeded
         }
-        clearCountdownActivation(for: actionID)
+        clearActivation(for: actionID)
         registrations[actionID] = registrationID
     }
 
     func unregister(actionID: String) throws {
         try requireActive()
-        clearCountdownActivation(for: actionID)
+        clearActivation(for: actionID)
         registrations.removeValue(forKey: actionID)
     }
 
     func revoke() {
         isRevoked = true
-        countdownActivation = nil
+        userActivation = nil
         registrations.removeAll()
     }
 
@@ -94,25 +103,58 @@ final class PluginActionSession {
     /// Matching attempts are consumed before any Host callback can reenter.
     /// Random tokens cannot revoke a genuine action's outstanding ticket.
     func consumeCountdownActivation(_ token: String) throws {
-        guard let activation = countdownActivation, activation.token == token else {
+        _ = try consumeActivation(token, for: .countdown)
+    }
+
+    /// The returned check retains only the consumed action's immutable scope.
+    /// It cannot mint or consume another ticket, and is used synchronously at
+    /// the final system-open boundary after any Host policy callback.
+    func consumeLinkActivation(_ token: String) throws -> ActivationValidation {
+        let activation = try consumeActivation(token, for: .openLink)
+        return { [weak self] in
+            guard let self else { throw PluginCountdownActivationError.invalidActivation }
+            try self.validateActivation(activation, for: .openLink)
+        }
+    }
+
+    private func consumeActivation(_ token: String, for purpose: ActivationPurpose) throws -> UserActivation {
+        guard var activation = userActivation, activation.token == token, !activation.isConsumed else {
             throw PluginCountdownActivationError.invalidActivation
         }
-        countdownActivation = nil
+        activation.isConsumed = true
+        userActivation = activation
+        try validateActivation(activation, for: purpose)
+        return activation
+    }
+
+    private func validateActivation(_ activation: UserActivation, for purpose: ActivationPurpose) throws {
         try requireActive()
-        guard canActivateCountdown,
+        let permitted: Bool
+        switch purpose {
+        case .countdown: permitted = canActivateCountdown
+        case .openLink:
+            if case .none = activation.action.value { permitted = canOpenLinks }
+            else { permitted = false }
+        }
+        let instant = now()
+        guard permitted,
+              userActivation?.token == activation.token, userActivation?.isConsumed == true,
               registrations[activation.action.actionID] == activation.registrationID,
-              now() < activation.expiresAt,
-              context.isActionActive(activation.action),
-              !isRevoked,
+              instant < activation.expiresAt, context.isActionActive(activation.action) else {
+            throw PluginCountdownActivationError.invalidActivation
+        }
+        let finalInstant = now()
+        guard !isRevoked,
+              userActivation?.token == activation.token, userActivation?.isConsumed == true,
               registrations[activation.action.actionID] == activation.registrationID,
-              now() < activation.expiresAt else {
+              finalInstant < activation.expiresAt else {
             throw PluginCountdownActivationError.invalidActivation
         }
         try context.perform {}
     }
 
-    private func clearCountdownActivation(for actionID: String) {
-        if countdownActivation?.action.actionID == actionID { countdownActivation = nil }
+    private func clearActivation(for actionID: String) {
+        if userActivation?.action.actionID == actionID { userActivation = nil }
     }
 
     private func requireActive() throws {
@@ -147,11 +189,11 @@ final class PluginActionSession {
         ]
         // Every newer routed action supersedes the previous ticket. Slider
         // movement never creates one; only a committed interaction can do so.
-        countdownActivation = nil
-        if canActivateCountdown, action.value.isCountdownActivation {
-            let activation = CountdownActivation(token: UUID().uuidString, registrationID: registrationID,
+        userActivation = nil
+        if (canActivateCountdown || canOpenLinks), action.value.isCommittedActivation {
+            let activation = UserActivation(token: UUID().uuidString, registrationID: registrationID,
                 action: action, expiresAt: now().advanced(by: .seconds(5)))
-            countdownActivation = activation
+            userActivation = activation
             fields["activation"] = .string(activation.token)
         }
         let event = PluginBridgeJSON.object(fields)
@@ -166,7 +208,7 @@ final class PluginActionSession {
 }
 
 private extension IslandRenderActionValue {
-    var isCountdownActivation: Bool {
+    var isCommittedActivation: Bool {
         switch self {
         case .none, .toggle, .sliderCommit: true
         case .slider: false

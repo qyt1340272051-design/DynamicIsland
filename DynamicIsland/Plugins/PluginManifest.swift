@@ -8,6 +8,7 @@ public nonisolated enum PluginEngine: String, Codable, CaseIterable, Sendable {
 public nonisolated enum PluginPermission: String, Codable, CaseIterable, Sendable {
     case network
     case localStorage = "storage.local"
+    case openLinks = "links.open"
     case publishNotifications = "notifications.publish"
     case readClipboard = "clipboard.read"
     case writeClipboard = "clipboard.write"
@@ -26,6 +27,7 @@ public nonisolated enum PluginCapability: String, Codable, CaseIterable, Sendabl
     case localStorage = "storage.local"
     case scheduler
     case countdown
+    case openLinks = "links.open"
 }
 
 public nonisolated enum PluginManifestError: Error, Equatable, LocalizedError, Sendable {

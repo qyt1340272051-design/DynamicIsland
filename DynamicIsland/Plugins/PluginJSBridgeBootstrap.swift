@@ -144,6 +144,7 @@ nonisolated enum PluginJSBridgeBootstrap {
                         if (method.length > 10 && apply(sliceString, method, [0, 10]) === 'countdown.') {
                             validateCountdownParams(method, request.params);
                         }
+                        if (method === 'links.open') validateLinkParams(request.params);
                         const json = stringify(request);
                         if (utf8Bytes(json) > 16384) throw LIMIT;
                         id = nextID++;
@@ -364,6 +365,29 @@ nonisolated enum PluginJSBridgeBootstrap {
                 }
                 return true;
             }
+            function validateLinkParams(value) {
+                const fields = fieldsWithShape(value, ['url', 'activation']);
+                if (typeof fields.url !== 'string' || !validActionID(fields.activation) ||
+                    fields.activation.length > 80) throw null;
+                if (utf8Bytes(fields.url) > 2048) throw LIMIT;
+                if (apply(lowercase, apply(sliceString, fields.url, [0, 8]), []) !== 'https://') throw null;
+                let authorityEnd = fields.url.length;
+                for (let i = 0; i < fields.url.length; i++) {
+                    const code = apply(charCode, fields.url, [i]);
+                    if (code <= 32 || (code >= 127 && code <= 160) || code === 92 || code === 5760 ||
+                        (code >= 8192 && code <= 8202) || code === 8232 || code === 8233 ||
+                        code === 8239 || code === 8287 || code === 12288 || code === 65279) throw null;
+                    if (i >= 8 && authorityEnd === fields.url.length && (code === 47 || code === 63 || code === 35))
+                        authorityEnd = i;
+                }
+                if (authorityEnd <= 8) throw null;
+                // URL parsing and the configurable domain policy are enforced
+                // independently by the Host. No plugin getter is consulted.
+                for (let i = 8; i < authorityEnd; i++) {
+                    const code = apply(charCode, fields.url, [i]);
+                    if (code === 64 || code === 37 || code > 127) throw null;
+                }
+            }
             function validateCountdownParams(name, value) {
                 let required;
                 switch (name) {
@@ -454,6 +478,13 @@ nonisolated enum PluginJSBridgeBootstrap {
             files.chooseText = method(function() {
                 if (arguments.length !== 0) return rejected('invalidArguments');
                 return send('files.chooseText', {});
+            });
+            const links = create(null);
+            links.apiVersion = version;
+            links.supported = true;
+            links.open = method(function(options) {
+                if (arguments.length !== 1) return rejected('invalidArguments');
+                return send('links.open', options);
             });
             const scheduler = create(null);
             scheduler.apiVersion = version;
@@ -602,6 +633,7 @@ nonisolated enum PluginJSBridgeBootstrap {
             island.storage = freeze(storage);
             island.clipboard = freeze(clipboard);
             island.files = freeze(files);
+            island.links = freeze(links);
             island.network = freeze(network);
             island.scheduler = freeze(scheduler);
             island.countdown = freeze(countdown);
@@ -634,7 +666,8 @@ nonisolated enum PluginJSBridgeBootstrap {
                                  pair.method === 'countdown.pause' || pair.method === 'countdown.resume') {
                             pair.resolve(countdownResponse(value, pair.method === 'countdown.get'));
                         } else if (pair.method === 'countdown.stop' || pair.method === 'countdown.onComplete' ||
-                                   pair.method === 'countdown.offComplete' || pair.method === 'countdown.failure') {
+                                   pair.method === 'countdown.offComplete' || pair.method === 'countdown.failure' ||
+                                   pair.method === 'links.open') {
                             if (value !== null) throw null;
                             pair.resolve(null);
                         }

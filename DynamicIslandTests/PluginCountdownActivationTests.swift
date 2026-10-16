@@ -306,6 +306,65 @@ final class PluginCountdownActivationTests: XCTestCase {
         assertInvalid(token, session: fixture.session)
     }
 
+    func testOpenOnlyPluginGetsButtonActivationWithoutCountdownCapability() throws {
+        let fixture = try CountdownActivationFixture(capabilities: [.handleActions, .openLinks])
+        defer { fixture.shutdown() }
+        try fixture.publish()
+        XCTAssertEqual(try fixture.dispatch(), .handled)
+        let token = try fixture.activation()
+        let validate = try fixture.session.consumeLinkActivation(token)
+        XCTAssertNoThrow(try validate())
+        XCTAssertThrowsError(try fixture.session.consumeLinkActivation(token))
+        assertInvalid(token, session: fixture.session)
+    }
+
+    func testOpenAndCountdownMutuallyConsumeTheSameUserAction() throws {
+        let fixture = try CountdownActivationFixture(capabilities: [.handleActions, .countdown, .openLinks])
+        defer { fixture.shutdown() }
+        try fixture.publish()
+        XCTAssertEqual(try fixture.dispatch(), .handled)
+        let opened = try fixture.activation()
+        _ = try fixture.session.consumeLinkActivation(opened)
+        assertInvalid(opened, session: fixture.session)
+        XCTAssertEqual(try fixture.dispatch(), .handled)
+        let started = try fixture.activation()
+        XCTAssertNoThrow(try fixture.session.consumeCountdownActivation(started))
+        XCTAssertThrowsError(try fixture.session.consumeLinkActivation(started))
+    }
+
+    func testOpenRequiresButtonAndBurnsOtherCommittedActionAttempts() throws {
+        let fixture = try CountdownActivationFixture(capabilities: [.handleActions, .countdown, .openLinks])
+        defer { fixture.shutdown() }
+        try fixture.publish()
+        for value: IslandRenderActionValue in [.toggle(true), .sliderCommit(0.5)] {
+            XCTAssertEqual(try fixture.dispatch(value: value), .handled)
+            let token = try fixture.activation()
+            XCTAssertThrowsError(try fixture.session.consumeLinkActivation(token))
+            assertInvalid(token, session: fixture.session)
+            XCTAssertEqual(try fixture.dispatch(value: value), .handled)
+            XCTAssertNoThrow(try fixture.session.consumeCountdownActivation(fixture.activation()))
+        }
+    }
+
+    func testConsumedOpenScopeCannotOutliveNewActionRegistrationOrDeadline() throws {
+        let fixture = try CountdownActivationFixture(capabilities: [.handleActions, .openLinks])
+        defer { fixture.shutdown() }
+        try fixture.publish()
+        XCTAssertEqual(try fixture.dispatch(), .handled)
+        let superseded = try fixture.session.consumeLinkActivation(fixture.activation())
+        XCTAssertEqual(try fixture.dispatch(actionID: "other"), .handled)
+        XCTAssertThrowsError(try superseded())
+
+        let reregistered = try fixture.session.consumeLinkActivation(fixture.activation())
+        try fixture.session.register(actionID: "other", registrationID: "other-r1")
+        XCTAssertThrowsError(try reregistered())
+
+        XCTAssertEqual(try fixture.dispatch(), .handled)
+        let expired = try fixture.session.consumeLinkActivation(fixture.activation())
+        fixture.activationClock.instant = fixture.activationClock.instant.advanced(by: .seconds(5))
+        XCTAssertThrowsError(try expired())
+    }
+
     private func assertInactiveResponse(_ response: String, file: StaticString = #filePath, line: UInt = #line) {
         do {
             let fields = try XCTUnwrap(JSONSerialization.jsonObject(with: Data(response.utf8)) as? [String: Any],

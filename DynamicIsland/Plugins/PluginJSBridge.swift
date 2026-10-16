@@ -72,6 +72,7 @@ public final class PluginJSBridge {
     private let storage: PluginStorage
     private let permissions: PermissionManager
     private let network: PluginNetworkBroker
+    private let links: PluginLinkBroker
     private let files: PluginFileBroker
     private let clipboard: PluginClipboardBroker
     private let scheduler: PluginScheduler
@@ -82,6 +83,7 @@ public final class PluginJSBridge {
     public init(storage: PluginStorage = PluginStorage(),
                 permissions: PermissionManager? = nil,
                 network: PluginNetworkBroker? = nil,
+                links: PluginLinkBroker? = nil,
                 files: PluginFileBroker? = nil,
                 clipboard: PluginClipboardBroker? = nil,
                 scheduler: PluginScheduler? = nil,
@@ -90,6 +92,7 @@ public final class PluginJSBridge {
         self.storage = storage
         self.permissions = permissions ?? PermissionManager()
         self.network = network ?? PluginNetworkBroker()
+        self.links = links ?? PluginLinkBroker()
         self.files = files ?? PluginFileBroker()
         self.clipboard = clipboard ?? PluginClipboardBroker()
         self.scheduler = scheduler ?? PluginScheduler()
@@ -131,6 +134,10 @@ public final class PluginJSBridge {
                   reply: @escaping @Sendable (String) -> Void) async {
         do {
             let envelope = try object(PluginBridgeJSON.parse(requestJSON), required: ["apiVersion", "method", "params"])
+            if envelope["method"] == .string("links.open") {
+                reply(handleLink(envelope, package: package, context: context, actionSession: actionSession))
+                return
+            }
             if case .string(let method)? = envelope["method"], method.hasPrefix("countdown.") {
                 reply(handleCountdown(envelope, package: package, context: context,
                                       actionSession: actionSession, countdownSession: countdownSession))
@@ -186,6 +193,42 @@ public final class PluginJSBridge {
         catch let error as PluginSchedulerError { reply(brokerFailure(code: error.code, message: error.errorDescription)) }
         catch let error as PluginResourceError { reply(failure(error == .inactiveExecution ? .inactiveExecution : .coreRejected)) }
         catch { reply(failure(.inactiveExecution)) }
+    }
+
+    /// Gesture consumption and the final system-open gate are synchronous on
+    /// MainActor. A refresh, network completion or storage wait cannot extend
+    /// the original user action's deadline.
+    private func handleLink(_ envelope: [String: PluginBridgeJSON], package: ValidatedPluginPackage,
+                            context: PluginExecutionContext, actionSession: PluginActionSession?) -> String {
+        do {
+            guard envelope["apiVersion"] == .string(Self.apiVersion) else { throw PluginBridgeErrorCode.unsupportedVersion }
+            guard context.id == package.manifest.id else { throw PluginBridgeErrorCode.coreRejected }
+            try context.perform {}
+            try require(.openLinks, manifest: package.manifest)
+            try require(.handleActions, manifest: package.manifest)
+            let fields = try object(envelope["params"]!, required: ["url", "activation"])
+            let request = try PluginLinkRequest(source: string(fields["url"], maximumBytes: 2_048, nonempty: true))
+            let token = try identifier(fields["activation"], maximumBytes: 80)
+            guard package.manifest.permissions.contains(.openLinks) else { throw PluginBridgeErrorCode.permissionRequired }
+            guard let actionSession, actionSession.matches(context: context) else {
+                throw PluginBridgeErrorCode.activationRequired
+            }
+            let validateAction = try actionSession.consumeLinkActivation(token)
+            let authorization = try permissions.require(permission: .openLinks, package: package)
+            try links.open(request: request, pluginID: context.id, authorization: authorization,
+                           admission: context.resourceAdmission) {
+                try context.perform {}
+                try validateAction()
+                try context.perform {}
+            }
+            return response(.object(["ok": .boolean(true), "value": .null]))
+        } catch let error as PluginBridgeErrorCode { return failure(error) }
+        catch let error as PluginPermissionError {
+            return failure(PluginBridgeErrorCode(rawValue: error.code) ?? .coreRejected)
+        }
+        catch is PluginActionActivationError { return failure(.activationRequired) }
+        catch let error as PluginLinkError { return brokerFailure(code: error.code, message: error.errorDescription) }
+        catch { return failure(.inactiveExecution) }
     }
 
     /// A countdown mutation, including gesture consumption, is one synchronous

@@ -14,7 +14,7 @@
 
 ## 2026-10-17 人工验收安排调整
 
-用户明确要求「需要我操作的部分先跳过,统计好下次我再来处理」。因此仅将需要物理指针 / 设备配合的门槛延期到[统一人工清单](MANUAL_ACCEPTANCE.md)，允许后续任务先推进可自动完成的开发与验证；本条是用户对上述开始依赖规则的本次例外。原依赖列与未通过任务的状态保留，不能以跳过代替验收。T35 当前 1 组 / 2 个用户动作，最后一轮计时未开始；T36 可先开发，最终验收保留依赖说明。
+用户明确要求「需要我操作的部分先跳过,统计好下次我再来处理」。因此仅将需要物理指针 / 设备配合的门槛延期到[统一人工清单](MANUAL_ACCEPTANCE.md)，允许后续任务先推进可自动完成的开发与验证；本条是用户对上述开始依赖规则的本次例外。原依赖列与未通过任务的状态保留，不能以跳过代替验收。当前共 2 组 / 最多 3 个指针动作（T35 两步，T36 一步），另需解锁会话供助手补跑 5 项输入测试。T35 最后一轮计时未开始；T36 自动开发与验证已完成，最终验收保留依赖说明。
 
 ## Phase 0 — 准备阶段：项目审计、分支与基线
 
@@ -92,7 +92,7 @@
 | T33 | Extensions Settings UI | T20 | `verified` | [管理页与持久化分项授权验收](phase-7-t33-extensions-settings.md)；模型 / 存储 / 并发定向 91 passed，原生 UI 3 passed，完整 CI 647 passed、1 skipped、0 failures，普通 Release build / 签名通过；Release 定向合计 149 passed。Discover 按计划后置。 |
 | T34 | .dip Installer | T19、T28 | `verified` | [.dip 格式](dip-format.md)与[验收记录](phase-7-t34-installer.md)：App 内导入 / 预览 / disabled 安装 / 实际启停卸载通过；解包 17、事务 19、UI model 12、UI 2，CI 698 passed、1 skipped、0 failures，Release 150 passed。[正常应用目录的 Finder 冷启动与预览取消验收通过](evidence/t34-finder-20261014.md)，临时构建目录的候选差异已查明，原 App 与默认设置保留。 |
 | T35 | Pomodoro 官方插件 | T24–T34 | `in progress` | [公开 showsCompact、工具角色、实例绑定选择与共享几何](phase-7-t35-pomodoro.md)已完成；CI 732 passed、1 skipped、0 failures，普通 Release build / 签名通过；真实导入、启用、菜单、JS 按钮、内置页切换与收起恢复已验收。通用 Host 倒计时与一次性动作凭证 API 已实现，见[合约与验证](t35-countdown-api.md)；声明式倒计时节点与可见共享秒级显示已接入，CI 831 passed / 4 skipped / 0 failures、Release build passed，见[节点证据](evidence/t35-countdown-node-20261015/result.json)；自动 compact 与展开页共存规则已完成（CI 864 passed / 4 skipped，见[证据](evidence/t35-compact-policy-20261015/result.json)）；官方 JS 包的 3A 计时 / 预设 / transient 通知闭环已通过 7 项 VM 集成测试（[证据](evidence/t35-pomodoro-3a-20261015.json)）；Storage / Scheduler 3B 已完成（CI 891 passed / 1 skipped / 0 failures、Release build passed，见[证据](evidence/t35-pomodoro-3b-20261016.json)）；专用 Swift 已删除（CI 887 passed / 1 skipped / 0 failures，见[迁移证据](evidence/t35-pomodoro-migration-20261016.json)）；已完成实际 .dip 导入、逐项授权 / 拒绝 / 撤销、重启预设恢复和真实进程退出（见[部分验收](evidence/t35-pomodoro-ui-20261016/result.json)）；[最终 build 部分验收](evidence/t35-pomodoro-final-20261016/result.json)已确认真实 900.29 秒自然到期、无效设置回退、物理 compact 两翼和内置旧页面回归；收起后重展开恢复已通过；第二轮实际完成提示居中落入相机区，已在官方包 0.2.1 修正，见[修复与像素证据](evidence/t35-completion-layout-20261016/result.json)。最新完整 CI 891 passed / 1 skipped / 0 failures，Release build passed；0.2.1 已[实际升级并重新授权](evidence/t35-v021-ui-20261017/result.json)，新版真实完成提示按[人工清单](MANUAL_ACCEPTANCE.md)延期。最新退出取消恢复 CI 为 890 total / 889 passed / 1 skipped / 0 failures，见[证据](evidence/t35-quit-cancellation-20261016/result.json)。T35 保持 in progress。 |
-| T36 | GitHub 官方插件 | T35 | `in progress` | 按用户 2026-10-17 人工验收延期安排先推进自动开发：公共 HTTPS Open / 动作凭证、独立 links.open 权限和无 Token 公开 CI / PR 示例；实际结果随实现补充，T35 人工门槛仍保留。 |
+| T36 | GitHub 官方插件 | T35 | `in progress` | 按用户人工验收延期安排完成[公共 Links API](t36-links-api.md)及[无 Token 公开 CI / PR 示例与验证](phase-7-t36-github.md)。完整 CI 919 passed / 7 skipped / 0 failures、Release build passed；真实匿名 API 选测 1 passed / 0 skipped / 0 failures，见[证据](evidence/t36-github-20261017/result.json)。实际 UI / 系统 Open 与会话解锁后的输入测试按[人工清单](MANUAL_ACCEPTANCE.md)延期；T35 依赖仍保留。 |
 
 ## Phase 8 — SuperIsland Compatibility
 

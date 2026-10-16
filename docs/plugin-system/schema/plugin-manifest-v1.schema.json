@@ -104,6 +104,7 @@
       "enum": [
         "network",
         "storage.local",
+        "links.open",
         "notifications.publish",
         "clipboard.read",
         "clipboard.write",
@@ -120,8 +121,9 @@
         "ui.islandNode",
         "actions.handle",
         "storage.local",
-          "scheduler",
-          "countdown"
+        "scheduler",
+        "countdown",
+        "links.open"
       ]
     }
   }

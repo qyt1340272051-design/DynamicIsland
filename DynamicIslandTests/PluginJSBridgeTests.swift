@@ -13,12 +13,13 @@ final class PluginJSBridgeTests: XCTestCase {
         try await ready(runtime)
         let result = try await runtime.evaluateForTesting("""
             Object.isFrozen(island) && Object.isFrozen(island.plugin) &&
-            ['activity', 'storage', 'actions'].every(key => Object.isFrozen(island[key])) &&
+            ['activity', 'storage', 'actions', 'links'].every(key => Object.isFrozen(island[key])) &&
             [island.log, island.activity.publish, island.activity.update, island.activity.end,
              island.storage.get, island.storage.set, island.storage.remove,
-             island.storage.clear, island.actions.on, island.actions.off].every(method =>
+             island.storage.clear, island.actions.on, island.actions.off, island.links.open].every(method =>
                  typeof method === 'function' && Object.isFrozen(method) && method.apiVersion === '1.0.0') &&
             island.actions.supported === true &&
+            island.links.supported === true && island.links.apiVersion === '1.0.0' &&
             [island.log, island.storage.get].every(method => {
                 try { void method.caller; return false; } catch (_) { return true; }
             }) &&
