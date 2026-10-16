@@ -98,7 +98,7 @@
 
 | ID | 任务 | 前置依赖 | 状态 | 验收证据 |
 | --- | --- | --- | --- | --- |
-| T37 | SuperIsland Adapter | T35 | `pending` | 待补。 |
+| T37 | SuperIsland Adapter | T35 | `in progress` | 按用户人工验收延期安排完成[固定上游 commit、首批接口、许可缺口与 Host 边界准备](phase-8-t37-superisland-scope.md)；尚未接入兼容 Runtime，不宣称兼容通过。T35 依赖仍保留。 |
 
 ## Phase 9 — SDK、文档与插件生态
 
