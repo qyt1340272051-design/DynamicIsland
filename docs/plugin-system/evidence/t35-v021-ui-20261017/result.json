@@ -22,11 +22,11 @@
   "inheritedActualOldVersion": "../t35-pomodoro-final-20261016/result.json",
   "continuation": {
     "appPath": "/Users/rong5/Applications/Dynamic Island T35 Pomodoro.app",
-    "running": false,
-    "pid": 17040,
-    "lastObservedUI": "collapsed",
+    "running": true,
+    "pid": 32762,
+    "lastObservedUI": "menu tree; actual expansion unverified",
     "countdownStarted": false,
-    "next": "Deferred by user; follow MANUAL_ACCEPTANCE.md M01. Launch isolated app, confirm new PID, then request physical pointer actions together."
+    "next": "Await current physical Escape/hover reply, inspect current UI, then begin an actual 15-minute round. Never infer a start from the earlier reply."
   },
   "productionAppPID": 66831,
   "productionAppAndDataUntouched": true,
@@ -41,5 +41,23 @@
     "pid17040Alive": false,
     "stagingEntries": [],
     "method": "Actual standard menu Quit via CUA; isolated app and plugin data retained"
+  },
+  "resumedAttempt": {
+    "utc": "2026-10-17T05:58:00.880419+00:00",
+    "pid": 32762,
+    "productionAppPID": 21458,
+    "version": "0.2.1",
+    "installedFilesMatchSource": true,
+    "strictSignatureVerified": true,
+    "pluginEnabled": true,
+    "storagePermission": "granted",
+    "countdownStarted": false,
+    "uiBlocker": "CUA remains on a menu tree; element actions return -10005 even after rebinding/reset. No Start click has occurred.",
+    "pendingUserAction": "Close menu with physical Escape, leave/reenter top hover region and keep expanded.",
+    "sourceSHA256": {
+      "manifest.json": "42e1f96131e433b47badce3acc2af88f0e0dc585f730690592f1423362b4fbb3",
+      "index.js": "6a0782e1788b009ddea8321aad4370ebc6d3d8b746315616b15e8bea0e03f6b2",
+      "README.md": "f3100e511f4d8ed3ac3a6343bad4019908dafa2596f31279b6b64f1df9aa54d2"
+    }
   }
 }
