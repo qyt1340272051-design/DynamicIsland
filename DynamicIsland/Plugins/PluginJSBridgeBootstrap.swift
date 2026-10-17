@@ -765,6 +765,43 @@ nonisolated enum PluginJSBridgeBootstrap {
             receivers.receiveResponse = receiveResponse;
             receivers.receiveAction = receiveAction;
             receivers.receiveCountdown = receiveCountdown;
+            // The engine passes this closure only to the compatibility
+            // installer before loading plugin code. It is never a property of
+            // globalThis or island, and the Host still gates every request by
+            // the validated package's explicit engine mode.
+            const superIslandBridge = create(null);
+            superIslandBridge.snapshot = function(value) {
+                try { return freezeTree(snapshot(value, 1, snapshotBudget(), [])); }
+                catch (error) { throw failure(error === LIMIT ? 'quotaExceeded' : 'invalidArguments'); }
+            };
+            superIslandBridge.render = function(compact, expanded) {
+                return protectCompatibilityPromise(send('superisland.render', {compact, expanded}));
+            };
+            superIslandBridge.reportFailure = function(kind) {
+                chainRequest(send('superisland.failure', {kind}), function() {}, function() {});
+            };
+            function protectCompatibilityPromise(request) {
+                // Promise resolution reads a returned Promise's `then` even
+                // when our caller uses the captured native then method.
+                // Private adapter chains therefore need an own captured
+                // implementation as well as the constructor/species guard.
+                if (!descriptor(request, 'then')) {
+                    const attributes = create(null);
+                    attributes.value = function(fulfilled, rejected) {
+                        return compatibilityChain(request, fulfilled, rejected);
+                    };
+                    define(request, 'then', attributes);
+                }
+                return request;
+            }
+            function compatibilityChain(request, fulfilled, rejected) {
+                return protectCompatibilityPromise(chainRequest(request, fulfilled, rejected));
+            }
+            superIslandBridge.chain = compatibilityChain;
+            superIslandBridge.resolved = function() {
+                return protectCompatibilityPromise(new PromiseType(resolve => resolve(null)));
+            };
+            receivers.superIslandBridge = freeze(superIslandBridge);
             return freeze(receivers);
         })();
         """

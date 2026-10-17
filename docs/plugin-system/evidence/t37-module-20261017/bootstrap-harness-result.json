@@ -1,0 +1,1 @@
+{"passed":["start/register/render/action/stop","captured primordials and poisoned then getters","single fixed render-failure report","expanded fallback","unsupported controls","accessor refusal","failed replacement rolls back new IDs and preserves old callback"],"count":7}

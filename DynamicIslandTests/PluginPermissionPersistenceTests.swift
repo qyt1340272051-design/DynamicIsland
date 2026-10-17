@@ -30,11 +30,12 @@ final class PluginPermissionPersistenceTests: XCTestCase {
         assertFailure(.denied) { try restored.require(permission: .network, package: reordered) }
     }
 
-    func testCodeVersionDeveloperAndDeclarationsInvalidateSavedApproval() async throws {
+    func testCodeVersionDeveloperRuntimeProfileAndDeclarationsInvalidateSavedApproval() async throws {
         let changes = [
             try package(source: "function onStart() { globalThis.changed = true; }"),
             try package(version: "1.0.1"),
             try package(developer: "Different Developer"),
+            try package(engine: .superIsland),
             try package(permissions: [.localStorage, .network]),
             try package(capabilities: [.localStorage, .publishActivity])
         ]
@@ -53,6 +54,31 @@ final class PluginPermissionPersistenceTests: XCTestCase {
             let saved = try await store.load()
             XCTAssertEqual(saved[id]?.fingerprint, try PermissionManager.persistenceFingerprint(package: replacement))
             XCTAssertEqual(saved[id]?.states, states)
+        }
+    }
+
+    func testRuntimeProfileChangeRevokesLiveLeaseAndNeverReusesEarlierApproval() async throws {
+        let store = PluginPermissionDecisionStore()
+        let manager = PermissionManager(decisionStore: store)
+        let native = try package()
+        let compatible = try package(engine: .superIsland)
+        XCTAssertNotEqual(try PermissionManager.persistenceFingerprint(package: native),
+                          try PermissionManager.persistenceFingerprint(package: compatible))
+        await manager.prepare(package: native)
+        let oldReview = try manager.snapshot(package: native).review
+        try await manager.applyPersistentHostDecision(decision: .granted, review: oldReview, permission: .localStorage)
+        let oldLease = try manager.require(permission: .localStorage, package: native)
+
+        await manager.prepare(package: compatible)
+        XCTAssertEqual(try manager.state(permission: .localStorage, package: compatible), .requested)
+        assertFailure(.revoked) { try oldLease.perform { XCTFail("Old runtime profile lease executed.") } }
+        await assertAsyncFailure(.staleReview) {
+            try await manager.applyPersistentHostDecision(decision: .granted, review: oldReview, permission: .localStorage)
+        }
+        await manager.prepare(package: native)
+        XCTAssertEqual(try manager.state(permission: .localStorage, package: native), .requested)
+        await assertAsyncFailure(.staleReview) {
+            try await manager.applyPersistentHostDecision(decision: .granted, review: oldReview, permission: .localStorage)
         }
     }
 
@@ -399,10 +425,11 @@ final class PluginPermissionPersistenceTests: XCTestCase {
     }
 
     private func package(source: String = "function onStart() {}", version: String = "1.0.0",
-                         developer: String? = "Original Developer", permissions: [PluginPermission] = [.localStorage],
+                         developer: String? = "Original Developer", engine: PluginEngine = .javaScriptCore,
+                         permissions: [PluginPermission] = [.localStorage],
                          capabilities: [PluginCapability] = [.localStorage], root: URL? = nil) throws -> ValidatedPluginPackage {
         let manifest = try PluginManifest(id: id, name: "Permission Persistence", version: SemanticVersion(version),
-            engine: .javaScriptCore, entry: "index.js", minimumHostVersion: SemanticVersion("0.6.0"),
+            engine: engine, entry: "index.js", minimumHostVersion: SemanticVersion("0.6.0"),
             permissions: permissions, capabilities: capabilities, developer: developer)
         let bytes = Data(source.utf8)
         return .init(manifest: manifest, canonicalRootURL: root ?? URL(fileURLWithPath: "/permission-persistence-tests/\(id)", isDirectory: true),

@@ -16,6 +16,7 @@ public nonisolated struct PluginInstallReview: Equatable, Sendable {
     public let name: String
     public let version: SemanticVersion
     public let developer: String?
+    public var engine: PluginEngine { package.manifest.engine }
     public let permissions: [PluginPermission]
     public let capabilities: [PluginCapability]
     public let previousVersion: SemanticVersion?

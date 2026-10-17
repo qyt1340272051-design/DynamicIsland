@@ -5,12 +5,26 @@ import XCTest
 
 @MainActor
 final class PluginInstallerTests: XCTestCase {
+    func testExplicitCompatibleModeIsPreviewedAndInstalledDisabledWithoutExecution() async throws {
+        let f = try await fixture()
+        defer { f.cleanup() }
+        let archive = try archive(in: f.root, permissions: [], engine: .superIsland)
+        let preview = try await f.installer.prepare(archiveURL: archive)
+        XCTAssertEqual(preview.engine, .superIsland)
+        XCTAssertTrue(f.runtimes.values.isEmpty)
+        let installed = try await f.installer.commit(preview)
+        XCTAssertEqual(installed.manifest.engine, .superIsland)
+        XCTAssertFalse(installed.isEnabled)
+        XCTAssertTrue(f.runtimes.values.isEmpty)
+    }
+
     func testPreviewDoesNotRegisterPermissionsOrExecuteAndCommitRequiresExplicitEnablement() async throws {
         let f = try await fixture()
         defer { f.cleanup() }
         let archive = try archive(in: f.root, version: "1.0.0", permissions: [.localStorage])
         let preview = try await f.installer.prepare(archiveURL: archive)
         XCTAssertEqual(preview.name, "Installer Test")
+        XCTAssertEqual(preview.engine, .javaScriptCore)
         XCTAssertEqual(preview.permissions, [.localStorage])
         XCTAssertFalse(preview.isUpgrade)
         XCTAssertTrue(f.runtimes.values.isEmpty)
@@ -429,17 +443,18 @@ final class PluginInstallerTests: XCTestCase {
             try await marker(try XCTUnwrap(f.runtimes.values.last))
         }
     }
-    private func manifest(version: String, permissions: [PluginPermission] = [.localStorage]) throws -> PluginManifest {
+    private func manifest(version: String, permissions: [PluginPermission] = [.localStorage],
+                          engine: PluginEngine = .javaScriptCore) throws -> PluginManifest {
         try PluginManifest(id: "com.example.installer", name: "Installer Test", version: SemanticVersion(version),
-            engine: .javaScriptCore, entry: "main.js", minimumHostVersion: SemanticVersion("0.6.0"),
+            engine: engine, entry: "main.js", minimumHostVersion: SemanticVersion("0.6.0"),
             permissions: permissions, capabilities: [.publishActivity], developer: "Installer Developer")
     }
     private func source(_ version: String) -> String {
         "function onStart(){island.activity.publish({id:'installer',presentation:{title:'Version \(version)'}}).then(()=>{globalThis.published=true;});}"
     }
     private func archive(in root: URL, version: String = "1.0.0", permissions: [PluginPermission] = [.localStorage],
-                         resource: Data? = nil) throws -> URL {
-        var files = [("manifest.json", try manifest(version: version, permissions: permissions).encodeJSON()),
+                         resource: Data? = nil, engine: PluginEngine = .javaScriptCore) throws -> URL {
+        var files = [("manifest.json", try manifest(version: version, permissions: permissions, engine: engine).encodeJSON()),
                      ("main.js", Data(source(version).utf8))]
         if let resource { files.append(("resource.txt", resource)) }
         let url = root.appendingPathComponent("\(UUID().uuidString).dip")

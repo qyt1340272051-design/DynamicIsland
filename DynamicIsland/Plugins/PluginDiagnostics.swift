@@ -3,6 +3,7 @@ import Foundation
 public nonisolated enum PluginDiagnosticCategory: String, Equatable, Sendable {
     case pluginMessage, runtimeFailure, lifecycleFailure
     case actionFailure, actionLimit, watchdogIsolation, persistenceFailure, restart
+    case compatibilityFailure
 }
 
 /// Diagnostic text is chosen from Host constants. This type has no arbitrary

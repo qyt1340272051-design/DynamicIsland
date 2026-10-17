@@ -66,6 +66,8 @@ public final class PluginJSBridge {
         case registerAction(actionID: String, registrationID: String)
         case unregisterAction(actionID: String)
         case actionFailure(kind: String)
+        case superIslandRender(PluginBridgeJSON)
+        case superIslandFailure(kind: String)
     }
 
     public let diagnostics: PluginDiagnosticsStore
@@ -504,6 +506,28 @@ public final class PluginJSBridge {
                          context: PluginExecutionContext, actionSession: PluginActionSession?) throws -> PluginBridgeJSON {
         let pluginID = context.id
         switch operation {
+        case .superIslandRender(let value):
+            guard manifest.engine == .superIsland else { throw PluginBridgeErrorCode.unsupportedMethod }
+            let converted = try SuperIslandModuleConverter.convert(value, title: manifest.name)
+            let id = Self.activityID(pluginID: pluginID, localID: SuperIslandModuleConverter.localID)
+            let isUpdate = try context.activity(id: id) != nil
+            // Reuse the ordinary capability checks, rate limiter, ownership,
+            // lifecycle validation and ActivityManager admission transaction.
+            _ = try execute(.activity(converted.request(isUpdate: isUpdate)), manifest: manifest,
+                            context: context, actionSession: actionSession)
+            return .object(["limitations": .array(converted.limitations.map(\.rawValue).sorted().map {
+                .string($0)
+            })])
+        case .superIslandFailure(let kind):
+            guard manifest.engine == .superIsland else { throw PluginBridgeErrorCode.unsupportedMethod }
+            diagnostics.record(pluginID: pluginID,
+                level: kind == "exception" || kind == "rejection" ? .error : .warning,
+                category: .compatibilityFailure, code: .runtime(.compatibilityFailure))
+            if kind == "exception" || kind == "rejection" {
+                guard context.reportSeriousFailure(kind: kind == "exception" ? .actionException : .actionRejection) else {
+                    throw PluginBridgeErrorCode.inactiveExecution
+                }
+            }
         case .log(_, let level):
             diagnostics.recordPluginMessage(pluginID: pluginID, level: level)
             switch level {
@@ -597,6 +621,17 @@ public final class PluginJSBridge {
         let method = try string(envelope["method"], maximumBytes: 64, nonempty: true)
         guard let params = envelope["params"] else { throw PluginBridgeErrorCode.invalidArguments }
         switch method {
+        case "superisland.render":
+            // Conversion is delayed until execution, after the explicit mode
+            // and current context have been checked independently by the Host.
+            return .superIslandRender(params)
+        case "superisland.failure":
+            let fields = try object(params, required: ["kind"])
+            let kind = try string(fields["kind"], maximumBytes: 32)
+            guard ["exception", "rejection", "limit", "invalidArguments"].contains(kind) else {
+                throw PluginBridgeErrorCode.invalidArguments
+            }
+            return .superIslandFailure(kind: kind)
         case "log":
             let fields = try object(params, required: ["message", "level"])
             let message = try string(fields["message"], maximumBytes: 1_024)

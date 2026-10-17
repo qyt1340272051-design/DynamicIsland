@@ -22,4 +22,4 @@
 
 同时修正公开 Manifest Schema 的过期数组上限：权限 8 项、capability 9 项，与现有 Swift 有限集合一致。此前 7 项上限会误拒绝分别声明 8 项 capability 的 Pomodoro / GitHub 官方示例；新增回归覆盖全部 7 份示例和完整枚举集合。此项没有改变 Host 运行时资源配额。
 
-当前转换器尚未接入 Module 生命周期、Manifest 模式、运行时动作回调、PresentationRequest 或管理页兼容标识。自动转换测试不代表真实上游插件已在兼容模式运行；下一步按固定范围接入显式模式及同 VM 生命周期。
+本转换子步骤完成时尚未接入 Module 生命周期、Manifest 模式、运行时动作回调、PresentationRequest 或管理页兼容标识。后续已完成[显式模式](phase-8-t37-manifest-profile.md)和[同 VM 模块闭环](phase-8-t37-module-runtime.md)；PresentationRequest 与真实上游插件验收仍待完成。自动转换测试不代表真实上游插件已在兼容模式运行。

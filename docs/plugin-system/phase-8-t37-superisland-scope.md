@@ -1,8 +1,8 @@
 # Phase 8 — T37 SuperIsland 兼容范围准备
 
-日期：2026-10-17。状态 `in progress`，本页记录 T37 第一步的来源核对与范围准备，后续[有界 View 转换](phase-8-t37-view-conversion.md)已完成验证，尚未接入兼容 Runtime。T35 的实际完成提示按[人工验收安排](MANUAL_ACCEPTANCE.md)延期；遵循 [PROGRESS 中的用户例外](PROGRESS.md)推进自动工作。
+日期：2026-10-17。状态 `in progress`，本页记录 T37 第一步的来源核对与范围准备，后续已完成[有界 View 转换](phase-8-t37-view-conversion.md)、[显式模式](phase-8-t37-manifest-profile.md)和[同 VM 模块闭环](phase-8-t37-module-runtime.md)。PresentationRequest 和真实上游插件验收尚未完成。T35 的实际完成提示按[人工验收安排](MANUAL_ACCEPTANCE.md)延期；遵循 [PROGRESS 中的用户例外](PROGRESS.md)推进自动工作。
 
-## 当前 Host 边界
+## 范围准备时的 Host 边界（历史快照）
 
 - [PluginManifest](../../DynamicIsland/Plugins/PluginManifest.swift) 的 engine 当前只有 `javascriptcore`；未知字段 / capability / permission 拒绝整个 Manifest。兼容输入不能靠放宽现有 V1 解码进入。
 - [PluginRuntime](../../DynamicIsland/Plugins/PluginRuntime.swift) 每次执行拥有独立 VM，先安装 Host bootstrap，再执行验证后保留的 `entrySource`。适配器应有明确版本与启用路径，在该隔离环境中运行。
@@ -30,7 +30,7 @@
 
 Builder Guide 的最小 Hello 是固定复现候选；本轮未构建或运行上游，也没有把文档示例标成兼容通过。
 
-## 初期映射候选
+## 范围准备时的初期映射候选（历史快照）
 
 下表是已核对接口的首批适配候选；尚未实现或运行，细节差异必须记录为 Limited Compatibility。
 
@@ -46,7 +46,7 @@ Builder Guide 的最小 Hello 是固定复现候选；本轮未构建或运行�
 
 兼容层放在独立 `Compatibility/SuperIslandAdapter` 边界，转换为现有 Plugin API 数据。上游扩展不能反向改变核心 Activity 语义、授予权限、跳过包校验或强制展开 / 关闭刘海。
 
-## 下一步实现与验收
+## 初始实施顺序与验收门槛
 
 1. 根据以上固定签名实现独立协议夹具，并列出不支持的样式 / 数值行为；复制上游样本前补齐许可依据。
 2. 实现有界 View 转换，再接 Module 生命周期与动作注册；在同一 VM 中运行适配器和插件，复用 Host 执行撤销。
@@ -54,4 +54,4 @@ Builder Guide 的最小 Hello 是固定复现候选；本轮未构建或运行�
 4. Host 保存实际模式并显示兼容等级；对不支持的输入明确标记 Limited 或拒绝，不能静默成功。
 5. 运行若干固定版本的简单上游插件，覆盖文本 / 堆栈、按钮和 progress；再验证旧实例按钮、停用、权限撤销、超限树和跨插件 ID 隔离。自写夹具与真实上游样本分别记录。
 
-范围文档不等于兼容实现或验证通过；当前 T37 不标为 `verified`，T38 稳定 SDK 的两款官方插件实际验收门槛仍保留。
+上述顺序的 View、显式模式、Module 生命周期和动作部分现已接入，当前继续位置见[模块子步骤](phase-8-t37-module-runtime.md)。PresentationRequest、限制详情和真实上游样本验收仍待完成；当前 T37 不标为 `verified`，T38 稳定 SDK 的两款官方插件实际验收门槛仍保留。

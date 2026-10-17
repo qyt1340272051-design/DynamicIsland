@@ -396,6 +396,7 @@ public struct PluginDiagnosticsView: View {
         case .lifecycleFailure: "生命周期"
         case .actionFailure: "交互异常"
         case .actionLimit: "交互限额"
+        case .compatibilityFailure: "兼容异常"
         case .watchdogIsolation: "自动隔离"
         case .persistenceFailure: "状态保存"
         case .restart: "插件重启"

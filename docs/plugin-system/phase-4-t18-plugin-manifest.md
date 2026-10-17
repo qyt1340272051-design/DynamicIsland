@@ -4,6 +4,8 @@
 
 2026-10-12 T33 兼容扩展：增加可选 developer 自述信息，见 [管理界面与授权记录](phase-7-t33-extensions-settings.md)。原九个必需字段、旧包编码及下述历史验证仍保留。
 
+2026-10-17 T37 显式模式扩展：`engine` 新增 `superisland` 闭集值，用于固定的 SuperIsland V1 协议配置；底层仍为隔离 JavaScriptCore。原生模式不会探测入口代码并自动切换；未知字段、权限与 capability 的拒绝规则保持严格，见[模式与授权合约](phase-8-t37-manifest-profile.md)。
+
 ## V1 契约
 
 Manifest 是只含数据的 `Codable`、`Sendable` 模型，九个字段必填，developer 可选：
@@ -14,7 +16,7 @@ Manifest 是只含数据的 `Codable`、`Sendable` 模型，九个字段必填�
 | `id` | 小写 ASCII 反向域名，至少三段，总长不超过 255 bytes；每段 1–63 bytes，以小写字母开头、字母或数字结尾，中间只允许小写字母、数字和连字符。 |
 | `name` | 1–80 个 Unicode scalar，不允许首尾空白、控制字符、方向控制符和不可见格式字符。 |
 | `version` | SemVer 2.0.0 字符串。 |
-| `engine` | V1 只接受 `javascriptcore`。 |
+| `engine` | 显式选择 `javascriptcore` 原生 V1 或 `superisland` 固定兼容配置；其他字符串拒绝。 |
 | `entry` | 最长 240 bytes 的相对 POSIX `.js` 路径；拒绝绝对路径、空段、`.`、`..`、反斜线、NUL 和未声明字符。 |
 | `minimumHostVersion` | SemVer 2.0.0 字符串。 |
 | `permissions` | T28 规划的 7 项闭集；未知项和重复项均拒绝。 |

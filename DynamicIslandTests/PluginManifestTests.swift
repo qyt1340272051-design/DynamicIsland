@@ -197,14 +197,39 @@ final class PluginManifestTests: XCTestCase {
         )
     }
 
-    func testOnlyDeclaredEngineIsAccepted() throws {
-        XCTAssertNoThrow(try PluginManifest.decodeJSON(try fixtureData { $0["engine"] = "javascriptcore" }))
-        for value in ["javascriptCore", "JavaScriptCore", "native", ""] {
+    func testOnlyExplicitRuntimeProfilesAreAcceptedAndRoundTrip() throws {
+        for engine in PluginEngine.allCases {
+            let manifest = try PluginManifest.decodeJSON(try fixtureData { $0["engine"] = engine.rawValue })
+            XCTAssertEqual(manifest.engine, engine)
+            XCTAssertEqual(try PluginManifest.decodeJSON(manifest.encodeJSON()), manifest)
+        }
+        for value in ["javascriptCore", "JavaScriptCore", "SuperIsland", "superisland-v2", "native", ""] {
             assertManifestError(
                 try fixtureData { $0["engine"] = value },
                 code: "unsupportedEngine",
                 path: "$.engine"
             )
+        }
+    }
+
+    func testEveryRuntimeProfilePreservesStrictManifestFieldsAndDeclarations() throws {
+        for engine in PluginEngine.allCases {
+            assertManifestError(try fixtureData {
+                $0["engine"] = engine.rawValue
+                $0["compatibility"] = "superisland"
+            }, code: "unknownField", path: "$.compatibility")
+            assertManifestError(try fixtureData {
+                $0["engine"] = engine.rawValue
+                $0["permissions"] = ["filesystem"]
+            }, code: "unknownPermission", path: "$.permissions[0]")
+            assertManifestError(try fixtureData {
+                $0["engine"] = engine.rawValue
+                $0["capabilities"] = ["window.control"]
+            }, code: "unknownCapability", path: "$.capabilities[0]")
+            let data = try fixtureData { $0["engine"] = engine.rawValue }
+            let json = try XCTUnwrap(String(data: data, encoding: .utf8))
+            let duplicate = Data((String(json.dropLast()) + #", "\u0065ngine": "superisland"}"#).utf8)
+            assertManifestError(duplicate, code: "duplicateField", path: "$.engine")
         }
     }
 

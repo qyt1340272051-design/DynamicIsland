@@ -2,6 +2,10 @@ import Foundation
 
 public nonisolated enum PluginEngine: String, Codable, CaseIterable, Sendable {
     case javaScriptCore = "javascriptcore"
+    /// Explicit SuperIsland protocol V1 profile. Execution still uses the
+    /// isolated JavaScriptCore Runtime; scripts never select a profile by
+    /// exposing globals, and unsupported APIs do not fall back to native V1.
+    case superIsland = "superisland"
 }
 
 /// Permissions are a closed V1 set. Unknown values fail the whole manifest.

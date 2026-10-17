@@ -200,7 +200,12 @@ public struct PluginExtensionsView: View {
                     .font(.callout).textSelection(.enabled)
                     .accessibilityIdentifier("plugin-extensions-developer")
                 HStack(spacing: 8) {
-                    Label("原生 JavaScriptCore", systemImage: "checkmark.seal")
+                    switch plugin.manifest.engine {
+                    case .javaScriptCore:
+                        Label("原生 JavaScriptCore", systemImage: "checkmark.seal")
+                    case .superIsland:
+                        Label("SuperIsland（有限兼容）", systemImage: "exclamationmark.seal")
+                    }
                     Text("最低主程序版本 \(plugin.manifest.minimumHostVersion.description)")
                 }
                 .font(.caption).foregroundStyle(.secondary)

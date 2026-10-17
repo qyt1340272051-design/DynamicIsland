@@ -351,6 +351,12 @@ public struct PluginInstallerView: View {
             VStack(alignment: .leading, spacing: 6) {
                 Text(review.name).font(.title3.weight(.semibold)).textSelection(.enabled)
                 Text("版本：\(review.version.description)")
+                switch review.engine {
+                case .javaScriptCore:
+                    Text("原生 JavaScriptCore").font(.callout).foregroundStyle(.secondary)
+                case .superIsland:
+                    Text("SuperIsland（有限兼容）").font(.callout).foregroundStyle(.secondary)
+                }
                 Text("开发者：\(review.developer ?? "未提供")（插件自行声明，未验证）")
                     .font(.callout).textSelection(.enabled)
                 Text("插件 ID：\(review.id)").font(.caption).foregroundStyle(.secondary).textSelection(.enabled)

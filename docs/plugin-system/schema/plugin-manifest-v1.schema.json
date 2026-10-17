@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://raw.githubusercontent.com/qyt1340272051-design/DynamicIsland/main/docs/plugin-system/schema/plugin-manifest-v1.schema.json",
   "title": "DynamicIsland Plugin Manifest V1",
-  "description": "Strict manifest contract for DynamicIsland JavaScriptCore plugins.",
+  "description": "Strict manifest contract for explicitly selected native or SuperIsland V1 profiles, both executed in isolated JavaScriptCore runtimes.",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -44,10 +44,11 @@
       "description": "Plugin version using Semantic Versioning 2.0.0."
     },
     "engine": {
-      "description": "Runtime required by this manifest version.",
+      "description": "Explicit runtime profile: javascriptcore selects native V1; superisland selects the fixed SuperIsland V1 compatibility contract. No script detection or fallback occurs.",
       "type": "string",
       "enum": [
-        "javascriptcore"
+        "javascriptcore",
+        "superisland"
       ]
     },
     "entry": {

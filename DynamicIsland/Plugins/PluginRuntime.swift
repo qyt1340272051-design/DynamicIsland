@@ -13,6 +13,7 @@ public nonisolated enum PluginRuntimePhase: String, Equatable, Sendable {
 public nonisolated enum PluginRuntimeErrorCode: String, Equatable, Sendable {
     case invalidUTF8, contextUnavailable, javaScriptException
     case invalidLifecycleCallback, unsupportedLifecycleReturn
+    case compatibilityFailure
 }
 
 public nonisolated struct PluginRuntimeFailure: Error, Equatable, Sendable {
@@ -405,6 +406,8 @@ private nonisolated final class PluginJavaScriptEngine {
     private var bridgeReceiver: JSValue?
     private var actionReceiver: JSValue?
     private var countdownReceiver: JSValue?
+    private var compatibilityStart: JSValue?
+    private var compatibilityStop: JSValue?
     private let submitRequest: @Sendable (Int, String) -> Void
 
     init(package: ValidatedPluginPackage, submitRequest: @escaping @Sendable (Int, String) -> Void) throws {
@@ -452,6 +455,26 @@ private nonisolated final class PluginJavaScriptEngine {
             throw PluginRuntimeFailure(phase: .bootstrap, code: .contextUnavailable,
                                        message: "Bridge receivers unavailable.")
         }
+        if package.manifest.engine == .superIsland {
+            let installer = try evaluate(SuperIslandModuleBootstrap.script, phase: .bootstrap)
+            guard let installer,
+                  JSObjectIsFunction(context.jsGlobalContextRef, installer.jsValueRef),
+                  let compatibilityBridge = receivers?.objectForKeyedSubscript("superIslandBridge") else {
+                throw PluginRuntimeFailure(phase: .bootstrap, code: .contextUnavailable,
+                                           message: "Compatibility installer unavailable.")
+            }
+            clearException()
+            let lifecycle = installer.call(withArguments: [compatibilityBridge])
+            try checkException(.bootstrap)
+            compatibilityStart = lifecycle?.objectForKeyedSubscript("start")
+            compatibilityStop = lifecycle?.objectForKeyedSubscript("stop")
+            guard let compatibilityStart, let compatibilityStop,
+                  JSObjectIsFunction(context.jsGlobalContextRef, compatibilityStart.jsValueRef),
+                  JSObjectIsFunction(context.jsGlobalContextRef, compatibilityStop.jsValueRef) else {
+                throw PluginRuntimeFailure(phase: .bootstrap, code: .contextUnavailable,
+                                           message: "Compatibility lifecycle unavailable.")
+            }
+        }
     }
 
     func loadEntry(_ package: ValidatedPluginPackage) throws {
@@ -465,14 +488,22 @@ private nonisolated final class PluginJavaScriptEngine {
     func callLifecycle(_ name: String, phase: PluginRuntimePhase, arguments: [Any] = []) throws {
         guard let context else { throw PluginRuntimeError.inactiveExecution }
         clearException()
-        let callback = context.objectForKeyedSubscript(name)
+        let callback: JSValue?
+        let callbackArguments: [Any]
+        if let compatibilityStart, let compatibilityStop {
+            callback = name == "onStart" ? compatibilityStart : compatibilityStop
+            callbackArguments = []
+        } else {
+            callback = context.objectForKeyedSubscript(name)
+            callbackArguments = arguments
+        }
         try checkException(phase)
         guard let callback, !callback.isUndefined else { return }
         guard callback.isObject,
               JSObjectIsFunction(context.jsGlobalContextRef, callback.jsValueRef) else {
             throw PluginRuntimeFailure(phase: phase, code: .invalidLifecycleCallback, message: "\(name) must be a function when present.")
         }
-        let result = callback.call(withArguments: arguments)
+        let result = callback.call(withArguments: callbackArguments)
         try checkException(phase)
         guard result?.isUndefined == true else {
             throw PluginRuntimeFailure(phase: phase, code: .unsupportedLifecycleReturn, message: "\(name) must return undefined; asynchronous lifecycle callbacks are unsupported.")
@@ -513,6 +544,8 @@ private nonisolated final class PluginJavaScriptEngine {
         bridgeReceiver = nil
         actionReceiver = nil
         countdownReceiver = nil
+        compatibilityStart = nil
+        compatibilityStop = nil
         context?.exceptionHandler = nil
         context?.exception = nil
         context = nil
