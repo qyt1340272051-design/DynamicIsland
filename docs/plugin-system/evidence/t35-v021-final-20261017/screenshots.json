@@ -1,0 +1,37 @@
+[
+  {
+    "file": "tool-selected.jpg",
+    "completedUTC": "2026-10-17T08:51:33.828Z",
+    "callID": "call_afd85328fa0346b38da95a0ff05bed92",
+    "sha256": "fccf5579afa3c6d6f773065cc5c4768696e0be1c87fe041df52f192694851bea",
+    "source": "Unmodified actual CUA image output"
+  },
+  {
+    "file": "actual-15min-ready.jpg",
+    "completedUTC": "2026-10-17T08:51:49.450Z",
+    "callID": "call_4d5775c4a7f84e1bb97a9cb4342556c0",
+    "sha256": "edc53e73dc4052b1bd4c62c816e25b52d5ac40eca70e37eea75257eebaf632f6",
+    "source": "Unmodified actual CUA image output"
+  },
+  {
+    "file": "actual-15min-started.jpg",
+    "completedUTC": "2026-10-17T08:52:04.615Z",
+    "callID": "call_926d35358fcd496a970401bc6b0c1139",
+    "sha256": "324e57a60ccbd5311de0596a89c6967e0bc04fef9505aab3d8d4468a0399047b",
+    "source": "Unmodified actual CUA image output"
+  },
+  {
+    "file": "compact-06m19.jpg",
+    "completedUTC": "2026-10-17T09:00:45.612Z",
+    "callID": "call_55378a3b77bb451c8da0ff41a9853c57",
+    "sha256": "958947cd8903ed90fe968b68d5d7170f3adb1e604297e9ebec6a9d596ea6c33e",
+    "source": "Unmodified actual CUA image output"
+  },
+  {
+    "file": "after-natural-completion.jpg",
+    "completedUTC": "2026-10-17T09:07:37.798Z",
+    "callID": "call_24910abbd5bf48abae9d86ccfc2161bf",
+    "sha256": "1625fa92be210e7bb1788e1e648f809981bb944a0a3fe65536e27d67ca665362",
+    "source": "Unmodified actual CUA image output"
+  }
+]

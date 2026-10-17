@@ -1,0 +1,10 @@
+{
+  "callID": "call_027d5c6895ac417b9c7d8520a2a60e18",
+  "completedUTC": "2026-10-17T09:14:38.832Z",
+  "status": "passed",
+  "durationSeconds": 9.012,
+  "observedFrames": 224,
+  "selectedImageExport": true,
+  "hostTimerModified": false,
+  "scope": "Capture harness only: local observation deadline, no application countdown started or shortened. Rebound the exact app before sampling and passed state explicitly."
+}

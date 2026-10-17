@@ -1,0 +1,33 @@
+{
+  "bundleID": "com.rong5.dynamic-island.t35-pomodoro.20261016",
+  "appPath": "/Users/rong5/Applications/Dynamic Island T35 Pomodoro.app",
+  "hostExecutableSHA256": "bf0ee3f884598a0ab8b5adc1b5fd794797b71ac62437f213773894572dc221d0",
+  "pluginVersion": "0.2.1",
+  "pid": 32762,
+  "productionPID": 21458,
+  "pluginSHA256": {
+    "manifest.json": "42e1f96131e433b47badce3acc2af88f0e0dc585f730690592f1423362b4fbb3",
+    "index.js": "6a0782e1788b009ddea8321aad4370ebc6d3d8b746315616b15e8bea0e03f6b2",
+    "README.md": "f3100e511f4d8ed3ac3a6343bad4019908dafa2596f31279b6b64f1df9aa54d2"
+  },
+  "sourceCheckpoint": "50211d9b2741d49da81e1bfbb3078cd753fd21cf",
+  "expectedDurationSeconds": 900,
+  "startBeforeEpochMs": 1792227123808,
+  "startAfterEpochMs": 1792227123833,
+  "startCallID": "call_926d35358fcd496a970401bc6b0c1139",
+  "actualUIStart": true,
+  "privateStartOrClockChangeUsed": false,
+  "hostBuildCommit": null,
+  "hostBuildProvenance": {
+    "setupEvidence": "../t35-quit-cancellation-20261016/actual-ui/setup-current.json",
+    "baseCommit": "b61ced4",
+    "recordedSourceCheckpoint": "0b96caba42f6ea124ada40765820115d79a2d6d1",
+    "note": "Historical ordinary Release built after b61ced4; eight recorded Host source hashes agree with later checkpoint 0b96cab. Exact clean build commit was not stamped. Current sourceCheckpoint50211d9 is only this acceptance working tree checkpoint.",
+    "sameBinaryAs": [
+      "../t35-pomodoro-final-20261016/setup-current.json",
+      "../t35-v021-ui-20261017/identity.json"
+    ]
+  },
+  "strictSignatureVerified": true,
+  "testOnlyEntitlements": false
+}

@@ -1,0 +1,47 @@
+{
+  "utc": "2026-10-17T09:11:21.721470+00:00",
+  "status": "partial; actual 0.2.1 natural run verified, short completion notice not captured; T35 remains in progress",
+  "pid": 32762,
+  "version": "0.2.1",
+  "naturalRun": "run.json",
+  "completion": {
+    "utc": "2026-10-17T09:07:04.764569+00:00",
+    "epochMs": 1792228024763,
+    "settings": {
+      "lastSession": "completed",
+      "schemaVersion": 1,
+      "selectedMinutes": 15
+    },
+    "millisecondsAfterClickBefore": 900955,
+    "millisecondsAfterClickAfter": 900930
+  },
+  "noticeAccepted": false,
+  "noticeFailure": "Capture call was dispatched after the short notice had already expired; its loop stored zero frames and reported an empty-array reduction error. This is an acceptance capture error, not evidence that the product notice failed.",
+  "verified": [
+    "Actual UI selected the 15-minute preset and Start",
+    "Same isolated PID continued throughout the real 900-second round",
+    "Compact timer icon and time occupy opposite physical notch wings",
+    "Completion persisted after about 900.93 to 900.955 seconds from Start bounds",
+    "Post-completion app returns to an idle compact shell; no automatic countdown was observed"
+  ],
+  "pending": [
+    "Repeat actual UI round with the capture function already armed before Start",
+    "Capture safe compact completion wings and normal disappearance",
+    "Final normal exit, staging and retained-data record"
+  ],
+  "captureRepair": {
+    "preparedBeforeAnyRepeat": true,
+    "script": "capture-prepared.js",
+    "chunkSeconds": 45,
+    "plannedStartBeforeDeadlineSeconds": 120,
+    "note": "Initialize each repeat with its own new Start bounds and deadline, clear previous frame buffers, then run short capture chunks continuously through completion.",
+    "preflight": "capture-preflight.json",
+    "preflightPassed": true,
+    "explicitStateParameter": true,
+    "freshAppBindingBeforeEachChunk": true,
+    "exportFullFrameTimes": "After capture, write JSON.stringify(capture.frames.map(f=>[f.index,f.before,f.after,f.phase])) to avoid inspection output truncation."
+  },
+  "screenshotIndex": "screenshots.json",
+  "productionPID": 21458,
+  "productionAppUntouched": true
+}

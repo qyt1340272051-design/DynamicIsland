@@ -1,0 +1,24 @@
+[
+  {
+    "utc": "2026-10-17T08:56:57.066652+00:00",
+    "epochMs": 1792227417066,
+    "settings": {
+      "lastSession": "running",
+      "schemaVersion": 1,
+      "selectedMinutes": 15
+    },
+    "millisecondsAfterClickBefore": 293258,
+    "millisecondsAfterClickAfter": 293233
+  },
+  {
+    "utc": "2026-10-17T09:07:04.764569+00:00",
+    "epochMs": 1792228024763,
+    "settings": {
+      "lastSession": "completed",
+      "schemaVersion": 1,
+      "selectedMinutes": 15
+    },
+    "millisecondsAfterClickBefore": 900955,
+    "millisecondsAfterClickAfter": 900930
+  }
+]

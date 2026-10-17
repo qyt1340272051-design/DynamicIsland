@@ -10,13 +10,12 @@
     "Actual per-permission dialog explicitly confirms current 0.2.1 code",
     "Storage becomes granted after explicit confirmation",
     "Installed manifest, script and README exactly match source and archive",
-    "Ordinary Release signature verification passed"
+    "Ordinary Release signature verification passed",
+    "Actual 0.2.1 UI 15-minute round completed naturally; see ../t35-v021-final-20261017/result.json"
   ],
   "pending": [
-    "Physical hover to expand and start actual 15-minute countdown",
-    "Natural completion Activity shows safe compact wings",
-    "Completion disappears with no automatic restart",
-    "Normal exit and final staging/data retention record"
+    "Capture actual short completion notice with safe compact wings",
+    "Final normal exit and staging/data retention record"
   ],
   "inheritedCI": "../t35-completion-layout-20261016/result.json",
   "inheritedActualOldVersion": "../t35-pomodoro-final-20261016/result.json",
@@ -24,9 +23,10 @@
     "appPath": "/Users/rong5/Applications/Dynamic Island T35 Pomodoro.app",
     "running": true,
     "pid": 32762,
-    "lastObservedUI": "compact; initial menu blocker cleared",
-    "countdownStarted": false,
-    "next": "M01 remains deferred. Inspect actual expanded UI before Start; no final 15-minute round has started."
+    "lastObservedUI": "idle compact after actual natural completion",
+    "countdownStarted": true,
+    "next": "Await user repeat/deferral choice. A new actual UI Start is needed only to recapture the missed short completion notice; capture function is prepared before any repeat.",
+    "countdownCompleted": true
   },
   "productionAppPID": 66831,
   "productionAppAndDataUntouched": true,
@@ -67,6 +67,7 @@
       "countdownStarted": false,
       "privateStartOrClockAdjustmentUsed": false,
       "next": "Manual M01 remains deferred; wait for actual expansion before a new Start click."
-    }
+    },
+    "naturalRunEvidence": "../t35-v021-final-20261017/result.json"
   }
 }
