@@ -78,7 +78,7 @@
     "capabilities": {
       "description": "V1 Host API capabilities used by the plugin. Unknown capabilities are invalid.",
       "type": "array",
-      "maxItems": 9,
+      "maxItems": 10,
       "uniqueItems": true,
       "items": {
         "$ref": "#/$defs/capability"
@@ -124,7 +124,8 @@
         "storage.local",
         "scheduler",
         "countdown",
-        "links.open"
+        "links.open",
+        "presentation.request"
       ]
     }
   }

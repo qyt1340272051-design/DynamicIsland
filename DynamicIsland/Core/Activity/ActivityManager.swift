@@ -69,9 +69,21 @@ public final class ActivityManager: ObservableObject {
         }
     }
 
+    private nonisolated struct RequestedPresentation {
+        let id = UUID()
+        let selection: ToolSelection
+        let expiresAt: Date
+    }
+
     private var activities: [String: IslandActivity] = [:]
     private var instanceTokens: [String: ActivityInstanceToken] = [:]
     private var selectedTool: ToolSelection?
+    private var requestedPresentation: RequestedPresentation?
+    private var presentationRequestsAllowed = false
+    private var presentationRequestBudgetUsed = false
+    private var isReconciling = false
+    private var needsReconcile = false
+    private var pendingUserSelection: ToolSelection?
     private var presentationContext: PresentationContext = .expanded
     private var displayDeadlines: [String: Date] = [:]
     private var firstPresentedAt: [String: Date] = [:]
@@ -93,8 +105,101 @@ public final class ActivityManager: ObservableObject {
     /// transaction. Expanded remains the default for existing Core callers.
     public func setPresentationContext(_ context: PresentationContext) {
         presentationContext = context
-        if context == .compact { selectedTool = nil }
+        if context == .compact {
+            selectedTool = nil
+            requestedPresentation = nil
+            presentationRequestsAllowed = false
+        }
         reconcile()
+    }
+
+    /// The Host derives this permission from its actual surface, dragging,
+    /// locking and completion state. Only a new false-to-true context grants
+    /// another request opportunity; repeated true values never reset it.
+    public func setPresentationRequestsAllowed(_ allowed: Bool) {
+        if allowed && !presentationRequestsAllowed { presentationRequestBudgetUsed = false }
+        presentationRequestsAllowed = allowed
+        if !allowed { requestedPresentation = nil }
+        reconcile()
+    }
+
+    /// A plugin request may temporarily make its existing tool eligible. It
+    /// never becomes a user selection and never receives its scheduling bypass.
+    @discardableResult
+    public func requestPresentation(_ snapshot: ActivitySnapshot, autoDismiss: Bool = true) -> PresentationDecision {
+        reconcile()
+        let selection = ToolSelection(snapshot)
+        guard let activity = activities[selection.id], activity.source == selection.source,
+              instanceTokens[selection.id] == selection.instanceToken else {
+            return .init(status: .rejected, reason: .staleInstance)
+        }
+        guard activity.isTool, activity.lifecycle.policy == .persistent || activity.lifecycle.policy == .progress,
+              toolSnapshots.contains(where: { ToolSelection($0) == selection }) else {
+            return .init(status: .rejected, reason: .invalidActivity)
+        }
+        guard presentationContext == .expanded, presentationRequestsAllowed else {
+            return .init(status: .rejected, reason: .hostUnavailable)
+        }
+        guard selectedTool == nil else { return .init(status: .rejected, reason: .userSelection) }
+        if let request = requestedPresentation {
+            guard request.selection == selection else { return .init(status: .rejected, reason: .busy) }
+            return .init(status: .accepted, reason: .alreadyGranted, expiresAt: request.expiresAt)
+        }
+        guard !hasPresentationBlockingStatus(at: scheduler.clock.now()) else {
+            return .init(status: .rejected, reason: .statusPriority)
+        }
+        guard !presentationRequestBudgetUsed else {
+            return .init(status: .rejected, reason: .contextBudgetUsed)
+        }
+        let ordinary = positiveDuration(scheduler.configuration.transientDuration)
+        let maximum = max(ordinary, positiveDuration(scheduler.configuration.maximumTransientContinuousDuration))
+        let expiresAt = scheduler.clock.now().addingTimeInterval(autoDismiss ? ordinary : maximum)
+        let request = RequestedPresentation(selection: selection, expiresAt: expiresAt)
+        requestedPresentation = request
+        presentationRequestBudgetUsed = true
+        reconcile()
+        // A synchronous Host observer can revoke permission, remove this
+        // instance or replace the context while its presentation is published.
+        // Report the original grant only if that exact lease survived.
+        guard let currentActivity = activities[selection.id], currentActivity.source == selection.source,
+              instanceTokens[selection.id] == selection.instanceToken else {
+            return .init(status: .rejected, reason: .staleInstance)
+        }
+        guard currentActivity.isTool,
+              toolSnapshots.contains(where: { ToolSelection($0) == selection }) else {
+            return .init(status: .rejected, reason: .invalidActivity)
+        }
+        guard presentationContext == .expanded, presentationRequestsAllowed else {
+            return .init(status: .rejected, reason: .hostUnavailable)
+        }
+        guard selectedTool == nil else { return .init(status: .rejected, reason: .userSelection) }
+        guard !hasPresentationBlockingStatus(at: scheduler.clock.now()) else {
+            return .init(status: .rejected, reason: .statusPriority)
+        }
+        guard requestedPresentation?.id == request.id,
+              request.expiresAt > scheduler.clock.now() else {
+            return .init(status: .rejected, reason: .contextBudgetUsed)
+        }
+        return .init(status: autoDismiss ? .accepted : .degraded,
+                     reason: autoDismiss ? .granted : .boundedDuration, expiresAt: expiresAt)
+    }
+
+    @discardableResult
+    public func requestPresentation(_ request: PresentationRequest) -> PresentationDecision {
+        requestPresentation(request.snapshot, autoDismiss: request.autoDismiss)
+    }
+
+    /// Withdrawal revokes only this exact request. It does not dismiss or end
+    /// module data, clear a Host user choice, or touch another source's lease.
+    @discardableResult
+    public func withdrawPresentation(_ snapshot: ActivitySnapshot) -> PresentationDecision {
+        reconcile()
+        guard requestedPresentation?.selection == ToolSelection(snapshot) else {
+            return .init(status: .accepted, reason: .noRequest)
+        }
+        requestedPresentation = nil
+        reconcile()
+        return .init(status: .accepted, reason: .withdrawn)
     }
 
     /// Only a Host user interaction can select a tool. Capture the original
@@ -106,6 +211,8 @@ public final class ActivityManager: ObservableObject {
         reconcile()
         let selection = ToolSelection(snapshot)
         guard toolSnapshots.contains(where: { ToolSelection($0) == selection }) else { return false }
+        requestedPresentation = nil
+        presentationRequestBudgetUsed = true
         selectedTool = selection
         reconcile(userSelection: selection)
         return true
@@ -113,6 +220,7 @@ public final class ActivityManager: ObservableObject {
 
     public func clearToolSelection() {
         selectedTool = nil
+        requestedPresentation = nil
         reconcile()
     }
 
@@ -271,6 +379,7 @@ public final class ActivityManager: ObservableObject {
 
     private func remove(id: String) {
         if selectedTool?.id == id { selectedTool = nil }
+        if requestedPresentation?.selection.id == id { requestedPresentation = nil }
         activities.removeValue(forKey: id)
         instanceTokens.removeValue(forKey: id)
         displayDeadlines.removeValue(forKey: id)
@@ -349,12 +458,59 @@ public final class ActivityManager: ObservableObject {
         if selectedToolSnapshot != selected { selectedToolSnapshot = selected }
     }
 
+    private func hasPresentationBlockingStatus(at now: Date) -> Bool {
+        activities.values.contains { activity in
+            !activity.isTool && !activity.isExpired(at: now)
+                && [.queued, .presented, .background].contains(activity.lifecycle.state)
+                && (!requiresPluginActivation || activity.source.kind != .plugin
+                    || enabledPluginSources.contains(activity.source))
+                && (activity.priority == .important || activity.priority == .critical
+                    || !activity.lifecycle.policy.isInterruptible
+                    || (activity.priority == .normal && activity.lifecycle.policy == .transient))
+        }
+    }
+
     private func reconcile(userSelection: ToolSelection? = nil) {
+        needsReconcile = true
+        if let userSelection { pendingUserSelection = userSelection }
+        // @Published sends before its stored value changes. A synchronous
+        // subscriber may mutate the graph; wait for that setter to finish
+        // before publishing another reconciled snapshot of the same graph.
+        guard !isReconciling else { return }
+        isReconciling = true
+        defer { isReconciling = false }
+        while needsReconcile {
+            needsReconcile = false
+            let selection = pendingUserSelection
+            pendingUserSelection = nil
+            reconcilePass(userSelection: selection)
+            if needsReconcile, pendingUserSelection == nil,
+               let selection, selectedTool == selection {
+                pendingUserSelection = selection
+            }
+        }
+    }
+
+    private func reconcilePass(userSelection: ToolSelection?) {
         expireDue()
         trimNormalQueue()
         let now = scheduler.clock.now()
         refreshToolSnapshots(at: now)
-        defer { refreshToolSnapshots(at: now) }
+        guard !needsReconcile else { return }
+        defer {
+            if !needsReconcile { refreshToolSnapshots(at: now) }
+        }
+        if let request = requestedPresentation,
+           presentationContext != .expanded || !presentationRequestsAllowed || selectedTool != nil
+            || request.expiresAt <= now
+            || !toolSnapshots.contains(where: { ToolSelection($0) == request.selection })
+            || hasPresentationBlockingStatus(at: now) {
+            requestedPresentation = nil
+        }
+        let requestedToolSnapshot = requestedPresentation.flatMap { request in
+            toolSnapshots.first { ToolSelection($0) == request.selection }
+        }
+        let eligibleSelectedTool = selectedToolSnapshot ?? requestedToolSnapshot
         func isAutomaticCompactTool(_ activity: IslandActivity) -> Bool {
             presentationContext == .compact && activity.isTool
                 && activity.presentation.compactPolicy == .automatic
@@ -363,7 +519,7 @@ public final class ActivityManager: ObservableObject {
         // Inventory contains only live, admitted tool instances. An opt-in
         // must not make a disabled or dismissed source eligible again.
         let eligibleToolIDs = Set(toolSnapshots.filter {
-            $0.activity.id == selectedToolSnapshot?.activity.id || isAutomaticCompactTool($0.activity)
+            $0.activity.id == eligibleSelectedTool?.activity.id || isAutomaticCompactTool($0.activity)
         }.map { $0.activity.id })
         let activeCurrent = current.flatMap { activities[$0.id] }.flatMap {
             $0.lifecycle.state == .presented ? $0 : nil
@@ -389,7 +545,7 @@ public final class ActivityManager: ObservableObject {
         let candidate: IslandActivity?
         if let eligibleCurrent, !eligibleCurrent.lifecycle.policy.isInterruptible {
             candidate = eligibleCurrent
-        } else if selectedToolSnapshot != nil || !automaticTools.isEmpty {
+        } else if eligibleSelectedTool != nil || !automaticTools.isEmpty {
             // A selected or explicitly opted-in compact tool wins over
             // ordinary persistent statuses, including music's current-peer
             // tie. Event statuses retain their priority and source limits.
@@ -400,8 +556,8 @@ public final class ActivityManager: ObservableObject {
                     && isRateEligible(activity)
             }
             if let blockingStatus { candidate = blockingStatus }
-            else if let selected = selectedToolSnapshot,
-                    userSelection == selectedTool || isRateEligible(selected.activity) {
+            else if let selected = eligibleSelectedTool,
+                    (selectedTool != nil && userSelection == selectedTool) || isRateEligible(selected.activity) {
                 candidate = selected.activity
             } else if let automatic = automaticTools.first(where: isRateEligible) {
                 candidate = automatic
@@ -419,6 +575,7 @@ public final class ActivityManager: ObservableObject {
                 log(stored, from: .presented, to: .background, reason: "toolSelectionCleared")
             }
             setCurrent(nil)
+            guard !needsReconcile else { return }
             currentSince = nil
             ordinaryDebounceUntil = nil
             armNextWake(rateDeadline: rateDeadline)
@@ -426,6 +583,7 @@ public final class ActivityManager: ObservableObject {
         }
         if activeCurrent?.id == next.id {
             setCurrent(next)
+            guard !needsReconcile else { return }
             ordinaryDebounceUntil = nil
             armNextWake(rateDeadline: rateDeadline)
             return
@@ -441,6 +599,7 @@ public final class ActivityManager: ObservableObject {
             let allowedAt = max(ordinaryDebounceUntil ?? now, dwellUntil)
             if allowedAt > now {
                 setCurrent(activeCurrent)
+                guard !needsReconcile else { return }
                 armNextWake(rateDeadline: minDate(rateDeadline, allowedAt))
                 return
             }
@@ -466,7 +625,9 @@ public final class ActivityManager: ObservableObject {
             log(stored, from: previous, to: stored.lifecycle.state, reason: "preempt")
         }
         activities[selected.id] = selected
-        setCurrent(selected)
+        // Commit scheduling metadata before publishing. A subscriber may end
+        // the source and remove these entries; the stale outer pass must never
+        // recreate them after its @Published notification returns.
         currentSince = now
         // Only configured sources participate in rate limiting. Retaining
         // every one-off source here would make the dictionary grow forever
@@ -486,6 +647,8 @@ public final class ActivityManager: ObservableObject {
             }
         }
         log(selected, from: previous, to: .presented, reason: "select")
+        setCurrent(selected)
+        guard !needsReconcile else { return }
         armNextWake(rateDeadline: rateDeadline)
     }
 
@@ -500,6 +663,9 @@ public final class ActivityManager: ObservableObject {
             }
         }
         for deadline in displayDeadlines.values where deadline > now { next = minDate(next, deadline) }
+        if let requestDeadline = requestedPresentation?.expiresAt, requestDeadline > now {
+            next = minDate(next, requestDeadline)
+        }
         if let debounce = ordinaryDebounceUntil, debounce > now { next = minDate(next, debounce) }
         scheduler.arm(at: next) { [weak self] in self?.reconcile() }
     }
@@ -526,6 +692,9 @@ public final class ActivityManager: ObservableObject {
         instanceToken: ActivityInstanceToken
     ) -> IslandActivity? {
         reconcile()
+        // A callback inside a still-pending publication cannot authorize an
+        // action from the old presentation before the drain applies revocation.
+        guard !needsReconcile else { return nil }
         guard let activity = activities[id],
               activity.source == source,
               activity.lifecycle.state == .presented,

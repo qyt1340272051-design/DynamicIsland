@@ -4,6 +4,178 @@ import XCTest
 
 @MainActor
 final class IslandActivityRuntimeTests: XCTestCase {
+    func testPresentationRequestRequiresVisibleExpandedToolsWithoutChangingHostState() throws {
+        let model = IslandViewModel.preview()
+        let runtime = IslandActivityRuntime(viewModel: model)
+        defer { runtime.shutdownPlugins() }
+        try runtime.manager.publish(hostTool())
+        let tool = try XCTUnwrap(runtime.manager.toolSnapshots.first)
+
+        XCTAssertEqual(runtime.manager.requestPresentation(tool).reason, .hostUnavailable)
+        XCTAssertEqual(model.presentationState, .compact)
+        XCTAssertEqual(model.expandedSurface, .music)
+        model.setHovering(true)
+        XCTAssertEqual(runtime.manager.requestPresentation(tool).reason, .hostUnavailable)
+        model.selectExpandedSurface(.fileTray)
+        XCTAssertEqual(runtime.manager.requestPresentation(tool).status, .rejected)
+        model.selectExpandedSurface(.tools)
+
+        let decision = runtime.manager.requestPresentation(tool, autoDismiss: true)
+        XCTAssertEqual(decision.status, .accepted)
+        XCTAssertEqual(decision.reason, .granted)
+        XCTAssertNotNil(decision.expiresAt)
+        XCTAssertNil(runtime.manager.selectedToolSnapshot,
+                     "A plugin request must not become a Host user choice.")
+        XCTAssertTrue(model.isIslandPanelVisible)
+        XCTAssertTrue(model.isHovering)
+        XCTAssertEqual(model.presentationState, .expanded)
+        XCTAssertEqual(model.expandedSurface, .tools)
+    }
+
+    func testPresentationRequestInitialContextAndPanelVisibilityRevokeSynchronously() async throws {
+        let model = IslandViewModel.preview()
+        model.setHovering(true)
+        model.selectExpandedSurface(.tools)
+        let runtime = IslandActivityRuntime(viewModel: model)
+        defer { runtime.shutdownPlugins() }
+        try runtime.manager.publish(hostTool())
+        let tool = try XCTUnwrap(runtime.manager.toolSnapshots.first)
+        XCTAssertEqual(runtime.manager.requestPresentation(tool).status, .accepted,
+                       "The initial publisher values must authorize an already visible tools surface.")
+        try await waitForTool { runtime.manager.currentSnapshot?.instanceToken == tool.instanceToken }
+
+        model.setIslandPanelVisible(false)
+        XCTAssertNotEqual(runtime.manager.currentSnapshot?.instanceToken, tool.instanceToken)
+        XCTAssertEqual(runtime.manager.requestPresentation(tool).reason, .hostUnavailable,
+                       "@Published emits before the visible stored property changes.")
+        XCTAssertEqual(runtime.manager.withdrawPresentation(tool).reason, .noRequest)
+        XCTAssertEqual(model.presentationState, .expanded,
+                       "Visibility policy must not alter the Host's expansion state.")
+        XCTAssertEqual(model.expandedSurface, .tools)
+
+        model.setIslandPanelVisible(true)
+        XCTAssertEqual(runtime.manager.requestPresentation(tool).status, .accepted,
+                       "A newly visible eligible Host context grants a fresh opportunity.")
+    }
+
+    func testPresentationRequestFoldRevokesAndDoesNotResumeOnExpansion() async throws {
+        let model = IslandViewModel.preview()
+        model.setHovering(true)
+        model.selectExpandedSurface(.tools)
+        let runtime = IslandActivityRuntime(viewModel: model)
+        defer { runtime.shutdownPlugins() }
+        try runtime.manager.publish(hostTool())
+        let tool = try XCTUnwrap(runtime.manager.toolSnapshots.first)
+        XCTAssertEqual(runtime.manager.requestPresentation(tool).status, .accepted)
+        try await waitForTool { runtime.manager.currentSnapshot?.instanceToken == tool.instanceToken }
+
+        model.endHovering()
+        XCTAssertEqual(model.presentationState, .compact)
+        XCTAssertNotEqual(runtime.manager.currentSnapshot?.instanceToken, tool.instanceToken)
+        XCTAssertEqual(runtime.manager.requestPresentation(tool).reason, .hostUnavailable)
+        XCTAssertEqual(runtime.manager.withdrawPresentation(tool).reason, .noRequest)
+        model.setHovering(true)
+        model.selectExpandedSurface(.tools)
+        XCTAssertNotEqual(runtime.manager.currentSnapshot?.instanceToken, tool.instanceToken,
+                          "Reopening must not revive the previous request.")
+        XCTAssertEqual(runtime.manager.requestPresentation(tool).status, .accepted)
+    }
+
+    func testPresentationRequestDragTrayLockAndNativeCompletionRevokeUntilRestored() async throws {
+        enum Blocker: CaseIterable { case dragging, lockedTray, nativeCompletion }
+        for blocker in Blocker.allCases {
+            let model = IslandViewModel.preview()
+            model.setHovering(true)
+            model.selectExpandedSurface(.tools)
+            let runtime = IslandActivityRuntime(viewModel: model)
+            defer { runtime.shutdownPlugins() }
+            try runtime.manager.publish(hostTool())
+            let tool = try XCTUnwrap(runtime.manager.toolSnapshots.first)
+            XCTAssertEqual(runtime.manager.requestPresentation(tool).status, .accepted)
+            try await waitForTool { runtime.manager.currentSnapshot?.instanceToken == tool.instanceToken }
+
+            switch blocker {
+            case .dragging:
+                model.setDragging(true)
+            case .lockedTray:
+                model.toggleFileTrayLock()
+            case .nativeCompletion:
+                let start = Date()
+                model.timerTools.selectedMode = .countdown
+                model.timerTools.startSelectedTimer(at: start)
+                model.timerTools.refresh(at: start.addingTimeInterval(model.timerTools.countdownDuration + 1))
+                XCTAssertTrue(model.isTimerCompletionPresented)
+            }
+            XCTAssertNotEqual(runtime.manager.currentSnapshot?.instanceToken, tool.instanceToken,
+                              "The old request must be synchronously revoked for \(blocker).")
+            let decision = runtime.manager.requestPresentation(tool)
+            XCTAssertEqual(decision.status, .rejected)
+            XCTAssertEqual(decision.reason, .hostUnavailable)
+            XCTAssertEqual(runtime.manager.withdrawPresentation(tool).reason, .noRequest)
+            XCTAssertNil(runtime.manager.selectedToolSnapshot)
+
+            switch blocker {
+            case .dragging:
+                model.setDragging(false)
+            case .lockedTray:
+                model.toggleFileTrayLock()
+            case .nativeCompletion:
+                model.acknowledgeTimerCompletion()
+                model.endHovering()
+                model.setHovering(true)
+            }
+            model.selectExpandedSurface(.tools)
+            XCTAssertNotEqual(runtime.manager.currentSnapshot?.instanceToken, tool.instanceToken)
+            XCTAssertEqual(runtime.manager.requestPresentation(tool).status, .accepted,
+                           "Restoring an eligible Host context must allow a new request for \(blocker).")
+        }
+    }
+
+    func testHostToolAndLegacyChoicesWithdrawRequestsWithoutGrantingAnotherLease() throws {
+        let model = IslandViewModel.preview()
+        model.setHovering(true)
+        model.selectExpandedSurface(.tools)
+        let runtime = IslandActivityRuntime(viewModel: model)
+        defer { runtime.shutdownPlugins() }
+        try runtime.manager.publish(hostTool())
+        let tool = try XCTUnwrap(runtime.manager.toolSnapshots.first)
+        XCTAssertEqual(runtime.manager.requestPresentation(tool).status, .accepted)
+
+        // This same-surface choice produces no ViewModel publication. The
+        // Runtime must still withdraw the request through clearToolSelection.
+        runtime.selectLegacySurface(.tools)
+        XCTAssertEqual(runtime.manager.withdrawPresentation(tool).reason, .noRequest)
+        XCTAssertEqual(runtime.manager.requestPresentation(tool).reason, .contextBudgetUsed)
+        XCTAssertNil(runtime.manager.selectedToolSnapshot)
+        XCTAssertTrue(runtime.selectTool(tool))
+        XCTAssertEqual(runtime.manager.requestPresentation(tool).reason, .userSelection)
+        runtime.selectLegacySurface(.music)
+        XCTAssertNil(runtime.manager.selectedToolSnapshot)
+        XCTAssertEqual(runtime.manager.requestPresentation(tool).reason, .hostUnavailable)
+        runtime.selectLegacySurface(.tools)
+        XCTAssertEqual(runtime.manager.requestPresentation(tool).status, .accepted)
+    }
+
+    func testShutdownRevokesPresentationRequestsAndStopsContextFromReopeningThem() throws {
+        let model = IslandViewModel.preview()
+        model.setHovering(true)
+        model.selectExpandedSurface(.tools)
+        let runtime = IslandActivityRuntime(viewModel: model)
+        try runtime.manager.publish(hostTool())
+        let tool = try XCTUnwrap(runtime.manager.toolSnapshots.first)
+        XCTAssertEqual(runtime.manager.requestPresentation(tool).status, .accepted)
+
+        runtime.shutdownPlugins()
+        XCTAssertEqual(runtime.manager.withdrawPresentation(tool).reason, .noRequest)
+        XCTAssertEqual(runtime.manager.requestPresentation(tool).reason, .hostUnavailable)
+        model.setIslandPanelVisible(false)
+        model.setIslandPanelVisible(true)
+        model.selectExpandedSurface(.music)
+        model.selectExpandedSurface(.tools)
+        XCTAssertEqual(runtime.manager.requestPresentation(tool).reason, .hostUnavailable,
+                       "A shutdown Runtime must not reopen admission after later publisher changes.")
+    }
+
     func testCountdownBusinessChangesInvalidateHostDisplayAndShutdownClosesItsClock() async throws {
         let model = IslandViewModel.preview()
         let runtime = IslandActivityRuntime(viewModel: model)

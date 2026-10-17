@@ -16,12 +16,15 @@ nonisolated enum SuperIslandModuleBootstrap {
         const charCode = String.prototype.charCodeAt;
         const nativeActionsOn = island.actions.on, nativeActionsOff = island.actions.off;
         const snapshotValue = bridge.snapshot, sendRender = bridge.render;
+        const sendPresentation = bridge.presentation;
+        const RATE_LIMIT = bridge.rateLimited;
         const reportFailure = bridge.reportFailure, chain = bridge.chain, resolved = bridge.resolved;
         const INVALID = problem('invalidArguments');
         const LIMIT = problem('quotaExceeded');
-        const UNSUPPORTED = problem('unsupportedMethod');
+        const INACTIVE = problem('inactiveExecution');
         let config, registering = false, didStart = false, didStop = false, active = false;
-        let inFlight = false, pendingRender;
+        let inFlight = false, pendingRender, pendingPresentation;
+        let callbackDepth = 0, preparingRender = false, deactivating = false;
         const registrations = create(null);
 
         function problem(code) {
@@ -65,8 +68,13 @@ nonisolated enum SuperIslandModuleBootstrap {
             return true;
         }
         function synchronous(callback, args) {
-            const value = apply(callback, undefined, args);
-            if (value !== undefined) throw INVALID;
+            callbackDepth++;
+            try {
+                const value = apply(callback, undefined, args);
+                if (value !== undefined) throw INVALID;
+            } finally {
+                callbackDepth--;
+            }
         }
         function safeSnapshot(value) {
             try { return snapshotValue(value); }
@@ -121,13 +129,17 @@ nonisolated enum SuperIslandModuleBootstrap {
         }
         function failed(error) {
             if (!active) return;
-            reportFailure(error === LIMIT ? 'limit' : error === INVALID ? 'invalidArguments' : 'rejection');
+            reportFailure(error === LIMIT || error === RATE_LIMIT ? 'limit' : error === INVALID ? 'invalidArguments' : 'rejection');
         }
         function handleAction(event) {
             if (!active || !config.onAction) return;
             // Current subset has only buttons. Do not forward the Host's
             // execution identity or user-activation ticket to module code.
-            synchronous(config.onAction, [event.actionID]);
+            try { synchronous(config.onAction, [event.actionID]); }
+            catch (error) {
+                pendingPresentation = undefined;
+                throw error;
+            }
             try { requestRender(); }
             catch (error) {
                 reportFailure(error === LIMIT ? 'limit' : error === INVALID ? 'invalidArguments' : 'exception');
@@ -137,7 +149,17 @@ nonisolated enum SuperIslandModuleBootstrap {
             if (!active) return;
             // Keep one current and one replacement request. Rapid actions
             // coalesce instead of creating an unbounded Promise/render queue.
-            pendingRender = prepareRender();
+            preparingRender = true;
+            try {
+                const request = prepareRender();
+                request.presentation = pendingPresentation;
+                pendingRender = request;
+            } finally {
+                // A failed frame or a superseded pending frame must never
+                // leave its intent to be applied to an unrelated later one.
+                pendingPresentation = undefined;
+                preparingRender = false;
+            }
             drainRender();
         }
         function drainRender() {
@@ -165,6 +187,21 @@ nonisolated enum SuperIslandModuleBootstrap {
             work = chain(work, function() {
                 if (!active) return null;
                 return sendRender(request.compact, request.expanded);
+            });
+            work = chain(work, function(reply) {
+                if (!active || !request.presentation) return null;
+                // The handle was minted by the Host for this successful
+                // render's exact Activity instance and execution. It never
+                // becomes a property of the public compatibility API.
+                if (!reply || typeof reply.presentationHandle !== 'string') return null;
+                const intent = request.presentation;
+                return chain(sendPresentation(intent.operation, intent.autoDismiss, reply.presentationHandle),
+                    function() { return null; }, function() {
+                        // Capability and Host policy denial are expected
+                        // outcomes, not module exceptions or crash incidents.
+                        // The Host records bounded, fixed diagnostics.
+                        return null;
+                    });
             });
             chain(work, function() {
                 // An accepted Host render is the transaction boundary. Keep
@@ -242,9 +279,42 @@ nonisolated enum SuperIslandModuleBootstrap {
             didStop = true;
             active = false;
             pendingRender = undefined;
-            if (didStart && config.onDeactivate) synchronous(config.onDeactivate, []);
+            pendingPresentation = undefined;
+            if (didStart && config.onDeactivate) {
+                deactivating = true;
+                try { synchronous(config.onDeactivate, []); }
+                finally { deactivating = false; }
+            }
         }
-        function unsupported() { throw UNSUPPORTED; }
+        function queuePresentation(operation, autoDismiss) {
+            if (didStop) {
+                // Lifecycle cleanup often withdraws presentation. The Host
+                // has already revoked this execution, so that synchronous
+                // cleanup is harmless and sends no new bridge request.
+                if (deactivating && operation === 'dismiss') return;
+                throw INACTIVE;
+            }
+            const intent = create(null);
+            intent.operation = operation;
+            if (operation === 'activate') intent.autoDismiss = autoDismiss;
+            pendingPresentation = intent;
+            // Lifecycle/action/view callbacks finish their frame first.
+            // Calls outside them still use the same bounded render pipeline.
+            if (active && callbackDepth === 0 && !preparingRender) {
+                try { requestRender(); }
+                catch (error) {
+                    reportFailure(error === LIMIT ? 'limit' : error === INVALID ? 'invalidArguments' : 'exception');
+                }
+            }
+        }
+        function activate(autoDismiss) {
+            if (arguments.length > 1 || (autoDismiss !== undefined && typeof autoDismiss !== 'boolean')) throw INVALID;
+            queuePresentation('activate', autoDismiss === undefined ? true : autoDismiss);
+        }
+        function dismiss() {
+            if (arguments.length !== 0) throw INVALID;
+            queuePresentation('dismiss');
+        }
         function text(value, opts) {
             if (arguments.length < 1 || arguments.length > 2 || typeof value !== 'string') throw INVALID;
             const fields = options(opts, ['style', 'color', 'lineLimit']);
@@ -298,8 +368,8 @@ nonisolated enum SuperIslandModuleBootstrap {
         view.hstack = freeze(hstack); view.vstack = freeze(vstack);
         view.progress = freeze(progress); view.button = freeze(button);
         const controls = create(null);
-        controls.supported = false;
-        controls.activate = freeze(unsupported); controls.dismiss = controls.activate;
+        controls.supported = true;
+        controls.activate = freeze(activate); controls.dismiss = freeze(dismiss);
         const superIsland = create(null);
         superIsland.registerModule = freeze(registerModule);
         superIsland.island = freeze(controls);

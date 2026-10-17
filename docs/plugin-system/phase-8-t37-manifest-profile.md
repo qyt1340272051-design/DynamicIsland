@@ -23,4 +23,6 @@
 
 安装预览也读取已验证 Manifest 的 engine，显示同一有限兼容标识；准备和提交仍不运行插件，安装后保持停用。
 
+后续[展示请求](t37-presentation-requests.md)新增独立 `presentation.request` capability；它不属于系统权限，旧包不自动获得。Schema capability 上限同步为 10；新增该声明也使原有包授权指纹失效，需要重新审核已有权限。
+
 定向回归覆盖两种模式的编码往返、非法模式、未知字段与声明、escaped 重复 engine，以及模式变更后的持久授权失效和现存 lease / review 撤销。Manifest 18 项、持久权限 16 项及安装 20 项均通过，属于本轮 133 项选测的一部分，见[统一证据](evidence/t37-module-20261017/result.json)。同 VM 接线见[模块子步骤](phase-8-t37-module-runtime.md)，真实上游插件验收仍待完成。

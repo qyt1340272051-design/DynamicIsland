@@ -32,6 +32,7 @@ public nonisolated enum PluginCapability: String, Codable, CaseIterable, Sendabl
     case scheduler
     case countdown
     case openLinks = "links.open"
+    case requestPresentation = "presentation.request"
 }
 
 public nonisolated enum PluginManifestError: Error, Equatable, LocalizedError, Sendable {

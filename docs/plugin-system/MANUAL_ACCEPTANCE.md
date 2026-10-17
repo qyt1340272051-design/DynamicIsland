@@ -32,6 +32,7 @@ T02 的基线量化、T08 的闪烁 / 能耗归档、T10 / T11 的历史证据�
 
 - [T36 自动验证](evidence/t36-github-20261017/result.json)：完整 CI 919 passed / 7 skipped / 0 failures，Release build passed；真实匿名公共 API 选测 1 passed / 0 skipped / 0 failures。
 - 后续 [T37 模块回归](evidence/t37-module-20261017/result.json)：完整 CI 955 passed / 7 skipped / 0 failures，普通 Release build / 签名通过；本轮完整 CI 仍跳过同样 5 项锁屏鼠标输入，它们继续待下次解锁后由助手执行。T35 / T36 验收副本本轮均未启动。
+- 最新 [T37 展示请求回归](evidence/t37-presentation-20261017/result.json)：完整 CI 1002 passed / 7 skipped / 0 failures，普通 Release build / 签名通过；仍有同样 5 项锁屏鼠标测试待补。本子步骤不改变 T35 / T36 人工验收缺口，副本均未启动。
 - 7 个 skip 中：5 项真实 AppKit 鼠标输入因会话锁定跳过；1 项显式截图矩阵；1 项默认关闭的 live 网络测试已单独通过。下次会话解锁后，由助手补跑前 5 项，不把截图矩阵算作用户任务。
 - T36 独立验收 App `/Users/rong5/Applications/Dynamic Island T36 GitHub.app` 已构建签名，尚未启动；包 `/tmp/dynamic-island-t36-20261017/github-0.1.0.dip` 已生成。导入、批准三项独立权限、启用与截图均由助手完成；只在需要系统鼠标悬停时请求 M02-A。
 - T35 副本 PID 17040 已正常退出，Staging 为空，Installed / Storage / 授权保留。下次先确认最终 Host / 包身份与新 PID，再开始 M01。

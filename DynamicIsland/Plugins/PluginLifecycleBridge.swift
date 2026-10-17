@@ -78,6 +78,7 @@ public final class PluginExecutionContext {
     let countdownOwner: PluginCountdownOwner?
     private let token: UUID
     private weak var bridge: PluginLifecycleBridge?
+    private var presentationBinding: (handle: String, snapshot: ActivitySnapshot)?
 
     fileprivate init(id: String, token: UUID, storageAdmission: PluginStorageAdmission,
                      networkAdmission: PluginNetworkAdmission, resourceAdmission: PluginResourceAdmission,
@@ -124,6 +125,44 @@ public final class PluginExecutionContext {
             guard activity.source == source else { throw PluginExecutionError.sourceMismatch }
             try bridge?.updateActivity(activity)
         }
+    }
+
+    /// The handle is opaque to JavaScript and binds the successful render's
+    /// exact instance. A later lookup by ID must not retarget an old request.
+    func capturePresentationHandle(id: String) throws -> String {
+        var handle: String?
+        try perform {
+            guard let snapshot = bridge?.presentationSnapshot(id: id, source: source) else {
+                throw PluginBridgeErrorCode.activityNotFound
+            }
+            if let binding = presentationBinding,
+               binding.snapshot.activity.id == snapshot.activity.id,
+               binding.snapshot.activity.source == snapshot.activity.source,
+               binding.snapshot.instanceToken == snapshot.instanceToken {
+                handle = binding.handle
+            } else {
+                let value = UUID().uuidString
+                presentationBinding = (value, snapshot)
+                handle = value
+            }
+        }
+        try perform {}
+        guard let handle else { throw PluginExecutionError.inactiveExecution }
+        return handle
+    }
+
+    func requestPresentation(handle: String, autoDismiss: Bool?) throws -> PresentationDecision {
+        var decision: PresentationDecision?
+        try perform {
+            guard let binding = presentationBinding, binding.handle == handle else {
+                decision = .init(status: .rejected, reason: .staleInstance)
+                return
+            }
+            decision = bridge?.presentationDecision(for: binding.snapshot, autoDismiss: autoDismiss)
+        }
+        try perform {}
+        guard let decision else { throw PluginExecutionError.inactiveExecution }
+        return decision
     }
 
     public func registerActionHandler(_ handler: @escaping ActionRouter.Handler) throws {
@@ -475,6 +514,16 @@ public final class PluginLifecycleBridge: PluginManagerLifecycleHandling {
         activityManager.processDeadlines()
         guard let activity = activityManager.activity(id: id), activity.source == source else { return nil }
         return activity
+    }
+
+    fileprivate func presentationSnapshot(id: String, source: ActivitySource) -> ActivitySnapshot? {
+        activityManager.processDeadlines()
+        return activityManager.toolSnapshots.first { $0.activity.id == id && $0.activity.source == source }
+    }
+
+    fileprivate func presentationDecision(for snapshot: ActivitySnapshot, autoDismiss: Bool?) -> PresentationDecision {
+        if let autoDismiss { return activityManager.requestPresentation(snapshot, autoDismiss: autoDismiss) }
+        return activityManager.withdrawPresentation(snapshot)
     }
 
     fileprivate func updateActivity(_ activity: IslandActivity) throws {

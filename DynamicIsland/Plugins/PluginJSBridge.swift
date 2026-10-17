@@ -68,6 +68,7 @@ public final class PluginJSBridge {
         case actionFailure(kind: String)
         case superIslandRender(PluginBridgeJSON)
         case superIslandFailure(kind: String)
+        case superIslandPresentation(handle: String, autoDismiss: Bool?)
     }
 
     public let diagnostics: PluginDiagnosticsStore
@@ -515,9 +516,26 @@ public final class PluginJSBridge {
             // lifecycle validation and ActivityManager admission transaction.
             _ = try execute(.activity(converted.request(isUpdate: isUpdate)), manifest: manifest,
                             context: context, actionSession: actionSession)
-            return .object(["limitations": .array(converted.limitations.map(\.rawValue).sorted().map {
+            let handle = try context.capturePresentationHandle(id: id)
+            return .object(["presentationHandle": .string(handle), "limitations": .array(converted.limitations.map(\.rawValue).sorted().map {
                 .string($0)
             })])
+        case .superIslandPresentation(let handle, let autoDismiss):
+            guard manifest.engine == .superIsland else { throw PluginBridgeErrorCode.unsupportedMethod }
+            guard manifest.capabilities.contains(.requestPresentation) else {
+                diagnostics.record(pluginID: pluginID, level: .info, category: .presentationDecision,
+                                   code: .presentationRejected)
+                return .object(["status": .string("rejected"), "reason": .string("capabilityRequired")])
+            }
+            let decision = try context.requestPresentation(handle: handle, autoDismiss: autoDismiss)
+            let code: PluginDiagnosticCode
+            switch decision.status {
+            case .accepted: code = .presentationAccepted
+            case .degraded: code = .presentationDegraded
+            case .rejected: code = .presentationRejected
+            }
+            diagnostics.record(pluginID: pluginID, level: .info, category: .presentationDecision, code: code)
+            return .object(["status": .string(decision.status.rawValue), "reason": .string(decision.reason.rawValue)])
         case .superIslandFailure(let kind):
             guard manifest.engine == .superIsland else { throw PluginBridgeErrorCode.unsupportedMethod }
             diagnostics.record(pluginID: pluginID,
@@ -625,6 +643,20 @@ public final class PluginJSBridge {
             // Conversion is delayed until execution, after the explicit mode
             // and current context have been checked independently by the Host.
             return .superIslandRender(params)
+        case "superisland.presentation":
+            let fields = try object(params, required: ["operation", "handle"], optional: ["autoDismiss"])
+            let handle = try identifier(fields["handle"], maximumBytes: 80)
+            switch fields["operation"] {
+            case .string("activate"):
+                guard case .boolean(let autoDismiss) = fields["autoDismiss"] else {
+                    throw PluginBridgeErrorCode.invalidArguments
+                }
+                return .superIslandPresentation(handle: handle, autoDismiss: autoDismiss)
+            case .string("dismiss"):
+                guard fields["autoDismiss"] == nil else { throw PluginBridgeErrorCode.invalidArguments }
+                return .superIslandPresentation(handle: handle, autoDismiss: nil)
+            default: throw PluginBridgeErrorCode.invalidArguments
+            }
         case "superisland.failure":
             let fields = try object(params, required: ["kind"])
             let kind = try string(fields["kind"], maximumBytes: 32)

@@ -1,0 +1,163 @@
+{
+  "utc": "2026-10-17T15:03:55.613692+00:00",
+  "status": "Host-admitted presentation request component verified; T37 remains in progress",
+  "baseCommit": "85f4ee3a3dadeadcd7df0f74a5ce775af96d97b3",
+  "selectedTests": {
+    "result": "Passed",
+    "totalTestCount": 144,
+    "passedTests": 144,
+    "skippedTests": 0,
+    "failedTests": 0,
+    "expectedFailures": 0,
+    "startTime": 1792245392.03,
+    "finishTime": 1792245408.022,
+    "environmentDescription": "Dynamic Island · Built with macOS 26.6.2",
+    "testFailures": []
+  },
+  "fullCI": {
+    "result": "Passed",
+    "totalTestCount": 1009,
+    "passedTests": 1002,
+    "skippedTests": 7,
+    "failedTests": 0,
+    "expectedFailures": 0,
+    "startTime": 1792245446.413,
+    "finishTime": 1792245537.844,
+    "environmentDescription": "Dynamic Island · Built with macOS 26.6.2",
+    "testFailures": []
+  },
+  "skips": [
+    {
+      "suite": "GitHubPluginTests",
+      "test": "testLivePublicGitHubAPIThroughOfficialPluginWhenExplicitlyEnabled",
+      "reason": "Set DYNAMIC_ISLAND_GITHUB_LIVE=1 to verify the anonymous public GitHub API."
+    },
+    {
+      "suite": "IslandQuitCancellationTests",
+      "test": "testCancellationDuringAnimationPreventsLateTerminationAndRestoresNativeClicks",
+      "reason": "Real AppKit mouse input requires an unlocked macOS session."
+    },
+    {
+      "suite": "IslandQuitCancellationTests",
+      "test": "testCancelledTerminationRestoresRenderedIslandHitTestingAndAllowsAnotherQuit",
+      "reason": "Real AppKit mouse input requires an unlocked macOS session."
+    },
+    {
+      "suite": "PluginActionBridgeTests",
+      "test": "testActualActionMockSwiftUIButtonToggleSliderAndTypedCommitReachJavaScript",
+      "reason": "Real AppKit mouse input requires an unlocked macOS session."
+    },
+    {
+      "suite": "PluginExtensionsUITests",
+      "test": "testNativeButtonsRequireExplicitConsentAndUninstallConfirmation",
+      "reason": "Real AppKit mouse input requires an unlocked macOS session."
+    },
+    {
+      "suite": "PluginInstallerUITests",
+      "test": "testNativeCancelWindowCloseAndInstallButtonsUseTheCurrentReview",
+      "reason": "Real AppKit mouse input requires an unlocked macOS session."
+    },
+    {
+      "suite": "ScreenSnapshotMatrixTests",
+      "test": "testGenerateSnapshotMatrix",
+      "reason": "Run Scripts/generate-screen-matrix.sh to generate the screenshot matrix."
+    }
+  ],
+  "testBreakdown": {
+    "ActivityManagerTests": 6,
+    "ActivityPresentationRequestTests": 23,
+    "ActivitySchedulerTests": 8,
+    "IslandActivityRuntimeTests": 24,
+    "PluginLifecycleBridgeTests": 14,
+    "PluginManifestTests": 18,
+    "PluginPermissionPersistenceTests": 16,
+    "PluginPresentationBridgeTests": 6,
+    "SuperIslandModuleRuntimeTests": 17,
+    "SuperIslandPresentationRuntimeTests": 12
+  },
+  "newCapability": "presentation.request",
+  "newSystemPermissions": [],
+  "hostDefaults": {
+    "autoDismissSeconds": 3,
+    "nonAutoDismissMaximumSeconds": 30,
+    "maximumConcurrentRequests": 1,
+    "newGrantsPerHostAvailabilityEpoch": 1,
+    "pluginOwnedTimersAdded": 0
+  },
+  "reentrantFix": {
+    "before": "reentrant-before-summary.json",
+    "beforeSourceIdentity": "reentrant-before-source.json",
+    "beforeAssertionFailures": 8,
+    "beforeFailingTests": 2,
+    "afterBothTestsPassed": true,
+    "repair": "Serial reconciliation drain; interrupted publications converge after Host revocation; no stale metadata reinsertion, no pending action authorization, final execution and lease checks"
+  },
+  "verified": [
+    "Explicit compatible mode and independent capability gate",
+    "Successful render issues one bounded opaque handle bound to source, execution and exact instance",
+    "Old handle cannot retarget an Activity reusing the same ID or withdraw a replacement lease",
+    "Host accepts only an already expanded visible tools surface without protected interactions",
+    "Request-owned selection preserves Host user choice and normal scheduling rules",
+    "Bounded expiry shares existing scheduler; autoDismiss false is limited, repeated requests do not renew",
+    "Only successful matching render commits its latest intent; failed/coalesced/stopped work discards it",
+    "Normal policy refusal and render rate limits never become crash incidents",
+    "Synchronous disable and Host revocation cannot leave a ghost current Activity or stale acceptance",
+    "Native scheduling, lifecycle and Runtime regressions passed"
+  ],
+  "releaseBuild": "passed",
+  "ordinaryReleaseStrictDeepSignature": "passed",
+  "testOnlyEntitlements": false,
+  "releaseExecutableSHA256": "b79a9fa49f33b80cb751b49a39b9c8d42ce4e8d06c1af9daf7112a678a832f31",
+  "sourceSHA256": {
+    "DynamicIsland/Compatibility/SuperIslandAdapter/SuperIslandModuleBootstrap.swift": "395f417225592359cc310207a825609ba1d1e8ce5ef22d5dd0b5ef9bae04ec35",
+    "DynamicIsland/Core/Activity/ActivityManager.swift": "48af3c3997b4ab467a236e77d97e9b2301c22881fba7043219ce2c893bf81687",
+    "DynamicIsland/Core/Activity/IslandActivityRuntime.swift": "5608bb4f91cb9c62eb618f3860206db2da4fde85289f4ef05a7eb03b0519a44b",
+    "DynamicIsland/Core/Activity/PresentationRequest.swift": "8e59c46061d071ae134acd69a61648d8829360adcb2d008eeb3e1366f7130d46",
+    "DynamicIsland/Plugins/PluginDiagnostics.swift": "59860a2af47b57eed6618ecdca49ed481681613ab6350a5f76f4fb606a8d4b59",
+    "DynamicIsland/Plugins/PluginDiagnosticsUI.swift": "ddd4b7bd30807b28c7a5cdc71cae253274e43e5fc9de65fe2165752320bafeac",
+    "DynamicIsland/Plugins/PluginJSBridge.swift": "fd66f0561b0eb4dc51cb7733dd4a93448723fb66936e31a5125424a77d12ee36",
+    "DynamicIsland/Plugins/PluginJSBridgeBootstrap.swift": "adc7644efeed5f233de967ea095922411fabb1446ec2ccaafc1938f5e13c3f59",
+    "DynamicIsland/Plugins/PluginLifecycleBridge.swift": "beb85c1360aeeebd305ac22aab71881b9b714bd4d2743bb0971c6177f9b39fc3",
+    "DynamicIsland/Plugins/PluginManifest.swift": "ae1e0d5fb39ea91de180e501297a396575332a4feba046f5cce3a9487b285c74",
+    "DynamicIslandTests/ActivityPresentationRequestTests.swift": "8d75c353c230ed7ccf2d12a76139e55dfc72cdf55546f78b1d0273fb840dac5a",
+    "DynamicIslandTests/IslandActivityRuntimeTests.swift": "717f56e8e1989204db5c4d19f7f014985a30177bfdead167765733c65e026f8d",
+    "DynamicIslandTests/PluginManifestTests.swift": "ce63abbfe1115228f2bade8645d99e26ef4732c5f7db4c4ce5274de3b0da9f21",
+    "DynamicIslandTests/PluginPermissionPersistenceTests.swift": "c88088eeabe0f47da8a4511feb9f20d1a7a5b7c46fb50769a1c52016b04d1801",
+    "DynamicIslandTests/PluginPresentationBridgeTests.swift": "cac375273fae4c4693d733e0adf426dd902ce92a446e216b7bc6dae060129bb8",
+    "DynamicIslandTests/SuperIslandModuleRuntimeTests.swift": "5b1d5995fcd57dc4f1a9e9fba8904ae2e61c5067c186bf3dc0a2f5202cf0ab3b",
+    "DynamicIslandTests/SuperIslandPresentationRuntimeTests.swift": "d74298c905d5dad6299f5b2c48ba395e892e7fa2bf58c4744bc5ab3c700c22b5",
+    "docs/plugin-system/schema/plugin-manifest-v1.schema.json": "8187d31f0ee571ba6575362c1804ac8c1119a5bd6095d7de7a6717d282d616b9"
+  },
+  "pending": [
+    "Detailed compatibility limitation reporting",
+    "Actual fixed upstream plugin acceptance with license basis",
+    "T35 notice capture and T36 actual UI acceptance remain in manual ledger"
+  ],
+  "manualAcceptance": {
+    "ledger": "../../MANUAL_ACCEPTANCE.md",
+    "t35AcceptanceAppLaunched": false,
+    "t36AcceptanceAppLaunched": false,
+    "productionPID": 21458,
+    "productionAlive": true
+  },
+  "logs": {
+    "reentrant-before.log": {
+      "path": "/tmp/dynamic-island-t37-presentation-20261017/reentrant-before.log",
+      "sha256": "3baa670df10cb1baf9ccb70ea9a95e91ac773a2e0d622a0878e59da1939815be"
+    },
+    "final-tests.log": {
+      "path": "/tmp/dynamic-island-t37-presentation-20261017/final-tests.log",
+      "sha256": "a09228b4c5ff7306b269d3a4cbdb417bc266f85ebab16182fb20a775a6e8d03c"
+    },
+    "ci.log": {
+      "path": "/tmp/dynamic-island-t37-presentation-20261017/ci.log",
+      "sha256": "f0eeebdb198b14d2dd0d798a63bec1e6eeaeb00165601d6121bb33f6b6f54308"
+    }
+  },
+  "testResultPaths": {
+    "before": "/tmp/dynamic-island-t37-presentation-20261017/ReentrantBefore.xcresult",
+    "selected": "/tmp/dynamic-island-t37-presentation-20261017/FinalTests.xcresult",
+    "fullCI": "/tmp/dynamic-island-t37-presentation-20261017/FullTests.xcresult"
+  },
+  "actualUpstreamPluginsRun": false
+}

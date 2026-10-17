@@ -276,6 +276,10 @@ final class PluginManifestTests: XCTestCase {
         })
         XCTAssertEqual(manifest.permissions.map(\.rawValue), allPermissions)
         XCTAssertEqual(manifest.capabilities.map(\.rawValue), allCapabilities)
+        assertManifestError(
+            try fixtureData { $0["permissions"] = ["presentation.request"] },
+            code: "unknownPermission", path: "$.permissions[0]"
+        )
 
         assertManifestError(
             try fixtureData { $0["permissions"] = ["shell.execute"] },

@@ -6,6 +6,8 @@
 
 2026-10-17 T37 显式模式扩展：`engine` 新增 `superisland` 闭集值，用于固定的 SuperIsland V1 协议配置；底层仍为隔离 JavaScriptCore。原生模式不会探测入口代码并自动切换；未知字段、权限与 capability 的拒绝规则保持严格，见[模式与授权合约](phase-8-t37-manifest-profile.md)。
 
+同日展示请求扩展：新增独立 `presentation.request` capability，旧包不隐式获得该能力；权限闭集保持 8 项，capability 闭集增至 10 项，见[Host 展示请求合约](t37-presentation-requests.md)。
+
 ## V1 契约
 
 Manifest 是只含数据的 `Codable`、`Sendable` 模型，九个字段必填，developer 可选：
@@ -19,8 +21,8 @@ Manifest 是只含数据的 `Codable`、`Sendable` 模型，九个字段必填�
 | `engine` | 显式选择 `javascriptcore` 原生 V1 或 `superisland` 固定兼容配置；其他字符串拒绝。 |
 | `entry` | 最长 240 bytes 的相对 POSIX `.js` 路径；拒绝绝对路径、空段、`.`、`..`、反斜线、NUL 和未声明字符。 |
 | `minimumHostVersion` | SemVer 2.0.0 字符串。 |
-| `permissions` | T28 规划的 7 项闭集；未知项和重复项均拒绝。 |
-| `capabilities` | Activity publish/update/end、IslandNode UI、action、local storage 和 scheduler 共 7 项闭集；未知项和重复项均拒绝。 |
+| `permissions` | network、storage.local、links.open、notifications.publish、clipboard.read/write、calendar.read、files.userSelected 共 8 项闭集；未知项和重复项均拒绝。 |
+| `capabilities` | Activity publish/update/end、IslandNode UI、actions、storage、scheduler、countdown、links.open、presentation.request 共 10 项闭集；未知项和重复项均拒绝。 |
 | `developer` | 可选自述开发者，采用 name 的文本规则；不能表示已验证的发布者身份。 |
 
 `SemanticVersion` 保留 prerelease 与 build metadata。优先级按 SemVer 比较，build metadata 不参与优先级；核心数字用规范化十进制字符串比较，不受固定宽度整数溢出限制。

@@ -37,7 +37,8 @@ final class PluginPermissionPersistenceTests: XCTestCase {
             try package(developer: "Different Developer"),
             try package(engine: .superIsland),
             try package(permissions: [.localStorage, .network]),
-            try package(capabilities: [.localStorage, .publishActivity])
+            try package(capabilities: [.localStorage, .publishActivity]),
+            try package(capabilities: [.localStorage, .requestPresentation])
         ]
         for replacement in changes {
             let store = PluginPermissionDecisionStore()

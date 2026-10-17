@@ -77,11 +77,20 @@ public final class IslandActivityRuntime {
             viewModel.$isHovering, viewModel.$isDragging,
             viewModel.$isFileTrayLocked, viewModel.$expandedSurface
         ).combineLatest(viewModel.$isTimerCompletionPresented)
-            .sink { [weak self] context, hasCompletion in
+            .combineLatest(viewModel.$isIslandPanelVisible)
+            .sink { [weak self] completionContext, panelVisible in
+                let (context, hasCompletion) = completionContext
                 let (hovering, dragging, trayLocked, surface) = context
                 let state = IslandViewModel.presentationState(
                     isDragging: dragging, isHovering: hovering,
                     isFileTrayLocked: trayLocked, isTimerCompletionPresented: hasCompletion
+                )
+                // Revoke the old surface's request before reconciling the new
+                // mode. Neither @Published's old stored value nor a hidden
+                // panel may grant an intermediate presentation opportunity.
+                self?.manager.setPresentationRequestsAllowed(
+                    state == .expanded && surface == .tools && !dragging
+                        && !trayLocked && !hasCompletion && panelVisible
                 )
                 self?.manager.setPresentationContext(state == .compact ? .compact : .expanded)
                 if state != .expanded || surface != .tools || hasCompletion {
@@ -92,6 +101,9 @@ public final class IslandActivityRuntime {
 
     /// App teardown also removes the scheduler's system observers and deadline.
     public func shutdownPlugins() {
+        toolContextObservation?.cancel()
+        toolContextObservation = nil
+        manager.setPresentationRequestsAllowed(false)
         countdownDisplayClock.shutdown()
         if let countdownDisplayObservation {
             pluginLifecycle.countdownBroker.removeChangeObserver(countdownDisplayObservation)

@@ -98,7 +98,7 @@
 
 | ID | 任务 | 前置依赖 | 状态 | 验收证据 |
 | --- | --- | --- | --- | --- |
-| T37 | SuperIsland Adapter | T35 | `in progress` | 已完成[固定上游范围](phase-8-t37-superisland-scope.md)及[六类有界 View 转换](phase-8-t37-view-conversion.md)，历史 28 项选测及 Release 结果见[View 证据](evidence/t37-view-20261017/result.json)。本轮接入[显式模式与授权失效](phase-8-t37-manifest-profile.md)、[同 VM 模块生命周期 / 动作闭环](phase-8-t37-module-runtime.md)，包括失败渲染回滚、旧实例撤销与内建方法污染防护；选测 133 passed / 0 skipped / 0 failures，完整 CI 955 passed / 7 skipped / 0 failures，普通 Release build / strict 签名通过，见[模块证据](evidence/t37-module-20261017/result.json)。PresentationRequest、限制详情与真实上游插件验收尚未完成。T35 依赖仍保留。 |
+| T37 | SuperIsland Adapter | T35 | `in progress` | 已完成[固定上游范围](phase-8-t37-superisland-scope.md)、[六类有界 View 转换](phase-8-t37-view-conversion.md)、[显式模式与授权失效](phase-8-t37-manifest-profile.md)及[同 VM 模块闭环](phase-8-t37-module-runtime.md)，历史验证分别保留为 [View](evidence/t37-view-20261017/result.json) / [模块](evidence/t37-module-20261017/result.json)证据。本轮接入[Host 裁决的 PresentationRequest](t37-presentation-requests.md)：独立 capability、精确实例句柄、有界租约、渲染事务及同步撤销；选测 144 passed / 0 skipped / 0 failures，完整 CI 1002 passed / 7 skipped / 0 failures，普通 Release build / strict 签名通过，见[展示请求证据](evidence/t37-presentation-20261017/result.json)。限制详情与真实上游插件验收尚未完成。T35 依赖仍保留。 |
 
 ## Phase 9 — SDK、文档与插件生态
 

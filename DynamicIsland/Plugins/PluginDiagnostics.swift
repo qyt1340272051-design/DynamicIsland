@@ -3,7 +3,7 @@ import Foundation
 public nonisolated enum PluginDiagnosticCategory: String, Equatable, Sendable {
     case pluginMessage, runtimeFailure, lifecycleFailure
     case actionFailure, actionLimit, watchdogIsolation, persistenceFailure, restart
-    case compatibilityFailure
+    case compatibilityFailure, presentationDecision
 }
 
 /// Diagnostic text is chosen from Host constants. This type has no arbitrary
@@ -14,6 +14,7 @@ public nonisolated enum PluginDiagnosticCode: Equatable, Sendable {
     case runtime(PluginRuntimeErrorCode)
     case startFailed, stopFailed, actionHandlerFailed, actionHandlerLimitExceeded
     case automaticDisable, stateWriteFailed, restartRequested, restarted
+    case presentationAccepted, presentationDegraded, presentationRejected
 
     public var value: String {
         switch self {
@@ -27,6 +28,9 @@ public nonisolated enum PluginDiagnosticCode: Equatable, Sendable {
         case .stateWriteFailed: "stateWriteFailed"
         case .restartRequested: "restartRequested"
         case .restarted: "restarted"
+        case .presentationAccepted: "presentationAccepted"
+        case .presentationDegraded: "presentationDegraded"
+        case .presentationRejected: "presentationRejected"
         }
     }
 
@@ -42,6 +46,9 @@ public nonisolated enum PluginDiagnosticCode: Equatable, Sendable {
         case .stateWriteFailed: "The Host could not persist plugin isolation."
         case .restartRequested: "The Host received a plugin restart request."
         case .restarted: "The Host restarted this plugin."
+        case .presentationAccepted: "The Host accepted the presentation request."
+        case .presentationDegraded: "The Host limited the presentation request."
+        case .presentationRejected: "The Host rejected the presentation request."
         }
     }
 }

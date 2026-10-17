@@ -1,6 +1,6 @@
 # T37 子步骤：同 VM 模块生命周期与动作
 
-日期：2026-10-17。接续[有界 View 转换](phase-8-t37-view-conversion.md)和[显式运行模式](phase-8-t37-manifest-profile.md)。本页只覆盖最小模块闭环，整个 T37 保持 `in progress`。
+日期：2026-10-17。接续[有界 View 转换](phase-8-t37-view-conversion.md)和[显式运行模式](phase-8-t37-manifest-profile.md)。本页记录最小模块闭环；后续已接入[Host 展示请求](t37-presentation-requests.md)，整个 T37 保持 `in progress`。
 
 ## 输入与 Host 映射
 
@@ -13,7 +13,7 @@
 | onActivate / onDeactivate | 与本次 Host 执行的开始 / 停止绑定；同步且必须返回 undefined。悬停展开不触发新的执行，也不重复调用激活。 |
 | onAction | 由现有 ActionRouter 和实例绑定的 PluginActionSession 投递；同步回调后重新生成布局，不接受兼容层制造的 activation。 |
 | View 六种工厂 | 支持 text、icon、hstack、vstack、progress、button；节点参数仍经过已有有界转换。 |
-| activate / dismiss | 本轮明确不支持，不能直接展开或收起 Host；后续由 PresentationRequest 设计接续。 |
+| activate / dismiss | 模块子步骤初验时不支持；后续已映射为[由 Host 裁决的 PresentationRequest](t37-presentation-requests.md)，仍不能直接展开或收起窗口。 |
 
 适配器和入口脚本运行在同一个独立 VM 中。Runtime 保留私有生命周期 receiver；兼容脚本定义全局 onStart / onStop 不能替换这些 receiver。Native 模式不注入 SuperIsland / View，不自动探测或回退。
 
@@ -26,12 +26,12 @@
 - 失败诊断只有 Host 固定类别和文本，不记录插件抛出值。停用、重载与关闭继续撤销会话和旧回调；模式变化后的授权需要重新确认。
 - 安装预览和管理页均由 Host 显示「SuperIsland（有限兼容）」，不能由包自报为完整兼容。
 
-本轮不会轮询模块或引入 JS 定时器，只在开始和动作后渲染。异步生命周期 / 渲染 / 动作、fullExpanded、minimalCompact、上游资源直通和窗口状态同步未实现；不支持的输入会拒绝。没有请求新的系统权限。
+模块子步骤只在开始和动作后渲染；后续外部展示请求也经过同一有界渲染管线，不轮询模块或引入 JS 定时器。异步生命周期 / 渲染 / 动作、fullExpanded、minimalCompact、上游资源直通和窗口状态同步未实现；不支持的输入会拒绝。没有请求新的系统权限。
 
 ## 验证与继续位置
 
 验证结果和源码身份记录在[本轮证据](evidence/t37-module-20261017/result.json)。17 项模块测试运行真实 VM / ActionRouter，覆盖六种 View、生命周期、配置 / 渲染访问器、Promise 数据拒绝、模式与能力检查、停用重启、双插件隔离、失败替换回滚，以及内建方法 / Promise 污染后的正常动作。另有 4 项转换边界测试及模式、授权、安装、原生 Runtime / 动作回归；选测 **133 passed / 0 skipped / 0 failures**。
 
-完整 `Scripts/ci.sh` 为 **962 total / 955 passed / 7 skipped / 0 failures**，普通 Release build 与 strict / deep 签名校验通过，保持普通沙盒与 JIT 配置，没有测试专用权限。测试夹具的真实 VM / ActionRouter 闭环与真实上游插件的产品验收分别记录，前者不能替代后者。7 项 skip 为 5 项锁屏鼠标输入、显式截图矩阵和默认关闭的 live 网络选测；没有把跳过算为通过。
+模块初验时完整 `Scripts/ci.sh` 为 **962 total / 955 passed / 7 skipped / 0 failures**，普通 Release build 与 strict / deep 签名校验通过，保持普通沙盒与 JIT 配置，没有测试专用权限。测试夹具的真实 VM / ActionRouter 闭环与真实上游插件的产品验收分别记录，前者不能替代后者。7 项 skip 为 5 项锁屏鼠标输入、显式截图矩阵和默认关闭的 live 网络选测；没有把跳过算为通过。后续当前回归结果见[展示请求记录](t37-presentation-requests.md)。
 
-下一步仍是由 Host 裁决的 PresentationRequest、兼容限制详情，以及具备许可依据的若干固定版本上游插件验收。T35 补拍与 T36 实机验收继续保留在[人工清单](MANUAL_ACCEPTANCE.md)。本子步骤不提前接受 T37，也不开始 T38 的稳定 SDK。
+后续 [PresentationRequest 子步骤](t37-presentation-requests.md)已接入；下一步仍是兼容限制详情，以及具备许可依据的若干固定版本上游插件验收。T35 补拍与 T36 实机验收继续保留在[人工清单](MANUAL_ACCEPTANCE.md)。本子步骤不提前接受 T37，也不开始 T38 的稳定 SDK。

@@ -770,12 +770,29 @@ nonisolated enum PluginJSBridgeBootstrap {
             // globalThis or island, and the Host still gates every request by
             // the validated package's explicit engine mode.
             const superIslandBridge = create(null);
+            const compatibilityRateLimited = freeze(create(null));
+            superIslandBridge.rateLimited = compatibilityRateLimited;
             superIslandBridge.snapshot = function(value) {
                 try { return freezeTree(snapshot(value, 1, snapshotBudget(), [])); }
                 catch (error) { throw failure(error === LIMIT ? 'quotaExceeded' : 'invalidArguments'); }
             };
             superIslandBridge.render = function(compact, expanded) {
-                return protectCompatibilityPromise(send('superisland.render', {compact, expanded}));
+                return compatibilityChain(send('superisland.render', {compact, expanded}), function(value) {
+                    return value;
+                }, function(error) {
+                    // Only this private send rejection reaches here. send /
+                    // receiveResponse replace errors with validated, frozen
+                    // Host data; plugin callback exceptions never enter it.
+                    const code = descriptor(error, 'code');
+                    if (code && code.value === 'rateLimited') throw compatibilityRateLimited;
+                    throw error;
+                });
+            };
+            superIslandBridge.presentation = function(operation, autoDismiss, handle) {
+                const params = create(null);
+                params.operation = operation; params.handle = handle;
+                if (operation === 'activate') params.autoDismiss = autoDismiss;
+                return protectCompatibilityPromise(send('superisland.presentation', params));
             };
             superIslandBridge.reportFailure = function(kind) {
                 chainRequest(send('superisland.failure', {kind}), function() {}, function() {});

@@ -272,25 +272,26 @@ final class SuperIslandModuleRuntimeTests: XCTestCase {
         XCTAssertNil(fixture.manager.currentSnapshot)
     }
 
-    func testWindowRequestsAreUnsupportedAndCannotChangeHostToolSelection() async throws {
+    func testUndeclaredPresentationRequestsCannotChangeHostToolSelection() async throws {
         let fixture = SuperIslandModuleFixture()
         defer { fixture.shutdown() }
+        fixture.manager.setPresentationRequestsAllowed(true)
         let runtime = fixture.load(try package(source: "SuperIsland.registerModule({compact:function(){return View.text('Ready');}});"))
         let original = try await snapshot(fixture)
         XCTAssertNil(fixture.manager.currentSnapshot)
         let rejected = try await runtime.evaluateForTesting("""
-            ['activate','dismiss'].every(function(name){
-                try {SuperIsland.island[name]();return false;}
-                catch(error){return error.code === 'unsupportedMethod';}
-            })
+            SuperIsland.island.activate() === undefined
             """)
         XCTAssertEqual(rejected, .boolean(true))
+        try await waitUntil { fixture.service.diagnostics.records(for: fixture.defaultID).contains { $0.code == "presentationRejected" } }
         XCTAssertNil(fixture.manager.currentSnapshot)
         XCTAssertTrue(fixture.manager.selectTool(original))
+        let before = fixture.service.diagnostics.records(for: fixture.defaultID).filter { $0.code == "presentationRejected" }.count
         let afterSelection = try await runtime.evaluateForTesting("""
-            (()=>{try{SuperIsland.island.dismiss();return false;}catch(error){return error.code === 'unsupportedMethod';}})()
+            SuperIsland.island.dismiss() === undefined
             """)
         XCTAssertEqual(afterSelection, .boolean(true))
+        try await waitUntil { fixture.service.diagnostics.records(for: fixture.defaultID).filter { $0.code == "presentationRejected" }.count > before }
         XCTAssertEqual(fixture.manager.currentSnapshot?.instanceToken, original.instanceToken)
     }
 
