@@ -1,0 +1,34 @@
+{
+  "observedUTC": "2026-10-17T09:43:36.726535+00:00",
+  "normalQuitRequestedUTC": "2026-10-17T09:42:29.606Z",
+  "method": "CUA app-directed standard Cmd+Q on the exact isolated bundle; no force termination",
+  "bundleID": "com.rong5.dynamic-island.t35-pomodoro.20261016",
+  "appPath": "/Users/rong5/Applications/Dynamic Island T35 Pomodoro.app",
+  "pid": 32762,
+  "pidAlive": false,
+  "stagingEntries": [],
+  "installedVersion": "0.2.1",
+  "pluginEnabledOnNextLaunch": true,
+  "storagePermission": "granted",
+  "retainedSettings": {
+    "lastSession": "completed",
+    "schemaVersion": 1,
+    "selectedMinutes": 15
+  },
+  "installedSHA256": {
+    "manifest.json": "42e1f96131e433b47badce3acc2af88f0e0dc585f730690592f1423362b4fbb3",
+    "index.js": "6a0782e1788b009ddea8321aad4370ebc6d3d8b746315616b15e8bea0e03f6b2",
+    "README.md": "f3100e511f4d8ed3ac3a6343bad4019908dafa2596f31279b6b64f1df9aa54d2"
+  },
+  "installedFilesMatchRun": true,
+  "hostExecutableSHA256": "bf0ee3f884598a0ab8b5adc1b5fd794797b71ac62437f213773894572dc221d0",
+  "hostBinaryUnchanged": true,
+  "productionPID": 21458,
+  "productionAlive": true,
+  "productionCommand": "/Users/rong5/Library/Developer/Xcode/DerivedData/DynamicIsland-akumdixgpeinlcgajmgpsellwlbf/Build/Products/Debug/Dynamic Island.app/Contents/MacOS/Dynamic Island -NSDocumentRevisionsDebugMode YES",
+  "productionAppAndDataUntouched": true,
+  "userDecision": "留待下次",
+  "repeatStarted": false,
+  "noticeAccepted": false,
+  "taskStatus": "in progress"
+}

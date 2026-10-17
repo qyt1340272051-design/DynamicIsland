@@ -14,19 +14,24 @@
     "Actual 0.2.1 UI 15-minute round completed naturally; see ../t35-v021-final-20261017/result.json"
   ],
   "pending": [
-    "Capture actual short completion notice with safe compact wings",
-    "Final normal exit and staging/data retention record"
+    "Capture actual short completion notice with safe compact wings"
   ],
   "inheritedCI": "../t35-completion-layout-20261016/result.json",
   "inheritedActualOldVersion": "../t35-pomodoro-final-20261016/result.json",
   "continuation": {
     "appPath": "/Users/rong5/Applications/Dynamic Island T35 Pomodoro.app",
-    "running": true,
+    "running": false,
     "pid": 32762,
-    "lastObservedUI": "idle compact after actual natural completion",
+    "lastObservedUI": "idle compact after actual natural completion, then standard Cmd+Q; PID absence verified",
     "countdownStarted": true,
-    "next": "Await user repeat/deferral choice. A new actual UI Start is needed only to recapture the missed short completion notice; capture function is prepared before any repeat.",
-    "countdownCompleted": true
+    "next": "User explicitly deferred repeat to next session. Launch the isolated app and verify a new PID before a new real UI Start and fresh deadline/capture state.",
+    "countdownCompleted": true,
+    "cleanup": "../t35-v021-final-20261017/cleanup.json",
+    "manualDeferral": {
+      "userReply": "留待下次",
+      "recordedUTC": "2026-10-17T09:43:36.726535+00:00",
+      "repeatStarted": false
+    }
   },
   "productionAppPID": 66831,
   "productionAppAndDataUntouched": true,

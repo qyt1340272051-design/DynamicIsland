@@ -22,12 +22,12 @@
     "Same isolated PID continued throughout the real 900-second round",
     "Compact timer icon and time occupy opposite physical notch wings",
     "Completion persisted after about 900.93 to 900.955 seconds from Start bounds",
-    "Post-completion app returns to an idle compact shell; no automatic countdown was observed"
+    "Post-completion app returns to an idle compact shell; no automatic countdown was observed",
+    "Current round ended by normal Cmd+Q; isolated PID gone, staging empty, installed code/settings/grant retained"
   ],
   "pending": [
     "Repeat actual UI round with the capture function already armed before Start",
-    "Capture safe compact completion wings and normal disappearance",
-    "Final normal exit, staging and retained-data record"
+    "Capture safe compact completion wings and normal disappearance"
   ],
   "captureRepair": {
     "preparedBeforeAnyRepeat": true,
@@ -43,5 +43,13 @@
   },
   "screenshotIndex": "screenshots.json",
   "productionPID": 21458,
-  "productionAppUntouched": true
+  "productionAppUntouched": true,
+  "manualDeferral": {
+    "recordedUTC": "2026-10-17T09:43:36.726535+00:00",
+    "userReply": "留待下次",
+    "repeatStarted": false,
+    "ledger": "../../MANUAL_ACCEPTANCE.md",
+    "next": "At the next user session launch the isolated app, verify its new PID and retained version/grant, record a new real UI Start, and use fresh capture state with the new deadline."
+  },
+  "cleanup": "cleanup.json"
 }

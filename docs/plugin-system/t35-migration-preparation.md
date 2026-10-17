@@ -4,7 +4,7 @@
 
 实施进度见 [T35 记录](phase-7-t35-pomodoro.md)。子步骤 1A / 1B 和 2A–2C2 已实现 showsCompact、工具角色、实例选择、共享几何、Host 倒计时、点击凭证，以及声明式节点与仅可见节点的共享秒级显示。3A / 3B 已完成官方 JS 包的计时、预设、完成 Activity、Storage 和一次 Scheduler 对账；3C 已删除全部专用生产 Swift。
 
-最终实机已通过无效设置、旧页面、物理 compact 与收起重展开；两轮实际 900 秒自然到期均完成。第二轮捕获到旧版完成提示位于相机区域，官方包 0.2.1 已修正并通过 VM / 像素测试和完整 CI（891 passed / 1 skipped / 0 failures，Release build passed）。0.2.1 已完成[实际升级和新版重新授权](evidence/t35-v021-ui-20261017/result.json)；新版已实际完成一轮约 900.9 秒，但短暂完成提示漏拍；当前仅待[补拍安全两翼及最终退出清理](evidence/t35-v021-final-20261017/result.json)。见[T35 当前继续位置](phase-7-t35-pomodoro.md)与[修复证据](evidence/t35-completion-layout-20261016/result.json)。T35 仍 in progress，下文保留初始历史。
+最终实机已通过无效设置、旧页面、物理 compact 与收起重展开；两轮实际 900 秒自然到期均完成。第二轮捕获到旧版完成提示位于相机区域，官方包 0.2.1 已修正并通过 VM / 像素测试和完整 CI（891 passed / 1 skipped / 0 failures，Release build passed）。0.2.1 已完成[实际升级和新版重新授权](evidence/t35-v021-ui-20261017/result.json)；新版已实际完成一轮约 900.9 秒，但短暂完成提示漏拍；用户选择「留待下次」，本轮副本已[正常退出并保留设置与授权](evidence/t35-v021-final-20261017/cleanup.json)。当前仅待[补拍安全两翼](evidence/t35-v021-final-20261017/result.json)，补跑结束后再正常退出归档。见[T35 当前继续位置](phase-7-t35-pomodoro.md)与[修复证据](evidence/t35-completion-layout-20261016/result.json)。T35 仍 in progress，下文保留初始历史。
 
 ## 初始生产迁移范围（3C 已完成）
 
