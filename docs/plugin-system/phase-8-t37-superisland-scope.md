@@ -1,6 +1,6 @@
 # Phase 8 — T37 SuperIsland 兼容范围准备
 
-日期：2026-10-17。状态 `in progress`，本轮只完成 T37 第一步的来源核对与范围准备，尚未接入兼容 Runtime。T35 的实际完成提示按[人工验收安排](MANUAL_ACCEPTANCE.md)延期；遵循 [PROGRESS 中的用户例外](PROGRESS.md)推进自动工作。
+日期：2026-10-17。状态 `in progress`，本页记录 T37 第一步的来源核对与范围准备，后续[有界 View 转换](phase-8-t37-view-conversion.md)已完成验证，尚未接入兼容 Runtime。T35 的实际完成提示按[人工验收安排](MANUAL_ACCEPTANCE.md)延期；遵循 [PROGRESS 中的用户例外](PROGRESS.md)推进自动工作。
 
 ## 当前 Host 边界
 

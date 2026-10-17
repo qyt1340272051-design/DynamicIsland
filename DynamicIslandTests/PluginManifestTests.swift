@@ -302,6 +302,8 @@ final class PluginManifestTests: XCTestCase {
         for field in ["permissions", "capabilities"] {
             let property = try XCTUnwrap(properties[field] as? [String: Any])
             XCTAssertEqual(property["uniqueItems"] as? Bool, true)
+            let count = field == "permissions" ? PluginPermission.allCases.count : PluginCapability.allCases.count
+            XCTAssertEqual(property["maxItems"] as? Int, count, field)
         }
 
         let idProperty = try XCTUnwrap(properties["id"] as? [String: Any])
@@ -334,6 +336,29 @@ final class PluginManifestTests: XCTestCase {
         for value in ["0.0.0", "1.2.3-alpha.1+build.5", "1.2", "1.2.03", "1.2.3-01"] {
             XCTAssertEqual(matches(pattern: semanticVersionPattern, value: value), (try? SemanticVersion(value)) != nil, value)
         }
+    }
+
+    func testOfficialExamplesFitPublishedManifestArrayLimits() throws {
+        let root = URL(fileURLWithPath: #filePath).deletingLastPathComponent().deletingLastPathComponent()
+        let schemaData = try Data(contentsOf: root.appendingPathComponent("docs/plugin-system/schema/plugin-manifest-v1.schema.json"))
+        let schema = try XCTUnwrap(JSONSerialization.jsonObject(with: schemaData) as? [String: Any])
+        let properties = try XCTUnwrap(schema["properties"] as? [String: Any])
+        let examples = root.appendingPathComponent("docs/plugin-system/examples")
+        let directories = try FileManager.default.contentsOfDirectory(at: examples, includingPropertiesForKeys: nil)
+        var checked = 0
+        for directory in directories {
+            let url = directory.appendingPathComponent("manifest.json")
+            guard FileManager.default.fileExists(atPath: url.path) else { continue }
+            let manifest = try PluginManifest.decodeJSON(Data(contentsOf: url))
+            for (field, values) in ["permissions": manifest.permissions.map(\.rawValue),
+                                    "capabilities": manifest.capabilities.map(\.rawValue)] {
+                let property = try XCTUnwrap(properties[field] as? [String: Any])
+                XCTAssertLessThanOrEqual(values.count, try XCTUnwrap(property["maxItems"] as? Int),
+                                         "\(directory.lastPathComponent): \(field)")
+            }
+            checked += 1
+        }
+        XCTAssertGreaterThan(checked, 0)
     }
 
     private func fixtureData(_ update: ((inout [String: Any]) -> Void)? = nil) throws -> Data {

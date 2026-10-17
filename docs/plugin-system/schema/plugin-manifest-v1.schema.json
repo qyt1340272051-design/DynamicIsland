@@ -68,7 +68,7 @@
     "permissions": {
       "description": "Permissions requested by the plugin. Declaration does not grant access; unknown permissions are invalid.",
       "type": "array",
-      "maxItems": 7,
+      "maxItems": 8,
       "uniqueItems": true,
       "items": {
         "$ref": "#/$defs/permission"
@@ -77,7 +77,7 @@
     "capabilities": {
       "description": "V1 Host API capabilities used by the plugin. Unknown capabilities are invalid.",
       "type": "array",
-      "maxItems": 7,
+      "maxItems": 9,
       "uniqueItems": true,
       "items": {
         "$ref": "#/$defs/capability"

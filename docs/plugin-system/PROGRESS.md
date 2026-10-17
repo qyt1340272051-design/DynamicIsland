@@ -98,7 +98,7 @@
 
 | ID | 任务 | 前置依赖 | 状态 | 验收证据 |
 | --- | --- | --- | --- | --- |
-| T37 | SuperIsland Adapter | T35 | `in progress` | 按用户人工验收延期安排完成[固定上游 commit、首批接口、许可缺口与 Host 边界准备](phase-8-t37-superisland-scope.md)；尚未接入兼容 Runtime，不宣称兼容通过。T35 依赖仍保留。 |
+| T37 | SuperIsland Adapter | T35 | `in progress` | 已完成[固定上游范围](phase-8-t37-superisland-scope.md)及[六类有界 View 转换](phase-8-t37-view-conversion.md)：转换 11 项 / Manifest 17 项，共 28 passed、0 skipped、0 failures，普通 Release 编译 / 签名通过，见[证据](evidence/t37-view-20261017/result.json)。尚未接入 Module / 兼容 Runtime / 展示请求，不宣称真实插件兼容通过。T35 依赖仍保留。 |
 
 ## Phase 9 — SDK、文档与插件生态
 
