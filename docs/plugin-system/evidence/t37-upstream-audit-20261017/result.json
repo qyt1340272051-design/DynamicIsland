@@ -1,0 +1,1037 @@
+{
+  "schemaVersion": 1,
+  "observedAtUTC": "2026-10-17T15:12:45.217342+00:00",
+  "status": "read-only source audit complete; real upstream acceptance remains pending",
+  "t37Verified": false,
+  "actualUpstreamPluginsRun": false,
+  "upstreamEntryBodiesStored": false,
+  "upstreamSampleBodiesDistributed": false,
+  "appLaunched": false,
+  "runtimeAPIsExpanded": false,
+  "upstream": {
+    "repository": "shobhit99/SuperIsland",
+    "commit": "68cce87205a88a004e74e33f40bbcb253f8287e9",
+    "commitDateUTC": "2026-09-13T03:54:09Z",
+    "gitTreeSHA": "1386259ef7cf03c32113ae5401c033458dbde3e9",
+    "treeTruncated": false,
+    "commitAPIURL": "https://api.github.com/repos/shobhit99/SuperIsland/git/commits/68cce87205a88a004e74e33f40bbcb253f8287e9",
+    "treeAPIURL": "https://api.github.com/repos/shobhit99/SuperIsland/git/trees/1386259ef7cf03c32113ae5401c033458dbde3e9?recursive=1",
+    "commitURL": "https://github.com/shobhit99/SuperIsland/tree/68cce87205a88a004e74e33f40bbcb253f8287e9"
+  },
+  "repositoryMetadata": {
+    "sourceURL": "https://api.github.com/repos/shobhit99/SuperIsland",
+    "license": null,
+    "scope": "current repository metadata; not pinned commit metadata"
+  },
+  "licenseEvidence": {
+    "threshold": "Existing project rule requires traceable licensing material before incorporating or distributing upstream sample code. This audit records missing materials and makes no legal determination.",
+    "dedicatedLicenseFilesFound": [],
+    "dedicatedFileSearchScope": "entire fixed tree; basenames matching LICENSE/LICENCE/COPYING/NOTICE with optional extensions, case-insensitive",
+    "pluginReadmeLicenseTextFound": false,
+    "rootReadmeLicenseTextFound": false,
+    "extensionsReadmeLicenseTextFound": false,
+    "builderGuideIndependentLicenseTextFound": false,
+    "manifestDeclaredLicenseCount": 7,
+    "licenseLikeMatches": [
+      {
+        "path": "Extensions/agents-status/manifest.json",
+        "lines": [
+          10
+        ],
+        "kind": "manifest license field only",
+        "declaredLicense": "MIT"
+      },
+      {
+        "path": "Extensions/ai-usage/manifest.json",
+        "lines": [
+          12
+        ],
+        "kind": "manifest license field only",
+        "declaredLicense": "MIT"
+      },
+      {
+        "path": "Extensions/lastfm-scrobbler/manifest.json",
+        "lines": [
+          12
+        ],
+        "kind": "manifest license field only",
+        "declaredLicense": "MIT"
+      },
+      {
+        "path": "Extensions/linear-mentions/manifest.json",
+        "lines": [
+          12
+        ],
+        "kind": "manifest license field only",
+        "declaredLicense": "MIT"
+      },
+      {
+        "path": "Extensions/live-football/manifest.json",
+        "lines": [
+          12
+        ],
+        "kind": "manifest license field only",
+        "declaredLicense": "MIT"
+      },
+      {
+        "path": "Extensions/pomodoro/manifest.json",
+        "lines": [
+          12
+        ],
+        "kind": "manifest license field only",
+        "declaredLicense": "MIT"
+      },
+      {
+        "path": "Extensions/whatsapp-web/manifest.json",
+        "lines": [
+          12
+        ],
+        "kind": "manifest license field only",
+        "declaredLicense": "MIT"
+      },
+      {
+        "path": "SUPER-ISLAND-EXTENSION-API.md",
+        "lines": [
+          59
+        ],
+        "kind": "manifest field documentation only; no licensing grant"
+      }
+    ]
+  },
+  "textScan": {
+    "root": "Extensions/",
+    "includedBlobCount": 44,
+    "inclusion": "All UTF-8 blobs under Extensions except .wav audio and package-lock.json dependency metadata. Source bytes were read in memory for static inspection and hashing; this artifact stores no source bodies.",
+    "excludedPaths": [
+      "Extensions/agents-status/sounds/8bit/need-input.wav",
+      "Extensions/agents-status/sounds/8bit/start.wav",
+      "Extensions/agents-status/sounds/8bit/task-complete.wav",
+      "Extensions/agents-status/sounds/crystal/need-input.wav",
+      "Extensions/agents-status/sounds/crystal/start.wav",
+      "Extensions/agents-status/sounds/crystal/task-complete.wav",
+      "Extensions/agents-status/sounds/soft/need-input.wav",
+      "Extensions/agents-status/sounds/soft/start.wav",
+      "Extensions/agents-status/sounds/soft/task-complete.wav",
+      "Extensions/whatsapp-web/provider/package-lock.json"
+    ],
+    "licensePattern": "\\blicen[cs]e\\b|\\bcopyright\\b|permission is hereby|redistribut|all rights reserved|\\bSPDX\\b|\\bMIT\\b",
+    "files": [
+      {
+        "path": "Extensions/.gitignore",
+        "gitBlobSHA": "aa4c8505282a771558b93480ed48106dede01a3a",
+        "sha256": "fa6f86ab79d527bc30b564d0c4854766efda7f3162278804c38d585f6a95cbec",
+        "bytes": 30,
+        "sourceURL": "https://raw.githubusercontent.com/shobhit99/SuperIsland/68cce87205a88a004e74e33f40bbcb253f8287e9/Extensions/.gitignore"
+      },
+      {
+        "path": "Extensions/README.md",
+        "gitBlobSHA": "119c38fd61ef2bbc04a411ebc2d3ca4cd716503f",
+        "sha256": "3acae39b094189affdd26e9fda7007654179e7b0ee6dc16a7733cceb304b44ba",
+        "bytes": 399,
+        "sourceURL": "https://raw.githubusercontent.com/shobhit99/SuperIsland/68cce87205a88a004e74e33f40bbcb253f8287e9/Extensions/README.md"
+      },
+      {
+        "path": "Extensions/agents-status/.gitignore",
+        "gitBlobSHA": "7bfcd7a0b1b8c6332b97bb454d8e65332d4cc90a",
+        "sha256": "d958025fe3928d9ec40a2cd0b56e873c5f3ad4ca45be3d104583964cbcff26cb",
+        "bytes": 18,
+        "sourceURL": "https://raw.githubusercontent.com/shobhit99/SuperIsland/68cce87205a88a004e74e33f40bbcb253f8287e9/Extensions/agents-status/.gitignore"
+      },
+      {
+        "path": "Extensions/agents-status/README.md",
+        "gitBlobSHA": "2ee656d0a8859d59e56377dc590440649a7da642",
+        "sha256": "9383bf435ce16170025dadd4f190aa60196e4cf3222a5dcc42e553fbe7fe76ab",
+        "bytes": 6669,
+        "sourceURL": "https://raw.githubusercontent.com/shobhit99/SuperIsland/68cce87205a88a004e74e33f40bbcb253f8287e9/Extensions/agents-status/README.md"
+      },
+      {
+        "path": "Extensions/agents-status/hooks/cc-event-hook.sh",
+        "gitBlobSHA": "f7f41be2d8f7dfbf587e34d4d1bdad8e688b1a90",
+        "sha256": "7542012c830133adfa7e0e5e8961841ec23eb82577d11773d5310ae502fea204",
+        "bytes": 4930,
+        "sourceURL": "https://raw.githubusercontent.com/shobhit99/SuperIsland/68cce87205a88a004e74e33f40bbcb253f8287e9/Extensions/agents-status/hooks/cc-event-hook.sh"
+      },
+      {
+        "path": "Extensions/agents-status/hooks/claude-settings-snippet.json",
+        "gitBlobSHA": "78b49d9abe4f107ff79558cd83721ac2bb321177",
+        "sha256": "e72b099783ccf885ea031dcbd221c0277b69dc0076732f4e6d1678de5fed7e12",
+        "bytes": 1938,
+        "sourceURL": "https://raw.githubusercontent.com/shobhit99/SuperIsland/68cce87205a88a004e74e33f40bbcb253f8287e9/Extensions/agents-status/hooks/claude-settings-snippet.json"
+      },
+      {
+        "path": "Extensions/agents-status/hooks/codex-notify-hook.sh",
+        "gitBlobSHA": "3bb5dae4f635d60589f1f23fa36ff46189d7898d",
+        "sha256": "caf5cbe34cc6236c885b909a79b9c7d56f4e09f931728684487a30c9853d1325",
+        "bytes": 3898,
+        "sourceURL": "https://raw.githubusercontent.com/shobhit99/SuperIsland/68cce87205a88a004e74e33f40bbcb253f8287e9/Extensions/agents-status/hooks/codex-notify-hook.sh"
+      },
+      {
+        "path": "Extensions/agents-status/icon.svg",
+        "gitBlobSHA": "4c9c781cc65066b1452a55563bc9e805e4c10812",
+        "sha256": "a62f9942da49ade6aea4bc47123fc5b9b0372c2b535bd8d3c3951f83216ea8e3",
+        "bytes": 719,
+        "sourceURL": "https://raw.githubusercontent.com/shobhit99/SuperIsland/68cce87205a88a004e74e33f40bbcb253f8287e9/Extensions/agents-status/icon.svg"
+      },
+      {
+        "path": "Extensions/agents-status/index.js",
+        "gitBlobSHA": "83f48263f61ed7e77ebf1f9fb37dd24dad8781ae",
+        "sha256": "ac0e1099fa925aa7977f3938664f1609079f6f6ceea801e8925a017bac0e05b2",
+        "bytes": 32253,
+        "sourceURL": "https://raw.githubusercontent.com/shobhit99/SuperIsland/68cce87205a88a004e74e33f40bbcb253f8287e9/Extensions/agents-status/index.js"
+      },
+      {
+        "path": "Extensions/agents-status/manifest.json",
+        "gitBlobSHA": "5c786b2e911605f01d7a76094513da5f1a116b1d",
+        "sha256": "fe2031413bc0c461bfad55d94467fe66383cfef0e93c24bd83c761ef7612ae1f",
+        "bytes": 726,
+        "sourceURL": "https://raw.githubusercontent.com/shobhit99/SuperIsland/68cce87205a88a004e74e33f40bbcb253f8287e9/Extensions/agents-status/manifest.json"
+      },
+      {
+        "path": "Extensions/agents-status/server/server.py",
+        "gitBlobSHA": "6a089b57b4e7c3811dd0fc7c8d699f079a21b68c",
+        "sha256": "b757a0a6a67c7e0dffc05570113c418fd2bd8715fa5f7576722f9ecd22f7a902",
+        "bytes": 89585,
+        "sourceURL": "https://raw.githubusercontent.com/shobhit99/SuperIsland/68cce87205a88a004e74e33f40bbcb253f8287e9/Extensions/agents-status/server/server.py"
+      },
+      {
+        "path": "Extensions/agents-status/server/test_server.py",
+        "gitBlobSHA": "cb0b6bf8c9edcc1cfe252b541e22d069ea888c6a",
+        "sha256": "dcfbf248b3dab0c28306e7ed880d683b030da9fdefe4154a10e572492b87e387",
+        "bytes": 3673,
+        "sourceURL": "https://raw.githubusercontent.com/shobhit99/SuperIsland/68cce87205a88a004e74e33f40bbcb253f8287e9/Extensions/agents-status/server/test_server.py"
+      },
+      {
+        "path": "Extensions/agents-status/settings.json",
+        "gitBlobSHA": "0bea04f07653d395ab977700673f433349db6844",
+        "sha256": "2c11cfa0e49f95cc8c6410d7fea006af4cfd7c14a67c2a5946de04d49e03fbe1",
+        "bytes": 1547,
+        "sourceURL": "https://raw.githubusercontent.com/shobhit99/SuperIsland/68cce87205a88a004e74e33f40bbcb253f8287e9/Extensions/agents-status/settings.json"
+      },
+      {
+        "path": "Extensions/ai-usage/README.md",
+        "gitBlobSHA": "4fe551bbafbaa370be0829e41f833e5cfcacd032",
+        "sha256": "eaa3dffecd06e9c7e1e7d31eaebb3f4330874f13830ec40e134d56f2e38ddc46",
+        "bytes": 1438,
+        "sourceURL": "https://raw.githubusercontent.com/shobhit99/SuperIsland/68cce87205a88a004e74e33f40bbcb253f8287e9/Extensions/ai-usage/README.md"
+      },
+      {
+        "path": "Extensions/ai-usage/icon.svg",
+        "gitBlobSHA": "add9fa81c347af46e9a39ed6b837911efdb12f65",
+        "sha256": "43fd882f6ecad079f7c051014295d2b582f5dc6a87aae0f3b59128561f78c3fa",
+        "bytes": 532,
+        "sourceURL": "https://raw.githubusercontent.com/shobhit99/SuperIsland/68cce87205a88a004e74e33f40bbcb253f8287e9/Extensions/ai-usage/icon.svg"
+      },
+      {
+        "path": "Extensions/ai-usage/index.js",
+        "gitBlobSHA": "ee5ecbec592e99b1ac454b3fd3f2bdad517de7f7",
+        "sha256": "4f8b8f7949101462a88bc78af9464401af92044054a5c2e09dc9401652df6b25",
+        "bytes": 11306,
+        "sourceURL": "https://raw.githubusercontent.com/shobhit99/SuperIsland/68cce87205a88a004e74e33f40bbcb253f8287e9/Extensions/ai-usage/index.js"
+      },
+      {
+        "path": "Extensions/ai-usage/manifest.json",
+        "gitBlobSHA": "773bf782ccdeeeb1f55cd8a6a39f77af37868c23",
+        "sha256": "0ccf4a04e8d617fd4b4223d19303dca956399266ce7a3b6bfb46c7a4e87e9933",
+        "bytes": 622,
+        "sourceURL": "https://raw.githubusercontent.com/shobhit99/SuperIsland/68cce87205a88a004e74e33f40bbcb253f8287e9/Extensions/ai-usage/manifest.json"
+      },
+      {
+        "path": "Extensions/lastfm-scrobbler/README.md",
+        "gitBlobSHA": "ec7422eef4b3c593abeaf2ec3658295ded1deb54",
+        "sha256": "8c70ded62fd1afd7f3e0e07b83bd97a95a8575aaa6de4f9cd90ee91bc867ba33",
+        "bytes": 1702,
+        "sourceURL": "https://raw.githubusercontent.com/shobhit99/SuperIsland/68cce87205a88a004e74e33f40bbcb253f8287e9/Extensions/lastfm-scrobbler/README.md"
+      },
+      {
+        "path": "Extensions/lastfm-scrobbler/icon.svg",
+        "gitBlobSHA": "df3da444a7cd634e2f826eff2316da65f3b59b36",
+        "sha256": "5c1dc9a6c6bdced941f7d8d89a1ad5acc45325e31bb2b714e65eccaaab889b54",
+        "bytes": 953,
+        "sourceURL": "https://raw.githubusercontent.com/shobhit99/SuperIsland/68cce87205a88a004e74e33f40bbcb253f8287e9/Extensions/lastfm-scrobbler/icon.svg"
+      },
+      {
+        "path": "Extensions/lastfm-scrobbler/index.js",
+        "gitBlobSHA": "cab55191bd6da65356d94062c47b67bb084a410a",
+        "sha256": "220d19c1c933e03e31e5e0dd25571075500f0be81e39348d8414d951acc5d7ad",
+        "bytes": 62214,
+        "sourceURL": "https://raw.githubusercontent.com/shobhit99/SuperIsland/68cce87205a88a004e74e33f40bbcb253f8287e9/Extensions/lastfm-scrobbler/index.js"
+      },
+      {
+        "path": "Extensions/lastfm-scrobbler/manifest.json",
+        "gitBlobSHA": "df8106b2fac47fbd60f949455eb91e245f2c461c",
+        "sha256": "3becb569dc373cd92976f526fab55baac6219ebbc59f74aaec146873c1f04da4",
+        "bytes": 726,
+        "sourceURL": "https://raw.githubusercontent.com/shobhit99/SuperIsland/68cce87205a88a004e74e33f40bbcb253f8287e9/Extensions/lastfm-scrobbler/manifest.json"
+      },
+      {
+        "path": "Extensions/lastfm-scrobbler/settings.json",
+        "gitBlobSHA": "da557e8c24f68f6dcf4ffbb7156926570f14f4c1",
+        "sha256": "5fbff813dde921ab61b72fe6a28b40921b3c43b242e484df9a73d104ed027b52",
+        "bytes": 1798,
+        "sourceURL": "https://raw.githubusercontent.com/shobhit99/SuperIsland/68cce87205a88a004e74e33f40bbcb253f8287e9/Extensions/lastfm-scrobbler/settings.json"
+      },
+      {
+        "path": "Extensions/linear-mentions/README.md",
+        "gitBlobSHA": "1b29b19c7c67cbd2e67ee120ab903b3673d49911",
+        "sha256": "2ea46d0b539733890b75dbf9977f2f27d06443f14e87b8e1c7479734073f4248",
+        "bytes": 1264,
+        "sourceURL": "https://raw.githubusercontent.com/shobhit99/SuperIsland/68cce87205a88a004e74e33f40bbcb253f8287e9/Extensions/linear-mentions/README.md"
+      },
+      {
+        "path": "Extensions/linear-mentions/icon.svg",
+        "gitBlobSHA": "53d625598d6d0ff1c3b6b64a9c0245a43de1ffae",
+        "sha256": "9326c9bb47752fe51157e5e024e0282875e9163ee22825151f80999037760d78",
+        "bytes": 7575,
+        "sourceURL": "https://raw.githubusercontent.com/shobhit99/SuperIsland/68cce87205a88a004e74e33f40bbcb253f8287e9/Extensions/linear-mentions/icon.svg"
+      },
+      {
+        "path": "Extensions/linear-mentions/index.js",
+        "gitBlobSHA": "81d4800c0d0c85c5af9dccaf988397b58a3f2d78",
+        "sha256": "c4d25638b872c9b6518a7568137976e491885b6b8f19333537583f6b68484657",
+        "bytes": 30511,
+        "sourceURL": "https://raw.githubusercontent.com/shobhit99/SuperIsland/68cce87205a88a004e74e33f40bbcb253f8287e9/Extensions/linear-mentions/index.js"
+      },
+      {
+        "path": "Extensions/linear-mentions/manifest.json",
+        "gitBlobSHA": "98760f0191999a25b860af85fa821e72d3320884",
+        "sha256": "b9ebb6e9eb242ceaa6f8406ff6426f35f5f7d1228056c282548736a95d9b0fce",
+        "bytes": 736,
+        "sourceURL": "https://raw.githubusercontent.com/shobhit99/SuperIsland/68cce87205a88a004e74e33f40bbcb253f8287e9/Extensions/linear-mentions/manifest.json"
+      },
+      {
+        "path": "Extensions/linear-mentions/settings.json",
+        "gitBlobSHA": "a77fb0e380a093d0bb9df3a5f4ebb98e60eecfbd",
+        "sha256": "fd238ce4daa8a0bfb2df5250e4ace5fb34015638a8089d7d3ceb0daaa80f971b",
+        "bytes": 1026,
+        "sourceURL": "https://raw.githubusercontent.com/shobhit99/SuperIsland/68cce87205a88a004e74e33f40bbcb253f8287e9/Extensions/linear-mentions/settings.json"
+      },
+      {
+        "path": "Extensions/live-football/README.md",
+        "gitBlobSHA": "bc500580caabcf5f652f177121f4b6d567b9ffdf",
+        "sha256": "41ac57cbec8711812a86cedd16874410707e27eaa79237814acbb7b39841bc30",
+        "bytes": 1967,
+        "sourceURL": "https://raw.githubusercontent.com/shobhit99/SuperIsland/68cce87205a88a004e74e33f40bbcb253f8287e9/Extensions/live-football/README.md"
+      },
+      {
+        "path": "Extensions/live-football/icon.svg",
+        "gitBlobSHA": "19c941c96d33ebe9460feeb57bdd1f0b8d748b14",
+        "sha256": "6c7ac1ddc4318fb7e15a517062177520b4239f7a1eee5512ebf3f9624e2af8b8",
+        "bytes": 1727,
+        "sourceURL": "https://raw.githubusercontent.com/shobhit99/SuperIsland/68cce87205a88a004e74e33f40bbcb253f8287e9/Extensions/live-football/icon.svg"
+      },
+      {
+        "path": "Extensions/live-football/index.js",
+        "gitBlobSHA": "a72c5cedbce947526f729f8f664ca600e29dd11e",
+        "sha256": "d7a1e1c8ad6afc10d9ac90d5cc0dbcaa3a2a8d260aa6d16e481e477cf77ff219",
+        "bytes": 34390,
+        "sourceURL": "https://raw.githubusercontent.com/shobhit99/SuperIsland/68cce87205a88a004e74e33f40bbcb253f8287e9/Extensions/live-football/index.js"
+      },
+      {
+        "path": "Extensions/live-football/manifest.json",
+        "gitBlobSHA": "1cd7f5e27ae9daa3078188ce6fa9583587f70609",
+        "sha256": "78cf8ebd2a090602d5e9572a6fd383082c4c16137fbfa1d069a4141e9480361b",
+        "bytes": 666,
+        "sourceURL": "https://raw.githubusercontent.com/shobhit99/SuperIsland/68cce87205a88a004e74e33f40bbcb253f8287e9/Extensions/live-football/manifest.json"
+      },
+      {
+        "path": "Extensions/live-football/settings.json",
+        "gitBlobSHA": "578e417d73e74a108c02ae7e22565e9ae13a64f8",
+        "sha256": "5e827e9d17fc806b6481825be6da81e273ba1492e2a9842b2c5461577729ddb6",
+        "bytes": 1548,
+        "sourceURL": "https://raw.githubusercontent.com/shobhit99/SuperIsland/68cce87205a88a004e74e33f40bbcb253f8287e9/Extensions/live-football/settings.json"
+      },
+      {
+        "path": "Extensions/pomodoro/README.md",
+        "gitBlobSHA": "bbbe3a435bfa8f38823f06fc49a7bbef2ccf7621",
+        "sha256": "b08f110175f00fd37436efd42cded1c0738f0497a932564d22e4b9ded07611ee",
+        "bytes": 534,
+        "sourceURL": "https://raw.githubusercontent.com/shobhit99/SuperIsland/68cce87205a88a004e74e33f40bbcb253f8287e9/Extensions/pomodoro/README.md"
+      },
+      {
+        "path": "Extensions/pomodoro/icon.svg",
+        "gitBlobSHA": "62f267191869f0aa78f63f89e6d5eb1a6357e677",
+        "sha256": "820349b70d53ca387334dfcc823384e5eb36d23035c2dd88df7f1bf37cb4d424",
+        "bytes": 5691,
+        "sourceURL": "https://raw.githubusercontent.com/shobhit99/SuperIsland/68cce87205a88a004e74e33f40bbcb253f8287e9/Extensions/pomodoro/icon.svg"
+      },
+      {
+        "path": "Extensions/pomodoro/index.js",
+        "gitBlobSHA": "8dbe910cc4a9ccd42eba91e667c6bdf8aab2c0ae",
+        "sha256": "140f7d10eeaaf567a8f40e8193ad6472d4e3234ce5989d3a630a66c9d89d8772",
+        "bytes": 13148,
+        "sourceURL": "https://raw.githubusercontent.com/shobhit99/SuperIsland/68cce87205a88a004e74e33f40bbcb253f8287e9/Extensions/pomodoro/index.js"
+      },
+      {
+        "path": "Extensions/pomodoro/manifest.json",
+        "gitBlobSHA": "ef80cfbbc7020c334127b77e69a276204fc59f2a",
+        "sha256": "55cffc584428e42ed1b8270e35d7b35c56b954b1f8df903be153af9d44081408",
+        "bytes": 632,
+        "sourceURL": "https://raw.githubusercontent.com/shobhit99/SuperIsland/68cce87205a88a004e74e33f40bbcb253f8287e9/Extensions/pomodoro/manifest.json"
+      },
+      {
+        "path": "Extensions/pomodoro/settings.json",
+        "gitBlobSHA": "7147d91dbf0e896063a2b11f5457e6af26def887",
+        "sha256": "f495650242b9c8fe1d879853dc1101e33bc014e06e85cae36a22be759d3327aa",
+        "bytes": 884,
+        "sourceURL": "https://raw.githubusercontent.com/shobhit99/SuperIsland/68cce87205a88a004e74e33f40bbcb253f8287e9/Extensions/pomodoro/settings.json"
+      },
+      {
+        "path": "Extensions/whatsapp-web/README.md",
+        "gitBlobSHA": "3f7442ec18b47df8eb0d35f827cda31a539687b4",
+        "sha256": "a0a59046b041ee581ae160220603a72f87bebb20470d25a31bd23e82e6d37104",
+        "bytes": 639,
+        "sourceURL": "https://raw.githubusercontent.com/shobhit99/SuperIsland/68cce87205a88a004e74e33f40bbcb253f8287e9/Extensions/whatsapp-web/README.md"
+      },
+      {
+        "path": "Extensions/whatsapp-web/icon.svg",
+        "gitBlobSHA": "056da7c7e5ae6fc0fb83d6f812b338c156dbc9e6",
+        "sha256": "3c3238fa540ad9dbc268a5554c785489f3ee9ff0aa7dd91c18db163f983e3b78",
+        "bytes": 2420,
+        "sourceURL": "https://raw.githubusercontent.com/shobhit99/SuperIsland/68cce87205a88a004e74e33f40bbcb253f8287e9/Extensions/whatsapp-web/icon.svg"
+      },
+      {
+        "path": "Extensions/whatsapp-web/index.js",
+        "gitBlobSHA": "a68dfec4d361ea88f57a66cf69f84e25a34595fa",
+        "sha256": "a8ec5290ea544e382515f432ab4ebee86eb3a4e99b9ab3778ec382dbc062efea",
+        "bytes": 15394,
+        "sourceURL": "https://raw.githubusercontent.com/shobhit99/SuperIsland/68cce87205a88a004e74e33f40bbcb253f8287e9/Extensions/whatsapp-web/index.js"
+      },
+      {
+        "path": "Extensions/whatsapp-web/manifest.json",
+        "gitBlobSHA": "9a1eafe36eda4fb983ad3060f8f902b3cf443106",
+        "sha256": "1264028aabfc1cb0ad95e3cd0a24ad5bf353e4dd263c11c562df904360512008",
+        "bytes": 708,
+        "sourceURL": "https://raw.githubusercontent.com/shobhit99/SuperIsland/68cce87205a88a004e74e33f40bbcb253f8287e9/Extensions/whatsapp-web/manifest.json"
+      },
+      {
+        "path": "Extensions/whatsapp-web/provider/index.mjs",
+        "gitBlobSHA": "e71bf6791d1aba71c4a632c93dcecbfb19ff7618",
+        "sha256": "3254503b9b8eba6c25b1938048ae218fa70bbac854cf6c7359a4f95ca0907f5e",
+        "bytes": 25571,
+        "sourceURL": "https://raw.githubusercontent.com/shobhit99/SuperIsland/68cce87205a88a004e74e33f40bbcb253f8287e9/Extensions/whatsapp-web/provider/index.mjs"
+      },
+      {
+        "path": "Extensions/whatsapp-web/provider/package.json",
+        "gitBlobSHA": "0d3982298c4f372cc6d748b74a11fef37e589755",
+        "sha256": "0c3d77d06bd1725da5ff855b29bb79ee7f02dd2a7e3beee1eda298511241f4b7",
+        "bytes": 154,
+        "sourceURL": "https://raw.githubusercontent.com/shobhit99/SuperIsland/68cce87205a88a004e74e33f40bbcb253f8287e9/Extensions/whatsapp-web/provider/package.json"
+      },
+      {
+        "path": "Extensions/whatsapp-web/settings.json",
+        "gitBlobSHA": "c5df0e5c5a13eebdb9ca7d749bdf99637ad45f53",
+        "sha256": "2cac831d3955c383d3feb8a79f5f47c095c2dd0501ee876b4da834db6065c416",
+        "bytes": 264,
+        "sourceURL": "https://raw.githubusercontent.com/shobhit99/SuperIsland/68cce87205a88a004e74e33f40bbcb253f8287e9/Extensions/whatsapp-web/settings.json"
+      }
+    ],
+    "additionalDocuments": [
+      {
+        "path": "README.md",
+        "gitBlobSHA": "7083cb63169995864e62590275db9b438c0bd61a",
+        "sha256": "d878ca33419b35ff6b3894a75490a7a90e5e5f68b51cf79ee0f98d6f6061a42d",
+        "bytes": 4672,
+        "sourceURL": "https://raw.githubusercontent.com/shobhit99/SuperIsland/68cce87205a88a004e74e33f40bbcb253f8287e9/README.md"
+      },
+      {
+        "path": "SUPER-ISLAND-EXTENSION-API.md",
+        "gitBlobSHA": "717442f1712e24b30eb2fbc4d7ae1a86244e656c",
+        "sha256": "53a7c877ee6fc140c2a3394b521669b911c431305263959e63880d04c483a384",
+        "bytes": 14887,
+        "sourceURL": "https://raw.githubusercontent.com/shobhit99/SuperIsland/68cce87205a88a004e74e33f40bbcb253f8287e9/SUPER-ISLAND-EXTENSION-API.md"
+      }
+    ]
+  },
+  "currentHostSubset": {
+    "manifest": "Strict DynamicIsland Manifest V1 wrapper with explicit engine=superisland; original upstream manifests are not accepted directly.",
+    "moduleKeys": [
+      "compact",
+      "expanded",
+      "onActivate",
+      "onDeactivate",
+      "onAction"
+    ],
+    "viewFactories": [
+      "text",
+      "icon",
+      "hstack",
+      "vstack",
+      "progress",
+      "button"
+    ],
+    "runtime": "Synchronous callbacks in the existing isolated JavaScriptCore execution; Host arbitrates presentation requests.",
+    "contractSources": [
+      "../../phase-8-t37-manifest-profile.md",
+      "../../phase-8-t37-module-runtime.md",
+      "../../phase-8-t37-view-conversion.md",
+      "../../t37-presentation-requests.md"
+    ]
+  },
+  "candidates": [
+    {
+      "plugin": "agents-status",
+      "id": "superisland.agents-status",
+      "version": "1.6.0",
+      "declaredLicense": "MIT",
+      "manifest": {
+        "path": "Extensions/agents-status/manifest.json",
+        "gitBlobSHA": "5c786b2e911605f01d7a76094513da5f1a116b1d",
+        "sha256": "fe2031413bc0c461bfad55d94467fe66383cfef0e93c24bd83c761ef7612ae1f",
+        "bytes": 726,
+        "sourceURL": "https://raw.githubusercontent.com/shobhit99/SuperIsland/68cce87205a88a004e74e33f40bbcb253f8287e9/Extensions/agents-status/manifest.json"
+      },
+      "entry": {
+        "path": "Extensions/agents-status/index.js",
+        "gitBlobSHA": "83f48263f61ed7e77ebf1f9fb37dd24dad8781ae",
+        "sha256": "ac0e1099fa925aa7977f3938664f1609079f6f6ceea801e8925a017bac0e05b2",
+        "bytes": 32253,
+        "sourceURL": "https://raw.githubusercontent.com/shobhit99/SuperIsland/68cce87205a88a004e74e33f40bbcb253f8287e9/Extensions/agents-status/index.js"
+      },
+      "readme": {
+        "path": "Extensions/agents-status/README.md",
+        "gitBlobSHA": "2ee656d0a8859d59e56377dc590440649a7da642",
+        "sha256": "9383bf435ce16170025dadd4f190aa60196e4cf3222a5dcc42e553fbe7fe76ab",
+        "bytes": 6669,
+        "sourceURL": "https://raw.githubusercontent.com/shobhit99/SuperIsland/68cce87205a88a004e74e33f40bbcb253f8287e9/Extensions/agents-status/README.md"
+      },
+      "independentLicenseTextFound": false,
+      "runtimeTested": false,
+      "unmodifiedEntryWithinCurrentSubset": false,
+      "gapAssessment": "static source and current Host contract comparison; not an execution result",
+      "outOfScopeCapabilities": [
+        "fullExpanded/minimalCompact module configuration",
+        "HTTP and settings access",
+        "JavaScript timers",
+        "notifications and feedback",
+        "frame/padding/scroll/decorator View nodes"
+      ],
+      "entryReferenceLines": {
+        "fullExpanded": [
+          865,
+          866
+        ],
+        "minimalCompact": [
+          790,
+          791
+        ],
+        "SuperIsland.settings.get": [
+          406,
+          433
+        ],
+        "SuperIsland.http.fetch": [
+          19,
+          20
+        ],
+        "View.frame": [
+          113,
+          144,
+          250
+        ],
+        "View.spacer": [
+          907
+        ],
+        "View.padding": [
+          260,
+          261,
+          331
+        ],
+        "setInterval": [
+          702
+        ]
+      }
+    },
+    {
+      "plugin": "ai-usage",
+      "id": "superisland.ai-usage",
+      "version": "1.0.0",
+      "declaredLicense": "MIT",
+      "manifest": {
+        "path": "Extensions/ai-usage/manifest.json",
+        "gitBlobSHA": "773bf782ccdeeeb1f55cd8a6a39f77af37868c23",
+        "sha256": "0ccf4a04e8d617fd4b4223d19303dca956399266ce7a3b6bfb46c7a4e87e9933",
+        "bytes": 622,
+        "sourceURL": "https://raw.githubusercontent.com/shobhit99/SuperIsland/68cce87205a88a004e74e33f40bbcb253f8287e9/Extensions/ai-usage/manifest.json"
+      },
+      "entry": {
+        "path": "Extensions/ai-usage/index.js",
+        "gitBlobSHA": "ee5ecbec592e99b1ac454b3fd3f2bdad517de7f7",
+        "sha256": "4f8b8f7949101462a88bc78af9464401af92044054a5c2e09dc9401652df6b25",
+        "bytes": 11306,
+        "sourceURL": "https://raw.githubusercontent.com/shobhit99/SuperIsland/68cce87205a88a004e74e33f40bbcb253f8287e9/Extensions/ai-usage/index.js"
+      },
+      "readme": {
+        "path": "Extensions/ai-usage/README.md",
+        "gitBlobSHA": "4fe551bbafbaa370be0829e41f833e5cfcacd032",
+        "sha256": "eaa3dffecd06e9c7e1e7d31eaebb3f4330874f13830ec40e134d56f2e38ddc46",
+        "bytes": 1438,
+        "sourceURL": "https://raw.githubusercontent.com/shobhit99/SuperIsland/68cce87205a88a004e74e33f40bbcb253f8287e9/Extensions/ai-usage/README.md"
+      },
+      "independentLicenseTextFound": false,
+      "runtimeTested": false,
+      "unmodifiedEntryWithinCurrentSubset": false,
+      "gapAssessment": "static source and current Host contract comparison; not an execution result",
+      "outOfScopeCapabilities": [
+        "fullExpanded/minimalCompact module configuration",
+        "system.getAIUsage",
+        "circularProgress/frame/spacer View nodes"
+      ],
+      "entryReferenceLines": {
+        "fullExpanded": [
+          345
+        ],
+        "minimalCompact": [
+          296
+        ],
+        "SuperIsland.system.getAIUsage": [
+          279
+        ],
+        "View.frame": [
+          310
+        ],
+        "View.circularProgress": [
+          266,
+          300,
+          311
+        ],
+        "View.spacer": [
+          291
+        ]
+      }
+    },
+    {
+      "plugin": "lastfm-scrobbler",
+      "id": "superisland.lastfm-scrobbler",
+      "version": "0.1.0",
+      "declaredLicense": "MIT",
+      "manifest": {
+        "path": "Extensions/lastfm-scrobbler/manifest.json",
+        "gitBlobSHA": "df8106b2fac47fbd60f949455eb91e245f2c461c",
+        "sha256": "3becb569dc373cd92976f526fab55baac6219ebbc59f74aaec146873c1f04da4",
+        "bytes": 726,
+        "sourceURL": "https://raw.githubusercontent.com/shobhit99/SuperIsland/68cce87205a88a004e74e33f40bbcb253f8287e9/Extensions/lastfm-scrobbler/manifest.json"
+      },
+      "entry": {
+        "path": "Extensions/lastfm-scrobbler/index.js",
+        "gitBlobSHA": "cab55191bd6da65356d94062c47b67bb084a410a",
+        "sha256": "220d19c1c933e03e31e5e0dd25571075500f0be81e39348d8414d951acc5d7ad",
+        "bytes": 62214,
+        "sourceURL": "https://raw.githubusercontent.com/shobhit99/SuperIsland/68cce87205a88a004e74e33f40bbcb253f8287e9/Extensions/lastfm-scrobbler/index.js"
+      },
+      "readme": {
+        "path": "Extensions/lastfm-scrobbler/README.md",
+        "gitBlobSHA": "ec7422eef4b3c593abeaf2ec3658295ded1deb54",
+        "sha256": "8c70ded62fd1afd7f3e0e07b83bd97a95a8575aaa6de4f9cd90ee91bc867ba33",
+        "bytes": 1702,
+        "sourceURL": "https://raw.githubusercontent.com/shobhit99/SuperIsland/68cce87205a88a004e74e33f40bbcb253f8287e9/Extensions/lastfm-scrobbler/README.md"
+      },
+      "independentLicenseTextFound": false,
+      "runtimeTested": false,
+      "unmodifiedEntryWithinCurrentSubset": false,
+      "gapAssessment": "static source and current Host contract comparison; not an execution result",
+      "outOfScopeCapabilities": [
+        "fullExpanded/minimalCompact module configuration",
+        "media/HTTP/store/settings access",
+        "JavaScript timers",
+        "notifications and URL opening",
+        "image/circularProgress/decorator View nodes"
+      ],
+      "entryReferenceLines": {
+        "fullExpanded": [
+          1798,
+          1982,
+          1983
+        ],
+        "minimalCompact": [
+          1740,
+          1748,
+          1966
+        ],
+        "SuperIsland.settings.get": [
+          108,
+          250
+        ],
+        "SuperIsland.store.get": [
+          79,
+          258,
+          264
+        ],
+        "SuperIsland.store.set": [
+          84,
+          1875,
+          1881
+        ],
+        "SuperIsland.http.fetch": [
+          1109
+        ],
+        "View.frame": [
+          390,
+          406,
+          508
+        ],
+        "View.circularProgress": [
+          1773
+        ],
+        "View.spacer": [
+          633,
+          702
+        ],
+        "View.padding": [
+          367,
+          409,
+          625
+        ],
+        "setInterval": [
+          1844
+        ]
+      }
+    },
+    {
+      "plugin": "linear-mentions",
+      "id": "superisland.linear-mentions",
+      "version": "1.0.0",
+      "declaredLicense": "MIT",
+      "manifest": {
+        "path": "Extensions/linear-mentions/manifest.json",
+        "gitBlobSHA": "98760f0191999a25b860af85fa821e72d3320884",
+        "sha256": "b9ebb6e9eb242ceaa6f8406ff6426f35f5f7d1228056c282548736a95d9b0fce",
+        "bytes": 736,
+        "sourceURL": "https://raw.githubusercontent.com/shobhit99/SuperIsland/68cce87205a88a004e74e33f40bbcb253f8287e9/Extensions/linear-mentions/manifest.json"
+      },
+      "entry": {
+        "path": "Extensions/linear-mentions/index.js",
+        "gitBlobSHA": "81d4800c0d0c85c5af9dccaf988397b58a3f2d78",
+        "sha256": "c4d25638b872c9b6518a7568137976e491885b6b8f19333537583f6b68484657",
+        "bytes": 30511,
+        "sourceURL": "https://raw.githubusercontent.com/shobhit99/SuperIsland/68cce87205a88a004e74e33f40bbcb253f8287e9/Extensions/linear-mentions/index.js"
+      },
+      "readme": {
+        "path": "Extensions/linear-mentions/README.md",
+        "gitBlobSHA": "1b29b19c7c67cbd2e67ee120ab903b3673d49911",
+        "sha256": "2ea46d0b539733890b75dbf9977f2f27d06443f14e87b8e1c7479734073f4248",
+        "bytes": 1264,
+        "sourceURL": "https://raw.githubusercontent.com/shobhit99/SuperIsland/68cce87205a88a004e74e33f40bbcb253f8287e9/Extensions/linear-mentions/README.md"
+      },
+      "independentLicenseTextFound": false,
+      "runtimeTested": false,
+      "unmodifiedEntryWithinCurrentSubset": false,
+      "gapAssessment": "static source and current Host contract comparison; not an execution result",
+      "outOfScopeCapabilities": [
+        "fullExpanded/minimalCompact module configuration",
+        "HTTP/store/settings access",
+        "JavaScript timers",
+        "notification interaction and input composer",
+        "image/frame/padding View nodes"
+      ],
+      "entryReferenceLines": {
+        "fullExpanded": [
+          427,
+          500,
+          853
+        ],
+        "minimalCompact": [
+          939
+        ],
+        "SuperIsland.settings.get": [
+          164,
+          169
+        ],
+        "SuperIsland.store.get": [
+          190,
+          237,
+          447
+        ],
+        "SuperIsland.store.set": [
+          252,
+          347,
+          348
+        ],
+        "SuperIsland.http.fetch": [
+          359
+        ],
+        "View.frame": [
+          699
+        ],
+        "View.spacer": [
+          650,
+          728,
+          743
+        ],
+        "View.padding": [
+          670
+        ],
+        "setInterval": [
+          549
+        ]
+      }
+    },
+    {
+      "plugin": "live-football",
+      "id": "superisland.live-football",
+      "version": "1.0.0",
+      "declaredLicense": "MIT",
+      "manifest": {
+        "path": "Extensions/live-football/manifest.json",
+        "gitBlobSHA": "1cd7f5e27ae9daa3078188ce6fa9583587f70609",
+        "sha256": "78cf8ebd2a090602d5e9572a6fd383082c4c16137fbfa1d069a4141e9480361b",
+        "bytes": 666,
+        "sourceURL": "https://raw.githubusercontent.com/shobhit99/SuperIsland/68cce87205a88a004e74e33f40bbcb253f8287e9/Extensions/live-football/manifest.json"
+      },
+      "entry": {
+        "path": "Extensions/live-football/index.js",
+        "gitBlobSHA": "a72c5cedbce947526f729f8f664ca600e29dd11e",
+        "sha256": "d7a1e1c8ad6afc10d9ac90d5cc0dbcaa3a2a8d260aa6d16e481e477cf77ff219",
+        "bytes": 34390,
+        "sourceURL": "https://raw.githubusercontent.com/shobhit99/SuperIsland/68cce87205a88a004e74e33f40bbcb253f8287e9/Extensions/live-football/index.js"
+      },
+      "readme": {
+        "path": "Extensions/live-football/README.md",
+        "gitBlobSHA": "bc500580caabcf5f652f177121f4b6d567b9ffdf",
+        "sha256": "41ac57cbec8711812a86cedd16874410707e27eaa79237814acbb7b39841bc30",
+        "bytes": 1967,
+        "sourceURL": "https://raw.githubusercontent.com/shobhit99/SuperIsland/68cce87205a88a004e74e33f40bbcb253f8287e9/Extensions/live-football/README.md"
+      },
+      "independentLicenseTextFound": false,
+      "runtimeTested": false,
+      "unmodifiedEntryWithinCurrentSubset": false,
+      "gapAssessment": "static source and current Host contract comparison; not an execution result",
+      "outOfScopeCapabilities": [
+        "fullExpanded/minimalCompact module configuration",
+        "HTTP/settings access",
+        "JavaScript timers",
+        "notifications/feedback/URL opening",
+        "image/scroll/frame/padding/animation View nodes"
+      ],
+      "entryReferenceLines": {
+        "fullExpanded": [
+          337,
+          341,
+          876
+        ],
+        "minimalCompact": [
+          951
+        ],
+        "SuperIsland.settings.get": [
+          46,
+          55
+        ],
+        "SuperIsland.http.fetch": [
+          227,
+          346
+        ],
+        "View.frame": [
+          653,
+          690,
+          708
+        ],
+        "View.spacer": [
+          714,
+          762,
+          773
+        ],
+        "View.padding": [
+          672,
+          677,
+          779
+        ],
+        "setInterval": [
+          923
+        ]
+      }
+    },
+    {
+      "plugin": "pomodoro",
+      "id": "superisland.pomodoro",
+      "version": "1.0.0",
+      "declaredLicense": "MIT",
+      "manifest": {
+        "path": "Extensions/pomodoro/manifest.json",
+        "gitBlobSHA": "ef80cfbbc7020c334127b77e69a276204fc59f2a",
+        "sha256": "55cffc584428e42ed1b8270e35d7b35c56b954b1f8df903be153af9d44081408",
+        "bytes": 632,
+        "sourceURL": "https://raw.githubusercontent.com/shobhit99/SuperIsland/68cce87205a88a004e74e33f40bbcb253f8287e9/Extensions/pomodoro/manifest.json"
+      },
+      "entry": {
+        "path": "Extensions/pomodoro/index.js",
+        "gitBlobSHA": "8dbe910cc4a9ccd42eba91e667c6bdf8aab2c0ae",
+        "sha256": "140f7d10eeaaf567a8f40e8193ad6472d4e3234ce5989d3a630a66c9d89d8772",
+        "bytes": 13148,
+        "sourceURL": "https://raw.githubusercontent.com/shobhit99/SuperIsland/68cce87205a88a004e74e33f40bbcb253f8287e9/Extensions/pomodoro/index.js"
+      },
+      "readme": {
+        "path": "Extensions/pomodoro/README.md",
+        "gitBlobSHA": "bbbe3a435bfa8f38823f06fc49a7bbef2ccf7621",
+        "sha256": "b08f110175f00fd37436efd42cded1c0738f0497a932564d22e4b9ded07611ee",
+        "bytes": 534,
+        "sourceURL": "https://raw.githubusercontent.com/shobhit99/SuperIsland/68cce87205a88a004e74e33f40bbcb253f8287e9/Extensions/pomodoro/README.md"
+      },
+      "independentLicenseTextFound": false,
+      "runtimeTested": false,
+      "unmodifiedEntryWithinCurrentSubset": false,
+      "gapAssessment": "static source and current Host contract comparison; not an execution result",
+      "outOfScopeCapabilities": [
+        "fullExpanded/minimalCompact module configuration",
+        "settings/store access",
+        "JavaScript timers",
+        "notifications/feedback/mascot access",
+        "circularProgress/zstack/frame/spacer/animation View nodes"
+      ],
+      "entryReferenceLines": {
+        "fullExpanded": [
+          111,
+          372
+        ],
+        "minimalCompact": [
+          347
+        ],
+        "SuperIsland.settings.get": [
+          23,
+          27
+        ],
+        "SuperIsland.store.get": [
+          64,
+          87,
+          88
+        ],
+        "SuperIsland.store.set": [
+          68,
+          69,
+          78
+        ],
+        "View.frame": [
+          257,
+          294,
+          349
+        ],
+        "View.circularProgress": [
+          343
+        ],
+        "View.spacer": [
+          367,
+          398,
+          404
+        ],
+        "setInterval": [
+          107
+        ]
+      }
+    },
+    {
+      "plugin": "whatsapp-web",
+      "id": "superisland.whatsapp-web",
+      "version": "1.0.0",
+      "declaredLicense": "MIT",
+      "manifest": {
+        "path": "Extensions/whatsapp-web/manifest.json",
+        "gitBlobSHA": "9a1eafe36eda4fb983ad3060f8f902b3cf443106",
+        "sha256": "1264028aabfc1cb0ad95e3cd0a24ad5bf353e4dd263c11c562df904360512008",
+        "bytes": 708,
+        "sourceURL": "https://raw.githubusercontent.com/shobhit99/SuperIsland/68cce87205a88a004e74e33f40bbcb253f8287e9/Extensions/whatsapp-web/manifest.json"
+      },
+      "entry": {
+        "path": "Extensions/whatsapp-web/index.js",
+        "gitBlobSHA": "a68dfec4d361ea88f57a66cf69f84e25a34595fa",
+        "sha256": "a8ec5290ea544e382515f432ab4ebee86eb3a4e99b9ab3778ec382dbc062efea",
+        "bytes": 15394,
+        "sourceURL": "https://raw.githubusercontent.com/shobhit99/SuperIsland/68cce87205a88a004e74e33f40bbcb253f8287e9/Extensions/whatsapp-web/index.js"
+      },
+      "readme": {
+        "path": "Extensions/whatsapp-web/README.md",
+        "gitBlobSHA": "3f7442ec18b47df8eb0d35f827cda31a539687b4",
+        "sha256": "a0a59046b041ee581ae160220603a72f87bebb20470d25a31bd23e82e6d37104",
+        "bytes": 639,
+        "sourceURL": "https://raw.githubusercontent.com/shobhit99/SuperIsland/68cce87205a88a004e74e33f40bbcb253f8287e9/Extensions/whatsapp-web/README.md"
+      },
+      "independentLicenseTextFound": false,
+      "runtimeTested": false,
+      "unmodifiedEntryWithinCurrentSubset": false,
+      "gapAssessment": "static source and current Host contract comparison; not an execution result",
+      "outOfScopeCapabilities": [
+        "fullExpanded/minimalCompact module configuration",
+        "WhatsApp system bridge and settings access",
+        "notification interaction and input composer",
+        "image/scroll/frame/padding/markdown View nodes"
+      ],
+      "entryReferenceLines": {
+        "fullExpanded": [
+          410,
+          477,
+          478
+        ],
+        "minimalCompact": [
+          460
+        ],
+        "SuperIsland.settings.get": [
+          147
+        ],
+        "SuperIsland.system.getWhatsAppWeb": [
+          158,
+          162
+        ],
+        "View.frame": [
+          275,
+          287,
+          306
+        ],
+        "View.spacer": [
+          345,
+          396,
+          433
+        ],
+        "View.padding": [
+          312
+        ]
+      }
+    }
+  ],
+  "helloDocumentExample": {
+    "document": {
+      "path": "SUPER-ISLAND-EXTENSION-API.md",
+      "gitBlobSHA": "717442f1712e24b30eb2fbc4d7ae1a86244e656c",
+      "sha256": "53a7c877ee6fc140c2a3394b521669b911c431305263959e63880d04c483a384",
+      "bytes": 14887,
+      "sourceURL": "https://raw.githubusercontent.com/shobhit99/SuperIsland/68cce87205a88a004e74e33f40bbcb253f8287e9/SUPER-ISLAND-EXTENSION-API.md"
+    },
+    "sourceURL": "https://github.com/shobhit99/SuperIsland/blob/68cce87205a88a004e74e33f40bbcb253f8287e9/SUPER-ISLAND-EXTENSION-API.md#L13-L31",
+    "staticProtocolFit": true,
+    "runtimeTested": false,
+    "independentLicenseTextFound": false,
+    "requiresIndependentHostManifestWrapper": true,
+    "coveredFeatures": [
+      "text",
+      "icon",
+      "hstack",
+      "compact",
+      "expanded",
+      "onAction declaration"
+    ],
+    "missingAcceptanceCoverage": [
+      "button interaction",
+      "progress rendering",
+      "multiple real upstream plugins"
+    ],
+    "assessment": "Static minimum candidate only. No sample body was extracted into the repository or executed."
+  },
+  "objectiveGaps": [
+    {
+      "id": "upstream-license-materials",
+      "status": "pending",
+      "description": "No independent permission/copyright text found for the fixed candidate sources under the existing project acceptance rule."
+    },
+    {
+      "id": "upstream-samples-within-subset",
+      "status": "pending",
+      "description": "None of the seven fixed built-in plugin entries falls wholly within the current declared subset. The Hello documentation candidate alone does not provide the required several-plugin button/progress coverage."
+    }
+  ],
+  "futureRunProvenanceFields": [
+    "fixed repository commit and original entry path",
+    "original Git blob SHA and SHA256",
+    "separate independently written DynamicIsland wrapper SHA256",
+    "exact Host source/build identity",
+    "explicit permissions and enable state",
+    "actual UI and action observations",
+    "unsupported behavior and visual differences",
+    "distinguish unmodified upstream entry runs from migration experiments"
+  ],
+  "scopeDecision": "Keep T37 in progress, retain the existing supported API boundary, and continue independent authorized automatic work. No new user question or external message is required for this audit."
+}

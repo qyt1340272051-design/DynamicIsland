@@ -292,9 +292,10 @@ struct InstallerUIFixture {
                      lifecycle: lifecycle, permissions: permissions, starts: starts)
     }
 
-    func archive(version: String, permissions: [PluginPermission] = [.readClipboard]) throws -> URL {
+    func archive(version: String, permissions: [PluginPermission] = [.readClipboard],
+                 engine: PluginEngine = .javaScriptCore) throws -> URL {
         let manifest = try PluginManifest(id: id, name: "Installer Fixture", version: SemanticVersion(version),
-            engine: .javaScriptCore, entry: "main.js", minimumHostVersion: SemanticVersion("0.6.0"),
+            engine: engine, entry: "main.js", minimumHostVersion: SemanticVersion("0.6.0"),
             permissions: permissions, capabilities: [.publishActivity], developer: "Fixture Developer")
         let output = configuration.rootDirectoryURL.appendingPathComponent("SECRET-SOURCE-\(UUID().uuidString).dip")
         let entries = [("manifest.json", try manifest.encodeJSON()), ("main.js", Data("function onStart() {}".utf8))]

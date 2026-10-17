@@ -14,16 +14,7 @@ nonisolated enum SuperIslandViewConversionError: Error, Equatable, Sendable {
 nonisolated struct SuperIslandViewConverter: Sendable {
     /// Differences cannot disappear when the caller later presents a package's
     /// compatibility level. These are a finite Host vocabulary, not user text.
-    nonisolated enum Limitation: String, CaseIterable, Hashable, Sendable {
-        case hostTextTypography
-        case hostTextLineLimit
-        case hostIconAppearance
-        case hostStackSpacing
-        case hostStackAlignment
-        case hostStackDistribution
-        case semanticColors
-        case hostButtonAppearance
-    }
+    typealias Limitation = PluginCompatibilityLayoutLimitation
 
     nonisolated struct Conversion: Equatable, Sendable {
         let node: IslandNode

@@ -197,6 +197,14 @@ public final class PluginExecutionContext {
     public func reportSeriousFailure(kind: PluginSeriousFailureKind) -> Bool {
         bridge?.reportSeriousFailure(id: id, token: token, kind: kind) ?? false
     }
+
+    /// Host converter observations carry this execution's private token. This
+    /// is not a JavaScript report endpoint and accepts no arbitrary text.
+    func recordCompatibilityLayout(_ limitations: Set<PluginCompatibilityLayoutLimitation>) throws {
+        try perform {
+            try bridge?.recordCompatibilityLayout(id: id, token: token, limitations: limitations)
+        }
+    }
 }
 
 /// The production execution, Activity, and interaction boundary. Enablement
@@ -217,6 +225,7 @@ public final class PluginLifecycleBridge: PluginManagerLifecycleHandling {
         var lastExecutionToken: UUID?
         var runtime: (any PluginLifecycleRuntime)?
         var lastFailure: PluginLifecycleFailure?
+        var compatibility: PluginCompatibilitySnapshot
         var isTransitioning = false
         var isStarting = false
         var isWatchdogRegistered = false
@@ -224,6 +233,7 @@ public final class PluginLifecycleBridge: PluginManagerLifecycleHandling {
         init(package: ValidatedPluginPackage, isEnabled: Bool) {
             self.package = package
             self.isEnabled = isEnabled
+            compatibility = .profile(for: package.manifest.engine)
         }
 
         var source: ActivitySource { .init(kind: .plugin, identifier: package.manifest.id) }
@@ -282,6 +292,13 @@ public final class PluginLifecycleBridge: PluginManagerLifecycleHandling {
         guard let entry = entries[id] else { return nil }
         return .init(id: id, state: entry.lifecycle.state, isEnabled: entry.isEnabled,
                      lastFailure: entry.lastFailure, quarantine: watchdog.snapshot(id: id)?.quarantine)
+    }
+
+    /// A same-ID replacement can have the same Manifest and version but new
+    /// code. Exact immutable-package equality prevents borrowing its report.
+    public func compatibilitySnapshot(for package: ValidatedPluginPackage) -> PluginCompatibilitySnapshot? {
+        guard let entry = entries[package.manifest.id], entry.package == package else { return nil }
+        return entry.compatibility
     }
 
     /// Host UI observers enqueue their refresh; they must not block a Manager
@@ -477,6 +494,20 @@ public final class PluginLifecycleBridge: PluginManagerLifecycleHandling {
         allowsExecution(id: id) && entries[id]?.token == token
     }
 
+    fileprivate func recordCompatibilityLayout(id: String, token: UUID,
+                                              limitations: Set<PluginCompatibilityLayoutLimitation>) throws {
+        guard let entry = entries[id], accepts(id: id, token: token) else {
+            throw PluginExecutionError.inactiveExecution
+        }
+        guard entry.package.manifest.engine == .superIsland else {
+            throw PluginBridgeErrorCode.unsupportedMethod
+        }
+        let updated = entry.compatibility.recordingLayout(limitations)
+        guard updated != entry.compatibility else { return }
+        entry.compatibility = updated
+        notifyChangeObservers()
+    }
+
     fileprivate func reportFailure(id: String, token: UUID, failure: PluginLifecycleFailure) -> Bool {
         guard let entry = entries[id], entry.lastExecutionToken == token else { return false }
         defer { notifyChangeObservers() }
@@ -608,6 +639,16 @@ public final class PluginLifecycleBridge: PluginManagerLifecycleHandling {
         entry.resourceAdmission = resourceAdmission
         entry.lastExecutionToken = token
         entry.lastFailure = nil
+        entry.compatibility = entry.compatibility.executionDidStart()
+        // Load/enable callers already publish their eventual snapshot, while
+        // environment recovery has no outer notification. Publish a newly
+        // admitted execution after onStart returns, only if synchronous Host
+        // callbacks have not stopped or replaced it in the meantime.
+        defer {
+            if entries[entry.package.manifest.id] === entry, entry.token == token {
+                notifyChangeObservers()
+            }
+        }
         _ = try? entry.lifecycle.transition(entry.lifecycle.state == .suspended ? .resume : .start)
         activityManager.setPluginSourceEnabled(true, for: entry.source)
         actionRouter.setEnabled(true, for: entry.source)
@@ -678,6 +719,7 @@ public final class PluginLifecycleBridge: PluginManagerLifecycleHandling {
         entry.isTransitioning = true
         defer { entry.isTransitioning = false }
         entry.token = nil
+        entry.compatibility = .profile(for: entry.package.manifest.engine)
         _ = try? entry.lifecycle.transition(event)
         closeSource(entry.source)
         guard let runtime = entry.runtime else { return }

@@ -13,12 +13,64 @@ final class PluginExtensionsModelTests: XCTestCase {
         XCTAssertEqual(fixture.model.selectedPlugin?.manifest.name, "Extensions Test")
         XCTAssertEqual(fixture.model.selectedSnapshot?.state, .disabled)
         XCTAssertEqual(fixture.model.selectedPermissionSnapshot?.states[.localStorage], .requested)
+        XCTAssertEqual(fixture.model.selectedCompatibilitySnapshot, .profile(for: .javaScriptCore))
         XCTAssertTrue(fixture.runtimes.values.isEmpty)
         XCTAssertFalse(fixture.model.isBusy)
         let firstReview = try XCTUnwrap(fixture.model.permissionReview(id: fixture.id))
         await fixture.model.refresh()
         XCTAssertEqual(fixture.model.permissionReview(id: fixture.id), firstReview)
         XCTAssertTrue(fixture.runtimes.values.isEmpty)
+    }
+
+    func testCompatibleLayoutObservationsRefreshWithoutRestartAndResetOnDisable() async throws {
+        let fixture = try await makeFixture(engine: .superIsland, source: Self.compatibleSource)
+        defer { fixture.cleanup() }
+        XCTAssertEqual(fixture.model.selectedCompatibilitySnapshot, .profile(for: .superIsland))
+        await fixture.model.setEnabled(id: fixture.id, isEnabled: true)
+        try await waitUntil { fixture.model.selectedCompatibilitySnapshot?.observation == .rendered }
+        let first = try XCTUnwrap(fixture.model.selectedCompatibilitySnapshot)
+        XCTAssertEqual(first.level, .limited)
+        XCTAssertEqual(first.profileLimitations, Set(PluginCompatibilityProfileLimitation.allCases))
+        XCTAssertTrue(first.layoutLimitations.contains(.hostButtonAppearance))
+        XCTAssertEqual(fixture.runtimes.values.count, 1)
+
+        let activity = try XCTUnwrap(fixture.activities.toolSnapshots.first)
+        XCTAssertTrue(fixture.activities.selectTool(activity))
+        XCTAssertEqual(fixture.router.dispatch(id: activity.activity.id, source: activity.activity.source,
+            instanceToken: activity.instanceToken, action: .init(actionID: "change", value: .none)), .handled)
+        try await waitUntil {
+            fixture.model.selectedCompatibilitySnapshot?.observation == .rendered &&
+                fixture.model.selectedCompatibilitySnapshot?.layoutLimitations.isEmpty == true
+        }
+        XCTAssertEqual(fixture.runtimes.values.count, 1, "Observing compatibility must not restart JavaScript.")
+        XCTAssertEqual(fixture.model.selectedCompatibilitySnapshot?.level, .limited)
+        XCTAssertEqual(fixture.model.selectedCompatibilitySnapshot?.profileLimitations, first.profileLimitations)
+
+        await fixture.model.setEnabled(id: fixture.id, isEnabled: false)
+        XCTAssertEqual(fixture.model.selectedCompatibilitySnapshot, .profile(for: .superIsland))
+    }
+
+    func testSameIDDifferentPackageUsesStaticProfileInsteadOfForeignLayoutReport() async throws {
+        let fixture = try await makeFixture(engine: .superIsland, source: Self.compatibleSource)
+        defer { fixture.cleanup() }
+        let currentValue = await fixture.manager.validatedPackage(id: fixture.id)
+        let current = try XCTUnwrap(currentValue)
+        let foreign = ValidatedPluginPackage(manifest: current.manifest,
+            canonicalRootURL: current.canonicalRootURL.appendingPathComponent("replacement"),
+            entryRelativePath: current.entryRelativePath,
+            entrySource: Data(Self.compatibleSource.utf8), regularFileCount: 2,
+            totalFileBytes: UInt64(Self.compatibleSource.utf8.count))
+        // A lifecycle/Manager handoff may briefly expose a same-ID execution
+        // with different immutable package identity. It is never this review.
+        fixture.lifecycle.pluginWillUnload(id: fixture.id)
+        fixture.lifecycle.pluginDidLoad(foreign, isEnabled: true)
+        try await waitUntil { fixture.lifecycle.compatibilitySnapshot(for: foreign)?.observation == .rendered }
+        await fixture.model.refresh()
+
+        XCTAssertEqual(fixture.model.selectedCompatibilitySnapshot, .profile(for: .superIsland))
+        XCTAssertNil(fixture.lifecycle.compatibilitySnapshot(for: current))
+        XCTAssertFalse(fixture.lifecycle.compatibilitySnapshot(for: foreign)?.layoutLimitations.isEmpty == true)
+        XCTAssertEqual(fixture.runtimes.values.count, 1)
     }
 
     func testEnableRunsRealJavaScriptAndDisableClosesActivityAndOldContext() async throws {
@@ -309,7 +361,9 @@ final class PluginExtensionsModelTests: XCTestCase {
 
     private func makeFixture(permissions: [PluginPermission] = [.localStorage],
                              stateStore: ExtensionsModelStateStore? = nil,
-                             durablePermissions: Bool = false) async throws -> ExtensionsModelFixture {
+                             durablePermissions: Bool = false,
+                             engine: PluginEngine = .javaScriptCore,
+                             source: String? = nil) async throws -> ExtensionsModelFixture {
         let root = FileManager.default.temporaryDirectory.appendingPathComponent("Extensions-SECRET-\(UUID().uuidString)")
         let configuration = PluginManagerConfiguration(rootDirectoryURL: root, hostVersion: try SemanticVersion("0.6.0"))
         let decisionStore = durablePermissions
@@ -321,7 +375,8 @@ final class PluginExtensionsModelTests: XCTestCase {
         let watchdog = PluginCrashWatchdog(clock: { 100 })
         let runtimes = ExtensionsModelRuntimes()
         let bridge = PluginJSBridge(storage: storage, permissions: permissionManager, diagnostics: diagnostics)
-        let lifecycle = PluginLifecycleBridge(activityManager: activities, actionRouter: ActionRouter(manager: activities),
+        let router = ActionRouter(manager: activities)
+        let lifecycle = PluginLifecycleBridge(activityManager: activities, actionRouter: router,
                                               permissions: permissionManager, watchdog: watchdog, diagnostics: diagnostics,
                                               runtimeFactory: { package in
             let runtime = PluginRuntime(package: package, bridge: bridge)
@@ -337,7 +392,8 @@ final class PluginExtensionsModelTests: XCTestCase {
         let initial = await manager.discover()
         XCTAssertTrue(initial.failures.isEmpty)
         let id = "com.example.extensions.model"
-        let packageURL = try makePackage(in: configuration.installedDirectoryURL, id: id, permissions: permissions)
+        let packageURL = try makePackage(in: configuration.installedDirectoryURL, id: id, permissions: permissions,
+                                         engine: engine, source: source)
         _ = try await manager.load(at: packageURL)
         let diagnosticsModel = PluginDiagnosticsModel(manager: manager, lifecycle: lifecycle, diagnostics: diagnostics)
         let model = PluginExtensionsModel(manager: manager, lifecycle: lifecycle, permissions: permissionManager,
@@ -345,20 +401,23 @@ final class PluginExtensionsModelTests: XCTestCase {
         await model.refresh()
         return .init(id: id, configuration: configuration, entryURL: packageURL.appendingPathComponent("main.js"),
                      manager: manager, lifecycle: lifecycle, permissions: permissionManager, storage: storage,
-                     activities: activities, watchdog: watchdog, diagnostics: diagnostics,
+                     activities: activities, router: router, watchdog: watchdog, diagnostics: diagnostics,
                      diagnosticsModel: diagnosticsModel, model: model, runtimes: runtimes)
     }
 
     private func makePackage(in installed: URL, id: String, permissions: [PluginPermission],
-                             directoryName: String? = nil) throws -> URL {
+                             directoryName: String? = nil, engine: PluginEngine = .javaScriptCore,
+                             source: String? = nil) throws -> URL {
         let packageURL = installed.appendingPathComponent(directoryName ?? id, isDirectory: true)
         try FileManager.default.createDirectory(at: packageURL, withIntermediateDirectories: false,
                                                 attributes: [.posixPermissions: NSNumber(value: 0o700)])
         let manifest = try PluginManifest(id: id, name: "Extensions Test", version: SemanticVersion("1.0.0"),
-                                          engine: .javaScriptCore, entry: "main.js", minimumHostVersion: SemanticVersion("0.6.0"),
-                                          permissions: permissions, capabilities: [.publishActivity, .localStorage])
+                                          engine: engine, entry: "main.js", minimumHostVersion: SemanticVersion("0.6.0"),
+                                          permissions: permissions, capabilities: engine == .superIsland
+                                            ? [.publishActivity, .updateActivity, .islandNodeUI, .handleActions, .localStorage]
+                                            : [.publishActivity, .localStorage])
         try manifest.encodeJSON().write(to: packageURL.appendingPathComponent("manifest.json"))
-        try Data(Self.source.utf8).write(to: packageURL.appendingPathComponent("main.js"))
+        try Data((source ?? Self.source).utf8).write(to: packageURL.appendingPathComponent("main.js"))
         return packageURL
     }
 
@@ -367,6 +426,16 @@ final class PluginExtensionsModelTests: XCTestCase {
             island.activity.publish({id:'extensions', presentation:{title:'Extensions running'}})
               .then(() => { globalThis.published = true; });
         }
+        """
+
+    private static let compatibleSource = """
+        globalThis.changed = false;
+        SuperIsland.registerModule({
+            compact: function() {
+                return changed ? View.progress(1) : View.button(View.text('Original'), 'change');
+            },
+            onAction: function(id) { if (id === 'change') changed = true; }
+        });
         """
 
     private func marker(_ runtime: PluginRuntime, _ name: String) async throws {
@@ -396,6 +465,7 @@ private struct ExtensionsModelFixture {
     let permissions: PermissionManager
     let storage: PluginStorage
     let activities: ActivityManager
+    let router: ActionRouter
     let watchdog: PluginCrashWatchdog
     let diagnostics: PluginDiagnosticsStore
     let diagnosticsModel: PluginDiagnosticsModel

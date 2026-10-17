@@ -517,6 +517,11 @@ public final class PluginJSBridge {
             _ = try execute(.activity(converted.request(isUpdate: isUpdate)), manifest: manifest,
                             context: context, actionSession: actionSession)
             let handle = try context.capturePresentationHandle(id: id)
+            // Only a successful, still-current Host render can update the
+            // compatibility inventory. JavaScript cannot submit a grade or
+            // choose report text through the bridge.
+            try context.recordCompatibilityLayout(converted.limitations)
+            try context.perform {}
             return .object(["presentationHandle": .string(handle), "limitations": .array(converted.limitations.map(\.rawValue).sorted().map {
                 .string($0)
             })])

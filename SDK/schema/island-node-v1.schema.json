@@ -1,0 +1,246 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:dynamicisland:experimental-authoring:island-node-v1",
+  "title": "Experimental DynamicIsland authoring subset nodes",
+  "description": "Editor aid for the eight node kinds used by the official Pomodoro/GitHub examples. This is a narrower authoring preflight, not Host admission or a stable SDK guarantee.",
+  "$comment": "Run di_plugin.py validate-node for raw 65536-byte JSON input, strict UTF-8, duplicate keys, finite numbers, UTF-8 text limits, maximum depth 8 and aggregate nodes 128. Schema checks alone do not enforce these aggregate or byte constraints. Host independently checks rendering-mode support, capabilities, permissions, active instance and countdown generation.",
+  "$ref": "#/$defs/node",
+  "$defs": {
+    "text": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "type",
+        "content"
+      ],
+      "properties": {
+        "type": {
+          "const": "text"
+        },
+        "content": {
+          "type": "string",
+          "maxLength": 256,
+          "description": "At most 256 UTF-8 bytes; CLI enforces bytes in addition to this editor character bound."
+        },
+        "color": {
+          "type": "string",
+          "enum": [
+            "primary",
+            "secondary",
+            "accent",
+            "success",
+            "warning",
+            "danger"
+          ]
+        }
+      }
+    },
+    "icon": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "type",
+        "symbolName"
+      ],
+      "properties": {
+        "type": {
+          "const": "icon"
+        },
+        "symbolName": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[A-Za-z0-9._:-]+$"
+        }
+      }
+    },
+    "hStack": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "type",
+        "children"
+      ],
+      "properties": {
+        "type": {
+          "const": "hStack"
+        },
+        "children": {
+          "type": "array",
+          "maxItems": 16,
+          "items": {
+            "$ref": "#/$defs/node"
+          }
+        }
+      }
+    },
+    "vStack": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "type",
+        "children"
+      ],
+      "properties": {
+        "type": {
+          "const": "vStack"
+        },
+        "children": {
+          "type": "array",
+          "maxItems": 16,
+          "items": {
+            "$ref": "#/$defs/node"
+          }
+        }
+      }
+    },
+    "spacer": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "type"
+      ],
+      "properties": {
+        "type": {
+          "const": "spacer"
+        }
+      }
+    },
+    "progress": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "type",
+        "value"
+      ],
+      "properties": {
+        "type": {
+          "const": "progress"
+        },
+        "value": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "style": {
+          "type": "string",
+          "enum": [
+            "linear",
+            "battery"
+          ]
+        },
+        "color": {
+          "type": "string",
+          "enum": [
+            "primary",
+            "secondary",
+            "accent",
+            "success",
+            "warning",
+            "danger"
+          ]
+        }
+      }
+    },
+    "countdown": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "type",
+        "id",
+        "generation"
+      ],
+      "properties": {
+        "type": {
+          "const": "countdown"
+        },
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 80,
+          "pattern": "^[A-Za-z0-9._-]+$"
+        },
+        "generation": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$",
+          "minLength": 36,
+          "maxLength": 36
+        },
+        "style": {
+          "type": "string",
+          "enum": [
+            "time",
+            "progress"
+          ]
+        },
+        "color": {
+          "type": "string",
+          "enum": [
+            "primary",
+            "secondary",
+            "accent",
+            "success",
+            "warning",
+            "danger"
+          ]
+        }
+      }
+    },
+    "button": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "type",
+        "actionID",
+        "label"
+      ],
+      "properties": {
+        "type": {
+          "const": "button"
+        },
+        "actionID": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 80,
+          "pattern": "^[A-Za-z0-9._-]+$"
+        },
+        "label": {
+          "$ref": "#/$defs/node"
+        },
+        "accessibilityLabel": {
+          "type": "string",
+          "maxLength": 256,
+          "description": "At most 256 UTF-8 bytes; CLI enforces bytes in addition to this editor character bound."
+        }
+      }
+    },
+    "node": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/text"
+        },
+        {
+          "$ref": "#/$defs/icon"
+        },
+        {
+          "$ref": "#/$defs/hStack"
+        },
+        {
+          "$ref": "#/$defs/vStack"
+        },
+        {
+          "$ref": "#/$defs/spacer"
+        },
+        {
+          "$ref": "#/$defs/progress"
+        },
+        {
+          "$ref": "#/$defs/countdown"
+        },
+        {
+          "$ref": "#/$defs/button"
+        }
+      ]
+    }
+  }
+}

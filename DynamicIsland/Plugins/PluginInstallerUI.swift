@@ -347,20 +347,20 @@ public struct PluginInstallerView: View {
     }
 
     private func reviewDetails(_ review: PluginInstallReview) -> some View {
-        VStack(alignment: .leading, spacing: 14) {
+        // Import previews describe only the reviewed package's validated
+        // engine. They never borrow an installed execution's layout report.
+        let compatibility = PluginCompatibilitySnapshot.profile(for: review.engine)
+        return VStack(alignment: .leading, spacing: 14) {
             VStack(alignment: .leading, spacing: 6) {
                 Text(review.name).font(.title3.weight(.semibold)).textSelection(.enabled)
                 Text("版本：\(review.version.description)")
-                switch review.engine {
-                case .javaScriptCore:
-                    Text("原生 JavaScriptCore").font(.callout).foregroundStyle(.secondary)
-                case .superIsland:
-                    Text("SuperIsland（有限兼容）").font(.callout).foregroundStyle(.secondary)
-                }
+                PluginCompatibilityBadge(snapshot: compatibility)
+                    .font(.callout).foregroundStyle(.secondary)
                 Text("开发者：\(review.developer ?? "未提供")（插件自行声明，未验证）")
                     .font(.callout).textSelection(.enabled)
                 Text("插件 ID：\(review.id)").font(.caption).foregroundStyle(.secondary).textSelection(.enabled)
             }
+            PluginCompatibilityDetails(snapshot: compatibility)
             if let previous = review.previousVersion {
                 Label(review.isDowngrade ? "将从 \(previous.description) 降级到 \(review.version.description)。旧版本会被替换。"
                       : "将替换当前版本 \(previous.description)。",

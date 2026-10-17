@@ -34,4 +34,4 @@
 
 模块初验时完整 `Scripts/ci.sh` 为 **962 total / 955 passed / 7 skipped / 0 failures**，普通 Release build 与 strict / deep 签名校验通过，保持普通沙盒与 JIT 配置，没有测试专用权限。测试夹具的真实 VM / ActionRouter 闭环与真实上游插件的产品验收分别记录，前者不能替代后者。7 项 skip 为 5 项锁屏鼠标输入、显式截图矩阵和默认关闭的 live 网络选测；没有把跳过算为通过。后续当前回归结果见[展示请求记录](t37-presentation-requests.md)。
 
-后续 [PresentationRequest 子步骤](t37-presentation-requests.md)已接入；下一步仍是兼容限制详情，以及具备许可依据的若干固定版本上游插件验收。T35 补拍与 T36 实机验收继续保留在[人工清单](MANUAL_ACCEPTANCE.md)。本子步骤不提前接受 T37，也不开始 T38 的稳定 SDK。
+后续 [PresentationRequest 子步骤](t37-presentation-requests.md)和[兼容限制详情](t37-compatibility-details.md)已完成；具备许可依据且匹配子集的固定上游样本验收仍保留，见[审计](t37-upstream-acceptance-audit.md)。T35 补拍与 T36 实机验收继续保留在[人工清单](MANUAL_ACCEPTANCE.md)。本子步骤不提前接受 T37，也不发布稳定 SDK。

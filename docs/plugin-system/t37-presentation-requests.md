@@ -42,4 +42,4 @@ Host 回执为 accepted / degraded / rejected 及有限原因，诊断使用固�
 
 选测 **144 passed / 0 skipped / 0 failures**，其中 Core 请求 23 项、原始 Host 桥接 6 项、真实 VM 请求 12 项；另含生产 Runtime、Manifest / 授权、原生调度和生命周期回归。完整 `Scripts/ci.sh` 为 **1009 total / 1002 passed / 7 skipped / 0 failures**，普通 Release build / strict / deep 签名通过，没有测试专用权限。7 项 skip 仍为 5 项锁屏鼠标输入、显式截图矩阵和默认关闭的 live 网络选测。结果见[本轮证据](evidence/t37-presentation-20261017/result.json)。未启动 T35 / T36 验收副本；人工步骤继续保留在[清单](MANUAL_ACCEPTANCE.md)。
 
-下一步为兼容限制详情与具备许可依据的固定上游样本验收；本子步骤不提前接受 T37 或开始稳定 SDK。
+[兼容限制详情](t37-compatibility-details.md)已完成；具备许可依据的固定上游样本验收仍保留，见[来源审计](t37-upstream-acceptance-audit.md)。本子步骤不提前接受 T37 或发布稳定 SDK。

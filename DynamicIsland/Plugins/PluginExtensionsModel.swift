@@ -45,6 +45,7 @@ public final class PluginExtensionsModel {
     public private(set) var plugins: [PluginRecord] = []
     public private(set) var snapshots: [String: PluginLifecycleSnapshot] = [:]
     public private(set) var permissionSnapshots: [String: PluginPermissionSnapshot] = [:]
+    public private(set) var compatibilitySnapshots: [String: PluginCompatibilitySnapshot] = [:]
     public private(set) var discoveryFailures: [PluginExtensionsDiscoveryIssue] = []
     public var selectedID: String?
     public private(set) var isBusy = false
@@ -96,6 +97,9 @@ public final class PluginExtensionsModel {
     public var selectedSnapshot: PluginLifecycleSnapshot? { selectedID.flatMap { snapshots[$0] } }
     public var selectedPermissionSnapshot: PluginPermissionSnapshot? {
         selectedID.flatMap { permissionSnapshots[$0] }
+    }
+    public var selectedCompatibilitySnapshot: PluginCompatibilitySnapshot? {
+        selectedID.flatMap { compatibilitySnapshots[$0] }
     }
 
     /// Permissions without a working Host Broker remain visible but cannot be
@@ -241,14 +245,20 @@ public final class PluginExtensionsModel {
         plugins = currentPlugins
         var currentLifecycle: [String: PluginLifecycleSnapshot] = [:]
         var currentPermissions: [String: PluginPermissionSnapshot] = [:]
+        var currentCompatibility: [String: PluginCompatibilitySnapshot] = [:]
         for plugin in plugins {
             currentLifecycle[plugin.id] = lifecycle.snapshot(id: plugin.id)
             if let package = currentPackages[plugin.id] {
                 currentPermissions[plugin.id] = try? permissions.snapshot(package: package)
+                // A layout report belongs to the complete validated package,
+                // never merely an ID that replacement code can reuse.
+                currentCompatibility[plugin.id] = lifecycle.compatibilitySnapshot(for: package)
+                    ?? .profile(for: package.manifest.engine)
             }
         }
         snapshots = currentLifecycle
         permissionSnapshots = currentPermissions
+        compatibilitySnapshots = currentCompatibility
         persistenceError = permissions.persistenceError
         if !plugins.contains(where: { $0.id == selectedID }) { selectedID = plugins.first?.id }
         // Manager reads cross actor boundaries. A change to an earlier item

@@ -16,6 +16,7 @@ mkdir -p "$(dirname "$RESULT_BUNDLE_PATH")"
 
 "$SCRIPT_DIR/validate-release-config.sh"
 "$SCRIPT_DIR/validate-beta-matrix.rb"
+"$SCRIPT_DIR/check-plugin-sdk.sh"
 
 printf 'Running Dynamic Island tests...\n'
 xcodebuild test \

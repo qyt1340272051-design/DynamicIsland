@@ -7,6 +7,47 @@ import XCTest
 
 @MainActor
 final class PluginInstallerUITests: XCTestCase {
+    func testSuperIslandPreviewShowsStaticLimitationsAndNotRunWithoutExecutingPackage() async throws {
+        let fixture = try await InstallerUIFixture.make()
+        defer { fixture.cleanup() }
+        let model = PluginInstallerModel(installer: fixture.installer)
+        let imported = await model.importArchive(try fixture.archive(version: "1.0.0", permissions: [], engine: .superIsland))
+        XCTAssertTrue(imported)
+        XCTAssertEqual(model.review?.engine, .superIsland)
+        let controller = PluginInstallerWindowController(model: model)
+        let window = try XCTUnwrap(controller.window)
+        defer { controller.finishClose() }
+        controller.show()
+        window.setContentSize(CGSize(width: 640, height: 520))
+        try await settle(window)
+        let view = try XCTUnwrap(window.contentView)
+        let compact = try CompatibilityRenderingEvidence.renderedText(in: view)
+        CompatibilityRenderingEvidence.assertEngine(.superIsland, pixelText: compact)
+        print("T37_SUPERISLAND_PREVIEW_MINIMUM_RENDERED_TEXT=\(compact)")
+        for required in ["有限兼容", "当前未运行", "安装不会授予权限"] {
+            XCTAssertTrue(compact.contains(required), "A compatibility preview label was cropped: \(required)")
+        }
+        XCTAssertFalse(compact.contains("最近成功布局"))
+        try writeScreenshot(window, filename: "dynamic-island-t37-superisland-preview-minimum.png")
+
+        // The production view remains scrollable at its minimum size. Render
+        // a taller review as well to verify every static detail's actual text.
+        window.setContentSize(CGSize(width: 820, height: 1200))
+        try await settle(window)
+        let expanded = try CompatibilityRenderingEvidence.renderedText(in: view)
+        CompatibilityRenderingEvidence.assertEngine(.superIsland, pixelText: expanded)
+        print("T37_SUPERISLAND_PREVIEW_DETAILS_RENDERED_TEXT=\(expanded)")
+        for limitation in PluginCompatibilityProfileLimitation.allCases {
+            XCTAssertTrue(expanded.contains(limitation.title), "Missing reviewed engine limitation: \(limitation)")
+        }
+        XCTAssertFalse(expanded.contains("此布局的显示替代"))
+        XCTAssertFalse(expanded.contains(fixture.configuration.rootDirectoryURL.path))
+        XCTAssertEqual(fixture.starts.value, 0, "Reviewing compatibility must not execute staged code.")
+        XCTAssertNil(fixture.lifecycle.snapshot(id: fixture.id))
+        try writeScreenshot(window, filename: "dynamic-island-t37-superisland-preview-details.png")
+        _ = await model.cancel()
+    }
+
     func testNativePreviewRendersMetadataPrivacyAndDisabledInstallPolicyAtMinimumSize() async throws {
         let fixture = try await InstallerUIFixture.make()
         defer { fixture.cleanup() }
@@ -122,6 +163,7 @@ final class PluginInstallerUITests: XCTestCase {
         let request = VNRecognizeTextRequest()
         request.recognitionLevel = .accurate
         request.recognitionLanguages = ["zh-Hans", "en-US"]
+        request.customWords = ["SuperIsland", "JavaScriptCore"]
         try VNImageRequestHandler(cgImage: image, options: [:]).perform([request])
         return (request.results ?? []).compactMap { observation in
             guard let text = observation.topCandidates(1).first?.string else { return nil }

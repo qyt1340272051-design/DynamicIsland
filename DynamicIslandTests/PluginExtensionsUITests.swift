@@ -8,6 +8,65 @@ import XCTest
 
 @MainActor
 final class PluginExtensionsUITests: XCTestCase {
+    func testCompatibilityDetailsRenderHostProfileObservationAndRecentLayoutAtReadableWidth() async throws {
+        let baseline = PluginCompatibilitySnapshot.profile(for: .superIsland)
+        let window = NSWindow(contentRect: CGRect(x: 0, y: 0, width: 820, height: 700),
+                              styleMask: [.titled], backing: .buffered, defer: false)
+        window.isReleasedWhenClosed = false
+        defer { window.close() }
+
+        func display(_ snapshot: PluginCompatibilitySnapshot, name: String) async throws -> String {
+            let view = NSHostingView(rootView: VStack(alignment: .leading, spacing: 16) {
+                PluginCompatibilityBadge(snapshot: snapshot)
+                PluginCompatibilityDetails(snapshot: snapshot)
+            }.padding(18).frame(width: 820, alignment: .leading)
+                .background(Color(nsColor: .windowBackgroundColor)))
+            window.contentView = view
+            // Size to the rendered content instead of giving the OCR fixture
+            // a mostly empty 1400-point canvas. Order the real hosting view so
+            // replacements receive SwiftUI's normal display invalidations.
+            window.setContentSize(CGSize(width: 820, height: max(80, view.fittingSize.height)))
+            window.orderFrontRegardless()
+            try await settle(window)
+            let text = try CompatibilityRenderingEvidence.renderedText(in: view)
+            CompatibilityRenderingEvidence.assertEngine(snapshot.engine, pixelText: text)
+            print("T37_COMPATIBILITY_\(name.uppercased())_RENDERED_TEXT=\(text)")
+            try writeScreenshot(window, filename: "dynamic-island-t37-compatibility-\(name).png")
+            return text
+        }
+
+        let native = try await display(.profile(for: .javaScriptCore), name: "native")
+        XCTAssertTrue(native.contains("原生"))
+        XCTAssertTrue(native.contains("JavaScriptCore"))
+        XCTAssertFalse(native.contains("兼容详情"), "Native plugins should retain compact metadata.")
+        XCTAssertFalse(native.contains("兼容范围"))
+
+        let notRun = try await display(baseline, name: "not-run")
+        for text in ["有限兼容", "当前未运行", "兼容范围", "有限视图类型", "不提供上游窗口状态", "不提供上游资源接口"] {
+            XCTAssertTrue(notRun.contains(text), "Missing static Host compatibility detail: \(text)")
+        }
+        XCTAssertFalse(notRun.contains("此布局的显示替代"))
+
+        let awaiting = try await display(baseline.executionDidStart(), name: "awaiting-layout")
+        XCTAssertTrue(awaiting.contains("运行中"))
+        XCTAssertTrue(awaiting.contains("尚无成功布局"))
+        XCTAssertFalse(awaiting.contains("此布局的显示替代"))
+
+        let plain = try await display(baseline.executionDidStart().recordingLayout([]), name: "plain-layout")
+        XCTAssertTrue(plain.contains("最近成功布局"))
+        XCTAssertTrue(plain.contains("此布局未使用显示替代"))
+        XCTAssertTrue(plain.contains("有限兼容"), "A successful layout must not upgrade the static profile.")
+        XCTAssertTrue(plain.contains("兼容范围"))
+
+        let rendered = try await display(baseline.executionDidStart().recordingLayout(
+            Set(PluginCompatibilityLayoutLimitation.allCases)), name: "details")
+        for limitation in PluginCompatibilityLayoutLimitation.allCases {
+            XCTAssertTrue(rendered.contains(limitation.title), "A typed layout observation was cropped: \(limitation)")
+        }
+        XCTAssertTrue(rendered.contains("兼容范围"))
+        XCTAssertTrue(rendered.contains("有限兼容"))
+    }
+
     func testNativeManagementWindowRendersMetadataPermissionsAndMinimumSizeToPNG() async throws {
         let fixture = try await makeFixture(permissions: PluginPermission.allCases)
         defer { fixture.cleanup() }
@@ -190,6 +249,7 @@ final class PluginExtensionsUITests: XCTestCase {
         let request = VNRecognizeTextRequest()
         request.recognitionLevel = .accurate
         request.recognitionLanguages = ["zh-Hans", "en-US"]
+        request.customWords = ["SuperIsland", "JavaScriptCore"]
         try VNImageRequestHandler(cgImage: image, options: [:]).perform([request])
         return (request.results ?? []).compactMap { $0.topCandidates(1).first?.string }.joined(separator: " ")
     }
@@ -282,3 +342,53 @@ private final class ExtensionsUIRuntime: PluginLifecycleRuntime {
 @MainActor
 private final class ExtensionsUIDiagnosticsWitness { var opens = 0 }
 private enum ExtensionsUITestError: Error { case timedOut }
+
+/// These static rendering assertions deliberately do not share the top-one
+/// OCR results used by the existing native mouse-button hit testing.
+@MainActor
+enum CompatibilityRenderingEvidence {
+    static func renderedText(in view: NSView) throws -> String {
+        let bitmap = try XCTUnwrap(view.bitmapImageRepForCachingDisplay(in: view.bounds))
+        view.cacheDisplay(in: view.bounds, to: bitmap)
+        let image = try XCTUnwrap(bitmap.cgImage)
+        let request = recognitionRequest()
+        try VNImageRequestHandler(cgImage: image, options: [:]).perform([request])
+        let observations = request.results ?? []
+        var text = observations.flatMap { $0.topCandidates(5).map(\.string) }
+        let imageBounds = CGRect(x: 0, y: 0, width: image.width, height: image.height)
+        for observation in observations {
+            // Chinese function words can disappear when Vision reads a dense
+            // whole card. Recognize each actually detected line again using
+            // the same source pixels with four pixels of surrounding context.
+            let bounds = observation.boundingBox
+            let pixels = CGRect(x: bounds.minX * imageBounds.width,
+                                y: (1 - bounds.maxY) * imageBounds.height,
+                                width: bounds.width * imageBounds.width,
+                                height: bounds.height * imageBounds.height)
+                .insetBy(dx: -4, dy: -4).intersection(imageBounds).integral
+            guard let line = image.cropping(to: pixels) else { continue }
+            let lineRequest = recognitionRequest()
+            try VNImageRequestHandler(cgImage: line, options: [:]).perform([lineRequest])
+            text.append(contentsOf: (lineRequest.results ?? []).flatMap { $0.topCandidates(5).map(\.string) })
+        }
+        return text.joined(separator: " ")
+    }
+
+    static func assertEngine(_ engine: PluginEngine, pixelText: String,
+                             file: StaticString = #filePath, line: UInt = #line) {
+        let expected = engine == .superIsland ? "SuperIsland" : "JavaScriptCore"
+        let expectedLevel = PluginCompatibilitySnapshot.profile(for: engine).level.title
+        XCTAssertTrue(pixelText.contains(expected),
+                      "The complete, exact engine name must be visible in rendered pixels.", file: file, line: line)
+        XCTAssertTrue(pixelText.contains(expectedLevel),
+                      "The Host compatibility level must be visible in rendered pixels.", file: file, line: line)
+    }
+
+    private static func recognitionRequest() -> VNRecognizeTextRequest {
+        let request = VNRecognizeTextRequest()
+        request.recognitionLevel = .accurate
+        request.recognitionLanguages = ["zh-Hans", "en-US"]
+        request.customWords = ["SuperIsland", "JavaScriptCore"]
+        return request
+    }
+}

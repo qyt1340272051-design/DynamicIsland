@@ -41,6 +41,82 @@ nonisolated enum PluginPermissionPresentation {
     }
 }
 
+/// Compatibility labels come from the Host's validated engine profile and
+/// typed observations. Package-supplied status or error text is not displayed.
+@MainActor
+struct PluginCompatibilityBadge: View {
+    let snapshot: PluginCompatibilitySnapshot
+    private var engineName: String { snapshot.engine == .javaScriptCore ? "JavaScriptCore" : "SuperIsland" }
+
+    var body: some View {
+        HStack(spacing: 6) {
+            Label(snapshot.level.title,
+                  systemImage: snapshot.level == .native ? "checkmark.seal" : "exclamationmark.triangle")
+            Text(engineName)
+                .font(.system(.caption, design: .monospaced))
+        }
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel(Text("\(snapshot.level.title)，\(engineName)"))
+        .accessibilityAddTraits(.isStaticText)
+        .accessibilityIdentifier("plugin-compatibility-level")
+    }
+}
+
+@MainActor
+struct PluginCompatibilityDetails: View {
+    let snapshot: PluginCompatibilitySnapshot
+
+    var body: some View {
+        // Native plugins keep the usual compact metadata row; compatible
+        // layout substitutions and upstream limits apply only to SuperIsland.
+        if snapshot.engine == .superIsland {
+            VStack(alignment: .leading, spacing: 12) {
+                Text("兼容详情").font(.headline)
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(snapshot.observation.title).font(.callout.weight(.medium))
+                    Text(snapshot.observation.description)
+                        .font(.caption).foregroundStyle(.secondary)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+                .accessibilityIdentifier("plugin-compatibility-observation")
+                if snapshot.observation == .rendered {
+                    VStack(alignment: .leading, spacing: 6) {
+                        Text("此布局的显示替代").font(.callout.weight(.medium))
+                        if snapshot.layoutLimitations.isEmpty {
+                            Text("此布局未使用显示替代，仍受下方兼容范围限制。")
+                                .font(.caption).foregroundStyle(.secondary)
+                                .fixedSize(horizontal: false, vertical: true)
+                        } else {
+                            ForEach(snapshot.layoutLimitationsInDisplayOrder, id: \.self) { limitation in
+                                limitationRow(title: limitation.title, description: limitation.description)
+                            }
+                        }
+                    }
+                    .accessibilityIdentifier("plugin-compatibility-layout-limitations")
+                }
+                VStack(alignment: .leading, spacing: 6) {
+                    Text("兼容范围").font(.callout.weight(.medium))
+                    ForEach(snapshot.profileLimitationsInDisplayOrder, id: \.self) { limitation in
+                        limitationRow(title: limitation.title, description: limitation.description)
+                    }
+                }
+                .accessibilityIdentifier("plugin-compatibility-profile-limitations")
+            }
+            .padding(12)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .background(Color(nsColor: .controlBackgroundColor), in: RoundedRectangle(cornerRadius: 8))
+            .accessibilityElement(children: .contain)
+            .accessibilityIdentifier("plugin-compatibility-details")
+        }
+    }
+
+    private func limitationRow(title: String, description: String) -> some View {
+        Text("\(title)：\(description)")
+            .font(.caption).foregroundStyle(.secondary)
+            .fixedSize(horizontal: false, vertical: true)
+    }
+}
+
 @MainActor
 public struct PluginExtensionsView: View {
     @Bindable private var model: PluginExtensionsModel
@@ -194,18 +270,14 @@ public struct PluginExtensionsView: View {
     }
 
     private func pluginDetail(_ plugin: PluginRecord) -> some View {
-        VStack(alignment: .leading, spacing: 16) {
+        let compatibility = model.compatibilitySnapshots[plugin.id] ?? .profile(for: plugin.manifest.engine)
+        return VStack(alignment: .leading, spacing: 16) {
             VStack(alignment: .leading, spacing: 8) {
                 Text("开发者：\(plugin.manifest.developer ?? "未提供")（插件自行声明，未验证）")
                     .font(.callout).textSelection(.enabled)
                     .accessibilityIdentifier("plugin-extensions-developer")
                 HStack(spacing: 8) {
-                    switch plugin.manifest.engine {
-                    case .javaScriptCore:
-                        Label("原生 JavaScriptCore", systemImage: "checkmark.seal")
-                    case .superIsland:
-                        Label("SuperIsland（有限兼容）", systemImage: "exclamationmark.seal")
-                    }
+                    PluginCompatibilityBadge(snapshot: compatibility)
                     Text("最低主程序版本 \(plugin.manifest.minimumHostVersion.description)")
                 }
                 .font(.caption).foregroundStyle(.secondary)
@@ -237,6 +309,8 @@ public struct PluginExtensionsView: View {
                 .disabled(model.isBusy)
                 .accessibilityIdentifier("plugin-extensions-uninstall")
             }
+
+            PluginCompatibilityDetails(snapshot: compatibility)
 
             if model.snapshots[plugin.id]?.quarantine != nil {
                 message("插件因重复严重失败已自动隔离。请打开诊断，检查记录后重启插件。",

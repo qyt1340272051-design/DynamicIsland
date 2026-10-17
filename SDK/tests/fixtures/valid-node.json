@@ -1,0 +1,48 @@
+{
+  "type": "vStack",
+  "children": [
+    {
+      "type": "text",
+      "content": "SDK fixture",
+      "color": "primary"
+    },
+    {
+      "type": "icon",
+      "symbolName": "timer"
+    },
+    {
+      "type": "spacer"
+    },
+    {
+      "type": "progress",
+      "value": 0.5,
+      "style": "linear",
+      "color": "success"
+    },
+    {
+      "type": "countdown",
+      "id": "focus",
+      "generation": "12345678-1234-1234-1234-123456789abc",
+      "style": "time",
+      "color": "accent"
+    },
+    {
+      "type": "button",
+      "actionID": "start",
+      "label": {
+        "type": "hStack",
+        "children": [
+          {
+            "type": "icon",
+            "symbolName": "play.fill"
+          },
+          {
+            "type": "text",
+            "content": "Start"
+          }
+        ]
+      },
+      "accessibilityLabel": "Start focus"
+    }
+  ]
+}

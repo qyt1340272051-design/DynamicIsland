@@ -1,0 +1,8 @@
+{
+  "name": "dynamic-island-sdk-draft",
+  "version": "0.1.0-experimental",
+  "private": true,
+  "description": "Local experimental SDK type checks; plugin runtime has no npm dependency.",
+  "scripts": { "check:types": "tsc -p tsconfig.json" },
+  "devDependencies": { "typescript": "4.5.5" }
+}

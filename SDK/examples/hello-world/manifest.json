@@ -1,0 +1,12 @@
+{
+  "schemaVersion": 1,
+  "id": "com.example.hello-world",
+  "name": "你好，计数器",
+  "developer": "示例开发者",
+  "version": "0.1.0",
+  "engine": "javascriptcore",
+  "entry": "index.js",
+  "minimumHostVersion": "0.6.0",
+  "permissions": [],
+  "capabilities": ["activity.publish", "activity.update", "ui.islandNode", "actions.handle"]
+}

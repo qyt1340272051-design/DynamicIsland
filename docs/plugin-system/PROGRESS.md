@@ -14,7 +14,7 @@
 
 ## 2026-10-17 人工验收安排调整
 
-用户明确要求「需要我操作的部分先跳过,统计好下次我再来处理」。因此仅将需要物理指针 / 设备配合的门槛延期到[统一人工清单](MANUAL_ACCEPTANCE.md)，允许后续任务先推进可自动完成的开发与验证；本条是用户对上述开始依赖规则的本次例外。原依赖列与未通过任务的状态保留，不能以跳过代替验收。当前共 2 组 / 最多 3 个指针动作（T35 两步，T36 一步），另需解锁会话供助手补跑 5 项输入测试。T35 的 0.2.1 已真实自然完成一轮约 900.9 秒，短暂完成提示漏拍；用户明确选择「留待下次」，本轮副本已[正常退出并保留数据](evidence/t35-v021-final-20261017/cleanup.json)，补拍未开始。T36 自动开发与验证已完成，最终验收保留依赖说明。
+用户明确要求「需要我操作的部分先跳过,统计好下次我再来处理」。因此仅将需要物理指针 / 设备配合的门槛延期到[统一人工清单](MANUAL_ACCEPTANCE.md)，允许后续任务先推进可自动完成的开发与验证；本条是用户对上述开始依赖规则的本次例外。原依赖列与未通过任务的状态保留，不能以跳过代替验收。当前共 2 组 / 最多 3 个指针动作（T35 两步，T36 一步），另需解锁会话供助手补跑剩余 3 项输入测试（管理 / 安装两项已在当前定向运行通过）。T35 的 0.2.1 已真实自然完成一轮约 900.9 秒，短暂完成提示漏拍；用户明确选择「留待下次」，本轮副本已[正常退出并保留数据](evidence/t35-v021-final-20261017/cleanup.json)，补拍未开始。T36 自动开发与验证已完成，最终验收保留依赖说明。
 
 ## Phase 0 — 准备阶段：项目审计、分支与基线
 
@@ -98,12 +98,12 @@
 
 | ID | 任务 | 前置依赖 | 状态 | 验收证据 |
 | --- | --- | --- | --- | --- |
-| T37 | SuperIsland Adapter | T35 | `in progress` | 已完成[固定上游范围](phase-8-t37-superisland-scope.md)、[六类有界 View 转换](phase-8-t37-view-conversion.md)、[显式模式与授权失效](phase-8-t37-manifest-profile.md)及[同 VM 模块闭环](phase-8-t37-module-runtime.md)，历史验证分别保留为 [View](evidence/t37-view-20261017/result.json) / [模块](evidence/t37-module-20261017/result.json)证据。本轮接入[Host 裁决的 PresentationRequest](t37-presentation-requests.md)：独立 capability、精确实例句柄、有界租约、渲染事务及同步撤销；选测 144 passed / 0 skipped / 0 failures，完整 CI 1002 passed / 7 skipped / 0 failures，普通 Release build / strict 签名通过，见[展示请求证据](evidence/t37-presentation-20261017/result.json)。限制详情与真实上游插件验收尚未完成。T35 依赖仍保留。 |
+| T37 | SuperIsland Adapter | T35 | `in progress` | 已完成[固定上游范围](phase-8-t37-superisland-scope.md)、[六类有界 View 转换](phase-8-t37-view-conversion.md)、[显式模式与授权失效](phase-8-t37-manifest-profile.md)及[同 VM 模块闭环](phase-8-t37-module-runtime.md)，历史验证分别保留为 [View](evidence/t37-view-20261017/result.json) / [模块](evidence/t37-module-20261017/result.json)证据。本轮接入[Host 裁决的 PresentationRequest](t37-presentation-requests.md)：独立 capability、精确实例句柄、有界租约、渲染事务及同步撤销；选测 144 passed / 0 skipped / 0 failures，完整 CI 1002 passed / 7 skipped / 0 failures，普通 Release build / strict 签名通过，见[展示请求证据](evidence/t37-presentation-20261017/result.json)。已完成[Host 兼容详情](t37-compatibility-details.md)，包含完整包 / token 隔离、最近成功布局替代与静态安装预览；综合定向 91 passed / 0 skipped / 0 failures，完整 CI 1028 passed / 7 skipped / 0 failures，Release build / strict 签名通过，见[详情证据](evidence/t37-compatibility-20261017/result.json)。[固定上游审计](t37-upstream-acceptance-audit.md)确认许可材料与原样样本能力匹配仍有缺口，未运行上游插件。T35 依赖及真实上游验收继续保留。 |
 
 ## Phase 9 — SDK、文档与插件生态
 
 | ID | 任务 | 前置依赖 | 状态 | 验收证据 |
 | --- | --- | --- | --- | --- |
-| T38 | DynamicIsland SDK | T36 | `pending` | 待补。 |
+| T38 | DynamicIsland SDK | T36 | `in progress` | 已完成[实验性 SDK 草案](phase-9-t38-sdk-draft.md)：有限类型 / Schema、版本策略、无权限 Hello、离线校验和确定性打包；Python 33 passed、TypeScript 47 项预期错误通过、共享 30 契约案例及正式 Host VM / 动作 / 撤销闭环通过。综合定向 91 passed，完整 CI 1028 passed / 7 skipped / 0 failures，Release build / strict 签名通过，见[证据](evidence/t38-sdk-draft-20261017/result.json)。T36 / T35 实机依赖与稳定发布门槛保留，未发布 SDK。 |
 | T39 | 开发者文档与模板 | T38 | `pending` | 待补。 |
 | T40 | Plugin Registry | T38 | `pending` | 待补。 |

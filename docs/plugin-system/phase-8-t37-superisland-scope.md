@@ -1,6 +1,6 @@
 # Phase 8 — T37 SuperIsland 兼容范围准备
 
-日期：2026-10-17。状态 `in progress`，本页记录 T37 第一步的来源核对与范围准备，后续已完成[有界 View 转换](phase-8-t37-view-conversion.md)、[显式模式](phase-8-t37-manifest-profile.md)、[同 VM 模块闭环](phase-8-t37-module-runtime.md)和[Host 展示请求](t37-presentation-requests.md)。限制详情与真实上游插件验收尚未完成。T35 的实际完成提示按[人工验收安排](MANUAL_ACCEPTANCE.md)延期；遵循 [PROGRESS 中的用户例外](PROGRESS.md)推进自动工作。
+日期：2026-10-17。状态 `in progress`，本页记录 T37 第一步的来源核对与范围准备，后续已完成[有界 View 转换](phase-8-t37-view-conversion.md)、[显式模式](phase-8-t37-manifest-profile.md)、[同 VM 模块闭环](phase-8-t37-module-runtime.md)和[Host 展示请求](t37-presentation-requests.md)。后续已完成[Host 兼容详情](t37-compatibility-details.md)；真实上游插件验收仍保留，见[固定样本审计](t37-upstream-acceptance-audit.md)。T35 的实际完成提示按[人工验收安排](MANUAL_ACCEPTANCE.md)延期；遵循 [PROGRESS 中的用户例外](PROGRESS.md)推进自动工作。
 
 ## 范围准备时的 Host 边界（历史快照）
 
@@ -54,4 +54,4 @@ Builder Guide 的最小 Hello 是固定复现候选；本轮未构建或运行�
 4. Host 保存实际模式并显示兼容等级；对不支持的输入明确标记 Limited 或拒绝，不能静默成功。
 5. 运行若干固定版本的简单上游插件，覆盖文本 / 堆栈、按钮和 progress；再验证旧实例按钮、停用、权限撤销、超限树和跨插件 ID 隔离。自写夹具与真实上游样本分别记录。
 
-上述顺序的 View、显式模式、Module 生命周期、动作和 PresentationRequest 已接入，当前继续位置见[展示请求子步骤](t37-presentation-requests.md)。限制详情和真实上游样本验收仍待完成；当前 T37 不标为 `verified`，T38 稳定 SDK 的两款官方插件实际验收门槛仍保留。
+上述顺序的 View、显式模式、Module 生命周期、动作和 PresentationRequest 已接入，当前继续位置见[展示请求子步骤](t37-presentation-requests.md)。[兼容详情](t37-compatibility-details.md)已完成；[真实上游样本验收](t37-upstream-acceptance-audit.md)仍待完成；当前 T37 不标为 `verified`，T38 稳定 SDK 的两款官方插件实际验收门槛仍保留。
