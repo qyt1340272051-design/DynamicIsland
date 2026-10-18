@@ -1,0 +1,35 @@
+{
+  "devicesAndConfigurations": [
+    {
+      "device": {
+        "architecture": "arm64",
+        "deviceName": "My Mac",
+        "modelName": "MacBook Air",
+        "osBuildNumber": "25G83",
+        "osVersion": "26.6.2",
+        "platform": "macOS"
+      },
+      "expectedFailures": 0,
+      "failedTests": 0,
+      "passedTests": 7,
+      "skippedTests": 0,
+      "testPlanConfiguration": {
+        "configurationId": "1",
+        "configurationName": "Test Scheme Action"
+      }
+    }
+  ],
+  "environmentDescription": "Dynamic Island · Built with macOS 26.6.2",
+  "expectedFailures": 0,
+  "failedTests": 0,
+  "finishTime": 1792303888.842,
+  "passedTests": 7,
+  "result": "Passed",
+  "skippedTests": 0,
+  "startTime": 1792303880.752,
+  "statistics": [],
+  "testFailures": [],
+  "title": "Test - Dynamic Island",
+  "topInsights": [],
+  "totalTestCount": 7
+}

@@ -1,0 +1,7 @@
+{
+  "type": "vStack",
+  "children": [
+    {"type": "text", "content": "正在处理", "color": "primary"},
+    {"type": "progress", "value": 0.5, "color": "accent"}
+  ]
+}

@@ -105,5 +105,5 @@
 | ID | 任务 | 前置依赖 | 状态 | 验收证据 |
 | --- | --- | --- | --- | --- |
 | T38 | DynamicIsland SDK | T36 | `in progress` | 已完成[实验性 SDK 草案](phase-9-t38-sdk-draft.md)：有限类型 / Schema、版本策略、无权限 Hello、离线校验和确定性打包；Python 33 passed、TypeScript 47 项预期错误通过、共享 30 契约案例及正式 Host VM / 动作 / 撤销闭环通过。综合定向 91 passed，完整 CI 1028 passed / 7 skipped / 0 failures，Release build / strict 签名通过，见[证据](evidence/t38-sdk-draft-20261017/result.json)。T36 / T35 实机依赖与稳定发布门槛保留，未发布 SDK。 |
-| T39 | 开发者文档与模板 | T38 | `pending` | 待补。 |
+| T39 | 开发者文档与模板 | T38 | `in progress` | [13 个主题的开发手册](../../SDK/docs/README.md)与 [T39 记录](phase-9-t39-developer-docs.md)已完成自动开发：15 页 / 8 个源码对照代码块 / 33 条本地链接，Quick Start 在独立 SDK 副本生成实际包，Python 37 passed、严格类型通过、正式 Host 定向 7 passed / 0 skipped / 0 failures。见[证据](evidence/t39-docs-20261018/result.json)。T38 依赖、新作者首次安装和约十分钟目标的实际走查保留；没有发布稳定文档 / SDK。 |
 | T40 | Plugin Registry | T38 | `pending` | 待补。 |

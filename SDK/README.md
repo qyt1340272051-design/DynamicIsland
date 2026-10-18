@@ -4,6 +4,8 @@
 
 工具需要 Python 3.9+，只使用标准库，可离线运行，不执行 JavaScript。插件运行无需 Node.js、Python、npm 或 TypeScript；安装和执行仍由主程序负责。
 
+新作者从[开发手册 / Quick Start](docs/quick-start.md)开始。完整的 [13 个主题](docs/README.md)解释 Manifest、Activity、组件、动作、资源与权限、设置、生命周期、排错和分发；文档代码块纳入 CI，首次安装体验仍保留验收门槛。
+
 ## 开始一个插件
 
 在本目录的副本中修改 [Hello World](examples/hello-world/README.md) 的 Manifest 和 JavaScript。只需理解本目录的类型、示例和下述合约，无需阅读主程序 Swift 源码。以下从 SDK 目录执行：
