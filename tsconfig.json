@@ -13,5 +13,5 @@
     "allowJs": true,
     "checkJs": true
   },
-  "include": ["types/island.d.ts", "tests/types/**/*.ts", "examples/hello-world/index.js"]
+  "include": ["types/island.d.ts", "tests/types/**/*.ts", "examples/hello-world/index.js", "docs/snippets/*.js"]
 }
