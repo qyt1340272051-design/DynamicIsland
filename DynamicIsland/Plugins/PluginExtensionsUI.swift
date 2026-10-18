@@ -122,13 +122,15 @@ public struct PluginExtensionsView: View {
     @Bindable private var model: PluginExtensionsModel
     private let onShowDiagnostics: (() -> Void)?
     private let onImport: (() -> Void)?
+    private let onDiscover: (() -> Void)?
     @State private var confirmation: Confirmation?
 
     public init(model: PluginExtensionsModel, onShowDiagnostics: (() -> Void)? = nil,
-                onImport: (() -> Void)? = nil) {
+                onImport: (() -> Void)? = nil, onDiscover: (() -> Void)? = nil) {
         self.model = model
         self.onShowDiagnostics = onShowDiagnostics
         self.onImport = onImport
+        self.onDiscover = onDiscover
     }
 
     public var body: some View {
@@ -233,6 +235,10 @@ public struct PluginExtensionsView: View {
                 if let onImport {
                     Button(action: onImport) { Label("导入插件", systemImage: "square.and.arrow.down") }
                         .accessibilityIdentifier("plugin-extensions-import")
+                }
+                if let onDiscover {
+                    Button(action: onDiscover) { Label("发现", systemImage: "square.grid.2x2") }
+                        .accessibilityIdentifier("plugin-extensions-discover")
                 }
                 Button { Task { await model.refresh() } } label: {
                     Label("刷新", systemImage: "arrow.clockwise")
@@ -463,7 +469,7 @@ public final class PluginExtensionsWindowController: NSWindowController {
     private let model: PluginExtensionsModel
 
     public init(model: PluginExtensionsModel, onShowDiagnostics: (() -> Void)? = nil,
-                onImport: (() -> Void)? = nil) {
+                onImport: (() -> Void)? = nil, onDiscover: (() -> Void)? = nil) {
         self.model = model
         let window = NSWindow(contentRect: CGRect(x: 0, y: 0, width: 860, height: 680),
                               styleMask: [.titled, .closable, .miniaturizable, .resizable],
@@ -473,7 +479,7 @@ public final class PluginExtensionsWindowController: NSWindowController {
         window.minSize = window.frameRect(forContentRect: CGRect(x: 0, y: 0, width: 800, height: 600)).size
         window.isReleasedWhenClosed = false
         let hostingView = NSHostingView(rootView: PluginExtensionsView(model: model, onShowDiagnostics: onShowDiagnostics,
-                                                                     onImport: onImport))
+                                                                     onImport: onImport, onDiscover: onDiscover))
         hostingView.frame = CGRect(x: 0, y: 0, width: 860, height: 680)
         hostingView.autoresizingMask = [.width, .height]
         window.contentView = hostingView

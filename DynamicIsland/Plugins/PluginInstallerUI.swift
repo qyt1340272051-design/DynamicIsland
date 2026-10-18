@@ -35,7 +35,7 @@ extension PluginInstaller: PluginInstallationHandling {}
 @MainActor
 @Observable
 public final class PluginInstallerModel {
-    public enum Phase { case idle, preparing, reviewing, installing, cancelling }
+    public enum Phase { case idle, downloading, preparing, reviewing, installing, cancelling }
     public private(set) var phase: Phase = .idle
     public private(set) var review: PluginInstallReview?
     public private(set) var errorMessage: String?
@@ -43,23 +43,72 @@ public final class PluginInstallerModel {
     public private(set) var installedID: String?
     public private(set) var isTerminating = false
     public private(set) var requiresCleanup = false
-    public var isBusy: Bool { phase == .preparing || phase == .installing || phase == .cancelling }
+    public private(set) var isCancellingDownload = false
+    public var isBusy: Bool { phase == .downloading || phase == .preparing || phase == .installing || phase == .cancelling }
+    public var canCancelDownload: Bool { phase == .downloading && !isCancellingDownload }
     public var hasPendingImport: Bool { phase != .idle || review != nil || requiresCleanup }
 
     private let installer: any PluginInstallationHandling
     private let archiveAccess: any PluginArchiveAccessing
+    private let registryPrepare: (@Sendable (PluginRegistryEntry) async throws -> PluginInstallReview)?
+    private var registryTask: Task<PluginInstallReview, Error>?
     private let onInstalled: (@MainActor (PluginRecord) async -> Void)?
     private let onInstallFailure: (@MainActor (PluginInstallReview, String) async -> Void)?
     private var idleWaiters: [CheckedContinuation<Void, Never>] = []
 
     public init(installer: any PluginInstallationHandling,
                 archiveAccess: any PluginArchiveAccessing = NativePluginArchiveAccess(),
+                registryPrepare: (@Sendable (PluginRegistryEntry) async throws -> PluginInstallReview)? = nil,
                 onInstalled: (@MainActor (PluginRecord) async -> Void)? = nil,
                 onInstallFailure: (@MainActor (PluginInstallReview, String) async -> Void)? = nil) {
         self.installer = installer
         self.archiveAccess = archiveAccess
+        self.registryPrepare = registryPrepare
         self.onInstalled = onInstalled
         self.onInstallFailure = onInstallFailure
+    }
+
+    /// Reserves the same slot used by local file imports before suspending.
+    /// The injected preparer must belong to this model's Installer instance.
+    @discardableResult
+    public func importRegistryEntry(_ entry: PluginRegistryEntry) async -> Bool {
+        guard !isTerminating else { return false }
+        guard !hasPendingImport else { rejectBusy(); return false }
+        guard let registryPrepare else {
+            setError(code: "registryUnavailable", message: "插件目录下载暂不可用，请使用本地导入。"); return false
+        }
+        phase = .downloading
+        isCancellingDownload = false
+        defer { isCancellingDownload = false }
+        review = nil
+        installedID = nil
+        requiresCleanup = false
+        clearError()
+        let task = Task { try await registryPrepare(entry) }
+        registryTask = task
+        do {
+            let prepared = try await withTaskCancellationHandler {
+                try await task.value
+            } onCancel: { task.cancel() }
+            registryTask = nil
+            review = prepared
+            phase = .reviewing
+            // Cancellation may race with a successful prepare. Retain the
+            // exact review until ordinary Installer cleanup has completed.
+            if task.isCancelled || Task.isCancelled || isTerminating {
+                _ = await cancel()
+                return false
+            }
+            resumeIdleWaiters()
+            return true
+        } catch {
+            registryTask = nil
+            requiresCleanup = await installer.hasPendingCleanup()
+            phase = .idle
+            record(error, fallback: requiresCleanup ? "临时插件包无法清理，请重试清理。" : "插件下载失败，请稍后重试。")
+            resumeIdleWaiters()
+            return false
+        }
     }
 
     @discardableResult
@@ -132,6 +181,14 @@ public final class PluginInstallerModel {
 
     @discardableResult
     public func cancel() async -> Bool {
+        if phase == .downloading {
+            isCancellingDownload = true
+            registryTask?.cancel()
+            while isBusy { await withCheckedContinuation { idleWaiters.append($0) } }
+            // importRegistryEntry owns cleanup of a late successful review.
+            // Do not silently retry a cleanup failure here.
+            return !hasPendingImport
+        }
         guard !isBusy else { return false }
         guard let capturedReview = review else {
             if requiresCleanup { return await retryCleanup() }
@@ -181,6 +238,8 @@ public final class PluginInstallerModel {
     @discardableResult
     public func shutdown() async -> Bool {
         isTerminating = true
+        if phase == .downloading { isCancellingDownload = true }
+        registryTask?.cancel()
         while isBusy { await withCheckedContinuation { idleWaiters.append($0) } }
         let cleaned = await cancel()
         if !cleaned { isTerminating = false }
@@ -196,6 +255,12 @@ public final class PluginInstallerModel {
     private func clearError() { errorMessage = nil; errorCode = nil }
     private func setError(code: String, message: String) { errorCode = code; errorMessage = message }
     private func record(_ error: Error, fallback: String) {
+        if error is CancellationError || error as? PluginRegistryError == .cancelled {
+            setError(code: "cancelled", message: "插件下载已取消。"); return
+        }
+        if let registryError = error as? PluginRegistryError {
+            setError(code: registryError.rawValue, message: PluginRegistryMessages.message(registryError)); return
+        }
         guard let failure = error as? PluginInstallerError else {
             setError(code: "installFailed", message: fallback); return
         }
@@ -206,6 +271,8 @@ public final class PluginInstallerModel {
         case "incompatibleHost": message = "此插件需要较新的 Dynamic Island 版本，请更新主程序后重新导入。"
         case "quotaExceeded": message = "插件包超过允许的大小或文件数量，无法导入。"
         case "archiveRejected", "invalidPackage": message = "插件包损坏或不符合安全要求，无法导入。"
+        case "archiveChecksumMismatch": message = "下载文件的校验值与目录不符，已停止安装。请刷新目录后重试。"
+        case "registryMismatch": message = "插件包信息与目录不符，已停止安装。请刷新目录后重试。"
         case "rollbackFailed": message = "安装未完成，旧插件已停止并保留备份。请查看插件管理状态。"
         case "invalidArguments": message = "请选择有效的 .dip 插件包。"
         case "cancelled": message = "插件导入已取消。"
@@ -314,6 +381,8 @@ public struct PluginInstallerView: View {
                     if let review = model.review { reviewDetails(review) }
                     else if model.phase == .preparing {
                         Text("正在检查插件包…").foregroundStyle(.secondary)
+                    } else if model.phase == .downloading {
+                        Text(model.isCancellingDownload ? "正在取消下载…" : "正在下载并校验插件包…").foregroundStyle(.secondary)
                     } else if model.installedID != nil {
                         Text("插件已安装并保持停用。请在插件管理中授权和启用。")
                     } else if model.errorMessage == nil {
@@ -331,8 +400,8 @@ public struct PluginInstallerView: View {
                         .disabled(model.isBusy)
                         .accessibilityIdentifier("plugin-installer-retry-cleanup")
                 }
-                Button(model.requiresCleanup && model.review != nil ? "重试取消" : (model.installedID == nil ? "取消" : "完成"), action: onCancel)
-                    .disabled(model.isBusy)
+                Button(model.canCancelDownload ? "取消下载" : (model.requiresCleanup && model.review != nil ? "重试取消" : (model.installedID == nil ? "取消" : "完成")), action: onCancel)
+                    .disabled(model.isBusy && !model.canCancelDownload)
                     .accessibilityIdentifier("plugin-installer-cancel")
                 Button(model.review?.isUpgrade == true ? "替换并安装" : "安装插件") {
                     Task { await model.install() }
@@ -441,7 +510,7 @@ public final class PluginInstallerWindowController: NSWindowController, NSWindow
     }
 
     private func requestCancel() {
-        guard !model.isBusy else { return }
+        guard !model.isBusy || model.canCancelDownload else { return }
         Task { @MainActor [weak self] in
             guard let self, await self.model.cancel() else { return }
             self.finishClose()

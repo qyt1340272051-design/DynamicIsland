@@ -1,0 +1,2 @@
+/tmp/dynamic-island-ci-derived-data/Build/Products/Release/Dynamic Island.app: valid on disk
+/tmp/dynamic-island-ci-derived-data/Build/Products/Release/Dynamic Island.app: satisfies its Designated Requirement

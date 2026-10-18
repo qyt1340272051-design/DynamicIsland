@@ -24,7 +24,7 @@ private struct PluginSettingsContent: View {
     var body: some View {
         if let model = appDelegate.pluginExtensionsModel {
             PluginExtensionsView(model: model, onShowDiagnostics: { appDelegate.showPluginDiagnostics() },
-                                 onImport: { appDelegate.importPlugin() })
+                                 onImport: { appDelegate.importPlugin() }, onDiscover: { appDelegate.showPluginRegistry() })
         } else {
             ContentUnavailableView("插件管理暂不可用", systemImage: "puzzlepiece.extension",
                                    description: Text("请等待插件初始化完成。"))
@@ -52,6 +52,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
     private var pluginExtensionsWindowController: PluginExtensionsWindowController?
     private var pluginInstallerModel: PluginInstallerModel?
     private var pluginInstallerWindowController: PluginInstallerWindowController?
+    private var pluginRegistryModel: PluginRegistryModel?
+    private var pluginRegistryWindowController: PluginRegistryWindowController?
     private lazy var pluginImportCoordinator = PluginImportCoordinator { [weak self] in
         self?.showPluginInstaller()
     }
@@ -102,12 +104,14 @@ final class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
         guard pluginInstallerModel != nil || pluginImportCoordinator.pendingCount > 0 else { return .terminateNow }
         guard pluginTerminationTask == nil else { return .terminateCancel }
         pluginTerminationTask = Task { @MainActor [weak self] in
+            await self?.pluginRegistryModel?.shutdown()
             let cleaned = await self?.pluginImportCoordinator.shutdown() ?? true
             if cleaned {
                 self?.pluginTerminationApproved = true
                 sender.terminate(nil)
             } else {
                 self?.pluginTerminationTask = nil
+                self?.pluginRegistryModel?.resumeAfterCancelledTermination()
                 NotificationCenter.default.post(name: .islandQuitCancelled, object: nil)
                 self?.showPluginInstaller()
             }
@@ -126,6 +130,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
         pluginDiagnosticsWindowController?.close()
         pluginExtensionsWindowController?.close()
         pluginInstallerWindowController?.finishClose()
+        pluginRegistryWindowController?.close()
         activityRuntime?.shutdownPlugins()
         panelController?.hide()
     }
@@ -161,7 +166,10 @@ final class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
                 permissions: permissions, diagnostics: diagnostics, diagnosticsModel: model)
             pluginExtensionsModel = extensionsModel
             let installer = PluginInstaller(manager: manager, configuration: configuration)
-            let installerModel = PluginInstallerModel(installer: installer, onInstalled: { [weak self, weak extensionsModel] record in
+            let registryClient = PluginRegistryClient()
+            let installerModel = PluginInstallerModel(installer: installer, registryPrepare: { entry in
+                try await registryClient.prepareDownload(entry, installer: installer)
+            }, onInstalled: { [weak self, weak extensionsModel] record in
                 guard self?.pluginTerminationTask == nil else { return }
                 await extensionsModel?.refresh()
                 extensionsModel?.selectedID = record.id
@@ -180,6 +188,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
                 }
             })
             pluginInstallerModel = installerModel
+            let registryModel = PluginRegistryModel(hostVersion: configuration.hostVersion, installerModel: installerModel,
+                loadCatalog: { url in try await registryClient.loadCatalog(from: url) })
             lifecycle.setAutomaticDisableHandler { [weak manager, weak lifecycle, weak model, weak extensionsModel] package, incident in
                 guard let manager, let lifecycle else { return }
                 Task { @MainActor in
@@ -202,6 +212,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
                 await extensionsModel.refresh()
                 guard !Task.isCancelled else { return }
                 self.pluginImportCoordinator.configure(model: installerModel)
+                self.pluginRegistryModel = registryModel
                 for failure in report.failures {
                     pluginLogger.error("Plugin discovery rejected a candidate: \(failure.error.code, privacy: .public)")
                 }
@@ -265,8 +276,22 @@ final class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
         guard let model = pluginExtensionsModel else { return }
         let controller = pluginExtensionsWindowController ?? PluginExtensionsWindowController(
             model: model, onShowDiagnostics: { [weak self] in self?.showPluginDiagnostics() },
-            onImport: { [weak self] in self?.importPlugin() })
+            onImport: { [weak self] in self?.importPlugin() }, onDiscover: { [weak self] in self?.showPluginRegistry() })
         pluginExtensionsWindowController = controller
+        controller.show()
+    }
+
+    fileprivate func showPluginRegistry() {
+        guard let model = pluginRegistryModel, pluginTerminationTask == nil else { return }
+        let controller = pluginRegistryWindowController ?? PluginRegistryWindowController(model: model, onDownload: { [weak self] entry in
+            guard let self, self.pluginTerminationTask == nil, model.canDownload(entry) else { return }
+            Task { @MainActor [weak self] in
+                guard let self, self.pluginTerminationTask == nil, model.canDownload(entry) else { return }
+                self.showPluginInstaller()
+                _ = await model.download(entry)
+            }
+        })
+        pluginRegistryWindowController = controller
         controller.show()
     }
 
