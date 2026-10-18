@@ -6,6 +6,7 @@ public nonisolated enum PluginInstallerError: String, Error, Equatable, Sendable
     case invalidArguments, busy, staleReview, stagingFailed, archiveRejected
     case invalidPackage, incompatibleHost, quotaExceeded, installFailed
     case rollbackFailed, cleanupFailed, cancelled
+    case archiveChecksumMismatch, registryMismatch
     public var code: String { rawValue }
 }
 
@@ -66,6 +67,22 @@ public actor PluginInstaller {
     }
 
     public func prepare(archiveURL: URL) async throws -> PluginInstallReview {
+        try await prepare(archiveURL: archiveURL, registryEntry: nil)
+    }
+
+    /// A Registry entry adds integrity/identity requirements; all existing
+    /// archive, Validator, staging and explicit-consent checks still run.
+    public func prepare(archiveURL: URL, registryEntry: PluginRegistryEntry?) async throws -> PluginInstallReview {
+        try await prepare(input: .file(archiveURL), registryEntry: registryEntry)
+    }
+
+    public func prepare(archiveData: Data, registryEntry: PluginRegistryEntry) async throws -> PluginInstallReview {
+        try await prepare(input: .data(archiveData), registryEntry: registryEntry)
+    }
+
+    private enum ArchiveInput { case file(URL), data(Data) }
+
+    private func prepare(input: ArchiveInput, registryEntry: PluginRegistryEntry?) async throws -> PluginInstallReview {
         guard !operationInProgress, pending == nil, cleanupReservation == nil else { throw PluginInstallerError.busy }
         operationInProgress = true
         defer { operationInProgress = false }
@@ -80,13 +97,29 @@ public actor PluginInstaller {
             let destination = staging.appendingPathComponent(token.uuidString, isDirectory: true)
             stagedURL = destination
             let limits = try PluginInstallationLimits.bounded(configuration.limits)
-            try extractor.extract(archiveURL: archiveURL, destinationURL: destination, limits: limits,
-                onCreate: { _, device, inode in createdIdentity.set(.init(device: device, inode: inode)) })
+            let capture: @Sendable (URL, dev_t, ino_t) -> Void = { _, device, inode in
+                createdIdentity.set(.init(device: device, inode: inode))
+            }
+            switch input {
+            case .file(let url):
+                try extractor.extract(archiveURL: url, destinationURL: destination, limits: limits,
+                                      expectedSHA256: registryEntry?.hash, onCreate: capture)
+            case .data(let data):
+                try extractor.extract(archiveData: data, destinationURL: destination, limits: limits,
+                                      expectedSHA256: registryEntry?.hash, onCreate: capture)
+            }
             stagedIdentity = try PluginInstallationIdentity.read(destination)
             try Task.checkCancellation()
             let package = try validator.validateExpandedPackage(at: destination, context: .init(
                 hostVersion: configuration.hostVersion, occupiedPluginIDs: [], limits: limits,
                 allowedContainerURL: staging))
+            if let registryEntry {
+                guard package.manifest.id == registryEntry.id, package.manifest.name == registryEntry.name,
+                      package.manifest.version == registryEntry.version,
+                      package.manifest.minimumHostVersion == registryEntry.minHostVersion else {
+                    throw PluginInstallerError.registryMismatch
+                }
+            }
             let fingerprint = try PluginInstallationFingerprint.read(package.canonicalRootURL, limits: limits)
             let current = await manager.installationSnapshot(id: package.manifest.id)
             try Task.checkCancellation()
@@ -166,6 +199,7 @@ public actor PluginInstaller {
             switch error {
             case .quotaExceeded: return .quotaExceeded
             case .invalidArguments: return .invalidArguments
+            case .checksumMismatch: return .archiveChecksumMismatch
             default: return .archiveRejected
             }
         }

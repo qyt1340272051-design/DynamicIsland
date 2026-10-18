@@ -1,0 +1,21 @@
+{
+  "environmentDescription": "Dynamic Island · Built with macOS 26.6.2",
+  "expectedFailures": 0,
+  "failedTests": 0,
+  "finishTime": 1792304316.816,
+  "passedTests": 47,
+  "result": "Passed",
+  "skippedTests": 0,
+  "startTime": 1792304301.945,
+  "statistics": [],
+  "testFailures": [],
+  "title": "Test - Dynamic Island",
+  "topInsights": [
+    {
+      "category": "Longest Test Runs",
+      "impact": "21% of duration",
+      "text": "1 longest test run with outlier durations exceeding 0.06s (three standard deviations)"
+    }
+  ],
+  "totalTestCount": 47
+}

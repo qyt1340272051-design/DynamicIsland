@@ -1,11 +1,12 @@
 import Darwin
+import CryptoKit
 import Foundation
 import zlib
 
 /// Fixed errors never include archive paths, entry names or filesystem errors.
 public nonisolated enum PluginPackageArchiveError: Error, Equatable, Sendable {
     case invalidArguments, unreadableArchive, unsupportedArchive, invalidArchive
-    case invalidEntry, quotaExceeded, extractionFailed
+    case invalidEntry, quotaExceeded, extractionFailed, checksumMismatch
 }
 
 /// A controlled ZIP32 profile for `.dip` files. The caller owns the staging
@@ -25,9 +26,23 @@ public nonisolated struct PluginPackageArchiveExtractor: Sendable {
     /// Installer retains this identity before any output is written, allowing
     /// cleanup to be retried if a later filesystem failure prevents deletion.
     func extract(archiveURL: URL, destinationURL: URL, limits: PluginPackageLimits = .init(),
+                 expectedSHA256: String? = nil,
                  onCreate: @Sendable (URL, dev_t, ino_t) -> Void) throws {
+        try extract(archiveData: Self.readArchive(archiveURL), destinationURL: destinationURL, limits: limits,
+                    expectedSHA256: expectedSHA256, onCreate: onCreate)
+    }
+
+    func extract(archiveData bytes: Data, destinationURL: URL, limits: PluginPackageLimits = .init(),
+                 expectedSHA256: String? = nil,
+                 onCreate: @Sendable (URL, dev_t, ino_t) -> Void) throws {
+        guard bytes.count <= Self.maximumArchiveBytes else { throw PluginPackageArchiveError.quotaExceeded }
         let bounds = try ArchiveBounds(limits)
-        let bytes = try Self.readArchive(archiveURL)
+        if let expectedSHA256 {
+            // Hash and extract the SAME immutable buffer. Never hash a path
+            // and then reopen it for extraction, which permits replacement.
+            let actual = SHA256.hash(data: bytes).map { String(format: "%02x", $0) }.joined()
+            guard actual == expectedSHA256 else { throw PluginPackageArchiveError.checksumMismatch }
+        }
         let entries = try ArchiveReader(bytes: bytes, bounds: bounds).entries()
         let destination = try ArchiveDestination(url: destinationURL)
         onCreate(destinationURL, destination.device, destination.inode)

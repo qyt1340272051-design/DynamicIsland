@@ -14,7 +14,7 @@
 
 ## 2026-10-17 人工验收安排调整
 
-用户明确要求「需要我操作的部分先跳过,统计好下次我再来处理」。因此仅将需要物理指针 / 设备配合的门槛延期到[统一人工清单](MANUAL_ACCEPTANCE.md)，允许后续任务先推进可自动完成的开发与验证；本条是用户对上述开始依赖规则的本次例外。原依赖列与未通过任务的状态保留，不能以跳过代替验收。当前共 2 组 / 最多 3 个指针动作（T35 两步，T36 一步），另需解锁会话供助手补跑剩余 3 项输入测试（管理 / 安装两项已在当前定向运行通过）。T35 的 0.2.1 已真实自然完成一轮约 900.9 秒，短暂完成提示漏拍；用户明确选择「留待下次」，本轮副本已[正常退出并保留数据](evidence/t35-v021-final-20261017/cleanup.json)，补拍未开始。T36 自动开发与验证已完成，最终验收保留依赖说明。
+用户明确要求「需要我操作的部分先跳过,统计好下次我再来处理」。因此仅将需要物理指针 / 设备配合的门槛延期到[统一人工清单](MANUAL_ACCEPTANCE.md)，允许后续任务先推进可自动完成的开发与验证；本条是用户对上述开始依赖规则的本次例外。原依赖列与未通过任务的状态保留，不能以跳过代替验收。当前共 2 组 / 最多 3 个指针动作（T35 两步，T36 一步），2026-10-18 完整 CI 已通过全部五项真实输入测试，历史剩余三项输入缺口已清除；另有 T39 新作者首次安装走查留待安排。T35 的 0.2.1 已真实自然完成一轮约 900.9 秒，短暂完成提示漏拍；用户明确选择「留待下次」，本轮副本已[正常退出并保留数据](evidence/t35-v021-final-20261017/cleanup.json)，补拍未开始。T36 自动开发与验证已完成，最终验收保留依赖说明。
 
 ## Phase 0 — 准备阶段：项目审计、分支与基线
 
@@ -106,4 +106,4 @@
 | --- | --- | --- | --- | --- |
 | T38 | DynamicIsland SDK | T36 | `in progress` | 已完成[实验性 SDK 草案](phase-9-t38-sdk-draft.md)：有限类型 / Schema、版本策略、无权限 Hello、离线校验和确定性打包；Python 33 passed、TypeScript 47 项预期错误通过、共享 30 契约案例及正式 Host VM / 动作 / 撤销闭环通过。综合定向 91 passed，完整 CI 1028 passed / 7 skipped / 0 failures，Release build / strict 签名通过，见[证据](evidence/t38-sdk-draft-20261017/result.json)。T36 / T35 实机依赖与稳定发布门槛保留，未发布 SDK。 |
 | T39 | 开发者文档与模板 | T38 | `in progress` | [13 个主题的开发手册](../../SDK/docs/README.md)与 [T39 记录](phase-9-t39-developer-docs.md)已完成自动开发：15 页 / 8 个源码对照代码块 / 33 条本地链接，Quick Start 在独立 SDK 副本生成实际包，Python 37 passed、严格类型通过、正式 Host 定向 7 passed / 0 skipped / 0 failures。见[证据](evidence/t39-docs-20261018/result.json)。T38 依赖、新作者首次安装和约十分钟目标的实际走查保留；没有发布稳定文档 / SDK。 |
-| T40 | Plugin Registry | T38 | `pending` | 待补。 |
+| T40 | Plugin Registry | T38 | `in progress` | 已完成[目录与下载 / 安装核心](phase-9-t40-registry-core.md)：严格 Registry V1、受限 HTTPS / CDN 跳转、流式体积限制、同一归档字节的 SHA-256 / 解压、Manifest 身份复核、现有安装预览与停用提交。正式 [registry.json](../../Registry/registry.json)为空；13 个新测试，完整 CI 1050 passed / 2 skipped / 0 failures，见[证据](evidence/t40-registry-core-20261018/result.json)。发现 UI / App 接线、真实发布条目与实际端到端验收待继续；T38 依赖保留。 |
