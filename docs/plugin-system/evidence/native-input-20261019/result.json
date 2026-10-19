@@ -1,0 +1,12 @@
+{
+  "date": "2026-10-19",
+  "checkpoint": "253c588",
+  "passed": 6,
+  "skipped": 0,
+  "failed": 0,
+  "scope": "Six real AppKit mouse-input tests skipped in the preceding locked full CI; now all passed in an unlocked session.",
+  "resultBundle": "/tmp/dynamic-island-manual-20261019/NativeInput.xcresult",
+  "logSHA256": "2961f04ac91c4530153b3e4bed2400b60ed869bf97a2352fec39d2c81334378f",
+  "productionAppStarted": false,
+  "t35CountdownModified": false
+}

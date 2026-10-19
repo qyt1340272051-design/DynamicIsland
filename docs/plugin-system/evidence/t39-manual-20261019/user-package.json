@@ -1,0 +1,19 @@
+{
+  "observedUTC": "2026-10-19T01:41:11.266211+00:00",
+  "sourcePackage": "/var/folders/74/pt17w8td2v593cq_59b3_fr00000gn/T/dynamic-island-hello.HVEAzt/hello-world.dip",
+  "sourcePackageMtimeUTC": "2026-10-19T01:34:55.163148+00:00",
+  "sha256": "fd4c3fac92d500a8e804aaaa3c4a78e5196b38c54f7ff388c9dd4475d45ae280",
+  "archiveFiles": [
+    "README.md",
+    "index.js",
+    "manifest.json"
+  ],
+  "matchesTemplateSourceExactly": true,
+  "matchesDeterministicHostFixtureBytes": true,
+  "assistantExecutedThisPackageBuild": false,
+  "assistantDidImport": false,
+  "userOpenedImportPanelObserved": true,
+  "userInstallAndClickPending": false,
+  "installedAndEnabledByUserObserved": true,
+  "userReportedCounterTransition": "0 to 1"
+}

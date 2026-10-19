@@ -1,0 +1,42 @@
+{
+  "date": "2026-10-19",
+  "status": "M02 passed; real GitHub UI and system Open acceptance complete",
+  "pid": 82621,
+  "pluginVersion": "0.1.0",
+  "realImport": true,
+  "installedDisabledAndThreePermissionsRequested": true,
+  "threePermissionsIndividuallyApprovedBeforeEnable": true,
+  "fiveRowsAndButtonsVisuallyVerified": true,
+  "publicNetworkFixtureUsed": false,
+  "tokenUsed": false,
+  "repositoriesObserved": [
+    "actions/checkout",
+    "cli/cli"
+  ],
+  "latestRunsObserved": [
+    "39115930522.1",
+    "39184461294.1"
+  ],
+  "PRsObserved": [
+    1687,
+    14727
+  ],
+  "manualRefreshAndRepositorySwitch": true,
+  "systemBrowser": "com.apple.Safari",
+  "realOpenedURLs": [
+    "https://github.com/cli/cli/actions/runs/39184461294",
+    "https://github.com/cli/cli/pull/14727"
+  ],
+  "revokedLinkPermissionShowsFixedFailure": true,
+  "restoredPermissionNewClickNavigatesFromBuildURLToPRURL": true,
+  "normalQuitVerified": true,
+  "stagingEmpty": true,
+  "retainedRepository": "cli/cli",
+  "hostIsCurrentHEADBinary": false,
+  "scope": "Historical ordinary Release identified in preflight; actual current public network and system browser, with matching original GitHub plugin package. Does not replace current HEAD full-release acceptance.",
+  "screenshots": "screenshots.json",
+  "uiExcerpts": "ui-excerpts.json",
+  "cleanup": "cleanup.json",
+  "productionAppModified": false,
+  "postedOrModifiedRemoteData": false
+}

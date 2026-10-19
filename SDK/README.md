@@ -1,10 +1,10 @@
 # DynamicIsland SDK 实验草案
 
-本目录是 0.6.0 开发分支中的 **实验性作者工具**，尚未发布稳定 SDK。T35 的完成提示补拍、T36 的真实界面 / Open 验收仍待完成；T38 保持 `in progress`。wire API `1.0.0` 与 Manifest schema `1` 是协议标识，不等于 SDK 已达到稳定发布门槛。
+本目录是 0.6.0 开发分支中的 **实验性作者工具**，尚未发布稳定 SDK。T35 完成提示与 T36 真实界面 / 系统 Open 的实机依赖已于 2026-10-19 满足，范围见[验证说明](docs/verification.md)；T38 仍为 `in progress`，稳定版本复核与发布继续单独追踪。wire API `1.0.0` 与 Manifest schema `1` 是协议标识，不等于 SDK 已达到稳定发布门槛。
 
 工具需要 Python 3.9+，只使用标准库，可离线运行，不执行 JavaScript。插件运行无需 Node.js、Python、npm 或 TypeScript；安装和执行仍由主程序负责。
 
-新作者从[开发手册 / Quick Start](docs/quick-start.md)开始。完整的 [13 个主题](docs/README.md)解释 Manifest、Activity、组件、动作、资源与权限、设置、生命周期、排错和分发；文档代码块纳入 CI，首次安装体验仍保留验收门槛。
+新作者从[开发手册 / Quick Start](docs/quick-start.md)开始。完整的 [13 个主题](docs/README.md)解释 Manifest、Activity、组件、动作、资源与权限、设置、生命周期、排错和分发；文档代码块纳入 CI。Quick Start 提供适用于 macOS 默认交互式 zsh 的单行入口；首次作者的独立安装体验和用时仍在验证。
 
 ## 开始一个插件
 
@@ -21,7 +21,7 @@ python3 tools/di_plugin.py package examples/hello-world /tmp/hello-world-0.1.0.d
 
 ## 当前草案范围
 
-[types/island.d.ts](types/island.d.ts) 描述两款官方插件自动验证过的 Native API 子集，未声明完整 Host 能力。两款官方示例的真实设备验收仍分别保留。
+[types/island.d.ts](types/island.d.ts) 描述两款官方插件使用并自动验证过的 Native API 子集，未声明完整 Host 能力。两款官方示例的实机任务均已验收；其历史独立普通 Release、当前源码回归和单机设备范围分别保留，不等同于当前 HEAD 的全量二进制验收。
 
 | 接口 | 本草案提供的调用 |
 | --- | --- |

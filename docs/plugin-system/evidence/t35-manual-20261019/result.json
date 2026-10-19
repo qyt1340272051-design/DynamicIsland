@@ -1,0 +1,56 @@
+{
+  "date": "2026-10-19",
+  "status": "M01 passed; final completion visibility gap closed",
+  "pluginVersion": "0.2.1",
+  "pid": 80223,
+  "realUIStart": true,
+  "expectedDurationSeconds": 900,
+  "firstAXCompletionSecondsAfterStartBounds": [
+    900.836,
+    900.93
+  ],
+  "continuousStoredFrameCount": 2459,
+  "completeAXFrames": 69,
+  "singleCompletionInterval": true,
+  "safeWingsVisuallyVerified": true,
+  "visibleCompletionScreenshots": [
+    "completion-early.jpg",
+    "completion-middle.jpg",
+    "completion-last.jpg"
+  ],
+  "AXCanLeadRenderedPixels": "The earliest complete AX frame had not painted the notice yet; only later visibly rendered frames are used for visual acceptance.",
+  "normalDisappearanceVerified": true,
+  "noAutomaticRestartObserved": true,
+  "normalQuitVerified": true,
+  "stagingEmpty": true,
+  "settingsCompleted": true,
+  "hostProvenance": "host-provenance.json",
+  "scope": "Historical isolated ordinary Release and exact current Pomodoro 0.2.1 package; not a current HEAD binary acceptance",
+  "capture": "capture.json",
+  "screenshots": "screenshots.json",
+  "cleanup": "cleanup.json",
+  "productionAppModified": false,
+  "privateClockOrCountdownEntryUsed": false,
+  "maximumGapBetweenConsecutiveCompleteAXFramesMs": 0,
+  "visibleCompletionFrameBoundsSecondsAfterStart": [
+    [
+      901.537,
+      901.612
+    ],
+    [
+      902.34,
+      902.413
+    ],
+    [
+      903.89,
+      903.988
+    ]
+  ],
+  "frameRetention": {
+    "allCapturedFramesKeptInCUAMemory": true,
+    "allCapturedFramesWrittenToDisk": false,
+    "selectedCaptureImagesWrittenToDisk": 7,
+    "allCompleteAXFrameTimesWrittenToDisk": 69,
+    "otherContextScreenshotsWrittenToDisk": 4
+  }
+}

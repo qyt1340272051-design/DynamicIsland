@@ -1,14 +1,26 @@
 # Phase 7 — T35 Pomodoro 官方插件
 
-日期：2026-10-14，更新于 2026-10-17。直接依赖 T24–T34 均已 verified；T31 的真实后台空闲证据已提交。T35 状态为 `in progress`，总体迁移顺序见[准备记录](t35-migration-preparation.md)。
+日期：2026-10-14，更新于 2026-10-19。直接依赖 T24–T34 均已 verified；T31 的真实后台空闲证据已提交。T35 状态为 `verified`，总体迁移顺序见[准备记录](t35-migration-preparation.md)，阶段复核见[Phase 7 统一检查](phase-7-acceptance.md)。
 
 ## 当前进度与验收边界
 
-官方 JS 包的计时、预设、完成 Activity、Storage 和一次 Scheduler 对账均已实现；3C 已删除全部 Pomodoro 专用生产 Swift，保留秒表、倒计时和通用 Host 能力。[迁移 CI](evidence/t35-pomodoro-migration-20261016.json)与[退出修复 CI](evidence/t35-quit-fix-20261016.json)保留当时的 888 total / 887 passed / 1 skipped / 0 failures；[退出取消恢复验证](evidence/t35-quit-cancellation-20261016/result.json)为 890 total / 889 passed / 1 skipped / 0 failures。最新 [0.2.1 完成布局验证](evidence/t35-completion-layout-20261016/result.json)为 **892 total / 891 passed / 1 skipped / 0 failures**，普通 Release build passed。
+官方 JS 包的计时、预设、完成 Activity、Storage 和一次 Scheduler 对账均已实现；3C 已删除全部 Pomodoro 专用生产 Swift，保留秒表、倒计时和通用 Host 能力。[迁移 CI](evidence/t35-pomodoro-migration-20261016.json)与[退出修复 CI](evidence/t35-quit-fix-20261016.json)保留当时的 888 total / 887 passed / 1 skipped / 0 failures；[退出取消恢复验证](evidence/t35-quit-cancellation-20261016/result.json)为 890 total / 889 passed / 1 skipped / 0 failures。历史 [0.2.1 完成布局验证](evidence/t35-completion-layout-20261016/result.json)为 **892 total / 891 passed / 1 skipped / 0 failures**，普通 Release build passed。
 
 普通 Release 隔离副本已完成实际 `.dip` 导入、权限拒绝 / 撤销 / 明确授权、设置保存、真实新进程恢复预设且不自动开始，以及菜单 / 动画退出的 PID 消失验证。首次退出卡住后撤回的重启结论及后续修复均保留在[部分验收证据](evidence/t35-pomodoro-ui-20261016/result.json)和文末记录中。
 
-0.2.0 隔离副本已通过无效设置回退、两轮真实 900 秒自然到期、无自动重开、物理 compact 两翼、旧页面和收起重展开恢复，并正常退出。第二轮实际捕获到完成提示，但居中摘要位于相机区域，未接受该可见性。官方包 0.2.1 已修正两形态；本轮已实际升级，确认安装后停用、启用仍不授予 storage，并通过新版审核明确允许该权限。0.2.1 现已[实际自然完成一轮约 900.9 秒](evidence/t35-v021-final-20261017/result.json)，并确认运行中的物理两翼与结束后无自动开表；短暂完成提示因助手启动抓帧晚而未留图，不能接受该项。用户选择「留待下次」后，本轮副本已[正常退出并保留数据与授权](evidence/t35-v021-final-20261017/cleanup.json)；当前仅待 **补拍实际完成提示的安全两翼**，补跑结束后仍须正常退出归档。T35 保持 in progress；T36 已按用户人工验收延期安排先行完成自动开发，实际验收仍 in progress。已提交的[修复证据](evidence/t35-completion-layout-20261016/result.json)和[0.2.0 实测](evidence/t35-pomodoro-final-20261016/result.json)保留原版本范围；本轮 0.2.1 升级与授权已保存为[阶段证据](evidence/t35-v021-ui-20261017/result.json)。历史进度保留如下。
+0.2.0 的实际计时、旧页面和设置验收保留原版本范围，旧版完成摘要因相机遮挡未被接受；0.2.1 已修正 compact / expanded 两种布局，并[实际升级与独立重审授权](evidence/t35-v021-ui-20261017/result.json)。2026-10-17 的[自然完成漏拍记录](evidence/t35-v021-final-20261017/result.json)继续保留，缺口已由下述本日实机补齐，不能把旧版画面或离屏测试替代为新版实机证据。
+
+## 2026-10-19 最终实机验收通过
+
+[本轮结果](evidence/t35-manual-20261019/result.json)：独立普通 Release / PID 80223 中，通过真实 UI 开始十五分钟计时，在 Start 前后采样界限之后 **900.836–900.93 秒**首次观察到完成 AX。[连续捕获](evidence/t35-manual-20261019/capture.json)在内存连续采集 2459 帧，归档 7 个选帧及全部 69 帧完成 AX 时间，只有一个完成区间。最早 AX 帧尚未绘制完成提示；可见性只由后续实际像素确认：[早期](evidence/t35-manual-20261019/completion-early.jpg)、[中段](evidence/t35-manual-20261019/completion-middle.jpg)、[末段](evidence/t35-manual-20261019/completion-last.jpg)均显示左侧完成图标、右侧两字「完成」位于物理相机两侧，提示随后正常消失，未观察到自动重开。
+
+[正常退出与保留数据](evidence/t35-manual-20261019/cleanup.json)确认 Command-Q 后 PID 80223 消失、Staging 为空，0.2.1 包、启用状态、storage 批准以及十五分钟 completed 设置均保留。没有使用私有 countdown 入口、改时钟或修改生产 App。结合既有公开 API / 迁移 / 设置 / 旧页面证据，原任务内最后的完成提示和清理缺口已关闭，T35 标为 verified。
+
+[Host 来源边界](evidence/t35-manual-20261019/host-provenance.json)明确：本轮是历史独立普通 Release 与完全相同的当前 0.2.1 插件包；历史精确干净构建 commit 未盖章。八项 Host 源 hash 对应 checkpoint 0b96cab，当前相关渲染几何与 countdown 源码保持相同，但 App、JSBridge、Activity Runtime / Manager 后续已有扩展，因此本次不等同于当前 HEAD 二进制的全量产品验收。当前代码的自动回归另见[完整 CI](evidence/t40-registry-ui-20261018/result.json)与[六项真实输入补验](evidence/native-input-20261019/result.json)。
+
+## 历史实施与延期记录
+
+以下保留各子步骤当时的状态、失败、修复和继续位置；其中「in progress」「待补拍」及历史 PID 不代表当前状态。最终结论以上述 2026-10-19 实机记录为准。
 
 ## 子步骤 1A：公开 compact 可见性字段
 
@@ -176,9 +188,9 @@ CI **868 total / 864 passed / 4 skipped / 0 failures**，普通 Release build pa
 该轮结束时，完成提示补录和重新展开恢复尚未完成；随后用户物理重新展开已确认选择清除，第二轮也已捕获旧版提示，但其遮挡问题未被接受。当前待办以文末 0.2.1 继续位置为准。
 
 
-## T35 范围统一检查
+## T35 范围统一检查（2026-10-17 历史）
 
-本表仅覆盖 T35，不表示 Phase 7 已全部完成。0.2.0 的第二轮提示补录、重新展开恢复与 PID 11953 正常退出已记录；旧提示因相机遮挡未通过。0.2.1 已实际升级并重新审核授权，真实自然完成一轮并正常退出，当前仅待新版自然到期安全两翼提示补拍。用户选择留待下次，T35 in progress；T36 自动开发已完成，实际验收仍 in progress。
+本表保留 2026-10-17 当时范围；其补拍 / 清理缺口已于[2026-10-19 最终验收](evidence/t35-manual-20261019/result.json)关闭，当前阶段结论见[Phase 7 统一检查](phase-7-acceptance.md)。当时本表仅覆盖 T35，不表示 Phase 7 已全部完成。0.2.0 的第二轮提示补录、重新展开恢复与 PID 11953 正常退出已记录；旧提示因相机遮挡未通过。0.2.1 已实际升级并重新审核授权，真实自然完成一轮并正常退出，当时仅待新版自然到期安全两翼提示补拍。用户选择留待下次，T35 当时 in progress；T36 自动开发已完成，实际验收当时仍 in progress。
 
 | 类别 | 结论与证据 | 验收范围 |
 | --- | --- | --- |
@@ -218,8 +230,10 @@ CI **868 total / 864 passed / 4 skipped / 0 failures**，普通 Release build pa
 
 用户要求先跳过需要本人操作的部分，已登记到[统一人工清单](MANUAL_ACCEPTANCE.md)：当时 T35 为 1 组 / 2 个指针动作，最后一轮计时未开始。当时不再等待悬停；隔离副本已通过标准菜单请求退出，实际进程结果见[升级证据](evidence/t35-v021-ui-20261017/result.json)。T35 未验收状态保留，T36 按用户这次依赖例外先推进可自动完成的开发。
 
-## 本轮自然完成与补拍延期（2026-10-17 当前继续位置）
+## 本轮自然完成与补拍延期（2026-10-17 历史继续位置）
 
 用户配合展开后，实际 0.2.1 / PID 32762 于 08:52:03.808–08:52:03.833Z 通过 UI 点击开始；同一进程于 09:07:04.764569Z 保存 completed，实际经过约 900.93–900.955 秒。运行中的 compact 图标和时间位于物理刘海两侧，结束后回到空闲且无自动开表。助手抓帧启动晚，未留下短暂完成提示，不能将该项标为通过。[本轮证据](evidence/t35-v021-final-20261017/result.json)明确保留缺口。
 
-捕获函数已预先准备，并用空闲界面完成短时抓帧验证；下次应为新一轮建立独立 Start 时间、截止时间和帧缓存，到期前至少两分钟开始连续短段捕获，每段重新绑定实际 App。用户现已明确回复「留待下次」，本轮没有启动补跑。副本已于 09:42:29.606Z 请求正常 Cmd+Q，随后确认 PID 32762 消失、Staging 为空，0.2.1 安装三文件、15 分钟 completed 设置和存储批准保留；原 App PID 21458 仍运行，见[清理记录](evidence/t35-v021-final-20261017/cleanup.json)。下次从[人工清单 M01](MANUAL_ACCEPTANCE.md)恢复并核对新 PID，T35 继续 in progress。
+捕获函数已预先准备，并用空闲界面完成短时抓帧验证；下次应为新一轮建立独立 Start 时间、截止时间和帧缓存，到期前至少两分钟开始连续短段捕获，每段重新绑定实际 App。用户当时明确回复「留待下次」，当轮没有启动补跑。副本已于 09:42:29.606Z 请求正常 Cmd+Q，随后确认 PID 32762 消失、Staging 为空，0.2.1 安装三文件、15 分钟 completed 设置和存储批准保留；原 App PID 21458 当时仍运行，见[清理记录](evidence/t35-v021-final-20261017/cleanup.json)。当时下次计划为从[人工清单 M01](MANUAL_ACCEPTANCE.md)恢复并核对新 PID，T35 当时继续 in progress。
+
+后续：本节保留的补拍与正常退出待办已由[2026-10-19 实机结果](evidence/t35-manual-20261019/result.json)和[清理](evidence/t35-manual-20261019/cleanup.json)完成；T35 当前为 verified，不再要求重复本历史计时。

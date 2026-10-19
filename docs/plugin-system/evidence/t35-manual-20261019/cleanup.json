@@ -1,0 +1,40 @@
+{
+  "observedUTC": "2026-10-19T01:13:56.019546+00:00",
+  "pid": 80223,
+  "pidAlive": false,
+  "normalQuitRequestedUTC": "2026-10-19T01:13:27.039Z",
+  "method": "CUA exact-app normal Command-Q",
+  "stagingEntries": [],
+  "retainedStorage": {
+    "pluginID": "com.dynamicisland.pomodoro",
+    "schemaVersion": 1,
+    "values": {
+      "settings": {
+        "lastSession": "completed",
+        "schemaVersion": 1,
+        "selectedMinutes": 15
+      }
+    }
+  },
+  "manager": {
+    "plugins": {
+      "com.dynamicisland.pomodoro": {
+        "isEnabled": true,
+        "version": "0.2.1"
+      }
+    },
+    "schemaVersion": 1
+  },
+  "permissions": {
+    "records": {
+      "com.dynamicisland.pomodoro": {
+        "fingerprint": "fbc68a105bce20160bd4af1109cf31cb91b9113aa913c888a7b66fa3ca773a00",
+        "pluginID": "com.dynamicisland.pomodoro",
+        "states": {
+          "storage.local": "granted"
+        }
+      }
+    },
+    "schemaVersion": 1
+  }
+}

@@ -1,0 +1,247 @@
+{
+  "date": "2026-10-19",
+  "createdUTC": "2026-10-19T01:04:37.272788+00:00",
+  "purpose": "T39 first-author walkthrough isolated ordinary Release App preparation only",
+  "status": "prepared; not launched; human author walkthrough pending",
+  "currentHEAD": "253c5882f45daaac3c358833277098766065a0fe",
+  "sourceApp": {
+    "path": "/tmp/dynamic-island-ci-derived-data/Build/Products/Release/Dynamic Island.app",
+    "bundleID": "com.rong5.dynamic-island-mac",
+    "name": "Dynamic Island",
+    "displayName": "Dynamic Island",
+    "productVersion": "0.5.0",
+    "build": "2",
+    "executablePath": "/tmp/dynamic-island-ci-derived-data/Build/Products/Release/Dynamic Island.app/Contents/MacOS/Dynamic Island",
+    "executableSHA256": "011472297eaf46d49348b860476961b87c56f47d4d3d6c0cb360e235b0e13f04",
+    "executableMtimeEpochSeconds": 1792322627.9465404,
+    "executableMtimeUTC": "2026-10-18T11:23:47.946540+00:00",
+    "infoPlistSHA256": "0736d5a8ad0669a2aa92b56fc28468186a3bcdf901ed46d03536409dafe78790",
+    "signatureDetails": [
+      "Executable=/private/tmp/dynamic-island-ci-derived-data/Build/Products/Release/Dynamic Island.app/Contents/MacOS/Dynamic Island",
+      "Identifier=com.rong5.dynamic-island-mac",
+      "Format=app bundle with Mach-O thin (arm64)",
+      "CodeDirectory v=20500 size=20893 flags=0x10002(adhoc,runtime) hashes=642+7 location=embedded",
+      "VersionPlatform=1",
+      "VersionMin=1703936",
+      "VersionSDK=1705216",
+      "Hash type=sha256 size=32",
+      "CandidateCDHash sha256=fc214fcc1988145ec515c76237917b5f1a8442a9",
+      "CandidateCDHashFull sha256=fc214fcc1988145ec515c76237917b5f1a8442a9d5126ff121dc473b2c80a0cf",
+      "Hash choices=sha256",
+      "CMSDigest=fc214fcc1988145ec515c76237917b5f1a8442a9d5126ff121dc473b2c80a0cf",
+      "CMSDigestType=2",
+      "Executable Segment base=0",
+      "Executable Segment limit=3047424",
+      "Executable Segment flags=0x1",
+      "Page size=16384",
+      "CDHash=fc214fcc1988145ec515c76237917b5f1a8442a9",
+      "Signature=adhoc",
+      "Info.plist entries=28",
+      "TeamIdentifier=not set",
+      "Runtime Version=26.5.0",
+      "Sealed Resources version=2 rules=13 files=2",
+      "Internal requirements count=0 size=12"
+    ],
+    "strictDeepVerification": {
+      "passed": true,
+      "output": [
+        "/tmp/dynamic-island-ci-derived-data/Build/Products/Release/Dynamic Island.app: valid on disk",
+        "/tmp/dynamic-island-ci-derived-data/Build/Products/Release/Dynamic Island.app: satisfies its Designated Requirement"
+      ]
+    },
+    "entitlements": {
+      "com.apple.security.app-sandbox": true,
+      "com.apple.security.automation.apple-events": true,
+      "com.apple.security.cs.allow-jit": true,
+      "com.apple.security.files.user-selected.read-write": true,
+      "com.apple.security.network.client": true,
+      "com.apple.security.scripting-targets": {
+        "com.apple.Music": [
+          "com.apple.Music.playback",
+          "com.apple.Music.library.read"
+        ]
+      }
+    },
+    "documentTypesPresent": true,
+    "URLTypesPresent": false,
+    "exportedTypeDeclarationsPresent": true,
+    "importedTypeDeclarationsPresent": false
+  },
+  "copyApp": {
+    "path": "/tmp/dynamic-island-manual-20261019/Dynamic Island T39 SDK.app",
+    "bundleID": "com.rong5.dynamic-island.t39-sdk.20261019",
+    "name": "Dynamic Island T39 SDK",
+    "displayName": "Dynamic Island T39 SDK",
+    "productVersion": "0.5.0",
+    "build": "2",
+    "executablePath": "/tmp/dynamic-island-manual-20261019/Dynamic Island T39 SDK.app/Contents/MacOS/Dynamic Island",
+    "executableSHA256": "401e30e02fbc0b547a8c7cdab0f8a0afa4fe04b013a32a823646a083d646c299",
+    "executableMtimeEpochSeconds": 1792371877.14999,
+    "executableMtimeUTC": "2026-10-19T01:04:37.149990+00:00",
+    "infoPlistSHA256": "59c486518adf9b049e5730eec23e2cac7b0de0cfb458c27a0a7a4531da8b4d90",
+    "signatureDetails": [
+      "Executable=/private/tmp/dynamic-island-manual-20261019/Dynamic Island T39 SDK.app/Contents/MacOS/Dynamic Island",
+      "Identifier=com.rong5.dynamic-island.t39-sdk.20261019",
+      "Format=app bundle with Mach-O thin (arm64)",
+      "CodeDirectory v=20500 size=20906 flags=0x10002(adhoc,runtime) hashes=642+7 location=embedded",
+      "VersionPlatform=1",
+      "VersionMin=1703936",
+      "VersionSDK=1705216",
+      "Hash type=sha256 size=32",
+      "CandidateCDHash sha256=f8f654fb5338240894f733ac30626314bbd503f9",
+      "CandidateCDHashFull sha256=f8f654fb5338240894f733ac30626314bbd503f9abf993c481bed15fe5026268",
+      "Hash choices=sha256",
+      "CMSDigest=f8f654fb5338240894f733ac30626314bbd503f9abf993c481bed15fe5026268",
+      "CMSDigestType=2",
+      "Executable Segment base=0",
+      "Executable Segment limit=3047424",
+      "Executable Segment flags=0x1",
+      "Page size=16384",
+      "CDHash=f8f654fb5338240894f733ac30626314bbd503f9",
+      "Signature=adhoc",
+      "Info.plist entries=26",
+      "TeamIdentifier=not set",
+      "Runtime Version=26.5.0",
+      "Sealed Resources version=2 rules=13 files=2",
+      "Internal requirements count=0 size=12"
+    ],
+    "strictDeepVerification": {
+      "passed": true,
+      "output": [
+        "/tmp/dynamic-island-manual-20261019/Dynamic Island T39 SDK.app: valid on disk",
+        "/tmp/dynamic-island-manual-20261019/Dynamic Island T39 SDK.app: satisfies its Designated Requirement"
+      ]
+    },
+    "entitlements": {
+      "com.apple.security.app-sandbox": true,
+      "com.apple.security.automation.apple-events": true,
+      "com.apple.security.cs.allow-jit": true,
+      "com.apple.security.files.user-selected.read-write": true,
+      "com.apple.security.network.client": true,
+      "com.apple.security.scripting-targets": {
+        "com.apple.Music": [
+          "com.apple.Music.playback",
+          "com.apple.Music.library.read"
+        ]
+      }
+    },
+    "documentTypesPresent": false,
+    "URLTypesPresent": false,
+    "exportedTypeDeclarationsPresent": false,
+    "importedTypeDeclarationsPresent": false
+  },
+  "copyAndResign": {
+    "compiled": false,
+    "copiedUsing": "ditto",
+    "executableSHA256BeforeInfoMutation": "011472297eaf46d49348b860476961b87c56f47d4d3d6c0cb360e235b0e13f04",
+    "executableSHA256AfterInfoMutationBeforeResigning": "011472297eaf46d49348b860476961b87c56f47d4d3d6c0cb360e235b0e13f04",
+    "copyMatchedSourceBeforeResigning": true,
+    "removedHandlers": {
+      "CFBundleDocumentTypes": true,
+      "CFBundleURLTypes": false,
+      "UTExportedTypeDeclarations": true,
+      "UTImportedTypeDeclarations": false
+    },
+    "signingCommand": [
+      "codesign",
+      "--force",
+      "--sign",
+      "-",
+      "--options",
+      "runtime",
+      "--timestamp=none",
+      "--entitlements",
+      "/tmp/dynamic-island-manual-20261019/t39-ordinary-entitlements.plist",
+      "--generate-entitlement-der",
+      "/tmp/dynamic-island-manual-20261019/Dynamic Island T39 SDK.app"
+    ],
+    "signingOutput": [
+      "/tmp/dynamic-island-manual-20261019/Dynamic Island T39 SDK.app: replacing existing signature"
+    ],
+    "fullExecutableSHA256ChangesOnResigning": true,
+    "noRecompilationProof": {
+      "method": "Copy each full Mach-O to a separate disposable file; remove embedded signature using codesign --remove-signature; compare remaining entire file SHA256",
+      "sourceUnsignedSHA256": "d4b33c37fc2df1b0857a396d276c44212ba6f213ad83e08be9bcc8018849d88b",
+      "copyUnsignedSHA256": "d4b33c37fc2df1b0857a396d276c44212ba6f213ad83e08be9bcc8018849d88b",
+      "identical": true
+    }
+  },
+  "buildProvenance": {
+    "priorEvidence": "../t40-registry-ui-20261018/result.json",
+    "priorEvidenceBaselineCommit": "23a039c",
+    "sourceLogPath": "/tmp/dynamic-island-t40-ui-20261018/full-ci.log",
+    "sourceLogSHA256": "b804a0efb7e06b0c40dd4a85f0514e29f9a42432c6c24ac036726aac7acf5842",
+    "matchesRecordedLogHash": true,
+    "logExcerpts": [
+      {
+        "line": 9546,
+        "text": "Ld /tmp/dynamic-island-ci-derived-data/Build/Products/Release/Dynamic\\ Island.app/Contents/MacOS/Dynamic\\ Island normal (in target 'Dynamic Island' from project 'DynamicIsland')"
+      },
+      {
+        "line": 9564,
+        "text": "CodeSign /tmp/dynamic-island-ci-derived-data/Build/Products/Release/Dynamic\\ Island.app (in target 'Dynamic Island' from project 'DynamicIsland')"
+      },
+      {
+        "line": 9579,
+        "text": "** BUILD SUCCEEDED **"
+      },
+      {
+        "line": 9581,
+        "text": "Tests and Release build passed."
+      }
+    ],
+    "recordedSourceHashesComparedToCurrentHEAD": {
+      "DynamicIsland/DynamicIslandApp.swift": {
+        "recordedSHA256": "9c9e183cab31ff76ae5fe2478cc90d262c26b2d9cd91d7395a98e0288ed529ba",
+        "currentSHA256": "9c9e183cab31ff76ae5fe2478cc90d262c26b2d9cd91d7395a98e0288ed529ba",
+        "matches": true
+      },
+      "DynamicIsland/Plugins/PluginExtensionsUI.swift": {
+        "recordedSHA256": "4301c28627b2184d1dc06b5595f6b80d1ba7ba8d9063f41ca1173f4f65bce527",
+        "currentSHA256": "4301c28627b2184d1dc06b5595f6b80d1ba7ba8d9063f41ca1173f4f65bce527",
+        "matches": true
+      },
+      "DynamicIsland/Plugins/PluginInstallerUI.swift": {
+        "recordedSHA256": "74df2a48b0445dd6e047be3255ec5032f434743612a8c23cb531899e13d52fa6",
+        "currentSHA256": "74df2a48b0445dd6e047be3255ec5032f434743612a8c23cb531899e13d52fa6",
+        "matches": true
+      },
+      "DynamicIsland/Plugins/PluginRegistryUI.swift": {
+        "recordedSHA256": "bdfee10581dfa5a7d7ae37c5ff6b1536c0da2c2017fccf65ee93d934ff21420c",
+        "currentSHA256": "bdfee10581dfa5a7d7ae37c5ff6b1536c0da2c2017fccf65ee93d934ff21420c",
+        "matches": true
+      },
+      "DynamicIslandTests/PluginRegistryModelTests.swift": {
+        "recordedSHA256": "746f275350b716c54ac58215f6df8c1d57478bac54bc5c70e35e6d3089feb65c",
+        "currentSHA256": "746f275350b716c54ac58215f6df8c1d57478bac54bc5c70e35e6d3089feb65c",
+        "matches": true
+      },
+      "DynamicIslandTests/PluginRegistryUITests.swift": {
+        "recordedSHA256": "049425fda5038ca15e0d06295cb8b87313fdcbafdf7770fd8766d50114d0961c",
+        "currentSHA256": "049425fda5038ca15e0d06295cb8b87313fdcbafdf7770fd8766d50114d0961c",
+        "matches": true
+      },
+      "Registry/README.md": {
+        "recordedSHA256": "a78773fdffc9f592c85af5cb8c3eba5147bd345a968d920137a39f4436cb7a96",
+        "currentSHA256": "a78773fdffc9f592c85af5cb8c3eba5147bd345a968d920137a39f4436cb7a96",
+        "matches": true
+      },
+      "SDK/docs/publishing.md": {
+        "recordedSHA256": "5d529abea907103f7aa7addf101a654b08e54a2a48e1d5f6f74c47bf5aedf5a7",
+        "currentSHA256": "5d529abea907103f7aa7addf101a654b08e54a2a48e1d5f6f74c47bf5aedf5a7",
+        "matches": true
+      }
+    },
+    "note": "Reuses the previous CI ordinary Release linked on 2026-10-18; source file hashes recorded by that run match current HEAD 253c588. The original build did not embed a Git commit stamp, so the file/source/log correspondence is recorded instead of claiming a fresh compile."
+  },
+  "scope": {
+    "appLaunched": false,
+    "UIOperated": false,
+    "networkUsed": false,
+    "helloPackagedForUser": false,
+    "productionAppModified": false,
+    "T35T36AppsOrContainersModified": false,
+    "sourceAppUnchangedAfterCopyAndResign": true
+  },
+  "next": "User reads SDK/docs/quick-start.md, runs its offline template packaging steps, installs, enables, selects the tool, clicks Add once, and reports timing and friction."
+}

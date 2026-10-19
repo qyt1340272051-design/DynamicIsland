@@ -2,6 +2,8 @@
 
 日期：2026-10-18。按用户允许延期人工验收的安排，继续 T38 实验草案的作者资料。T38 / T36 / T35 的依赖门槛保留，T39 为 `in progress`；新作者按文档首次安装以及约十分钟的目标尚未实测。
 
+2026-10-19 更新：T35 / T36 实机依赖已完成。本次首次作者走查发现交互式 zsh 粘贴完整 Bash 脚本时触发 `zsh: event not found: /usr/bin/env`，首轮独立体验遇阻；现已修正，用户协助功能复测已通过。首次独立体验与十分钟目标仍待验证。详细记录见下方。
+
 ## 交付
 
 [SDK 开发手册](../../SDK/docs/README.md)覆盖计划指定的 Quick Start、Manifest、Activity、UI Components、Actions、Storage、Network、Permissions、Settings、Lifecycle、Debugging、Packaging、Publishing 共 13 个主题，另有索引和验证边界页。无需阅读 Swift 源码即可理解有限 Native API。
@@ -20,6 +22,16 @@ Hello 沿用 T38 的单一可打包源目录，没有另做分叉模板。Quick 
 - 正式 Host 定向 **7 passed / 0 skipped / 0 failures**：4 个新文档测试和 3 个 SDK 契约测试。读取原始文档示例文件，校验临时包后进入实际 VM / Bridge / Manager / Router；验证发布更新结束、未授权 / 批准 / 撤销存储、非法业务 JSON、网络状态和真实动作链接。只替换网络响应和系统 opener，不发真实请求。
 - 本子步骤未改变产品 Swift 源码，未重复完整 UI / Release 矩阵。构建出现的两项历史 actor 警告不由本次新增测试引入；没有新增编译错误。
 
-## 后续门槛
+## 2026-10-18 后续门槛（历史安排）
 
 需要新作者按 Quick Start 完成第一次安装并确认信息足够；暂不要求用户现在操作，不以自动 Host 测试代替人类上手体验。M01 / M02 继续按原安排延期，本轮未启动验收副本或新的十五分钟计时。稳定 SDK、真实上游兼容和 Registry 发布仍分别保留。
+
+## 2026-10-19 首次作者卡点与文档修正
+
+用户本日恢复人工验收，T35 / T36 已完成。独立 SDK 副本和来源见 [预检](evidence/t39-manual-20261019/preflight.json)，首次走查见 [记录](evidence/t39-manual-20261019/walkthrough.json)。助手只准备空管理窗口与手册，未代用户打包、安装或点击。
+
+用户在终端校验 / 打包阶段报告 `zsh: event not found: /usr/bin/env`。旧手册将带 `#!/usr/bin/env bash` 的完整脚本作为第一段可复制代码，交互式 zsh 会对 `!` 做历史展开；自动执行脚本文件的旧测试未覆盖这种粘贴方式。
+
+[修正与验证](evidence/t39-manual-20261019/quick-start-fix.json)：Quick Start 首段现为单行 `bash docs/quick-start.sh`，完整源码折叠展示。原有独立 SDK 测试改为把实际首段命令传入交互式 zsh 标准输入，并继续检查确定性 `.dip` 字节；没有改变模板或包格式。Python 37 项、类型检查及 47 项预期错误均通过。当前文档检查为 **15 页 / 9 个源码对照代码块 / 33 条本地链接**；上文 8 块是原提交的历史结果。
+
+修正命令提供后，用户自行打包、导入、启用并回复已看到 0 → 1；后续界面实际显示已点击 2 次，助手未点击或重置计数。用户生成的包与模板、正式 Host fixture 字节一致，插件未申请额外权限，副本正常退出且 Staging 为空，见[本轮结果](evidence/t39-manual-20261019/result.json)。协助功能复测通过；首轮独立体验遇阻的事实保留，十分钟目标及无需额外指导的首次作者体验仍待复测验证。T38 稳定版本门槛继续独立追踪，T39 保持 `in progress`。

@@ -1,0 +1,29 @@
+{
+  "date": "2026-10-19",
+  "status": "Assisted functional walkthrough passed after documentation fix; independent first-author and ten-minute criteria remain unverified",
+  "userBuiltAndInstalledHello": true,
+  "installedSourceMatchesTemplate": true,
+  "pluginHasExtraPermissions": false,
+  "userReportedTransition": "0 to 1",
+  "laterVisuallyObservedCounterValue": 2,
+  "assistantClickedCounter": false,
+  "initialFailure": "zsh: event not found: /usr/bin/env",
+  "fix": "quick-start-fix.json",
+  "SDKRegression": {
+    "pythonPassed": 37,
+    "typeChecksPassed": true,
+    "expectedTypeErrors": 47,
+    "documents": 15,
+    "sourceBoundExamples": 9,
+    "localLinks": 33
+  },
+  "normalQuitVerified": true,
+  "stagingEmpty": true,
+  "walkthrough": "walkthrough.json",
+  "screenshots": "screenshots.json",
+  "cleanup": "cleanup.json",
+  "firstIndependentAuthorCriterionPassed": false,
+  "tenMinuteTargetVerified": false,
+  "T38StableSDKGateSatisfied": false,
+  "T39TaskStatus": "in progress"
+}

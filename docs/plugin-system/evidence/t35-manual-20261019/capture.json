@@ -1,0 +1,355 @@
+{
+  "startBeforeEpochMs": 1792371436160,
+  "startAfterEpochMs": 1792371436187,
+  "deadlineEpochMs": 1792372336187,
+  "totalObserved": 3487,
+  "storedFrames": 2459,
+  "completeAXFrames": 69,
+  "firstNoticeBounds": [
+    1792372337023,
+    1792372337090
+  ],
+  "lastNoticeBounds": [
+    1792372340077,
+    1792372340148
+  ],
+  "firstStoredBounds": [
+    1792372216226,
+    1792372216275
+  ],
+  "lastStoredBounds": [
+    1792372356273,
+    1792372356322
+  ],
+  "selectedFrames": [
+    {
+      "index": 0,
+      "before": 1792372336258,
+      "after": 1792372336308,
+      "phase": "running",
+      "state": "Window: \"\", App: Dynamic Island T35 Pomodoro.\n0 system dialog Secondary Actions: Raise\n\t1 container\n\t\t2 image timer\n\t\t3 text Description: Countdown, Value: 00:01\n4 menu bar\n\t5 Dynamic Island T35 Pomodoro\n\t6 Edit\n\t7 View\n\t8 Window\n\t9 Help\n"
+    },
+    {
+      "index": 1,
+      "before": 1792372337023,
+      "after": 1792372337090,
+      "phase": "complete",
+      "state": "Window: \"\", App: Dynamic Island T35 Pomodoro.\n0 system dialog Secondary Actions: Raise\n\t1 container\n\t\t2 image (selected) Description: checkmark circle fill, ID: checkmark.circle.fill\n\t\t3 text 完成\n4 menu bar\n\t5 Dynamic Island T35 Pomodoro\n\t6 Edit\n\t7 View\n\t8 Window\n\t9 Help\n"
+    },
+    {
+      "index": 2,
+      "before": 1792372337724,
+      "after": 1792372337772,
+      "phase": "complete",
+      "state": "Window: \"\", App: Dynamic Island T35 Pomodoro.\n0 system dialog Secondary Actions: Raise\n\t1 container\n\t\t2 image (selected) Description: checkmark circle fill, ID: checkmark.circle.fill\n\t\t3 text 完成\n4 menu bar\n\t5 Dynamic Island T35 Pomodoro\n\t6 Edit\n\t7 View\n\t8 Window\n\t9 Help\n"
+    },
+    {
+      "index": 3,
+      "before": 1792372338527,
+      "after": 1792372338573,
+      "phase": "complete",
+      "state": "Window: \"\", App: Dynamic Island T35 Pomodoro.\n0 system dialog Secondary Actions: Raise\n\t1 container\n\t\t2 image (selected) Description: checkmark circle fill, ID: checkmark.circle.fill\n\t\t3 text 完成\n4 menu bar\n\t5 Dynamic Island T35 Pomodoro\n\t6 Edit\n\t7 View\n\t8 Window\n\t9 Help\n"
+    },
+    {
+      "index": 4,
+      "before": 1792372340077,
+      "after": 1792372340148,
+      "phase": "complete",
+      "state": "Window: \"\", App: Dynamic Island T35 Pomodoro.\n0 system dialog Secondary Actions: Raise\n\t1 container\n\t\t2 image (selected) Description: checkmark circle fill, ID: checkmark.circle.fill\n\t\t3 text 完成\n4 menu bar\n\t5 Dynamic Island T35 Pomodoro\n\t6 Edit\n\t7 View\n\t8 Window\n\t9 Help\n"
+    },
+    {
+      "index": 5,
+      "before": 1792372340906,
+      "after": 1792372340943,
+      "phase": "idle",
+      "state": "Window: \"\", App: Dynamic Island T35 Pomodoro.\n0 system dialog Secondary Actions: Raise\n1 menu bar\n\t2 Dynamic Island T35 Pomodoro\n\t3 Edit\n\t4 View\n\t5 Window\n\t6 Help\n"
+    },
+    {
+      "index": 6,
+      "before": 1792372345122,
+      "after": 1792372345160,
+      "phase": "idle",
+      "state": "Window: \"\", App: Dynamic Island T35 Pomodoro.\n0 system dialog Secondary Actions: Raise\n1 menu bar\n\t2 Dynamic Island T35 Pomodoro\n\t3 Edit\n\t4 View\n\t5 Window\n\t6 Help\n"
+    }
+  ],
+  "noticeFrameTimes": [
+    [
+      1792372337023,
+      1792372337090
+    ],
+    [
+      1792372337090,
+      1792372337142
+    ],
+    [
+      1792372337142,
+      1792372337189
+    ],
+    [
+      1792372337189,
+      1792372337229
+    ],
+    [
+      1792372337229,
+      1792372337273
+    ],
+    [
+      1792372337273,
+      1792372337325
+    ],
+    [
+      1792372337325,
+      1792372337375
+    ],
+    [
+      1792372337375,
+      1792372337424
+    ],
+    [
+      1792372337424,
+      1792372337475
+    ],
+    [
+      1792372337475,
+      1792372337524
+    ],
+    [
+      1792372337524,
+      1792372337575
+    ],
+    [
+      1792372337575,
+      1792372337625
+    ],
+    [
+      1792372337625,
+      1792372337675
+    ],
+    [
+      1792372337675,
+      1792372337724
+    ],
+    [
+      1792372337724,
+      1792372337772
+    ],
+    [
+      1792372337772,
+      1792372337810
+    ],
+    [
+      1792372337810,
+      1792372337856
+    ],
+    [
+      1792372337856,
+      1792372337894
+    ],
+    [
+      1792372337894,
+      1792372337939
+    ],
+    [
+      1792372337939,
+      1792372337976
+    ],
+    [
+      1792372337976,
+      1792372338022
+    ],
+    [
+      1792372338022,
+      1792372338060
+    ],
+    [
+      1792372338060,
+      1792372338106
+    ],
+    [
+      1792372338106,
+      1792372338156
+    ],
+    [
+      1792372338156,
+      1792372338193
+    ],
+    [
+      1792372338193,
+      1792372338240
+    ],
+    [
+      1792372338240,
+      1792372338276
+    ],
+    [
+      1792372338276,
+      1792372338322
+    ],
+    [
+      1792372338322,
+      1792372338359
+    ],
+    [
+      1792372338359,
+      1792372338406
+    ],
+    [
+      1792372338406,
+      1792372338442
+    ],
+    [
+      1792372338442,
+      1792372338489
+    ],
+    [
+      1792372338489,
+      1792372338527
+    ],
+    [
+      1792372338527,
+      1792372338573
+    ],
+    [
+      1792372338573,
+      1792372338615
+    ],
+    [
+      1792372338615,
+      1792372338657
+    ],
+    [
+      1792372338657,
+      1792372338706
+    ],
+    [
+      1792372338706,
+      1792372338743
+    ],
+    [
+      1792372338743,
+      1792372338789
+    ],
+    [
+      1792372338789,
+      1792372338840
+    ],
+    [
+      1792372338840,
+      1792372338889
+    ],
+    [
+      1792372338889,
+      1792372338926
+    ],
+    [
+      1792372338926,
+      1792372338973
+    ],
+    [
+      1792372338973,
+      1792372339023
+    ],
+    [
+      1792372339023,
+      1792372339060
+    ],
+    [
+      1792372339060,
+      1792372339106
+    ],
+    [
+      1792372339106,
+      1792372339155
+    ],
+    [
+      1792372339155,
+      1792372339193
+    ],
+    [
+      1792372339193,
+      1792372339239
+    ],
+    [
+      1792372339239,
+      1792372339276
+    ],
+    [
+      1792372339276,
+      1792372339323
+    ],
+    [
+      1792372339323,
+      1792372339359
+    ],
+    [
+      1792372339359,
+      1792372339407
+    ],
+    [
+      1792372339407,
+      1792372339457
+    ],
+    [
+      1792372339457,
+      1792372339506
+    ],
+    [
+      1792372339506,
+      1792372339543
+    ],
+    [
+      1792372339543,
+      1792372339589
+    ],
+    [
+      1792372339589,
+      1792372339626
+    ],
+    [
+      1792372339626,
+      1792372339672
+    ],
+    [
+      1792372339672,
+      1792372339709
+    ],
+    [
+      1792372339709,
+      1792372339757
+    ],
+    [
+      1792372339757,
+      1792372339806
+    ],
+    [
+      1792372339806,
+      1792372339857
+    ],
+    [
+      1792372339857,
+      1792372339907
+    ],
+    [
+      1792372339907,
+      1792372339956
+    ],
+    [
+      1792372339956,
+      1792372339994
+    ],
+    [
+      1792372339994,
+      1792372340039
+    ],
+    [
+      1792372340039,
+      1792372340077
+    ],
+    [
+      1792372340077,
+      1792372340148
+    ]
+  ],
+  "callID": "call_f963ce06a5b44466996938d4b6d7b7a9",
+  "completedUTC": "2026-10-19T01:13:19.478Z"
+}

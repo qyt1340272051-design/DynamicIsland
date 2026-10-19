@@ -6,7 +6,17 @@
 
 准备支持插件管理的 Dynamic Island 0.6.0 开发版本，以及本 SDK 目录。macOS 上的 Python 3.9+ 用于离线打包。Hello 使用普通 JavaScript，不需要 npm 安装或编译步骤。
 
-在终端进入 SDK 目录（能看到 `tools`、`examples`、`types`）。以下命令复制一份模板到新的临时工作目录，不修改 SDK 内的示例。第一次先保持原样，成功后再改 ID、名称与逻辑。
+在终端进入 SDK 目录（能看到 `tools`、`examples`、`types`），复制并运行下面这一行。它会复制模板到新的临时工作目录，完成校验和打包。第一次先保持模板原样，成功后再改 ID、名称与逻辑。
+
+<!-- sdk-source: quick-start-command.sh -->
+```sh
+bash docs/quick-start.sh
+```
+
+macOS 默认的交互式 zsh 会把 `#!` 中的 `!` 当成历史命令展开。如果此前粘贴完整脚本时遇到 `zsh: event not found: /usr/bin/env`，改为运行上面的一行命令即可。
+
+<details>
+<summary>查看完整 Bash 脚本（使用上方命令运行）</summary>
 
 <!-- sdk-source: quick-start.sh -->
 ```sh
@@ -20,7 +30,9 @@ python3 tools/di_plugin.py package "$workspace/hello-world" "$workspace/hello-wo
 printf 'Plugin package: %s\n' "$workspace/hello-world.dip"
 ```
 
-最后一行给出 `hello-world.dip` 的绝对路径。`workspace` 是本次终端会话的变量；关闭终端后用已打印的绝对路径找回。临时目录可能被系统清理，继续开发前把源目录搬到自己的项目目录。
+</details>
+
+脚本最后一行给出 `hello-world.dip` 的绝对路径，复制这个路径用于下一步导入。`workspace` 只存在于脚本内部；脚本结束后直接使用已打印的绝对路径找回文件。临时目录可能被系统清理，继续开发前把源目录搬到自己的项目目录。
 
 ## 2. 安装并运行
 

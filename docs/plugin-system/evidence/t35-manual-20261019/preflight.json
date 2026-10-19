@@ -1,0 +1,66 @@
+{
+  "observedUTC": "2026-10-19T00:53:28.563833+00:00",
+  "bundleID": "com.rong5.dynamic-island.t35-pomodoro.20261016",
+  "pid": 80223,
+  "manifest": {
+    "schemaVersion": 1,
+    "id": "com.dynamicisland.pomodoro",
+    "name": "番茄钟",
+    "developer": "DynamicIsland",
+    "version": "0.2.1",
+    "engine": "javascriptcore",
+    "entry": "index.js",
+    "minimumHostVersion": "0.6.0",
+    "permissions": [
+      "storage.local"
+    ],
+    "capabilities": [
+      "activity.publish",
+      "activity.update",
+      "activity.end",
+      "ui.islandNode",
+      "actions.handle",
+      "countdown",
+      "storage.local",
+      "scheduler"
+    ]
+  },
+  "pluginSHA256": {
+    "index.js": "6a0782e1788b009ddea8321aad4370ebc6d3d8b746315616b15e8bea0e03f6b2",
+    "README.md": "f3100e511f4d8ed3ac3a6343bad4019908dafa2596f31279b6b64f1df9aa54d2",
+    "manifest.json": "42e1f96131e433b47badce3acc2af88f0e0dc585f730690592f1423362b4fbb3"
+  },
+  "manager": {
+    "plugins": {
+      "com.dynamicisland.pomodoro": {
+        "isEnabled": true,
+        "version": "0.2.1"
+      }
+    },
+    "schemaVersion": 1
+  },
+  "permissions": {
+    "records": {
+      "com.dynamicisland.pomodoro": {
+        "fingerprint": "fbc68a105bce20160bd4af1109cf31cb91b9113aa913c888a7b66fa3ca773a00",
+        "pluginID": "com.dynamicisland.pomodoro",
+        "states": {
+          "storage.local": "granted"
+        }
+      }
+    },
+    "schemaVersion": 1
+  },
+  "storage": {
+    "pluginID": "com.dynamicisland.pomodoro",
+    "schemaVersion": 1,
+    "values": {
+      "settings": {
+        "lastSession": "completed",
+        "schemaVersion": 1,
+        "selectedMinutes": 15
+      }
+    }
+  },
+  "stagingEntries": []
+}

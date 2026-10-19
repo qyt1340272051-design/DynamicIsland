@@ -1,0 +1,39 @@
+{
+  "observedUTC": "2026-10-19T01:01:45.028926+00:00",
+  "historicalHostExecutableSHA256": "bf0ee3f884598a0ab8b5adc1b5fd794797b71ac62437f213773894572dc221d0",
+  "historicalExactBuildCommit": null,
+  "historicalSourceHashCheckpoint": "0b96caba42f6ea124ada40765820115d79a2d6d1",
+  "currentCheckpoint": "253c588",
+  "historicalEightHostHashesMatchCheckpoint": {
+    "DynamicIsland/DynamicIslandApp.swift": true,
+    "DynamicIsland/IslandQuitAnimation.swift": true,
+    "DynamicIsland/IslandView.swift": true,
+    "DynamicIsland/Core/Activity/IslandActivityRuntime.swift": true,
+    "DynamicIsland/Plugins/PluginCountdownBroker.swift": true,
+    "DynamicIsland/Plugins/PluginCountdownSession.swift": true,
+    "DynamicIsland/Plugins/PluginJSBridge.swift": true,
+    "DynamicIsland/Plugins/PluginBridgeTransport.swift": true
+  },
+  "unchangedGeometryAndCountdownSources": [
+    "DynamicIsland/IslandView.swift",
+    "DynamicIsland/IslandUI/IslandRenderer.swift",
+    "DynamicIsland/IslandUI/ActivityPresentationPolicy.swift",
+    "DynamicIsland/IslandUI/Schema/IslandNode.swift",
+    "DynamicIsland/IslandPanelGeometry.swift",
+    "DynamicIsland/IslandVisualStyle.swift",
+    "DynamicIsland/Plugins/PluginActivityConverter.swift",
+    "DynamicIsland/Plugins/PluginCountdownBroker.swift",
+    "DynamicIsland/Plugins/PluginCountdownSession.swift",
+    "DynamicIsland/Plugins/PluginBridgeTransport.swift",
+    "DynamicIsland/Core/Activity/ActivityLifecycle.swift",
+    "DynamicIsland/Core/Activity/ActivityQueue.swift",
+    "DynamicIsland/Core/Activity/ActivityScheduler.swift"
+  ],
+  "changedHostSources": [
+    "DynamicIsland/DynamicIslandApp.swift",
+    "DynamicIsland/Plugins/PluginJSBridge.swift",
+    "DynamicIsland/Core/Activity/IslandActivityRuntime.swift",
+    "DynamicIsland/Core/Activity/ActivityManager.swift"
+  ],
+  "scope": "Historical isolated ordinary Release plus identical Pomodoro 0.2.1 package; current geometry source equivalence does not make this a current HEAD binary acceptance."
+}
