@@ -12,7 +12,7 @@ TOPICS = (
     'packaging', 'publishing', 'verification', 'README',
 )
 SOURCES = {
-    'docs/quick-start.sh', 'examples/hello-world/manifest.json',
+    'docs/quick-start-command.sh', 'docs/quick-start.sh', 'examples/hello-world/manifest.json',
     'examples/hello-world/index.js', 'docs/snippets/activity.js',
     'docs/snippets/settings.js', 'docs/snippets/network.js',
     'docs/snippets/open-link.js', 'docs/snippets/progress.json',

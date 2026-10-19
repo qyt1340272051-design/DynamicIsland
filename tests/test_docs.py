@@ -26,16 +26,20 @@ class DocumentationTests(unittest.TestCase):
 
     def test_all_handbook_sources_are_exact_valid_examples_and_links_resolve(self):
         result = check_docs.check(SDK)
-        self.assertEqual(result['examples'], 8)
+        self.assertEqual(result['examples'], 9)
         self.assertEqual(result['documents'], 15)
 
     def test_quick_start_builds_the_actual_template_from_a_standalone_sdk(self):
         with tempfile.TemporaryDirectory(prefix='sdk-documentation-') as directory:
             sdk = self.copy_sdk(directory)
-            # The block checked above is the exact script used by an author.
+            # Exercise the command actually copied from the handbook. On macOS
+            # use an interactive zsh without user startup files: pasting the
+            # old full Bash block here expanded its shebang as shell history.
             check_docs.check(sdk)
-            environment = dict(os.environ, TMPDIR=directory)
-            result = subprocess.run(['bash', 'docs/quick-start.sh'], cwd=sdk, env=environment,
+            environment = dict(os.environ, TMPDIR=directory, HISTFILE=os.devnull)
+            command = (sdk / 'docs/quick-start-command.sh').read_text()
+            shell = ['zsh', '-f', '-i'] if shutil.which('zsh') else ['bash', '--noprofile', '--norc', '-i']
+            result = subprocess.run(shell, input=command + '\nexit\n', cwd=sdk, env=environment,
                                     check=True, capture_output=True, text=True, timeout=30)
             package_lines = [line for line in result.stdout.splitlines() if line.startswith('Plugin package: ')]
             self.assertEqual(len(package_lines), 1)
