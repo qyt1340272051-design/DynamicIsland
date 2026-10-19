@@ -16,6 +16,6 @@
 
 本轮已完成真实源码的 Validator / VM / Bridge / ActivityManager / Router 集成，覆盖共享动作名隔离、同实例更新、停用旧动作、重新启用重置、展示请求及 critical 抢占；[完整回归](evidence/final-regression-20261019/result.json)为 1070 passed / 2 skipped / 0 failures，普通 Release 构建通过。
 
-三个兼容包已在普通 Release 隔离副本实际导入，逐个确认安装后停用、有限兼容说明及明确启用，见[安装证据](evidence/final-app-install-20261019/result.json)。同一副本另装入计时三态验收与独立 AI 原创工具，共五个无额外权限包。用户最新要求先跳过人工操作，因此真实刘海工具选择、按钮与进度像素保留在[人工清单 M03](MANUAL_ACCEPTANCE.md)；没有把自动 Router 调用写成真实鼠标点击。
+三个兼容包已在普通 Release 隔离副本实际导入，逐个确认安装后停用、有限兼容说明及明确启用，见[安装证据](evidence/final-app-install-20261019/result.json)。同一副本另装入计时三态验收与独立 AI 原创工具，共五个无额外权限包。晚间最初由用户延期的工具界面，已在[随后恢复的 M03 实机](t02-t37-manual-acceptance-20261019.md)完成：真实按钮、进度、互不串线、停用移除与再启用初值均通过。自动 Router 调用与真实鼠标输入分别归档。
 
-副本已正常退出，Staging 为空、五包与启用状态保留；下次重新启动后核对身份再继续，不沿用历史 PID。
+最初延期时副本正常退出，Staging 为空、五包与启用状态保留；随后恢复 M03 时重新核对构建、包摘要与新 PID。历史退出状态不充作当前进程证明。

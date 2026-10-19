@@ -1,0 +1,9 @@
+{
+  "SDKDirectory": "/tmp/dynamic-island-sdk-final-audit-20261019/walkthrough/DynamicIslandSDK",
+  "candidateSHA256": "dd9ba3e40c856343271e8088643276fc329526191213fa1bbee1973eab299433",
+  "filesMatchedDistributionManifest": 53,
+  "SDKRootREADMEPresent": true,
+  "quickStartPresent": true,
+  "userBuildOrImportNotPerformedByAssistant": true,
+  "participantScope": "Same human author has earlier experience; any later independent retry must preserve this scope."
+}

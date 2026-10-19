@@ -1,0 +1,20 @@
+Window: "", App: Dynamic Island Acceptance.
+0 system dialog Secondary Actions: Raise
+	1 container
+		2 button Description: 音乐, ID: island-surface-music
+		3 button Description: 拖盘, ID: island-surface-tray
+		4 menu button Description: 计时, Help: 计时与插件工具, ID: island-tool-selector
+		5 button Description: 退出 Dynamic Island, ID: power
+		6 text 手动步骤 3/4
+		7 progress indicator Description: Progress, Value: 0.75, Details: 75 percent
+		8 text 展示意图：未发送
+		9 button 下一步
+		10 button 归零
+		11 button 请求展示
+		12 button 撤回请求
+13 menu bar
+	14 Dynamic Island Acceptance
+	15 Edit
+	16 View
+	17 Window
+	18 Help

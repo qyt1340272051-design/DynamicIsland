@@ -20,18 +20,22 @@
 
 [T35 / M01](evidence/t35-manual-20261019/result.json)已捕获真实十五分钟自然到期的安全两翼提示、正常消失与不自动重开；[T36 / M02](evidence/t36-manual-20261019/result.json)已通过真实导入、三项独立授权、公开 CI / PR、仓库切换 / 刷新及系统浏览器 Open。两个独立副本均正常退出且 Staging 为空；[六项真实输入补验](evidence/native-input-20261019/result.json)为 6 passed / 0 skipped / 0 failures。T35、T36 标为 verified，任务内延期门槛已关闭，完整范围见[Phase 7 统一检查](phase-7-acceptance.md)。本次实机使用已记录身份的历史独立普通 Release，不能称为当前 HEAD 二进制验收；相关源码与后续自动回归分别保留。T39 新作者体验、T37 上游兼容、T38 稳定发布及 T40 公网安装门槛仍独立追踪。
 
-## 2026-10-19 本轮收尾
+## 2026-10-19 自动收尾（历史）
 
 当前 **34 项 verified、6 项 in progress**。T08 / T10 的后续证据已归并；T02、T11、T37、T38、T39、T40 保留各自未通过门槛。用户最新要求「现在不方便，先跳过人工操作」，下次集中处理[人工清单 M03–M05](MANUAL_ACCEPTANCE.md)。普通 Release 隔离副本已安装启用五个无额外权限示例，现已正常退出并保留状态。
 
 本轮完整 CI 1070 passed / 2 skipped / 0 failures，普通 Release 构建通过；随后新增的独立作者原包 Host 集成另跑 8 项全通过，SDK 归档审阅修复后 Python 40 项及类型检查通过。各批次分别留存，不合并成一次全量结果。SDK 与官方插件公开发布、正式 Registry 目录及公网安装尚未执行。 [提交前检查](evidence/final-review-20261019/README.md)已核对当前源码摘要、最新 SDK、结构化证据及本轮本地链接。
+
+## 2026-10-19 恢复人工验收
+
+用户要求「来完成人工操作部分」。[M03](t02-t37-manual-acceptance-20261019.md)现已通过，T02 / T37 标为 verified，当前共 **36 项 verified、4 项 in progress**。M04 两轮都只捕获到展开画面，计时已结束，待用户确认准备后再补真实收起三态；M05 修正版文档独立复测尚未开始；本轮没有修改生产源码、扩大权限或公开发布。
 
 ## Phase 0 — 准备阶段：项目审计、分支与基线
 
 | ID | 任务 | 前置依赖 | 状态 | 验收证据 |
 | --- | --- | --- | --- | --- |
 | T01 | 项目架构审计 | 无 | `verified` | [Phase 0 基线记录](phase-0-baseline.md)记录了真实依赖图、职责边界、迁移调用点、多屏约束及审计结论。 |
-| T02 | 开发分支与基线测试 | T01 | `in progress` | [Phase 0 基线记录](phase-0-baseline.md)保留分支与清单；[本日真实基线](t02-t08-acceptance-20261019.md)已完成普通 Release 启动、菜单和退出、300 秒静置及 303.534 秒量化采样，平均单核 CPU 1.4387%、物理内存峰值 27.49 MiB。功能 / 设备场景采用 Phase 3 历史真实验收；当前只剩菜单隐藏 / 显示确认。采样是本轮修正前冻结起点，不冒称新 UI 或重构前后对照。 |
+| T02 | 开发分支与基线测试 | T01 | `verified` | [Phase 0 清单](phase-0-baseline.md)与[真实基线](t02-t08-acceptance-20261019.md)保留普通 Release 启动 / 退出、300 秒静置和 303.534 秒量化采样；历史设备场景按来源独立归并。[本轮 M03](t02-t37-manual-acceptance-20261019.md)补齐菜单隐藏 / 显示：用户确认消失与恢复，恢复实际 UI 另行捕获；隐藏 AX 超时不冒充截图证明。旧资源数值仍是修正前冻结起点，不扩大为新 UI 或重构前后对照。 |
 
 ## Phase 1 — Activity Engine
 
@@ -112,7 +116,7 @@
 
 | ID | 任务 | 前置依赖 | 状态 | 验收证据 |
 | --- | --- | --- | --- | --- |
-| T37 | SuperIsland Adapter | T35 | `in progress` | [六类 View](phase-8-t37-view-conversion.md)、[显式模式](phase-8-t37-manifest-profile.md)、[同 VM 模块](phase-8-t37-module-runtime.md)、[Host 展示请求](t37-presentation-requests.md)及[兼容详情](t37-compatibility-details.md)均已实现并保留历史自动证据。本日按用户选定范围新增[三个原创示例](t37-independent-examples.md)，真实源码通过 Validator / VM / Router 集成，覆盖共享动作名隔离、同实例更新、停用旧动作与 critical 抢占；完整回归见[本日结果](evidence/final-regression-20261019/result.json)。三个包已在普通 Release 隔离副本实际导入、安装后停用并分别启用，无额外权限；工具界面与真实按钮验收待完成。原样上游许可 / 能力差距继续作为限制，不计入本版通过范围。 |
+| T37 | SuperIsland Adapter | T35 | `verified` | [六类 View](phase-8-t37-view-conversion.md)、[同 VM 模块](phase-8-t37-module-runtime.md)、[Host 请求](t37-presentation-requests.md)与[兼容详情](t37-compatibility-details.md)已实现。按用户选定范围交付[三个原创兼容子集示例](t37-independent-examples.md)，真实 Validator / VM / Router 集成及[完整回归](evidence/final-regression-20261019/result.json)通过；[本轮 M03 实机](t02-t37-manual-acceptance-20261019.md)完成按钮、0–100% 进度、跨工具隔离、停用菜单移除与再启用初值。旧动作拒绝 / critical 抢占沿用明确自动证据；原样上游许可和能力差距保留为限制，不宣称完整兼容。 |
 
 ## Phase 9 — SDK、文档与插件生态
 

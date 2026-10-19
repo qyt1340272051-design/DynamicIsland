@@ -1,0 +1,38 @@
+{
+  "completedUTC": "2026-10-19T15:53:13.816951+00:00",
+  "M03Status": "passed",
+  "T02RemainingMenuCriterion": "passed by user hide/disappearance/show confirmation and restored actual UI",
+  "T37ApprovedScope": "Limited compatibility subset, three independently authored original examples; unchanged upstream plugins excluded by user decision",
+  "T37RealUICriteria": {
+    "statusToggle": true,
+    "counterIncrementAndReset": true,
+    "progressZeroToFourAndReset": true,
+    "progressAXValues": [
+      0,
+      0.25,
+      0.5,
+      0.75,
+      1
+    ],
+    "intentRequestAndWithdrawal": true,
+    "selectedToolRemainedVisibleDuringIntentWithdrawal": true,
+    "crossToolStateIsolation": true,
+    "disabledToolsAbsentFromMenu": true,
+    "explicitReenableResetsAllThreeToInitialState": true,
+    "noExtraPermissions": true
+  },
+  "independentAuthorPackageRealButtons": [
+    "initial",
+    "focus",
+    "rest"
+  ],
+  "userHideReply": "Found it, clicked Hide",
+  "userShowReply": "Hidden state disappeared; now shown and expanded",
+  "hideScreenshotNotAvailable": true,
+  "hiddenAXReadTimedOut": true,
+  "scope": "Real CUA native control input and unmodified screenshots in isolated ordinary Release. Hide disappearance is user-confirmed; no hidden pixels invented.",
+  "oldActionAndCriticalPreemptionScope": "Formal Runtime/Router tests cover old-action rejection and critical preemption. Real UI proves removal of disabled tools, not direct invocation of a retained stale action or a new critical event.",
+  "screenshotIndex": "screenshots.json",
+  "actionIndex": "actions.json",
+  "host": "preflight.json"
+}

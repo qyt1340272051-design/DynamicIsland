@@ -1,0 +1,16 @@
+Window: "", App: Dynamic Island Acceptance.
+0 system dialog Secondary Actions: Raise
+	1 container
+		2 button Description: 音乐, ID: island-surface-music
+		3 button Description: 拖盘, ID: island-surface-tray
+		4 menu button Description: 计时, Help: 计时与插件工具, ID: island-tool-selector
+		5 button Description: 退出 Dynamic Island, ID: power
+		6 text 三态计时 · compact · 计时中 Host 刷新策略：background 04:28
+		7 progress indicator Description: Countdown progress, Value: 0.1067012827766667, Details: 11 percent
+		8 button 结束验收
+9 menu bar
+	10 Dynamic Island Acceptance
+	11 Edit
+	12 View
+	13 Window
+	14 Help

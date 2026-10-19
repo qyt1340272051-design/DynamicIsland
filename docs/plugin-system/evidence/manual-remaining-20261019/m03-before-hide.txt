@@ -1,0 +1,8 @@
+Window: "", App: Dynamic Island Acceptance.
+0 system dialog Secondary Actions: Raise
+1 menu bar
+	2 Dynamic Island Acceptance
+	3 Edit
+	4 View
+	5 Window
+	6 Help
