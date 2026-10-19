@@ -1,6 +1,6 @@
-# 你好，计数器（实验性 SDK 模板）
+# 你好，计数器（SDK 1.0.0 候选模板）
 
-这是 0.6.0 当前 Native 接口的最小工具示例，不代表稳定 SDK 已发布。`index.js` 是可以直接运行的 JavaScript，无需 TypeScript 编译、npm 安装或构建步骤。类型引用只帮助编辑器检查源码。
+这是 SDK 1.0.0 发布候选面向 App 0.6.0 Native 接口的最小工具示例，尚未公开发布 SDK。`index.js` 是可以直接运行的 JavaScript，无需 TypeScript 编译、npm 安装或构建步骤。类型引用只帮助编辑器检查源码。
 
 - 无需额外权限；只声明发布、更新、节点 UI 和动作四项 capability。
 - 提供 minimal、compact、expanded 三种布局。工具等待你在展开后的工具菜单中选择，不请求自动展开。
@@ -10,14 +10,14 @@
 
 ## 校验和打包
 
-在仓库根目录执行以下实验性 SDK CLI 命令：
+在 SDK 根目录（能看到 `tools`、`examples`、`types`）执行以下 SDK CLI 命令：
 
 ```sh
-python3 SDK/tools/di_plugin.py validate SDK/examples/hello-world
-python3 SDK/tools/di_plugin.py package SDK/examples/hello-world /tmp/hello-world-0.1.0.dip
+python3 tools/di_plugin.py validate examples/hello-world
+python3 tools/di_plugin.py package examples/hello-world /tmp/hello-world-0.1.0.dip
 ```
 
-输出文件必须尚不存在。将生成的 `.dip` 通过主程序的“导入插件”安装，再单独启用。安装不会自动运行或授予权限。类型检查是可选开发步骤；`SDK/tsconfig.json` 与正反类型夹具由项目验收环境检查，不属于插件运行依赖。
+输出文件必须尚不存在。将生成的 `.dip` 通过主程序的“导入插件”安装，再单独启用。安装不会自动运行或授予权限。类型检查是可选开发步骤；SDK 根目录的 `tsconfig.json` 与正反类型夹具由项目验收环境检查，不属于插件运行依赖。
 
 ## 修改模板
 

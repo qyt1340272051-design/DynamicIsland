@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Experimental offline authoring preflight, narrower than Host admission.
+"""SDK 1.0.0 release-candidate offline preflight, narrower than Host admission.
 
 Python 3.9+ standard library only. No JavaScript is executed. Manifest validation
 mirrors the Host's closed V1 vocabulary; declarations do not promise accepted
@@ -24,6 +24,7 @@ import zipfile
 from package_plugin import inspect_source, package
 
 
+SDK_VERSION = '1.0.0'
 MAX_JSON_BYTES = 65_536
 PERMISSIONS = frozenset((
     'network', 'storage.local', 'links.open', 'notifications.publish',
@@ -356,7 +357,7 @@ def main(argv=None):
                 package(args.source, args.output)
             except (OSError, ValueError, zipfile.BadZipFile, zipfile.LargeZipFile):
                 fail('invalidPackage')
-        print(json.dumps({'ok': True, 'command': command, 'scope': 'experimental-authoring-preflight',
+        print(json.dumps({'ok': True, 'command': command, 'scope': 'authoring-preflight', 'sdkVersion': SDK_VERSION,
                           'summary': summary}, sort_keys=True))
         return 0
     except ValidationError as error:

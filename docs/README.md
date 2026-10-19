@@ -1,6 +1,6 @@
-# 插件开发手册（实验性）
+# 插件开发手册（SDK 1.0.0 发布候选）
 
-面向熟悉 JavaScript 的作者，适用于 0.6.0 开发分支的 Native SDK 草案。先从 [Quick Start](quick-start.md) 制作一个无权限的计数工具，再按需要增加功能。运行插件只需支持本协议的 Dynamic Island；编写和打包需要 Python 3.9+，类型检查才需要 Node.js / npm。
+面向熟悉 JavaScript 的作者，适用于 App 0.6.0 的 Native SDK 1.0.0 发布候选，尚未公开发布。先从 [Quick Start](quick-start.md) 制作一个无权限的计数工具，再按需要增加功能。运行插件只需支持本协议的 Dynamic Island；编写和打包需要 Python 3.9+，类型检查才需要 Node.js / npm。
 
 | 主题 | 解决的问题 |
 | --- | --- |

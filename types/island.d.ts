@@ -1,9 +1,9 @@
 /**
- * Experimental Native SDK draft for the current DynamicIsland Host.
+ * DynamicIsland Native SDK 1.0.0 release candidate; not publicly released.
  *
  * This file describes a deliberately small javascriptcore surface exercised by
- * the official Pomodoro and GitHub examples. It is not a stable SDK release or
- * a declaration of the complete Host implementation. Runtime validation,
+ * the official Pomodoro and GitHub examples. It is not a declaration of
+ * the complete Host implementation. Runtime validation,
  * package capabilities, explicit permissions, quotas and lifecycle admission
  * remain authoritative. No browser, Node.js or SuperIsland globals are added.
  */

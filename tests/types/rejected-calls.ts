@@ -1,4 +1,4 @@
-// Every expected error protects a deliberate draft boundary. tsc must reject
+// Every expected error protects a deliberate SDK boundary. tsc must reject
 // each statement; an unused @ts-expect-error fails the type test.
 export {};
 
@@ -89,27 +89,27 @@ void island.network.fetch('https://api.github.com').then(response => {
     void response.json<{id: number}>();
 });
 
-// @ts-expect-error No SuperIsland API in the Native draft.
+// @ts-expect-error No SuperIsland API in the Native SDK.
 SuperIsland.registerModule({});
 // @ts-expect-error No unmediated or invented presentation entry point.
 island.activity.requestPresentation('tool');
 // @ts-expect-error Private compatibility endpoints are absent.
 island.superisland.render({});
-// @ts-expect-error Clipboard is outside this deliberately small SDK draft.
+// @ts-expect-error Clipboard is outside this deliberately small SDK.
 island.clipboard.readText();
-// @ts-expect-error File selection is outside this SDK draft.
+// @ts-expect-error File selection is outside this SDK.
 island.files.chooseText();
-// @ts-expect-error Notifications are not implemented in this SDK draft.
+// @ts-expect-error Notifications are not implemented in this SDK.
 island.notifications.publish({});
-// @ts-expect-error Calendar is not implemented in this SDK draft.
+// @ts-expect-error Calendar is not implemented in this SDK.
 island.calendar.read();
-// @ts-expect-error Not exercised by the two official packages; outside the authoring draft.
+// @ts-expect-error Not exercised by the two official packages; outside the authoring subset.
 island.actions.off('start');
-// @ts-expect-error Not exercised by the two official packages; outside the authoring draft.
+// @ts-expect-error Not exercised by the two official packages; outside the authoring subset.
 island.countdown.offComplete();
-// @ts-expect-error Not exercised by the two official packages; outside the authoring draft.
+// @ts-expect-error Not exercised by the two official packages; outside the authoring subset.
 island.storage.remove('settings');
-// @ts-expect-error Not exercised by the two official packages; outside the authoring draft.
+// @ts-expect-error Not exercised by the two official packages; outside the authoring subset.
 island.storage.clear();
 // @ts-expect-error Metadata is immutable and cannot select plugin identity.
 island.plugin.id = 'com.example.someone-else';
