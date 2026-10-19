@@ -1,0 +1,36 @@
+{
+  "date": "2026-10-19",
+  "preparedUTC": "2026-10-19T06:17:27.994586+00:00",
+  "sourceApp": "/tmp/dynamic-island-ci-derived-data/Build/Products/Release/Dynamic Island.app",
+  "targetApp": "/tmp/dynamic-island-final-20261019/Dynamic Island Baseline.app",
+  "sourceExecutableSHA256": "011472297eaf46d49348b860476961b87c56f47d4d3d6c0cb360e235b0e13f04",
+  "targetExecutableSHA256": "b20659a21a0c1e94d3f625c8925d6ff9e3877df4dc20c2642ff11db83da73ba6",
+  "bundleID": "com.rong5.dynamic-island.baseline.20261019",
+  "appVersion": "0.5.0",
+  "appBuild": "2",
+  "removedHandlerKeys": [
+    "CFBundleDocumentTypes",
+    "UTExportedTypeDeclarations"
+  ],
+  "entitlements": {
+    "com.apple.security.app-sandbox": true,
+    "com.apple.security.automation.apple-events": true,
+    "com.apple.security.cs.allow-jit": true,
+    "com.apple.security.files.user-selected.read-write": true,
+    "com.apple.security.network.client": true,
+    "com.apple.security.scripting-targets": {
+      "com.apple.Music": [
+        "com.apple.Music.playback",
+        "com.apple.Music.library.read"
+      ]
+    }
+  },
+  "strictDeepSignatureVerified": true,
+  "sourceAppUnchanged": true,
+  "HEAD": "eaa2bc3220d346794516fb5e9292b8c5e3a25580",
+  "productionSourceDiffSince253c588": [],
+  "uncommittedProductionSourcePathsAtPreparation": [],
+  "sourceProvenance": "Existing ordinary Release from the 2026-10-18 CI at 253c588; executable identity matches the T39 preflight. No embedded Git stamp; executable hash and source correspondence are recorded separately. No recompile.",
+  "signatureVerification": "/tmp/dynamic-island-final-20261019/Dynamic Island Baseline.app: valid on disk\n/tmp/dynamic-island-final-20261019/Dynamic Island Baseline.app: satisfies its Designated Requirement\n",
+  "launched": false
+}

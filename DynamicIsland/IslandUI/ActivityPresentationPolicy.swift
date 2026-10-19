@@ -3,6 +3,17 @@ import Foundation
 /// Host-side presentation resolution and layout limits. None of these values
 /// cross the serialized Activity boundary.
 public extension ActivityPresentation {
+    /// A collapsed Host window can display either authored form. Keep a real
+    /// minimal leaf when the compact tree is missing or exceeds its budget;
+    /// the Host places that leaf beside the physical camera rather than
+    /// treating it as a centered compact row. Missing layouts still retain
+    /// the legacy compact summary fallback.
+    var effectiveCollapsedMode: Mode {
+        if let compact, HostPolicy.accepts(compact, for: .compact) { return .compact }
+        if let minimal, HostPolicy.accepts(minimal, for: .minimal) { return .minimal }
+        return .compact
+    }
+
     /// Resolve only toward a simpler supplied layout. An expanded tree is
     /// never squeezed into a compact or minimal shell. The summary is the last
     /// fallback and also supports JSON written before declarative layouts.

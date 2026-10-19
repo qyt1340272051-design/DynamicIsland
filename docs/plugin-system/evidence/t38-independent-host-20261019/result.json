@@ -1,0 +1,89 @@
+{
+  "date": "2026-10-19",
+  "execution": {
+    "SDKContractTestCount": 4,
+    "command": "xcodebuild test -project DynamicIsland.xcodeproj -scheme 'Dynamic Island' -destination platform=macOS -derivedDataPath /tmp/dynamic-island-ci-derived-data -resultBundlePath /tmp/dynamic-island-sdk-independent-host-20261019/HostContracts.xcresult -parallel-testing-enabled NO -only-testing:DynamicIslandTests/PluginSDKContractTests -only-testing:DynamicIslandTests/PluginDocumentationTests",
+    "documentationTestCount": 4,
+    "failed": 0,
+    "logPath": "/tmp/dynamic-island-sdk-independent-host-20261019/xcodebuild.log",
+    "logSHA256": "fb364ee81b62b4c0beab66db4cfc503a1fa8a2566225acc2766e389ae98cd2a2",
+    "newIndependentPackageTestCount": 1,
+    "passed": 8,
+    "resultBundle": "/tmp/dynamic-island-sdk-independent-host-20261019/HostContracts.xcresult",
+    "skipped": 0,
+    "summary": "summary.json",
+    "summarySHA256": "4ba4b544cae8500b33cbfd9881d998d9d5c1f5e46802b65d340db60abc4359ab",
+    "testExcerpts": "test-excerpts.txt"
+  },
+  "inputArchive": {
+    "authorshipRecord": "../t39-independent-20261019/result.json",
+    "bytes": 2661,
+    "entryLoadedAndExecutedByProductionValidatorAndVM": true,
+    "path": "../t39-independent-20261019/status-switch-0.1.0.dip",
+    "sha256": "c4a68d98adff6205e9f712feeebab86d610ac5230a128ebd28281d4741e90f0b",
+    "sourceJavaScriptReadForImplementation": false,
+    "sourceModified": false
+  },
+  "limits": {
+    "UIOrPointerActionsPerformed": false,
+    "fullCIRerun": false,
+    "humanFirstAuthorAcceptance": false,
+    "knownBuildDiagnostics": "Two existing actor-isolation warnings in countdown tests and system AppIntents/linkd diagnostics appeared; no new test failures.",
+    "nativeButtonClickAcceptance": false,
+    "physicalNotchVisualAcceptance": false,
+    "publicReleasePerformed": false,
+    "tenMinuteInstallationTargetVerified": false,
+    "timing": "Earlier 137.7 seconds describes independent AI offline authorship only, not this Host execution or an end-to-end installation time."
+  },
+  "observedUTC": "2026-10-19T14:39:26.336666+00:00",
+  "pipeline": [
+    "PluginPackageArchiveExtractor",
+    "PluginValidator",
+    "PluginRuntime / JavaScriptCore",
+    "PluginJSBridge",
+    "PluginLifecycleBridge",
+    "ActivityManager",
+    "ActionRouter"
+  ],
+  "scope": "One original independently AI-authored two-button package, unmodified since offline authorship; selected automated Host tests only.",
+  "sourceBaseCommit": "eaa2bc3220d346794516fb5e9292b8c5e3a25580",
+  "sourceSHA256": {
+    "DynamicIsland/Core/Activity/ActivityManager.swift": "48af3c3997b4ab467a236e77d97e9b2301c22881fba7043219ce2c893bf81687",
+    "DynamicIsland/IslandUI/ActionRouter.swift": "118974c57a8438af0c586db2c4cff5063c285d900b0c9821196767673ba88e50",
+    "DynamicIsland/Plugins/PluginJSBridge.swift": "3488c484834927b427c3c59867f9a8ed33c9c7aae5e11b449a943adbab9cd381",
+    "DynamicIsland/Plugins/PluginJSBridgeBootstrap.swift": "adc7644efeed5f233de967ea095922411fabb1446ec2ccaafc1938f5e13c3f59",
+    "DynamicIsland/Plugins/PluginLifecycleBridge.swift": "464493dfe11dcfe95fb17c139152b134e7935fdd5391f82e88ce444118671a04",
+    "DynamicIsland/Plugins/PluginPackageArchive.swift": "d57e2b6c3ccdd1b56fb1248d7913534e2f4c52b68395bc388c2809808c6da72a",
+    "DynamicIsland/Plugins/PluginRuntime.swift": "31febca64dd6dca32dd7b4860655404830c54d92d0d0c1060b04837aac6534f4",
+    "DynamicIsland/Plugins/PluginValidator.swift": "641cb282d932b8ebe99f2a8d1840b4ac9ebeee4b605bba8684187ca0137452b7",
+    "DynamicIslandTests/PluginDocumentationTests.swift": "04d63d6de33810e220630e892fc2487b8881dff1390a3d40f0bb29f87f0bd332",
+    "DynamicIslandTests/PluginSDKContractTests.swift": "082c331e0b18048c93984e02c8d7656527160eec7388c08cdcf48deab1ed6150"
+  },
+  "sourceState": "Working tree test and Host files identified by sourceSHA256; not an assertion that the base commit contains the new test.",
+  "status": "AI-authored plugin passed actual Host extraction, validation, VM and ActionRouter integration; no human or native-click acceptance",
+  "unchangedSDKCandidate": {
+    "bytes": 84000,
+    "modified": false,
+    "path": "/Users/rong5/Dynamiclsland/artifacts/sdk/dynamic-island-sdk-1.0.0.zip",
+    "sha256": "47729aa038528f800b8da6fd94666a0c0bcf6da6cc530086d5d4c86f9443663c"
+  },
+  "verified": {
+    "declaredActionIDs": [
+      "focus",
+      "rest"
+    ],
+    "disabledOldFocusAndRestActionsRejected": true,
+    "disabledPackageCreatesNoVMOrTool": true,
+    "enabledPackagePermissionsEmpty": true,
+    "firstUpdateKeepsCreatedAt": true,
+    "focusExpandedText": "\u5f53\u524d\u72b6\u6001\uff1a\u4e13\u6ce8\u4e2d",
+    "initialExpandedText": "\u5f53\u524d\u72b6\u6001\uff1a\u5f85\u9009\u62e9",
+    "lifecycleLastFailureIsNil": true,
+    "newInstanceFocusStillWorks": true,
+    "noForcedForegroundOnEnable": true,
+    "priorRestActionRejectedAfterReenable": true,
+    "reenableUsesNewInstanceAndResetsMemoryState": true,
+    "restExpandedText": "\u5f53\u524d\u72b6\u6001\uff1a\u4f11\u606f\u4e2d",
+    "updatesKeepInstanceToken": true
+  }
+}

@@ -94,6 +94,22 @@ final class IslandRendererTests: XCTestCase {
         }
     }
 
+    func testMinimalRegionUsesOnlyTheUnobstructedRightWing() {
+        let shell = CGSize(width: 396, height: 32)
+        XCTAssertEqual(IslandRenderer.collapsedRegionSize(
+            for: .minimal, shellSize: shell, reservedCenterWidth: 270
+        ), CGSize(width: 63, height: 32))
+        XCTAssertEqual(IslandRenderer.collapsedRegionSize(
+            for: .compact, shellSize: shell, reservedCenterWidth: 270
+        ), shell)
+        XCTAssertEqual(IslandRenderer.collapsedRegionSize(
+            for: .minimal, shellSize: CGSize(width: 240, height: 32), reservedCenterWidth: 270
+        ), CGSize(width: 0, height: 32), "Never paint a minimal leaf over a wider physical cutout.")
+        XCTAssertEqual(IslandRenderer.collapsedRegionSize(
+            for: .minimal, shellSize: shell, reservedCenterWidth: .nan
+        ), .zero)
+    }
+
     func testExpandedArtworkUsesHostSizeAndUntitledSliderStillRenders() throws {
         let artwork = NSImage(size: CGSize(width: 124, height: 124), flipped: false) { rect in
             NSColor.red.setFill()

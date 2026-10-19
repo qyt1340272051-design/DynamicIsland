@@ -1,0 +1,8 @@
+{
+  "state": "Full run failed exact OCR engine assertion at minimum size; original image saved before re-run",
+  "log": "/tmp/dynamic-island-final-20261019/full-ci-fixed.log",
+  "logSHA256": "d4fb5e06ce5dca2886c261dcfc75732a104aa62330d6fa717ad84364d51eb8da",
+  "imageSHA256": "d567151d58c2aa6f12bb411b7afe933d8893e6658832f1b56b0604751e143f3d",
+  "source": "Unmodified actual NSView cacheDisplay image from full run; 2 pixels per point",
+  "sourceImage": "/Users/rong5/Library/Containers/com.rong5.dynamic-island-mac/Data/tmp/dynamic-island-t37-superisland-preview-minimum.png"
+}

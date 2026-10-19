@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "createdUTC": "2026-10-19T06:19:55.583422+00:00",
+  "target": {
+    "pid": 92924,
+    "uid": 501,
+    "executable": "/private/tmp/dynamic-island-final-20261019/Dynamic Island Baseline.app/Contents/MacOS/Dynamic Island",
+    "processStartText": "Mon Oct 19 14:18:23 2026",
+    "executableSHA256": "b20659a21a0c1e94d3f625c8925d6ff9e3877df4dc20c2642ff11db83da73ba6"
+  },
+  "observationHEAD": "eaa2bc3220d346794516fb5e9292b8c5e3a25580",
+  "buildNote": "Existing ordinary Release from CI at253c588, source executable SHA011472297eaf46d49348b860476961b87c56f47d4d3d6c0cb360e235b0e13f04; independently signed isolated copy; see app-preflight.json. HEAD production source unchanged since253c588; no recompile.",
+  "scenarioNote": "Fresh isolated bundle com.rong5.dynamic-island.baseline.20261019, zero installed plugins; root CUA observed actual notch shell; Apple Music not running, no production Dynamic Island process. No Xcode build or tests during window. Power readings archived automatically; display state separately observed by root.",
+  "model": "Mac16,12",
+  "architecture": "arm64",
+  "operatingSystem": "26.6.2",
+  "operatingSystemBuild": "25G83",
+  "bundleID": "com.rong5.dynamic-island.baseline.20261019",
+  "appVersion": "0.5.0",
+  "appBuild": "2",
+  "powerAtStart": "Now drawing from 'Battery Power'\n -InternalBattery-0 (id=22544483)\t100%; discharging; 5:28 remaining present: true",
+  "powerConfiguration": "Battery Power:\n Sleep On Power Button 1\n lowpowermode         0\n standby              1\n ttyskeepawake        1\n hibernatemode        3\n powernap             1\n hibernatefile        /var/vm/sleepimage\n displaysleep         10\n womp                 0\n networkoversleep     0\n sleep                1\n lessbright           0\n tcpkeepalive         1\n disksleep            10\nAC Power:\n Sleep On Power Button 1\n lowpowermode         0\n standby              1\n ttyskeepawake        1\n hibernatemode        3\n powernap             1\n hibernatefile        /var/vm/sleepimage\n displaysleep         10\n womp                 1\n networkoversleep     0\n sleep                1\n tcpkeepalive         1\n disksleep            10",
+  "phase": "no-plugins",
+  "warmupSeconds": 300,
+  "requestedSampleSeconds": 300,
+  "intervalSeconds": 5,
+  "observerSource": "Scripts/ActivityProcessSampler.swift",
+  "observerSourceSHA256": "76d0acd482ca2a59ca7d5c8e16a666740ebee19ed540257e681a73d47ef4aef1",
+  "observerExecutableSHA256": "33d81bd38770785cacb3a1eb733fcde1efe52cfde2a118ff121743f44f6ce992",
+  "wrapperSourceSHA256": "0b3436a7ab71acb2969bdbc3efa0a41b9d8a9a01b12603ece1485b98f9ed57d7",
+  "scope": "Owned process CPU, physical footprint, wakeups, I/O and kernel-attributed CPU energy. Not Activity Monitor Energy Impact or whole-device/battery/GPU/display/network power.",
+  "acceptance": "Measurement only; does not automatically accept T02 or T08."
+}

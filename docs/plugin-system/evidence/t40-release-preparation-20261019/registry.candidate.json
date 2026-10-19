@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "plugins": [
+    {
+      "id": "com.dynamicisland.pomodoro",
+      "name": "番茄钟",
+      "version": "0.2.1",
+      "download": "https://github.com/qyt1340272051-design/DynamicIsland/releases/download/plugins-0.6.0/pomodoro-0.2.1.dip",
+      "source": "https://github.com/qyt1340272051-design/DynamicIsland",
+      "minHostVersion": "0.6.0",
+      "hash": "7b33c55615d2043d432eaef2cca84b856f0eaa6817c5fef086c1cc9bcc4b7ef3"
+    },
+    {
+      "id": "com.dynamicisland.github",
+      "name": "GitHub",
+      "version": "0.1.0",
+      "download": "https://github.com/qyt1340272051-design/DynamicIsland/releases/download/plugins-0.6.0/github-0.1.0.dip",
+      "source": "https://github.com/qyt1340272051-design/DynamicIsland",
+      "minHostVersion": "0.6.0",
+      "hash": "277c8eda20d2a34648e5255ccf39504c54d0f88b3173c8b361725e74531281a6"
+    }
+  ]
+}

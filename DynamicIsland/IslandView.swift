@@ -196,13 +196,13 @@ public struct IslandView: View {
         if activityRuntime.prioritizesCurrentActivityOverLegacyContent,
            let snapshot = activityManager.currentSnapshot,
            snapshot.activity.presentation.isCompactVisible {
-            renderedActivity(snapshot, mode: .compact, shellSize: compactPresentationSize)
+            renderedCollapsedActivity(snapshot)
                 .transition(compactContentTransition)
         } else if viewModel.compactTimerMode != nil {
             CompactTimerStatus(model: viewModel.timerTools)
                 .transition(compactContentTransition)
         } else if hasCompactActivity, let snapshot = activityManager.currentSnapshot {
-            renderedActivity(snapshot, mode: .compact, shellSize: compactPresentationSize)
+            renderedCollapsedActivity(snapshot)
                 .transition(compactContentTransition)
         }
     }
@@ -210,6 +210,20 @@ public struct IslandView: View {
     private var compactContentTransition: AnyTransition {
         guard !reduceMotion else { return .opacity }
         return .opacity.combined(with: .scale(scale: IslandExpansionAnimation.compactActivityContentScale))
+    }
+
+    private func renderedCollapsedActivity(_ snapshot: ActivitySnapshot) -> some View {
+        let mode = snapshot.activity.presentation.effectiveCollapsedMode
+        let region = IslandRenderer.collapsedRegionSize(
+            for: mode,
+            shellSize: compactPresentationSize,
+            reservedCenterWidth: viewModel.compactPanelSize.width
+        )
+        return renderedActivity(snapshot, mode: mode, shellSize: region)
+            .frame(width: region.width, height: region.height)
+            .frame(width: compactPresentationSize.width, height: compactPresentationSize.height,
+                   alignment: .trailing)
+            .animation(reduceMotion ? nil : IslandExpansionAnimation.compactActivityShell, value: mode)
     }
 
     @ViewBuilder

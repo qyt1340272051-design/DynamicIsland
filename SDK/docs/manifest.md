@@ -30,8 +30,8 @@
 | `permissions` | 访问资源的声明；仍需用户单独批准，见 [Permissions](permissions.md)。 |
 | `capabilities` | 所需 Host 功能；不代替权限，也不保证当前执行获准。 |
 
-常用能力：`activity.publish`、`activity.update`、`activity.end`、`ui.islandNode`、`actions.handle`、`storage.local`、`scheduler`、`countdown`、`links.open`。网络只声明 `network` 权限，没有名为 `network` 的 capability。`presentation.request` 属于兼容展示协议，Native SDK 草案没有公开该方法。
+常用能力：`activity.publish`、`activity.update`、`activity.end`、`ui.islandNode`、`actions.handle`、`storage.local`、`scheduler`、`countdown`、`links.open`。网络只声明 `network` 权限，没有名为 `network` 的 capability。`presentation.request` 属于兼容展示协议，Native SDK 没有公开该方法。
 
-Host Schema 另识别 `superisland` 引擎；这不表示原始上游插件可直接安装或所有上游 API 均受支持。本手册和 Hello 面向 Native 草案。原始上游许可与实际兼容验收尚未完成。
+Host Schema 另识别 `superisland` 引擎；这不表示原始上游插件可直接安装或所有上游 API 均受支持。本手册和 Hello 面向 Native SDK。原始上游许可与实际兼容验收单独追踪，不属于本 SDK 的完整兼容承诺。
 
 离线 [Manifest Schema](../schema/plugin-manifest-v1.schema.json)用于编辑器提示；CLI 还检查重复键和字节限额。完整 Manifest 最多 65,536 bytes。校验和打包见 [Packaging](packaging.md)。

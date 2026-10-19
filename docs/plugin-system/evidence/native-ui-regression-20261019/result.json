@@ -1,0 +1,53 @@
+{
+  "date": "2026-10-19",
+  "observedUTC": "2026-10-19T14:18:16.850824+00:00",
+  "status": "Six formerly failing native/OCR cases pass in a new runner; not a replacement for full CI",
+  "firstFailure": {
+    "log": "/tmp/dynamic-island-final-20261019/full-ci.log",
+    "logSHA256": "ba1764336179ec137405a57613bd6206752caea4f4d3df1f20610c50c900804c",
+    "resultBundle": "/tmp/dynamic-island-ci-results-94829/TestResults.xcresult",
+    "summary": "initial-full-ci-summary.json",
+    "affectedOldCases": 6,
+    "separateNewT11FixtureCaseExcludedFromThisRepair": true
+  },
+  "diagnosis": {
+    "fourOldNativeCasesFailedWaitingForKeyWindowBeforeBusinessClicks": true,
+    "firstNativeFailurePredatesNewT11WindowTest": true,
+    "screenLockOrFullscreenCauseProven": false,
+    "initialActualPNGVisualReview": "JavaScriptCore and the diagnostics button were complete; OCR changed case or a Chinese character.",
+    "initialNativeCompatibilityImagePixels": [
+      820,
+      53
+    ],
+    "historicalCompatibilityImagePixels": [
+      1640,
+      106
+    ],
+    "initialPNGs": "Observed in tool images before the repeat; original fixed temporary paths are reused by the test. No claim that the initial PNG bytes were archived."
+  },
+  "testOnlyChanges": {
+    "productionChanges": false,
+    "originalKeyWaitAssertionsAndErrorsPreserved": true,
+    "keyTimeoutDiagnostics": "On failure only: canBecomeKey, key/main/visible/activeSpace, scale, collection behavior, modal window and reported session state.",
+    "OCR": "Actual NSView cacheDisplay uses a fixed 2x bitmap; exact required text assertions and native event dispatch remain unchanged.",
+    "sourceSHA256": {
+      "DynamicIslandTests/IslandQuitCancellationTests.swift": "81fd037b6ab7667398f4858994c53c4065650db43ab01ba67a779e8d496eaf25",
+      "DynamicIslandTests/PluginExtensionsUITests.swift": "2cfa507ac8a44b7a59ba5021f645d64252486149f0ff4d624d8fed05c959081a",
+      "DynamicIslandTests/PluginInstallerUITests.swift": "223639b501181fd4d5499279d47bfe702561812cbcc8e9e659417575dd7c501c",
+      "DynamicIslandTests/PluginRegistryUITests.swift": "6ba2061823c0d9fd4d2a28823ca38b04f6b307fca065c63dc919ddd665431600"
+    }
+  },
+  "targetedRepeat": {
+    "passed": 6,
+    "skipped": 0,
+    "failed": 0,
+    "processExitCode": 0,
+    "keyTimeoutDiagnosticsTriggered": false,
+    "log": "/tmp/dynamic-island-final-20261019/native-six-diagnostic.log",
+    "logSHA256": "14b6cf3112d35fb976bc032482db79a8a5f79df5dddcf4cae3f09d76d50ead42",
+    "resultBundle": "/tmp/dynamic-island-final-20261019/native-six-diagnostic.xcresult",
+    "summary": "native-six-summary.json"
+  },
+  "scope": "A fresh runner did not reproduce the native key acquisition failures; no attribution to lock, fullscreen, T11 window leakage or production code is made. Two OCR precision failures are addressed without relaxing exact labels. Full CI remains a separate gate.",
+  "screenshots": "screenshots.json"
+}

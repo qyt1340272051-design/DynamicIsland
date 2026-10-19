@@ -1,8 +1,8 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "urn:dynamicisland:experimental-authoring:island-node-v1",
+  "$id": "urn:dynamicisland:sdk:island-node-v1",
   "title": "Experimental DynamicIsland authoring subset nodes",
-  "description": "Editor aid for the eight node kinds used by the official Pomodoro/GitHub examples. This is a narrower authoring preflight, not Host admission or a stable SDK guarantee.",
+  "description": "SDK 1.0.0 release-candidate editor aid for the eight node kinds used by the official Pomodoro/GitHub examples. This is narrower authoring preflight, not Host admission or a declaration of the full Host contract.",
   "$comment": "Run di_plugin.py validate-node for raw 65536-byte JSON input, strict UTF-8, duplicate keys, finite numbers, UTF-8 text limits, maximum depth 8 and aggregate nodes 128. Schema checks alone do not enforce these aggregate or byte constraints. Host independently checks rendering-mode support, capabilities, permissions, active instance and countdown generation.",
   "$ref": "#/$defs/node",
   "$defs": {

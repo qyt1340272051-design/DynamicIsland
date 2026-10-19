@@ -1,0 +1,69 @@
+{
+  "title": "Test - Dynamic Island",
+  "result": "Failed",
+  "totalTestCount": 1072,
+  "passedTests": 1063,
+  "failedTests": 7,
+  "skippedTests": 2,
+  "expectedFailures": 0,
+  "startTime": 1792391601.004,
+  "finishTime": 1792391733.136,
+  "testFailures": [
+    {
+      "failureText": "failed - The hosted island did not complete its native control operation.",
+      "targetName": "DynamicIslandTests",
+      "testIdentifier": 251,
+      "testIdentifierString": "IslandQuitCancellationTests/testCancellationDuringAnimationPreventsLateTerminationAndRestoresNativeClicks()",
+      "testIdentifierURL": "test://com.apple.xcode/DynamicIsland/DynamicIslandTests/IslandQuitCancellationTests/testCancellationDuringAnimationPreventsLateTerminationAndRestoresNativeClicks",
+      "testName": "testCancellationDuringAnimationPreventsLateTerminationAndRestoresNativeClicks()"
+    },
+    {
+      "failureText": "XCTAssertTrue failed - The complete, exact engine name must be visible in rendered pixels.",
+      "targetName": "DynamicIslandTests",
+      "testIdentifier": 575,
+      "testIdentifierString": "PluginExtensionsUITests/testCompatibilityDetailsRenderHostProfileObservationAndRecentLayoutAtReadableWidth()",
+      "testIdentifierURL": "test://com.apple.xcode/DynamicIsland/DynamicIslandTests/PluginExtensionsUITests/testCompatibilityDetailsRenderHostProfileObservationAndRecentLayoutAtReadableWidth",
+      "testName": "testCompatibilityDetailsRenderHostProfileObservationAndRecentLayoutAtReadableWidth()"
+    },
+    {
+      "failureText": "XCTAssertEqual failed: (\"compact\") is not equal to (\"minimal\")",
+      "targetName": "DynamicIslandTests",
+      "testIdentifier": 268,
+      "testIdentifierString": "IslandTimerShellRenderingTests/testMinimalLeafStaysOutsideCameraAndSameActivityCanGrowAndExpand()",
+      "testIdentifierURL": "test://com.apple.xcode/DynamicIsland/DynamicIslandTests/IslandTimerShellRenderingTests/testMinimalLeafStaysOutsideCameraAndSameActivityCanGrowAndExpand",
+      "testName": "testMinimalLeafStaysOutsideCameraAndSameActivityCanGrowAndExpand()"
+    },
+    {
+      "failureText": "failed - A native control did not complete its Host operation.",
+      "targetName": "DynamicIslandTests",
+      "testIdentifier": 577,
+      "testIdentifierString": "PluginExtensionsUITests/testNativeButtonsRequireExplicitConsentAndUninstallConfirmation()",
+      "testIdentifierURL": "test://com.apple.xcode/DynamicIsland/DynamicIslandTests/PluginExtensionsUITests/testNativeButtonsRequireExplicitConsentAndUninstallConfirmation",
+      "testName": "testNativeButtonsRequireExplicitConsentAndUninstallConfirmation()"
+    },
+    {
+      "failureText": "failed - The Host installation operation did not complete.",
+      "targetName": "DynamicIslandTests",
+      "testIdentifier": 611,
+      "testIdentifierString": "PluginInstallerUITests/testNativeCancelWindowCloseAndInstallButtonsUseTheCurrentReview()",
+      "testIdentifierURL": "test://com.apple.xcode/DynamicIsland/DynamicIslandTests/PluginInstallerUITests/testNativeCancelWindowCloseAndInstallButtonsUseTheCurrentReview",
+      "testName": "testNativeCancelWindowCloseAndInstallButtonsUseTheCurrentReview()"
+    },
+    {
+      "failureText": "XCTAssertTrue failed - Required control or permission was cropped: 查看诊断",
+      "targetName": "DynamicIslandTests",
+      "testIdentifier": 578,
+      "testIdentifierString": "PluginExtensionsUITests/testNativeManagementWindowRendersMetadataPermissionsAndMinimumSizeToPNG()",
+      "testIdentifierURL": "test://com.apple.xcode/DynamicIsland/DynamicIslandTests/PluginExtensionsUITests/testNativeManagementWindowRendersMetadataPermissionsAndMinimumSizeToPNG",
+      "testName": "testNativeManagementWindowRendersMetadataPermissionsAndMinimumSizeToPNG()"
+    },
+    {
+      "failureText": "failed - The Host installation operation did not complete.",
+      "targetName": "DynamicIslandTests",
+      "testIdentifier": 849,
+      "testIdentifierString": "PluginRegistryUITests/testNativeRefreshDownloadAndInstallPreserveExplicitConsent()",
+      "testIdentifierURL": "test://com.apple.xcode/DynamicIsland/DynamicIslandTests/PluginRegistryUITests/testNativeRefreshDownloadAndInstallPreserveExplicitConsent",
+      "testName": "testNativeRefreshDownloadAndInstallPreserveExplicitConsent()"
+    }
+  ]
+}

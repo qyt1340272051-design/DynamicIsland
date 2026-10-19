@@ -1,0 +1,19 @@
+Test Case '-[DynamicIslandTests.PluginDocumentationTests testDocumentedActivityFunctionsPublishReplaceAndEndInHost]' started.
+Test Case '-[DynamicIslandTests.PluginDocumentationTests testDocumentedActivityFunctionsPublishReplaceAndEndInHost]' passed (0.036 seconds).
+Test Case '-[DynamicIslandTests.PluginDocumentationTests testDocumentedLinkHandlerOnlyOpensFromCurrentAuthorizedAction]' started.
+Test Case '-[DynamicIslandTests.PluginDocumentationTests testDocumentedLinkHandlerOnlyOpensFromCurrentAuthorizedAction]' passed (0.044 seconds).
+Test Case '-[DynamicIslandTests.PluginDocumentationTests testDocumentedNetworkFunctionUsesHostPolicyAndValidatesBusinessJSON]' started.
+Test Case '-[DynamicIslandTests.PluginDocumentationTests testDocumentedNetworkFunctionUsesHostPolicyAndValidatesBusinessJSON]' passed (0.080 seconds).
+Test Case '-[DynamicIslandTests.PluginDocumentationTests testDocumentedSettingsDefaultWithoutGrantAndValidateStoredShape]' started.
+Test Case '-[DynamicIslandTests.PluginDocumentationTests testDocumentedSettingsDefaultWithoutGrantAndValidateStoredShape]' passed (0.062 seconds).
+Test Case '-[DynamicIslandTests.PluginSDKContractTests testBundledManifestSchemaIsAnExactOfflineCopyOfHostContract]' started.
+Test Case '-[DynamicIslandTests.PluginSDKContractTests testBundledManifestSchemaIsAnExactOfflineCopyOfHostContract]' passed (0.002 seconds).
+Test Case '-[DynamicIslandTests.PluginSDKContractTests testIndependentAuthorPackageRoutesBothButtonsThroughCurrentHostInstance]' started.
+Test Case '-[DynamicIslandTests.PluginSDKContractTests testIndependentAuthorPackageRoutesBothButtonsThroughCurrentHostInstance]' passed (0.070 seconds).
+Test Case '-[DynamicIslandTests.PluginSDKContractTests testSDKPackagedHelloRunsInProductionVMAndRoutesOnlyCurrentInstances]' started.
+Test Case '-[DynamicIslandTests.PluginSDKContractTests testSDKPackagedHelloRunsInProductionVMAndRoutesOnlyCurrentInstances]' passed (0.051 seconds).
+Test Case '-[DynamicIslandTests.PluginSDKContractTests testSharedAuthoringCasesAgreeWithProductionManifestAndNodeConverters]' started.
+Test Case '-[DynamicIslandTests.PluginSDKContractTests testSharedAuthoringCasesAgreeWithProductionManifestAndNodeConverters]' passed (0.011 seconds).
+	 Executed 8 tests, with 0 failures (0 unexpected) in 0.355 (0.358) seconds
+	 Executed 8 tests, with 0 failures (0 unexpected) in 0.355 (0.358) seconds
+** TEST SUCCEEDED **

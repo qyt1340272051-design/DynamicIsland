@@ -1,0 +1,135 @@
+{
+  "date": "2026-10-19",
+  "observedUTC": "2026-10-19T06:18:27.487813+00:00",
+  "checkpoint": "eaa2bc3",
+  "method": "Read-only reconciliation of plan, production code, existing test coverage, historical accepted results, and three actual unmodified UI screenshots. No new Xcode run or App launch.",
+  "T10": {
+    "recommendedStatus": "verified",
+    "planCompletionCriterion": "The same component has a consistent visual language across plugins.",
+    "finiteTokensPresent": true,
+    "pluginArbitraryFontPaddingCornerRadiusRejected": true,
+    "actualPomodoroAndGitHubSharedComponentVisualsReviewed": true,
+    "actualScreenshots": [
+      "docs/plugin-system/evidence/t35-manual-20261019/started.jpg",
+      "docs/plugin-system/evidence/t36-manual-20261019/ui-08.jpg"
+    ],
+    "lightDarkAndIncreasedContrastSupport": "Existing IslandDesignTokensTests cover six colors in both appearances and both contrast modes, at least 4.5 against the black island surface. No new system appearance switching performed.",
+    "accessibilitySupport": "Phase 3 user acceptance explicitly confirms Music VoiceOver and Volume Reduce Motion; shared Renderer semantic controls and reduced animation paths remain present. Not per-plugin exhaustive VoiceOver certification.",
+    "designTokensUnchangedSince": "f7052bb1fb1f289126571f8914e9370f308c6911",
+    "designTokensUnchangedVerified": true,
+    "currentHEADWholeBinaryAcceptance": false
+  },
+  "T11": {
+    "recommendedStatus": "in progress",
+    "pureDataThreeFormsAndHostBoundsPresent": true,
+    "fallbackPolicyAndSameViewTestsPresent": true,
+    "actualTimerCompactExpandedCoveredByT35": true,
+    "continuousRealTimerMinimalCompactExpandedEvidenceArchived": false,
+    "remainingCriterion": "Same Timer Activity visibly and smoothly progresses from minimal to compact and expanded without changing its instance or restarting its clock.",
+    "suggestion": "Preserve the two global Host window states; select a real minimal leaf on compact-tree fallback, place it in a camera-safe wing, then verify same-instance update to compact and Host expansion. No product toggle or plugin-owned dimensions needed.",
+    "debugPanelCannotProveCurrentPomodoro": "Existing DEBUG window owns a separate Manager and supplies no countdown resolver.",
+    "formalHostExplicitMinimalModeSelectedAtAuditCheckpoint": false,
+    "preparedImplementation": {
+      "status": "Directed regression passed; actual countdown and continuous physical UI acceptance still pending",
+      "files": [
+        "DynamicIsland/IslandUI/ActivityPresentationPolicy.swift",
+        "DynamicIsland/IslandUI/IslandRenderer.swift",
+        "DynamicIsland/IslandView.swift",
+        "DynamicIslandTests/ActivityPresentationTests.swift",
+        "DynamicIslandTests/IslandRendererTests.swift",
+        "DynamicIslandTests/IslandTimerShellRenderingTests.swift"
+      ],
+      "behavior": "Host selects accepted compact, otherwise accepted minimal, otherwise legacy compact summary. Minimal leaf is confined to the right wing outside the reserved center; same instance renderer keeps actions and countdown resolver.",
+      "newGlobalWindowState": false,
+      "newUserToggle": false,
+      "newPluginDimensions": false,
+      "productionPomodoroSpecificSwift": false
+    },
+    "preparedAcceptancePackage": {
+      "sourceDirectory": "docs/plugin-system/examples/timer-presentations",
+      "packagePath": "/tmp/timer-presentations-0.1.0.dip",
+      "packageSHA256": "307e53f9fa895bc0bb5b637638f0c1de73588fc347feb5f6ef90621d4f1a19e4",
+      "pluginID": "com.dynamicisland.acceptance.timer-presentations",
+      "permissions": [],
+      "realCountdownDurationMs": 300000,
+      "singleHostRefreshDelayMs": 30000,
+      "nodeSyntaxCheck": "passed",
+      "offlineManifestAndPackagingPreflight": "passed",
+      "actualHostRun": "not yet performed",
+      "sourceSHA256": {
+        "docs/plugin-system/examples/timer-presentations/README.md": "3c07efb32a504933bdb3a9c66807ff5698069d2bdf2486e32ff6b7ab76fb5980",
+        "docs/plugin-system/examples/timer-presentations/index.js": "d555f742cfe0179560b404eb1dcb1dd8ccb00596270e85fbd95a3a1f8bdf51e5",
+        "docs/plugin-system/examples/timer-presentations/manifest.json": "7de0e93046864c0d43af170285f1448d800e7f806ff54e14eb05b8ea8360e1a8"
+      }
+    },
+    "validation": {
+      "initialFullCILog": "/tmp/dynamic-island-final-20261019/full-ci.log",
+      "initialNewTestResult": "failed: snapshot read before target Activity selected",
+      "rootCause": "The preview Music Activity remains current during normal Host debounce/minimum dwell. The test incorrectly captured that snapshot immediately after admission, then photographed before the target was selected. Later identity assertions compared the target to the original Music token.",
+      "fix": "Wait boundedly for the admitted target id/source to become current, assert both, and classify visible non-black high-alpha foreground. Retain glyph count >10, camera clearance >=8pt, same-token/createdAt, update/expansion assertions. No production change for this test correction.",
+      "fixedTestSourceSHA256": "8f3a4e7ed87a10ac34378c66ce8ff261be22d674f0196c85992c5ac0f46153ce",
+      "directedResult": "passed",
+      "directedLog": "/tmp/dynamic-island-t11-fixed-20261019.log",
+      "directedResultBundle": "/tmp/dynamic-island-t11-fixed-20261019.xcresult",
+      "secondRootCause": "The NSHostingView PNG visibly contains a white monochrome SF Symbol. An accent-only predicate incorrectly counted zero. A geometry test must detect non-black high-alpha foreground independently of color; dedicated token/Renderer tests retain color coverage.",
+      "intermediateDirectedFailureLog": "/tmp/dynamic-island-t11-fix-20261019.log",
+      "diagnosticFailureLog": "/tmp/dynamic-island-t11-pixels-20261019.log",
+      "passed": 24,
+      "skipped": 0,
+      "failed": 0,
+      "suiteCounts": {
+        "ActivityPresentationTests": 12,
+        "IslandRendererTests": 10,
+        "IslandTimerShellRenderingTests": 2
+      },
+      "directedLogSHA256": "c0be5dd2662d095af121ae0a479ceee5836fc0404a5b5c52384a1eaf5d3f5a8a",
+      "originalControlledImage": {
+        "path": "docs/plugin-system/evidence/t10-t11-20261019/minimal-host-view.png",
+        "SHA256": "3d84e70801cc5c26a31f917b9c2c0c875ae2e0cf90408eb72f9b5ffa4b1e7ae5",
+        "source": "Original unmodified successful XCTest attachment exported using xcresulttool",
+        "test": "IslandTimerShellRenderingTests/testMinimalLeafStaysOutsideCameraAndSameActivityCanGrowAndExpand",
+        "attachmentTimestampEpochSeconds": 1792392034.867,
+        "foregroundPixelCount": 51,
+        "foregroundBounds": {
+          "minX": 407,
+          "maxX": 417,
+          "minY": 11,
+          "maxY": 21
+        },
+        "reservedCameraRightEdgeX": 395,
+        "actualClearancePoints": 12,
+        "scope": "Controlled NSHostingView of production IslandView; not an actual live countdown or a continuous physical island animation record"
+      }
+    }
+  },
+  "appLaunched": false,
+  "systemSettingsChanged": false,
+  "imagesEdited": false,
+  "limits": [
+    "Historical Release screenshot identity is preserved; it is not the current HEAD binary.",
+    "No new quantitative CPU, power, frame-rate, or all-device results.",
+    "Does not close T02, T08, or T11."
+  ],
+  "sourceSHA256AtAuditCheckpoint": {
+    "DynamicIsland/IslandUI/DesignTokens.swift": "adca0f7ee25a877f2646a76be55b1720abe27adce2e2cfeafab834a2295a656a",
+    "DynamicIsland/IslandUI/IslandRenderer.swift": "dae7aa5a4eac5c6aeab7e228da1561f5dd35fc9c52c93dcfb6d05c3069e85f80",
+    "DynamicIsland/IslandUI/IslandCountdownNodeView.swift": "54c4681b6666288d0740d31217ca16d1f9f88854b61eb7f74742f5be2007fe33",
+    "DynamicIsland/IslandUI/ActivityPresentationPolicy.swift": "ab82afd697272a8db70938eeb091cbf10c76524e6c0b68effdc0a765bee05179",
+    "DynamicIsland/Core/Activity/IslandActivity.swift": "8256cc0dbb3ea9d7bfcb9f8fe14bd8954712be7e5afb10f322b99ad83a9e231f",
+    "DynamicIsland/IslandView.swift": "66790be54325fdf44a2896c17819fc9af10b981b8c45c602d309b6e199083b6a",
+    "DynamicIslandTests/IslandDesignTokensTests.swift": "b8001c697890b0a2a0708dab40913234a0f42556dda0b29124c80cd506afdd99",
+    "DynamicIslandTests/ActivityPresentationTests.swift": "c5b21bdb84a817dd6c5671b59e7e599ae65c62f21fa5475f61f60868679c9661",
+    "DynamicIslandTests/IslandRendererTests.swift": "b107139d49beeae8af0fd1cefd2a6388dc15436a86b3434a7be21f604b216172",
+    "DynamicIslandTests/PluginIslandNodeBridgeTests.swift": "934707dd4a0d9cf9ddb63aea6555d1dfb75538121e5f04fc79b667d953f23c9f",
+    "docs/plugin-system/phase-3-acceptance.md": "31de458faab0946ab682188173fbb45669195590d2b21ca9c024eea0fea435d5",
+    "docs/plugin-system/examples/pomodoro/index.js": "6a0782e1788b009ddea8321aad4370ebc6d3d8b746315616b15e8bea0e03f6b2",
+    "docs/plugin-system/examples/github/index.js": "931812cfd596ee612e7ea5f1573d81b71597ec2499326aa25c4257b55b38c971",
+    "docs/plugin-system/evidence/t35-manual-20261019/started.jpg": "8737f9006eb7f7be65d132c3203f631f71e183d164068f8c88180517beecac08",
+    "docs/plugin-system/evidence/t35-manual-20261019/compact-14m03.jpg": "df598b685314d3ef6d1f5416570566c0916ef0e0f59eed16b01d77e30ffd85ee",
+    "docs/plugin-system/evidence/t36-manual-20261019/ui-08.jpg": "a740d391f0c08d73441f647b75cbacfdebc79401741ad06fe4bd20118addb1b0",
+    "docs/plugin-system/evidence/t35-manual-20261019/host-provenance.json": "e6d55a8ac7c6b790a1cd9e800e0dbb02a9de18ab5a96a74fca9c9d46f125fe27",
+    "docs/plugin-system/evidence/t35-manual-20261019/result.json": "2314d44980a5910158c8d2195108ee8da7c51c6791b1748164088db20f7b2573",
+    "docs/plugin-system/evidence/t36-manual-20261019/result.json": "3e9af89ee5f948e8f6f29de0c96c9fb464cd3c107838d2409f7d4334019357aa"
+  },
+  "newXcodeTestsRunAtInitialAudit": false
+}

@@ -243,8 +243,7 @@ final class PluginExtensionsUITests: XCTestCase {
     }
 
     private func renderedText(in view: NSView) throws -> String {
-        let bitmap = try XCTUnwrap(view.bitmapImageRepForCachingDisplay(in: view.bounds))
-        view.cacheDisplay(in: view.bounds, to: bitmap)
+        let bitmap = try CompatibilityRenderingEvidence.bitmap(in: view)
         let image = try XCTUnwrap(bitmap.cgImage)
         let request = VNRecognizeTextRequest()
         request.recognitionLevel = .accurate
@@ -260,7 +259,11 @@ final class PluginExtensionsUITests: XCTestCase {
         // run through NSApplication's native event dispatcher.
         window.makeKeyAndOrderFront(nil)
         try await settle(window)
-        try await waitUntil { window.isKeyWindow }
+        do { try await waitUntil { window.isKeyWindow } }
+        catch {
+            NativeWindowTestingDiagnostics.keyTimeout(window)
+            throw error
+        }
         let local = CGPoint(x: point.x, y: view.isFlipped ? point.y : view.bounds.height - point.y)
         let location = view.convert(local, to: nil)
         let events = try [NSEvent.EventType.leftMouseDown, .leftMouseUp].map { type in
@@ -302,8 +305,7 @@ final class PluginExtensionsUITests: XCTestCase {
 
     private func writeScreenshot(_ window: NSWindow, filename: String) throws {
         let view = try XCTUnwrap(window.contentView)
-        let bitmap = try XCTUnwrap(view.bitmapImageRepForCachingDisplay(in: view.bounds))
-        view.cacheDisplay(in: view.bounds, to: bitmap)
+        let bitmap = try CompatibilityRenderingEvidence.bitmap(in: view)
         let png = try XCTUnwrap(bitmap.representation(using: .png, properties: [:]))
         XCTAssertGreaterThan(png.count, 2_000)
         let output = FileManager.default.temporaryDirectory.appendingPathComponent(filename)
@@ -347,9 +349,27 @@ private enum ExtensionsUITestError: Error { case timedOut }
 /// OCR results used by the existing native mouse-button hit testing.
 @MainActor
 enum CompatibilityRenderingEvidence {
-    static func renderedText(in view: NSView) throws -> String {
-        let bitmap = try XCTUnwrap(view.bitmapImageRepForCachingDisplay(in: view.bounds))
+    /// Keep the actual view rendering at a fixed two pixels per point. The
+    /// current screen can change between Retina and external 1x displays;
+    /// small labels must not gain OCR failures solely from that change.
+    static func bitmap(in view: NSView) throws -> NSBitmapImageRep {
+        view.layoutSubtreeIfNeeded()
+        view.displayIfNeeded()
+        let bitmap = try XCTUnwrap(NSBitmapImageRep(
+            bitmapDataPlanes: nil,
+            pixelsWide: Int((view.bounds.width * 2).rounded(.up)),
+            pixelsHigh: Int((view.bounds.height * 2).rounded(.up)),
+            bitsPerSample: 8, samplesPerPixel: 4, hasAlpha: true,
+            isPlanar: false, colorSpaceName: .deviceRGB, bytesPerRow: 0, bitsPerPixel: 0
+        ))
+        bitmap.size = view.bounds.size
+        bitmap.bitmapData?.initialize(repeating: 0, count: bitmap.bytesPerRow * bitmap.pixelsHigh)
         view.cacheDisplay(in: view.bounds, to: bitmap)
+        return bitmap
+    }
+
+    static func renderedText(in view: NSView) throws -> String {
+        let bitmap = try bitmap(in: view)
         let image = try XCTUnwrap(bitmap.cgImage)
         let request = recognitionRequest()
         try VNImageRequestHandler(cgImage: image, options: [:]).perform([request])
@@ -370,6 +390,19 @@ enum CompatibilityRenderingEvidence {
             let lineRequest = recognitionRequest()
             try VNImageRequestHandler(cgImage: line, options: [:]).perform([lineRequest])
             text.append(contentsOf: (lineRequest.results ?? []).flatMap { $0.topCandidates(5).map(\.string) })
+            if observation.topCandidates(5).contains(where: { candidate in
+                candidate.string.unicodeScalars.contains { scalar in
+                    (65...90).contains(scalar.value) || (97...122).contains(scalar.value)
+                }
+            }) {
+                // Mixed Chinese/English language correction may normalize a
+                // real camel-case engine label or mistake I for l. Recognize
+                // the same detected source line with English correction off;
+                // keep the actual candidates and exact assertions unchanged.
+                let english = recognitionRequest(languages: ["en-US"], languageCorrection: false)
+                try VNImageRequestHandler(cgImage: line, options: [:]).perform([english])
+                text.append(contentsOf: (english.results ?? []).flatMap { $0.topCandidates(5).map(\.string) })
+            }
         }
         return text.joined(separator: " ")
     }
@@ -384,11 +417,65 @@ enum CompatibilityRenderingEvidence {
                       "The Host compatibility level must be visible in rendered pixels.", file: file, line: line)
     }
 
-    private static func recognitionRequest() -> VNRecognizeTextRequest {
+    private static func recognitionRequest(
+        languages: [String] = ["zh-Hans", "en-US"],
+        languageCorrection: Bool = true
+    ) -> VNRecognizeTextRequest {
         let request = VNRecognizeTextRequest()
         request.recognitionLevel = .accurate
-        request.recognitionLanguages = ["zh-Hans", "en-US"]
+        request.recognitionLanguages = languages
+        request.usesLanguageCorrection = languageCorrection
         request.customWords = ["SuperIsland", "JavaScriptCore"]
         return request
+    }
+}
+
+/// Emit only when a real native-input prerequisite failed. Preserve the
+/// caller's original timeout assertion and do not infer a locked session from
+/// failure to acquire a key window.
+@MainActor
+enum NativeWindowTestingDiagnostics {
+    static func keyTimeout(_ window: NSWindow) {
+        func describe(_ value: NSWindow?) -> [String: Any] {
+            guard let value else { return [:] }
+            return [
+                "number": value.windowNumber,
+                "class": String(describing: type(of: value)),
+                "canBecomeKey": value.canBecomeKey,
+                "isKey": value.isKeyWindow,
+                "isMain": value.isMainWindow,
+                "isVisible": value.isVisible,
+                "isMiniaturized": value.isMiniaturized,
+                "isOnActiveSpace": value.isOnActiveSpace,
+                "backingScale": value.backingScaleFactor,
+                "screenScale": value.screen?.backingScaleFactor ?? -1,
+                "styleMask": value.styleMask.rawValue,
+                "collectionBehavior": value.collectionBehavior.rawValue,
+                "occlusionState": value.occlusionState.rawValue,
+                "attachedSheetNumber": value.attachedSheet?.windowNumber ?? -1
+            ]
+        }
+        let session = CGSessionCopyCurrentDictionary() as? [String: Any]
+        var reportedSession: [String: Any] = [:]
+        for key in ["CGSSessionScreenIsLocked", kCGSessionOnConsoleKey as String, kCGSessionLoginDoneKey as String] {
+            reportedSession[key] = session?[key] ?? "not reported"
+        }
+        let record: [String: Any] = [
+            "dateUTC": ISO8601DateFormatter().string(from: Date()),
+            "target": describe(window),
+            "appKeyWindow": describe(NSApp.keyWindow),
+            "appMainWindow": describe(NSApp.mainWindow),
+            "appModalWindow": describe(NSApp.modalWindow),
+            "appActive": NSApp.isActive,
+            "appHidden": NSApp.isHidden,
+            "appActivationPolicy": NSApp.activationPolicy().rawValue,
+            "frontmostBundleID": NSWorkspace.shared.frontmostApplication?.bundleIdentifier ?? "not reported",
+            "currentEventType": NSApp.currentEvent.map { Int($0.type.rawValue) } ?? -1,
+            "session": reportedSession
+        ]
+        if let data = try? JSONSerialization.data(withJSONObject: record, options: [.sortedKeys]),
+           let text = String(data: data, encoding: .utf8) {
+            print("NATIVE_KEY_WINDOW_TIMEOUT=\(text)")
+        }
     }
 }

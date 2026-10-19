@@ -24,4 +24,4 @@ else
   exit 1
 fi
 
-printf 'Experimental SDK authoring, packaging, and type checks passed.\n'
+printf 'SDK authoring, packaging, and type checks passed.\n'

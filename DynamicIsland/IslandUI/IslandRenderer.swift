@@ -131,6 +131,22 @@ public struct IslandRenderer: View {
         }
     }
 
+    /// The center of a collapsed island may be a physical camera cutout.
+    /// A minimal leaf gets only the right display wing; compact rows retain
+    /// both wings and their authored spacer. Dimensions remain Host-owned.
+    public static func collapsedRegionSize(
+        for mode: ActivityPresentation.Mode,
+        shellSize: CGSize,
+        reservedCenterWidth: CGFloat
+    ) -> CGSize {
+        guard shellSize.width.isFinite, shellSize.height.isFinite,
+              reservedCenterWidth.isFinite else { return .zero }
+        let width = max(0, shellSize.width)
+        let height = max(0, shellSize.height)
+        guard mode == .minimal else { return CGSize(width: width, height: height) }
+        return CGSize(width: max(0, width - max(0, reservedCenterWidth)) / 2, height: height)
+    }
+
     static func resolvedNode(in presentation: ActivityPresentation, for mode: ActivityPresentation.Mode) -> IslandNode {
         let node = presentation.resolvedNode(for: mode)
         return ActivityPresentation.HostPolicy.accepts(node, for: mode)

@@ -133,7 +133,11 @@ final class PluginInstallerUITests: XCTestCase {
     private func click(_ label: String, in window: NSWindow) async throws {
         window.makeKeyAndOrderFront(nil)
         try await settle(window)
-        try await InstallerUIFixture.wait { window.isKeyWindow }
+        do { try await InstallerUIFixture.wait { window.isKeyWindow } }
+        catch {
+            NativeWindowTestingDiagnostics.keyTimeout(window)
+            throw error
+        }
         let matches = try renderedText(window).filter { $0.text.contains(label) }
         let text = try XCTUnwrap(matches.min { $0.bounds.minY < $1.bounds.minY }, "Missing rendered native button \(label)")
         let view = try XCTUnwrap(window.contentView)
@@ -157,8 +161,7 @@ final class PluginInstallerUITests: XCTestCase {
 
     private func renderedText(_ window: NSWindow) throws -> [(text: String, bounds: CGRect)] {
         let view = try XCTUnwrap(window.contentView)
-        let bitmap = try XCTUnwrap(view.bitmapImageRepForCachingDisplay(in: view.bounds))
-        view.cacheDisplay(in: view.bounds, to: bitmap)
+        let bitmap = try CompatibilityRenderingEvidence.bitmap(in: view)
         let image = try XCTUnwrap(bitmap.cgImage)
         let request = VNRecognizeTextRequest()
         request.recognitionLevel = .accurate
@@ -173,8 +176,7 @@ final class PluginInstallerUITests: XCTestCase {
 
     private func writeScreenshot(_ window: NSWindow, filename: String) throws {
         let view = try XCTUnwrap(window.contentView)
-        let bitmap = try XCTUnwrap(view.bitmapImageRepForCachingDisplay(in: view.bounds))
-        view.cacheDisplay(in: view.bounds, to: bitmap)
+        let bitmap = try CompatibilityRenderingEvidence.bitmap(in: view)
         let png = try XCTUnwrap(bitmap.representation(using: .png, properties: [:]))
         let output = FileManager.default.temporaryDirectory.appendingPathComponent(filename)
         try png.write(to: output, options: .atomic)

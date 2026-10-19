@@ -95,6 +95,27 @@ final class ActivityPresentationTests: XCTestCase {
         XCTAssertEqual(expandedOnly.resolvedNode(for: .compact), .hStack(.init([.text(.init("Focus"))])))
     }
 
+    func testCollapsedModeUsesAnAcceptedMinimalLeafBeforeTheCompactSummary() {
+        let minimal: IslandNode = .icon(.init("timer"))
+        let compact: IslandNode = .hStack(.init([minimal, .text(.init("24:58"))]))
+        var presentation = ActivityPresentation(title: "Focus", minimal: minimal)
+        XCTAssertEqual(presentation.effectiveCollapsedMode, .minimal)
+        XCTAssertEqual(presentation.resolvedNode(for: presentation.effectiveCollapsedMode), minimal)
+
+        presentation.compact = .vStack(.init([.text(.init("One")), .text(.init("Two"))]))
+        XCTAssertEqual(presentation.effectiveCollapsedMode, .minimal,
+                       "An over-complex compact tree must keep the authored minimal form.")
+        presentation.compact = compact
+        XCTAssertEqual(presentation.effectiveCollapsedMode, .compact)
+        XCTAssertEqual(presentation.resolvedNode(for: presentation.effectiveCollapsedMode), compact)
+
+        presentation.compact = nil
+        presentation.minimal = .hStack(.init([minimal]))
+        XCTAssertEqual(presentation.effectiveCollapsedMode, .compact,
+                       "An invalid minimal tree must retain the safe legacy summary.")
+        XCTAssertEqual(ActivityPresentation(title: "Legacy").effectiveCollapsedMode, .compact)
+    }
+
     func testInvalidOrOverComplexLayoutsUseSafeFallback() {
         let invalidMinimal: IslandNode = .text(.init(String(repeating: "x", count: 300)))
         let invalidCompact: IslandNode = .vStack(.init([

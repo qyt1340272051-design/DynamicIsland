@@ -1,0 +1,38 @@
+{
+  "verifierSHA256": "806978126ea616a7de2f9ee4d126f424083c19c1ec09c96ea789d8a7db824883",
+  "sourceFixture": "../t31-background-20261014/disabled.jsonl",
+  "negativeChecks": [
+    {
+      "case": "identity-change",
+      "corruptWindowRejected": true
+    },
+    {
+      "case": "counter-rollback",
+      "corruptWindowRejected": true
+    },
+    {
+      "case": "sampling-gap",
+      "corruptWindowRejected": true
+    },
+    {
+      "case": "summary-mismatch",
+      "corruptWindowRejected": true
+    },
+    {
+      "case": "short-window-metadata",
+      "corruptWindowRejected": true
+    },
+    {
+      "case": "invalid-timebase",
+      "corruptWindowRejected": true
+    },
+    {
+      "case": "unknown-phase",
+      "corruptWindowRejected": true
+    }
+  ],
+  "actualHistoricalWindowsVerified": 2,
+  "independentReadOnlyReview": "SDK stability agent reviewed clock, counters, identity and boundary handling; its metadata validation and optimized-Python suggestions were incorporated.",
+  "purpose": "Verify counter integrity rejection before accepting the new real measurement; does not execute product tests.",
+  "invalidMetadataRejectedWithOptimizedPython": true
+}

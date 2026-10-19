@@ -1,0 +1,25 @@
+{
+  "observedUTC": "2026-10-19T06:33:52.118794+00:00",
+  "normalQuitMethod": "Root CUA super+q; subsequent root UI read returned procNotFound.",
+  "PID": 92924,
+  "PIDGoneIndependentlyConfirmed": true,
+  "isolatedPluginInventory": {
+    "Installed": [],
+    "Staging": [],
+    "Trash": [],
+    "Recovery": []
+  },
+  "stagingEmpty": true,
+  "installedPlugins": 0,
+  "actualThisRun": [
+    "App startup and later visible shell screenshot",
+    "Menu opened and Quit item observed by root",
+    "Normal Command-Q and process disappearance"
+  ],
+  "notExecutedThisRun": [
+    "Menu hide/show toggle. Root CUA menu AX indexes became stale; this is a tool observation issue, not established App failure."
+  ],
+  "productionAppLaunchedOrStoppedByThisTask": false,
+  "productionContainerReadByThisTask": false,
+  "isolatedAppRetainedForReview": true
+}

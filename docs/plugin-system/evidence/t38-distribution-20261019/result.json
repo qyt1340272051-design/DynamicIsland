@@ -1,0 +1,128 @@
+{
+  "T38TaskStatus": "in progress",
+  "artifact": {
+    "archiveRoot": "DynamicIslandSDK",
+    "bytes": 84000,
+    "files": 53,
+    "humanWalkthroughDirectory": "/tmp/dynamic-island-sdk-1.0.0-walkthrough-receipt-20261019/DynamicIslandSDK",
+    "manifest": "distribution-manifest.json",
+    "path": "/Users/rong5/Dynamiclsland/artifacts/sdk/dynamic-island-sdk-1.0.0.zip",
+    "sdkVersion": "1.0.0",
+    "sha256": "47729aa038528f800b8da6fd94666a0c0bcf6da6cc530086d5d4c86f9443663c"
+  },
+  "date": "2026-10-19",
+  "environment": {
+    "architecture": "arm64",
+    "macOS": "26.6.2",
+    "python": "3.9.6"
+  },
+  "helloFixture": {
+    "change": "README version and SDK-relative command documentation only. JavaScript and Manifest unchanged.",
+    "historicalManualEvidenceRewritten": false,
+    "newBytes": 2690,
+    "newSHA256": "d0e94985f688832de8227f524cecb2bef83aef09c50af6ddebf33129d077c976",
+    "oldBytes": 2667,
+    "oldSHA256": "fd4c3fac92d500a8e804aaaa3c4a78e5196b38c54f7ff388c9dd4475d45ae280"
+  },
+  "independentAIAuthorReview": {
+    "HostInstallationOrUIAcceptance": false,
+    "candidateSHA256Reviewed": "b92a911594b8e7dafa723dc70ba6e851cc35e21ec0e730ef2857a8cf5ccf0808",
+    "humanWalkthrough": false,
+    "offlineElapsedSeconds": 137.7,
+    "readSwiftSource": false,
+    "reviewPath": "/tmp/dynamic-island-independent-author-20261019/review.md",
+    "reviewSHA256": "bb5d586a73b48f9c50c75373475fe1d4bebf158eee05957c6bdce048e36fe3cd",
+    "scope": "Independent new-context AI author produced Hello and original two-button plugin using initial candidate. New README wording is not retrospectively attributed to that review."
+  },
+  "initialCandidate": {
+    "READMEReceiptClarificationIncluded": false,
+    "archiveBackupPath": "/tmp/dynamic-island-t38-distribution-20261019/initial-candidate/dynamic-island-sdk-1.0.0.zip",
+    "artifact": {
+      "archiveRoot": "DynamicIslandSDK",
+      "bytes": 83967,
+      "canonicalPathAtCreation": "/Users/rong5/Dynamiclsland/artifacts/sdk/dynamic-island-sdk-1.0.0.zip",
+      "files": 53,
+      "humanWalkthroughDirectory": "/tmp/dynamic-island-sdk-1.0.0-walkthrough-20261019/DynamicIslandSDK",
+      "manifest": "distribution-manifest.json",
+      "path": "/tmp/dynamic-island-t38-distribution-20261019/initial-candidate/dynamic-island-sdk-1.0.0.zip",
+      "sdkVersion": "1.0.0",
+      "sha256": "b92a911594b8e7dafa723dc70ba6e851cc35e21ec0e730ef2857a8cf5ccf0808"
+    },
+    "backupDirectory": "/tmp/dynamic-island-t38-distribution-20261019/initial-candidate",
+    "historicalResult": "initial-candidate.json",
+    "originalWalkthroughDirectoryPreserved": "/tmp/dynamic-island-sdk-1.0.0-walkthrough-20261019/DynamicIslandSDK",
+    "portableLog": "portable-check.txt",
+    "portableLogSHA256": "c45051f6c7876faa9b1e291cd69b6eb23b235ceb39912878f368e6718aa3615d",
+    "portableSDKPython": {
+      "failed": 0,
+      "passed": 37,
+      "skipReasons": [
+        "Official repository examples are outside standalone SDK.",
+        "Legacy repository wrapper is outside standalone SDK."
+      ],
+      "skipped": 2,
+      "total": 39
+    },
+    "sourceInventory": "initial-file-inventory.json"
+  },
+  "licenseMatchesRepository": true,
+  "logs": {
+    "sdk-check.txt": "f18c9a0c2437bfdf2585b05683d3946002ae87d6e9caac02a300618ae3892cfe"
+  },
+  "manifestSchemaVersion": 1,
+  "minimumHostVersion": "0.6.0",
+  "npmPrivate": true,
+  "npmPublished": false,
+  "observedUTC": "2026-10-19T14:16:26.825196+00:00",
+  "officialPluginPrerequisites": [
+    "../t35-manual-20261019/result.json",
+    "../t36-manual-20261019/result.json"
+  ],
+  "permissionSemanticsChanged": false,
+  "publiclyPublished": false,
+  "readmeReceiptClarification": {
+    "description": "publish/update resolve to an {id: string} receipt; id is the local Activity ID. No API change.",
+    "helloFixtureUnchanged": true,
+    "sourceSHA256": "0f8177802b3bcf3950c89d614f579e4b5375b384617265e52266ed95c81daf5a"
+  },
+  "releaseChannel": "release-candidate",
+  "remaining": [
+    "Final candidate material review and public SDK distribution.",
+    "Independent developer walkthrough and actual time evidence are tracked by T39."
+  ],
+  "remotePush": false,
+  "runtimeAPISurfaceExpanded": false,
+  "sdkVersion": "1.0.0",
+  "sourceBaseCommit": "eaa2bc3220d346794516fb5e9292b8c5e3a25580",
+  "sourceState": "Working tree SDK files identified by file-inventory.json; not an assertion that HEAD contains the candidate.",
+  "status": "SDK 1.0.0 release candidate rebuilt after README receipt clarification; not publicly published",
+  "tagCreated": false,
+  "validation": {
+    "archiveFileHashesMatched": 53,
+    "canonicalArchiveBytesMatchedIndependentRepeat": true,
+    "changedArchiveMembersComparedToInitialCandidate": [
+      "DynamicIslandSDK/README.md",
+      "DynamicIslandSDK/distribution-manifest.json"
+    ],
+    "completeArchiveMarkdownLinksChecked": true,
+    "deterministicArchiveBytesComparedTwice": true,
+    "expectedTypeErrors": 47,
+    "fullPortableSuiteRerunAfterReceiptClarification": false,
+    "handbook": {
+      "documents": 15,
+      "localLinks": 33,
+      "sourceBoundExamples": 9
+    },
+    "hostContractTests": "Root will run PluginSDKContractTests and PluginDocumentationTests against the final fixture; not rerun by this subtask.",
+    "interactiveZshEntryExecutedFromExtractedSDK": true,
+    "note": "The final SDK gate includes actual extracted archive Markdown/Quick Start/fixture tests. The earlier full portable-suite result is scoped under initialCandidate.",
+    "repositorySDKPython": {
+      "failed": 0,
+      "passed": 39,
+      "skipped": 0,
+      "total": 39
+    },
+    "typeCheckPassed": true
+  },
+  "wireAPIVersion": "1.0.0"
+}

@@ -2,7 +2,7 @@
 
 权限流程为：在 Manifest 声明 → 安装预览 → 用户在插件管理逐项授权 → 启用与调用。用户也可先启用再授权；此时受保护的方法必须按未授权处理。启用开关和接口 supported 不代替批准。
 
-| 本草案用到的权限 | 能力声明 | 用途与拒绝后的建议 |
+| 本版本用到的权限 | 能力声明 | 用途与拒绝后的建议 |
 | --- | --- | --- |
 | `storage.local` | `storage.local` | 保存插件数据；拒绝后使用内存状态并显示未保存。 |
 | `network` | 无 network capability | 请求 Host 允许的 HTTPS 目标；拒绝后显示网络未授权，保留可离线部分。 |
@@ -14,4 +14,4 @@ Manifest Schema 还识别 notifications.publish、clipboard.read、clipboard.wri
 
 常见状态错误：未声明 `permissionRequired`、尚未批准 `permissionNotGranted`、用户拒绝 `permissionDenied`、被撤销或包发生变化 `permissionRevoked`。缺少 capability 是 `capabilityRequired`。处理方式见 [Debugging](debugging.md)。
 
-需要系统级许可的资源还受 macOS 控制；这份草案不会提供绕过系统授权的接口。Hello 的 permissions 为空，按钮计数完全不依赖资源授权。
+需要系统级许可的资源还受 macOS 控制；本 SDK 不提供绕过系统授权的接口。Hello 的 permissions 为空，按钮计数完全不依赖资源授权。

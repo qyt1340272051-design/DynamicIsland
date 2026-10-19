@@ -4,6 +4,102 @@ import XCTest
 
 @MainActor
 final class SuperIslandModuleRuntimeTests: XCTestCase {
+    func testShippedIndependentExamplesValidateRunAndKeepSharedActionsIsolated() async throws {
+        let fixture = SuperIslandModuleFixture()
+        defer { fixture.shutdown() }
+        let repository = URL(fileURLWithPath: #filePath).deletingLastPathComponent().deletingLastPathComponent()
+        let examples = repository.appendingPathComponent("docs/plugin-system/examples")
+        var packages: [String: ValidatedPluginPackage] = [:]
+        for name in ["status", "counter", "progress"] {
+            let package = try PluginValidator().validateExpandedPackage(
+                at: examples.appendingPathComponent("superisland-\(name)"),
+                context: .init(hostVersion: SemanticVersion("0.6.0"), occupiedPluginIDs: [], allowedContainerURL: examples))
+            XCTAssertEqual(package.manifest.engine, .superIsland)
+            XCTAssertTrue(package.manifest.permissions.isEmpty)
+            packages[name] = package
+            _ = fixture.load(package)
+            _ = try await snapshot(fixture, id: package.manifest.id)
+        }
+        XCTAssertNil(fixture.manager.currentSnapshot, "Enabling examples must not select a tool or expand the Host.")
+        fixture.manager.setPresentationContext(.expanded)
+        func current(_ name: String) throws -> ActivitySnapshot {
+            try XCTUnwrap(fixture.snapshot(id: packages[name]?.manifest.id))
+        }
+        let status = try current("status"), counter = try current("counter"), progress = try current("progress")
+        XCTAssertEqual(fixture.manager.toolSnapshots.count, 3)
+        XCTAssertTrue(fixture.manager.selectTool(counter))
+        XCTAssertEqual(fixture.dispatch(counter), .handled)
+        try await waitUntil {
+            fixture.snapshot(id: counter.activity.source.identifier)?.activity.presentation.compact ==
+                .hStack(.init([.icon(.init("plus.circle.fill")), .text(.init("计数 1"))]))
+        }
+        XCTAssertEqual(try current("counter").instanceToken, counter.instanceToken)
+        XCTAssertEqual(try current("status").activity.presentation, status.activity.presentation)
+        XCTAssertEqual(try current("progress").activity.presentation, progress.activity.presentation)
+
+        XCTAssertTrue(fixture.manager.selectTool(status))
+        XCTAssertEqual(fixture.dispatch(status), .handled)
+        try await waitUntil {
+            fixture.snapshot(id: status.activity.source.identifier)?.activity.presentation.compact ==
+                .hStack(.init([.icon(.init("pause.circle.fill")), .text(.init("暂停"))]))
+        }
+        XCTAssertEqual(try current("counter").activity.presentation.compact,
+            .hStack(.init([.icon(.init("plus.circle.fill")), .text(.init("计数 1"))])))
+
+        XCTAssertTrue(fixture.manager.selectTool(progress))
+        XCTAssertEqual(fixture.dispatch(progress), .handled)
+        let expectedProgress: IslandNode = .vStack(.init([
+            .text(.init("手动步骤 1/4")), .progress(.init(0.25, color: .primary)),
+            .text(.init("展示意图：未发送")),
+            .hStack(.init([
+                .button(.init(actionID: "increment", label: .text(.init("下一步")))),
+                .button(.init(actionID: "reset", label: .text(.init("归零"))))
+            ])),
+            .hStack(.init([
+                .button(.init(actionID: "reveal", label: .text(.init("请求展示")))),
+                .button(.init(actionID: "dismiss", label: .text(.init("撤回请求"))))
+            ]))
+        ]))
+        try await waitUntil {
+            fixture.snapshot(id: progress.activity.source.identifier)?.activity.presentation.expanded == expectedProgress
+        }
+        XCTAssertEqual(try current("progress").instanceToken, progress.instanceToken)
+        XCTAssertEqual(fixture.dispatch(try current("progress"), id: "reveal"), .handled)
+        try await waitUntil {
+            guard case .vStack(let stack)? = fixture.snapshot(id: progress.activity.source.identifier)?.activity.presentation.expanded
+            else { return false }
+            return stack.children.contains(.text(.init("展示意图：已请求")))
+        }
+        XCTAssertEqual(fixture.dispatch(try current("progress"), id: "dismiss"), .handled)
+        try await waitUntil {
+            guard case .vStack(let stack)? = fixture.snapshot(id: progress.activity.source.identifier)?.activity.presentation.expanded
+            else { return false }
+            return stack.children.contains(.text(.init("展示意图：已撤回")))
+        }
+        XCTAssertEqual(fixture.manager.currentSnapshot?.instanceToken, progress.instanceToken)
+        XCTAssertEqual(fixture.latestRuntime(id: progress.activity.source.identifier)?.snapshot.state, .running)
+
+        let alert = IslandActivity(id: "host-critical-example",
+            source: .init(kind: .builtIn, identifier: "host-example-test"), priority: .critical,
+            lifecycle: .init(policy: .persistent), presentation: .init(title: "Host critical alert"),
+            createdAt: Date(timeIntervalSinceReferenceDate: 104_000))
+        try fixture.manager.publish(alert)
+        XCTAssertEqual(fixture.manager.currentSnapshot?.activity.id, alert.id,
+            "Compatible examples cannot bypass critical Activity scheduling.")
+
+        fixture.lifecycle.pluginDidChangeEnablement(id: counter.activity.source.identifier, isEnabled: false)
+        XCTAssertNil(fixture.snapshot(id: counter.activity.source.identifier))
+        XCTAssertEqual(fixture.dispatch(counter), .inactiveActivity)
+        XCTAssertNotNil(fixture.snapshot(id: status.activity.source.identifier))
+        XCTAssertNotNil(fixture.snapshot(id: progress.activity.source.identifier))
+        fixture.lifecycle.pluginDidChangeEnablement(id: counter.activity.source.identifier, isEnabled: true)
+        let replacement = try await snapshot(fixture, id: counter.activity.source.identifier)
+        XCTAssertNotEqual(replacement.instanceToken, counter.instanceToken)
+        XCTAssertEqual(replacement.activity.presentation.compact,
+            .hStack(.init([.icon(.init("plus.circle.fill")), .text(.init("计数 0"))])))
+        XCTAssertEqual(fixture.dispatch(counter), .inactiveActivity)
+    }
+
     func testActualModuleRendersSixViewKindsAndActionRouterUpdatesSameActivity() async throws {
         let fixture = SuperIslandModuleFixture()
         defer { fixture.shutdown() }

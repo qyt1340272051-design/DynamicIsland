@@ -117,6 +117,7 @@ final class IslandQuitCancellationTests: XCTestCase {
             try await waitUntil { window.isKeyWindow }
             return fixture
         } catch {
+            if !window.isKeyWindow { NativeWindowTestingDiagnostics.keyTimeout(window) }
             fixture.cleanup()
             throw error
         }
@@ -130,7 +131,11 @@ final class IslandQuitCancellationTests: XCTestCase {
 
     private func click(_ fixture: QuitCancellationFixture, at point: CGPoint) async throws {
         fixture.window.makeKeyAndOrderFront(nil)
-        try await waitUntil { fixture.window.isKeyWindow }
+        do { try await waitUntil { fixture.window.isKeyWindow } }
+        catch {
+            NativeWindowTestingDiagnostics.keyTimeout(fixture.window)
+            throw error
+        }
         let view = fixture.view
         let local = CGPoint(x: point.x, y: view.isFlipped ? point.y : view.bounds.height - point.y)
         let location = view.convert(local, to: nil)

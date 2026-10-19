@@ -176,10 +176,13 @@ final class PluginRegistryUITests: XCTestCase {
     private func click(_ label: String, in window: NSWindow) async throws {
         window.makeKeyAndOrderFront(nil)
         try await settle(window)
-        try await InstallerUIFixture.wait { window.isKeyWindow }
+        do { try await InstallerUIFixture.wait { window.isKeyWindow } }
+        catch {
+            NativeWindowTestingDiagnostics.keyTimeout(window)
+            throw error
+        }
         let view = try XCTUnwrap(window.contentView)
-        let bitmap = try XCTUnwrap(view.bitmapImageRepForCachingDisplay(in: view.bounds))
-        view.cacheDisplay(in: view.bounds, to: bitmap)
+        let bitmap = try CompatibilityRenderingEvidence.bitmap(in: view)
         let image = try XCTUnwrap(bitmap.cgImage)
         let request = VNRecognizeTextRequest()
         request.recognitionLevel = .accurate
@@ -206,8 +209,7 @@ final class PluginRegistryUITests: XCTestCase {
 
     private func screenshot(_ window: NSWindow, name: String) throws {
         let view = try XCTUnwrap(window.contentView)
-        let bitmap = try XCTUnwrap(view.bitmapImageRepForCachingDisplay(in: view.bounds))
-        view.cacheDisplay(in: view.bounds, to: bitmap)
+        let bitmap = try CompatibilityRenderingEvidence.bitmap(in: view)
         let png = try XCTUnwrap(bitmap.representation(using: .png, properties: [:]))
         let path = FileManager.default.temporaryDirectory.appendingPathComponent("dynamic-island-t40-\(name).png")
         try png.write(to: path)

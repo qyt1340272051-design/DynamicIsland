@@ -1,0 +1,27 @@
+{
+  "start": "2026-10-19T06:35:40+00:00",
+  "end": "2026-10-19T06:37:57.701879+00:00",
+  "elapsedSeconds": 137.701879,
+  "artifacts": [
+    {
+      "path": "/var/folders/74/pt17w8td2v593cq_59b3_fr00000gn/T/dynamic-island-hello.8c2e1K/hello-world.dip",
+      "sha256": "d0e94985f688832de8227f524cecb2bef83aef09c50af6ddebf33129d077c976",
+      "archiveBytes": 2690,
+      "members": [
+        "README.md",
+        "index.js",
+        "manifest.json"
+      ]
+    },
+    {
+      "path": "/tmp/dynamic-island-independent-author-20261019/status-switch-0.1.0.dip",
+      "sha256": "c4a68d98adff6205e9f712feeebab86d610ac5230a128ebd28281d4741e90f0b",
+      "archiveBytes": 2661,
+      "members": [
+        "README.md",
+        "index.js",
+        "manifest.json"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "observedUTC": "2026-10-19T06:31:07.804793+00:00",
+  "musicRunning": false,
+  "dynamicIslandProcesses": [
+    {
+      "pid": 92924,
+      "executable": "/private/tmp/dynamic-island-final-20261019/Dynamic Island Baseline.app/Contents/MacOS/Dynamic Island"
+    }
+  ],
+  "scope": "Filtered process existence after the measurement; no unrelated process inventory archived."
+}

@@ -1,0 +1,30 @@
+{
+  "records": {
+    "com.dynamicisland.acceptance.timer-presentations": {
+      "fingerprint": "96a521445b320132b9d670ff7c6eaf7c6a2de0eb072bb2a4dd7a262d66b3d7ac",
+      "pluginID": "com.dynamicisland.acceptance.timer-presentations",
+      "states": {}
+    },
+    "com.dynamicisland.compat-counter": {
+      "fingerprint": "0c2a73bb129116c12f8d430b3a3b3d6de69af55645edbedfe65580e31faafc9f",
+      "pluginID": "com.dynamicisland.compat-counter",
+      "states": {}
+    },
+    "com.dynamicisland.compat-progress": {
+      "fingerprint": "778de443928ebecd4f053e8ae124aef7a9de8cbca57b5bacd351489e1014d668",
+      "pluginID": "com.dynamicisland.compat-progress",
+      "states": {}
+    },
+    "com.dynamicisland.compat-status": {
+      "fingerprint": "7fb307ced071fab5f243090888629234553cdbbc043ecc4b2164a4594cf0f140",
+      "pluginID": "com.dynamicisland.compat-status",
+      "states": {}
+    },
+    "com.example.independent-status": {
+      "fingerprint": "88b3c73f59f8e529b693d625ba127157fc6888074e356cc4dfada1f9051d2f13",
+      "pluginID": "com.example.independent-status",
+      "states": {}
+    }
+  },
+  "schemaVersion": 1
+}

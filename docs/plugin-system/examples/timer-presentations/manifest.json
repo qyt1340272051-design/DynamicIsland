@@ -1,0 +1,12 @@
+{
+  "schemaVersion": 1,
+  "id": "com.dynamicisland.acceptance.timer-presentations",
+  "name": "计时三态验收",
+  "developer": "DynamicIsland",
+  "version": "0.1.0",
+  "engine": "javascriptcore",
+  "entry": "index.js",
+  "minimumHostVersion": "0.6.0",
+  "permissions": [],
+  "capabilities": ["activity.publish", "activity.update", "ui.islandNode", "actions.handle", "countdown", "scheduler"]
+}

@@ -1,0 +1,31 @@
+{
+  "date": "2026-10-19",
+  "observedUTC": "2026-10-19T14:23:03.610317+00:00",
+  "initialIssue": {
+    "log": "/tmp/dynamic-island-final-20261019/full-ci-fixed.log",
+    "logSHA256": "d4fb5e06ce5dca2886c261dcfc75732a104aa62330d6fa717ad84364d51eb8da",
+    "test": "PluginInstallerUITests.testSuperIslandPreviewShowsStaticLimitationsAndNotRunWithoutExecutingPackage",
+    "failure": "Only minimum-size engine OCR lacked exact SuperIsland; actual pixels were complete.",
+    "retainedByParent": "../second-full-failure"
+  },
+  "change": "Existing detected source lines containing ASCII letters receive an additional English-only OCR pass with language correction off. All actual top-five candidates are retained. Exact assertions are unchanged.",
+  "bounded3xResamplingUsed": false,
+  "fixedBitmapScale": 2,
+  "productionCodeChanged": false,
+  "diagnosticsKeyFix": "Use CoreGraphics OnConsole and LoginDone constants rather than guessed dictionary spellings.",
+  "source": "DynamicIslandTests/PluginExtensionsUITests.swift",
+  "sourceSHA256": "660e4d3791a42ba87396100978b29031b3eb746eaef15d87aa93fbe806516b47",
+  "repeat": {
+    "passed": 3,
+    "skipped": 0,
+    "failed": 0,
+    "exitCode": 0,
+    "log": "/tmp/dynamic-island-final-20261019/ocr-three-regression.log",
+    "logSHA256": "10b70998f0a561498d286b9d1301bfb30a446f3b848ea718edf247c1dcb2fd91",
+    "resultBundle": "/tmp/dynamic-island-final-20261019/ocr-three-regression.xcresult",
+    "summary": "summary.json",
+    "minimumEngineExactOCRRecovered": true
+  },
+  "scope": "Three selected precision checks only; does not rewrite either failed full CI or claim a new complete CI result.",
+  "screenshots": "screenshots.json"
+}

@@ -1,0 +1,39 @@
+Independent SDK author walkthrough
+Start: 2026-10-19 06:35:40 UTC (2026-10-19 14:35:40 Asia/Shanghai)
+Scope: only supplied SDK documents, tools, types and template; offline CLI; no Host/UI verification.
+Read order:
+1. README.md
+2. docs/quick-start.md
+Python: 3.9.6 (default, May 22 2026, 11:13:45) 
+[Clang 21.0.0 (clang-2100.1.1.101)]
+{"command": "validate", "ok": true, "scope": "authoring-preflight", "sdkVersion": "1.0.0", "summary": {"bytes": 4464, "files": 3}}
+{"command": "package", "ok": true, "scope": "authoring-preflight", "sdkVersion": "1.0.0", "summary": {"bytes": 4464, "files": 3}}
+Plugin package: /var/folders/74/pt17w8td2v593cq_59b3_fr00000gn/T//dynamic-island-hello.8c2e1K/hello-world.dip
+
+Read additional SDK materials: examples/hello-world/{README.md,manifest.json,index.js}; docs/{README.md,manifest.md,activity.md,actions.md,lifecycle.md,ui-components.md,packaging.md,debugging.md}; types/island.d.ts; CLI --help.
+Actual reading error: guessed docs/components.md; cat reported "No such file or directory" and exited 1. This was an author path guess, not a broken SDK link. docs/README.md correctly links ui-components.md; reading that file then succeeded.
+Created original status-switch/{manifest.json,index.js,README.md}; no additional permissions or resource APIs.
+
+$ node --version
+v26.0.0
+Exit code: 0
+
+$ node --check /tmp/dynamic-island-independent-author-20261019/status-switch/index.js
+Exit code: 0
+
+$ python3 /tmp/dynamic-island-sdk-1.0.0-walkthrough-20261019/DynamicIslandSDK/tools/di_plugin.py validate-manifest /tmp/dynamic-island-independent-author-20261019/status-switch/manifest.json
+{"command": "validate-manifest", "ok": true, "scope": "authoring-preflight", "sdkVersion": "1.0.0", "summary": {}}
+Exit code: 0
+
+$ python3 /tmp/dynamic-island-sdk-1.0.0-walkthrough-20261019/DynamicIslandSDK/tools/di_plugin.py validate /tmp/dynamic-island-independent-author-20261019/status-switch
+{"command": "validate", "ok": true, "scope": "authoring-preflight", "sdkVersion": "1.0.0", "summary": {"bytes": 4969, "files": 3}}
+Exit code: 0
+
+$ python3 /tmp/dynamic-island-sdk-1.0.0-walkthrough-20261019/DynamicIslandSDK/tools/di_plugin.py package /tmp/dynamic-island-independent-author-20261019/status-switch /tmp/dynamic-island-independent-author-20261019/status-switch-0.1.0.dip
+{"command": "package", "ok": true, "scope": "authoring-preflight", "sdkVersion": "1.0.0", "summary": {"bytes": 4969, "files": 3}}
+Exit code: 0
+
+Quick Start command was: bash docs/quick-start.sh (SDK cwd); exit 0. Output above includes both successful CLI results.
+Archive inspection and SHA-256: [{"path": "/var/folders/74/pt17w8td2v593cq_59b3_fr00000gn/T/dynamic-island-hello.8c2e1K/hello-world.dip", "sha256": "d0e94985f688832de8227f524cecb2bef83aef09c50af6ddebf33129d077c976", "archiveBytes": 2690, "members": ["README.md", "index.js", "manifest.json"]}, {"path": "/tmp/dynamic-island-independent-author-20261019/status-switch-0.1.0.dip", "sha256": "c4a68d98adff6205e9f712feeebab86d610ac5230a128ebd28281d4741e90f0b", "archiveBytes": 2661, "members": ["README.md", "index.js", "manifest.json"]}]
+Offline workflow end: 2026-10-19T06:37:57.701879+00:00
+Elapsed seconds since initial SDK read: 137.701879

@@ -1,0 +1,46 @@
+{
+  "HostContractEvidence": "../t38-independent-host-20261019/result.json",
+  "HostScope": "Existing Host result is unchanged and separately scoped. This fix affects SDK archive tooling only.",
+  "artifact": {
+    "bytes": 84278,
+    "files": 53,
+    "path": "/Users/rong5/Dynamiclsland/artifacts/sdk/dynamic-island-sdk-1.0.0.zip",
+    "sdkVersion": "1.0.0",
+    "sha256": "dd9ba3e40c856343271e8088643276fc329526191213fa1bbee1973eab299433"
+  },
+  "changedArchiveMembers": [
+    "DynamicIslandSDK/distribution-manifest.json",
+    "DynamicIslandSDK/tests/test_distribution.py",
+    "DynamicIslandSDK/tools/package_sdk.py"
+  ],
+  "date": "2026-10-19",
+  "fix": "os.walk directory enumeration errors are raised; inaccessible subdirectories cannot silently disappear from a successful archive.",
+  "gateLogSHA256": "0795514c0ecff0d62ca57f0270320c80944e94488d36f11bfe2e2446831eb4c9",
+  "helloFixtureChanged": false,
+  "humanOrNativeNotchAcceptancePerformed": false,
+  "independentAIAuthorScope": "Earlier AI authorship used initial b92a candidate; not this archive.",
+  "observedUTC": "2026-10-19T14:46:39.925829+00:00",
+  "previousReceiptCandidate": {
+    "bytes": 84000,
+    "historicalEvidence": "../t38-distribution-20261019/result.json",
+    "preservedPath": "/Users/rong5/Dynamiclsland/artifacts/sdk/history/receipt-clarified-20261019/dynamic-island-sdk-1.0.0.zip",
+    "sha256": "47729aa038528f800b8da6fd94666a0c0bcf6da6cc530086d5d4c86f9443663c"
+  },
+  "publiclyPublished": false,
+  "remotePush": false,
+  "runtimeAPIChanged": false,
+  "status": "Final local SDK candidate after directory enumeration failure fix; not published",
+  "tagCreated": false,
+  "validation": {
+    "SDKPythonFailed": 0,
+    "SDKPythonPassed": 40,
+    "SDKPythonSkipped": 0,
+    "expectedTypeErrors": 47,
+    "gateIncludesExtractedMarkdownLinksAndInteractiveZshQuickStartAndFixture": true,
+    "simulatedScandirPermissionErrorRejectedWithoutOutput": true,
+    "sourceHashesMatched": 53,
+    "twoIndependentArchivesByteIdentical": true,
+    "typesPassed": true
+  },
+  "walkthroughDirectory": "/tmp/dynamic-island-sdk-final-audit-20261019/walkthrough/DynamicIslandSDK"
+}

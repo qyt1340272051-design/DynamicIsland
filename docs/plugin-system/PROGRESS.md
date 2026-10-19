@@ -20,12 +20,18 @@
 
 [T35 / M01](evidence/t35-manual-20261019/result.json)已捕获真实十五分钟自然到期的安全两翼提示、正常消失与不自动重开；[T36 / M02](evidence/t36-manual-20261019/result.json)已通过真实导入、三项独立授权、公开 CI / PR、仓库切换 / 刷新及系统浏览器 Open。两个独立副本均正常退出且 Staging 为空；[六项真实输入补验](evidence/native-input-20261019/result.json)为 6 passed / 0 skipped / 0 failures。T35、T36 标为 verified，任务内延期门槛已关闭，完整范围见[Phase 7 统一检查](phase-7-acceptance.md)。本次实机使用已记录身份的历史独立普通 Release，不能称为当前 HEAD 二进制验收；相关源码与后续自动回归分别保留。T39 新作者体验、T37 上游兼容、T38 稳定发布及 T40 公网安装门槛仍独立追踪。
 
+## 2026-10-19 本轮收尾
+
+当前 **34 项 verified、6 项 in progress**。T08 / T10 的后续证据已归并；T02、T11、T37、T38、T39、T40 保留各自未通过门槛。用户最新要求「现在不方便，先跳过人工操作」，下次集中处理[人工清单 M03–M05](MANUAL_ACCEPTANCE.md)。普通 Release 隔离副本已安装启用五个无额外权限示例，现已正常退出并保留状态。
+
+本轮完整 CI 1070 passed / 2 skipped / 0 failures，普通 Release 构建通过；随后新增的独立作者原包 Host 集成另跑 8 项全通过，SDK 归档审阅修复后 Python 40 项及类型检查通过。各批次分别留存，不合并成一次全量结果。SDK 与官方插件公开发布、正式 Registry 目录及公网安装尚未执行。 [提交前检查](evidence/final-review-20261019/README.md)已核对当前源码摘要、最新 SDK、结构化证据及本轮本地链接。
+
 ## Phase 0 — 准备阶段：项目审计、分支与基线
 
 | ID | 任务 | 前置依赖 | 状态 | 验收证据 |
 | --- | --- | --- | --- | --- |
 | T01 | 项目架构审计 | 无 | `verified` | [Phase 0 基线记录](phase-0-baseline.md)记录了真实依赖图、职责边界、迁移调用点、多屏约束及审计结论。 |
-| T02 | 开发分支与基线测试 | T01 | `in progress` | [Phase 0 基线记录](phase-0-baseline.md)记录开发分支、自动化基线和重复检查清单；真实启动、空闲资源及设备场景待测。 |
+| T02 | 开发分支与基线测试 | T01 | `in progress` | [Phase 0 基线记录](phase-0-baseline.md)保留分支与清单；[本日真实基线](t02-t08-acceptance-20261019.md)已完成普通 Release 启动、菜单和退出、300 秒静置及 303.534 秒量化采样，平均单核 CPU 1.4387%、物理内存峰值 27.49 MiB。功能 / 设备场景采用 Phase 3 历史真实验收；当前只剩菜单隐藏 / 显示确认。采样是本轮修正前冻结起点，不冒称新 UI 或重构前后对照。 |
 
 ## Phase 1 — Activity Engine
 
@@ -36,15 +42,15 @@
 | T05 | ActivityLifecycle | T03 | `verified` | [状态转换与行为策略](../../DynamicIsland/Core/Activity/ActivityLifecycle.swift)、[dismiss/ended/恢复/过期测试](../../DynamicIslandTests/ActivityLifecycleTests.swift)；同上 CI。 |
 | T06 | ActivityManager | T03–T05 | `verified` | [单写入口](../../DynamicIsland/Core/Activity/ActivityManager.swift)、[DEBUG Provider 与只读观察窗口](../../DynamicIsland/Core/Activity/ActivityDebugPanel.swift)、[同一 NSHostingView 的发布/更新/结束渲染测试](../../DynamicIslandTests/ActivityDebugPanelTests.swift)；`./Scripts/ci.sh` 190 tests、1 skipped、0 failures、Release build passed。 |
 | T07 | Priority Queue | T06 | `verified` | [确定性队列](../../DynamicIsland/Core/Activity/ActivityQueue.swift)和 [抢占/恢复测试](../../DynamicIslandTests/ActivityQueueTests.swift)；同上 CI。 |
-| T08 | Activity Scheduler | T07 | `in progress` | [集中截止任务](../../DynamicIsland/Core/Activity/ActivityScheduler.swift)与 [过期、续展、正时长、20 事件、自动唤醒测试](../../DynamicIslandTests/ActivitySchedulerTests.swift)；同上 CI。实际岛体 UI 闪烁和空闲能耗待接入后实测。 |
+| T08 | Activity Scheduler | T07 | `verified` | [集中截止任务](../../DynamicIsland/Core/Activity/ActivityScheduler.swift)与 [20 事件 / critical 等测试](../../DynamicIslandTests/ActivitySchedulerTests.swift)覆盖策略；[归并验收](t02-t08-acceptance-20261019.md)将 Phase 3 用户已确认的真实百事件压力、抢占 / 恢复动画对应原完成标准。本日真实空闲计数及独立复算另行归档，不将历史定性动画写成本日帧率或功耗对照。 |
 
 ## Phase 2 — IslandNode、Renderer 与动作路由
 
 | ID | 任务 | 前置依赖 | 状态 | 验收证据 |
 | --- | --- | --- | --- | --- |
 | T09 | IslandNode | T03 | `verified` | [受限数据节点与 JSON 校验](../../DynamicIsland/IslandUI/Schema/IslandNode.swift)、[计时/构建/音乐树及恶意输入测试](../../DynamicIslandTests/IslandNodeTests.swift)；6 项定向测试通过。 |
-| T10 | DesignTokens | T09 | `in progress` | [有限 Host token 与几何映射](../../DynamicIsland/IslandUI/DesignTokens.swift)、[编码/对比度/尺寸测试](../../DynamicIslandTests/IslandDesignTokensTests.swift)；Renderer 已共用 Host 字体、颜色、间距和尺寸，但正式岛体的视觉与可访问性实测待 T14–T17。 |
-| T11 | Presentation Model | T09 | `in progress` | [纯数据三形态](../../DynamicIsland/Core/Activity/IslandActivity.swift)、[Host 降级与高度/复杂度策略](../../DynamicIsland/IslandUI/ActivityPresentationPolicy.swift)、[旧 JSON/计时三态测试](../../DynamicIslandTests/ActivityPresentationTests.swift)；同一 NSHostingView 的三态渲染测试通过。正式岛体的 Timer 平滑切换待 T14–T17 实测。 |
+| T10 | DesignTokens | T09 | `verified` | [统一 token](../../DynamicIsland/IslandUI/DesignTokens.swift)与[对比度 / 尺寸测试](../../DynamicIslandTests/IslandDesignTokensTests.swift)保持 Host 视觉词汇；[本日归并](t10-t11-acceptance-20261019.md)核对两款官方插件真实截图的一致字体、按钮和间距，并引用 Phase 3 已确认的 VoiceOver / Reduce Motion。原始截图与来源 hash 保留，不声称新做全系统外观矩阵。 |
+| T11 | Presentation Model | T09 | `in progress` | [纯数据三形态](../../DynamicIsland/Core/Activity/IslandActivity.swift)、[Host 策略](../../DynamicIsland/IslandUI/ActivityPresentationPolicy.swift)已补明确 minimal 回退；正式 IslandView 将 minimal 放在相机安全右翼，保留同实例 Renderer 与计时解析。修正测试时序与几何像素筛选后，定向 24 passed / 0 skipped / 0 failures，原始图标距相机边缘 12pt，见[记录](t10-t11-acceptance-20261019.md)。真实倒计时三态及连续物理界面验收继续保留。 |
 | T12 | IslandRenderer | T09–T11 | `verified` | [受限 SwiftUI 映射](../../DynamicIsland/IslandUI/IslandRenderer.swift)、[12 类节点/三态/152、190、200 pt 壳尺寸测试](../../DynamicIslandTests/IslandRendererTests.swift)和 [Phase 2 验证记录](phase-2-renderer-action-router.md)；`./Scripts/ci.sh` 220 tests、1 skipped、0 failures、Release build passed。 |
 | T13 | ActionRouter | T12 | `verified` | [实例绑定与生命周期校验](../../DynamicIsland/IslandUI/ActionRouter.swift)、[路由及旧实例 / 权限测试](../../DynamicIslandTests/ActionRouterTests.swift)、[DEBUG 渲染入口](../../DynamicIsland/Core/Activity/ActivityDebugPanel.swift)与 [Phase 2 历史验证记录](phase-2-renderer-action-router.md)；当时 CI 同上。历史原生计时适配器及其闭环测试已在 T35 迁移时删除，当前公开插件的暂停 / 继续 / 停止闭环见 [Pomodoro VM / Router 集成测试](../../DynamicIslandTests/PomodoroPluginTests.swift)与[迁移记录](phase-7-t35-pomodoro.md)。 |
 
@@ -102,16 +108,18 @@
 
 ## Phase 8 — SuperIsland Compatibility
 
+2026-10-19 用户已明确选定本版范围：交付兼容子集，用独立编写的简单插件完成实机验收。[原创示例](t37-independent-examples.md)按该范围验证；原样上游的许可与能力差距继续列为限制，不将其冒称已解决。
+
 | ID | 任务 | 前置依赖 | 状态 | 验收证据 |
 | --- | --- | --- | --- | --- |
-| T37 | SuperIsland Adapter | T35 | `in progress` | 已完成[固定上游范围](phase-8-t37-superisland-scope.md)、[六类有界 View 转换](phase-8-t37-view-conversion.md)、[显式模式与授权失效](phase-8-t37-manifest-profile.md)及[同 VM 模块闭环](phase-8-t37-module-runtime.md)，历史验证分别保留为 [View](evidence/t37-view-20261017/result.json) / [模块](evidence/t37-module-20261017/result.json)证据。本轮接入[Host 裁决的 PresentationRequest](t37-presentation-requests.md)：独立 capability、精确实例句柄、有界租约、渲染事务及同步撤销；选测 144 passed / 0 skipped / 0 failures，完整 CI 1002 passed / 7 skipped / 0 failures，普通 Release build / strict 签名通过，见[展示请求证据](evidence/t37-presentation-20261017/result.json)。已完成[Host 兼容详情](t37-compatibility-details.md)，包含完整包 / token 隔离、最近成功布局替代与静态安装预览；综合定向 91 passed / 0 skipped / 0 failures，完整 CI 1028 passed / 7 skipped / 0 failures，Release build / strict 签名通过，见[详情证据](evidence/t37-compatibility-20261017/result.json)。[固定上游审计](t37-upstream-acceptance-audit.md)确认许可材料与原样样本能力匹配仍有缺口，未运行上游插件。T35 前置已于 2026-10-19 满足；真实上游许可、样本能力匹配及验收门槛继续保留。 |
+| T37 | SuperIsland Adapter | T35 | `in progress` | [六类 View](phase-8-t37-view-conversion.md)、[显式模式](phase-8-t37-manifest-profile.md)、[同 VM 模块](phase-8-t37-module-runtime.md)、[Host 展示请求](t37-presentation-requests.md)及[兼容详情](t37-compatibility-details.md)均已实现并保留历史自动证据。本日按用户选定范围新增[三个原创示例](t37-independent-examples.md)，真实源码通过 Validator / VM / Router 集成，覆盖共享动作名隔离、同实例更新、停用旧动作与 critical 抢占；完整回归见[本日结果](evidence/final-regression-20261019/result.json)。三个包已在普通 Release 隔离副本实际导入、安装后停用并分别启用，无额外权限；工具界面与真实按钮验收待完成。原样上游许可 / 能力差距继续作为限制，不计入本版通过范围。 |
 
 ## Phase 9 — SDK、文档与插件生态
 
 | ID | 任务 | 前置依赖 | 状态 | 验收证据 |
 | --- | --- | --- | --- | --- |
-| T38 | DynamicIsland SDK | T36 | `in progress` | 已完成[实验性 SDK 草案](phase-9-t38-sdk-draft.md)：有限类型 / Schema、版本策略、无权限 Hello、离线校验和确定性打包；Python 33 passed、TypeScript 47 项预期错误通过、共享 30 契约案例及正式 Host VM / 动作 / 撤销闭环通过。综合定向 91 passed，完整 CI 1028 passed / 7 skipped / 0 failures，Release build / strict 签名通过，见[证据](evidence/t38-sdk-draft-20261017/result.json)。T36 / T35 实机依赖已于 2026-10-19 满足；稳定 SDK 发布及其余验收门槛仍保留，未发布 SDK。 |
-| T39 | 开发者文档与模板 | T38 | `in progress` | [13 个主题的开发手册](../../SDK/docs/README.md)与 [T39 记录](phase-9-t39-developer-docs.md)已有[自动验证](evidence/t39-docs-20261018/result.json)，正式 Host 定向 7 passed / 0 skipped / 0 failures。本日用户首轮遇到 zsh 历史展开错误，已改为单行入口并通过交互式 zsh 回归；当前为 15 页 / 9 个源码块 / 33 条链接、Python 37 passed、类型及 47 项预期错误通过，见[修正](evidence/t39-manual-20261019/quick-start-fix.json)。用户自行打包、导入、启用并回复 0 → 1，后续实际显示 2；无额外权限，副本正常退出，[协助功能复测通过](evidence/t39-manual-20261019/result.json)。首次独立作者体验及约十分钟目标仍待验证，T38 稳定 SDK 门槛保留。 |
-| T40 | Plugin Registry | T38 | `in progress` | 已完成[目录与下载 / 安装核心](phase-9-t40-registry-core.md)及[发现 UI / App 接线](phase-9-t40-registry-ui.md)：受限 HTTPS、流式限额、同字节 SHA-256 / ZIP 校验、Manifest 复核；手动刷新、来源与最低版本展示、共享安装槽位、下载取消 / 退出清理与迟到结果拒绝。正式 [registry.json](../../Registry/registry.json)仍为空。新增模型 11 项 / UI 5 项，真实 AppKit 刷新 → 下载 → 预览 → 明确安装定向通过；完整 CI 1060 passed / 8 skipped / 0 failures，Release build / strict 签名通过，见[最新证据](evidence/t40-registry-ui-20261018/result.json)。历史 8 项 skip 为 6 项锁屏输入及 2 项默认选测；[2026-10-19 六项输入补验](evidence/native-input-20261019/result.json)已另跑 6 passed / 0 skipped / 0 failures，不改写原完整 CI 计数。真实发布条目、公开网络端到端验收及 T38 依赖保留。 |
+| T38 | DynamicIsland SDK | T36 | `in progress` | [历史实验草案](phase-9-t38-sdk-draft.md)之后已完成[SDK 1.0.0 发布候选复核](t38-stability-review-20261019.md)：有限 API / 版本策略、完整许可、可重复独立 ZIP、源文件摘要、离线工具 / 模板与脱仓库验证。当前 SDK Python 40 passed、类型及 47 项预期错误通过；[完整回归](evidence/final-regression-20261019/result.json)中正式 Host SDK / 文档契约通过。随后将独立 AI 作者原始双按钮包送入正式 Host，含既有契约共[8 项通过](t38-independent-host-20261019.md)，验证同实例与生命周期。归档扫描错误已修正，最新候选摘要及历史区别见[最终分发证据](evidence/t38-final-audit-20261019/result.json)。T35 / T36 实机前置已满足，正式公开发布仍保留；AI 自动结果不替代真人或物理界面。 |
+| T39 | 开发者文档与模板 | T38 | `in progress` | [13 主题手册](../../SDK/docs/README.md)及[T39 记录](phase-9-t39-developer-docs.md)保留 15 页 / 9 个源码块 / 33 条链接与正式 Host 契约。本日用户首轮 zsh 卡点已修正，[协助功能复测通过](evidence/t39-manual-20261019/result.json)，未冒称首轮独立成功。全新上下文 AI 作者仅按独立 SDK 在 137.7 秒完成 Hello 与原创双按钮包的离线校验 / 打包，未读 App Swift，见[独立资料走查](evidence/t39-independent-20261019/result.json)；其 README receipt 歧义已修正。AI 离线结果不计作真人十分钟安装体验；修正版无额外指导复测及 T38 发布门槛仍保留。 |
+| T40 | Plugin Registry | T38 | `in progress` | [目录核心](phase-9-t40-registry-core.md)与[发现 UI](phase-9-t40-registry-ui.md)已完成，复用正式解包 / 安装 / 权限流程；[本日完整回归](evidence/final-regression-20261019/result.json)为 1070 passed / 2 skipped / 0 failures，普通 Release build passed。[发布准备](t40-release-preparation-20261019.md)已生成附 MIT 许可的两款官方包、固定摘要与候选目录，独立重打字节一致。正式 [registry.json](../../Registry/registry.json)仍为空，未登记不存在的下载地址；公开 Release / 目录发布、真实网络安装与 T38 依赖继续保留。 |
 
 [Phase 9 统一检查](phase-9-acceptance.md)已归并当前自动开发证据及剩余门槛；T38–T40 继续保持 `in progress`，不等同于稳定 SDK 或 Plugin 1.0 发布验收。

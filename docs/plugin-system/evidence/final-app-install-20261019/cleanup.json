@@ -1,0 +1,16 @@
+{
+  "observedUTC": "2026-10-19T14:36:59.436237+00:00",
+  "normalQuitRequestedEpochMs": 1792420496738,
+  "method": "CUA Command-Q, followed only by owned process and container reads",
+  "matchingExecutableProcessAbsent": true,
+  "stagingEmpty": true,
+  "installedPreserved": [
+    "com.dynamicisland.acceptance.timer-presentations",
+    "com.dynamicisland.compat-counter",
+    "com.dynamicisland.compat-progress",
+    "com.dynamicisland.compat-status",
+    "com.example.independent-status"
+  ],
+  "productionAppModified": false,
+  "observationNote": "A UI read after the first Command-Q relaunched the copy; a second normal Command-Q was verified without further UI observations."
+}

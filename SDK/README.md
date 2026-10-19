@@ -1,6 +1,6 @@
-# DynamicIsland SDK 实验草案
+# DynamicIsland SDK 1.0.0 发布候选
 
-本目录是 0.6.0 开发分支中的 **实验性作者工具**，尚未发布稳定 SDK。T35 完成提示与 T36 真实界面 / 系统 Open 的实机依赖已于 2026-10-19 满足，范围见[验证说明](docs/verification.md)；T38 仍为 `in progress`，稳定版本复核与发布继续单独追踪。wire API `1.0.0` 与 Manifest schema `1` 是协议标识，不等于 SDK 已达到稳定发布门槛。
+本目录采用 **SDK `1.0.0` 发布候选**，尚未公开发布。它适用于 App `0.6.0` 的有限 Native API；SDK、App、wire API `1.0.0` 与 Manifest schema `1` 分别管理版本。T35 / T36 的实机前置已于 2026-10-19 满足，范围见[验证说明](docs/verification.md)；发布候选还需最终材料复核、独立作者走查和公开分发验收。
 
 工具需要 Python 3.9+，只使用标准库，可离线运行，不执行 JavaScript。插件运行无需 Node.js、Python、npm 或 TypeScript；安装和执行仍由主程序负责。
 
@@ -19,11 +19,11 @@ python3 tools/di_plugin.py package examples/hello-world /tmp/hello-world-0.1.0.d
 
 源目录之外的类型引用仅供编辑器使用，JavaScript 运行时不会导入它。打包器保留所有普通源文件；请把构建产物放在源目录之外，勿将无关文件或凭据放入插件目录。
 
-## 当前草案范围
+## 1.0.0 接口范围
 
 [types/island.d.ts](types/island.d.ts) 描述两款官方插件使用并自动验证过的 Native API 子集，未声明完整 Host 能力。两款官方示例的实机任务均已验收；其历史独立普通 Release、当前源码回归和单机设备范围分别保留，不等同于当前 HEAD 的全量二进制验收。
 
-| 接口 | 本草案提供的调用 |
+| 接口 | 本版本提供的调用 |
 | --- | --- |
 | `island.log` | 固定级别日志；保留的诊断不含消息正文。 |
 | `island.activity` | `publish`、`update`、`end`。 |
@@ -40,7 +40,7 @@ Manifest Schema 保留 Host 的完整闭集，方便诊断所有已知声明；�
 
 ## 调用和生命周期
 
-- Host 方法返回 Promise。`publish` / `update` 返回本地 Activity ID；变更类调用通常返回 `null`，具体以类型为准。
+- Host 方法返回 Promise。`publish` / `update` resolve 为 `{id: string}` receipt，其中 `id` 是本地 Activity ID；变更类调用通常返回 `null`，具体以类型为准。
 - 全局 `onStart()` 和 `onStop()` 必须同步返回 `undefined`。用同步 hook 启动 Promise 链并捕获拒绝；动作和完成回调可以返回真实 Promise。模板已演示这一方式。
 - 注册动作后，将相同 ID 同时用于 Activity 的 `actions` 与按钮节点。Host 根据当前呈现的实例重新检查动作，旧按钮不能操作重启后的实例。
 - `update` 是 Activity 字段补丁，但整个 `presentation` 是替换对象；生命周期 policy 不能在同一实例中改变。工具使用 persistent 或 progress。
@@ -65,4 +65,4 @@ CLI 输出单个 JSON 对象，成功退出码为 0，错误为非零；不打�
 
 ## 版本和参考
 
-兼容策略见 [VERSIONING.md](VERSIONING.md)。官方 [Pomodoro](../docs/plugin-system/examples/pomodoro/README.md) 与 [GitHub](../docs/plugin-system/examples/github/README.md) 保留在仓库原位置，避免复制后漂移；它们不是独立 SDK 运行所需文件。开发进度和未验收门槛见 [PROGRESS](../docs/plugin-system/PROGRESS.md)。
+兼容策略见 [VERSIONING.md](VERSIONING.md)，冻结的接口承诺与变更见 [CHANGELOG.md](CHANGELOG.md)，独立分发和本地归档见 [DISTRIBUTION.md](DISTRIBUTION.md)。官方 Pomodoro 与 GitHub 保留在完整仓库的 `docs/plugin-system/examples/`，进度表位于 `docs/plugin-system/PROGRESS.md`；这些仓库资料不包含在独立 SDK 中，也不是运行作者工具所需的文件。SDK 自身的实际验证与边界见[验证说明](docs/verification.md)。

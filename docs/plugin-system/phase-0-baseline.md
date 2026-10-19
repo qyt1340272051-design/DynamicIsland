@@ -1,5 +1,7 @@
 # 插件系统 Phase 0：架构审计与基线
 
+2026-10-19 后续更新：[真实基线与早期门槛归并](t02-t08-acceptance-20261019.md)已记录普通 Release 启动、零插件空闲资源和正常退出；下文的初始 Pending 表是 2026-09-22 历史快照。当前状态以 [PROGRESS](PROGRESS.md) 为准，不追填不存在的重构前性能数据。
+
 状态：T01 已完成静态代码审计；T02 已完成开发分支与自动化基线。真机功能和性能基线待测。
 
 本页对应仓库内的 [开发计划](DevelopmentPlan.md) 的 T01、T02。以下描述的是 0.6.0 Activity 重构前的现状，不代表 Activity Engine 已经接入。2026-09-22 检查的分支为 `codex/dynamic-island-0.6.0`，开发基线 HEAD 为 `cb3b696`；`v0.5.0` 标签在 `2ca5a56`，Xcode 工程当前 `MARKETING_VERSION` 仍为 `0.5.0`。

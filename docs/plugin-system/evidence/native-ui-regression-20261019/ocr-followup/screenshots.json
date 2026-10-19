@@ -1,0 +1,38 @@
+[
+  {
+    "file": "installer-minimum-2x.png",
+    "sha256": "d567151d58c2aa6f12bb411b7afe933d8893e6658832f1b56b0604751e143f3d",
+    "pixels": [
+      1280,
+      1040
+    ],
+    "source": "Unmodified PNG from the actual NSView at fixed 2x; no image editing"
+  },
+  {
+    "file": "installer-details-2x.png",
+    "sha256": "af5c9d043bc290881ae5846948c63da2e4637f931ed1a9fbd24f776f040b7cbd",
+    "pixels": [
+      1640,
+      2400
+    ],
+    "source": "Unmodified PNG from the actual NSView at fixed 2x; no image editing"
+  },
+  {
+    "file": "compatibility-native-2x.png",
+    "sha256": "65d58c5a73970dfd7712999385c66b5eaead9a711881ac4660df9fd9588e4962",
+    "pixels": [
+      1640,
+      106
+    ],
+    "source": "Unmodified PNG from the actual NSView at fixed 2x; no image editing"
+  },
+  {
+    "file": "management-2x.png",
+    "sha256": "6567711490d594cc16f597124ccd9aaac4b10655f39a299bad416f180aba95d1",
+    "pixels": [
+      1600,
+      1200
+    ],
+    "source": "Unmodified PNG from the actual NSView at fixed 2x; no image editing"
+  }
+]
