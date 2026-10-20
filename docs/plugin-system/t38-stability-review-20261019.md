@@ -74,3 +74,9 @@ AI 实际读取的是初始候选 SHA-256 `b92a911594b8e7dafa723dc70ba6e851cc35e
 M05 用户在终端阶段请求协助，贴出的实际结果是校验、打包两项 `ok: true`。助手已解释成功状态并协助定位原包；仓库 README / Quick Start 随后补清成功输出与路径区别，脚本和运行接口均未改变。当前候选为 **84,717 bytes**、53 个源文件，SHA-256 `8f4da7d24c1def1db6087b9c9124b427761975c3458075248afb831217d161ab`，见[最新分发记录](evidence/t39-output-clarity-20261020/README.md)。
 
 40 项 SDK 检查及类型正例 / 47 项预期错误通过；两份独立 ZIP 字节一致。只比前一候选改变 SDK README、Quick Start 与生成清单，旧 ZIP 保留在 `artifacts/sdk/history/pre-m05-clarity-20261020/`。用户使用的旧解压副本保持原状，实际阅读范围不改写。新说明尚未由新的真人作者独立复测，公开发布仍未执行。
+
+## 2026-10-20 稳定版正式发布（当前）
+
+此前候选说明保留历史范围。SDK 1.0.0 随后已通过 [sdk-v1.0.0 Release](https://github.com/qyt1340272051-design/DynamicIsland/releases/tag/sdk-v1.0.0) 正式公开，T38 标为 verified，完整材料见[发布记录](t38-sdk-release-20261020.md)。稳定包为 85,192 bytes、53 源文件，SHA-256 `b64d87e400a90f730bd098cce23dc7b743cf78dcbfcb4f878f7cfeb16a494ac9`；原 84,717-byte 候选在本地 `artifacts/sdk/history/pre-stable-20261020/` 保留。
+
+仓库 SDK 40 项、类型正例及 47 项预期错误、15 页 / 9 块 / 34 链接、正式 Host 8 项通过；独立副本为 38 passed / 2 repo-only skipped / 0 failures，重打一致。三份公开构件已匿名下载并验证摘要与 53 文件，下载后的实际 Quick Start 生成 Hello 也通过。T39 新作者无指导安装体验与 T40 插件目录公网安装仍独立保留；SDK 公开不等同于 App 0.6.0 安装包发布。

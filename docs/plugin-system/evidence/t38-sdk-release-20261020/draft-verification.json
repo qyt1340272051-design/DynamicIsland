@@ -1,0 +1,25 @@
+{
+  "observedUTC": "2026-10-20T15:33:08.495055+00:00",
+  "draftAuthenticatedDownloadPassed": true,
+  "allThreeAssetsByteIdentical": true,
+  "assets": {
+    "dynamic-island-sdk-1.0.0.zip": {
+      "bytes": 85192,
+      "sha256": "b64d87e400a90f730bd098cce23dc7b743cf78dcbfcb4f878f7cfeb16a494ac9"
+    },
+    "dynamic-island-sdk-1.0.0.zip.sha256": {
+      "bytes": 95,
+      "sha256": "cde4e4d599000a2690cc547ca8680e0788038fcab035701df7248c24c0c2723f"
+    },
+    "dynamic-island-sdk-1.0.0.manifest.json": {
+      "bytes": 7752,
+      "sha256": "428aff80c5597fddd7675a305655c87f841a6c391a42b470d4e43381530a4a94"
+    }
+  },
+  "remoteTag": {
+    "refs/tags/sdk-v1.0.0": "4e2aa91fc33c11a3ca04131b52e6aa10ba3331ff",
+    "refs/tags/sdk-v1.0.0^{}": "da3e6273b01f197b7044ed7d036b6a5f0f95f092"
+  },
+  "remotePeeledCommitMatchesSDKSnapshot": true,
+  "publicAnonymousDownloadChecked": false
+}

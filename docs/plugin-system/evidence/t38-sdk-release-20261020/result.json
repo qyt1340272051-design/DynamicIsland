@@ -1,0 +1,67 @@
+{
+  "observedUTC": "2026-10-20T15:37:17.565240+00:00",
+  "task": "T38",
+  "status": "verified",
+  "releaseURL": "https://github.com/qyt1340272051-design/DynamicIsland/releases/tag/sdk-v1.0.0",
+  "releaseID": 418563161,
+  "publishedUTC": "2026-10-20T15:33:53Z",
+  "sdkVersion": "1.0.0",
+  "draft": false,
+  "prerelease": false,
+  "publiclyPublished": true,
+  "SDKTagPushed": true,
+  "fullHostBranchPushed": false,
+  "publicAssets": {
+    "dynamic-island-sdk-1.0.0.manifest.json": {
+      "url": "https://github.com/qyt1340272051-design/DynamicIsland/releases/download/sdk-v1.0.0/dynamic-island-sdk-1.0.0.manifest.json",
+      "status": 200,
+      "bytes": 7752,
+      "sha256": "428aff80c5597fddd7675a305655c87f841a6c391a42b470d4e43381530a4a94"
+    },
+    "dynamic-island-sdk-1.0.0.zip": {
+      "url": "https://github.com/qyt1340272051-design/DynamicIsland/releases/download/sdk-v1.0.0/dynamic-island-sdk-1.0.0.zip",
+      "status": 200,
+      "bytes": 85192,
+      "sha256": "b64d87e400a90f730bd098cce23dc7b743cf78dcbfcb4f878f7cfeb16a494ac9"
+    },
+    "dynamic-island-sdk-1.0.0.zip.sha256": {
+      "url": "https://github.com/qyt1340272051-design/DynamicIsland/releases/download/sdk-v1.0.0/dynamic-island-sdk-1.0.0.zip.sha256",
+      "status": 200,
+      "bytes": 95,
+      "sha256": "cde4e4d599000a2690cc547ca8680e0788038fcab035701df7248c24c0c2723f"
+    }
+  },
+  "sourceMapping": "source-mapping.json",
+  "validation": {
+    "repositorySDKPassed": 40,
+    "repositorySDKSkipped": 0,
+    "repositorySDKFailed": 0,
+    "expectedTypeErrors": 47,
+    "documents": 15,
+    "sourceBlocks": 9,
+    "localLinks": 34,
+    "HostContractPassed": 8,
+    "HostContractFailed": 0,
+    "independentSDKPassed": 38,
+    "independentSDKSkipped": 2,
+    "independentSDKFailed": 0,
+    "twoIndependentRebuildsByteIdentical": true,
+    "anonymousDownloadPassed": true,
+    "publicQuickStartAndFixturePassed": true
+  },
+  "latestSelection": {
+    "requestedLatest": false,
+    "explicitPostPublicationPatchFalseSent": true,
+    "observedSDKIsLatest": true,
+    "beforeLatestEndpointStatus": 404,
+    "existingAppReleasesArePrereleases": true,
+    "existingAppReleasesModified": false,
+    "observation": "Despite make_latest=false, GitHub reports this only regular stable release as isLatest. Release notes and download names explicitly identify the SDK; the application has no releases/latest updater."
+  },
+  "newHumanIndependentExperienceAccepted": false,
+  "T39Status": "in progress",
+  "T40Status": "in progress",
+  "App060DMGPublished": false,
+  "productionSwiftChanged": false,
+  "wholeAppCIRerun": false
+}
