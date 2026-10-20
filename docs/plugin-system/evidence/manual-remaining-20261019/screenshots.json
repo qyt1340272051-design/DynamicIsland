@@ -422,5 +422,37 @@
     "axFile": "m04-run3-stopped.txt",
     "imageFile": "m04-run3-stopped.jpg",
     "imageSHA256": "f4d304251e84c71d8f2f978dc1ace1b8f58fb133edb1bf2325a5979679b20fef"
+  },
+  {
+    "label": "m05-before-hello-import",
+    "startedEpochMs": 1792475922849,
+    "observedEpochMs": 1792475922930,
+    "axFile": "m05-before-hello-import.txt",
+    "imageFile": "m05-before-hello-import.jpg",
+    "imageSHA256": "41965bab3968ab408dc3e8a12551c92bd3f20a8f9df124a1cea2ac879939eb49"
+  },
+  {
+    "label": "m05-hello-install-preview",
+    "startedEpochMs": 1792475993479,
+    "observedEpochMs": 1792475993553,
+    "axFile": "m05-hello-install-preview.txt",
+    "imageFile": "m05-hello-install-preview.jpg",
+    "imageSHA256": "f64a90703cff1c7f5ad73739e02898a9a8be9cba4646f67458fdeeb91ef8d541"
+  },
+  {
+    "label": "m05-hello-running",
+    "startedEpochMs": 1792476235605,
+    "observedEpochMs": 1792476235719,
+    "axFile": "m05-hello-running.txt",
+    "imageFile": "m05-hello-running.jpg",
+    "imageSHA256": "1b72596baddd04ba16fdd2d5ebc79ad1eaebdad591f9e5ecf40bf8d7d0eb87b3"
+  },
+  {
+    "label": "m05-hello-count",
+    "startedEpochMs": 1792476611614,
+    "observedEpochMs": 1792476611662,
+    "axFile": "m05-hello-count.txt",
+    "imageFile": "m05-hello-count.jpg",
+    "imageSHA256": "2b0f5c37b4e0d454ad0752b57c5172573e91b54018bb695adbf9ff04b7da90f7"
   }
 ]

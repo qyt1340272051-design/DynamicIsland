@@ -1,0 +1,46 @@
+{
+  "activeHumanWalkthrough": "Completed assisted human walkthrough used the unchanged older extracted dd9b candidate. New documentation bytes are not retrospectively attributed to that attempt.",
+  "artifact": {
+    "bytes": 84717,
+    "files": 53,
+    "path": "/Users/rong5/Dynamiclsland/artifacts/sdk/dynamic-island-sdk-1.0.0.zip",
+    "sdkVersion": "1.0.0",
+    "sha256": "8f4da7d24c1def1db6087b9c9124b427761975c3458075248afb831217d161ab"
+  },
+  "changedArchiveMembers": [
+    "DynamicIslandSDK/README.md",
+    "DynamicIslandSDK/distribution-manifest.json",
+    "DynamicIslandSDK/docs/quick-start.md"
+  ],
+  "gateLogSHA256": "9d3fcfb06b18db371f8d85fb9e4ce62ab9971e6c5073323ef88744a78c4da5f8",
+  "newWalkthroughDirectory": "/tmp/dynamic-island-sdk-output-clarity-20261020/walkthrough/DynamicIslandSDK",
+  "observedIssue": "Human requested terminal-stage assistance and supplied two ok:true results. No command failure was present in supplied output.",
+  "observedUTC": "2026-10-20T05:56:54.740023+00:00",
+  "previousCandidate": {
+    "bytes": 84278,
+    "historicalEvidence": "../t38-final-audit-20261019/result.json",
+    "preservedPath": "/Users/rong5/Dynamiclsland/artifacts/sdk/history/pre-m05-clarity-20261020/dynamic-island-sdk-1.0.0.zip",
+    "sha256": "dd9ba3e40c856343271e8088643276fc329526191213fa1bbee1973eab299433"
+  },
+  "productionAppSourceChanged": false,
+  "publiclyPublished": false,
+  "remotePush": false,
+  "runtimeAPISurfaceChanged": false,
+  "scriptsOrFixtureChanged": false,
+  "status": "Local SDK candidate rebuilt after successful-output and package-path documentation clarification; not public",
+  "tagCreated": false,
+  "validation": {
+    "SDKPythonFailed": 0,
+    "SDKPythonPassed": 40,
+    "SDKPythonSkipped": 0,
+    "actualExtractedQuickStartAndFixtureIncludedInGate": true,
+    "documents": 15,
+    "expectedTypeErrors": 47,
+    "localLinks": 33,
+    "sourceBoundExamples": 9,
+    "sourceFilesMatched": 53,
+    "twoIndependentArchivesByteIdentical": true,
+    "typesPassed": true
+  },
+  "humanOutcomeEvidence": "../manual-remaining-20261019/m05-result.json"
+}

@@ -1,0 +1,64 @@
+{
+  "observedUTC": "2026-10-20T06:05:19.528098+00:00",
+  "packagePath": "/tmp/hello-world-0.1.0.dip",
+  "packageBytes": 2690,
+  "packageSHA256": "d0e94985f688832de8227f524cecb2bef83aef09c50af6ddebf33129d077c976",
+  "installedID": "com.example.hello-world",
+  "installedSHA256": {
+    "README.md": "da8395a19fab957ad08e53358ef99e18604412bf6d06e317982696eac59fbaee",
+    "index.js": "9acecccb94b18350bde366c2dd5c9255ce11cf7f235f36e5036d21e59c7e0730",
+    "manifest.json": "194dd52a51214415bc845ae8aaf3434398d1686d88827a37671feb871898fef9"
+  },
+  "archiveFilesMatchInstalled": {
+    "README.md": true,
+    "index.js": true,
+    "manifest.json": true
+  },
+  "manifest": {
+    "schemaVersion": 1,
+    "id": "com.example.hello-world",
+    "name": "你好，计数器",
+    "developer": "示例开发者",
+    "version": "0.1.0",
+    "engine": "javascriptcore",
+    "entry": "index.js",
+    "minimumHostVersion": "0.6.0",
+    "permissions": [],
+    "capabilities": [
+      "activity.publish",
+      "activity.update",
+      "ui.islandNode",
+      "actions.handle"
+    ]
+  },
+  "manager": {
+    "plugins": {
+      "com.dynamicisland.acceptance.timer-presentations": {
+        "isEnabled": true,
+        "version": "0.1.0"
+      },
+      "com.dynamicisland.compat-counter": {
+        "isEnabled": true,
+        "version": "0.1.0"
+      },
+      "com.dynamicisland.compat-progress": {
+        "isEnabled": true,
+        "version": "0.1.0"
+      },
+      "com.dynamicisland.compat-status": {
+        "isEnabled": true,
+        "version": "0.1.0"
+      },
+      "com.example.hello-world": {
+        "isEnabled": true,
+        "version": "0.1.0"
+      },
+      "com.example.independent-status": {
+        "isEnabled": true,
+        "version": "0.1.0"
+      }
+    },
+    "schemaVersion": 1
+  },
+  "stagingEntries": []
+}

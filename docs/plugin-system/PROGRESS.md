@@ -28,7 +28,7 @@
 
 ## 2026-10-19 恢复人工验收
 
-用户要求「来完成人工操作部分」。[M03](t02-t37-manual-acceptance-20261019.md)已关闭 T02 / T37；[2026-10-20 第三轮 M04](t11-manual-acceptance-20261020.md)完成真实收起 minimal → compact、重新展开和停止，T11 标为 verified。当前共 **37 项 verified、3 项 in progress**；M05 修正版手册独立复测正在等待用户结果，T38 / T40 的公开发布门槛仍保留。本轮没有修改生产源码、扩大权限或公开发布。
+用户要求「来完成人工操作部分」。[M03](t02-t37-manual-acceptance-20261019.md)已关闭 T02 / T37；[2026-10-20 第三轮 M04](t11-manual-acceptance-20261020.md)完成真实收起 minimal → compact、重新展开和停止，T11 标为 verified。当前共 **37 项 verified、3 项 in progress**；[M05](t39-manual-retry-20261020.md)已完成协助功能复测，实际 Hello 显示已点击 3 次并正常退出；新作者仅按文档完成的原门槛继续保留，T38 / T40 的公开发布门槛仍保留。本轮没有修改生产源码、扩大权限或公开发布。
 
 ## Phase 0 — 准备阶段：项目审计、分支与基线
 
@@ -124,8 +124,8 @@
 
 | ID | 任务 | 前置依赖 | 状态 | 验收证据 |
 | --- | --- | --- | --- | --- |
-| T38 | DynamicIsland SDK | T36 | `in progress` | [历史实验草案](phase-9-t38-sdk-draft.md)之后已完成[SDK 1.0.0 发布候选复核](t38-stability-review-20261019.md)：有限 API / 版本策略、完整许可、可重复独立 ZIP、源文件摘要、离线工具 / 模板与脱仓库验证。当前 SDK Python 40 passed、类型及 47 项预期错误通过；[完整回归](evidence/final-regression-20261019/result.json)中正式 Host SDK / 文档契约通过。随后将独立 AI 作者原始双按钮包送入正式 Host，含既有契约共[8 项通过](t38-independent-host-20261019.md)，验证同实例与生命周期。归档扫描错误已修正，最新候选摘要及历史区别见[最终分发证据](evidence/t38-final-audit-20261019/result.json)。T35 / T36 实机前置已满足，正式公开发布仍保留；AI 自动结果不替代真人或物理界面。 |
-| T39 | 开发者文档与模板 | T38 | `in progress` | [13 主题手册](../../SDK/docs/README.md)及[T39 记录](phase-9-t39-developer-docs.md)保留 15 页 / 9 个源码块 / 33 条链接与正式 Host 契约。本日用户首轮 zsh 卡点已修正，[协助功能复测通过](evidence/t39-manual-20261019/result.json)，未冒称首轮独立成功。全新上下文 AI 作者仅按独立 SDK 在 137.7 秒完成 Hello 与原创双按钮包的离线校验 / 打包，未读 App Swift，见[独立资料走查](evidence/t39-independent-20261019/result.json)；其 README receipt 歧义已修正。AI 离线结果不计作真人十分钟安装体验；修正版无额外指导复测及 T38 发布门槛仍保留。 |
+| T38 | DynamicIsland SDK | T36 | `in progress` | [历史实验草案](phase-9-t38-sdk-draft.md)之后已完成[SDK 1.0.0 发布候选复核](t38-stability-review-20261019.md)：有限 API / 版本策略、完整许可、可重复独立 ZIP、源文件摘要、离线工具 / 模板与脱仓库验证。当前 SDK Python 40 passed、类型及 47 项预期错误通过；[完整回归](evidence/final-regression-20261019/result.json)中正式 Host SDK / 文档契约通过。随后将独立 AI 作者原始双按钮包送入正式 Host，含既有契约共[8 项通过](t38-independent-host-20261019.md)，验证同实例与生命周期。归档扫描错误已修正，最新候选已随成功输出 / 包路径说明修正重新打包，摘要及历史区别见[本轮分发证据](evidence/t39-output-clarity-20261020/result.json)。T35 / T36 实机前置已满足，正式公开发布仍保留；AI 自动结果不替代真人或物理界面。 |
+| T39 | 开发者文档与模板 | T38 | `in progress` | [13 主题手册](../../SDK/docs/README.md)及[T39 记录](phase-9-t39-developer-docs.md)保留 15 页 / 9 个源码块 / 33 条链接与正式 Host 契约。本日用户首轮 zsh 卡点已修正，[协助功能复测通过](evidence/t39-manual-20261019/result.json)，未冒称首轮独立成功。全新上下文 AI 作者仅按独立 SDK 在 137.7 秒完成 Hello 与原创双按钮包的离线校验 / 打包，未读 App Swift，见[独立资料走查](evidence/t39-independent-20261019/result.json)；其 README receipt 歧义已修正。AI 离线结果不计作真人十分钟安装体验；[2026-10-20 M05](t39-manual-retry-20261020.md)已核对正确 Hello 安装启用、实际计数 3 次及正常退出，手册补充成功输出 / 包路径说明；本轮接受解释及预览协助，新作者无指导门槛和 T38 发布门槛仍保留。 |
 | T40 | Plugin Registry | T38 | `in progress` | [目录核心](phase-9-t40-registry-core.md)与[发现 UI](phase-9-t40-registry-ui.md)已完成，复用正式解包 / 安装 / 权限流程；[本日完整回归](evidence/final-regression-20261019/result.json)为 1070 passed / 2 skipped / 0 failures，普通 Release build passed。[发布准备](t40-release-preparation-20261019.md)已生成附 MIT 许可的两款官方包、固定摘要与候选目录，独立重打字节一致。正式 [registry.json](../../Registry/registry.json)仍为空，未登记不存在的下载地址；公开 Release / 目录发布、真实网络安装与 T38 依赖继续保留。 |
 
 [Phase 9 统一检查](phase-9-acceptance.md)已归并当前自动开发证据及剩余门槛；T38–T40 继续保持 `in progress`，不等同于稳定 SDK 或 Plugin 1.0 发布验收。

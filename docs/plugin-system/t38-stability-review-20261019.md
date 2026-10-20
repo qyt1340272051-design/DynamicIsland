@@ -37,7 +37,7 @@ SDK 首次稳定发布候选已采用 **`1.0.0`**。此值独立于 App `0.6.0`�
 
 本候选的有限接口及行为已冻结在 [CHANGELOG](../../SDK/CHANGELOG.md)，版本策略分别规定 SDK major / minor / patch 与 Host wire 协议迁移。最终公开发布前仍需复核独立作者结果、正式 Host 契约和同一源码归档。原生接口扩展和 SuperIsland 兼容不能隐式改变授权。
 
-receipt 文案修正阶段的结果见[历史结构化证据](evidence/t38-distribution-20261019/result.json)，最新候选见[最终归档复核](evidence/t38-final-audit-20261019/result.json)。SDK 分发子步骤没有运行或修改生产 App，也没有远端推送、Git tag、Release、SDK 上传或 Registry 发布。修正版手册的真人独立作者体验及实际用时仍在 T39 中单独追踪。
+receipt 文案修正阶段的结果见[历史结构化证据](evidence/t38-distribution-20261019/result.json)，提交前归档阶段见[历史复核](evidence/t38-final-audit-20261019/result.json)，最新候选见[2026-10-20 说明修正后的分发证据](evidence/t39-output-clarity-20261020/result.json)。SDK 分发子步骤没有运行或修改生产 App，也没有远端推送、Git tag、Release、SDK 上传或 Registry 发布。修正版手册的真人独立作者体验及实际用时仍在 T39 中单独追踪。
 
 ## receipt 文案修正阶段的本地验证
 
@@ -57,14 +57,20 @@ receipt 文案修正阶段的结果见[历史结构化证据](evidence/t38-distr
 
 AI 实际读取的是初始候选 SHA-256 `b92a911594b8e7dafa723dc70ba6e851cc35e21ec0e730ef2857a8cf5ccf0808`，不将修正后的新字节归于该次走查。旧 ZIP 及原结果 / 清单 / 日志备份于 `/tmp/dynamic-island-t38-distribution-20261019/initial-candidate/`；结构化 `initialCandidate` 保留旧摘要和观察范围。
 
-该原始双按钮包随后实际经过 Extractor、Validator、JavaScriptCore、Bridge、ActivityManager 和 ActionRouter，验证待选择 → 专注中 → 休息中、同实例更新、停用旧动作拒绝与重新启用重置，见[正式 Host 自动闭环](t38-independent-host-20261019.md)。它也已在普通 Release 隔离副本安装后停用、明确启用，见[实机装载记录](evidence/final-app-install-20261019/result.json)；用户本轮跳过人工操作，因此未检查真实工具按钮或刘海像素。
+该原始双按钮包随后实际经过 Extractor、Validator、JavaScriptCore、Bridge、ActivityManager 和 ActionRouter，验证待选择 → 专注中 → 休息中、同实例更新、停用旧动作拒绝与重新启用重置，见[正式 Host 自动闭环](t38-independent-host-20261019.md)。它也已在普通 Release 隔离副本安装后停用、明确启用，见[实机装载记录](evidence/final-app-install-20261019/result.json)；当时用户跳过人工操作，该阶段未检查真实工具按钮或刘海像素。后续 [M03 实机验收](t02-t37-manual-acceptance-20261019.md)已补齐双按钮工具交互，历史装载结果不反写。
 
-## 提交前归档审阅与最新候选
+## 提交前归档审阅阶段
 
 审阅发现 Python `os.walk` 默认会忽略目录扫描错误，某个不可读取的子目录可能静默遗漏。归档工具现将扫描错误直接抛出；新增模拟 `scandir PermissionError` 用例，断言失败时不产生目标 ZIP。
 
 [最新 SDK gate](evidence/t38-final-audit-20261019/sdk-check.txt)为 **40 passed / 0 skipped / 0 failures**，类型正例及 **47 项预期错误**通过。正式 Host 与生产 Swift 未改变，保留上述完整回归和单独 8 项 Host 证据的各自范围。
 
-最新 `artifacts/sdk/dynamic-island-sdk-1.0.0.zip` 为 **84,278 bytes**、53 个源文件，SHA-256 `dd9ba3e40c856343271e8088643276fc329526191213fa1bbee1973eab299433`。两次独立打包字节一致，所有清单摘要与当前源文件一致；只比 receipt 候选改变归档工具、分发测试和生成清单。旧候选已保留，AI 实际阅读与此前执行事实不反写。详见[最终证据](evidence/t38-final-audit-20261019/README.md)。
+该阶段 `artifacts/sdk/dynamic-island-sdk-1.0.0.zip` 为 **84,278 bytes**、53 个源文件，SHA-256 `dd9ba3e40c856343271e8088643276fc329526191213fa1bbee1973eab299433`。两次独立打包字节一致，所有清单摘要与当时源文件一致；只比 receipt 候选改变归档工具、分发测试和生成清单。旧候选已保留，AI 实际阅读与此前执行事实不反写。详见[归档审阅证据](evidence/t38-final-audit-20261019/README.md)。
 
-下次独立 SDK 走查使用 `/tmp/dynamic-island-sdk-final-audit-20261019/walkthrough/DynamicIslandSDK`。该候选仍未公开发布；人工 M03–M05 由用户明确延期。
+该候选的独立目录 `/tmp/dynamic-island-sdk-final-audit-20261019/walkthrough/DynamicIslandSDK` 随后供 10 月 20 日 M05 复测使用。M03 与 M04 已分别完成实际工具按钮及真实 Timer 三态；M05 的协助与作者体验单独记录，不再沿用此前三组全部延期的状态。
+
+## 2026-10-20 输出说明与当前候选
+
+M05 用户在终端阶段请求协助，贴出的实际结果是校验、打包两项 `ok: true`。助手已解释成功状态并协助定位原包；仓库 README / Quick Start 随后补清成功输出与路径区别，脚本和运行接口均未改变。当前候选为 **84,717 bytes**、53 个源文件，SHA-256 `8f4da7d24c1def1db6087b9c9124b427761975c3458075248afb831217d161ab`，见[最新分发记录](evidence/t39-output-clarity-20261020/README.md)。
+
+40 项 SDK 检查及类型正例 / 47 项预期错误通过；两份独立 ZIP 字节一致。只比前一候选改变 SDK README、Quick Start 与生成清单，旧 ZIP 保留在 `artifacts/sdk/history/pre-m05-clarity-20261020/`。用户使用的旧解压副本保持原状，实际阅读范围不改写。新说明尚未由新的真人作者独立复测，公开发布仍未执行。

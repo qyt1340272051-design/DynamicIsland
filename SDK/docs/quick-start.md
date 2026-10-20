@@ -32,7 +32,11 @@ printf 'Plugin package: %s\n' "$workspace/hello-world.dip"
 
 </details>
 
-脚本最后一行给出 `hello-world.dip` 的绝对路径，复制这个路径用于下一步导入。`workspace` 只存在于脚本内部；脚本结束后直接使用已打印的绝对路径找回文件。临时目录可能被系统清理，继续开发前把源目录搬到自己的项目目录。
+脚本先输出 `validate`、`package` 两条 JSON；各自的 `ok: true` 表示校验、打包成功。两条都成功后即可继续导入。`summary.bytes` 与 `summary.files` 统计插件源目录的字节数和文件数。
+
+脚本最后一行 **`Plugin package:` 后的路径**是此次实际生成的 `hello-world.dip` 的绝对路径，复制这个路径继续下一步导入。若你运行的是 SDK README 中的两条 Python 命令，包就在命令指定的 `/tmp/hello-world-0.1.0.dip`，该方式不会打印 `Plugin package:` 行。
+
+`workspace` 只存在于脚本内部；脚本结束后直接使用已打印的绝对路径找回文件。临时目录可能被系统清理，继续开发前把源目录搬到自己的项目目录。
 
 ## 2. 安装并运行
 
