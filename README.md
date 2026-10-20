@@ -15,6 +15,10 @@ python3 tools/di_plugin.py validate examples/hello-world
 python3 tools/di_plugin.py package examples/hello-world /tmp/hello-world-0.1.0.dip
 ```
 
+终端会输出两条 JSON：`command` 为 `validate` 且 `ok: true` 表示校验成功；`command` 为 `package` 且 `ok: true` 表示打包成功。两条都成功后即可继续导入。`summary.bytes` 与 `summary.files` 统计插件源目录的字节数和文件数。
+
+以上两条命令把包生成在 **`/tmp/hello-world-0.1.0.dip`**，可直接使用这个绝对路径导入；它们不会另打印 `Plugin package:` 路径行。若运行的是 Quick Start 脚本，则使用脚本最后 `Plugin package:` 后打印的实际绝对路径。
+
 输出文件必须尚不存在、位于源目录之外。随后在主程序「插件管理 → 导入插件」中选择 `.dip`，检查预览，安装后单独启用。示例不请求额外权限；展开刘海后从工具菜单选择「你好，计数器」，点击「加一」。工具提供 minimal、compact、expanded 三种布局，但不自动展开窗口；停用或重启从零计数。
 
 源目录之外的类型引用仅供编辑器使用，JavaScript 运行时不会导入它。打包器保留所有普通源文件；请把构建产物放在源目录之外，勿将无关文件或凭据放入插件目录。
