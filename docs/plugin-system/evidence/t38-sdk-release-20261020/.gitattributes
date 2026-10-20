@@ -2,3 +2,5 @@
 sdk-check-initial.txt -whitespace
 sdk-check.txt -whitespace
 host-contract.txt -whitespace
+independent-verification-doc.diff -whitespace
+independent-standalone-python-tests.txt -whitespace

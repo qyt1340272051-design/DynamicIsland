@@ -1,0 +1,45 @@
+test_archive_is_repeatable_complete_and_runs_without_repository (test_distribution.DistributionTests) ... ok
+test_existing_output_is_preserved_and_source_caches_are_omitted (test_distribution.DistributionTests) ... ok
+test_unreadable_source_subdirectory_cannot_produce_an_incomplete_archive (test_distribution.DistributionTests) ... ok
+test_all_handbook_sources_are_exact_valid_examples_and_links_resolve (test_docs.DocumentationTests) ... ok
+test_changed_source_cannot_leave_a_stale_code_block_green (test_docs.DocumentationTests) ... ok
+test_quick_start_builds_the_actual_template_from_a_standalone_sdk (test_docs.DocumentationTests) ... ok
+test_untracked_code_and_broken_links_fail_documentation_gate (test_docs.DocumentationTests) ... ok
+test_archive_refuses_file_symlink_swap_after_inspection (test_validator.ValidatorTests) ... ok
+test_archive_refuses_parent_directory_symlink_swap_after_inspection (test_validator.ValidatorTests) ... ok
+test_both_official_manifests_use_the_closed_host_vocabulary (test_validator.ValidatorTests) ... skipped 'Repository official examples are outside the portable SDK.'
+test_cli_errors_are_short_fixed_json_without_input_echo (test_validator.ValidatorTests) ... ok
+test_countdown_requires_lowercase_canonical_uuid_and_no_state_fields (test_validator.ValidatorTests) ... ok
+test_depth_children_and_aggregate_node_boundaries (test_validator.ValidatorTests) ... ok
+test_duplicate_keys_are_rejected_including_escapes_and_nested_nodes (test_validator.ValidatorTests) ... ok
+test_hello_world_package_matches_committed_cross_language_fixture (test_validator.ValidatorTests) ... ok
+test_json_file_read_rejects_links_and_oversize (test_validator.ValidatorTests) ... ok
+test_json_invalid_encodings_bom_nul_and_unpaired_surrogates (test_validator.ValidatorTests) ... ok
+test_manifest_exact_types_and_closed_arrays (test_validator.ValidatorTests) ... ok
+test_manifest_ids_entry_paths_and_byte_limits (test_validator.ValidatorTests) ... ok
+test_manifest_names_count_scalars_and_reject_hidden_controls (test_validator.ValidatorTests) ... ok
+test_manifest_required_unknown_proto_and_null_fields (test_validator.ValidatorTests) ... ok
+test_manifest_schema_copy_is_exact_and_enums_match_cli (test_validator.ValidatorTests) ... ok
+test_node_identifiers_colors_and_progress_values (test_validator.ValidatorTests) ... ok
+test_node_text_limits_use_utf8_not_character_count (test_validator.ValidatorTests) ... ok
+test_nodes_reject_unknown_null_types_and_proto_properties (test_validator.ValidatorTests) ... ok
+test_nonfinite_and_overflow_json_numbers (test_validator.ValidatorTests) ... ok
+test_package_is_deterministic_and_refuses_overwrite_or_inside_output (test_validator.ValidatorTests) ... ok
+test_package_resolves_output_parent_before_containment_check (test_validator.ValidatorTests) ... ok
+test_package_validates_manifest_before_creating_archive (test_validator.ValidatorTests) ... ok
+test_portable_tools_work_without_repository_files (test_validator.ValidatorTests) ... ok
+test_repository_wrapper_preserves_legacy_cli_and_archive_bytes (test_validator.ValidatorTests) ... skipped 'Repository compatibility wrapper is outside the portable SDK.'
+test_semver_handles_big_components_without_integer_coercion (test_validator.ValidatorTests) ... ok
+test_shared_host_contract_cases_match_all_expected_results (test_validator.ValidatorTests) ... ok
+test_source_aggregate_bytes_and_path_entries_are_bounded (test_validator.ValidatorTests) ... ok
+test_source_rejects_file_count_size_and_depth_excess (test_validator.ValidatorTests) ... ok
+test_source_rejects_root_and_nested_symlinks_and_hardlinks (test_validator.ValidatorTests) ... ok
+test_source_rejects_unsafe_paths_missing_entry_and_special_files (test_validator.ValidatorTests) ... ok
+test_source_relative_path_bytes_are_bounded (test_validator.ValidatorTests) ... ok
+test_source_validation_does_not_execute_entry (test_validator.ValidatorTests) ... ok
+test_valid_fixtures_and_all_eight_node_kinds (test_validator.ValidatorTests) ... ok
+
+----------------------------------------------------------------------
+Ran 40 tests in 1.137s
+
+OK (skipped=2)
