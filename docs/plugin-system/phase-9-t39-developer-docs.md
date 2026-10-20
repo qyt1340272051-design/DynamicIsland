@@ -6,6 +6,8 @@
 
 2026-10-20 更新：[M05 人工复测](t39-manual-retry-20261020.md)中，用户提供的两条 `ok: true` 输出实际均为成功；助手解释结果、定位包并打开正确 Hello 预览后，用户确认安装、启用和加一，真实管理页已核对 Hello 正在运行，后续工具界面显示已点击 3 次，助手未点击计数；副本正常退出且 Staging 为空。成功输出与包路径说明已补入手册，[本轮 SDK 检查](evidence/t39-output-clarity-20261020/result.json)为 40 Python 通过、类型及 47 项预期错误通过。参与者已有经验且接受协助，原新作者无指导门槛继续保留；实际计数与收尾状态以本轮记录为准。
 
+用户后续反馈：回忆似乎没有查看 Swift 源码，估计打包 / 安装环节约需 1 分钟；未进行全流程计时。协助范围及 T39 状态保持不变，原话见[本轮结果](evidence/manual-remaining-20261019/m05-result.json)。
+
 ## 交付
 
 [SDK 开发手册](../../SDK/docs/README.md)覆盖计划指定的 Quick Start、Manifest、Activity、UI Components、Actions、Storage、Network、Permissions、Settings、Lifecycle、Debugging、Packaging、Publishing 共 13 个主题，另有索引和验证边界页。无需阅读 Swift 源码即可理解有限 Native API。

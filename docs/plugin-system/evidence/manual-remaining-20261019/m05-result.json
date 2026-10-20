@@ -19,8 +19,15 @@
   "firstIndependentNewAuthorCriterionPassed": false,
   "participantHasPriorExperience": true,
   "extraGuidanceProvided": true,
-  "durationReportedByParticipant": null,
-  "SwiftSourceLookupReportedByParticipant": null,
+  "durationReportedByParticipant": {
+    "approximateMinutes": 1,
+    "scope": "Packaging and installation only",
+    "method": "Participant recollection and estimate; no complete-walkthrough timing"
+  },
+  "SwiftSourceLookupReportedByParticipant": {
+    "lookedUp": false,
+    "certainty": "Participant recalls apparently not seeing Swift source; not independently observed"
+  },
   "tenMinuteTargetVerified": false,
   "humanUsedCandidateSHA256": "dd9ba3e40c856343271e8088643276fc329526191213fa1bbee1973eab299433",
   "latestCandidateSHA256": "8f4da7d24c1def1db6087b9c9124b427761975c3458075248afb831217d161ab",
@@ -55,5 +62,11 @@
   "processSnapshotAfterQuit": "",
   "cleanup": "m05-cleanup.json",
   "stagingEmptyAfterQuit": true,
-  "lastUpdatedUTC": "2026-10-20T06:12:35.111331+00:00"
+  "lastUpdatedUTC": "2026-10-20T07:04:29.605045+00:00",
+  "participantFeedback": {
+    "date": "2026-10-20",
+    "rawReply": "貌似咩有看到swift源码,打包安装应该只需要一分钟",
+    "independentNewAuthorCriterionChanged": false,
+    "completeTenMinuteWalkthroughCriterionVerified": false
+  }
 }

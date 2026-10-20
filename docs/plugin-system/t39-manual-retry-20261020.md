@@ -10,7 +10,9 @@
 
 用户随后明确回复“Hello 已安装启用，已点击加一”。[真实管理页](evidence/manual-remaining-20261019/m05-hello-running.jpg)显示已安装六款，Hello 正在运行。其[已安装文件](evidence/manual-remaining-20261019/m05-installed-20261020.json)与所选包三份文件的 SHA-256 全部一致；Manifest 权限数组为空，启用状态已持久化，Staging 为空。用户包为 2,690 bytes，SHA-256 `d0e94985f688832de8227f524cecb2bef83aef09c50af6ddebf33129d077c976`；助手另行生成的诊断包明确排除，不替代用户产物。
 
-用户随后配合展开刘海。助手仅选择 Hello，实际 [AX](evidence/manual-remaining-20261019/m05-hello-count.txt)及[原始截图](evidence/manual-remaining-20261019/m05-hello-count.jpg)均显示“已点击 3 次”；助手没有点击增加或重置。该证据证明当前 Hello 已响应用户点击，不声称直接拍到最初 0 → 1 的瞬间。尚未取得用户实际耗时及是否查阅 Swift 的答复，不推断约十分钟目标已达成。
+用户随后配合展开刘海。助手仅选择 Hello，实际 [AX](evidence/manual-remaining-20261019/m05-hello-count.txt)及[原始截图](evidence/manual-remaining-20261019/m05-hello-count.jpg)均显示“已点击 3 次”；助手没有点击增加或重置。该证据证明当前 Hello 已响应用户点击，不声称直接拍到最初 0 → 1 的瞬间。
+
+用户后续补充：“貌似咩有看到swift源码,打包安装应该只需要一分钟”。据此记录为：用户回忆似乎没有查看 App Swift 源码，并估计打包 / 安装环节约需 1 分钟。这是用户估算，未进行全流程计时；本轮有协助的范围及新作者独立完成门槛不变，不据此认定完整十分钟目标已验证。原话见[结构化结果](evidence/manual-remaining-20261019/m05-result.json)。
 
 副本于 2026-10-20 14:10:33.618（北京时间）正常 Cmd+Q 退出；[只读退出核对](evidence/manual-remaining-20261019/m05-cleanup.json)确认 PID 7794 消失、Staging 为空，六款 Installed 和启用状态保留。退出后没有再调用 UI 读取，未重新启动副本。Hello 的计数仅在内存中，下次启用 / 重启预期归零，不能将安装保留写成计数持久化。
 
