@@ -1,0 +1,2 @@
+/tmp/dynamic-island-u01-pointer-20261020/Dynamic Island Menu Return.app: valid on disk
+/tmp/dynamic-island-u01-pointer-20261020/Dynamic Island Menu Return.app: satisfies its Designated Requirement

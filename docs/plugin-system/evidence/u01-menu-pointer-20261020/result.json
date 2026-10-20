@@ -1,0 +1,44 @@
+{
+  "observedUTC": "2026-10-20T14:39:35.657952+00:00",
+  "status": "User confirms physical return retains dual-button tool; trace confirms inside at deadline; cleanup and native interactions pending",
+  "U01TaskStatus": "in progress",
+  "previousPhysicalAttempt": "../u01-menu-repair-20261020/physical-return-attempt-2.json",
+  "previousPhysicalAttemptPassed": false,
+  "observedPreviousGraceSeconds": [
+    1.097395,
+    1.047012
+  ],
+  "previousRootCauseConfirmed": false,
+  "changes": [
+    "Fixed two-second return grace without entry-based extension",
+    "Keep existing 30 Hz pointer timer in common RunLoop modes",
+    "Controller force refresh reconciles its pointer cache and VM before deadline releases token; recheck token after refresh"
+  ],
+  "menuReturnGraceSeconds": 2,
+  "targetedTests": {
+    "total": 96,
+    "failures": 0,
+    "skipped": 0,
+    "menu": 18,
+    "viewModel": 50,
+    "runtime": 24,
+    "hoverRegion": 4
+  },
+  "releaseBuildPassed": true,
+  "strictDeepSignaturePassed": true,
+  "physicalReturnPassed": true,
+  "sourceBinding": "preflight.json",
+  "candidateApp": "/tmp/dynamic-island-u01-pointer-20261020/Dynamic Island Menu Return.app",
+  "publiclyPublished": false,
+  "remotePushed": false,
+  "appPID": 23408,
+  "appRunning": true,
+  "traceCaptureSessionID": 93233,
+  "traceTemporaryPath": "/tmp/dynamic-island-u01-pointer-20261020/menu-trace.ndjson",
+  "traceCaptureActive": true,
+  "pendingHumanRequest": "Reply then return to island and hold for keyboard/cancel/page checks",
+  "keyboardCancelAndCleanupPassed": null,
+  "physicalReturnEvidence": "physical-return-attempt-3.json",
+  "normalExitReopenPassed": true,
+  "normalExitReopenSource": "User confirms native timer shown after exiting for three seconds and returning; post-reply screenshot is compact only"
+}

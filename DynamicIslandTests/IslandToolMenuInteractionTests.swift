@@ -176,6 +176,158 @@ final class IslandToolMenuInteractionTests: XCTestCase {
         XCTAssertEqual(fixture.dispatch(tool), .inactiveActivity)
     }
 
+    func testDeadlinePointerRefreshCorrectsStaleOutsideAndPreservesToolUntilNormalExit() async throws {
+        let fixture = try ToolMenuInteractionFixture()
+        defer {
+            fixture.model.refreshPointerContainmentBeforeToolMenuReturn = nil
+            fixture.shutdown()
+        }
+        let model = fixture.model
+        let tool = try fixture.tool("alpha")
+        XCTAssertTrue(fixture.runtime.selectTool(tool))
+        let menu = try XCTUnwrap(model.beginToolMenuInteraction())
+        model.endHovering()
+        XCTAssertFalse(model.isPointerInside)
+        var refreshCount = 0
+        model.refreshPointerContainmentBeforeToolMenuReturn = { [weak model] in
+            guard let model else { return }
+            refreshCount += 1
+            XCTAssertTrue(model.isToolMenuInteractionCurrent(menu))
+            XCTAssertFalse(model.isPointerInside)
+            // Model the controller observing the actual pointer inside at the
+            // deadline. This does not move or inspect the physical mouse.
+            model.beginHoveringAfterDelay()
+        }
+        model.endToolMenuInteraction(menu)
+
+        try await waitUntil { refreshCount == 1 && !model.isToolMenuInteractionCurrent(menu) }
+        XCTAssertTrue(model.isPointerInside)
+        XCTAssertTrue(model.isHovering)
+        XCTAssertEqual(model.presentationState, .expanded)
+        XCTAssertEqual(model.expandedSurface, .tools)
+        XCTAssertEqual(fixture.runtime.manager.selectedToolSnapshot?.instanceToken, tool.instanceToken)
+        XCTAssertEqual(fixture.dispatch(tool), .handled)
+
+        model.endHovering()
+        XCTAssertEqual(model.presentationState, .compact)
+        XCTAssertNil(fixture.runtime.manager.selectedToolSnapshot)
+        XCTAssertEqual(fixture.dispatch(tool), .inactiveActivity)
+        XCTAssertEqual(refreshCount, 1)
+    }
+
+    func testDeadlinePointerRefreshCorrectsStaleInsideAndRevokesSelectedTool() async throws {
+        let fixture = try ToolMenuInteractionFixture()
+        defer {
+            fixture.model.refreshPointerContainmentBeforeToolMenuReturn = nil
+            fixture.shutdown()
+        }
+        let model = fixture.model
+        let tool = try fixture.tool("alpha")
+        XCTAssertTrue(fixture.runtime.selectTool(tool))
+        let menu = try XCTUnwrap(model.beginToolMenuInteraction())
+        XCTAssertTrue(model.isPointerInside)
+        var refreshCount = 0
+        model.refreshPointerContainmentBeforeToolMenuReturn = { [weak model] in
+            guard let model else { return }
+            refreshCount += 1
+            XCTAssertTrue(model.isToolMenuInteractionCurrent(menu))
+            XCTAssertTrue(model.isPointerInside)
+            model.endHovering()
+            XCTAssertTrue(model.isHovering, "The current token still holds expansion during refresh.")
+        }
+        model.endToolMenuInteraction(menu)
+
+        try await waitUntil { refreshCount == 1 && !model.isToolMenuInteractionCurrent(menu) }
+        XCTAssertFalse(model.isPointerInside)
+        XCTAssertFalse(model.isHovering)
+        XCTAssertEqual(model.presentationState, .compact)
+        XCTAssertNil(fixture.runtime.manager.selectedToolSnapshot)
+        XCTAssertEqual(fixture.dispatch(tool), .inactiveActivity)
+        XCTAssertEqual(refreshCount, 1)
+    }
+
+    func testDeadlinePointerRefreshHideCannotRestoreOldSelection() async throws {
+        let fixture = try ToolMenuInteractionFixture()
+        defer {
+            fixture.model.refreshPointerContainmentBeforeToolMenuReturn = nil
+            fixture.shutdown()
+        }
+        let model = fixture.model
+        let tool = try fixture.tool("alpha")
+        XCTAssertTrue(fixture.runtime.selectTool(tool))
+        let menu = try XCTUnwrap(model.beginToolMenuInteraction())
+        model.endHovering()
+        var refreshCount = 0
+        model.refreshPointerContainmentBeforeToolMenuReturn = { [weak model] in
+            guard let model else { return }
+            refreshCount += 1
+            XCTAssertTrue(model.isToolMenuInteractionCurrent(menu))
+            model.setIslandPanelVisible(false)
+        }
+        model.endToolMenuInteraction(menu)
+
+        try await waitUntil { refreshCount == 1 }
+        try await remainsTrue(for: .milliseconds(70)) {
+            !model.isIslandPanelVisible
+                && !model.isToolMenuInteractionCurrent(menu)
+                && !model.isPointerInside
+                && !model.isHovering
+                && fixture.runtime.manager.selectedToolSnapshot == nil
+        }
+        XCTAssertEqual(fixture.dispatch(tool), .inactiveActivity)
+        model.setIslandPanelVisible(true)
+        XCTAssertEqual(model.presentationState, .compact)
+        XCTAssertNil(fixture.runtime.manager.selectedToolSnapshot)
+        XCTAssertEqual(refreshCount, 1)
+    }
+
+    func testDeadlinePointerRefreshReopenCannotReleaseReplacementTokenOrSelection() async throws {
+        let fixture = try ToolMenuInteractionFixture()
+        defer {
+            fixture.model.refreshPointerContainmentBeforeToolMenuReturn = nil
+            fixture.shutdown()
+        }
+        let model = fixture.model
+        let runtime = fixture.runtime
+        let first = try fixture.tool("alpha")
+        let second = try fixture.tool("beta")
+        XCTAssertTrue(runtime.selectTool(first))
+        let original = try XCTUnwrap(model.beginToolMenuInteraction())
+        model.endHovering()
+        var refreshCount = 0
+        var replacement: UUID?
+        model.refreshPointerContainmentBeforeToolMenuReturn = { [weak model, weak runtime] in
+            guard let model, let runtime else { return }
+            refreshCount += 1
+            XCTAssertTrue(model.isToolMenuInteractionCurrent(original))
+            replacement = model.beginToolMenuInteraction()
+            XCTAssertTrue(runtime.selectTool(second))
+        }
+        model.endToolMenuInteraction(original)
+
+        try await waitUntil { refreshCount == 1 }
+        let reopened = try XCTUnwrap(replacement)
+        XCTAssertNotEqual(original, reopened)
+        try await remainsTrue(for: .milliseconds(90)) {
+            model.isToolMenuInteractionCurrent(reopened)
+                && !model.isToolMenuInteractionCurrent(original)
+                && !model.isPointerInside
+                && model.isHovering
+                && model.presentationState == .expanded
+                && runtime.manager.selectedToolSnapshot?.instanceToken == second.instanceToken
+        }
+        XCTAssertEqual(fixture.dispatch(first), .inactiveActivity)
+        XCTAssertEqual(fixture.dispatch(second), .handled)
+        XCTAssertEqual(refreshCount, 1, "The replacement is still tracking, so it has no return deadline yet.")
+
+        model.refreshPointerContainmentBeforeToolMenuReturn = nil
+        model.endToolMenuInteraction(reopened)
+        try await waitUntil { model.presentationState == .compact }
+        XCTAssertFalse(model.isToolMenuInteractionCurrent(reopened))
+        XCTAssertNil(runtime.manager.selectedToolSnapshot)
+        XCTAssertEqual(fixture.dispatch(second), .inactiveActivity)
+    }
+
     func testCompletionTransfersToHostGraceBeforeSelectionAndControlLifetimeChanges() async throws {
         let fixture = try ToolMenuInteractionFixture()
         defer { fixture.shutdown() }

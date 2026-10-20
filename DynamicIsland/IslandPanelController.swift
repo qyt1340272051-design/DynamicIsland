@@ -42,6 +42,9 @@ final class IslandPanelController {
         self.screenManager = screenManager
         self.workspaceNotificationCenter = NSWorkspace.shared.notificationCenter
         self.applicationNotificationCenter = .default
+        viewModel.refreshPointerContainmentBeforeToolMenuReturn = { [weak self] in
+            self?.updatePointerContainment(force: true)
+        }
         observeScreenChanges()
     }
 
@@ -149,11 +152,13 @@ final class IslandPanelController {
         }
 
         updatePointerContainment()
-        hoverTimer = Timer.scheduledTimer(withTimeInterval: 1.0 / 30.0, repeats: true) { _ in
+        let timer = Timer(timeInterval: 1.0 / 30.0, repeats: true) { _ in
             Task { @MainActor [weak self] in
                 self?.updatePointerContainment()
             }
         }
+        hoverTimer = timer
+        RunLoop.main.add(timer, forMode: .common)
     }
 
     private func stopHoverTracking() {
@@ -163,14 +168,14 @@ final class IslandPanelController {
         viewModel.endHovering()
     }
 
-    private func updatePointerContainment() {
+    private func updatePointerContainment(force: Bool = false) {
         guard let panel, panel.isVisible else {
             return
         }
 
         let hoverFrame = currentHoverFrame(for: panel)
         let containsPointer = IslandPanelHoverRegion.contains(NSEvent.mouseLocation, in: hoverFrame)
-        guard containsPointer != isPointerInsidePanel else {
+        guard force || containsPointer != isPointerInsidePanel else {
             return
         }
 

@@ -64,6 +64,9 @@ public final class IslandViewModel: ObservableObject {
     private var toolMenuInteractionID: UUID?
     private var isToolMenuTracking = false
     private var toolMenuReturnTask: Task<Void, Never>?
+    // The panel owns physical pointer sampling and its containment cache.
+    // Reconcile both caches before a menu deadline can collapse the shell.
+    var refreshPointerContainmentBeforeToolMenuReturn: (() -> Void)?
     private let volumeService: VolumeService
     private let fileTrayService: FileTrayService
     private let sharingService: SharingService
@@ -103,7 +106,7 @@ public final class IslandViewModel: ObservableObject {
     }
 
     public nonisolated static let defaultHoverExpansionDelayNanoseconds: UInt64 = 350_000_000
-    public nonisolated static let defaultToolMenuReturnDelayNanoseconds: UInt64 = 1_000_000_000
+    public nonisolated static let defaultToolMenuReturnDelayNanoseconds: UInt64 = 2_000_000_000
     public nonisolated static let volumeAdjustmentStep: Float = 1.0 / 16.0
 
     public convenience init() {
@@ -296,14 +299,20 @@ public final class IslandViewModel: ObservableObject {
         guard isToolMenuInteractionCurrent(id), isToolMenuTracking else { return }
         isToolMenuTracking = false
         traceToolMenu("vm.grace.begin", session: id)
-        // AppKit menu tracking may pause the default-mode pointer timer. Always
-        // grant the return period, including when its last inside value is stale.
+        // Always grant the return period, including when the last pointer sample
+        // still says inside. Entries never consume or extend this deadline.
         toolMenuReturnTask = Task { [weak self, toolMenuReturnDelayNanoseconds] in
             do {
                 try await Task.sleep(nanoseconds: toolMenuReturnDelayNanoseconds)
             } catch { return }
             guard let self, !Task.isCancelled,
                   self.toolMenuInteractionID == id, !self.isToolMenuTracking else { return }
+            self.traceToolMenu("vm.grace.pointerRefresh", session: id)
+            self.refreshPointerContainmentBeforeToolMenuReturn?()
+            // Refreshing may synchronously hide the panel or replace a session.
+            guard !Task.isCancelled, self.toolMenuInteractionID == id,
+                  !self.isToolMenuTracking else { return }
+            self.traceToolMenu("vm.grace.pointerRefreshed", session: id)
             self.toolMenuReturnTask = nil
             self.toolMenuInteractionID = nil
             self.traceToolMenu("vm.grace.expired", session: id)

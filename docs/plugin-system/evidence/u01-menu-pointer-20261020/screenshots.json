@@ -1,0 +1,26 @@
+[
+  {
+    "label": "third-candidate-initial-state",
+    "startedEpochMs": 1792485841268,
+    "observedEpochMs": 1792485841318,
+    "axFile": "third-candidate-initial-state.txt",
+    "imageFile": "third-candidate-initial-state.jpg",
+    "imageSHA256": "298256f10c3a471455657fa4ce3aa2e34cb5aa63c848033aedf38f34c0a20cfa"
+  },
+  {
+    "label": "after-user-confirmed-retained-tool",
+    "startedEpochMs": 1792507114729,
+    "observedEpochMs": 1792507114990,
+    "axFile": "after-user-confirmed-retained-tool.txt",
+    "imageFile": "after-user-confirmed-retained-tool.jpg",
+    "imageSHA256": "298256f10c3a471455657fa4ce3aa2e34cb5aa63c848033aedf38f34c0a20cfa"
+  },
+  {
+    "label": "reopened-native-timer-after-exit",
+    "startedEpochMs": 1792507261794,
+    "observedEpochMs": 1792507261888,
+    "axFile": "reopened-native-timer-after-exit.txt",
+    "imageFile": "reopened-native-timer-after-exit.jpg",
+    "imageSHA256": "298256f10c3a471455657fa4ce3aa2e34cb5aa63c848033aedf38f34c0a20cfa"
+  }
+]

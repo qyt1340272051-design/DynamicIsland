@@ -6,5 +6,13 @@
     "axFile": "repair-current-state.txt",
     "imageFile": "repair-current-state.jpg",
     "imageSHA256": "298256f10c3a471455657fa4ce3aa2e34cb5aa63c848033aedf38f34c0a20cfa"
+  },
+  {
+    "label": "after-second-reported-premature-fold",
+    "startedEpochMs": 1792485697843,
+    "observedEpochMs": 1792485698109,
+    "axFile": "after-second-reported-premature-fold.txt",
+    "imageFile": "after-second-reported-premature-fold.jpg",
+    "imageSHA256": "298256f10c3a471455657fa4ce3aa2e34cb5aa63c848033aedf38f34c0a20cfa"
   }
 ]

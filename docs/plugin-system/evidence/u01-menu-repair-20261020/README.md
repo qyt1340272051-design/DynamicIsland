@@ -8,4 +8,16 @@
 
 [普通 Release 构建](release-build.txt)及 strict / deep 签名通过。[预检](preflight.json)绑定源文件摘要、可执行文件和此前失败副本的正常退出；复用原隔离验收容器，无新插件或额外权限。[当前结果](result.json)独立追踪修正版，不将历史七项菜单 AX / 按钮通过当作真实移回通过。
 
-修正版已启动，低频 `ToolMenu` 日志正在记录原生关闭 / 选择、VM 宽限及 inside / hovering 布尔值。日志不含插件文字或指针坐标。已请求用户独立完成菜单底部选择、停顿及移回，当前等待结果，U01 仍为 `in progress`。完整说明见[U01 记录](../../u01-tool-menu-20261020.md)。
+该第二版启动后以低频 `ToolMenu` 日志记录原生关闭 / 选择、VM 宽限及 inside / hovering 布尔值。日志不含插件文字或指针坐标。用户已反馈第二轮“仍然意外收起”，结果为失败，不再作为等待反馈的状态。完整说明见[U01 记录](../../u01-tool-menu-20261020.md)。
+
+## 第二轮真实返回结果
+
+[原始事件日志](physical-return-attempt-2-trace.ndjson)与[解析归档](physical-return-attempt-2.json)保存同一轮用户报告中的两个菜单 session，不能计为两轮独立真人验收。两条链均有实际 `choose` / `popUpReturn.selected` / `end` / `grace.begin` / `selection` / `pointerExit.hold` / `grace.expired`；宽限实际分别持续 **1.097395 / 1.047012 秒**，均为 **0 次进入、0 次取消事件**。
+
+这证明该轮原生选择和完整宽限移交已发生，不支持将失败归为原生取消或未提供宽限。日志未记录指针坐标和全部采样，不能确定缺少进入通知的进一步原因；用户本轮失败仍保留，92 项自动结果及该版 Release 构建不能替代它。
+
+## 第三版进行中
+
+第三版产品改为 2 秒固定、不续期宽限，原有单个 30Hz 指针 Timer 使用 `.common`；deadline 由 Controller 强制同步物理 containment 缓存与 ViewModel，再核验 token 后收尾。新增 4 项菜单回归使该组共 18 项，合并既有 78 项后的[第三版定向](../u01-menu-pointer-20261020/pointer-regression.txt)为 **96 tests / 0 failures / 0 skipped**；普通 Release 与 strict / deep 签名通过，身份见[第三版预检](../u01-menu-pointer-20261020/preflight.json)。
+
+第二版 PID 22058 已正常退出，第三版“Dynamic Island Menu Return”（本次 PID 23408）启动并记录事件。用户已确认第三轮返回保持及正常离开后回到内置计时，见[第三版当前结果](../u01-menu-pointer-20261020/result.json)；其余交互收尾仍待。本目录保留第二版 92 项、构建身份与两轮用户失败的原始范围，U01 仍为 `in progress`，原 T01–T40 仍为 37 verified / 3 in progress。
