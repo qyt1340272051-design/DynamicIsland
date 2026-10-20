@@ -30,5 +30,13 @@
     "axFile": "seven-menu-before-physical-return.txt",
     "imageFile": "seven-menu-before-physical-return.jpg",
     "imageSHA256": "d036da8f1c73212e95914c13f1905fbd59dc5095c2509b987622082ad4d50d98"
+  },
+  {
+    "label": "after-user-reported-premature-fold",
+    "startedEpochMs": 1792483899135,
+    "observedEpochMs": 1792483899263,
+    "axFile": "after-user-reported-premature-fold.txt",
+    "imageFile": "after-user-reported-premature-fold.jpg",
+    "imageSHA256": "298256f10c3a471455657fa4ce3aa2e34cb5aa63c848033aedf38f34c0a20cfa"
   }
 ]

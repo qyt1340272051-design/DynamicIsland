@@ -108,6 +108,163 @@ final class IslandToolMenuInteractionTests: XCTestCase {
         XCTAssertEqual(fixture.dispatch(tool), .inactiveActivity)
     }
 
+    func testBriefReturnThenExitKeepsOriginalMenuGraceAndToolSelection() async throws {
+        let fixture = try ToolMenuInteractionFixture()
+        defer { fixture.shutdown() }
+        let tool = try fixture.tool("alpha")
+        XCTAssertTrue(fixture.runtime.selectTool(tool))
+        let menu = try XCTUnwrap(fixture.model.beginToolMenuInteraction())
+        fixture.model.endHovering()
+        fixture.model.endToolMenuInteraction(menu)
+
+        // A sampled inside value immediately after menu close may be followed
+        // by an outside value before the user has returned to the island.
+        fixture.model.beginHoveringAfterDelay()
+        fixture.model.endHovering()
+        XCTAssertFalse(fixture.model.isPointerInside)
+        XCTAssertTrue(fixture.model.isToolMenuInteractionCurrent(menu))
+        XCTAssertTrue(fixture.model.isHovering)
+        XCTAssertEqual(fixture.model.presentationState, .expanded)
+        XCTAssertEqual(fixture.model.expandedSurface, .tools)
+        XCTAssertEqual(fixture.runtime.manager.selectedToolSnapshot?.instanceToken, tool.instanceToken)
+        XCTAssertEqual(fixture.dispatch(tool), .handled)
+
+        try await waitUntil { !fixture.model.isToolMenuInteractionCurrent(menu) }
+        XCTAssertEqual(fixture.model.presentationState, .compact)
+        XCTAssertNil(fixture.runtime.manager.selectedToolSnapshot)
+        XCTAssertEqual(fixture.dispatch(tool), .inactiveActivity)
+    }
+
+    func testCloseWithInsidePointerThenRepeatedReturnsCannotConsumeOrExtendOriginalGrace() async throws {
+        let fixture = try ToolMenuInteractionFixture()
+        defer { fixture.shutdown() }
+        let tool = try fixture.tool("alpha")
+        XCTAssertTrue(fixture.runtime.selectTool(tool))
+        let menu = try XCTUnwrap(fixture.model.beginToolMenuInteraction())
+        XCTAssertTrue(fixture.model.isPointerInside)
+        fixture.model.endToolMenuInteraction(menu)
+        fixture.model.endHovering()
+        fixture.model.beginHoveringAfterDelay()
+        fixture.model.endHovering()
+        XCTAssertTrue(fixture.model.isToolMenuInteractionCurrent(menu))
+        XCTAssertEqual(fixture.model.presentationState, .expanded)
+        XCTAssertEqual(fixture.runtime.manager.selectedToolSnapshot?.instanceToken, tool.instanceToken)
+
+        // Keep delivering inside/outside samples while waiting. A return must
+        // neither consume the hold immediately nor restart its original timer.
+        // The generous deadline checks eventual expiry without asserting an
+        // exact scheduling interval for the fixture's 40 ms return period.
+        let deadline = ContinuousClock.now.advanced(by: .seconds(4))
+        while fixture.model.isToolMenuInteractionCurrent(menu) {
+            guard ContinuousClock.now < deadline else {
+                XCTFail("Pointer sampling kept extending the original menu return period.")
+                throw ToolMenuInteractionTestError.timedOut
+            }
+            fixture.model.beginHoveringAfterDelay()
+            fixture.model.endHovering()
+            XCTAssertTrue(fixture.model.isToolMenuInteractionCurrent(menu))
+            XCTAssertFalse(fixture.model.isPointerInside)
+            XCTAssertTrue(fixture.model.isHovering)
+            XCTAssertEqual(fixture.model.presentationState, .expanded)
+            XCTAssertEqual(fixture.runtime.manager.selectedToolSnapshot?.instanceToken, tool.instanceToken)
+            try await Task.sleep(for: .milliseconds(2))
+        }
+
+        XCTAssertFalse(fixture.model.isPointerInside)
+        XCTAssertEqual(fixture.model.presentationState, .compact)
+        XCTAssertNil(fixture.runtime.manager.selectedToolSnapshot)
+        XCTAssertEqual(fixture.dispatch(tool), .inactiveActivity)
+    }
+
+    func testCompletionTransfersToHostGraceBeforeSelectionAndControlLifetimeChanges() async throws {
+        let fixture = try ToolMenuInteractionFixture()
+        defer { fixture.shutdown() }
+        let first = try fixture.tool("alpha")
+        let second = try fixture.tool("beta")
+        XCTAssertTrue(fixture.runtime.selectTool(first))
+        let menu = try XCTUnwrap(fixture.model.beginToolMenuInteraction())
+        fixture.model.endHovering()
+        var callbacks: [String] = []
+        var enteredGraceBeforeSelection = false
+        var oldControlIsAttached = true
+
+        IslandToolMenuCompletion.complete(session: menu, onEnded: { id in
+            callbacks.append("end")
+            XCTAssertEqual(id, menu)
+            fixture.model.endToolMenuInteraction(id)
+            enteredGraceBeforeSelection = fixture.model.isToolMenuInteractionCurrent(id)
+        }, isCurrent: { id in
+            callbacks.append("isCurrent")
+            // The Host token, rather than a native control's lifetime, owns
+            // validity after tracking ends.
+            return fixture.model.isToolMenuInteractionCurrent(id)
+        }, selection: {
+            callbacks.append("selection")
+            XCTAssertTrue(enteredGraceBeforeSelection)
+            XCTAssertFalse(fixture.model.isPointerInside)
+            XCTAssertEqual(fixture.model.presentationState, .expanded)
+            XCTAssertTrue(fixture.runtime.selectTool(second))
+
+            // Simulate a callback rebuilding its control. This is a lifetime
+            // spy, not a real AppKit Coordinator reconstruction test.
+            oldControlIsAttached = false
+            XCTAssertTrue(fixture.model.isToolMenuInteractionCurrent(menu))
+            XCTAssertEqual(fixture.runtime.manager.selectedToolSnapshot?.instanceToken, second.instanceToken)
+            XCTAssertEqual(fixture.dispatch(second), .handled)
+        })
+
+        XCTAssertEqual(callbacks, ["end", "isCurrent", "selection"])
+        XCTAssertTrue(enteredGraceBeforeSelection)
+        XCTAssertFalse(oldControlIsAttached)
+        XCTAssertTrue(fixture.model.isToolMenuInteractionCurrent(menu))
+        XCTAssertEqual(fixture.model.expandedSurface, .tools)
+        XCTAssertEqual(fixture.dispatch(first), .inactiveActivity)
+        XCTAssertEqual(fixture.handledActions[second.activity.id], 1)
+
+        try await waitUntil { !fixture.model.isToolMenuInteractionCurrent(menu) }
+        XCTAssertEqual(fixture.model.presentationState, .compact)
+        XCTAssertNil(fixture.runtime.manager.selectedToolSnapshot)
+        XCTAssertEqual(fixture.dispatch(second), .inactiveActivity)
+    }
+
+    func testCompletionSkipsSelectionWhenEndingTrackingHidesOrDragsHost() throws {
+        enum Interruption: CaseIterable { case hide, drag }
+        for interruption in Interruption.allCases {
+            let fixture = try ToolMenuInteractionFixture()
+            defer { fixture.shutdown() }
+            let first = try fixture.tool("alpha")
+            let second = try fixture.tool("beta")
+            XCTAssertTrue(fixture.runtime.selectTool(first))
+            let menu = try XCTUnwrap(fixture.model.beginToolMenuInteraction())
+            fixture.model.endHovering()
+            var callbacks: [String] = []
+            var didSelect = false
+
+            IslandToolMenuCompletion.complete(session: menu, onEnded: { id in
+                callbacks.append("end")
+                fixture.model.endToolMenuInteraction(id)
+                switch interruption {
+                case .hide: fixture.model.setIslandPanelVisible(false)
+                case .drag: fixture.model.setDragging(true)
+                }
+            }, isCurrent: { id in
+                callbacks.append("isCurrent")
+                return fixture.model.isToolMenuInteractionCurrent(id)
+            }, selection: {
+                callbacks.append("selection")
+                didSelect = true
+                _ = fixture.runtime.selectTool(second)
+            })
+
+            XCTAssertEqual(callbacks, ["end", "isCurrent"], "\(interruption)")
+            XCTAssertFalse(didSelect, "\(interruption)")
+            XCTAssertFalse(fixture.model.isToolMenuInteractionCurrent(menu), "\(interruption)")
+            XCTAssertNil(fixture.runtime.manager.selectedToolSnapshot, "\(interruption)")
+            XCTAssertEqual(fixture.dispatch(first), .inactiveActivity, "\(interruption)")
+            XCTAssertEqual(fixture.dispatch(second), .inactiveActivity, "\(interruption)")
+        }
+    }
+
     func testReopenedMenuRejectsOldCloseCancelAndDeadline() async throws {
         let fixture = try ToolMenuInteractionFixture()
         defer { fixture.shutdown() }

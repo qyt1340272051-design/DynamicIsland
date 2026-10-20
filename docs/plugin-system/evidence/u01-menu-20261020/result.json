@@ -1,7 +1,7 @@
 {
   "date": "2026-10-20",
   "observedUTC": "2026-10-20T08:03:32.449813+00:00",
-  "status": "Implementation and targeted regression passed; real native menu and physical pointer acceptance pending",
+  "status": "First physical pointer return acceptance failed; candidate superseded by repair",
   "U01TaskStatus": "in progress",
   "defaultMenuReturnGraceSeconds": 1,
   "menuTrackingHoldImplemented": true,
@@ -24,9 +24,9 @@
   "strictDeepSignaturePassed": true,
   "independentReadOnlyCodeReview": "No blocking issues found; native menu order, stale token, cancellation and cleanup inspected",
   "productionSourceHashCount": 102,
-  "currentSourceMatchesFinalBuiltCopy": true,
+  "currentSourceMatchesFinalBuiltCopy": false,
   "finalAppPID": 19822,
-  "finalAppRunning": true,
+  "finalAppRunning": false,
   "actualInventoryObservedRunning": 6,
   "actualInventoryAX": "inventory-ax.txt",
   "realMenuOpened": true,
@@ -34,7 +34,7 @@
   "physicalPointerReturnVerified": false,
   "realKeyboardAndCancellationVerified": false,
   "normalQuitAfterFinalAcceptanceVerified": false,
-  "pendingHumanRequest": "User confirmed expanded. Awaiting physical move to bottom menu item, pause, choose, then return to island after about half a second.",
+  "pendingHumanRequest": "First attempt finished with user-reported failure; follow-up is tracked in repair evidence.",
   "testLogSHA256": "5771d8b65b867ec85c047135cd2c0e9e7a0e48db2c408ca34dd0f188414f02cf",
   "releaseBuildLogSHA256": "698881c948c9997672328d60b7dd6fca49b5ecdcb92c146ed991710c3d0ec781",
   "preflight": "preflight.json",
@@ -51,5 +51,10 @@
     "bottom-tool-focus.txt"
   ],
   "readOnlyPointerWatch": "pointer-watch.json",
-  "pointerWatchScope": "438 AX observations over about 22 seconds all showed expanded menu. No pointer coordinates observed; does not prove a physical traversal."
+  "pointerWatchScope": "438 AX observations over about 22 seconds all showed expanded menu. No pointer coordinates observed; does not prove a physical traversal.",
+  "firstPhysicalAttemptPassed": false,
+  "physicalFailureEvidence": "../u01-menu-repair-20261020/physical-return-attempt-1.json",
+  "failedCandidateNormallyQuit": true,
+  "failedCandidateQuitRequestedUTC": "2026-10-20T08:15:32.661Z",
+  "sourceBindingScope": "Historical first candidate only; current repaired production sources are bound in ../u01-menu-repair-20261020/preflight.json"
 }

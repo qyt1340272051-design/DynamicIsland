@@ -1,0 +1,38 @@
+{
+  "observedUTC": "2026-10-20T08:20:33.638252+00:00",
+  "status": "Repair built and 92 targeted tests passed; second physical return attempt pending",
+  "U01TaskStatus": "in progress",
+  "firstPhysicalAttempt": "physical-return-attempt-1.json",
+  "firstPhysicalAttemptPassed": false,
+  "oldCallbackRootCauseConfirmed": false,
+  "fixedMechanisms": [
+    "Transfer bounded return hold to VM before tool selection can rebuild native control",
+    "Remove redundant didClose callback-order prerequisite",
+    "Keep original return deadline through transient pointer entry/exit without extending it"
+  ],
+  "menuReturnGraceSeconds": 1,
+  "targetedTests": {
+    "total": 92,
+    "failures": 0,
+    "skipped": 0,
+    "menuTests": 14,
+    "existingTests": 78
+  },
+  "redVMRegression": {
+    "tests": 2,
+    "assertionFailures": 8,
+    "scope": "VM deadline correction not yet applied; native completion ordering had already changed"
+  },
+  "releaseBuildPassed": true,
+  "strictDeepSignaturePassed": true,
+  "currentSourceBinding": "preflight.json",
+  "appPID": 22058,
+  "appRunning": true,
+  "traceCaptureSessionID": 68771,
+  "traceTemporaryPath": "/tmp/dynamic-island-u01-repair-20261020/menu-trace.ndjson",
+  "traceContent": "Fixed event codes, random Host session ID, pointerInside and hovering booleans; no plugin names or pointer coordinates",
+  "secondPhysicalAttemptPassed": null,
+  "pendingHumanRequest": "Open tool menu in Menu Repair, physically choose bottom dual-button tool, pause about half a second, then return and keep expanded",
+  "publiclyPublished": false,
+  "remotePushed": false
+}

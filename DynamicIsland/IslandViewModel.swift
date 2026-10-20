@@ -264,7 +264,10 @@ public final class IslandViewModel: ObservableObject {
         isPointerInside = false
         // Menu tracking and its bounded return period keep the same expanded
         // publication that Runtime observes, even outside the island's frame.
-        guard toolMenuInteractionID == nil else { return }
+        if let id = toolMenuInteractionID {
+            traceToolMenu("vm.pointerExit.hold", session: id)
+            return
+        }
         isHovering = false
         updateExpansionFeedback(allowsHaptic: false)
     }
@@ -280,6 +283,7 @@ public final class IslandViewModel: ObservableObject {
         toolMenuInteractionID = id
         isToolMenuTracking = true
         if !isHovering { isHovering = true }
+        traceToolMenu("vm.begin", session: id)
         updateExpansionFeedback(allowsHaptic: false)
         return id
     }
@@ -291,6 +295,7 @@ public final class IslandViewModel: ObservableObject {
     func endToolMenuInteraction(_ id: UUID) {
         guard isToolMenuInteractionCurrent(id), isToolMenuTracking else { return }
         isToolMenuTracking = false
+        traceToolMenu("vm.grace.begin", session: id)
         // AppKit menu tracking may pause the default-mode pointer timer. Always
         // grant the return period, including when its last inside value is stale.
         toolMenuReturnTask = Task { [weak self, toolMenuReturnDelayNanoseconds] in
@@ -301,6 +306,7 @@ public final class IslandViewModel: ObservableObject {
                   self.toolMenuInteractionID == id, !self.isToolMenuTracking else { return }
             self.toolMenuReturnTask = nil
             self.toolMenuInteractionID = nil
+            self.traceToolMenu("vm.grace.expired", session: id)
             if !self.isPointerInside {
                 self.isHovering = false
                 self.updateExpansionFeedback(allowsHaptic: false)
@@ -314,7 +320,8 @@ public final class IslandViewModel: ObservableObject {
     }
 
     func cancelToolMenuInteraction() {
-        guard toolMenuInteractionID != nil else { return }
+        guard let id = toolMenuInteractionID else { return }
+        traceToolMenu("vm.cancel", session: id)
         toolMenuReturnTask?.cancel()
         toolMenuReturnTask = nil
         toolMenuInteractionID = nil
@@ -327,13 +334,18 @@ public final class IslandViewModel: ObservableObject {
 
     private func resumeHoveringDuringToolMenuInteraction() {
         isPointerInside = true
-        if !isToolMenuTracking {
-            toolMenuReturnTask?.cancel()
-            toolMenuReturnTask = nil
-            toolMenuInteractionID = nil
+        if let id = toolMenuInteractionID {
+            traceToolMenu(isToolMenuTracking ? "vm.pointerEnter.tracking" : "vm.pointerEnter.grace", session: id)
         }
+        // Keep the original deadline through transient inside/outside samples.
+        // Neither an early entry nor repeated entries may consume or extend it.
         if !isHovering { isHovering = true }
         updateExpansionFeedback(allowsHaptic: false)
+    }
+
+    private func traceToolMenu(_ event: String, session: UUID) {
+        IslandToolMenuTrace.record(event: event, session: session,
+                                  pointerInside: isPointerInside, hovering: isHovering)
     }
 
     public func setDragging(_ dragging: Bool) {

@@ -1,5 +1,40 @@
 import AppKit
+import OSLog
 import SwiftUI
+
+@MainActor
+enum IslandToolMenuTrace {
+    private static let logger = Logger(subsystem: "com.rong5.dynamic-island", category: "ToolMenu")
+
+    static func record(event: String, session: UUID,
+                       pointerInside: Bool? = nil, hovering: Bool? = nil) {
+        let pointer = pointerInside.map { $0 ? "true" : "false" } ?? "-"
+        let hover = hovering.map { $0 ? "true" : "false" } ?? "-"
+        logger.info("event=\(event, privacy: .public) session=\(session.uuidString, privacy: .public) pointerInside=\(pointer, privacy: .public) hovering=\(hover, privacy: .public)")
+    }
+}
+
+/// Once tracking ends, the VM owns the bounded return period. Selection may
+/// rebuild the native control, so its lifetime must no longer own that hold.
+@MainActor
+enum IslandToolMenuCompletion {
+    static func complete(session: UUID,
+                         onEnded: @MainActor (UUID) -> Void,
+                         isCurrent: @MainActor (UUID) -> Bool,
+                         selection: (@MainActor () -> Void)?) {
+        IslandToolMenuTrace.record(event: "native.end", session: session)
+        onEnded(session)
+        // A real hide, drag, or Host interruption revokes the token. A normal
+        // replacement of the old SwiftUI/AppKit control does not revoke it.
+        guard isCurrent(session) else {
+            IslandToolMenuTrace.record(event: "native.selection.sessionInvalid", session: session)
+            return
+        }
+        guard let selection else { return }
+        IslandToolMenuTrace.record(event: "native.selection", session: session)
+        selection()
+    }
+}
 
 /// Keeps the Host's tool-selection hold alive for AppKit's entire tracking loop.
 /// The first entry is the built-in timer; subsequent entries are plugin snapshots.
@@ -42,7 +77,7 @@ struct IslandToolMenu: NSViewRepresentable {
         button.target = context.coordinator
         button.action = #selector(Coordinator.openMenu(_:))
         button.onWindowDetached = { [weak coordinator = context.coordinator] in
-            coordinator?.cancelActiveMenu()
+            coordinator?.cancelActiveMenu(reason: .windowDetached)
         }
         context.coordinator.update(self, button: button,
                                    enabled: isEnabled && context.environment.isEnabled)
@@ -55,7 +90,7 @@ struct IslandToolMenu: NSViewRepresentable {
     }
 
     static func dismantleNSView(_ button: ToolButton, coordinator: Coordinator) {
-        coordinator.invalidate()
+        coordinator.invalidate(reason: .dismantle)
         button.onWindowDetached = nil
         button.target = nil
         button.action = nil
@@ -84,6 +119,10 @@ struct IslandToolMenu: NSViewRepresentable {
 
     @MainActor
     final class Coordinator: NSObject, NSMenuDelegate {
+        enum CancellationReason: String {
+            case updateDisabled, windowDetached, dismantle, invalidate, sessionInvalid
+        }
+
         @MainActor
         private final class Session {
             let token: UUID
@@ -93,7 +132,6 @@ struct IslandToolMenu: NSViewRepresentable {
             let isCurrent: @MainActor (UUID) -> Bool
             let menu: NSMenu
             var didOpen = false
-            var didClose = false
             var pendingSelection: Entry?
 
             init(token: UUID, configuration: IslandToolMenu, menu: NSMenu) {
@@ -121,7 +159,7 @@ struct IslandToolMenu: NSViewRepresentable {
             button.applySelectionStyle(configuration.isSelected)
             // Updating selection styling or the next menu's snapshots must not
             // mutate the menu currently being tracked by AppKit.
-            if !enabled { cancelActiveMenu() }
+            if !enabled { cancelActiveMenu(reason: .updateDisabled) }
         }
 
         @objc func openMenu(_ sender: NSButton) {
@@ -133,9 +171,11 @@ struct IslandToolMenu: NSViewRepresentable {
             // Acquire before entering AppKit's nested tracking loop. A Host that
             // has hidden/collapsed the island can refuse this interaction.
             guard let token = configuration.onTrackingBegan() else { return }
+            IslandToolMenuTrace.record(event: "native.begin", session: token)
             let session = Session(token: token, configuration: configuration, menu: menu)
             guard !isInvalidated, enabled, button.window != nil,
                   session.isCurrent(token) else {
+                IslandToolMenuTrace.record(event: "native.cancel.sessionInvalid", session: token)
                 session.onCancelled(token)
                 return
             }
@@ -144,9 +184,11 @@ struct IslandToolMenu: NSViewRepresentable {
 
             // NSMenu confines itself to the screen and supplies native scrolling,
             // keyboard navigation, Escape, and outside-click cancellation.
-            _ = menu.popUp(positioning: nil,
-                           at: NSPoint(x: button.bounds.minX, y: button.bounds.minY - 4),
-                           in: button)
+            let selected = menu.popUp(positioning: nil,
+                                      at: NSPoint(x: button.bounds.minX, y: button.bounds.minY - 4),
+                                      in: button)
+            IslandToolMenuTrace.record(event: selected ? "native.popUpReturn.selected" : "native.popUpReturn.cancelled",
+                                      session: token)
             finish(session)
         }
 
@@ -171,23 +213,25 @@ struct IslandToolMenu: NSViewRepresentable {
             guard let session = activeSession, item.menu === session.menu,
                   let index = item.representedObject as? NSNumber,
                   session.entries.indices.contains(index.intValue) else { return }
+            IslandToolMenuTrace.record(event: "native.choose", session: session.token)
             guard canComplete(session) else {
-                cancelActiveMenu()
+                cancelActiveMenu(reason: .sessionInvalid)
                 return
             }
             // menuDidClose may precede the item's action. Keep the snapshot and
-            // defer its selection until popUp has returned, with the hold intact.
+            // defer its selection until popUp returns and the VM owns the hold.
             session.pendingSelection = session.entries[index.intValue]
         }
 
         func menuWillOpen(_ menu: NSMenu) {
             guard let session = activeSession, session.menu === menu else { return }
             session.didOpen = true
+            IslandToolMenuTrace.record(event: "native.willOpen", session: session.token)
         }
 
         func menuDidClose(_ menu: NSMenu) {
             guard let session = activeSession, session.menu === menu else { return }
-            session.didClose = true
+            IslandToolMenuTrace.record(event: "native.didClose", session: session.token)
         }
 
         private func canComplete(_ session: Session) -> Bool {
@@ -196,26 +240,29 @@ struct IslandToolMenu: NSViewRepresentable {
         }
 
         private func finish(_ session: Session) {
+            IslandToolMenuTrace.record(event: "native.finish", session: session.token)
             guard activeSession === session else { return }
-            guard canComplete(session), session.didOpen, session.didClose else {
-                cancelActiveMenu()
+            // popUp returning is the tracking boundary; do not require a
+            // delegate/action callback order that AppKit does not guarantee.
+            guard canComplete(session), session.didOpen else {
+                cancelActiveMenu(reason: .sessionInvalid)
                 return
             }
-            session.pendingSelection?.onSelect()
-            // Selection can synchronously hide or dismantle the host view.
-            guard activeSession === session else { return }
-            guard canComplete(session) else {
-                cancelActiveMenu()
-                return
-            }
+            let selection = session.pendingSelection?.onSelect
+            // Transfer ownership before callbacks can publish new content and
+            // synchronously detach or dismantle this native control.
             activeSession = nil
             session.menu.delegate = nil
             session.pendingSelection = nil
-            session.onEnded(session.token)
+            IslandToolMenuCompletion.complete(session: session.token,
+                                              onEnded: session.onEnded,
+                                              isCurrent: session.isCurrent,
+                                              selection: selection)
         }
 
-        func cancelActiveMenu() {
+        func cancelActiveMenu(reason: CancellationReason = .sessionInvalid) {
             guard let session = activeSession else { return }
+            IslandToolMenuTrace.record(event: "native.cancel.\(reason.rawValue)", session: session.token)
             // Clear first: cancelTracking and Host callbacks can reenter through
             // SwiftUI dismantling or the native menu delegate.
             activeSession = nil
@@ -225,12 +272,15 @@ struct IslandToolMenu: NSViewRepresentable {
             session.onCancelled(session.token)
         }
 
-        func invalidate() {
+        func invalidate(reason: CancellationReason = .invalidate) {
             guard !isInvalidated else { return }
+            if let session = activeSession {
+                IslandToolMenuTrace.record(event: "native.invalidate", session: session.token)
+            }
             isInvalidated = true
             enabled = false
             configuration = nil
-            cancelActiveMenu()
+            cancelActiveMenu(reason: reason)
             button = nil
         }
     }

@@ -1,0 +1,4 @@
+# Preserve original Xcode output byte-for-byte.
+grace-before-fix.txt -whitespace
+regression-after-fix.txt -whitespace
+release-build.txt -whitespace
