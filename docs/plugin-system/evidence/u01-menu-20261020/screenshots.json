@@ -1,0 +1,10 @@
+[
+  {
+    "label": "initial",
+    "startedEpochMs": 1792482087113,
+    "observedEpochMs": 1792482087192,
+    "axFile": "initial.txt",
+    "imageFile": "initial.jpg",
+    "imageSHA256": "298256f10c3a471455657fa4ce3aa2e34cb5aa63c848033aedf38f34c0a20cfa"
+  }
+]

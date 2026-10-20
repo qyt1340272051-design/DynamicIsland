@@ -101,6 +101,7 @@ public final class IslandActivityRuntime {
 
     /// App teardown also removes the scheduler's system observers and deadline.
     public func shutdownPlugins() {
+        viewModel?.cancelToolMenuInteraction()
         toolContextObservation?.cancel()
         toolContextObservation = nil
         manager.setPresentationRequestsAllowed(false)

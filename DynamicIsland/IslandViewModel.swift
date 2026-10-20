@@ -30,7 +30,12 @@ public nonisolated struct VolumeActivityEvent: Equatable, Sendable {
 public final class IslandViewModel: ObservableObject {
     @Published private(set) var isIslandPanelVisible = true
 
-    func setIslandPanelVisible(_ visible: Bool) { isIslandPanelVisible = visible }
+    func setIslandPanelVisible(_ visible: Bool) {
+        isIslandPanelVisible = visible
+        if !visible {
+            cancelToolMenuInteraction()
+        }
+    }
 
     @Published public private(set) var isPointerInside = false
     @Published public private(set) var isHovering = false
@@ -55,6 +60,10 @@ public final class IslandViewModel: ObservableObject {
 
     private let hoverExpansionDelayNanoseconds: UInt64
     private var hoverTask: Task<Void, Never>?
+    private let toolMenuReturnDelayNanoseconds: UInt64
+    private var toolMenuInteractionID: UUID?
+    private var isToolMenuTracking = false
+    private var toolMenuReturnTask: Task<Void, Never>?
     private let volumeService: VolumeService
     private let fileTrayService: FileTrayService
     private let sharingService: SharingService
@@ -94,6 +103,7 @@ public final class IslandViewModel: ObservableObject {
     }
 
     public nonisolated static let defaultHoverExpansionDelayNanoseconds: UInt64 = 350_000_000
+    public nonisolated static let defaultToolMenuReturnDelayNanoseconds: UInt64 = 1_000_000_000
     public nonisolated static let volumeAdjustmentStep: Float = 1.0 / 16.0
 
     public convenience init() {
@@ -114,7 +124,8 @@ public final class IslandViewModel: ObservableObject {
         musicService: MusicControlService,
         hapticFeedbackService: HapticFeedbackService,
         hoverExpansionDelayNanoseconds: UInt64 = IslandViewModel.defaultHoverExpansionDelayNanoseconds,
-        nowPlayingPollIntervalNanoseconds: UInt64 = 1_500_000_000
+        nowPlayingPollIntervalNanoseconds: UInt64 = 1_500_000_000,
+        toolMenuReturnDelayNanoseconds: UInt64 = IslandViewModel.defaultToolMenuReturnDelayNanoseconds
     ) {
         self.volumeService = volumeService
         self.fileTrayService = fileTrayService
@@ -123,6 +134,7 @@ public final class IslandViewModel: ObservableObject {
         self.hapticFeedbackService = hapticFeedbackService
         self.timerTools = IslandTimerToolsModel()
         self.hoverExpansionDelayNanoseconds = hoverExpansionDelayNanoseconds
+        self.toolMenuReturnDelayNanoseconds = toolMenuReturnDelayNanoseconds
         self.nowPlayingPollIntervalNanoseconds = nowPlayingPollIntervalNanoseconds
         let initialVolume = Self.clampedVolume((try? volumeService.currentVolume()) ?? 0.5)
         self.volume = initialVolume
@@ -135,6 +147,7 @@ public final class IslandViewModel: ObservableObject {
 
     deinit {
         hoverTask?.cancel()
+        toolMenuReturnTask?.cancel()
         nowPlayingPollTask?.cancel()
         playbackProgressTask?.cancel()
         playbackSeekTask?.cancel()
@@ -168,6 +181,14 @@ public final class IslandViewModel: ObservableObject {
     }
 
     public func setHovering(_ hovering: Bool) {
+        if toolMenuInteractionID != nil {
+            if hovering {
+                resumeHoveringDuringToolMenuInteraction()
+            } else {
+                endHovering()
+            }
+            return
+        }
         hoverTask?.cancel()
         hoverTask = nil
 
@@ -190,7 +211,12 @@ public final class IslandViewModel: ObservableObject {
     }
 
     public func beginHoveringAfterDelay() {
-        guard !suppressesHoverExpansionUntilPointerExit else {
+        guard isIslandPanelVisible, !suppressesHoverExpansionUntilPointerExit else {
+            return
+        }
+
+        if toolMenuInteractionID != nil {
+            resumeHoveringDuringToolMenuInteraction()
             return
         }
 
@@ -236,7 +262,77 @@ public final class IslandViewModel: ObservableObject {
             return
         }
         isPointerInside = false
+        // Menu tracking and its bounded return period keep the same expanded
+        // publication that Runtime observes, even outside the island's frame.
+        guard toolMenuInteractionID == nil else { return }
         isHovering = false
+        updateExpansionFeedback(allowsHaptic: false)
+    }
+
+    func beginToolMenuInteraction() -> UUID? {
+        guard isIslandPanelVisible, presentationState == .expanded,
+              !isDragging, !isTimerCompletionPresented else { return nil }
+        hoverTask?.cancel()
+        hoverTask = nil
+        toolMenuReturnTask?.cancel()
+        toolMenuReturnTask = nil
+        let id = UUID()
+        toolMenuInteractionID = id
+        isToolMenuTracking = true
+        if !isHovering { isHovering = true }
+        updateExpansionFeedback(allowsHaptic: false)
+        return id
+    }
+
+    func isToolMenuInteractionCurrent(_ id: UUID) -> Bool {
+        toolMenuInteractionID == id && isIslandPanelVisible
+    }
+
+    func endToolMenuInteraction(_ id: UUID) {
+        guard isToolMenuInteractionCurrent(id), isToolMenuTracking else { return }
+        isToolMenuTracking = false
+        // AppKit menu tracking may pause the default-mode pointer timer. Always
+        // grant the return period, including when its last inside value is stale.
+        toolMenuReturnTask = Task { [weak self, toolMenuReturnDelayNanoseconds] in
+            do {
+                try await Task.sleep(nanoseconds: toolMenuReturnDelayNanoseconds)
+            } catch { return }
+            guard let self, !Task.isCancelled,
+                  self.toolMenuInteractionID == id, !self.isToolMenuTracking else { return }
+            self.toolMenuReturnTask = nil
+            self.toolMenuInteractionID = nil
+            if !self.isPointerInside {
+                self.isHovering = false
+                self.updateExpansionFeedback(allowsHaptic: false)
+            }
+        }
+    }
+
+    func cancelToolMenuInteraction(_ id: UUID) {
+        guard toolMenuInteractionID == id else { return }
+        cancelToolMenuInteraction()
+    }
+
+    func cancelToolMenuInteraction() {
+        guard toolMenuInteractionID != nil else { return }
+        toolMenuReturnTask?.cancel()
+        toolMenuReturnTask = nil
+        toolMenuInteractionID = nil
+        isToolMenuTracking = false
+        if !isPointerInside {
+            isHovering = false
+            updateExpansionFeedback(allowsHaptic: false)
+        }
+    }
+
+    private func resumeHoveringDuringToolMenuInteraction() {
+        isPointerInside = true
+        if !isToolMenuTracking {
+            toolMenuReturnTask?.cancel()
+            toolMenuReturnTask = nil
+            toolMenuInteractionID = nil
+        }
+        if !isHovering { isHovering = true }
         updateExpansionFeedback(allowsHaptic: false)
     }
 
@@ -245,6 +341,7 @@ public final class IslandViewModel: ObservableObject {
             return
         }
         if dragging {
+            cancelToolMenuInteraction()
             if isSeekingPlayback {
                 finishPlaybackSeek(to: nowPlaying.progress)
             }
@@ -256,6 +353,7 @@ public final class IslandViewModel: ObservableObject {
 
     public func selectExpandedSurface(_ surface: IslandExpandedSurface) {
         let targetSurface: IslandExpandedSurface = isTimerCompletionPresented ? .tools : surface
+        if targetSurface != .tools { cancelToolMenuInteraction() }
         if targetSurface != .music, isSeekingPlayback {
             finishPlaybackSeek(to: nowPlaying.progress)
         }
@@ -275,6 +373,7 @@ public final class IslandViewModel: ObservableObject {
             return
         }
 
+        cancelToolMenuInteraction()
         hoverTask?.cancel()
         hoverTask = nil
         timerTools.acknowledgeCompletion()
@@ -790,6 +889,7 @@ public final class IslandViewModel: ObservableObject {
         timerTools.selectedMode = mode
         expandedSurface = .tools
         isTimerCompletionPresented = true
+        cancelToolMenuInteraction()
         updateExpansionFeedback()
     }
 

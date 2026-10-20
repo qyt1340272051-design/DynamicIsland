@@ -1,0 +1,706 @@
+Command line invocation:
+    /Applications/Xcode.app/Contents/Developer/usr/bin/xcodebuild test -project DynamicIsland.xcodeproj -scheme "Dynamic Island" -destination platform=macOS -derivedDataPath /tmp/dynamic-island-ci-derived-data -resultBundlePath /tmp/dynamic-island-u01-20261020/TargetedTests-Fixed.xcresult -parallel-testing-enabled NO "-only-testing:DynamicIslandTests/IslandToolMenuInteractionTests" "-only-testing:DynamicIslandTests/IslandViewModelTests" "-only-testing:DynamicIslandTests/IslandActivityRuntimeTests" "-only-testing:DynamicIslandTests/IslandPanelHoverRegionTests"
+
+Writing result bundle at path:
+	/tmp/dynamic-island-u01-20261020/TargetedTests-Fixed.xcresult
+
+--- xcodebuild: WARNING: Using the first of multiple matching destinations:
+{ platform:macOS, arch:arm64, id:00008132-001E49513A0B801C, name:My Mac }
+{ platform:macOS, arch:x86_64, id:00008132-001E49513A0B801C, name:My Mac }
+ComputePackagePrebuildTargetDependencyGraph
+
+Prepare packages
+
+CreateBuildRequest
+
+SendProjectDescription
+
+CreateBuildOperation
+
+ComputeTargetDependencyGraph
+note: Building targets in dependency order
+note: Target dependency graph (2 targets)
+    Target 'DynamicIslandTests' in project 'DynamicIsland'
+        ➜ Explicit dependency on target 'Dynamic Island' in project 'DynamicIsland'
+    Target 'Dynamic Island' in project 'DynamicIsland' (no dependencies)
+
+GatherProvisioningInputs
+
+CreateBuildDescription
+
+ExecuteExternalTool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -v -E -dM -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.5.sdk -x c -c /dev/null
+
+ExecuteExternalTool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc --version
+
+ExecuteExternalTool /Applications/Xcode.app/Contents/Developer/usr/bin/actool --version --output-format xml1
+
+ExecuteExternalTool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ld -version_details
+
+Build description signature: 754f1f881dfa5ac61141b582244056f7
+Build description path: /tmp/dynamic-island-ci-derived-data/Build/Intermediates.noindex/XCBuildData/754f1f881dfa5ac61141b582244056f7.xcbuilddata
+ClangStatCache /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang-stat-cache /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.5.sdk /tmp/dynamic-island-ci-derived-data/SDKStatCaches.noindex/macosx26.5-25F70-688ef53f1462e2c8f657fdc38a81448fe082c4a02f00227109f4ed75e425c832.sdkstatcache
+    cd /Users/rong5/Dynamiclsland/DynamicIsland.xcodeproj
+    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang-stat-cache /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.5.sdk -o /tmp/dynamic-island-ci-derived-data/SDKStatCaches.noindex/macosx26.5-25F70-688ef53f1462e2c8f657fdc38a81448fe082c4a02f00227109f4ed75e425c832.sdkstatcache
+
+note: Disabling hardened runtime with ad-hoc codesigning. (in target 'Dynamic Island' from project 'DynamicIsland')
+SwiftDriver Dynamic\ Island normal arm64 com.apple.xcode.tools.swift.compiler (in target 'Dynamic Island' from project 'DynamicIsland')
+    cd /Users/rong5/Dynamiclsland
+    builtin-SwiftDriver -- /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc -module-name DynamicIsland -Onone @/tmp/dynamic-island-ci-derived-data/Build/Intermediates.noindex/DynamicIsland.build/Debug/Dynamic\ Island.build/Objects-normal/arm64/Dynamic\ Island.SwiftFileList -DDEBUG -default-isolation\=MainActor -enable-bare-slash-regex -enable-upcoming-feature DisableOutwardActorInference -enable-upcoming-feature InferSendableFromCaptures -enable-upcoming-feature GlobalActorIsolatedTypesUsability -enable-upcoming-feature MemberImportVisibility -enable-upcoming-feature InferIsolatedConformances -enable-upcoming-feature NonisolatedNonsendingByDefault -enable-experimental-feature DebugDescriptionMacro -sdk /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.5.sdk -target arm64-apple-macos26.0 -g -module-cache-path /tmp/dynamic-island-ci-derived-data/ModuleCache.noindex -Xfrontend -serialize-debugging-options -profile-coverage-mapping -profile-generate -enable-testing -index-store-path /tmp/dynamic-island-ci-derived-data/Index.noindex/DataStore -Xcc -D_LIBCPP_HARDENING_MODE\=_LIBCPP_HARDENING_MODE_DEBUG -swift-version 5 -I /tmp/dynamic-island-ci-derived-data/Build/Products/Debug -F /tmp/dynamic-island-ci-derived-data/Build/Products/Debug -emit-localized-strings -emit-localized-strings-path /tmp/dynamic-island-ci-derived-data/Build/Intermediates.noindex/DynamicIsland.build/Debug/Dynamic\ Island.build/Objects-normal/arm64 -c -j10 -enable-batch-mode -incremental -Xcc -ivfsstatcache -Xcc /tmp/dynamic-island-ci-derived-data/SDKStatCaches.noindex/macosx26.5-25F70-688ef53f1462e2c8f657fdc38a81448fe082c4a02f00227109f4ed75e425c832.sdkstatcache -output-file-map /tmp/dynamic-island-ci-derived-data/Build/Intermediates.noindex/DynamicIsland.build/Debug/Dynamic\ Island.build/Objects-normal/arm64/Dynamic\ Island-OutputFileMap.json -use-frontend-parseable-output -save-temps -no-color-diagnostics -explicit-module-build -module-cache-path /tmp/dynamic-island-ci-derived-data/Build/Intermediates.noindex/SwiftExplicitPrecompiledModules -clang-scanner-module-cache-path /tmp/dynamic-island-ci-derived-data/ModuleCache.noindex -sdk-module-cache-path /tmp/dynamic-island-ci-derived-data/ModuleCache.noindex -serialize-diagnostics -emit-dependencies -emit-module -emit-module-path /tmp/dynamic-island-ci-derived-data/Build/Intermediates.noindex/DynamicIsland.build/Debug/Dynamic\ Island.build/Objects-normal/arm64/DynamicIsland.swiftmodule -validate-clang-modules-once -clang-build-session-file /tmp/dynamic-island-ci-derived-data/ModuleCache.noindex/Session.modulevalidation -Xcc -I/tmp/dynamic-island-ci-derived-data/Build/Intermediates.noindex/DynamicIsland.build/Debug/Dynamic\ Island.build/swift-overrides.hmap -emit-const-values -Xfrontend -const-gather-protocols-file -Xfrontend /tmp/dynamic-island-ci-derived-data/Build/Intermediates.noindex/DynamicIsland.build/Debug/Dynamic\ Island.build/Objects-normal/arm64/Dynamic\ Island_const_extract_protocols.json -Xcc -iquote -Xcc /tmp/dynamic-island-ci-derived-data/Build/Intermediates.noindex/DynamicIsland.build/Debug/Dynamic\ Island.build/Dynamic\ Island-generated-files.hmap -Xcc -I/tmp/dynamic-island-ci-derived-data/Build/Intermediates.noindex/DynamicIsland.build/Debug/Dynamic\ Island.build/Dynamic\ Island-own-target-headers.hmap -Xcc -I/tmp/dynamic-island-ci-derived-data/Build/Intermediates.noindex/DynamicIsland.build/Debug/Dynamic\ Island.build/Dynamic\ Island-all-target-headers.hmap -Xcc -iquote -Xcc /tmp/dynamic-island-ci-derived-data/Build/Intermediates.noindex/DynamicIsland.build/Debug/Dynamic\ Island.build/Dynamic\ Island-project-headers.hmap -Xcc -I/tmp/dynamic-island-ci-derived-data/Build/Products/Debug/include -Xcc -I/tmp/dynamic-island-ci-derived-data/Build/Intermediates.noindex/DynamicIsland.build/Debug/Dynamic\ Island.build/DerivedSources-normal/arm64 -Xcc -I/tmp/dynamic-island-ci-derived-data/Build/Intermediates.noindex/DynamicIsland.build/Debug/Dynamic\ Island.build/DerivedSources/arm64 -Xcc -I/tmp/dynamic-island-ci-derived-data/Build/Intermediates.noindex/DynamicIsland.build/Debug/Dynamic\ Island.build/DerivedSources -Xcc -DDEBUG\=1 -emit-objc-header -emit-objc-header-path /tmp/dynamic-island-ci-derived-data/Build/Intermediates.noindex/DynamicIsland.build/Debug/Dynamic\ Island.build/Objects-normal/arm64/DynamicIsland-Swift.h -working-directory /Users/rong5/Dynamiclsland -experimental-emit-module-separately -disable-cmo
+
+SwiftCompile normal arm64 Compiling\ IslandViewModel.swift /Users/rong5/Dynamiclsland/DynamicIsland/IslandViewModel.swift (in target 'Dynamic Island' from project 'DynamicIsland')
+
+SwiftCompile normal arm64 /Users/rong5/Dynamiclsland/DynamicIsland/IslandViewModel.swift (in target 'Dynamic Island' from project 'DynamicIsland')
+    cd /Users/rong5/Dynamiclsland
+    
+
+SwiftEmitModule normal arm64 Emitting\ module\ for\ DynamicIsland (in target 'Dynamic Island' from project 'DynamicIsland')
+EmitSwiftModule normal arm64 (in target 'Dynamic Island' from project 'DynamicIsland')
+    cd /Users/rong5/Dynamiclsland
+    
+
+SwiftDriverJobDiscovery normal arm64 Compiling IslandViewModel.swift (in target 'Dynamic Island' from project 'DynamicIsland')
+
+SwiftDriver\ Compilation Dynamic\ Island normal arm64 com.apple.xcode.tools.swift.compiler (in target 'Dynamic Island' from project 'DynamicIsland')
+    cd /Users/rong5/Dynamiclsland
+    builtin-Swift-Compilation -- /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc -module-name DynamicIsland -Onone @/tmp/dynamic-island-ci-derived-data/Build/Intermediates.noindex/DynamicIsland.build/Debug/Dynamic\ Island.build/Objects-normal/arm64/Dynamic\ Island.SwiftFileList -DDEBUG -default-isolation\=MainActor -enable-bare-slash-regex -enable-upcoming-feature DisableOutwardActorInference -enable-upcoming-feature InferSendableFromCaptures -enable-upcoming-feature GlobalActorIsolatedTypesUsability -enable-upcoming-feature MemberImportVisibility -enable-upcoming-feature InferIsolatedConformances -enable-upcoming-feature NonisolatedNonsendingByDefault -enable-experimental-feature DebugDescriptionMacro -sdk /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.5.sdk -target arm64-apple-macos26.0 -g -module-cache-path /tmp/dynamic-island-ci-derived-data/ModuleCache.noindex -Xfrontend -serialize-debugging-options -profile-coverage-mapping -profile-generate -enable-testing -index-store-path /tmp/dynamic-island-ci-derived-data/Index.noindex/DataStore -Xcc -D_LIBCPP_HARDENING_MODE\=_LIBCPP_HARDENING_MODE_DEBUG -swift-version 5 -I /tmp/dynamic-island-ci-derived-data/Build/Products/Debug -F /tmp/dynamic-island-ci-derived-data/Build/Products/Debug -emit-localized-strings -emit-localized-strings-path /tmp/dynamic-island-ci-derived-data/Build/Intermediates.noindex/DynamicIsland.build/Debug/Dynamic\ Island.build/Objects-normal/arm64 -c -j10 -enable-batch-mode -incremental -Xcc -ivfsstatcache -Xcc /tmp/dynamic-island-ci-derived-data/SDKStatCaches.noindex/macosx26.5-25F70-688ef53f1462e2c8f657fdc38a81448fe082c4a02f00227109f4ed75e425c832.sdkstatcache -output-file-map /tmp/dynamic-island-ci-derived-data/Build/Intermediates.noindex/DynamicIsland.build/Debug/Dynamic\ Island.build/Objects-normal/arm64/Dynamic\ Island-OutputFileMap.json -use-frontend-parseable-output -save-temps -no-color-diagnostics -explicit-module-build -module-cache-path /tmp/dynamic-island-ci-derived-data/Build/Intermediates.noindex/SwiftExplicitPrecompiledModules -clang-scanner-module-cache-path /tmp/dynamic-island-ci-derived-data/ModuleCache.noindex -sdk-module-cache-path /tmp/dynamic-island-ci-derived-data/ModuleCache.noindex -serialize-diagnostics -emit-dependencies -emit-module -emit-module-path /tmp/dynamic-island-ci-derived-data/Build/Intermediates.noindex/DynamicIsland.build/Debug/Dynamic\ Island.build/Objects-normal/arm64/DynamicIsland.swiftmodule -validate-clang-modules-once -clang-build-session-file /tmp/dynamic-island-ci-derived-data/ModuleCache.noindex/Session.modulevalidation -Xcc -I/tmp/dynamic-island-ci-derived-data/Build/Intermediates.noindex/DynamicIsland.build/Debug/Dynamic\ Island.build/swift-overrides.hmap -emit-const-values -Xfrontend -const-gather-protocols-file -Xfrontend /tmp/dynamic-island-ci-derived-data/Build/Intermediates.noindex/DynamicIsland.build/Debug/Dynamic\ Island.build/Objects-normal/arm64/Dynamic\ Island_const_extract_protocols.json -Xcc -iquote -Xcc /tmp/dynamic-island-ci-derived-data/Build/Intermediates.noindex/DynamicIsland.build/Debug/Dynamic\ Island.build/Dynamic\ Island-generated-files.hmap -Xcc -I/tmp/dynamic-island-ci-derived-data/Build/Intermediates.noindex/DynamicIsland.build/Debug/Dynamic\ Island.build/Dynamic\ Island-own-target-headers.hmap -Xcc -I/tmp/dynamic-island-ci-derived-data/Build/Intermediates.noindex/DynamicIsland.build/Debug/Dynamic\ Island.build/Dynamic\ Island-all-target-headers.hmap -Xcc -iquote -Xcc /tmp/dynamic-island-ci-derived-data/Build/Intermediates.noindex/DynamicIsland.build/Debug/Dynamic\ Island.build/Dynamic\ Island-project-headers.hmap -Xcc -I/tmp/dynamic-island-ci-derived-data/Build/Products/Debug/include -Xcc -I/tmp/dynamic-island-ci-derived-data/Build/Intermediates.noindex/DynamicIsland.build/Debug/Dynamic\ Island.build/DerivedSources-normal/arm64 -Xcc -I/tmp/dynamic-island-ci-derived-data/Build/Intermediates.noindex/DynamicIsland.build/Debug/Dynamic\ Island.build/DerivedSources/arm64 -Xcc -I/tmp/dynamic-island-ci-derived-data/Build/Intermediates.noindex/DynamicIsland.build/Debug/Dynamic\ Island.build/DerivedSources -Xcc -DDEBUG\=1 -emit-objc-header -emit-objc-header-path /tmp/dynamic-island-ci-derived-data/Build/Intermediates.noindex/DynamicIsland.build/Debug/Dynamic\ Island.build/Objects-normal/arm64/DynamicIsland-Swift.h -working-directory /Users/rong5/Dynamiclsland -experimental-emit-module-separately -disable-cmo
+
+ProcessInfoPlistFile /tmp/dynamic-island-ci-derived-data/Build/Products/Debug/Dynamic\ Island.app/Contents/Info.plist /Users/rong5/Dynamiclsland/DynamicIsland/Info.plist (in target 'Dynamic Island' from project 'DynamicIsland')
+    cd /Users/rong5/Dynamiclsland
+    builtin-infoPlistUtility /Users/rong5/Dynamiclsland/DynamicIsland/Info.plist -producttype com.apple.product-type.application -genpkginfo /tmp/dynamic-island-ci-derived-data/Build/Products/Debug/Dynamic\ Island.app/Contents/PkgInfo -expandbuildsettings -platform macosx -additionalcontentfile /tmp/dynamic-island-ci-derived-data/Build/Intermediates.noindex/DynamicIsland.build/Debug/Dynamic\ Island.build/assetcatalog_generated_info.plist -o /tmp/dynamic-island-ci-derived-data/Build/Products/Debug/Dynamic\ Island.app/Contents/Info.plist
+
+SwiftDriverJobDiscovery normal arm64 Emitting module for DynamicIsland (in target 'Dynamic Island' from project 'DynamicIsland')
+
+SwiftDriver\ Compilation\ Requirements Dynamic\ Island normal arm64 com.apple.xcode.tools.swift.compiler (in target 'Dynamic Island' from project 'DynamicIsland')
+    cd /Users/rong5/Dynamiclsland
+    builtin-Swift-Compilation-Requirements -- /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc -module-name DynamicIsland -Onone @/tmp/dynamic-island-ci-derived-data/Build/Intermediates.noindex/DynamicIsland.build/Debug/Dynamic\ Island.build/Objects-normal/arm64/Dynamic\ Island.SwiftFileList -DDEBUG -default-isolation\=MainActor -enable-bare-slash-regex -enable-upcoming-feature DisableOutwardActorInference -enable-upcoming-feature InferSendableFromCaptures -enable-upcoming-feature GlobalActorIsolatedTypesUsability -enable-upcoming-feature MemberImportVisibility -enable-upcoming-feature InferIsolatedConformances -enable-upcoming-feature NonisolatedNonsendingByDefault -enable-experimental-feature DebugDescriptionMacro -sdk /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.5.sdk -target arm64-apple-macos26.0 -g -module-cache-path /tmp/dynamic-island-ci-derived-data/ModuleCache.noindex -Xfrontend -serialize-debugging-options -profile-coverage-mapping -profile-generate -enable-testing -index-store-path /tmp/dynamic-island-ci-derived-data/Index.noindex/DataStore -Xcc -D_LIBCPP_HARDENING_MODE\=_LIBCPP_HARDENING_MODE_DEBUG -swift-version 5 -I /tmp/dynamic-island-ci-derived-data/Build/Products/Debug -F /tmp/dynamic-island-ci-derived-data/Build/Products/Debug -emit-localized-strings -emit-localized-strings-path /tmp/dynamic-island-ci-derived-data/Build/Intermediates.noindex/DynamicIsland.build/Debug/Dynamic\ Island.build/Objects-normal/arm64 -c -j10 -enable-batch-mode -incremental -Xcc -ivfsstatcache -Xcc /tmp/dynamic-island-ci-derived-data/SDKStatCaches.noindex/macosx26.5-25F70-688ef53f1462e2c8f657fdc38a81448fe082c4a02f00227109f4ed75e425c832.sdkstatcache -output-file-map /tmp/dynamic-island-ci-derived-data/Build/Intermediates.noindex/DynamicIsland.build/Debug/Dynamic\ Island.build/Objects-normal/arm64/Dynamic\ Island-OutputFileMap.json -use-frontend-parseable-output -save-temps -no-color-diagnostics -explicit-module-build -module-cache-path /tmp/dynamic-island-ci-derived-data/Build/Intermediates.noindex/SwiftExplicitPrecompiledModules -clang-scanner-module-cache-path /tmp/dynamic-island-ci-derived-data/ModuleCache.noindex -sdk-module-cache-path /tmp/dynamic-island-ci-derived-data/ModuleCache.noindex -serialize-diagnostics -emit-dependencies -emit-module -emit-module-path /tmp/dynamic-island-ci-derived-data/Build/Intermediates.noindex/DynamicIsland.build/Debug/Dynamic\ Island.build/Objects-normal/arm64/DynamicIsland.swiftmodule -validate-clang-modules-once -clang-build-session-file /tmp/dynamic-island-ci-derived-data/ModuleCache.noindex/Session.modulevalidation -Xcc -I/tmp/dynamic-island-ci-derived-data/Build/Intermediates.noindex/DynamicIsland.build/Debug/Dynamic\ Island.build/swift-overrides.hmap -emit-const-values -Xfrontend -const-gather-protocols-file -Xfrontend /tmp/dynamic-island-ci-derived-data/Build/Intermediates.noindex/DynamicIsland.build/Debug/Dynamic\ Island.build/Objects-normal/arm64/Dynamic\ Island_const_extract_protocols.json -Xcc -iquote -Xcc /tmp/dynamic-island-ci-derived-data/Build/Intermediates.noindex/DynamicIsland.build/Debug/Dynamic\ Island.build/Dynamic\ Island-generated-files.hmap -Xcc -I/tmp/dynamic-island-ci-derived-data/Build/Intermediates.noindex/DynamicIsland.build/Debug/Dynamic\ Island.build/Dynamic\ Island-own-target-headers.hmap -Xcc -I/tmp/dynamic-island-ci-derived-data/Build/Intermediates.noindex/DynamicIsland.build/Debug/Dynamic\ Island.build/Dynamic\ Island-all-target-headers.hmap -Xcc -iquote -Xcc /tmp/dynamic-island-ci-derived-data/Build/Intermediates.noindex/DynamicIsland.build/Debug/Dynamic\ Island.build/Dynamic\ Island-project-headers.hmap -Xcc -I/tmp/dynamic-island-ci-derived-data/Build/Products/Debug/include -Xcc -I/tmp/dynamic-island-ci-derived-data/Build/Intermediates.noindex/DynamicIsland.build/Debug/Dynamic\ Island.build/DerivedSources-normal/arm64 -Xcc -I/tmp/dynamic-island-ci-derived-data/Build/Intermediates.noindex/DynamicIsland.build/Debug/Dynamic\ Island.build/DerivedSources/arm64 -Xcc -I/tmp/dynamic-island-ci-derived-data/Build/Intermediates.noindex/DynamicIsland.build/Debug/Dynamic\ Island.build/DerivedSources -Xcc -DDEBUG\=1 -emit-objc-header -emit-objc-header-path /tmp/dynamic-island-ci-derived-data/Build/Intermediates.noindex/DynamicIsland.build/Debug/Dynamic\ Island.build/Objects-normal/arm64/DynamicIsland-Swift.h -working-directory /Users/rong5/Dynamiclsland -experimental-emit-module-separately -disable-cmo
+
+Copy /tmp/dynamic-island-ci-derived-data/Build/Products/Debug/DynamicIsland.swiftmodule/arm64-apple-macos.abi.json /tmp/dynamic-island-ci-derived-data/Build/Intermediates.noindex/DynamicIsland.build/Debug/Dynamic\ Island.build/Objects-normal/arm64/DynamicIsland.abi.json (in target 'Dynamic Island' from project 'DynamicIsland')
+    cd /Users/rong5/Dynamiclsland
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks -rename /tmp/dynamic-island-ci-derived-data/Build/Intermediates.noindex/DynamicIsland.build/Debug/Dynamic\ Island.build/Objects-normal/arm64/DynamicIsland.abi.json /tmp/dynamic-island-ci-derived-data/Build/Products/Debug/DynamicIsland.swiftmodule/arm64-apple-macos.abi.json
+
+Copy /tmp/dynamic-island-ci-derived-data/Build/Products/Debug/DynamicIsland.swiftmodule/Project/arm64-apple-macos.swiftsourceinfo /tmp/dynamic-island-ci-derived-data/Build/Intermediates.noindex/DynamicIsland.build/Debug/Dynamic\ Island.build/Objects-normal/arm64/DynamicIsland.swiftsourceinfo (in target 'Dynamic Island' from project 'DynamicIsland')
+    cd /Users/rong5/Dynamiclsland
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks -rename /tmp/dynamic-island-ci-derived-data/Build/Intermediates.noindex/DynamicIsland.build/Debug/Dynamic\ Island.build/Objects-normal/arm64/DynamicIsland.swiftsourceinfo /tmp/dynamic-island-ci-derived-data/Build/Products/Debug/DynamicIsland.swiftmodule/Project/arm64-apple-macos.swiftsourceinfo
+
+Ld /tmp/dynamic-island-ci-derived-data/Build/Products/Debug/Dynamic\ Island.app/Contents/MacOS/Dynamic\ Island.debug.dylib normal (in target 'Dynamic Island' from project 'DynamicIsland')
+    cd /Users/rong5/Dynamiclsland
+    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -Xlinker -reproducible -target arm64-apple-macos26.0 -dynamiclib -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.5.sdk -O0 -L/tmp/dynamic-island-ci-derived-data/Build/Intermediates.noindex/EagerLinkingTBDs/Debug -L/tmp/dynamic-island-ci-derived-data/Build/Products/Debug -F/tmp/dynamic-island-ci-derived-data/Build/Intermediates.noindex/EagerLinkingTBDs/Debug -F/tmp/dynamic-island-ci-derived-data/Build/Products/Debug -filelist /tmp/dynamic-island-ci-derived-data/Build/Intermediates.noindex/DynamicIsland.build/Debug/Dynamic\ Island.build/Objects-normal/arm64/Dynamic\ Island.LinkFileList -install_name @rpath/Dynamic\ Island.debug.dylib -Xlinker -rpath -Xlinker @executable_path/../Frameworks -Xlinker -object_path_lto -Xlinker /tmp/dynamic-island-ci-derived-data/Build/Intermediates.noindex/DynamicIsland.build/Debug/Dynamic\ Island.build/Objects-normal/arm64/Dynamic\ Island_lto.o -rdynamic -Xlinker -no_deduplicate -Xlinker -debug_variant -Xlinker -dependency_info -Xlinker /tmp/dynamic-island-ci-derived-data/Build/Intermediates.noindex/DynamicIsland.build/Debug/Dynamic\ Island.build/Objects-normal/arm64/Dynamic\ Island_dependency_info.dat -fobjc-link-runtime -fprofile-instr-generate -L/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/macosx -L/usr/lib/swift -Xlinker -add_ast_path -Xlinker /tmp/dynamic-island-ci-derived-data/Build/Intermediates.noindex/DynamicIsland.build/Debug/Dynamic\ Island.build/Objects-normal/arm64/DynamicIsland.swiftmodule @/tmp/dynamic-island-ci-derived-data/Build/Intermediates.noindex/DynamicIsland.build/Debug/Dynamic\ Island.build/Objects-normal/arm64/DynamicIsland-linker-args.resp -Xlinker -alias -Xlinker _main -Xlinker ___debug_main_executable_dylib_entry_point -Xlinker -no_adhoc_codesign -o /tmp/dynamic-island-ci-derived-data/Build/Products/Debug/Dynamic\ Island.app/Contents/MacOS/Dynamic\ Island.debug.dylib
+
+ConstructStubExecutorLinkFileList /tmp/dynamic-island-ci-derived-data/Build/Intermediates.noindex/DynamicIsland.build/Debug/Dynamic\ Island.build/Dynamic\ Island-ExecutorLinkFileList-normal-arm64.txt (in target 'Dynamic Island' from project 'DynamicIsland')
+    cd /Users/rong5/Dynamiclsland
+    construct-stub-executor-link-file-list /tmp/dynamic-island-ci-derived-data/Build/Products/Debug/Dynamic\ Island.app/Contents/MacOS/Dynamic\ Island.debug.dylib /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib/libPreviewsJITStubExecutor_no_swift_entry_point.a /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib/libPreviewsJITStubExecutor.a --output /tmp/dynamic-island-ci-derived-data/Build/Intermediates.noindex/DynamicIsland.build/Debug/Dynamic\ Island.build/Dynamic\ Island-ExecutorLinkFileList-normal-arm64.txt
+note: Using stub executor library with Swift entry point. (in target 'Dynamic Island' from project 'DynamicIsland')
+
+Ld /tmp/dynamic-island-ci-derived-data/Build/Products/Debug/Dynamic\ Island.app/Contents/MacOS/Dynamic\ Island normal (in target 'Dynamic Island' from project 'DynamicIsland')
+    cd /Users/rong5/Dynamiclsland
+    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -Xlinker -reproducible -target arm64-apple-macos26.0 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.5.sdk -O0 -L/tmp/dynamic-island-ci-derived-data/Build/Products/Debug -F/tmp/dynamic-island-ci-derived-data/Build/Products/Debug -Xlinker -rpath -Xlinker @executable_path -Xlinker -rpath -Xlinker @executable_path/../Frameworks -rdynamic -Xlinker -no_deduplicate -Xlinker -debug_variant -e ___debug_blank_executor_main -Xlinker -sectcreate -Xlinker __TEXT -Xlinker __debug_dylib -Xlinker /tmp/dynamic-island-ci-derived-data/Build/Intermediates.noindex/DynamicIsland.build/Debug/Dynamic\ Island.build/Dynamic\ Island-DebugDylibPath-normal-arm64.txt -Xlinker -sectcreate -Xlinker __TEXT -Xlinker __debug_instlnm -Xlinker /tmp/dynamic-island-ci-derived-data/Build/Intermediates.noindex/DynamicIsland.build/Debug/Dynamic\ Island.build/Dynamic\ Island-DebugDylibInstallName-normal-arm64.txt -Xlinker -filelist -Xlinker /tmp/dynamic-island-ci-derived-data/Build/Intermediates.noindex/DynamicIsland.build/Debug/Dynamic\ Island.build/Dynamic\ Island-ExecutorLinkFileList-normal-arm64.txt /tmp/dynamic-island-ci-derived-data/Build/Products/Debug/Dynamic\ Island.app/Contents/MacOS/Dynamic\ Island.debug.dylib -Xlinker -no_adhoc_codesign -o /tmp/dynamic-island-ci-derived-data/Build/Products/Debug/Dynamic\ Island.app/Contents/MacOS/Dynamic\ Island
+
+CopySwiftLibs /tmp/dynamic-island-ci-derived-data/Build/Products/Debug/Dynamic\ Island.app (in target 'Dynamic Island' from project 'DynamicIsland')
+    cd /Users/rong5/Dynamiclsland
+    builtin-swiftStdLibTool --copy --verbose --sign - --scan-executable /tmp/dynamic-island-ci-derived-data/Build/Products/Debug/Dynamic\ Island.app/Contents/MacOS/Dynamic\ Island.debug.dylib --scan-folder /tmp/dynamic-island-ci-derived-data/Build/Products/Debug/Dynamic\ Island.app/Contents/Frameworks --scan-folder /tmp/dynamic-island-ci-derived-data/Build/Products/Debug/Dynamic\ Island.app/Contents/PlugIns --scan-folder /tmp/dynamic-island-ci-derived-data/Build/Products/Debug/Dynamic\ Island.app/Contents/Library/SystemExtensions --scan-folder /tmp/dynamic-island-ci-derived-data/Build/Products/Debug/Dynamic\ Island.app/Contents/Extensions --platform macosx --toolchain /Users/rong5/Library/Developer/DVTDownloads/MetalToolchain/mounts/5f4a441a6d0a11f2e9b28c67384263afe92320f7/Metal.xctoolchain --toolchain /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain --destination /tmp/dynamic-island-ci-derived-data/Build/Products/Debug/Dynamic\ Island.app/Contents/Frameworks --strip-bitcode --strip-bitcode-tool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/bitcode_strip --emit-dependency-info /tmp/dynamic-island-ci-derived-data/Build/Intermediates.noindex/DynamicIsland.build/Debug/Dynamic\ Island.build/SwiftStdLibToolInputDependencies.dep --filter-for-swift-os
+
+ExtractAppIntentsMetadata (in target 'Dynamic Island' from project 'DynamicIsland')
+    cd /Users/rong5/Dynamiclsland
+    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/appintentsmetadataprocessor --toolchain-dir /Users/rong5/Library/Developer/DVTDownloads/MetalToolchain/mounts/5f4a441a6d0a11f2e9b28c67384263afe92320f7/Metal.xctoolchain --module-name DynamicIsland --sdk-root /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.5.sdk --xcode-version 17F113 --platform-family macOS --deployment-target 26.0 --bundle-identifier com.rong5.dynamic-island-mac --output /tmp/dynamic-island-ci-derived-data/Build/Products/Debug/Dynamic\ Island.app/Contents/Resources --target-triple arm64-apple-macos26.0 --binary-file /tmp/dynamic-island-ci-derived-data/Build/Products/Debug/Dynamic\ Island.app/Contents/MacOS/Dynamic\ Island --dependency-file /tmp/dynamic-island-ci-derived-data/Build/Intermediates.noindex/DynamicIsland.build/Debug/Dynamic\ Island.build/Objects-normal/arm64/Dynamic\ Island_dependency_info.dat --stringsdata-file /tmp/dynamic-island-ci-derived-data/Build/Intermediates.noindex/DynamicIsland.build/Debug/Dynamic\ Island.build/Objects-normal/arm64/ExtractedAppShortcutsMetadata.stringsdata --source-file-list /tmp/dynamic-island-ci-derived-data/Build/Intermediates.noindex/DynamicIsland.build/Debug/Dynamic\ Island.build/Objects-normal/arm64/Dynamic\ Island.SwiftFileList --metadata-file-list /tmp/dynamic-island-ci-derived-data/Build/Intermediates.noindex/DynamicIsland.build/Debug/Dynamic\ Island.build/Dynamic\ Island.DependencyMetadataFileList --static-metadata-file-list /tmp/dynamic-island-ci-derived-data/Build/Intermediates.noindex/DynamicIsland.build/Debug/Dynamic\ Island.build/Dynamic\ Island.DependencyStaticMetadataFileList --swift-const-vals-list /tmp/dynamic-island-ci-derived-data/Build/Intermediates.noindex/DynamicIsland.build/Debug/Dynamic\ Island.build/Objects-normal/arm64/Dynamic\ Island.SwiftConstValuesFileList --compile-time-extraction --deployment-aware-processing --validate-assistant-intents --no-app-shortcuts-localization
+2026-10-20 15:42:55.345 appintentsmetadataprocessor[19674:16668996] Starting appintentsmetadataprocessor export
+2026-10-20 15:42:55.349 appintentsmetadataprocessor[19674:16668996] warning: Metadata extraction skipped. No AppIntents.framework dependency found.
+
+ProcessInfoPlistFile /tmp/dynamic-island-ci-derived-data/Build/Products/Debug/Dynamic\ Island.app/Contents/PlugIns/DynamicIslandTests.xctest/Contents/Info.plist /tmp/dynamic-island-ci-derived-data/Build/Intermediates.noindex/DynamicIsland.build/Debug/DynamicIslandTests.build/empty-DynamicIslandTests.plist (in target 'DynamicIslandTests' from project 'DynamicIsland')
+    cd /Users/rong5/Dynamiclsland
+    builtin-infoPlistUtility /tmp/dynamic-island-ci-derived-data/Build/Intermediates.noindex/DynamicIsland.build/Debug/DynamicIslandTests.build/empty-DynamicIslandTests.plist -producttype com.apple.product-type.bundle.unit-test -expandbuildsettings -platform macosx -o /tmp/dynamic-island-ci-derived-data/Build/Products/Debug/Dynamic\ Island.app/Contents/PlugIns/DynamicIslandTests.xctest/Contents/Info.plist
+
+Ld /tmp/dynamic-island-ci-derived-data/Build/Products/Debug/Dynamic\ Island.app/Contents/PlugIns/DynamicIslandTests.xctest/Contents/MacOS/DynamicIslandTests normal (in target 'DynamicIslandTests' from project 'DynamicIsland')
+    cd /Users/rong5/Dynamiclsland
+    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -Xlinker -reproducible -target arm64-apple-macos26.0 -bundle -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.5.sdk -O0 -L/tmp/dynamic-island-ci-derived-data/Build/Intermediates.noindex/EagerLinkingTBDs/Debug -L/tmp/dynamic-island-ci-derived-data/Build/Products/Debug -L/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib -F/tmp/dynamic-island-ci-derived-data/Build/Intermediates.noindex/EagerLinkingTBDs/Debug -F/tmp/dynamic-island-ci-derived-data/Build/Products/Debug -iframework /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks -filelist /tmp/dynamic-island-ci-derived-data/Build/Intermediates.noindex/DynamicIsland.build/Debug/DynamicIslandTests.build/Objects-normal/arm64/DynamicIslandTests.LinkFileList -Xlinker -rpath -Xlinker @loader_path/../Frameworks -Xlinker -rpath -Xlinker @executable_path/../Frameworks -bundle_loader /tmp/dynamic-island-ci-derived-data/Build/Products/Debug/Dynamic\ Island.app/Contents/MacOS/Dynamic\ Island -Xlinker -object_path_lto -Xlinker /tmp/dynamic-island-ci-derived-data/Build/Intermediates.noindex/DynamicIsland.build/Debug/DynamicIslandTests.build/Objects-normal/arm64/DynamicIslandTests_lto.o -rdynamic -Xlinker -no_deduplicate -Xlinker -debug_variant -Xlinker -dependency_info -Xlinker /tmp/dynamic-island-ci-derived-data/Build/Intermediates.noindex/DynamicIsland.build/Debug/DynamicIslandTests.build/Objects-normal/arm64/DynamicIslandTests_dependency_info.dat -fobjc-link-runtime -fprofile-instr-generate -L/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/macosx -L/usr/lib/swift -Xlinker -add_ast_path -Xlinker /tmp/dynamic-island-ci-derived-data/Build/Intermediates.noindex/DynamicIsland.build/Debug/DynamicIslandTests.build/Objects-normal/arm64/DynamicIslandTests.swiftmodule @/tmp/dynamic-island-ci-derived-data/Build/Intermediates.noindex/DynamicIsland.build/Debug/DynamicIslandTests.build/Objects-normal/arm64/DynamicIslandTests-linker-args.resp -Xlinker -needed_framework -Xlinker XCTest -framework XCTest -Xlinker -needed-lXCTestSwiftSupport -lXCTestSwiftSupport /tmp/dynamic-island-ci-derived-data/Build/Products/Debug/Dynamic\ Island.app/Contents/MacOS/Dynamic\ Island.debug.dylib -Xlinker -no_adhoc_codesign -o /tmp/dynamic-island-ci-derived-data/Build/Products/Debug/Dynamic\ Island.app/Contents/PlugIns/DynamicIslandTests.xctest/Contents/MacOS/DynamicIslandTests
+
+CopySwiftLibs /tmp/dynamic-island-ci-derived-data/Build/Products/Debug/Dynamic\ Island.app/Contents/PlugIns/DynamicIslandTests.xctest (in target 'DynamicIslandTests' from project 'DynamicIsland')
+    cd /Users/rong5/Dynamiclsland
+    builtin-swiftStdLibTool --copy --verbose --sign - --scan-executable /tmp/dynamic-island-ci-derived-data/Build/Products/Debug/Dynamic\ Island.app/Contents/PlugIns/DynamicIslandTests.xctest/Contents/MacOS/DynamicIslandTests --scan-folder /tmp/dynamic-island-ci-derived-data/Build/Products/Debug/Dynamic\ Island.app/Contents/PlugIns/DynamicIslandTests.xctest/Contents/Frameworks --scan-folder /tmp/dynamic-island-ci-derived-data/Build/Products/Debug/Dynamic\ Island.app/Contents/PlugIns/DynamicIslandTests.xctest/Contents/PlugIns --scan-folder /tmp/dynamic-island-ci-derived-data/Build/Products/Debug/Dynamic\ Island.app/Contents/PlugIns/DynamicIslandTests.xctest/Contents/Library/SystemExtensions --scan-folder /tmp/dynamic-island-ci-derived-data/Build/Products/Debug/Dynamic\ Island.app/Contents/PlugIns/DynamicIslandTests.xctest/Contents/Extensions --platform macosx --toolchain /Users/rong5/Library/Developer/DVTDownloads/MetalToolchain/mounts/5f4a441a6d0a11f2e9b28c67384263afe92320f7/Metal.xctoolchain --toolchain /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain --destination /tmp/dynamic-island-ci-derived-data/Build/Products/Debug/Dynamic\ Island.app/Contents/PlugIns/DynamicIslandTests.xctest/Contents/Frameworks --strip-bitcode --scan-executable /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib/libXCTestSwiftSupport.dylib --strip-bitcode-tool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/bitcode_strip --emit-dependency-info /tmp/dynamic-island-ci-derived-data/Build/Intermediates.noindex/DynamicIsland.build/Debug/DynamicIslandTests.build/SwiftStdLibToolInputDependencies.dep --filter-for-swift-os
+
+ExtractAppIntentsMetadata (in target 'DynamicIslandTests' from project 'DynamicIsland')
+    cd /Users/rong5/Dynamiclsland
+    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/appintentsmetadataprocessor --toolchain-dir /Users/rong5/Library/Developer/DVTDownloads/MetalToolchain/mounts/5f4a441a6d0a11f2e9b28c67384263afe92320f7/Metal.xctoolchain --module-name DynamicIslandTests --sdk-root /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.5.sdk --xcode-version 17F113 --platform-family macOS --deployment-target 26.0 --bundle-identifier com.rong5.dynamic-island-mac.tests --output /tmp/dynamic-island-ci-derived-data/Build/Products/Debug/Dynamic\ Island.app/Contents/PlugIns/DynamicIslandTests.xctest/Contents/Resources --target-triple arm64-apple-macos26.0 --binary-file /tmp/dynamic-island-ci-derived-data/Build/Products/Debug/Dynamic\ Island.app/Contents/PlugIns/DynamicIslandTests.xctest/Contents/MacOS/DynamicIslandTests --dependency-file /tmp/dynamic-island-ci-derived-data/Build/Intermediates.noindex/DynamicIsland.build/Debug/DynamicIslandTests.build/Objects-normal/arm64/DynamicIslandTests_dependency_info.dat --stringsdata-file /tmp/dynamic-island-ci-derived-data/Build/Intermediates.noindex/DynamicIsland.build/Debug/DynamicIslandTests.build/Objects-normal/arm64/ExtractedAppShortcutsMetadata.stringsdata --source-file-list /tmp/dynamic-island-ci-derived-data/Build/Intermediates.noindex/DynamicIsland.build/Debug/DynamicIslandTests.build/Objects-normal/arm64/DynamicIslandTests.SwiftFileList --metadata-file-list /tmp/dynamic-island-ci-derived-data/Build/Intermediates.noindex/DynamicIsland.build/Debug/DynamicIslandTests.build/DynamicIslandTests.DependencyMetadataFileList --static-metadata-file-list /tmp/dynamic-island-ci-derived-data/Build/Intermediates.noindex/DynamicIsland.build/Debug/DynamicIslandTests.build/DynamicIslandTests.DependencyStaticMetadataFileList --swift-const-vals-list /tmp/dynamic-island-ci-derived-data/Build/Intermediates.noindex/DynamicIsland.build/Debug/DynamicIslandTests.build/Objects-normal/arm64/DynamicIslandTests.SwiftConstValuesFileList --compile-time-extraction --deployment-aware-processing --validate-assistant-intents --no-app-shortcuts-localization
+2026-10-20 15:42:55.690 appintentsmetadataprocessor[19677:16669024] Starting appintentsmetadataprocessor export
+2026-10-20 15:42:55.691 appintentsmetadataprocessor[19677:16669024] warning: Metadata extraction skipped. No AppIntents.framework dependency found.
+
+CodeSign /tmp/dynamic-island-ci-derived-data/Build/Products/Debug/Dynamic\ Island.app/Contents/PlugIns/DynamicIslandTests.xctest (in target 'DynamicIslandTests' from project 'DynamicIsland')
+    cd /Users/rong5/Dynamiclsland
+    
+    Signing Identity:     "Sign to Run Locally"
+    
+    /usr/bin/codesign --force --sign - --timestamp\=none --generate-entitlement-der /tmp/dynamic-island-ci-derived-data/Build/Products/Debug/Dynamic\ Island.app/Contents/PlugIns/DynamicIslandTests.xctest
+
+CodeSign /tmp/dynamic-island-ci-derived-data/Build/Products/Debug/Dynamic\ Island.app/Contents/MacOS/Dynamic\ Island.debug.dylib (in target 'Dynamic Island' from project 'DynamicIsland')
+    cd /Users/rong5/Dynamiclsland
+    
+    Signing Identity:     "Sign to Run Locally"
+    
+    /usr/bin/codesign --force --sign - --timestamp\=none --generate-entitlement-der /tmp/dynamic-island-ci-derived-data/Build/Products/Debug/Dynamic\ Island.app/Contents/MacOS/Dynamic\ Island.debug.dylib
+
+CodeSign /tmp/dynamic-island-ci-derived-data/Build/Products/Debug/Dynamic\ Island.app/Contents/MacOS/__preview.dylib (in target 'Dynamic Island' from project 'DynamicIsland')
+    cd /Users/rong5/Dynamiclsland
+    
+    Signing Identity:     "Sign to Run Locally"
+    
+    /usr/bin/codesign --force --sign - --timestamp\=none --generate-entitlement-der /tmp/dynamic-island-ci-derived-data/Build/Products/Debug/Dynamic\ Island.app/Contents/MacOS/__preview.dylib
+/tmp/dynamic-island-ci-derived-data/Build/Products/Debug/Dynamic Island.app/Contents/MacOS/__preview.dylib: replacing existing signature
+
+CodeSign /tmp/dynamic-island-ci-derived-data/Build/Products/Debug/Dynamic\ Island.app (in target 'Dynamic Island' from project 'DynamicIsland')
+    cd /Users/rong5/Dynamiclsland
+    
+    Signing Identity:     "Sign to Run Locally"
+    
+    /usr/bin/codesign --force --sign - --entitlements /tmp/dynamic-island-ci-derived-data/Build/Intermediates.noindex/DynamicIsland.build/Debug/Dynamic\ Island.build/Dynamic\ Island.app.xcent --timestamp\=none --generate-entitlement-der /tmp/dynamic-island-ci-derived-data/Build/Products/Debug/Dynamic\ Island.app
+
+Validate /tmp/dynamic-island-ci-derived-data/Build/Products/Debug/Dynamic\ Island.app (in target 'Dynamic Island' from project 'DynamicIsland')
+    cd /Users/rong5/Dynamiclsland
+    builtin-validationUtility /tmp/dynamic-island-ci-derived-data/Build/Products/Debug/Dynamic\ Island.app -no-validate-extension -infoplist-subpath Contents/Info.plist
+
+RegisterWithLaunchServices /tmp/dynamic-island-ci-derived-data/Build/Products/Debug/Dynamic\ Island.app (in target 'Dynamic Island' from project 'DynamicIsland')
+    cd /Users/rong5/Dynamiclsland
+    /System/Library/Frameworks/CoreServices.framework/Versions/Current/Frameworks/LaunchServices.framework/Versions/Current/Support/lsregister -f -R -trusted /tmp/dynamic-island-ci-derived-data/Build/Products/Debug/Dynamic\ Island.app
+
+2026-10-20 15:42:56.607384+0800 Dynamic Island[19683:16669121] [Connection] Unable to get synchronousRemoteObjectProxy, error: Error Domain=NSCocoaErrorDomain Code=4097 "connection to service named com.apple.linkd.autoShortcut" UserInfo={NSDebugDescription=connection to service named com.apple.linkd.autoShortcut}
+2026-10-20 15:42:56.607566+0800 Dynamic Island[19683:16669121] [Application] Error registering app with intents framework: Error Domain=NSCocoaErrorDomain Code=4097 "connection to service named com.apple.linkd.autoShortcut" UserInfo={NSDebugDescription=connection to service named com.apple.linkd.autoShortcut}
+2026-10-20 15:42:56.608592+0800 Dynamic Island[19683:16669112] [Connection] Unable to get synchronousRemoteObjectProxy, error: Error Domain=NSCocoaErrorDomain Code=4097 "connection to service named com.apple.linkd.autoShortcut" UserInfo={NSDebugDescription=connection to service named com.apple.linkd.autoShortcut}
+2026-10-20 15:42:56.608606+0800 Dynamic Island[19683:16669112] [Connection] Unable to re-register with Process Instance Registry, error: Error Domain=NSCocoaErrorDomain Code=4097 "connection to service named com.apple.linkd.autoShortcut" UserInfo={NSDebugDescription=connection to service named com.apple.linkd.autoShortcut}
+2026-10-20 15:42:56.609736+0800 Dynamic Island[19683:16669113] [Connection] Unable to get synchronousRemoteObjectProxy, error: Error Domain=NSCocoaErrorDomain Code=4097 "connection to service named com.apple.linkd.autoShortcut" UserInfo={NSDebugDescription=connection to service named com.apple.linkd.autoShortcut}
+2026-10-20 15:42:56.609750+0800 Dynamic Island[19683:16669113] [Connection] Unable to re-register with Process Instance Registry, error: Error Domain=NSCocoaErrorDomain Code=4097 "connection to service named com.apple.linkd.autoShortcut" UserInfo={NSDebugDescription=connection to service named com.apple.linkd.autoShortcut}
+2026-10-20 15:42:56.610787+0800 Dynamic Island[19683:16669113] [Connection] Will NOT re-try to establish the connection
+2026-10-20 15:42:56.610809+0800 Dynamic Island[19683:16669121] [Connection] Unable to get synchronousRemoteObjectProxy, error: Error Domain=NSCocoaErrorDomain Code=4097 "connection to service named com.apple.linkd.autoShortcut" UserInfo={NSDebugDescription=connection to service named com.apple.linkd.autoShortcut}
+2026-10-20 15:42:56.610820+0800 Dynamic Island[19683:16669121] [Connection] Unable to re-register with Process Instance Registry, error: Error Domain=NSCocoaErrorDomain Code=4097 "connection to service named com.apple.linkd.autoShortcut" UserInfo={NSDebugDescription=connection to service named com.apple.linkd.autoShortcut}
+Test Suite 'Selected tests' started at 2026-10-20 15:42:56.666.
+Test Suite 'DynamicIslandTests.xctest' started at 2026-10-20 15:42:56.666.
+Test Suite 'IslandActivityRuntimeTests' started at 2026-10-20 15:42:56.666.
+Test Case '-[DynamicIslandTests.IslandActivityRuntimeTests testAutomaticCompactToolRestoresSameInstanceAfterTransientPreemption]' started.
+2026-10-20 15:42:56.668896+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=none to=queued reason=publish
+2026-10-20 15:42:56.668930+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=queued to=presented reason=select
+2026-10-20 15:42:56.669462+0800 Dynamic Island[19683:16669096] [ActivityManager] source=automatic-countdown id=host-test-automatic-countdown from=none to=queued reason=publish
+2026-10-20 15:42:57.171517+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=presented to=background reason=preempt
+2026-10-20 15:42:57.171651+0800 Dynamic Island[19683:16669096] [ActivityManager] source=automatic-countdown id=host-test-automatic-countdown from=queued to=presented reason=select
+2026-10-20 15:42:57.172055+0800 Dynamic Island[19683:16669096] [ActivityManager] source=battery id=builtin.battery from=none to=queued reason=publish
+2026-10-20 15:42:57.172135+0800 Dynamic Island[19683:16669096] [ActivityManager] source=automatic-countdown id=host-test-automatic-countdown from=presented to=background reason=preempt
+2026-10-20 15:42:57.172157+0800 Dynamic Island[19683:16669096] [ActivityManager] source=battery id=builtin.battery from=queued to=presented reason=select
+2026-10-20 15:42:57.172660+0800 Dynamic Island[19683:16669096] [ActivityManager] source=battery id=builtin.battery from=presented to=ended reason=sourceEnd
+2026-10-20 15:42:57.172726+0800 Dynamic Island[19683:16669096] [ActivityManager] source=automatic-countdown id=host-test-automatic-countdown from=background to=presented reason=select
+Test Case '-[DynamicIslandTests.IslandActivityRuntimeTests testAutomaticCompactToolRestoresSameInstanceAfterTransientPreemption]' passed (0.509 seconds).
+Test Case '-[DynamicIslandTests.IslandActivityRuntimeTests testAutomaticToolContextTracksInitialExpansionDragTrayLockAndNativeCompletion]' started.
+2026-10-20 15:42:57.178550+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=none to=queued reason=publish
+2026-10-20 15:42:57.178629+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=queued to=presented reason=select
+2026-10-20 15:42:57.179406+0800 Dynamic Island[19683:16669096] [ActivityManager] source=automatic-countdown id=host-test-automatic-countdown from=none to=queued reason=publish
+2026-10-20 15:42:57.179622+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=presented to=background reason=preempt
+2026-10-20 15:42:57.179642+0800 Dynamic Island[19683:16669096] [ActivityManager] source=automatic-countdown id=host-test-automatic-countdown from=queued to=presented reason=select
+2026-10-20 15:42:57.179961+0800 Dynamic Island[19683:16669096] [ActivityManager] source=automatic-countdown id=host-test-automatic-countdown from=presented to=background reason=preempt
+2026-10-20 15:42:57.179977+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=background to=presented reason=select
+2026-10-20 15:42:57.683874+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=presented to=background reason=preempt
+2026-10-20 15:42:57.683989+0800 Dynamic Island[19683:16669096] [ActivityManager] source=automatic-countdown id=host-test-automatic-countdown from=background to=presented reason=select
+2026-10-20 15:42:57.684615+0800 Dynamic Island[19683:16669096] [ActivityManager] source=automatic-countdown id=host-test-automatic-countdown from=presented to=background reason=preempt
+2026-10-20 15:42:57.684681+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=background to=presented reason=select
+2026-10-20 15:42:58.185615+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=presented to=background reason=preempt
+2026-10-20 15:42:58.185690+0800 Dynamic Island[19683:16669096] [ActivityManager] source=automatic-countdown id=host-test-automatic-countdown from=background to=presented reason=select
+2026-10-20 15:42:58.186432+0800 Dynamic Island[19683:16669096] [ActivityManager] source=automatic-countdown id=host-test-automatic-countdown from=presented to=background reason=preempt
+2026-10-20 15:42:58.186456+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=background to=presented reason=select
+2026-10-20 15:42:58.686630+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=presented to=background reason=preempt
+2026-10-20 15:42:58.686674+0800 Dynamic Island[19683:16669096] [ActivityManager] source=automatic-countdown id=host-test-automatic-countdown from=background to=presented reason=select
+Test Case '-[DynamicIslandTests.IslandActivityRuntimeTests testAutomaticToolContextTracksInitialExpansionDragTrayLockAndNativeCompletion]' passed (1.511 seconds).
+Test Case '-[DynamicIslandTests.IslandActivityRuntimeTests testAutomaticToolUsesCompactContextAndPreservesExpandedLegacyChoices]' started.
+2026-10-20 15:42:58.689569+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=none to=queued reason=publish
+2026-10-20 15:42:58.689630+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=queued to=presented reason=select
+2026-10-20 15:42:58.690184+0800 Dynamic Island[19683:16669096] [ActivityManager] source=automatic-countdown id=host-test-automatic-countdown from=none to=queued reason=publish
+2026-10-20 15:42:59.190224+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=presented to=background reason=preempt
+2026-10-20 15:42:59.190332+0800 Dynamic Island[19683:16669096] [ActivityManager] source=automatic-countdown id=host-test-automatic-countdown from=queued to=presented reason=select
+2026-10-20 15:42:59.196174+0800 Dynamic Island[19683:16669096] [ActivityManager] source=automatic-countdown id=host-test-automatic-countdown from=presented to=background reason=preempt
+2026-10-20 15:42:59.196223+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=background to=presented reason=select
+2026-10-20 15:42:59.196617+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=presented to=background reason=preempt
+2026-10-20 15:42:59.196642+0800 Dynamic Island[19683:16669096] [ActivityManager] source=automatic-countdown id=host-test-automatic-countdown from=background to=presented reason=select
+2026-10-20 15:42:59.197049+0800 Dynamic Island[19683:16669096] [ActivityManager] source=automatic-countdown id=host-test-automatic-countdown from=presented to=background reason=preempt
+2026-10-20 15:42:59.197068+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=background to=presented reason=select
+2026-10-20 15:42:59.197332+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=presented to=background reason=preempt
+2026-10-20 15:42:59.197348+0800 Dynamic Island[19683:16669096] [ActivityManager] source=automatic-countdown id=host-test-automatic-countdown from=background to=presented reason=select
+2026-10-20 15:42:59.197502+0800 Dynamic Island[19683:16669096] [ActivityManager] source=automatic-countdown id=host-test-automatic-countdown from=presented to=background reason=preempt
+2026-10-20 15:42:59.197523+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=background to=presented reason=select
+2026-10-20 15:42:59.197887+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=presented to=background reason=preempt
+2026-10-20 15:42:59.197903+0800 Dynamic Island[19683:16669096] [ActivityManager] source=automatic-countdown id=host-test-automatic-countdown from=background to=presented reason=select
+2026-10-20 15:42:59.198056+0800 Dynamic Island[19683:16669096] [ActivityManager] source=automatic-countdown id=host-test-automatic-countdown from=presented to=background reason=preempt
+2026-10-20 15:42:59.198071+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=background to=presented reason=select
+2026-10-20 15:42:59.698502+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=presented to=background reason=preempt
+2026-10-20 15:42:59.698618+0800 Dynamic Island[19683:16669096] [ActivityManager] source=automatic-countdown id=host-test-automatic-countdown from=background to=presented reason=select
+2026-10-20 15:42:59.704293+0800 Dynamic Island[19683:16669096] [ActivityManager] source=automatic-countdown id=host-test-automatic-countdown from=presented to=ended reason=sourceEnd
+2026-10-20 15:42:59.704457+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=background to=presented reason=select
+2026-10-20 15:42:59.704656+0800 Dynamic Island[19683:16669096] [ActivityManager] source=automatic-countdown id=host-test-automatic-countdown from=none to=queued reason=publish
+2026-10-20 15:43:00.205757+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=presented to=background reason=preempt
+2026-10-20 15:43:00.205839+0800 Dynamic Island[19683:16669096] [ActivityManager] source=automatic-countdown id=host-test-automatic-countdown from=queued to=presented reason=select
+Test Case '-[DynamicIslandTests.IslandActivityRuntimeTests testAutomaticToolUsesCompactContextAndPreservesExpandedLegacyChoices]' passed (1.520 seconds).
+Test Case '-[DynamicIslandTests.IslandActivityRuntimeTests testBatteryCriticalTransitionsToChargingThenRecoveryRestoresSameMusicInstance]' started.
+2026-10-20 15:43:00.210862+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=none to=queued reason=publish
+2026-10-20 15:43:00.210957+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=queued to=presented reason=select
+2026-10-20 15:43:00.212395+0800 Dynamic Island[19683:16669096] [ActivityManager] source=battery id=builtin.battery from=none to=queued reason=publish
+2026-10-20 15:43:00.212466+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=presented to=background reason=preempt
+2026-10-20 15:43:00.212488+0800 Dynamic Island[19683:16669096] [ActivityManager] source=battery id=builtin.battery from=queued to=presented reason=select
+2026-10-20 15:43:00.215435+0800 Dynamic Island[19683:16669096] [ActivityManager] source=battery id=builtin.battery from=presented to=ended reason=sourceEnd
+2026-10-20 15:43:00.215509+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=background to=presented reason=select
+2026-10-20 15:43:00.215621+0800 Dynamic Island[19683:16669096] [ActivityManager] source=battery id=builtin.battery from=none to=queued reason=publish
+2026-10-20 15:43:00.215668+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=presented to=background reason=preempt
+2026-10-20 15:43:00.215685+0800 Dynamic Island[19683:16669096] [ActivityManager] source=battery id=builtin.battery from=queued to=presented reason=select
+2026-10-20 15:43:00.218576+0800 Dynamic Island[19683:16669096] [ActivityManager] source=battery id=builtin.battery from=presented to=ended reason=sourceEnd
+2026-10-20 15:43:00.218648+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=background to=presented reason=select
+Test Case '-[DynamicIslandTests.IslandActivityRuntimeTests testBatteryCriticalTransitionsToChargingThenRecoveryRestoresSameMusicInstance]' passed (0.014 seconds).
+Test Case '-[DynamicIslandTests.IslandActivityRuntimeTests testCountdownBusinessChangesInvalidateHostDisplayAndShutdownClosesItsClock]' started.
+2026-10-20 15:43:00.225261+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=none to=queued reason=publish
+2026-10-20 15:43:00.225381+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=queued to=presented reason=select
+Test Case '-[DynamicIslandTests.IslandActivityRuntimeTests testCountdownBusinessChangesInvalidateHostDisplayAndShutdownClosesItsClock]' passed (0.027 seconds).
+Test Case '-[DynamicIslandTests.IslandActivityRuntimeTests testCountdownCompactGeometryUsesOnlyCurrentResolvedCompactTree]' started.
+2026-10-20 15:43:00.252302+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=none to=queued reason=publish
+2026-10-20 15:43:00.252397+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=queued to=presented reason=select
+2026-10-20 15:43:00.253188+0800 Dynamic Island[19683:16669096] [ActivityManager] source=automatic-countdown id=host-test-automatic-countdown from=none to=queued reason=publish
+2026-10-20 15:43:00.253245+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=presented to=background reason=preempt
+2026-10-20 15:43:00.253264+0800 Dynamic Island[19683:16669096] [ActivityManager] source=automatic-countdown id=host-test-automatic-countdown from=queued to=presented reason=select
+2026-10-20 15:43:00.253520+0800 Dynamic Island[19683:16669096] [ActivityManager] source=automatic-countdown id=host-test-automatic-countdown from=presented to=presented reason=update
+2026-10-20 15:43:00.253639+0800 Dynamic Island[19683:16669096] [ActivityManager] source=automatic-countdown id=host-test-automatic-countdown from=presented to=presented reason=update
+2026-10-20 15:43:00.254064+0800 Dynamic Island[19683:16669096] [ActivityManager] source=automatic-countdown id=host-test-automatic-countdown from=presented to=presented reason=update
+2026-10-20 15:43:00.254188+0800 Dynamic Island[19683:16669096] [ActivityManager] source=automatic-countdown id=host-test-automatic-countdown from=presented to=presented reason=update
+2026-10-20 15:43:00.254296+0800 Dynamic Island[19683:16669096] [ActivityManager] source=automatic-countdown id=host-test-automatic-countdown from=presented to=ended reason=sourceEnd
+2026-10-20 15:43:00.254343+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=background to=presented reason=select
+Test Case '-[DynamicIslandTests.IslandActivityRuntimeTests testCountdownCompactGeometryUsesOnlyCurrentResolvedCompactTree]' passed (0.005 seconds).
+Test Case '-[DynamicIslandTests.IslandActivityRuntimeTests testHostToolAndLegacyChoicesWithdrawRequestsWithoutGrantingAnotherLease]' started.
+2026-10-20 15:43:00.257537+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=none to=queued reason=publish
+2026-10-20 15:43:00.257608+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=queued to=presented reason=select
+2026-10-20 15:43:00.258232+0800 Dynamic Island[19683:16669096] [ActivityManager] source=host-test-tool id=host-test-tool from=none to=queued reason=publish
+2026-10-20 15:43:00.258704+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=presented to=background reason=preempt
+2026-10-20 15:43:00.258722+0800 Dynamic Island[19683:16669096] [ActivityManager] source=host-test-tool id=host-test-tool from=queued to=presented reason=select
+2026-10-20 15:43:00.258833+0800 Dynamic Island[19683:16669096] [ActivityManager] source=host-test-tool id=host-test-tool from=presented to=background reason=preempt
+2026-10-20 15:43:00.258847+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=background to=presented reason=select
+Test Case '-[DynamicIslandTests.IslandActivityRuntimeTests testHostToolAndLegacyChoicesWithdrawRequestsWithoutGrantingAnotherLease]' passed (0.004 seconds).
+Test Case '-[DynamicIslandTests.IslandActivityRuntimeTests testMusicPlayingAndPausedUpdatesDriveRuntimeCompactVisibility]' started.
+2026-10-20 15:43:00.261797+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=none to=queued reason=publish
+2026-10-20 15:43:00.261863+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=queued to=presented reason=select
+2026-10-20 15:43:00.262784+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=presented to=presented reason=update
+Test Case '-[DynamicIslandTests.IslandActivityRuntimeTests testMusicPlayingAndPausedUpdatesDriveRuntimeCompactVisibility]' passed (0.003 seconds).
+Test Case '-[DynamicIslandTests.IslandActivityRuntimeTests testNativeTimerCompletionClearsToolChoiceAndKeepsItsLegacyGeometry]' started.
+2026-10-20 15:43:00.265276+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=none to=queued reason=publish
+2026-10-20 15:43:00.265359+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=queued to=presented reason=select
+2026-10-20 15:43:00.266069+0800 Dynamic Island[19683:16669096] [ActivityManager] source=host-test-tool id=host-test-tool from=none to=queued reason=publish
+2026-10-20 15:43:00.266671+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=presented to=background reason=preempt
+2026-10-20 15:43:00.266702+0800 Dynamic Island[19683:16669096] [ActivityManager] source=host-test-tool id=host-test-tool from=queued to=presented reason=select
+2026-10-20 15:43:00.267247+0800 Dynamic Island[19683:16669096] [ActivityManager] source=host-test-tool id=host-test-tool from=presented to=background reason=preempt
+2026-10-20 15:43:00.267272+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=background to=presented reason=select
+Test Case '-[DynamicIslandTests.IslandActivityRuntimeTests testNativeTimerCompletionClearsToolChoiceAndKeepsItsLegacyGeometry]' passed (0.005 seconds).
+Test Case '-[DynamicIslandTests.IslandActivityRuntimeTests testPresentationRequestDragTrayLockAndNativeCompletionRevokeUntilRestored]' started.
+2026-10-20 15:43:00.271161+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=none to=queued reason=publish
+2026-10-20 15:43:00.271231+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=queued to=presented reason=select
+2026-10-20 15:43:00.272002+0800 Dynamic Island[19683:16669096] [ActivityManager] source=host-test-tool id=host-test-tool from=none to=queued reason=publish
+2026-10-20 15:43:00.772198+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=presented to=background reason=preempt
+2026-10-20 15:43:00.772328+0800 Dynamic Island[19683:16669096] [ActivityManager] source=host-test-tool id=host-test-tool from=queued to=presented reason=select
+2026-10-20 15:43:00.778191+0800 Dynamic Island[19683:16669096] [ActivityManager] source=host-test-tool id=host-test-tool from=presented to=background reason=preempt
+2026-10-20 15:43:00.778258+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=background to=presented reason=select
+2026-10-20 15:43:00.781659+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=none to=queued reason=publish
+2026-10-20 15:43:00.781768+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=queued to=presented reason=select
+2026-10-20 15:43:00.782689+0800 Dynamic Island[19683:16669096] [ActivityManager] source=host-test-tool id=host-test-tool from=none to=queued reason=publish
+2026-10-20 15:43:01.285912+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=presented to=background reason=preempt
+2026-10-20 15:43:01.285978+0800 Dynamic Island[19683:16669096] [ActivityManager] source=host-test-tool id=host-test-tool from=queued to=presented reason=select
+2026-10-20 15:43:01.291909+0800 Dynamic Island[19683:16669096] [ActivityManager] source=host-test-tool id=host-test-tool from=presented to=background reason=preempt
+2026-10-20 15:43:01.291940+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=background to=presented reason=select
+2026-10-20 15:43:01.293542+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=none to=queued reason=publish
+2026-10-20 15:43:01.293585+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=queued to=presented reason=select
+2026-10-20 15:43:01.293988+0800 Dynamic Island[19683:16669096] [ActivityManager] source=host-test-tool id=host-test-tool from=none to=queued reason=publish
+2026-10-20 15:43:01.795964+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=presented to=background reason=preempt
+2026-10-20 15:43:01.796073+0800 Dynamic Island[19683:16669096] [ActivityManager] source=host-test-tool id=host-test-tool from=queued to=presented reason=select
+2026-10-20 15:43:01.798548+0800 Dynamic Island[19683:16669096] [ActivityManager] source=host-test-tool id=host-test-tool from=presented to=background reason=preempt
+2026-10-20 15:43:01.798605+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=background to=presented reason=select
+Test Case '-[DynamicIslandTests.IslandActivityRuntimeTests testPresentationRequestDragTrayLockAndNativeCompletionRevokeUntilRestored]' passed (1.532 seconds).
+Test Case '-[DynamicIslandTests.IslandActivityRuntimeTests testPresentationRequestFoldRevokesAndDoesNotResumeOnExpansion]' started.
+2026-10-20 15:43:01.804322+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=none to=queued reason=publish
+2026-10-20 15:43:01.804433+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=queued to=presented reason=select
+2026-10-20 15:43:01.805493+0800 Dynamic Island[19683:16669096] [ActivityManager] source=host-test-tool id=host-test-tool from=none to=queued reason=publish
+2026-10-20 15:43:02.308705+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=presented to=background reason=preempt
+2026-10-20 15:43:02.308820+0800 Dynamic Island[19683:16669096] [ActivityManager] source=host-test-tool id=host-test-tool from=queued to=presented reason=select
+2026-10-20 15:43:02.309172+0800 Dynamic Island[19683:16669096] [ActivityManager] source=host-test-tool id=host-test-tool from=presented to=background reason=preempt
+2026-10-20 15:43:02.309209+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=background to=presented reason=select
+Test Case '-[DynamicIslandTests.IslandActivityRuntimeTests testPresentationRequestFoldRevokesAndDoesNotResumeOnExpansion]' passed (0.510 seconds).
+Test Case '-[DynamicIslandTests.IslandActivityRuntimeTests testPresentationRequestInitialContextAndPanelVisibilityRevokeSynchronously]' started.
+2026-10-20 15:43:02.315101+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=none to=queued reason=publish
+2026-10-20 15:43:02.315208+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=queued to=presented reason=select
+2026-10-20 15:43:02.316136+0800 Dynamic Island[19683:16669096] [ActivityManager] source=host-test-tool id=host-test-tool from=none to=queued reason=publish
+2026-10-20 15:43:02.815551+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=presented to=background reason=preempt
+2026-10-20 15:43:02.815673+0800 Dynamic Island[19683:16669096] [ActivityManager] source=host-test-tool id=host-test-tool from=queued to=presented reason=select
+2026-10-20 15:43:02.820898+0800 Dynamic Island[19683:16669096] [ActivityManager] source=host-test-tool id=host-test-tool from=presented to=background reason=preempt
+2026-10-20 15:43:02.820984+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=background to=presented reason=select
+Test Case '-[DynamicIslandTests.IslandActivityRuntimeTests testPresentationRequestInitialContextAndPanelVisibilityRevokeSynchronously]' passed (0.511 seconds).
+Test Case '-[DynamicIslandTests.IslandActivityRuntimeTests testPresentationRequestRequiresVisibleExpandedToolsWithoutChangingHostState]' started.
+2026-10-20 15:43:02.826204+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=none to=queued reason=publish
+2026-10-20 15:43:02.826276+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=queued to=presented reason=select
+2026-10-20 15:43:02.826948+0800 Dynamic Island[19683:16669096] [ActivityManager] source=host-test-tool id=host-test-tool from=none to=queued reason=publish
+Test Case '-[DynamicIslandTests.IslandActivityRuntimeTests testPresentationRequestRequiresVisibleExpandedToolsWithoutChangingHostState]' passed (0.004 seconds).
+Test Case '-[DynamicIslandTests.IslandActivityRuntimeTests testProductionRuntimeExecutesJavaScriptAndKeepsOtherPluginAdmissionOpen]' started.
+2026-10-20 15:43:02.830708+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=none to=queued reason=publish
+2026-10-20 15:43:02.830782+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=queued to=presented reason=select
+2026-10-20 15:43:02.851161+0800 Dynamic Island[19683:16669096] [ActivityManager] source=com.example.production-running id=plugin:com.example.production-running:hello from=none to=queued reason=publish
+2026-10-20 15:43:02.852689+0800 Dynamic Island[19683:16669096] [ActivityManager] source=com.example.production-running id=plugin:com.example.production-running:hello from=queued to=queued reason=update
+2026-10-20 15:43:02.853464+0800 Dynamic Island[19683:16669096] [PluginJSBridge] plugin=com.example.production-running Plugin log message omitted.
+2026-10-20 15:43:02.859138+0800 Dynamic Island[19683:16669096] [ActivityManager] source=com.example.production-running id=plugin:com.example.production-running:hello from=queued to=ended reason=sourceStopped
+Test Case '-[DynamicIslandTests.IslandActivityRuntimeTests testProductionRuntimeExecutesJavaScriptAndKeepsOtherPluginAdmissionOpen]' passed (0.031 seconds).
+Test Case '-[DynamicIslandTests.IslandActivityRuntimeTests testProductionRuntimeSharesMusicActivityAndActionRouter]' started.
+2026-10-20 15:43:02.861531+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=none to=queued reason=publish
+2026-10-20 15:43:02.861580+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=queued to=presented reason=select
+2026-10-20 15:43:02.862077+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=presented to=presented reason=update
+Test Case '-[DynamicIslandTests.IslandActivityRuntimeTests testProductionRuntimeSharesMusicActivityAndActionRouter]' passed (0.002 seconds).
+Test Case '-[DynamicIslandTests.IslandActivityRuntimeTests testProductionRuntimeSharesSchedulerAndShutdownRemovesPendingDeadline]' started.
+2026-10-20 15:43:02.863691+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=none to=queued reason=publish
+2026-10-20 15:43:02.863729+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=queued to=presented reason=select
+2026-10-20 15:43:02.866990+0800 Dynamic Island[19683:16669096] [PluginJSBridge] plugin=com.example.production-scheduler Plugin log message omitted.
+Test Case '-[DynamicIslandTests.IslandActivityRuntimeTests testProductionRuntimeSharesSchedulerAndShutdownRemovesPendingDeadline]' passed (0.008 seconds).
+Test Case '-[DynamicIslandTests.IslandActivityRuntimeTests testPublicToolExampleRequiresHostSelectionAndRoutesOnlyVisibleInstance]' started.
+2026-10-20 15:43:02.872318+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=none to=queued reason=publish
+2026-10-20 15:43:02.872349+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=queued to=presented reason=select
+2026-10-20 15:43:02.889003+0800 Dynamic Island[19683:16669096] [ActivityManager] source=com.example.tool-demo id=plugin:com.example.tool-demo:counter from=none to=queued reason=publish
+2026-10-20 15:43:02.892200+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=presented to=background reason=preempt
+2026-10-20 15:43:02.892218+0800 Dynamic Island[19683:16669096] [ActivityManager] source=com.example.tool-demo id=plugin:com.example.tool-demo:counter from=queued to=presented reason=select
+2026-10-20 15:43:02.893571+0800 Dynamic Island[19683:16669096] [ActivityManager] source=com.example.tool-demo id=plugin:com.example.tool-demo:counter from=presented to=presented reason=update
+2026-10-20 15:43:02.898736+0800 Dynamic Island[19683:16669096] [ActivityManager] source=battery id=builtin.battery from=none to=queued reason=publish
+2026-10-20 15:43:02.898783+0800 Dynamic Island[19683:16669096] [ActivityManager] source=com.example.tool-demo id=plugin:com.example.tool-demo:counter from=presented to=background reason=preempt
+2026-10-20 15:43:02.898798+0800 Dynamic Island[19683:16669096] [ActivityManager] source=battery id=builtin.battery from=queued to=presented reason=select
+2026-10-20 15:43:02.898907+0800 Dynamic Island[19683:16669096] [ActivityManager] source=battery id=builtin.battery from=presented to=ended reason=sourceEnd
+2026-10-20 15:43:02.898938+0800 Dynamic Island[19683:16669096] [ActivityManager] source=com.example.tool-demo id=plugin:com.example.tool-demo:counter from=background to=presented reason=select
+2026-10-20 15:43:02.898991+0800 Dynamic Island[19683:16669096] [ActivityManager] source=com.example.tool-demo id=plugin:com.example.tool-demo:counter from=presented to=background reason=preempt
+2026-10-20 15:43:02.899000+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=background to=presented reason=select
+2026-10-20 15:43:02.899020+0800 Dynamic Island[19683:16669096] [ActivityManager] source=com.example.tool-demo id=plugin:com.example.tool-demo:counter from=background to=ended reason=sourceStopped
+Test Case '-[DynamicIslandTests.IslandActivityRuntimeTests testPublicToolExampleRequiresHostSelectionAndRoutesOnlyVisibleInstance]' passed (0.028 seconds).
+Test Case '-[DynamicIslandTests.IslandActivityRuntimeTests testRuntimeForwardsOwnedArtworkToMusicProviderAndScopesOtherResources]' started.
+2026-10-20 15:43:02.905530+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=none to=queued reason=publish
+2026-10-20 15:43:02.905560+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=queued to=presented reason=select
+Test Case '-[DynamicIslandTests.IslandActivityRuntimeTests testRuntimeForwardsOwnedArtworkToMusicProviderAndScopesOtherResources]' passed (0.006 seconds).
+Test Case '-[DynamicIslandTests.IslandActivityRuntimeTests testRuntimePublishesExternalVolumeChangeWithoutTreatingMusicControlAsSystemHUD]' started.
+2026-10-20 15:43:02.907243+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=none to=queued reason=publish
+2026-10-20 15:43:02.907273+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=queued to=presented reason=select
+2026-10-20 15:43:02.907563+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=presented to=presented reason=update
+2026-10-20 15:43:02.971897+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=presented to=presented reason=update
+2026-10-20 15:43:03.014724+0800 Dynamic Island[19683:16669096] [ActivityManager] source=volume id=builtin.volume from=none to=queued reason=publish
+2026-10-20 15:43:03.409116+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=presented to=background reason=preempt
+2026-10-20 15:43:03.409201+0800 Dynamic Island[19683:16669096] [ActivityManager] source=volume id=builtin.volume from=queued to=presented reason=select
+Test Case '-[DynamicIslandTests.IslandActivityRuntimeTests testRuntimePublishesExternalVolumeChangeWithoutTreatingMusicControlAsSystemHUD]' passed (0.506 seconds).
+Test Case '-[DynamicIslandTests.IslandActivityRuntimeTests testRuntimeUsesCurrentPresentationForCompactVisibility]' started.
+2026-10-20 15:43:03.413991+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=none to=queued reason=publish
+2026-10-20 15:43:03.414065+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=queued to=presented reason=select
+2026-10-20 15:43:03.414706+0800 Dynamic Island[19683:16669096] [ActivityManager] source=test id=test.hidden from=none to=queued reason=publish
+2026-10-20 15:43:03.414757+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=presented to=background reason=preempt
+2026-10-20 15:43:03.414773+0800 Dynamic Island[19683:16669096] [ActivityManager] source=test id=test.hidden from=queued to=presented reason=select
+2026-10-20 15:43:03.414857+0800 Dynamic Island[19683:16669096] [ActivityManager] source=test id=test.hidden from=presented to=ended reason=sourceEnd
+2026-10-20 15:43:03.414890+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=background to=presented reason=select
+2026-10-20 15:43:03.414950+0800 Dynamic Island[19683:16669096] [ActivityManager] source=test id=test.visible from=none to=queued reason=publish
+2026-10-20 15:43:03.415386+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=presented to=background reason=preempt
+2026-10-20 15:43:03.415406+0800 Dynamic Island[19683:16669096] [ActivityManager] source=test id=test.visible from=queued to=presented reason=select
+Test Case '-[DynamicIslandTests.IslandActivityRuntimeTests testRuntimeUsesCurrentPresentationForCompactVisibility]' passed (0.003 seconds).
+Test Case '-[DynamicIslandTests.IslandActivityRuntimeTests testShutdownRevokesPresentationRequestsAndStopsContextFromReopeningThem]' started.
+2026-10-20 15:43:03.417823+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=none to=queued reason=publish
+2026-10-20 15:43:03.417982+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=queued to=presented reason=select
+2026-10-20 15:43:03.418975+0800 Dynamic Island[19683:16669096] [ActivityManager] source=host-test-tool id=host-test-tool from=none to=queued reason=publish
+Test Case '-[DynamicIslandTests.IslandActivityRuntimeTests testShutdownRevokesPresentationRequestsAndStopsContextFromReopeningThem]' passed (0.005 seconds).
+Test Case '-[DynamicIslandTests.IslandActivityRuntimeTests testToolSelectionClearsSynchronouslyOnFoldDragAndLegacySurfaceChoice]' started.
+2026-10-20 15:43:03.422685+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=none to=queued reason=publish
+2026-10-20 15:43:03.422741+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=queued to=presented reason=select
+2026-10-20 15:43:03.423453+0800 Dynamic Island[19683:16669096] [ActivityManager] source=host-test-tool id=host-test-tool from=none to=queued reason=publish
+2026-10-20 15:43:03.424195+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=presented to=background reason=preempt
+2026-10-20 15:43:03.424231+0800 Dynamic Island[19683:16669096] [ActivityManager] source=host-test-tool id=host-test-tool from=queued to=presented reason=select
+2026-10-20 15:43:03.424610+0800 Dynamic Island[19683:16669096] [ActivityManager] source=host-test-tool id=host-test-tool from=presented to=background reason=preempt
+2026-10-20 15:43:03.424639+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=background to=presented reason=select
+2026-10-20 15:43:03.425195+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=presented to=background reason=preempt
+2026-10-20 15:43:03.425227+0800 Dynamic Island[19683:16669096] [ActivityManager] source=host-test-tool id=host-test-tool from=background to=presented reason=select
+2026-10-20 15:43:03.425507+0800 Dynamic Island[19683:16669096] [ActivityManager] source=host-test-tool id=host-test-tool from=presented to=background reason=preempt
+2026-10-20 15:43:03.425537+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=background to=presented reason=select
+2026-10-20 15:43:03.425728+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=presented to=background reason=preempt
+2026-10-20 15:43:03.425759+0800 Dynamic Island[19683:16669096] [ActivityManager] source=host-test-tool id=host-test-tool from=background to=presented reason=select
+2026-10-20 15:43:03.426032+0800 Dynamic Island[19683:16669096] [ActivityManager] source=host-test-tool id=host-test-tool from=presented to=background reason=preempt
+2026-10-20 15:43:03.426062+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=background to=presented reason=select
+2026-10-20 15:43:03.426261+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=presented to=background reason=preempt
+2026-10-20 15:43:03.426290+0800 Dynamic Island[19683:16669096] [ActivityManager] source=host-test-tool id=host-test-tool from=background to=presented reason=select
+2026-10-20 15:43:03.426582+0800 Dynamic Island[19683:16669096] [ActivityManager] source=host-test-tool id=host-test-tool from=presented to=background reason=preempt
+2026-10-20 15:43:03.426610+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=background to=presented reason=select
+2026-10-20 15:43:03.427059+0800 Dynamic Island[19683:16669096] [ActivityManager] source=host-test-tool id=host-test-tool from=background to=ended reason=sourceEnd
+Test Case '-[DynamicIslandTests.IslandActivityRuntimeTests testToolSelectionClearsSynchronouslyOnFoldDragAndLegacySurfaceChoice]' passed (0.006 seconds).
+Test Case '-[DynamicIslandTests.IslandActivityRuntimeTests testTransientActivityPreservesLockedFileTrayUntilLegacyTrayRestores]' started.
+2026-10-20 15:43:03.429549+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=none to=queued reason=publish
+2026-10-20 15:43:03.429603+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=queued to=presented reason=select
+2026-10-20 15:43:03.430092+0800 Dynamic Island[19683:16669096] [ActivityManager] source=battery id=builtin.battery from=none to=queued reason=publish
+2026-10-20 15:43:03.430145+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=presented to=background reason=preempt
+2026-10-20 15:43:03.430161+0800 Dynamic Island[19683:16669096] [ActivityManager] source=battery id=builtin.battery from=queued to=presented reason=select
+2026-10-20 15:43:03.430267+0800 Dynamic Island[19683:16669096] [ActivityManager] source=battery id=builtin.battery from=presented to=ended reason=sourceEnd
+2026-10-20 15:43:03.430300+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=background to=presented reason=select
+Test Case '-[DynamicIslandTests.IslandActivityRuntimeTests testTransientActivityPreservesLockedFileTrayUntilLegacyTrayRestores]' passed (0.003 seconds).
+Test Case '-[DynamicIslandTests.IslandActivityRuntimeTests testTransientActivityPreservesTimerCompletionUntilLegacyToolsRestore]' started.
+2026-10-20 15:43:03.432391+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=none to=queued reason=publish
+2026-10-20 15:43:03.432452+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=queued to=presented reason=select
+2026-10-20 15:43:03.432997+0800 Dynamic Island[19683:16669096] [ActivityManager] source=battery id=builtin.battery from=none to=queued reason=publish
+2026-10-20 15:43:03.433048+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=presented to=background reason=preempt
+2026-10-20 15:43:03.433064+0800 Dynamic Island[19683:16669096] [ActivityManager] source=battery id=builtin.battery from=queued to=presented reason=select
+2026-10-20 15:43:03.433155+0800 Dynamic Island[19683:16669096] [ActivityManager] source=battery id=builtin.battery from=presented to=ended reason=sourceEnd
+2026-10-20 15:43:03.433195+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=background to=presented reason=select
+Test Case '-[DynamicIslandTests.IslandActivityRuntimeTests testTransientActivityPreservesTimerCompletionUntilLegacyToolsRestore]' passed (0.003 seconds).
+Test Suite 'IslandActivityRuntimeTests' passed at 2026-10-20 15:43:03.435.
+	 Executed 24 tests, with 0 failures (0 unexpected) in 6.757 (6.769) seconds
+Test Suite 'IslandPanelHoverRegionTests' started at 2026-10-20 15:43:03.435.
+Test Case '-[DynamicIslandTests.IslandPanelHoverRegionTests testExpandedFrameStillContainsPointerFromCompactFrame]' started.
+Test Case '-[DynamicIslandTests.IslandPanelHoverRegionTests testExpandedFrameStillContainsPointerFromCompactFrame]' passed (0.001 seconds).
+Test Case '-[DynamicIslandTests.IslandPanelHoverRegionTests testExpandedHoverRegionUsesVisibleShellInsteadOfFullTransparentPanel]' started.
+Test Case '-[DynamicIslandTests.IslandPanelHoverRegionTests testExpandedHoverRegionUsesVisibleShellInsteadOfFullTransparentPanel]' passed (0.001 seconds).
+Test Case '-[DynamicIslandTests.IslandPanelHoverRegionTests testHoverRegionGrowsWithPointerFeedback]' started.
+Test Case '-[DynamicIslandTests.IslandPanelHoverRegionTests testHoverRegionGrowsWithPointerFeedback]' passed (0.001 seconds).
+Test Case '-[DynamicIslandTests.IslandPanelHoverRegionTests testPointOutsideToleranceIsNotInsideHoverRegion]' started.
+Test Case '-[DynamicIslandTests.IslandPanelHoverRegionTests testPointOutsideToleranceIsNotInsideHoverRegion]' passed (0.001 seconds).
+Test Suite 'IslandPanelHoverRegionTests' passed at 2026-10-20 15:43:03.440.
+	 Executed 4 tests, with 0 failures (0 unexpected) in 0.003 (0.005) seconds
+Test Suite 'IslandToolMenuInteractionTests' started at 2026-10-20 15:43:03.440.
+Test Case '-[DynamicIslandTests.IslandToolMenuInteractionTests testDisabledPluginCannotBeChosenOrInvokedByMenuRetainedSnapshot]' started.
+2026-10-20 15:43:03.441917+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=none to=queued reason=publish
+2026-10-20 15:43:03.441974+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=queued to=presented reason=select
+2026-10-20 15:43:03.442587+0800 Dynamic Island[19683:16669096] [ActivityManager] source=menu-tool-alpha id=menu-tool-alpha from=none to=queued reason=publish
+2026-10-20 15:43:03.442675+0800 Dynamic Island[19683:16669096] [ActivityManager] source=menu-tool-beta id=menu-tool-beta from=none to=queued reason=publish
+2026-10-20 15:43:03.448592+0800 Dynamic Island[19683:16669096] [ActivityManager] source=com.example.tool-demo id=plugin:com.example.tool-demo:counter from=none to=queued reason=publish
+2026-10-20 15:43:03.450087+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=presented to=background reason=preempt
+2026-10-20 15:43:03.450110+0800 Dynamic Island[19683:16669096] [ActivityManager] source=com.example.tool-demo id=plugin:com.example.tool-demo:counter from=queued to=presented reason=select
+2026-10-20 15:43:03.450205+0800 Dynamic Island[19683:16669096] [ActivityManager] source=com.example.tool-demo id=plugin:com.example.tool-demo:counter from=presented to=background reason=preempt
+2026-10-20 15:43:03.450215+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=background to=presented reason=select
+2026-10-20 15:43:03.450248+0800 Dynamic Island[19683:16669096] [ActivityManager] source=com.example.tool-demo id=plugin:com.example.tool-demo:counter from=background to=ended reason=sourceStopped
+Test Case '-[DynamicIslandTests.IslandToolMenuInteractionTests testDisabledPluginCannotBeChosenOrInvokedByMenuRetainedSnapshot]' passed (0.058 seconds).
+Test Case '-[DynamicIslandTests.IslandToolMenuInteractionTests testDragNonToolsSurfaceCompletionAndShutdownInvalidateCurrentMenu]' started.
+2026-10-20 15:43:03.499733+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=none to=queued reason=publish
+2026-10-20 15:43:03.499788+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=queued to=presented reason=select
+2026-10-20 15:43:03.500308+0800 Dynamic Island[19683:16669096] [ActivityManager] source=menu-tool-alpha id=menu-tool-alpha from=none to=queued reason=publish
+2026-10-20 15:43:03.500416+0800 Dynamic Island[19683:16669096] [ActivityManager] source=menu-tool-beta id=menu-tool-beta from=none to=queued reason=publish
+2026-10-20 15:43:03.500992+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=presented to=background reason=preempt
+2026-10-20 15:43:03.501026+0800 Dynamic Island[19683:16669096] [ActivityManager] source=menu-tool-alpha id=menu-tool-alpha from=queued to=presented reason=select
+2026-10-20 15:43:03.501175+0800 Dynamic Island[19683:16669096] [ActivityManager] source=menu-tool-alpha id=menu-tool-alpha from=presented to=background reason=preempt
+2026-10-20 15:43:03.501188+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=background to=presented reason=select
+2026-10-20 15:43:03.502859+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=none to=queued reason=publish
+2026-10-20 15:43:03.502919+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=queued to=presented reason=select
+2026-10-20 15:43:03.503366+0800 Dynamic Island[19683:16669096] [ActivityManager] source=menu-tool-alpha id=menu-tool-alpha from=none to=queued reason=publish
+2026-10-20 15:43:03.503472+0800 Dynamic Island[19683:16669096] [ActivityManager] source=menu-tool-beta id=menu-tool-beta from=none to=queued reason=publish
+2026-10-20 15:43:03.504249+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=presented to=background reason=preempt
+2026-10-20 15:43:03.504275+0800 Dynamic Island[19683:16669096] [ActivityManager] source=menu-tool-alpha id=menu-tool-alpha from=queued to=presented reason=select
+2026-10-20 15:43:03.504470+0800 Dynamic Island[19683:16669096] [ActivityManager] source=menu-tool-alpha id=menu-tool-alpha from=presented to=background reason=preempt
+2026-10-20 15:43:03.504491+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=background to=presented reason=select
+2026-10-20 15:43:03.505389+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=none to=queued reason=publish
+2026-10-20 15:43:03.505434+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=queued to=presented reason=select
+2026-10-20 15:43:03.505885+0800 Dynamic Island[19683:16669096] [ActivityManager] source=menu-tool-alpha id=menu-tool-alpha from=none to=queued reason=publish
+2026-10-20 15:43:03.506011+0800 Dynamic Island[19683:16669096] [ActivityManager] source=menu-tool-beta id=menu-tool-beta from=none to=queued reason=publish
+2026-10-20 15:43:03.506703+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=presented to=background reason=preempt
+2026-10-20 15:43:03.506731+0800 Dynamic Island[19683:16669096] [ActivityManager] source=menu-tool-alpha id=menu-tool-alpha from=queued to=presented reason=select
+2026-10-20 15:43:03.506918+0800 Dynamic Island[19683:16669096] [ActivityManager] source=menu-tool-alpha id=menu-tool-alpha from=presented to=background reason=preempt
+2026-10-20 15:43:03.506940+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=background to=presented reason=select
+2026-10-20 15:43:03.507815+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=none to=queued reason=publish
+2026-10-20 15:43:03.507866+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=queued to=presented reason=select
+2026-10-20 15:43:03.508284+0800 Dynamic Island[19683:16669096] [ActivityManager] source=menu-tool-alpha id=menu-tool-alpha from=none to=queued reason=publish
+2026-10-20 15:43:03.508411+0800 Dynamic Island[19683:16669096] [ActivityManager] source=menu-tool-beta id=menu-tool-beta from=none to=queued reason=publish
+2026-10-20 15:43:03.509082+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=presented to=background reason=preempt
+2026-10-20 15:43:03.509110+0800 Dynamic Island[19683:16669096] [ActivityManager] source=menu-tool-alpha id=menu-tool-alpha from=queued to=presented reason=select
+2026-10-20 15:43:03.509552+0800 Dynamic Island[19683:16669096] [ActivityManager] source=menu-tool-alpha id=menu-tool-alpha from=presented to=background reason=preempt
+2026-10-20 15:43:03.509573+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=background to=presented reason=select
+2026-10-20 15:43:03.510501+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=none to=queued reason=publish
+2026-10-20 15:43:03.510554+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=queued to=presented reason=select
+2026-10-20 15:43:03.511061+0800 Dynamic Island[19683:16669096] [ActivityManager] source=menu-tool-alpha id=menu-tool-alpha from=none to=queued reason=publish
+2026-10-20 15:43:03.511197+0800 Dynamic Island[19683:16669096] [ActivityManager] source=menu-tool-beta id=menu-tool-beta from=none to=queued reason=publish
+2026-10-20 15:43:03.511858+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=presented to=background reason=preempt
+2026-10-20 15:43:03.511890+0800 Dynamic Island[19683:16669096] [ActivityManager] source=menu-tool-alpha id=menu-tool-alpha from=queued to=presented reason=select
+2026-10-20 15:43:03.512044+0800 Dynamic Island[19683:16669096] [ActivityManager] source=menu-tool-alpha id=menu-tool-alpha from=presented to=background reason=preempt
+2026-10-20 15:43:03.512077+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=background to=presented reason=select
+Test Case '-[DynamicIslandTests.IslandToolMenuInteractionTests testDragNonToolsSurfaceCompletionAndShutdownInvalidateCurrentMenu]' passed (0.015 seconds).
+Test Case '-[DynamicIslandTests.IslandToolMenuInteractionTests testExplicitCancellationReleasesHoldAndLateCloseCannotRestoreSelection]' started.
+2026-10-20 15:43:03.514953+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=none to=queued reason=publish
+2026-10-20 15:43:03.515002+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=queued to=presented reason=select
+2026-10-20 15:43:03.515484+0800 Dynamic Island[19683:16669096] [ActivityManager] source=menu-tool-alpha id=menu-tool-alpha from=none to=queued reason=publish
+2026-10-20 15:43:03.515581+0800 Dynamic Island[19683:16669096] [ActivityManager] source=menu-tool-beta id=menu-tool-beta from=none to=queued reason=publish
+2026-10-20 15:43:03.516069+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=presented to=background reason=preempt
+2026-10-20 15:43:03.516086+0800 Dynamic Island[19683:16669096] [ActivityManager] source=menu-tool-alpha id=menu-tool-alpha from=queued to=presented reason=select
+2026-10-20 15:43:03.516224+0800 Dynamic Island[19683:16669096] [ActivityManager] source=menu-tool-alpha id=menu-tool-alpha from=presented to=background reason=preempt
+2026-10-20 15:43:03.516237+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=background to=presented reason=select
+Test Case '-[DynamicIslandTests.IslandToolMenuInteractionTests testExplicitCancellationReleasesHoldAndLateCloseCannotRestoreSelection]' passed (0.077 seconds).
+Test Case '-[DynamicIslandTests.IslandToolMenuInteractionTests testHideInvalidatesMenuAndLateCloseOrHoverCannotReviveHiddenPanel]' started.
+2026-10-20 15:43:03.592800+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=none to=queued reason=publish
+2026-10-20 15:43:03.592865+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=queued to=presented reason=select
+2026-10-20 15:43:03.593406+0800 Dynamic Island[19683:16669096] [ActivityManager] source=menu-tool-alpha id=menu-tool-alpha from=none to=queued reason=publish
+2026-10-20 15:43:03.593530+0800 Dynamic Island[19683:16669096] [ActivityManager] source=menu-tool-beta id=menu-tool-beta from=none to=queued reason=publish
+2026-10-20 15:43:03.594151+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=presented to=background reason=preempt
+2026-10-20 15:43:03.594169+0800 Dynamic Island[19683:16669096] [ActivityManager] source=menu-tool-alpha id=menu-tool-alpha from=queued to=presented reason=select
+2026-10-20 15:43:03.594460+0800 Dynamic Island[19683:16669096] [ActivityManager] source=menu-tool-alpha id=menu-tool-alpha from=presented to=background reason=preempt
+2026-10-20 15:43:03.594476+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=background to=presented reason=select
+Test Case '-[DynamicIslandTests.IslandToolMenuInteractionTests testHideInvalidatesMenuAndLateCloseOrHoverCannotReviveHiddenPanel]' passed (0.079 seconds).
+Test Case '-[DynamicIslandTests.IslandToolMenuInteractionTests testMenuAdmissionRequiresVisibleExpandedHostWithoutDragOrCompletion]' started.
+2026-10-20 15:43:03.673698+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=none to=queued reason=publish
+2026-10-20 15:43:03.673802+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=queued to=presented reason=select
+2026-10-20 15:43:03.674618+0800 Dynamic Island[19683:16669096] [ActivityManager] source=menu-tool-alpha id=menu-tool-alpha from=none to=queued reason=publish
+2026-10-20 15:43:03.674789+0800 Dynamic Island[19683:16669096] [ActivityManager] source=menu-tool-beta id=menu-tool-beta from=none to=queued reason=publish
+Test Case '-[DynamicIslandTests.IslandToolMenuInteractionTests testMenuAdmissionRequiresVisibleExpandedHostWithoutDragOrCompletion]' passed (0.006 seconds).
+Test Case '-[DynamicIslandTests.IslandToolMenuInteractionTests testMenuCloseWithStaleInsidePointerStillGrantsReturnPeriodAfterExit]' started.
+2026-10-20 15:43:03.678957+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=none to=queued reason=publish
+2026-10-20 15:43:03.679033+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=queued to=presented reason=select
+2026-10-20 15:43:03.679702+0800 Dynamic Island[19683:16669096] [ActivityManager] source=menu-tool-alpha id=menu-tool-alpha from=none to=queued reason=publish
+2026-10-20 15:43:03.679832+0800 Dynamic Island[19683:16669096] [ActivityManager] source=menu-tool-beta id=menu-tool-beta from=none to=queued reason=publish
+2026-10-20 15:43:03.680423+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=presented to=background reason=preempt
+2026-10-20 15:43:03.680446+0800 Dynamic Island[19683:16669096] [ActivityManager] source=menu-tool-alpha id=menu-tool-alpha from=queued to=presented reason=select
+2026-10-20 15:43:03.722695+0800 Dynamic Island[19683:16669096] [ActivityManager] source=menu-tool-alpha id=menu-tool-alpha from=presented to=background reason=preempt
+2026-10-20 15:43:03.722785+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=background to=presented reason=select
+Test Case '-[DynamicIslandTests.IslandToolMenuInteractionTests testMenuCloseWithStaleInsidePointerStillGrantsReturnPeriodAfterExit]' passed (0.047 seconds).
+Test Case '-[DynamicIslandTests.IslandToolMenuInteractionTests testNormalPointerExitAndLegacyPageChoiceStillRevokeOldToolActions]' started.
+2026-10-20 15:43:03.727046+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=none to=queued reason=publish
+2026-10-20 15:43:03.727136+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=queued to=presented reason=select
+2026-10-20 15:43:03.727884+0800 Dynamic Island[19683:16669096] [ActivityManager] source=menu-tool-alpha id=menu-tool-alpha from=none to=queued reason=publish
+2026-10-20 15:43:03.728138+0800 Dynamic Island[19683:16669096] [ActivityManager] source=menu-tool-beta id=menu-tool-beta from=none to=queued reason=publish
+2026-10-20 15:43:03.728847+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=presented to=background reason=preempt
+2026-10-20 15:43:03.728885+0800 Dynamic Island[19683:16669096] [ActivityManager] source=menu-tool-alpha id=menu-tool-alpha from=queued to=presented reason=select
+2026-10-20 15:43:03.729283+0800 Dynamic Island[19683:16669096] [ActivityManager] source=menu-tool-alpha id=menu-tool-alpha from=presented to=background reason=preempt
+2026-10-20 15:43:03.729304+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=background to=presented reason=select
+2026-10-20 15:43:03.730230+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=presented to=background reason=preempt
+2026-10-20 15:43:03.730258+0800 Dynamic Island[19683:16669096] [ActivityManager] source=menu-tool-alpha id=menu-tool-alpha from=background to=presented reason=select
+2026-10-20 15:43:03.730340+0800 Dynamic Island[19683:16669096] [ActivityManager] source=menu-tool-alpha id=menu-tool-alpha from=presented to=background reason=preempt
+2026-10-20 15:43:03.730355+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=background to=presented reason=select
+Test Case '-[DynamicIslandTests.IslandToolMenuInteractionTests testNormalPointerExitAndLegacyPageChoiceStillRevokeOldToolActions]' passed (0.006 seconds).
+Test Case '-[DynamicIslandTests.IslandToolMenuInteractionTests testPointerCanLeaveForMenuAndChooseAnotherToolBeforeGraceExpires]' started.
+2026-10-20 15:43:03.733627+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=none to=queued reason=publish
+2026-10-20 15:43:03.733699+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=queued to=presented reason=select
+2026-10-20 15:43:03.734699+0800 Dynamic Island[19683:16669096] [ActivityManager] source=menu-tool-alpha id=menu-tool-alpha from=none to=queued reason=publish
+2026-10-20 15:43:03.734849+0800 Dynamic Island[19683:16669096] [ActivityManager] source=menu-tool-beta id=menu-tool-beta from=none to=queued reason=publish
+2026-10-20 15:43:03.735502+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=presented to=background reason=preempt
+2026-10-20 15:43:03.735532+0800 Dynamic Island[19683:16669096] [ActivityManager] source=menu-tool-alpha id=menu-tool-alpha from=queued to=presented reason=select
+2026-10-20 15:43:03.735730+0800 Dynamic Island[19683:16669096] [ActivityManager] source=menu-tool-alpha id=menu-tool-alpha from=presented to=background reason=preempt
+2026-10-20 15:43:03.735745+0800 Dynamic Island[19683:16669096] [ActivityManager] source=menu-tool-beta id=menu-tool-beta from=queued to=presented reason=select
+2026-10-20 15:43:03.777208+0800 Dynamic Island[19683:16669096] [ActivityManager] source=menu-tool-beta id=menu-tool-beta from=presented to=background reason=preempt
+2026-10-20 15:43:03.777311+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=background to=presented reason=select
+Test Case '-[DynamicIslandTests.IslandToolMenuInteractionTests testPointerCanLeaveForMenuAndChooseAnotherToolBeforeGraceExpires]' passed (0.049 seconds).
+Test Case '-[DynamicIslandTests.IslandToolMenuInteractionTests testReopenedMenuRejectsOldCloseCancelAndDeadline]' started.
+2026-10-20 15:43:03.783312+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=none to=queued reason=publish
+2026-10-20 15:43:03.783394+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=queued to=presented reason=select
+2026-10-20 15:43:03.784126+0800 Dynamic Island[19683:16669096] [ActivityManager] source=menu-tool-alpha id=menu-tool-alpha from=none to=queued reason=publish
+2026-10-20 15:43:03.784268+0800 Dynamic Island[19683:16669096] [ActivityManager] source=menu-tool-beta id=menu-tool-beta from=none to=queued reason=publish
+2026-10-20 15:43:03.784871+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=presented to=background reason=preempt
+2026-10-20 15:43:03.784890+0800 Dynamic Island[19683:16669096] [ActivityManager] source=menu-tool-alpha id=menu-tool-alpha from=queued to=presented reason=select
+2026-10-20 15:43:03.919682+0800 Dynamic Island[19683:16669096] [ActivityManager] source=menu-tool-alpha id=menu-tool-alpha from=presented to=background reason=preempt
+2026-10-20 15:43:03.919810+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=background to=presented reason=select
+Test Case '-[DynamicIslandTests.IslandToolMenuInteractionTests testReopenedMenuRejectsOldCloseCancelAndDeadline]' passed (0.142 seconds).
+Test Case '-[DynamicIslandTests.IslandToolMenuInteractionTests testReturningDuringGracePreservesSurfaceSelectionAndExpansionFeedbackCount]' started.
+2026-10-20 15:43:03.926084+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=none to=queued reason=publish
+2026-10-20 15:43:03.926154+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=queued to=presented reason=select
+2026-10-20 15:43:03.926918+0800 Dynamic Island[19683:16669096] [ActivityManager] source=menu-tool-alpha id=menu-tool-alpha from=none to=queued reason=publish
+2026-10-20 15:43:03.927033+0800 Dynamic Island[19683:16669096] [ActivityManager] source=menu-tool-beta id=menu-tool-beta from=none to=queued reason=publish
+2026-10-20 15:43:03.927820+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=presented to=background reason=preempt
+2026-10-20 15:43:03.927843+0800 Dynamic Island[19683:16669096] [ActivityManager] source=menu-tool-alpha id=menu-tool-alpha from=queued to=presented reason=select
+2026-10-20 15:43:04.020822+0800 Dynamic Island[19683:16669096] [ActivityManager] source=menu-tool-alpha id=menu-tool-alpha from=presented to=background reason=preempt
+2026-10-20 15:43:04.020945+0800 Dynamic Island[19683:16669096] [ActivityManager] source=music id=builtin.music from=background to=presented reason=select
+Test Case '-[DynamicIslandTests.IslandToolMenuInteractionTests testReturningDuringGracePreservesSurfaceSelectionAndExpansionFeedbackCount]' passed (0.099 seconds).
+Test Suite 'IslandToolMenuInteractionTests' passed at 2026-10-20 15:43:04.024.
+	 Executed 10 tests, with 0 failures (0 unexpected) in 0.578 (0.584) seconds
+Test Suite 'IslandViewModelTests' started at 2026-10-20 15:43:04.024.
+Test Case '-[DynamicIslandTests.IslandViewModelTests testActionExpansionHapticCanFireAgainAfterReturningToCompact]' started.
+Test Case '-[DynamicIslandTests.IslandViewModelTests testActionExpansionHapticCanFireAgainAfterReturningToCompact]' passed (0.002 seconds).
+Test Case '-[DynamicIslandTests.IslandViewModelTests testActiveTimerUsesCompactTimerPresentationAfterIslandShrinks]' started.
+Test Case '-[DynamicIslandTests.IslandViewModelTests testActiveTimerUsesCompactTimerPresentationAfterIslandShrinks]' passed (0.002 seconds).
+Test Case '-[DynamicIslandTests.IslandViewModelTests testCompactIslandRefreshesArtworkAfterAutomaticTrackChange]' started.
+Test Case '-[DynamicIslandTests.IslandViewModelTests testCompactIslandRefreshesArtworkAfterAutomaticTrackChange]' passed (0.015 seconds).
+Test Case '-[DynamicIslandTests.IslandViewModelTests testDefaultHoverExpansionDelayIsSnappyButDeliberate]' started.
+Test Case '-[DynamicIslandTests.IslandViewModelTests testDefaultHoverExpansionDelayIsSnappyButDeliberate]' passed (0.001 seconds).
+Test Case '-[DynamicIslandTests.IslandViewModelTests testDelayedHoverExpansionPrefersFileTrayWhenTrayContainsFiles]' started.
+Test Case '-[DynamicIslandTests.IslandViewModelTests testDelayedHoverExpansionPrefersFileTrayWhenTrayContainsFiles]' passed (0.038 seconds).
+Test Case '-[DynamicIslandTests.IslandViewModelTests testDragStateExpandsIsland]' started.
+Test Case '-[DynamicIslandTests.IslandViewModelTests testDragStateExpandsIsland]' passed (0.002 seconds).
+Test Case '-[DynamicIslandTests.IslandViewModelTests testDropUpdatesAfterFinishedDropDoNotRestartDragging]' started.
+Test Case '-[DynamicIslandTests.IslandViewModelTests testDropUpdatesAfterFinishedDropDoNotRestartDragging]' passed (0.002 seconds).
+Test Case '-[DynamicIslandTests.IslandViewModelTests testEndingHoverCommitsUnfinishedPlaybackSeekAndAllowsLaterRefresh]' started.
+Test Case '-[DynamicIslandTests.IslandViewModelTests testEndingHoverCommitsUnfinishedPlaybackSeekAndAllowsLaterRefresh]' passed (0.008 seconds).
+Test Case '-[DynamicIslandTests.IslandViewModelTests testExpandedIslandAdvancesPlaybackProgressBetweenMusicPolls]' started.
+Test Case '-[DynamicIslandTests.IslandViewModelTests testExpandedIslandAdvancesPlaybackProgressBetweenMusicPolls]' passed (0.363 seconds).
+Test Case '-[DynamicIslandTests.IslandViewModelTests testExternalSystemVolumeChangeRefreshesIslandState]' started.
+Test Case '-[DynamicIslandTests.IslandViewModelTests testExternalSystemVolumeChangeRefreshesIslandState]' passed (0.014 seconds).
+Test Case '-[DynamicIslandTests.IslandViewModelTests testFailedTrayItemRemovalKeepsItemVisible]' started.
+Test Case '-[DynamicIslandTests.IslandViewModelTests testFailedTrayItemRemovalKeepsItemVisible]' passed (0.008 seconds).
+Test Case '-[DynamicIslandTests.IslandViewModelTests testFailedVolumeWriteRollsBackIslandState]' started.
+Test Case '-[DynamicIslandTests.IslandViewModelTests testFailedVolumeWriteRollsBackIslandState]' passed (0.003 seconds).
+Test Case '-[DynamicIslandTests.IslandViewModelTests testFileDropKeepsFileTraySurfaceWhilePointerRemainsInside]' started.
+Test Case '-[DynamicIslandTests.IslandViewModelTests testFileDropKeepsFileTraySurfaceWhilePointerRemainsInside]' passed (0.005 seconds).
+Test Case '-[DynamicIslandTests.IslandViewModelTests testFinishingFileDropImmediatelyClearsDraggingState]' started.
+Test Case '-[DynamicIslandTests.IslandViewModelTests testFinishingFileDropImmediatelyClearsDraggingState]' passed (0.002 seconds).
+Test Case '-[DynamicIslandTests.IslandViewModelTests testHoverDoesNotExpandBeforeDelay]' started.
+Test Case '-[DynamicIslandTests.IslandViewModelTests testHoverDoesNotExpandBeforeDelay]' passed (0.001 seconds).
+Test Case '-[DynamicIslandTests.IslandViewModelTests testHoverExpandsAfterDelay]' started.
+Test Case '-[DynamicIslandTests.IslandViewModelTests testHoverExpandsAfterDelay]' passed (0.034 seconds).
+Test Case '-[DynamicIslandTests.IslandViewModelTests testHoverExpansionPrefersFileTrayWhenTrayContainsFiles]' started.
+Test Case '-[DynamicIslandTests.IslandViewModelTests testHoverExpansionPrefersFileTrayWhenTrayContainsFiles]' passed (0.005 seconds).
+Test Case '-[DynamicIslandTests.IslandViewModelTests testHoverExpansionTriggersHapticFeedbackOnce]' started.
+Test Case '-[DynamicIslandTests.IslandViewModelTests testHoverExpansionTriggersHapticFeedbackOnce]' passed (0.136 seconds).
+Test Case '-[DynamicIslandTests.IslandViewModelTests testImportAddsTrayItemsAndKeepsExpandedWhilePointerRemainsInside]' started.
+Test Case '-[DynamicIslandTests.IslandViewModelTests testImportAddsTrayItemsAndKeepsExpandedWhilePointerRemainsInside]' passed (0.004 seconds).
+Test Case '-[DynamicIslandTests.IslandViewModelTests testImportAfterDragExitDoesNotReopenIslandWhenPointerIsOutside]' started.
+Test Case '-[DynamicIslandTests.IslandViewModelTests testImportAfterDragExitDoesNotReopenIslandWhenPointerIsOutside]' passed (0.005 seconds).
+Test Case '-[DynamicIslandTests.IslandViewModelTests testImportedFilesDoNotKeepIslandExpandedAfterPointerLeaves]' started.
+Test Case '-[DynamicIslandTests.IslandViewModelTests testImportedFilesDoNotKeepIslandExpandedAfterPointerLeaves]' passed (0.004 seconds).
+Test Case '-[DynamicIslandTests.IslandViewModelTests testInFlightMusicPollCannotOverwritePlaybackSeekPreview]' started.
+Test Case '-[DynamicIslandTests.IslandViewModelTests testInFlightMusicPollCannotOverwritePlaybackSeekPreview]' passed (0.015 seconds).
+Test Case '-[DynamicIslandTests.IslandViewModelTests testLeavingBeforeDelayCancelsExpansion]' started.
+Test Case '-[DynamicIslandTests.IslandViewModelTests testLeavingBeforeDelayCancelsExpansion]' passed (0.084 seconds).
+Test Case '-[DynamicIslandTests.IslandViewModelTests testLeavingHoverExpandedStateReturnsToCompactWithSingleHaptic]' started.
+Test Case '-[DynamicIslandTests.IslandViewModelTests testLeavingHoverExpandedStateReturnsToCompactWithSingleHaptic]' passed (0.001 seconds).
+Test Case '-[DynamicIslandTests.IslandViewModelTests testLocalMuteWriteAndCoreAudioEchoDoNotPublishVolumeActivity]' started.
+Test Case '-[DynamicIslandTests.IslandViewModelTests testLocalMuteWriteAndCoreAudioEchoDoNotPublishVolumeActivity]' passed (0.114 seconds).
+Test Case '-[DynamicIslandTests.IslandViewModelTests testLocalVolumeWriteAndCoreAudioEchoDoNotPublishVolumeActivity]' started.
+Test Case '-[DynamicIslandTests.IslandViewModelTests testLocalVolumeWriteAndCoreAudioEchoDoNotPublishVolumeActivity]' passed (0.013 seconds).
+Test Case '-[DynamicIslandTests.IslandViewModelTests testLockedFileTrayStaysExpandedAfterPointerLeavesAndTrayIsCleared]' started.
+Test Case '-[DynamicIslandTests.IslandViewModelTests testLockedFileTrayStaysExpandedAfterPointerLeavesAndTrayIsCleared]' passed (0.006 seconds).
+Test Case '-[DynamicIslandTests.IslandViewModelTests testLockKeepsIslandExpandedThroughDragAndTimerCompletion]' started.
+Test Case '-[DynamicIslandTests.IslandViewModelTests testLockKeepsIslandExpandedThroughDragAndTimerCompletion]' passed (0.003 seconds).
+Test Case '-[DynamicIslandTests.IslandViewModelTests testMusicButtonsSendPreviousPlayPauseAndNextCommands]' started.
+Test Case '-[DynamicIslandTests.IslandViewModelTests testMusicButtonsSendPreviousPlayPauseAndNextCommands]' passed (0.012 seconds).
+Test Case '-[DynamicIslandTests.IslandViewModelTests testMusicControlDoesNotKeepIslandExpandedAfterPointerLeaves]' started.
+Test Case '-[DynamicIslandTests.IslandViewModelTests testMusicControlDoesNotKeepIslandExpandedAfterPointerLeaves]' passed (0.003 seconds).
+Test Case '-[DynamicIslandTests.IslandViewModelTests testMuteButtonTogglesSystemMuteWithoutLosingVolume]' started.
+Test Case '-[DynamicIslandTests.IslandViewModelTests testMuteButtonTogglesSystemMuteWithoutLosingVolume]' passed (0.001 seconds).
+Test Case '-[DynamicIslandTests.IslandViewModelTests testNewFileDropCanStartAfterFinishedDrop]' started.
+Test Case '-[DynamicIslandTests.IslandViewModelTests testNewFileDropCanStartAfterFinishedDrop]' passed (0.001 seconds).
+Test Case '-[DynamicIslandTests.IslandViewModelTests testPlainHoverUsesMusicSurface]' started.
+Test Case '-[DynamicIslandTests.IslandViewModelTests testPlainHoverUsesMusicSurface]' passed (0.001 seconds).
+Test Case '-[DynamicIslandTests.IslandViewModelTests testPlaybackSeekFailureRestoresRemotePositionAndShowsError]' started.
+Test Case '-[DynamicIslandTests.IslandViewModelTests testPlaybackSeekFailureRestoresRemotePositionAndShowsError]' passed (0.008 seconds).
+Test Case '-[DynamicIslandTests.IslandViewModelTests testPlaybackSeekIsDisabledWithoutKnownDuration]' started.
+Test Case '-[DynamicIslandTests.IslandViewModelTests testPlaybackSeekIsDisabledWithoutKnownDuration]' passed (0.002 seconds).
+Test Case '-[DynamicIslandTests.IslandViewModelTests testPlaybackSeekPreviewsClampedPositionAndCommitsFinalPosition]' started.
+Test Case '-[DynamicIslandTests.IslandViewModelTests testPlaybackSeekPreviewsClampedPositionAndCommitsFinalPosition]' passed (0.008 seconds).
+Test Case '-[DynamicIslandTests.IslandViewModelTests testPlaybackSeekRejectsTrackThatChangedRemotely]' started.
+Test Case '-[DynamicIslandTests.IslandViewModelTests testPlaybackSeekRejectsTrackThatChangedRemotely]' passed (0.008 seconds).
+Test Case '-[DynamicIslandTests.IslandViewModelTests testPlaybackSeekUpdatesRemoteMusicBeforePointerIsReleased]' started.
+Test Case '-[DynamicIslandTests.IslandViewModelTests testPlaybackSeekUpdatesRemoteMusicBeforePointerIsReleased]' passed (0.114 seconds).
+Test Case '-[DynamicIslandTests.IslandViewModelTests testRefreshNowPlayingReportsAutomationPermissionDenial]' started.
+Test Case '-[DynamicIslandTests.IslandViewModelTests testRefreshNowPlayingReportsAutomationPermissionDenial]' passed (0.002 seconds).
+Test Case '-[DynamicIslandTests.IslandViewModelTests testRefreshNowPlayingUpdatesPlayingStateAndTrackInfo]' started.
+Test Case '-[DynamicIslandTests.IslandViewModelTests testRefreshNowPlayingUpdatesPlayingStateAndTrackInfo]' passed (0.002 seconds).
+Test Case '-[DynamicIslandTests.IslandViewModelTests testRemovingOneTrayItemKeepsOtherCopyAndPreservesLockWhenLastIsRemoved]' started.
+Test Case '-[DynamicIslandTests.IslandViewModelTests testRemovingOneTrayItemKeepsOtherCopyAndPreservesLockWhenLastIsRemoved]' passed (0.008 seconds).
+Test Case '-[DynamicIslandTests.IslandViewModelTests testRepeatedHoverEnterDoesNotRestartExpansionDelay]' started.
+Test Case '-[DynamicIslandTests.IslandViewModelTests testRepeatedHoverEnterDoesNotRestartExpansionDelay]' passed (0.030 seconds).
+Test Case '-[DynamicIslandTests.IslandViewModelTests testSelectingExpandedSurfaceSwitchesVisibleSurface]' started.
+Test Case '-[DynamicIslandTests.IslandViewModelTests testSelectingExpandedSurfaceSwitchesVisibleSurface]' passed (0.002 seconds).
+Test Case '-[DynamicIslandTests.IslandViewModelTests testSetVolumeWritesClampedValuesToVolumeService]' started.
+Test Case '-[DynamicIslandTests.IslandViewModelTests testSetVolumeWritesClampedValuesToVolumeService]' passed (0.002 seconds).
+Test Case '-[DynamicIslandTests.IslandViewModelTests testSuccessfulMusicRefreshDoesNotClearUnrelatedVolumeError]' started.
+Test Case '-[DynamicIslandTests.IslandViewModelTests testSuccessfulMusicRefreshDoesNotClearUnrelatedVolumeError]' passed (0.002 seconds).
+Test Case '-[DynamicIslandTests.IslandViewModelTests testTimerCompletionExpandsToolsAndAcknowledgementCollapsesIt]' started.
+Test Case '-[DynamicIslandTests.IslandViewModelTests testTimerCompletionExpandsToolsAndAcknowledgementCollapsesIt]' passed (0.001 seconds).
+Test Case '-[DynamicIslandTests.IslandViewModelTests testToolsSurfaceIsRestoredAfterIslandReopens]' started.
+Test Case '-[DynamicIslandTests.IslandViewModelTests testToolsSurfaceIsRestoredAfterIslandReopens]' passed (0.001 seconds).
+Test Case '-[DynamicIslandTests.IslandViewModelTests testUnlockWhilePointerIsInsideWaitsForPointerExit]' started.
+Test Case '-[DynamicIslandTests.IslandViewModelTests testUnlockWhilePointerIsInsideWaitsForPointerExit]' passed (0.001 seconds).
+Test Case '-[DynamicIslandTests.IslandViewModelTests testUnmutingFromZeroRestoresLastAudibleVolume]' started.
+Test Case '-[DynamicIslandTests.IslandViewModelTests testUnmutingFromZeroRestoresLastAudibleVolume]' passed (0.001 seconds).
+Test Case '-[DynamicIslandTests.IslandViewModelTests testVolumeButtonsAdjustSystemVolumeByOneStep]' started.
+Test Case '-[DynamicIslandTests.IslandViewModelTests testVolumeButtonsAdjustSystemVolumeByOneStep]' passed (0.001 seconds).
+Test Suite 'IslandViewModelTests' passed at 2026-10-20 15:43:05.151.
+	 Executed 50 tests, with 0 failures (0 unexpected) in 1.102 (1.126) seconds
+Test Suite 'DynamicIslandTests.xctest' passed at 2026-10-20 15:43:05.151.
+	 Executed 88 tests, with 0 failures (0 unexpected) in 8.441 (8.485) seconds
+Test Suite 'Selected tests' passed at 2026-10-20 15:43:05.151.
+	 Executed 88 tests, with 0 failures (0 unexpected) in 8.441 (8.486) seconds
+2026-10-20 15:43:05.447 xcodebuild[19640:16668676] [MT] IDETestOperationsObserverDebug: 9.575 elapsed -- Testing started completed.
+2026-10-20 15:43:05.447 xcodebuild[19640:16668676] [MT] IDETestOperationsObserverDebug: 0.000 sec, +0.000 sec -- start
+2026-10-20 15:43:05.447 xcodebuild[19640:16668676] [MT] IDETestOperationsObserverDebug: 9.575 sec, +9.575 sec -- end
+
+Test session results, code coverage, and logs:
+	/tmp/dynamic-island-u01-20261020/TargetedTests-Fixed.xcresult
+
+** TEST SUCCEEDED **
+
+Testing started

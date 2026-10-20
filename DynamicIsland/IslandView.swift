@@ -302,34 +302,27 @@ public struct IslandView: View {
                 .accessibilityIdentifier("island-surface-tools")
         } else {
             let isSelected = viewModel.expandedSurface == .tools
-            Menu {
-                Button {
-                    activityRuntime.selectLegacySurface(.tools)
-                } label: {
-                    Label("内置计时", systemImage: "alarm.fill")
-                }
-                .accessibilityIdentifier("island-tool-native")
-                Divider()
-                ForEach(activityManager.toolSnapshots, id: \.activity.id) { snapshot in
-                    Button {
-                        _ = activityRuntime.selectTool(snapshot)
-                    } label: {
-                        Label(snapshot.activity.presentation.title,
-                              systemImage: snapshot.activity.presentation.symbolName ?? "puzzlepiece.extension")
+            IslandToolMenu(
+                entries: [
+                    .init(id: "island-tool-native", title: "内置计时", symbolName: "alarm.fill") {
+                        activityRuntime.selectLegacySurface(.tools)
                     }
-                    .accessibilityIdentifier("island-tool-\(snapshot.activity.id)")
-                }
-            } label: {
-                surfaceIcon(surface: .tools, systemName: "alarm.fill")
-            }
-            .menuStyle(.borderlessButton)
-            .menuIndicator(.hidden)
+                ] + activityManager.toolSnapshots.map { snapshot in
+                    .init(id: "island-tool-\(snapshot.activity.id)",
+                          title: snapshot.activity.presentation.title,
+                          symbolName: snapshot.activity.presentation.symbolName ?? "puzzlepiece.extension") {
+                        _ = activityRuntime.selectTool(snapshot)
+                    }
+                },
+                isSelected: isSelected,
+                isEnabled: viewModel.isIslandPanelVisible && !viewModel.isDragging
+                    && !viewModel.isTimerCompletionPresented,
+                onTrackingBegan: viewModel.beginToolMenuInteraction,
+                onTrackingEnded: viewModel.endToolMenuInteraction,
+                onTrackingCancelled: viewModel.cancelToolMenuInteraction,
+                onSessionIsCurrent: viewModel.isToolMenuInteractionCurrent
+            )
             .frame(width: 28, height: 28)
-            .foregroundStyle(isSelected ? .white : .white.opacity(0.68))
-            .animation(reduceMotion ? nil : IslandSurfaceTransition.animation, value: isSelected)
-            .help("计时与插件工具")
-            .accessibilityLabel("计时")
-            .accessibilityIdentifier("island-tool-selector")
         }
     }
 
