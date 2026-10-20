@@ -1,4 +1,4 @@
-# GitHub 官方插件 — T36
+# GitHub 官方插件 0.1.0
 
 包 ID：`com.dynamicisland.github`；开发者：DynamicIsland；版本：0.1.0；最低 Host：0.6.0。
 
@@ -39,4 +39,6 @@ Open 使用 API 中与所选仓库、运行 ID 或 PR 编号完全匹配的 `htt
 
 `DynamicIslandTests/GitHubPluginTests.swift` 从本目录校验真实包，在真实 JavaScriptCore、Bridge、ActivityManager 和 ActionRouter 上运行；只替换 URLSession 传输、系统链接 opener 与 Host 调度时钟。覆盖构建状态与结果去重、PR/Open、仓库设置、逐项权限拒绝、错误与退避以及有界 JSON。
 
-真实普通应用的 `.dip` 导入、逐项授权界面、展开五行的像素尺寸、物理 compact 两翼与系统浏览器打开由项目人工验收清单继续记录。自动化测试通过不代表这些实际界面步骤已验收。
+2026-10-19 的单机普通 Release 隔离实测已完成真实 `.dip` 导入、三项独立授权、公开 CI / PR、仓库切换 / 刷新与系统浏览器打开。该实机记录与自动测试分别保留，没有扩展为其他设备、私有仓库或匿名配额保证。
+
+公开包附完整 MIT LICENSE 和本说明。README / LICENSE 改动会改变整包身份；安装后保持停用，旧包授权不能自动沿用，仍须分别批准三项权限。运行需要包含插件系统的 Host 0.6.0，公开的 App 0.5.0 不具备该 Runtime。

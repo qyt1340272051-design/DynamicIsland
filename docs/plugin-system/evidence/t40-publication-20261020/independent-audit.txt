@@ -1,0 +1,6 @@
+Frozen official plugin audit 2026-10-20T15:50:44.577714+00:00
+All five frozen/repeated/independently rebuilt files byte-identical.
+pomodoro-0.2.1.dip 7319B SHA256 444647bb7a2f40dc0c66418b62e94210c76f2b890f3df2681c2fd179ce5e25b2; only README.md changed; JS/Manifest/LICENSE match current and historical sources.
+github-0.1.0.dip 10215B SHA256 5a090cbc251b48d34ffed3bd82d8fd5ff42214e7c6386b769e1ba70477bae0fa; only README.md changed; JS/Manifest/LICENSE match current and historical sources.
+No repository edits, Xcode, network publication or Host installation performed.
+Prepared release-source-snapshot status does not itself prove public Release availability.

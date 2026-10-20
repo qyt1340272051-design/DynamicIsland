@@ -68,7 +68,7 @@ def prepare(output, tag):
                                  'archiveBytes': destination.stat().st_size}
     write_json(output / 'registry.candidate.json', {'schemaVersion': 1, 'plugins': entries})
     write_json(output / 'release-manifest.json', {
-        'status': 'local candidate; assets and catalog have not been published',
+        'status': 'release-source-snapshot; publication verified separately',
         'repository': REPOSITORY, 'tag': tag, 'sources': sources,
         'permissionRule': 'Install disabled. Enabling grants no permissions. Review each declared permission.',
     })

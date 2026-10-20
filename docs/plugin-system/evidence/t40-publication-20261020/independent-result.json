@@ -1,0 +1,167 @@
+{
+  "capturedAtUTC": "2026-10-20T15:50:44.582186+00:00",
+  "status": "Independent frozen release-source artifact audit; public publication and network Host installation verified separately.",
+  "auditRoot": "/tmp/dynamic-island-t40-frozen-independent-20261020-vkgpfbh3",
+  "frozen": "/tmp/dynamic-island-t40-publish-20261020/frozen",
+  "repeated": "/tmp/dynamic-island-t40-publish-20261020/repeated",
+  "baseline": "/tmp/dynamic-island-t40-independent-release-20261020-3ekr1gp6/first",
+  "command": {
+    "argv": [
+      "/Applications/Xcode.app/Contents/Developer/usr/bin/python3",
+      "-B",
+      "/Users/rong5/Dynamiclsland/Scripts/prepare-plugin-release.py",
+      "--tag",
+      "plugins-0.6.0",
+      "--output",
+      "/tmp/dynamic-island-t40-frozen-independent-20261020-vkgpfbh3/rebuilt"
+    ],
+    "cwd": "/Users/rong5/Dynamiclsland",
+    "exitCode": 0,
+    "log": "/tmp/dynamic-island-t40-frozen-independent-20261020-vkgpfbh3/prepare.log",
+    "reported": {
+      "archives": 2,
+      "output": "/tmp/dynamic-island-t40-frozen-independent-20261020-vkgpfbh3/rebuilt",
+      "published": false,
+      "tag": "plugins-0.6.0"
+    }
+  },
+  "allFiveOutputsByteIdenticalFrozenRepeatedAndIndependentRebuild": true,
+  "artifacts": {
+    "SHA256SUMS": {
+      "bytes": 168,
+      "sha256": "349ed6855da66a63c36348b34ac297f6e116f49e9bc0c780755a8213c7345f81"
+    },
+    "github-0.1.0.dip": {
+      "bytes": 10215,
+      "sha256": "5a090cbc251b48d34ffed3bd82d8fd5ff42214e7c6386b769e1ba70477bae0fa"
+    },
+    "pomodoro-0.2.1.dip": {
+      "bytes": 7319,
+      "sha256": "444647bb7a2f40dc0c66418b62e94210c76f2b890f3df2681c2fd179ce5e25b2"
+    },
+    "registry.candidate.json": {
+      "bytes": 879,
+      "sha256": "9392649799c432bbf2f1efe1dd25e61956695abc1fa35c6a98d7975089d63c2f"
+    },
+    "release-manifest.json": {
+      "bytes": 1308,
+      "sha256": "fa26c320f46603423d93f9182cde6e8dde9e25fbf2f6544c40659a54bd22fa78"
+    }
+  },
+  "plugins": [
+    {
+      "id": "com.dynamicisland.pomodoro",
+      "version": "0.2.1",
+      "filename": "pomodoro-0.2.1.dip",
+      "bytes": 7319,
+      "sha256": "444647bb7a2f40dc0c66418b62e94210c76f2b890f3df2681c2fd179ce5e25b2",
+      "frozenPath": "/tmp/dynamic-island-t40-publish-20261020/frozen/pomodoro-0.2.1.dip",
+      "baselineSHA256": "7b33c55615d2043d432eaef2cca84b856f0eaa6817c5fef086c1cc9bcc4b7ef3",
+      "changedArchiveMembers": [
+        "README.md"
+      ],
+      "sourceFilesSHA256": {
+        "LICENSE": "72ab5fec769e2affe1fc9bdc33fc6b52b8bb35ff27907db3e4bb7d4ef43e8610",
+        "README.md": "89c97f0d1fead5b10627778f631d278cda6ffaba3f6b3092816d0a7689afe4db",
+        "index.js": "6a0782e1788b009ddea8321aad4370ebc6d3d8b746315616b15e8bea0e03f6b2",
+        "manifest.json": "42e1f96131e433b47badce3acc2af88f0e0dc585f730690592f1423362b4fbb3"
+      },
+      "JSManifestAndLicenseByteIdenticalToBaseline": true,
+      "allMembersMatchCurrentSource": true,
+      "fullMITLicenseIncluded": true,
+      "permissions": [
+        "storage.local"
+      ],
+      "capabilities": [
+        "activity.publish",
+        "activity.update",
+        "activity.end",
+        "ui.islandNode",
+        "actions.handle",
+        "countdown",
+        "storage.local",
+        "scheduler"
+      ],
+      "islandAPICalls": [
+        "actions.on",
+        "activity.end",
+        "activity.publish",
+        "activity.update",
+        "countdown.get",
+        "countdown.onComplete",
+        "countdown.pause",
+        "countdown.resume",
+        "countdown.start",
+        "countdown.stop",
+        "log",
+        "scheduler.requestRefresh",
+        "storage.get",
+        "storage.set"
+      ],
+      "APIAndPermissionsUnchanged": true,
+      "sensitivePatternFindings": [],
+      "readmeDiff": "/tmp/dynamic-island-t40-frozen-independent-20261020-vkgpfbh3/pomodoro-README.diff"
+    },
+    {
+      "id": "com.dynamicisland.github",
+      "version": "0.1.0",
+      "filename": "github-0.1.0.dip",
+      "bytes": 10215,
+      "sha256": "5a090cbc251b48d34ffed3bd82d8fd5ff42214e7c6386b769e1ba70477bae0fa",
+      "frozenPath": "/tmp/dynamic-island-t40-publish-20261020/frozen/github-0.1.0.dip",
+      "baselineSHA256": "277c8eda20d2a34648e5255ccf39504c54d0f88b3173c8b361725e74531281a6",
+      "changedArchiveMembers": [
+        "README.md"
+      ],
+      "sourceFilesSHA256": {
+        "LICENSE": "72ab5fec769e2affe1fc9bdc33fc6b52b8bb35ff27907db3e4bb7d4ef43e8610",
+        "README.md": "bf9f4f0ac411296de98b810300d4530e08f9dc43ceeb358e7c526cc22bf0637d",
+        "index.js": "931812cfd596ee612e7ea5f1573d81b71597ec2499326aa25c4257b55b38c971",
+        "manifest.json": "bfb1c8d9b1f6efdafc896ce5964cd8acb5576b8ff52f3f389d95f5a842a644ed"
+      },
+      "JSManifestAndLicenseByteIdenticalToBaseline": true,
+      "allMembersMatchCurrentSource": true,
+      "fullMITLicenseIncluded": true,
+      "permissions": [
+        "network",
+        "storage.local",
+        "links.open"
+      ],
+      "capabilities": [
+        "activity.publish",
+        "activity.update",
+        "activity.end",
+        "ui.islandNode",
+        "actions.handle",
+        "storage.local",
+        "scheduler",
+        "links.open"
+      ],
+      "islandAPICalls": [
+        "actions.on",
+        "activity.end",
+        "activity.publish",
+        "activity.update",
+        "links.open",
+        "log",
+        "network.fetch",
+        "scheduler.requestRefresh",
+        "storage.get",
+        "storage.set"
+      ],
+      "APIAndPermissionsUnchanged": true,
+      "sensitivePatternFindings": [],
+      "readmeDiff": "/tmp/dynamic-island-t40-frozen-independent-20261020-vkgpfbh3/github-README.diff"
+    }
+  ],
+  "preparerSHA256": "360e2e5f7b35cbf640fe42aaad382734ec411d92de04cb7263059adc6da1098b",
+  "releaseManifestStatus": "release-source-snapshot; publication verified separately",
+  "catalogOnlyHashFieldsChangedFromBaseline": true,
+  "MITLicenseSHA256": "72ab5fec769e2affe1fc9bdc33fc6b52b8bb35ff27907db3e4bb7d4ef43e8610",
+  "permissionRule": "Install disabled. Enabling grants no permissions. Review each declared permission.",
+  "scanScope": "Exact four members, scoped private-key/common-token/private-local-path/credentialed-URL patterns; not an exhaustive secret guarantee.",
+  "repositoryEdits": false,
+  "xcodebuildInvoked": false,
+  "publicPublicationPerformedByAudit": false,
+  "networkHostInstallationVerifiedByAudit": false
+}

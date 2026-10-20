@@ -1,0 +1,179 @@
+{
+  "capturedAtUTC": "2026-10-20T15:45:19.694102+00:00",
+  "status": "Independent local release preparation audit only; no asset or catalog was published by this audit.",
+  "tag": "plugins-0.6.0",
+  "auditRoot": "/tmp/dynamic-island-t40-independent-release-20261020-3ekr1gp6",
+  "commands": [
+    {
+      "command": [
+        "/Applications/Xcode.app/Contents/Developer/usr/bin/python3",
+        "-B",
+        "/Users/rong5/Dynamiclsland/Scripts/prepare-plugin-release.py",
+        "--tag",
+        "plugins-0.6.0",
+        "--output",
+        "/tmp/dynamic-island-t40-independent-release-20261020-3ekr1gp6/first"
+      ],
+      "cwd": "/Users/rong5/Dynamiclsland",
+      "exitCode": 0,
+      "output": {
+        "archives": 2,
+        "output": "/tmp/dynamic-island-t40-independent-release-20261020-3ekr1gp6/first",
+        "published": false,
+        "tag": "plugins-0.6.0"
+      },
+      "log": "/tmp/dynamic-island-t40-independent-release-20261020-3ekr1gp6/first-prepare.log"
+    },
+    {
+      "command": [
+        "/Applications/Xcode.app/Contents/Developer/usr/bin/python3",
+        "-B",
+        "/Users/rong5/Dynamiclsland/Scripts/prepare-plugin-release.py",
+        "--tag",
+        "plugins-0.6.0",
+        "--output",
+        "/tmp/dynamic-island-t40-independent-release-20261020-3ekr1gp6/second"
+      ],
+      "cwd": "/Users/rong5/Dynamiclsland",
+      "exitCode": 0,
+      "output": {
+        "archives": 2,
+        "output": "/tmp/dynamic-island-t40-independent-release-20261020-3ekr1gp6/second",
+        "published": false,
+        "tag": "plugins-0.6.0"
+      },
+      "log": "/tmp/dynamic-island-t40-independent-release-20261020-3ekr1gp6/second-prepare.log"
+    }
+  ],
+  "plugins": [
+    {
+      "id": "com.dynamicisland.pomodoro",
+      "version": "0.2.1",
+      "minimumHostVersion": "0.6.0",
+      "filename": "pomodoro-0.2.1.dip",
+      "path": "/tmp/dynamic-island-t40-independent-release-20261020-3ekr1gp6/first/pomodoro-0.2.1.dip",
+      "bytes": 7209,
+      "sha256": "7b33c55615d2043d432eaef2cca84b856f0eaa6817c5fef086c1cc9bcc4b7ef3",
+      "sourceFilesSHA256": {
+        "LICENSE": "72ab5fec769e2affe1fc9bdc33fc6b52b8bb35ff27907db3e4bb7d4ef43e8610",
+        "README.md": "f3100e511f4d8ed3ac3a6343bad4019908dafa2596f31279b6b64f1df9aa54d2",
+        "index.js": "6a0782e1788b009ddea8321aad4370ebc6d3d8b746315616b15e8bea0e03f6b2",
+        "manifest.json": "42e1f96131e433b47badce3acc2af88f0e0dc585f730690592f1423362b4fbb3"
+      },
+      "sourceAndLicenseMatchHistoricalAndCurrent": true,
+      "archiveMembers": [
+        "LICENSE",
+        "README.md",
+        "index.js",
+        "manifest.json"
+      ],
+      "permissions": [
+        "storage.local"
+      ],
+      "capabilities": [
+        "activity.publish",
+        "activity.update",
+        "activity.end",
+        "ui.islandNode",
+        "actions.handle",
+        "countdown",
+        "storage.local",
+        "scheduler"
+      ],
+      "islandAPICalls": [
+        "actions.on",
+        "activity.end",
+        "activity.publish",
+        "activity.update",
+        "countdown.get",
+        "countdown.onComplete",
+        "countdown.pause",
+        "countdown.resume",
+        "countdown.start",
+        "countdown.stop",
+        "log",
+        "scheduler.requestRefresh",
+        "storage.get",
+        "storage.set"
+      ],
+      "allAPICallsInsideSDK1LimitedContract": true,
+      "sensitivePatternFindings": [],
+      "noCachesOrExtraFiles": true
+    },
+    {
+      "id": "com.dynamicisland.github",
+      "version": "0.1.0",
+      "minimumHostVersion": "0.6.0",
+      "filename": "github-0.1.0.dip",
+      "path": "/tmp/dynamic-island-t40-independent-release-20261020-3ekr1gp6/first/github-0.1.0.dip",
+      "bytes": 10055,
+      "sha256": "277c8eda20d2a34648e5255ccf39504c54d0f88b3173c8b361725e74531281a6",
+      "sourceFilesSHA256": {
+        "LICENSE": "72ab5fec769e2affe1fc9bdc33fc6b52b8bb35ff27907db3e4bb7d4ef43e8610",
+        "README.md": "f2b03f50150e539347a8c20624edd906c8bab166361b60823b93cf859e9ee391",
+        "index.js": "931812cfd596ee612e7ea5f1573d81b71597ec2499326aa25c4257b55b38c971",
+        "manifest.json": "bfb1c8d9b1f6efdafc896ce5964cd8acb5576b8ff52f3f389d95f5a842a644ed"
+      },
+      "sourceAndLicenseMatchHistoricalAndCurrent": true,
+      "archiveMembers": [
+        "LICENSE",
+        "README.md",
+        "index.js",
+        "manifest.json"
+      ],
+      "permissions": [
+        "network",
+        "storage.local",
+        "links.open"
+      ],
+      "capabilities": [
+        "activity.publish",
+        "activity.update",
+        "activity.end",
+        "ui.islandNode",
+        "actions.handle",
+        "storage.local",
+        "scheduler",
+        "links.open"
+      ],
+      "islandAPICalls": [
+        "actions.on",
+        "activity.end",
+        "activity.publish",
+        "activity.update",
+        "links.open",
+        "log",
+        "network.fetch",
+        "scheduler.requestRefresh",
+        "storage.get",
+        "storage.set"
+      ],
+      "allAPICallsInsideSDK1LimitedContract": true,
+      "sensitivePatternFindings": [],
+      "noCachesOrExtraFiles": true
+    }
+  ],
+  "allOutputFilesByteIdenticalAcrossTwoRunsAndHistorical": true,
+  "artifactSHA256": {
+    "SHA256SUMS": "ebe1dfdfc31d70618cf96daf5c18ccd3eade956490bbfdfac250e0c9b430f392",
+    "github-0.1.0.dip": "277c8eda20d2a34648e5255ccf39504c54d0f88b3173c8b361725e74531281a6",
+    "pomodoro-0.2.1.dip": "7b33c55615d2043d432eaef2cca84b856f0eaa6817c5fef086c1cc9bcc4b7ef3",
+    "registry.candidate.json": "cb980a02d07129c13669323c4c21186e8e67691578eb0fa6009b828501f0d0b9",
+    "release-manifest.json": "f36fb58ca9e6227a4b60553d0e10fdfc8a25dde12833bcf6f0e56f73eccf8c04"
+  },
+  "preparerSHA256": "bcde5f22df406c4bd32e2e247f631fdecbaebf1f23f94fa7562b7ee403ccefa0",
+  "preparerMatchesHistorical": true,
+  "license": "MIT",
+  "licenseSHA256": "72ab5fec769e2affe1fc9bdc33fc6b52b8bb35ff27907db3e4bb7d4ef43e8610",
+  "formalRegistryEmptyAtCapture": true,
+  "scanScope": "Exact four members, current/historical source SHA equality, private key/common token/private local path/credentialed URL patterns; not an exhaustive secret scanner.",
+  "permissionRule": "Install disabled. Enabling grants no permissions. Review storage.local (Pomodoro) and network/storage.local/links.open (GitHub) separately.",
+  "SDKBoundaryReview": "Only limited Native SDK1 APIs. No browser, Node, SuperIsland private API, credential input or JavaScript interval timers. GitHub network uses explicit network permission; no network capability is declared by the current closed Host vocabulary. Countdown start/resume and link open consume fresh action activation; Host remains authoritative.",
+  "readmeHistoricalStatusNote": "Unchanged Pomodoro README still describes its T35 3B historical stage as in progress; GitHub README defers real UI checks. Those preserved source claims are historical package prose, not this audit result or public release status.",
+  "published": false,
+  "tagCreated": false,
+  "remotePush": false,
+  "networkHostInstallationVerified": false,
+  "repositoryEdits": false,
+  "xcodebuildInvoked": false
+}
