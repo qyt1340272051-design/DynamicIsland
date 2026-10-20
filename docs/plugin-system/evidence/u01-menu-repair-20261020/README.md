@@ -20,4 +20,4 @@
 
 第三版产品改为 2 秒固定、不续期宽限，原有单个 30Hz 指针 Timer 使用 `.common`；deadline 由 Controller 强制同步物理 containment 缓存与 ViewModel，再核验 token 后收尾。新增 4 项菜单回归使该组共 18 项，合并既有 78 项后的[第三版定向](../u01-menu-pointer-20261020/pointer-regression.txt)为 **96 tests / 0 failures / 0 skipped**；普通 Release 与 strict / deep 签名通过，身份见[第三版预检](../u01-menu-pointer-20261020/preflight.json)。
 
-第二版 PID 22058 已正常退出，第三版“Dynamic Island Menu Return”（本次 PID 23408）启动并记录事件。用户已确认第三轮返回保持及正常离开后回到内置计时，见[第三版当前结果](../u01-menu-pointer-20261020/result.json)；其余交互收尾仍待。本目录保留第二版 92 项、构建身份与两轮用户失败的原始范围，U01 仍为 `in progress`，原 T01–T40 仍为 37 verified / 3 in progress。
+第二版 PID 22058 已正常退出，第三版后续已完成当前设备七项菜单的返回、清理、键盘 / 取消 / 页面切换和正常退出验收，见[第三版最终结果](../u01-menu-pointer-20261020/result.json)。本目录保留第二版 92 项、构建身份和两轮用户失败的历史范围；U01 最终为 `verified`，原 T01–T40 仍为 37 verified / 3 in progress。

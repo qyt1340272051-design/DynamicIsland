@@ -1,0 +1,16 @@
+Window: "", App: Dynamic Island Menu Return.
+0 system dialog Secondary Actions: Raise
+	1 container
+		2 button Description: 音乐, ID: island-surface-music
+		3 button Description: 拖盘, ID: island-surface-tray
+		4 button Description: 计时, Help: 计时与插件工具, ID: island-tool-selector
+		5 button Description: 退出 Dynamic Island, ID: power
+		6 text 当前状态：待选择
+		7 button 切换到专注状态
+		8 button 切换到休息状态
+9 menu bar
+	10 Dynamic Island Menu Return
+	11 Edit
+	12 View
+	13 Window
+	14 Help

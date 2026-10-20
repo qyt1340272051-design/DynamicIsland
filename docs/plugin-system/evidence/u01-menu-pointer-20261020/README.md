@@ -8,6 +8,12 @@
 - [普通 Release 原始日志](release-build.txt)与 [strict / deep 签名](signature.txt)通过。
 - [预检](preflight.json)绑定 102 个生产 Swift 文件、可执行文件及构建／测试日志。失败副本 PID 22058 已正常退出，第三版仅使用原隔离验收容器，无额外插件授权或生产容器修改。
 - [初始截图](third-candidate-initial-state.jpg)及 [AX](third-candidate-initial-state.txt)仅记录启动后的收起状态。
-- 当前副本为 `Dynamic Island Menu Return`（PID 23408），已开启低频事件记录。用户已确认返回后保持双按钮工具；[第三轮记录](physical-return-attempt-3.json)对应会话 2.039910 秒到期时复核 inside=true，完整 trace 同时保留其他取消 / outside 到期会话，不全部归为成功。回复后截图仅显示收起状态，工具身份依据用户反馈。用户也确认正常离开重开回到内置计时；键盘 / 取消和退出收尾仍待，见[结构化状态](result.json)，U01 保持 `in progress`。
+- 该副本 `Dynamic Island Menu Return`（当次 PID 23408）已正常退出，日志捕获停止。用户确认返回保持及正常离开清理，后续实测键盘最底部选择、按钮更新、Esc / 点外取消和页面切换通过，见[最终原生验收](native-menu-acceptance.json)与[退出清理](cleanup.json)。当前设备实际七项菜单范围内 U01 标为 `verified`。两次自动滚轮未观察内容变化，不作为滚轮通过；原一秒失败的唯一根因仍未确诊。
 
 没有进行公开发布或远程推送。
+
+## 本轮收尾证据范围
+
+`keyboard-bottom-tool-result` 首帧 AX 尚为菜单但像素已进入工具，后续 `keyboard-selected-tool-button-focus.txt` 为稳定双按钮 AX；该标签并不表示此时已点击专注。真实专注按钮操作及更新见 `keyboard-tool-focus-confirmed`。`native-timer-restored` 是动画过渡帧，稳定内置秒表见 `native-timer-stable`。
+
+`menu-scrolled-to-bottom` 与 `menu-coordinate-scroll-result` 两次自动滚轮尝试没有显示内容变化，仅记尝试；鼠标底部访问依据用户此前的完整步骤反馈，键盘底部可达另由 End / Return 实测。独立只读复核未发现阻断项，U01 仅按当前设备七项菜单范围关闭，完整清单与来源见 [native-menu-acceptance.json](native-menu-acceptance.json)。

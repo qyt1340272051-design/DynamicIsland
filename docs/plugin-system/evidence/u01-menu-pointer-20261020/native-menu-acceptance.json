@@ -1,0 +1,486 @@
+{
+  "observedUTC": "2026-10-20T14:51:20.856543+00:00",
+  "candidatePID": 23408,
+  "sourceBinding": "preflight.json",
+  "sourceCommit": "62dcb74",
+  "rawTrace": "final-menu-interactions-trace.ndjson",
+  "rawTraceSHA256": "93c27511ec72f6e30780ea61c42f05b103d26378adc7e906b83051469c24d2cb",
+  "events": [
+    {
+      "timestamp": "2026-10-20 22:47:00.505032+0800",
+      "event": "vm.begin",
+      "session": "5F42927F-B01F-4F28-914F-052EFD9DC4FF",
+      "pointerInside": "true",
+      "hovering": "true"
+    },
+    {
+      "timestamp": "2026-10-20 22:47:00.505075+0800",
+      "event": "native.begin",
+      "session": "5F42927F-B01F-4F28-914F-052EFD9DC4FF",
+      "pointerInside": "-",
+      "hovering": "-"
+    },
+    {
+      "timestamp": "2026-10-20 22:47:00.510120+0800",
+      "event": "native.willOpen",
+      "session": "5F42927F-B01F-4F28-914F-052EFD9DC4FF",
+      "pointerInside": "-",
+      "hovering": "-"
+    },
+    {
+      "timestamp": "2026-10-20 22:47:14.036564+0800",
+      "event": "native.didClose",
+      "session": "5F42927F-B01F-4F28-914F-052EFD9DC4FF",
+      "pointerInside": "-",
+      "hovering": "-"
+    },
+    {
+      "timestamp": "2026-10-20 22:47:14.037038+0800",
+      "event": "native.popUpReturn.cancelled",
+      "session": "5F42927F-B01F-4F28-914F-052EFD9DC4FF",
+      "pointerInside": "-",
+      "hovering": "-"
+    },
+    {
+      "timestamp": "2026-10-20 22:47:14.037063+0800",
+      "event": "native.finish",
+      "session": "5F42927F-B01F-4F28-914F-052EFD9DC4FF",
+      "pointerInside": "-",
+      "hovering": "-"
+    },
+    {
+      "timestamp": "2026-10-20 22:47:14.037111+0800",
+      "event": "native.end",
+      "session": "5F42927F-B01F-4F28-914F-052EFD9DC4FF",
+      "pointerInside": "-",
+      "hovering": "-"
+    },
+    {
+      "timestamp": "2026-10-20 22:47:14.037127+0800",
+      "event": "vm.grace.begin",
+      "session": "5F42927F-B01F-4F28-914F-052EFD9DC4FF",
+      "pointerInside": "true",
+      "hovering": "true"
+    },
+    {
+      "timestamp": "2026-10-20 22:47:16.262446+0800",
+      "event": "vm.grace.pointerRefresh",
+      "session": "5F42927F-B01F-4F28-914F-052EFD9DC4FF",
+      "pointerInside": "true",
+      "hovering": "true"
+    },
+    {
+      "timestamp": "2026-10-20 22:47:16.262732+0800",
+      "event": "vm.pointerEnter.grace",
+      "session": "5F42927F-B01F-4F28-914F-052EFD9DC4FF",
+      "pointerInside": "true",
+      "hovering": "true"
+    },
+    {
+      "timestamp": "2026-10-20 22:47:16.262768+0800",
+      "event": "vm.grace.pointerRefreshed",
+      "session": "5F42927F-B01F-4F28-914F-052EFD9DC4FF",
+      "pointerInside": "true",
+      "hovering": "true"
+    },
+    {
+      "timestamp": "2026-10-20 22:47:16.262781+0800",
+      "event": "vm.grace.expired",
+      "session": "5F42927F-B01F-4F28-914F-052EFD9DC4FF",
+      "pointerInside": "true",
+      "hovering": "true"
+    },
+    {
+      "timestamp": "2026-10-20 22:47:22.930470+0800",
+      "event": "vm.begin",
+      "session": "6BEDBDA3-C152-493A-8165-8809AA55D0A6",
+      "pointerInside": "true",
+      "hovering": "true"
+    },
+    {
+      "timestamp": "2026-10-20 22:47:22.930506+0800",
+      "event": "native.begin",
+      "session": "6BEDBDA3-C152-493A-8165-8809AA55D0A6",
+      "pointerInside": "-",
+      "hovering": "-"
+    },
+    {
+      "timestamp": "2026-10-20 22:47:22.934092+0800",
+      "event": "native.willOpen",
+      "session": "6BEDBDA3-C152-493A-8165-8809AA55D0A6",
+      "pointerInside": "-",
+      "hovering": "-"
+    },
+    {
+      "timestamp": "2026-10-20 22:47:25.224625+0800",
+      "event": "native.didClose",
+      "session": "6BEDBDA3-C152-493A-8165-8809AA55D0A6",
+      "pointerInside": "-",
+      "hovering": "-"
+    },
+    {
+      "timestamp": "2026-10-20 22:47:25.224873+0800",
+      "event": "native.choose",
+      "session": "6BEDBDA3-C152-493A-8165-8809AA55D0A6",
+      "pointerInside": "-",
+      "hovering": "-"
+    },
+    {
+      "timestamp": "2026-10-20 22:47:25.224984+0800",
+      "event": "native.popUpReturn.selected",
+      "session": "6BEDBDA3-C152-493A-8165-8809AA55D0A6",
+      "pointerInside": "-",
+      "hovering": "-"
+    },
+    {
+      "timestamp": "2026-10-20 22:47:25.224996+0800",
+      "event": "native.finish",
+      "session": "6BEDBDA3-C152-493A-8165-8809AA55D0A6",
+      "pointerInside": "-",
+      "hovering": "-"
+    },
+    {
+      "timestamp": "2026-10-20 22:47:25.225010+0800",
+      "event": "native.end",
+      "session": "6BEDBDA3-C152-493A-8165-8809AA55D0A6",
+      "pointerInside": "-",
+      "hovering": "-"
+    },
+    {
+      "timestamp": "2026-10-20 22:47:25.225023+0800",
+      "event": "vm.grace.begin",
+      "session": "6BEDBDA3-C152-493A-8165-8809AA55D0A6",
+      "pointerInside": "true",
+      "hovering": "true"
+    },
+    {
+      "timestamp": "2026-10-20 22:47:25.225042+0800",
+      "event": "native.selection",
+      "session": "6BEDBDA3-C152-493A-8165-8809AA55D0A6",
+      "pointerInside": "-",
+      "hovering": "-"
+    },
+    {
+      "timestamp": "2026-10-20 22:47:27.262940+0800",
+      "event": "vm.grace.pointerRefresh",
+      "session": "6BEDBDA3-C152-493A-8165-8809AA55D0A6",
+      "pointerInside": "true",
+      "hovering": "true"
+    },
+    {
+      "timestamp": "2026-10-20 22:47:27.263154+0800",
+      "event": "vm.pointerEnter.grace",
+      "session": "6BEDBDA3-C152-493A-8165-8809AA55D0A6",
+      "pointerInside": "true",
+      "hovering": "true"
+    },
+    {
+      "timestamp": "2026-10-20 22:47:27.263177+0800",
+      "event": "vm.grace.pointerRefreshed",
+      "session": "6BEDBDA3-C152-493A-8165-8809AA55D0A6",
+      "pointerInside": "true",
+      "hovering": "true"
+    },
+    {
+      "timestamp": "2026-10-20 22:47:27.263187+0800",
+      "event": "vm.grace.expired",
+      "session": "6BEDBDA3-C152-493A-8165-8809AA55D0A6",
+      "pointerInside": "true",
+      "hovering": "true"
+    },
+    {
+      "timestamp": "2026-10-20 22:47:53.347666+0800",
+      "event": "vm.begin",
+      "session": "AED815A3-F13F-416A-9FB5-AC51C38D8301",
+      "pointerInside": "true",
+      "hovering": "true"
+    },
+    {
+      "timestamp": "2026-10-20 22:47:53.347733+0800",
+      "event": "native.begin",
+      "session": "AED815A3-F13F-416A-9FB5-AC51C38D8301",
+      "pointerInside": "-",
+      "hovering": "-"
+    },
+    {
+      "timestamp": "2026-10-20 22:47:53.359137+0800",
+      "event": "native.willOpen",
+      "session": "AED815A3-F13F-416A-9FB5-AC51C38D8301",
+      "pointerInside": "-",
+      "hovering": "-"
+    },
+    {
+      "timestamp": "2026-10-20 22:48:18.902580+0800",
+      "event": "native.didClose",
+      "session": "AED815A3-F13F-416A-9FB5-AC51C38D8301",
+      "pointerInside": "-",
+      "hovering": "-"
+    },
+    {
+      "timestamp": "2026-10-20 22:48:18.902943+0800",
+      "event": "native.popUpReturn.cancelled",
+      "session": "AED815A3-F13F-416A-9FB5-AC51C38D8301",
+      "pointerInside": "-",
+      "hovering": "-"
+    },
+    {
+      "timestamp": "2026-10-20 22:48:18.902972+0800",
+      "event": "native.finish",
+      "session": "AED815A3-F13F-416A-9FB5-AC51C38D8301",
+      "pointerInside": "-",
+      "hovering": "-"
+    },
+    {
+      "timestamp": "2026-10-20 22:48:18.903021+0800",
+      "event": "native.end",
+      "session": "AED815A3-F13F-416A-9FB5-AC51C38D8301",
+      "pointerInside": "-",
+      "hovering": "-"
+    },
+    {
+      "timestamp": "2026-10-20 22:48:18.903051+0800",
+      "event": "vm.grace.begin",
+      "session": "AED815A3-F13F-416A-9FB5-AC51C38D8301",
+      "pointerInside": "true",
+      "hovering": "true"
+    },
+    {
+      "timestamp": "2026-10-20 22:48:19.378556+0800",
+      "event": "vm.cancel",
+      "session": "AED815A3-F13F-416A-9FB5-AC51C38D8301",
+      "pointerInside": "true",
+      "hovering": "true"
+    },
+    {
+      "timestamp": "2026-10-20 22:48:31.712770+0800",
+      "event": "vm.begin",
+      "session": "ED1C555A-C2FE-437B-907F-03D0ABEC3102",
+      "pointerInside": "true",
+      "hovering": "true"
+    },
+    {
+      "timestamp": "2026-10-20 22:48:31.712826+0800",
+      "event": "native.begin",
+      "session": "ED1C555A-C2FE-437B-907F-03D0ABEC3102",
+      "pointerInside": "-",
+      "hovering": "-"
+    },
+    {
+      "timestamp": "2026-10-20 22:48:31.716214+0800",
+      "event": "native.willOpen",
+      "session": "ED1C555A-C2FE-437B-907F-03D0ABEC3102",
+      "pointerInside": "-",
+      "hovering": "-"
+    },
+    {
+      "timestamp": "2026-10-20 22:48:33.993312+0800",
+      "event": "native.didClose",
+      "session": "ED1C555A-C2FE-437B-907F-03D0ABEC3102",
+      "pointerInside": "-",
+      "hovering": "-"
+    },
+    {
+      "timestamp": "2026-10-20 22:48:33.993744+0800",
+      "event": "native.choose",
+      "session": "ED1C555A-C2FE-437B-907F-03D0ABEC3102",
+      "pointerInside": "-",
+      "hovering": "-"
+    },
+    {
+      "timestamp": "2026-10-20 22:48:33.993977+0800",
+      "event": "native.popUpReturn.selected",
+      "session": "ED1C555A-C2FE-437B-907F-03D0ABEC3102",
+      "pointerInside": "-",
+      "hovering": "-"
+    },
+    {
+      "timestamp": "2026-10-20 22:48:33.994009+0800",
+      "event": "native.finish",
+      "session": "ED1C555A-C2FE-437B-907F-03D0ABEC3102",
+      "pointerInside": "-",
+      "hovering": "-"
+    },
+    {
+      "timestamp": "2026-10-20 22:48:33.994037+0800",
+      "event": "native.end",
+      "session": "ED1C555A-C2FE-437B-907F-03D0ABEC3102",
+      "pointerInside": "-",
+      "hovering": "-"
+    },
+    {
+      "timestamp": "2026-10-20 22:48:33.994067+0800",
+      "event": "vm.grace.begin",
+      "session": "ED1C555A-C2FE-437B-907F-03D0ABEC3102",
+      "pointerInside": "true",
+      "hovering": "true"
+    },
+    {
+      "timestamp": "2026-10-20 22:48:33.994107+0800",
+      "event": "native.selection",
+      "session": "ED1C555A-C2FE-437B-907F-03D0ABEC3102",
+      "pointerInside": "-",
+      "hovering": "-"
+    },
+    {
+      "timestamp": "2026-10-20 22:48:36.074386+0800",
+      "event": "vm.grace.pointerRefresh",
+      "session": "ED1C555A-C2FE-437B-907F-03D0ABEC3102",
+      "pointerInside": "true",
+      "hovering": "true"
+    },
+    {
+      "timestamp": "2026-10-20 22:48:36.074636+0800",
+      "event": "vm.pointerEnter.grace",
+      "session": "ED1C555A-C2FE-437B-907F-03D0ABEC3102",
+      "pointerInside": "true",
+      "hovering": "true"
+    },
+    {
+      "timestamp": "2026-10-20 22:48:36.074676+0800",
+      "event": "vm.grace.pointerRefreshed",
+      "session": "ED1C555A-C2FE-437B-907F-03D0ABEC3102",
+      "pointerInside": "true",
+      "hovering": "true"
+    },
+    {
+      "timestamp": "2026-10-20 22:48:36.074709+0800",
+      "event": "vm.grace.expired",
+      "session": "ED1C555A-C2FE-437B-907F-03D0ABEC3102",
+      "pointerInside": "true",
+      "hovering": "true"
+    },
+    {
+      "timestamp": "2026-10-20 22:48:49.727345+0800",
+      "event": "vm.begin",
+      "session": "3F922DB2-CB9C-4859-AF48-30651A9B232E",
+      "pointerInside": "true",
+      "hovering": "true"
+    },
+    {
+      "timestamp": "2026-10-20 22:48:49.727378+0800",
+      "event": "native.begin",
+      "session": "3F922DB2-CB9C-4859-AF48-30651A9B232E",
+      "pointerInside": "-",
+      "hovering": "-"
+    },
+    {
+      "timestamp": "2026-10-20 22:48:49.730929+0800",
+      "event": "native.willOpen",
+      "session": "3F922DB2-CB9C-4859-AF48-30651A9B232E",
+      "pointerInside": "-",
+      "hovering": "-"
+    },
+    {
+      "timestamp": "2026-10-20 22:49:50.861741+0800",
+      "event": "native.didClose",
+      "session": "3F922DB2-CB9C-4859-AF48-30651A9B232E",
+      "pointerInside": "-",
+      "hovering": "-"
+    },
+    {
+      "timestamp": "2026-10-20 22:49:50.862252+0800",
+      "event": "native.popUpReturn.cancelled",
+      "session": "3F922DB2-CB9C-4859-AF48-30651A9B232E",
+      "pointerInside": "-",
+      "hovering": "-"
+    },
+    {
+      "timestamp": "2026-10-20 22:49:50.862283+0800",
+      "event": "native.finish",
+      "session": "3F922DB2-CB9C-4859-AF48-30651A9B232E",
+      "pointerInside": "-",
+      "hovering": "-"
+    },
+    {
+      "timestamp": "2026-10-20 22:49:50.862350+0800",
+      "event": "native.end",
+      "session": "3F922DB2-CB9C-4859-AF48-30651A9B232E",
+      "pointerInside": "-",
+      "hovering": "-"
+    },
+    {
+      "timestamp": "2026-10-20 22:49:50.862384+0800",
+      "event": "vm.grace.begin",
+      "session": "3F922DB2-CB9C-4859-AF48-30651A9B232E",
+      "pointerInside": "true",
+      "hovering": "true"
+    },
+    {
+      "timestamp": "2026-10-20 22:49:51.272698+0800",
+      "event": "vm.cancel",
+      "session": "3F922DB2-CB9C-4859-AF48-30651A9B232E",
+      "pointerInside": "true",
+      "hovering": "true"
+    }
+  ],
+  "cases": {
+    "escape": {
+      "passed": true,
+      "input": "Escape",
+      "session": "5F42927F-B01F-4F28-914F-052EFD9DC4FF",
+      "evidence": [
+        "escape-cancel-result.txt",
+        "escape-cancel-result.jpg"
+      ]
+    },
+    "keyboardBottomTool": {
+      "passed": true,
+      "input": "End then Return",
+      "session": "6BEDBDA3-C152-493A-8165-8809AA55D0A6",
+      "evidence": [
+        "keyboard-bottom-tool-result.jpg",
+        "keyboard-selected-tool-button-focus.txt",
+        "keyboard-tool-focus-confirmed.txt",
+        "keyboard-tool-focus-confirmed.jpg"
+      ],
+      "scope": "First AX capture lagged the Return result; later AX confirms the dual-button page and the real Focus button updates it."
+    },
+    "outsideClick": {
+      "passed": true,
+      "input": "Click menu-external island point (400,120), grounded in menu-before-outside-click.jpg",
+      "session": "AED815A3-F13F-416A-9FB5-AC51C38D8301",
+      "evidence": [
+        "menu-before-outside-click.jpg",
+        "outside-click-cancel-result.txt",
+        "outside-click-cancel-result.jpg"
+      ],
+      "scope": "Menu closes and Focus state remains; then a real music page change revokes the pending menu grace."
+    },
+    "legacyPages": {
+      "passed": true,
+      "evidence": [
+        "legacy-music-page.txt",
+        "legacy-music-page.jpg",
+        "legacy-tray-page.txt",
+        "legacy-tray-page.jpg",
+        "native-timer-stable.txt",
+        "native-timer-stable.jpg"
+      ]
+    },
+    "physicalMouseBottomAndReturn": {
+      "passed": true,
+      "source": "physical-return-attempt-3.json",
+      "scope": "User confirms the requested bottom-tool selection and return; no separate measured half-second pause assertion."
+    },
+    "normalExitReopen": {
+      "passed": true,
+      "source": "User confirms native timer restored after exit and reopen",
+      "screenshotScope": "The prior post-reply capture is compact; native-timer-stable is a later actual legacy-page check, not that initial reopen."
+    },
+    "automatedWheel": {
+      "passed": null,
+      "observedContentChange": false,
+      "attempts": [
+        "menu-scrolled-to-bottom.jpg",
+        "menu-coordinate-scroll-result.jpg"
+      ],
+      "scope": "Two CUA scroll attempts did not show a content change; neither image proves wheel scrolling. Mouse bottom access is established by the user physical round; End/Return separately proves keyboard access."
+    },
+    "normalQuit": {
+      "passed": true,
+      "source": "cleanup.json"
+    }
+  },
+  "acceptanceScope": "Seven real menu entries on the current device. App-scoped screenshots do not establish global screen bounds or an extra display matrix. Original one-second failure is not attributed to one unique cause.",
+  "wholeAppCIRerun": false
+}
