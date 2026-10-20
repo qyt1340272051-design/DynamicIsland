@@ -390,5 +390,37 @@
     "axFile": "m04-run2-stopped.txt",
     "imageFile": "m04-run2-stopped.jpg",
     "imageSHA256": "2215fbef78e6cbe90d54797508fcbcedc27ffc991cd12d44c36998e86779aefb"
+  },
+  {
+    "label": "m04-run3-ready",
+    "startedEpochMs": 1792474448953,
+    "observedEpochMs": 1792474449015,
+    "axFile": "m04-run3-ready.txt",
+    "imageFile": "m04-run3-ready.jpg",
+    "imageSHA256": "17ef7262a77fd3f3fb939100ec015751c5772e5e139505f2b505464737832488"
+  },
+  {
+    "label": "m04-run3-started",
+    "startedEpochMs": 1792474449686,
+    "observedEpochMs": 1792474449731,
+    "axFile": "m04-run3-started.txt",
+    "imageFile": "m04-run3-started.jpg",
+    "imageSHA256": "2881cbe1085346643401130ea0b533771c33adcbc8ad08e31bbfa2acb19a9fe2"
+  },
+  {
+    "label": "m04-run3-reexpanded",
+    "startedEpochMs": 1792474558748,
+    "observedEpochMs": 1792474558794,
+    "axFile": "m04-run3-reexpanded.txt",
+    "imageFile": "m04-run3-reexpanded.jpg",
+    "imageSHA256": "b6cbfc7234d8128d1caf99ffa2f364f57ec7b16d11b95cd77de054146b7f9ba7"
+  },
+  {
+    "label": "m04-run3-stopped",
+    "startedEpochMs": 1792474568180,
+    "observedEpochMs": 1792474568245,
+    "axFile": "m04-run3-stopped.txt",
+    "imageFile": "m04-run3-stopped.jpg",
+    "imageSHA256": "f4d304251e84c71d8f2f978dc1ace1b8f58fb133edb1bf2325a5979679b20fef"
   }
 ]

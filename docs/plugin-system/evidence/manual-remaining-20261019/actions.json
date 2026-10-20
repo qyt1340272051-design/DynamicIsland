@@ -138,5 +138,19 @@
     "startEpochMs": 1792425389868,
     "observedEpochMs": 1792425390550,
     "capture": "m04-run2-stopped"
+  },
+  {
+    "needle": "button 开始三态验收",
+    "expected": "三态计时 · minimal · 计时中",
+    "startEpochMs": 1792474449062,
+    "observedEpochMs": 1792474449732,
+    "capture": "m04-run3-started"
+  },
+  {
+    "needle": "button 结束验收",
+    "expected": "三态计时 · idle · 等待开始",
+    "startEpochMs": 1792474567548,
+    "observedEpochMs": 1792474568246,
+    "capture": "m04-run3-stopped"
   }
 ]

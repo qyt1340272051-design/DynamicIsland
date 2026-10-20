@@ -1,0 +1,12 @@
+{
+  "action": {
+    "needle": "button 结束验收",
+    "expected": "三态计时 · idle · 等待开始",
+    "startEpochMs": 1792474567548,
+    "observedEpochMs": 1792474568246,
+    "capture": "m04-run3-stopped"
+  },
+  "realUIButton": true,
+  "returnedToIdle": true,
+  "countdownNaturalCompletionNotRequired": true
+}

@@ -28,7 +28,7 @@
 
 ## 2026-10-19 恢复人工验收
 
-用户要求「来完成人工操作部分」。[M03](t02-t37-manual-acceptance-20261019.md)现已通过，T02 / T37 标为 verified，当前共 **36 项 verified、4 项 in progress**。M04 两轮都只捕获到展开画面，计时已结束，待用户确认准备后再补真实收起三态；M05 修正版文档独立复测尚未开始；本轮没有修改生产源码、扩大权限或公开发布。
+用户要求「来完成人工操作部分」。[M03](t02-t37-manual-acceptance-20261019.md)已关闭 T02 / T37；[2026-10-20 第三轮 M04](t11-manual-acceptance-20261020.md)完成真实收起 minimal → compact、重新展开和停止，T11 标为 verified。当前共 **37 项 verified、3 项 in progress**；M05 修正版手册独立复测正在等待用户结果，T38 / T40 的公开发布门槛仍保留。本轮没有修改生产源码、扩大权限或公开发布。
 
 ## Phase 0 — 准备阶段：项目审计、分支与基线
 
@@ -54,9 +54,11 @@
 | --- | --- | --- | --- | --- |
 | T09 | IslandNode | T03 | `verified` | [受限数据节点与 JSON 校验](../../DynamicIsland/IslandUI/Schema/IslandNode.swift)、[计时/构建/音乐树及恶意输入测试](../../DynamicIslandTests/IslandNodeTests.swift)；6 项定向测试通过。 |
 | T10 | DesignTokens | T09 | `verified` | [统一 token](../../DynamicIsland/IslandUI/DesignTokens.swift)与[对比度 / 尺寸测试](../../DynamicIslandTests/IslandDesignTokensTests.swift)保持 Host 视觉词汇；[本日归并](t10-t11-acceptance-20261019.md)核对两款官方插件真实截图的一致字体、按钮和间距，并引用 Phase 3 已确认的 VoiceOver / Reduce Motion。原始截图与来源 hash 保留，不声称新做全系统外观矩阵。 |
-| T11 | Presentation Model | T09 | `in progress` | [纯数据三形态](../../DynamicIsland/Core/Activity/IslandActivity.swift)、[Host 策略](../../DynamicIsland/IslandUI/ActivityPresentationPolicy.swift)已补明确 minimal 回退；正式 IslandView 将 minimal 放在相机安全右翼，保留同实例 Renderer 与计时解析。修正测试时序与几何像素筛选后，定向 24 passed / 0 skipped / 0 failures，原始图标距相机边缘 12pt，见[记录](t10-t11-acceptance-20261019.md)。真实倒计时三态及连续物理界面验收继续保留。 |
+| T11 | Presentation Model | T09 | `verified` | [纯数据三形态](../../DynamicIsland/Core/Activity/IslandActivity.swift)、[Host 回退策略](../../DynamicIsland/IslandUI/ActivityPresentationPolicy.swift)与正式 IslandView 的右翼 minimal 已实现，[24 项定向与受控几何记录](t10-t11-acceptance-20261019.md)通过。[2026-10-20 M04 实机](t11-manual-acceptance-20261020.md)第三轮完成真实按钮开始、609 条连续收起观察中的右侧时间 → 左图标 / 右时间、重新展开时的计时 / 进度连续和真实停止。opaque 实例 / generation 绑定由未改的真实包源码与正式 Host 契约证明，未冒充 UI 读取；AX / 像素出现时间及未新增设备矩阵的范围分别保留。 |
 | T12 | IslandRenderer | T09–T11 | `verified` | [受限 SwiftUI 映射](../../DynamicIsland/IslandUI/IslandRenderer.swift)、[12 类节点/三态/152、190、200 pt 壳尺寸测试](../../DynamicIslandTests/IslandRendererTests.swift)和 [Phase 2 验证记录](phase-2-renderer-action-router.md)；`./Scripts/ci.sh` 220 tests、1 skipped、0 failures、Release build passed。 |
 | T13 | ActionRouter | T12 | `verified` | [实例绑定与生命周期校验](../../DynamicIsland/IslandUI/ActionRouter.swift)、[路由及旧实例 / 权限测试](../../DynamicIslandTests/ActionRouterTests.swift)、[DEBUG 渲染入口](../../DynamicIsland/Core/Activity/ActivityDebugPanel.swift)与 [Phase 2 历史验证记录](phase-2-renderer-action-router.md)；当时 CI 同上。历史原生计时适配器及其闭环测试已在 T35 迁移时删除，当前公开插件的暂停 / 继续 / 停止闭环见 [Pomodoro VM / Router 集成测试](../../DynamicIslandTests/PomodoroPluginTests.swift)与[迁移记录](phase-7-t35-pomodoro.md)。 |
+
+[2026-10-20 Phase 2 统一检查](phase-2-acceptance-20261020.md)已归并 T09–T13 的分项完成标准、后续普通 Release 实机及十项阶段检查。历史自动 / 设备结果与本次观察分别保留，未新增性能或设备矩阵声明。
 
 ## Phase 3 — 内置功能迁移与 API 自测
 

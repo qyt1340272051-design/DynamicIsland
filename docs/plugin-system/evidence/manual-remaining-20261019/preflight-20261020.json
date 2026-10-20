@@ -1,0 +1,13 @@
+{
+  "observedUTC": "2026-10-20T05:37:58.644166+00:00",
+  "acceptancePIDs": [
+    7794
+  ],
+  "executableSHA256": "5ba2f9371f63c2c993b5baa6331a24dee6fde8e448fbb65050bdc71a942cae38",
+  "productionSourceHashCount": 101,
+  "sameKnownBinaryAndProductionSource": true,
+  "strictDeepSignaturePassed": true,
+  "gitHEAD": "e48627009ff2257768856b9dce00d27b7b505937",
+  "powerSnapshot": "Now drawing from 'Battery Power'\n -InternalBattery-0 (id=22544483)\t100%; discharging; 4:27 remaining present: true\n",
+  "purpose": "Post-capture identity verification for M04 third run; no application launch or UI action."
+}

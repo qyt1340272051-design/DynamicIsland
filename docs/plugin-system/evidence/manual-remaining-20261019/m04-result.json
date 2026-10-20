@@ -1,0 +1,189 @@
+{
+  "date": "2026-10-20",
+  "status": "passed",
+  "manualItem": "M04",
+  "task": "T11",
+  "run": 3,
+  "host": "preflight-20261020.json",
+  "hostProductionSourceSHA256CountMatched": 101,
+  "archive": {
+    "pathAtVerification": "/tmp/timer-presentations-0.1.0.dip",
+    "sha256": "307e53f9fa895bc0bb5b637638f0c1de73588fc347feb5f6ef90621d4f1a19e4",
+    "pluginID": "com.dynamicisland.acceptance.timer-presentations",
+    "version": "0.1.0",
+    "permissions": [],
+    "sourceIndexSHA256": "d555f742cfe0179560b404eb1dcb1dd8ccb00596270e85fbd95a3a1f8bdf51e5",
+    "sourceManifestSHA256": "7de0e93046864c0d43af170285f1448d800e7f806ff54e14eb05b8ea8360e1a8",
+    "installedSourceEvidence": "../final-app-install-20261019/result.json",
+    "originalArchiveAndCurrentInstalledSourceHashesRechecked": true
+  },
+  "start": {
+    "realUIButton": true,
+    "actionStartedEpochMs": 1792474449062,
+    "actionObservationEpochMs": 1792474449732,
+    "display": "05:00",
+    "stage": "minimal",
+    "actualShell": "expanded",
+    "ax": "m04-run3-started.txt",
+    "image": "m04-run3-started.jpg"
+  },
+  "collapsedObservation": {
+    "source": "m04-run3-observation.json",
+    "sourceSHA256": "085b77ec460a37cc5ead3fed1a995db44e2519aef993060ade28d45aa5ef081f",
+    "records": 609,
+    "collapsedRecords": 609,
+    "everyRecordHadCountdown": true,
+    "countdownNonincreasing": true,
+    "largestAdjacentDecrementSeconds": 1,
+    "firstObservedEpochMs": 1792474469077,
+    "lastObservedEpochMs": 1792474494035,
+    "spanSeconds": 24.958,
+    "maximumAdjacentObservationGapMs": 67,
+    "initialDisplay": "04:41",
+    "finalDisplay": "04:16",
+    "displayedDecrementSeconds": 25,
+    "minimalOnlyRecords": 294,
+    "iconAndCountdownRecords": 315,
+    "lastAXWithoutIcon": {
+      "index": 293,
+      "observedEpochMs": 1792474480944,
+      "sinceActionStartSeconds": 31.882,
+      "display": "04:29"
+    },
+    "firstAXWithIcon": {
+      "index": 294,
+      "observedEpochMs": 1792474480991,
+      "sinceActionStartSeconds": 31.929,
+      "display": "04:29"
+    },
+    "axTransitionBracketMs": 47,
+    "firstSavedImageWithVisibleIcon": {
+      "index": 304,
+      "observedEpochMs": 1792474481373,
+      "sinceActionStartSeconds": 32.311
+    },
+    "pixelScope": "609 AX observations are preserved; five selected unmodified images are archived. Tool sample cadence is not display frame rate. AX icon appearance precedes its visible painted glyph in the selected images.",
+    "savedFrames": [
+      0,
+      293,
+      294,
+      304,
+      608
+    ]
+  },
+  "reexpanded": {
+    "observedEpochMs": 1792474558794,
+    "sinceActionStartSeconds": 109.732,
+    "stage": "compact",
+    "hostReceiptPolicy": "background",
+    "countdownDisplay": "03:12",
+    "progressValue": 0.36302425639,
+    "progressAXPercent": 36,
+    "elapsedSecondsDerivedFromProgress": 108.907276917,
+    "ax": "m04-run3-reexpanded.txt",
+    "image": "m04-run3-reexpanded.jpg"
+  },
+  "stopped": {
+    "realUIButton": true,
+    "actionStartedEpochMs": 1792474567548,
+    "actionObservationEpochMs": 1792474568246,
+    "actionStartToStopSeconds": 118.486,
+    "returnedToIdle": true,
+    "display": "05:00",
+    "progress": 0,
+    "ax": "m04-run3-stopped.txt",
+    "image": "m04-run3-stopped.jpg",
+    "actionEvidence": "m04-run3-stop.json",
+    "naturalCompletionRequired": false
+  },
+  "originalImagePixelAnalysis": {
+    "method": "Read-only NSBitmapImageRep(deviceRGB). Select pixels in x=[40,480), y=[0,56) satisfying R<190, G>=60, G-R>=15, B-R>=15 on the 0..255 scale. Split at image width/2. Bounds are inclusive image pixel coordinates.",
+    "imageSize": [
+      520,
+      240
+    ],
+    "frame0": {
+      "leftHalfBounds": null,
+      "rightHalfBounds": [
+        433,
+        24,
+        460,
+        31
+      ],
+      "foregroundCount": 111
+    },
+    "frame293": {
+      "leftHalfBounds": null,
+      "rightHalfBounds": [
+        433,
+        24,
+        461,
+        31
+      ],
+      "foregroundCount": 123
+    },
+    "frame294": {
+      "leftHalfBounds": null,
+      "rightHalfBounds": [
+        441,
+        24,
+        469,
+        31
+      ],
+      "foregroundCount": 122
+    },
+    "frame304": {
+      "leftHalfBounds": [
+        51,
+        23,
+        61,
+        33
+      ],
+      "rightHalfBounds": [
+        441,
+        24,
+        469,
+        31
+      ],
+      "foregroundCount": 180
+    },
+    "frame608": {
+      "leftHalfBounds": [
+        51,
+        23,
+        61,
+        33
+      ],
+      "rightHalfBounds": [
+        441,
+        24,
+        469,
+        31
+      ],
+      "foregroundCount": 171
+    },
+    "limitation": "These are colored foreground bounds in the saved app image, not physical camera coordinates, screen points, or measured clearance from a camera. No image was changed."
+  },
+  "sameActivityAndGeneration": {
+    "opaqueIDsReadFromUI": false,
+    "evidence": "The unchanged installed JavaScript publishes activityID=timer once, updates it, uses timer.id/generation in all countdown leaves, and accepts scheduler reconciliation only if generation still matches. Existing formal Host contracts verify update instance preservation and countdown ownership/generation binding. Visible elapsed countdown continuity supplements these source/contracts; no runtime opaque identity was extracted from the native UI.",
+    "automatedContractFiles": [
+      "DynamicIslandTests/IslandTimerShellRenderingTests.swift",
+      "DynamicIslandTests/PluginActivityBridgeTests.swift",
+      "DynamicIslandTests/PluginCountdownNodeBridgeTests.swift",
+      "DynamicIslandTests/PluginCountdownBrokerTests.swift"
+    ],
+    "priorRegression": "../final-regression-20261019/result.json"
+  },
+  "scope": {
+    "ordinaryReleaseRealUI": true,
+    "noProductionSourceChanges": true,
+    "noPrivateStartOrSimulatedClock": true,
+    "noNewTestsRunForThisArchive": true,
+    "reduceMotionChanged": false,
+    "newSystemOrDeviceMatrixClaimed": false,
+    "earlierRunsPreserved": true,
+    "recommendation": "Mark T11 verified based on the real third-run minimal-to-compact-to-expanded observations plus existing Host contracts. Do not infer other task completion."
+  },
+  "originalBuildIdentity": "preflight.json"
+}
