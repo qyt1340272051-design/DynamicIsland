@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""SDK 1.0.0 release-candidate offline preflight, narrower than Host admission.
+"""SDK 1.0.0 offline authoring preflight, narrower than Host admission.
 
 Python 3.9+ standard library only. No JavaScript is executed. Manifest validation
 mirrors the Host's closed V1 vocabulary; declarations do not promise accepted

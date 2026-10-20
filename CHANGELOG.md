@@ -1,8 +1,8 @@
 # SDK 变更说明
 
-## 1.0.0 发布候选 — 2026-10-19
+## 1.0.0 — 2026-10-20
 
-已采用候选版本，尚未公开发布。SDK `1.0.0`、App `0.6.0`、wire API `1.0.0` 与 Manifest schema `1` 是独立标识；此次没有改变 Host 协议、资源权限或现有插件业务逻辑。
+首次稳定的有限作者接口与工具分发，公开构件见 [sdk-v1.0.0 Release](https://github.com/qyt1340272051-design/DynamicIsland/releases/tag/sdk-v1.0.0)。SDK `1.0.0`、App `0.6.0`、wire API `1.0.0` 与 Manifest schema `1` 是独立标识；此次没有改变 Host 协议、资源权限或现有插件业务逻辑。
 
 ### 冻结的有限接口承诺
 
@@ -21,4 +21,4 @@
 - 加入完整 MIT License、独立 SDK ZIP 构建、逐文件摘要清单和实际解压后的脱仓库测试。
 - Hello JS / Manifest 不变；README 路径说明改变后重新生成 `.dip` 测试夹具。历史人工验收记录不改写。
 
-后续兼容策略见 [VERSIONING](VERSIONING.md)。正式公开发布时需复核同一源码状态生成的归档、摘要和独立作者结果。
+稳定版统一了发布状态说明，归档清单标识为 stable，并对相同源码重新生成 ZIP、摘要和 Hello 包夹具；接口、Manifest 与 Hello JavaScript 保持原合约。首次真人独立上手及约十分钟目标仍单独验收。后续兼容策略见 [VERSIONING](VERSIONING.md)。

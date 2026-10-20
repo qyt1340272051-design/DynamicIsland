@@ -1,5 +1,5 @@
 {
-  "status": "release-candidate-authoring-preflight-not-publicly-released",
+  "status": "stable-limited-authoring-preflight",
   "sdkVersion": "1.0.0",
   "manifestSchema": {
     "canonicalRepositoryPath": "docs/plugin-system/schema/plugin-manifest-v1.schema.json",
@@ -39,7 +39,7 @@
     "Host installation acceptance",
     "runtime permissions or capability authorization",
     "current countdown or action instance validity",
-    "public SDK release or full Host contract",
+    "full Host contract or resource authorization",
     "JavaScript correctness or execution"
   ]
 }

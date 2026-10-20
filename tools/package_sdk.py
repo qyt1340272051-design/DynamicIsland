@@ -64,7 +64,7 @@ def package(sdk, destination):
     manifest = {
         'artifactFormatVersion': 1,
         'sdkVersion': version,
-        'status': 'experimental' if '-' in version.split('+', 1)[0] else 'stable-candidate',
+        'status': 'experimental' if '-' in version.split('+', 1)[0] else 'stable',
         'wireAPIVersion': '1.0.0',
         'manifestSchemaVersion': schema['properties']['schemaVersion']['const'],
         'minimumHostVersion': example['minimumHostVersion'],

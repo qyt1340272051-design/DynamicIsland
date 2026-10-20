@@ -1,6 +1,6 @@
-# 你好，计数器（SDK 1.0.0 候选模板）
+# 你好，计数器（SDK 1.0.0 模板）
 
-这是 SDK 1.0.0 发布候选面向 App 0.6.0 Native 接口的最小工具示例，尚未公开发布 SDK。`index.js` 是可以直接运行的 JavaScript，无需 TypeScript 编译、npm 安装或构建步骤。类型引用只帮助编辑器检查源码。
+这是 SDK 1.0.0 面向 App 0.6.0 插件系统 Native 接口的最小工具示例。`index.js` 是可以直接运行的 JavaScript，无需 TypeScript 编译、npm 安装或构建步骤。类型引用只帮助编辑器检查源码。
 
 - 无需额外权限；只声明发布、更新、节点 UI 和动作四项 capability。
 - 提供 minimal、compact、expanded 三种布局。工具等待你在展开后的工具菜单中选择，不请求自动展开。
