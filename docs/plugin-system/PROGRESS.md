@@ -129,3 +129,11 @@
 | T40 | Plugin Registry | T38 | `in progress` | [目录核心](phase-9-t40-registry-core.md)与[发现 UI](phase-9-t40-registry-ui.md)已完成，复用正式解包 / 安装 / 权限流程；[本日完整回归](evidence/final-regression-20261019/result.json)为 1070 passed / 2 skipped / 0 failures，普通 Release build passed。[发布准备](t40-release-preparation-20261019.md)已生成附 MIT 许可的两款官方包、固定摘要与候选目录，独立重打字节一致。正式 [registry.json](../../Registry/registry.json)仍为空，未登记不存在的下载地址；公开 Release / 目录发布、真实网络安装与 T38 依赖继续保留。 |
 
 [Phase 9 统一检查](phase-9-acceptance.md)已归并当前自动开发证据及剩余门槛；T38–T40 继续保持 `in progress`，不等同于稳定 SDK 或 Plugin 1.0 发布验收。
+
+## 用户补充待办
+
+以下项目独立于原 T01–T40；原计划仍为 37 项 verified / 3 项 in progress，另有 1 项补充待办。
+
+| ID | 任务 | 状态 | 安排与验收 |
+| --- | --- | --- | --- |
+| U01 | 工具菜单越界与展开保持 | `pending` | [计划与用户截图](DevelopmentPlan.md#u01-工具菜单越界与展开保持)：工具增多后菜单超出岛体，选完若未立即移回则收起并退出工具。后续优化菜单交互期间的展开保持、选择后的返回缓冲及长列表可达性；在下一轮完整作者走查和 0.6.0 发布验收前处理。本轮仅登记，未实施或复现验收。 |
