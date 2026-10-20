@@ -1,0 +1,15 @@
+.....E..................................
+======================================================================
+ERROR: test_quick_start_builds_the_actual_template_from_a_standalone_sdk (test_docs.DocumentationTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/rong5/Dynamiclsland/SDK/tests/test_docs.py", line 38, in test_quick_start_builds_the_actual_template_from_a_standalone_sdk
+    check_docs.check(sdk)
+  File "/Users/rong5/Dynamiclsland/SDK/tools/check_docs.py", line 72, in check
+    raise ValueError(f'{document.name}: broken link {target}')
+ValueError: publishing.md: broken link ../DISTRIBUTION.md
+
+----------------------------------------------------------------------
+Ran 40 tests in 1.175s
+
+FAILED (errors=1)

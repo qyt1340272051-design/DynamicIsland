@@ -1,0 +1,60 @@
+{
+  "python": "3.9.6 (default, May 22 2026, 11:13:45) \n[Clang 21.0.0 (clang-2100.1.1.101)]",
+  "platform": "macOS-26.6.2-arm64-arm-64bit",
+  "zlibCompileVersion": "1.2.12",
+  "zlibRuntimeVersion": "1.2.12",
+  "records": [
+    {
+      "command": [
+        "/Applications/Xcode.app/Contents/Developer/usr/bin/python3",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-p",
+        "test_*.py",
+        "-v"
+      ],
+      "cwd": "/tmp/dynamic-island-sdk-final-frozen-audit-20261020-kv9nl85u/unpacked/DynamicIslandSDK",
+      "exitCode": 0,
+      "log": "/tmp/dynamic-island-sdk-final-frozen-audit-20261020-kv9nl85u/standalone-python-tests.log"
+    },
+    {
+      "command": [
+        "/Applications/Xcode.app/Contents/Developer/usr/bin/python3",
+        "-B",
+        "tools/package_sdk.py",
+        "/tmp/dynamic-island-sdk-final-frozen-audit-20261020-kv9nl85u/repacked-1.zip"
+      ],
+      "cwd": "/tmp/dynamic-island-sdk-final-frozen-audit-20261020-kv9nl85u/unpacked/DynamicIslandSDK",
+      "exitCode": 0,
+      "log": "/tmp/dynamic-island-sdk-final-frozen-audit-20261020-kv9nl85u/repack-1.log",
+      "summary": {
+        "bytes": 85192,
+        "files": 53,
+        "sdkVersion": "1.0.0",
+        "sha256": "b64d87e400a90f730bd098cce23dc7b743cf78dcbfcb4f878f7cfeb16a494ac9"
+      }
+    },
+    {
+      "command": [
+        "/Applications/Xcode.app/Contents/Developer/usr/bin/python3",
+        "-B",
+        "tools/package_sdk.py",
+        "/tmp/dynamic-island-sdk-final-frozen-audit-20261020-kv9nl85u/repacked-2.zip"
+      ],
+      "cwd": "/tmp/dynamic-island-sdk-final-frozen-audit-20261020-kv9nl85u/unpacked/DynamicIslandSDK",
+      "exitCode": 0,
+      "log": "/tmp/dynamic-island-sdk-final-frozen-audit-20261020-kv9nl85u/repack-2.log",
+      "summary": {
+        "bytes": 85192,
+        "files": 53,
+        "sdkVersion": "1.0.0",
+        "sha256": "b64d87e400a90f730bd098cce23dc7b743cf78dcbfcb4f878f7cfeb16a494ac9"
+      }
+    }
+  ],
+  "repackedFilesByteIdenticalToEachOtherAndFrozenCanonical": true
+}

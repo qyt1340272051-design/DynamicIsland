@@ -50,6 +50,10 @@ class DistributionTests(unittest.TestCase):
             sdk = root / 'unpacked' / 'DynamicIslandSDK'
             manifest = json.loads((sdk / 'distribution-manifest.json').read_text())
             self.assertEqual(manifest['sdkVersion'], json.loads((SDK / 'package.json').read_text())['version'])
+            self.assertEqual(manifest['status'], 'stable')
+            self.assertEqual(manifest['wireAPIVersion'], '1.0.0')
+            self.assertEqual(manifest['manifestSchemaVersion'], 1)
+            self.assertEqual(manifest['minimumHostVersion'], '0.6.0')
             self.assertEqual(len(manifest['files']), summary['files'])
             for name, expected in manifest['files'].items():
                 data = (sdk / name).read_bytes()

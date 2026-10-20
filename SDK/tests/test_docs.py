@@ -21,7 +21,8 @@ class DocumentationTests(unittest.TestCase):
             shutil.copytree(SDK / name, sdk / name, ignore=shutil.ignore_patterns('__pycache__'))
         for name in ('schema',):
             shutil.copytree(SDK / name, sdk / name)
-        shutil.copy(SDK / 'VERSIONING.md', sdk / 'VERSIONING.md')
+        for name in ('README.md', 'VERSIONING.md', 'DISTRIBUTION.md', 'CHANGELOG.md', 'LICENSE'):
+            shutil.copy(SDK / name, sdk / name)
         return sdk
 
     def test_all_handbook_sources_are_exact_valid_examples_and_links_resolve(self):

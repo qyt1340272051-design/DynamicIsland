@@ -1,6 +1,8 @@
-# DynamicIsland SDK 1.0.0 发布候选
+# DynamicIsland SDK 1.0.0
 
-本目录采用 **SDK `1.0.0` 发布候选**，尚未公开发布。它适用于 App `0.6.0` 的有限 Native API；SDK、App、wire API `1.0.0` 与 Manifest schema `1` 分别管理版本。T35 / T36 的实机前置已于 2026-10-19 满足，范围见[验证说明](docs/verification.md)；发布候选还需最终材料复核、独立作者走查和公开分发验收。
+本目录是 **SDK `1.0.0` 的稳定发布源**，提供 App `0.6.0` 插件系统的有限 Native API。SDK、App、wire API `1.0.0` 与 Manifest schema `1` 分别管理版本。公开构件、摘要和发布状态见 [sdk-v1.0.0 Release](https://github.com/qyt1340272051-design/DynamicIsland/releases/tag/sdk-v1.0.0)，验证范围见[验证说明](docs/verification.md)。
+
+安装运行插件需要支持该协议的 App `0.6.0` 开发版或后续兼容版本。现有 App `v0.5.0` 尚不包含插件 Runtime；SDK 分发独立于主程序安装包发布。
 
 工具需要 Python 3.9+，只使用标准库，可离线运行，不执行 JavaScript。插件运行无需 Node.js、Python、npm 或 TypeScript；安装和执行仍由主程序负责。
 

@@ -1,5 +1,5 @@
 /**
- * DynamicIsland Native SDK 1.0.0 release candidate; not publicly released.
+ * DynamicIsland Native SDK 1.0.0 limited stable authoring contract.
  *
  * This file describes a deliberately small javascriptcore surface exercised by
  * the official Pomodoro and GitHub examples. It is not a declaration of

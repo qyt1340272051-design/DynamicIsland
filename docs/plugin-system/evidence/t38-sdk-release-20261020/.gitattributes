@@ -1,0 +1,4 @@
+# Preserve original SDK and Xcode output byte-for-byte.
+sdk-check-initial.txt -whitespace
+sdk-check.txt -whitespace
+host-contract.txt -whitespace
