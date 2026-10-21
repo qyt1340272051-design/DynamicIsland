@@ -1,6 +1,6 @@
 # 使用说明
 
-Dynamic Island 是 macOS 菜单栏应用，支持 macOS 26.0 或更高版本。当前源码为 `0.6.0` 开发预览（候选 `v0.6.0-beta.1` / build 3），以[对应 Release](https://github.com/qyt1340272051-design/DynamicIsland/releases/tag/v0.6.0-beta.1)的实际资产为准，也可按[编译说明](BUILDING.md)从源码运行。测试 DMG 为未公证的 ad hoc 构建，不是 Developer ID 正式安装包。刘海 MacBook 是主要场景，无刘海屏幕和外接屏幕使用顶部居中的回退布局。
+Dynamic Island 是 macOS 菜单栏应用，支持 macOS 26.0 或更高版本。当前源码为 `0.6.0` 开发预览（候选 `v0.6.0-beta.2` / build 4），以[对应 Release](https://github.com/qyt1340272051-design/DynamicIsland/releases/tag/v0.6.0-beta.2)的实际资产为准，也可按[编译说明](BUILDING.md)从源码运行。测试 DMG 为未公证的 ad hoc 构建，不是 Developer ID 正式安装包。刘海 MacBook 是主要场景，无刘海屏幕和外接屏幕使用顶部居中的回退布局。
 
 ## 启动与菜单栏
 

@@ -1,0 +1,3 @@
+Test and build	Test and build	2026-10-21T03:50:35.4998090Z /Users/runner/work/DynamicIsland/DynamicIsland/DynamicIslandTests/PomodoroPluginStorageTests.swift:84: error: -[DynamicIslandTests.PomodoroPluginStorageTests testPresetActionsAndBusinessTransitionsSaveOnlyTheVersionedMetadata] : XCTAssertFalse failed
+Test and build	Test and build	2026-10-21T03:50:40.5040220Z 	 Executed 1092 tests, with 5 tests skipped and 1 failure (0 unexpected) in 228.196 (228.867) seconds
+Test and build	Test and build	2026-10-21T03:50:40.5055010Z 	 Executed 1092 tests, with 5 tests skipped and 1 failure (0 unexpected) in 228.196 (228.873) seconds

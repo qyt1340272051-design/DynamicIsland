@@ -45,12 +45,12 @@ npm ci --prefix SDK --ignore-scripts --no-audit --no-fund
 
 ## 本地打包与测试预发布
 
-当前候选为 App `0.6.0`（build 3）、标签 `v0.6.0-beta.1`。在准备好的源码上执行：
+当前候选为 App `0.6.0`（build 4）、标签 `v0.6.0-beta.2`。在准备好的源码上执行：
 
 ```bash
-RELEASE_TAG=v0.6.0-beta.1 ./Scripts/release.sh --local
+RELEASE_TAG=v0.6.0-beta.2 ./Scripts/release.sh --local
 ```
 
 本地模式生成双架构 ad hoc 签名的 Archive、DMG、SHA-256 与 manifest。该 DMG 可以明确标为“未公证测试包”上传 GitHub 预发布；没有 Developer ID 签名和 Apple 公证，macOS 首次运行可能要求在“系统设置 > 隐私与安全性 > 仍要打开”手动放行。不能承诺双击即启动，也不能将它称为正式签名公证安装包。Tag 自动发布和测试者安装步骤见 [发布指南](RELEASING.md)。
 
-输出文件为 `Dynamic-Island-0.6.0-beta.1-local.dmg`、对应 `.dmg.sha256` 和 `.json`，默认目录是 `build/release/`。本地构建不自动发布；T39 新作者独立体验和九项真机 Beta 场景仍待验收，不能据打包成功将其标为完成。SDK 作者文档见 [SDK Quick Start](../SDK/docs/quick-start.md)。
+输出文件为 `Dynamic-Island-0.6.0-beta.2-local.dmg`、对应 `.dmg.sha256` 和 `.json`，默认目录是 `build/release/`。本地构建不自动发布；T39 新作者独立体验和九项真机 Beta 场景仍待验收，不能据打包成功将其标为完成。SDK 作者文档见 [SDK Quick Start](../SDK/docs/quick-start.md)。

@@ -6,7 +6,7 @@
 
 一个贴合 Mac 刘海区域的开源 SwiftUI 菜单栏应用。提供系统音量、Apple Music、文件托盘、AirDrop、内置计时和可安装插件；通过统一 Activity 展示紧凑提示与展开工具。
 
-> 当前源码为 App `0.6.0` 开发预览，候选标签 `v0.6.0-beta.1`（build 3）；下载以对应 Release 实际资产为准。测试 DMG 使用 ad hoc 签名，未经 Apple 公证，不是 Developer ID 正式安装包。首次运行可能被 macOS 拦截；请先核对可信来源和 SHA-256，再按下方步骤手动批准。插件系统仍保留新作者独立体验与跨设备验收，不代表整个 Plugin 1.0 已验收。
+> 当前源码为 App `0.6.0` 开发预览，候选标签 `v0.6.0-beta.2`（build 4）；下载以对应 Release 实际资产为准。测试 DMG 使用 ad hoc 签名，未经 Apple 公证，不是 Developer ID 正式安装包。首次运行可能被 macOS 拦截；请先核对可信来源和 SHA-256，再按下方步骤手动批准。插件系统仍保留新作者独立体验与跨设备验收，不代表整个 Plugin 1.0 已验收。
 
 ## 界面预览
 
@@ -50,7 +50,7 @@
 
 ## 快速开始
 
-查看 [App 0.6.0 开发预览 Release](https://github.com/qyt1340272051-design/DynamicIsland/releases/tag/v0.6.0-beta.1)，以该页实际提供的 `-local.dmg`、校验和及 manifest 为准；若尚无资产，可从源码运行：
+查看 [App 0.6.0 开发预览 Release](https://github.com/qyt1340272051-design/DynamicIsland/releases/tag/v0.6.0-beta.2)，以该页实际提供的 `-local.dmg`、校验和及 manifest 为准；若尚无资产，可从源码运行：
 
 ```bash
 git clone https://github.com/qyt1340272051-design/DynamicIsland.git
@@ -145,7 +145,7 @@ open artifacts/screen-matrix/index.html
 本地可用下列命令构建通用架构测试 DMG、SHA-256 和 manifest：
 
 ```bash
-RELEASE_TAG=v0.6.0-beta.1 ./Scripts/release.sh --local
+RELEASE_TAG=v0.6.0-beta.2 ./Scripts/release.sh --local
 ```
 
 此包采用 ad hoc 签名，未经 Developer ID 签名或 Apple 公证，可作为明确标注风险的 GitHub 预发布测试包，但不能声称可无提示双击启动。`v*` Tag 的自动打包与预发布流程见 [发布指南](docs/RELEASING.md)。
