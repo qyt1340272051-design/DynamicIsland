@@ -1,0 +1,27 @@
+[
+  {
+    "stem": "b01-countdown-frame-000",
+    "elapsedMs": 56350,
+    "state": "Window: \"\", App: Dynamic Island.\n0 system dialog Secondary Actions: Raise\n\t1 container\n\t\t2 button Description: 音乐, ID: island-surface-music\n\t\t3 button Description: 拖盘, ID: island-surface-tray\n\t\t4 button Description: 计时, ID: island-surface-tools\n\t\t5 button Description: 退出 Dynamic Island, ID: power\n\t\t6 计时工具\n\t\t\t7 radio button Description: 秒表, Value: 0\n\t\t\t8 radio button Description: 倒计时, Value: 1\n\t\t9 text 按住加减按钮可快速调整 计时中\n\t\t10 button (disabled) Description: 减少一分钟, Help: 按住可连续调整, ID: minus\n\t\t11 text 1 分钟\n\t\t12 button (disabled) Description: 增加一分钟, Help: 按住可连续调整, ID: plus\n\t\t13 text 00:04\n\t\t14 button Description: 重置, ID: arrow.counterclockwise\n\t\t15 button Description: 暂停, ID: pause.fill\n16 menu bar\n\t17 Dynamic Island\n\t18 Edit\n\t19 View\n\t20 Window\n\t21 Help\n"
+  },
+  {
+    "stem": "b01-countdown-frame-001",
+    "elapsedMs": 57064,
+    "state": "Window: \"\", App: Dynamic Island.\n0 system dialog Secondary Actions: Raise\n\t1 container\n\t\t2 button Description: 音乐, ID: island-surface-music\n\t\t3 button Description: 拖盘, ID: island-surface-tray\n\t\t4 button Description: 计时, ID: island-surface-tools\n\t\t5 button Description: 退出 Dynamic Island, ID: power\n\t\t6 计时工具\n\t\t\t7 radio button Description: 秒表, Value: 0\n\t\t\t8 radio button Description: 倒计时, Value: 1\n\t\t9 text 按住加减按钮可快速调整 计时中\n\t\t10 button (disabled) Description: 减少一分钟, Help: 按住可连续调整, ID: minus\n\t\t11 text 1 分钟\n\t\t12 button (disabled) Description: 增加一分钟, Help: 按住可连续调整, ID: plus\n\t\t13 text 00:03\n\t\t14 button Description: 重置, ID: arrow.counterclockwise\n\t\t15 button Description: 暂停, ID: pause.fill\n16 menu bar\n\t17 Dynamic Island\n\t18 Edit\n\t19 View\n\t20 Window\n\t21 Help\n"
+  },
+  {
+    "stem": "b01-countdown-frame-002",
+    "elapsedMs": 58122,
+    "state": "Window: \"\", App: Dynamic Island.\n0 system dialog Secondary Actions: Raise\n\t1 container\n\t\t2 button Description: 音乐, ID: island-surface-music\n\t\t3 button Description: 拖盘, ID: island-surface-tray\n\t\t4 button Description: 计时, ID: island-surface-tools\n\t\t5 button Description: 退出 Dynamic Island, ID: power\n\t\t6 计时工具\n\t\t\t7 radio button Description: 秒表, Value: 0\n\t\t\t8 radio button Description: 倒计时, Value: 1\n\t\t9 text 按住加减按钮可快速调整 计时中\n\t\t10 button (disabled) Description: 减少一分钟, Help: 按住可连续调整, ID: minus\n\t\t11 text 1 分钟\n\t\t12 button (disabled) Description: 增加一分钟, Help: 按住可连续调整, ID: plus\n\t\t13 text 00:02\n\t\t14 button Description: 重置, ID: arrow.counterclockwise\n\t\t15 button Description: 暂停, ID: pause.fill\n16 menu bar\n\t17 Dynamic Island\n\t18 Edit\n\t19 View\n\t20 Window\n\t21 Help\n"
+  },
+  {
+    "stem": "b01-countdown-frame-003",
+    "elapsedMs": 59090,
+    "state": "Window: \"\", App: Dynamic Island.\n0 system dialog Secondary Actions: Raise\n\t1 container\n\t\t2 button Description: 音乐, ID: island-surface-music\n\t\t3 button Description: 拖盘, ID: island-surface-tray\n\t\t4 button Description: 计时, ID: island-surface-tools\n\t\t5 button Description: 退出 Dynamic Island, ID: power\n\t\t6 计时工具\n\t\t\t7 radio button Description: 秒表, Value: 0\n\t\t\t8 radio button Description: 倒计时, Value: 1\n\t\t9 text 按住加减按钮可快速调整 计时中\n\t\t10 button (disabled) Description: 减少一分钟, Help: 按住可连续调整, ID: minus\n\t\t11 text 1 分钟\n\t\t12 button (disabled) Description: 增加一分钟, Help: 按住可连续调整, ID: plus\n\t\t13 text 00:01\n\t\t14 button Description: 重置, ID: arrow.counterclockwise\n\t\t15 button Description: 暂停, ID: pause.fill\n16 menu bar\n\t17 Dynamic Island\n\t18 Edit\n\t19 View\n\t20 Window\n\t21 Help\n"
+  },
+  {
+    "stem": "b01-countdown-frame-004",
+    "elapsedMs": 60149,
+    "state": "Window: \"\", App: Dynamic Island.\n0 system dialog Secondary Actions: Raise\n\t1 container\n\t\t2 button Description: 音乐, ID: island-surface-music\n\t\t3 button Description: 拖盘, ID: island-surface-tray\n\t\t4 button Description: 计时, ID: island-surface-tools\n\t\t5 button Description: 退出 Dynamic Island, ID: power\n\t\t6 text 倒计时已完成\n\t\t7 button (selected) Description: 确认并收起, ID: checkmark\n\t\t8 text 点击确认并收起\n9 menu bar\n\t10 Dynamic Island\n\t11 Edit\n\t12 View\n\t13 Window\n\t14 Help\n"
+  }
+]
