@@ -46,5 +46,11 @@
   "guiInstallRepeat": {
     "result": "passed",
     "details": "gui-result.json"
+  },
+  "postOCRFixUIRegression": {
+    "passed": 12,
+    "skipped": 0,
+    "failures": 0,
+    "details": "ui-recognition-fix.json"
   }
 }

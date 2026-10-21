@@ -1,0 +1,28 @@
+{
+  "initialRemoteCI": {
+    "run": 39535498061,
+    "head": "417ea48a192baedba89ef99907107ecfa101c2e0",
+    "total": 1092,
+    "skipped": 5,
+    "failures": 4,
+    "cause": "Case/Chinese glyph OCR differences in 4 static pixel assertions, not product model or runtime failures"
+  },
+  "correction": "Keep real pixels, exact model contracts, complete presentation-policy explanation and all permission/privacy checks; tolerate ASCII OCR case/whitespace only and use readable recovery fragments for Chinese OCR uncertainty. No fixture text injection or native input bypass.",
+  "firstLocalCorrection": {
+    "total": 12,
+    "failures": 1,
+    "cause": "New recovery-copy whole-sentence assertion hit 是否/兼容 OCR ambiguity; changed to both visible instruction ends"
+  },
+  "finalLocalCorrection": {
+    "total": 12,
+    "passed": 12,
+    "skipped": 0,
+    "failures": 0,
+    "summary": "ui-recognition-summary.json"
+  },
+  "sourceSwiftChanged": false,
+  "sdkChanged": false,
+  "independentReview": "No blocking issues; privacy, permissions, actual-pixel and native input coverage retained",
+  "originalCILogSHA256": "47e49dfa2238d545749b1542fffb3ca60f1fdf6c4f2af19c8c526b594680c3bb",
+  "finalLocalLogSHA256": "f73a1cbcd3612f0b507e97f05fd309b2846652f6befa748a78a626450e91b910"
+}

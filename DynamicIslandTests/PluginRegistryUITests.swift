@@ -28,7 +28,17 @@ final class PluginRegistryUITests: XCTestCase {
             window.setContentSize(CGSize(width: 720, height: 480))
             try await settle(window)
             let text = try CompatibilityRenderingEvidence.renderedText(in: XCTUnwrap(window.contentView))
-            for label in expected { XCTAssertTrue(text.contains(label), "Missing \(label) in \(name): \(text)") }
+            print("T40_REGISTRY_\(name.uppercased())_RENDERED_TEXT=\(text)")
+            if name == "unavailable" {
+                XCTAssertEqual(model.errorCode, "httpStatus")
+                XCTAssertEqual(model.errorMessage, PluginRegistryMessages.message(.httpStatus))
+            }
+            for label in expected {
+                let visible = label == "httpStatus"
+                    ? CompatibilityRenderingEvidence.containsASCIIToken(label, in: text)
+                    : text.contains(label)
+                XCTAssertTrue(visible, "Missing \(label) in \(name): \(text)")
+            }
             XCTAssertTrue(text.contains("安装不会自动启用或授权"))
             XCTAssertFalse(text.contains(f.base.configuration.rootDirectoryURL.path))
             try screenshot(window, name: "registry-\(name)")

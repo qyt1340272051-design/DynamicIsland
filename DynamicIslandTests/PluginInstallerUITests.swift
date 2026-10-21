@@ -38,7 +38,19 @@ final class PluginInstallerUITests: XCTestCase {
         CompatibilityRenderingEvidence.assertEngine(.superIsland, pixelText: expanded)
         print("T37_SUPERISLAND_PREVIEW_DETAILS_RENDERED_TEXT=\(expanded)")
         for limitation in PluginCompatibilityProfileLimitation.allCases {
-            XCTAssertTrue(expanded.contains(limitation.title), "Missing reviewed engine limitation: \(limitation)")
+            if limitation == .hostPresentationPolicy {
+                // Vision on the hosted runner read 裁决 as 教决/数决, while
+                // retaining the complete policy explanation. Keep the exact
+                // source contract and require the full rendered semantics.
+                let explanation = "展开与收起会转换为有期限的展示请求，仍由主程序检查能力声明和当前交互状态。"
+                XCTAssertEqual(limitation.title, "展示请求由主程序裁决")
+                XCTAssertEqual(limitation.description, explanation)
+                XCTAssertTrue(expanded.contains("展示请求由主程序"), expanded)
+                XCTAssertTrue(expanded.contains(explanation), expanded)
+            } else {
+                XCTAssertTrue(expanded.contains(limitation.title),
+                              "Missing reviewed engine limitation: \(limitation): \(expanded)")
+            }
         }
         XCTAssertFalse(expanded.contains("此布局的显示替代"))
         XCTAssertFalse(expanded.contains(fixture.configuration.rootDirectoryURL.path))

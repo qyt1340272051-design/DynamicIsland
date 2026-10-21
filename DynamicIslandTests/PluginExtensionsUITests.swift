@@ -37,7 +37,7 @@ final class PluginExtensionsUITests: XCTestCase {
 
         let native = try await display(.profile(for: .javaScriptCore), name: "native")
         XCTAssertTrue(native.contains("原生"))
-        XCTAssertTrue(native.contains("JavaScriptCore"))
+        XCTAssertTrue(CompatibilityRenderingEvidence.containsASCIIToken("JavaScriptCore", in: native), native)
         XCTAssertFalse(native.contains("兼容详情"), "Native plugins should retain compact metadata.")
         XCTAssertFalse(native.contains("兼容范围"))
 
@@ -85,10 +85,11 @@ final class PluginExtensionsUITests: XCTestCase {
         try writeScreenshot(window, filename: "dynamic-island-t33-extensions.png")
         let labels = try renderedText(in: view)
         print("T33_RENDERED_TEXT=\(labels)")
+        XCTAssertEqual(fixture.model.selectedPlugin?.manifest.engine, .javaScriptCore)
         XCTAssertTrue(labels.contains("Extensions Fixture"))
         XCTAssertTrue(labels.contains("Fixture Developer"))
         XCTAssertTrue(labels.contains("未验证"))
-        XCTAssertTrue(labels.contains("JavaScriptCore"))
+        XCTAssertTrue(CompatibilityRenderingEvidence.containsASCIIToken("JavaScriptCore", in: labels), labels)
         for label in ["启用插件", "查看诊断", "卸载", "读取剪贴板", "写入剪贴板", "尚未支持"] {
             XCTAssertTrue(labels.contains(label), "Required control or permission was cropped: \(label)")
         }
@@ -189,9 +190,17 @@ final class PluginExtensionsUITests: XCTestCase {
         try await settle(window)
         let view = try XCTUnwrap(window.contentView)
         let labels = try renderedText(in: view)
+        print("T33_REJECTED_DISCOVERY_RENDERED_TEXT=\(labels)")
+        XCTAssertEqual(fixture.model.discoveryFailures.map(\.code), ["candidateUnreadable"])
         XCTAssertTrue(labels.contains("暂无已安装插件"))
         XCTAssertFalse(labels.contains("启用插件"))
-        XCTAssertTrue(labels.contains("candidateUnreadable"))
+        XCTAssertTrue(labels.contains("项插件未能载入"), labels)
+        // Vision can confuse 是否 / 兼容 glyphs even on the local runner.
+        // Require both ends of the rendered recovery instruction and the
+        // exact model code rather than treating OCR as a copy spellchecker.
+        XCTAssertTrue(labels.contains("请检查插件"), labels)
+        XCTAssertTrue(labels.contains("重新安装"), labels)
+        XCTAssertTrue(CompatibilityRenderingEvidence.containsASCIIToken("candidateUnreadable", in: labels), labels)
         XCTAssertFalse(labels.contains("SECRET-CANDIDATE"))
         XCTAssertFalse(labels.contains("SECRET-PATH"))
         XCTAssertFalse(labels.contains(fixture.configuration.rootDirectoryURL.path))
@@ -243,14 +252,7 @@ final class PluginExtensionsUITests: XCTestCase {
     }
 
     private func renderedText(in view: NSView) throws -> String {
-        let bitmap = try CompatibilityRenderingEvidence.bitmap(in: view)
-        let image = try XCTUnwrap(bitmap.cgImage)
-        let request = VNRecognizeTextRequest()
-        request.recognitionLevel = .accurate
-        request.recognitionLanguages = ["zh-Hans", "en-US"]
-        request.customWords = ["SuperIsland", "JavaScriptCore"]
-        try VNImageRequestHandler(cgImage: image, options: [:]).perform([request])
-        return (request.results ?? []).compactMap { $0.topCandidates(1).first?.string }.joined(separator: " ")
+        try CompatibilityRenderingEvidence.renderedText(in: view)
     }
 
     private func click(_ view: NSView, window: NSWindow, atTopLeftPoint point: CGPoint) async throws {
@@ -398,7 +400,8 @@ enum CompatibilityRenderingEvidence {
                 // Mixed Chinese/English language correction may normalize a
                 // real camel-case engine label or mistake I for l. Recognize
                 // the same detected source line with English correction off;
-                // keep the actual candidates and exact assertions unchanged.
+                // Keep only actual candidates; ASCII case/word splitting is
+                // handled separately at the static OCR assertion boundary.
                 let english = recognitionRequest(languages: ["en-US"], languageCorrection: false)
                 try VNImageRequestHandler(cgImage: line, options: [:]).perform([english])
                 text.append(contentsOf: (english.results ?? []).flatMap { $0.topCandidates(5).map(\.string) })
@@ -411,10 +414,20 @@ enum CompatibilityRenderingEvidence {
                              file: StaticString = #filePath, line: UInt = #line) {
         let expected = engine == .superIsland ? "SuperIsland" : "JavaScriptCore"
         let expectedLevel = PluginCompatibilitySnapshot.profile(for: engine).level.title
-        XCTAssertTrue(pixelText.contains(expected),
-                      "The complete, exact engine name must be visible in rendered pixels.", file: file, line: line)
+        XCTAssertTrue(containsASCIIToken(expected, in: pixelText),
+                      "The complete engine name must be visible in rendered pixels: \(pixelText)", file: file, line: line)
         XCTAssertTrue(pixelText.contains(expectedLevel),
                       "The Host compatibility level must be visible in rendered pixels.", file: file, line: line)
+    }
+
+    /// Vision may normalize camel case or split one ASCII label into words.
+    /// Match only those OCR differences; do not correct letters, append fixture
+    /// labels, or apply this normalization to Manifest/model identity checks.
+    static func containsASCIIToken(_ token: String, in pixelText: String) -> Bool {
+        precondition(!token.isEmpty && token.utf8.allSatisfy { $0 < 128 })
+        let compact = pixelText.components(separatedBy: .whitespacesAndNewlines).joined()
+        return compact.range(of: token, options: .caseInsensitive,
+                             locale: Locale(identifier: "en_US_POSIX")) != nil
     }
 
     private static func recognitionRequest(
