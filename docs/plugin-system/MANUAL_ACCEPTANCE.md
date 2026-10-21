@@ -4,6 +4,8 @@
 
 ## 当前统计
 
+- **2026-10-21 真实目录 GUI 安装补验已通过。** [本轮证据](../releases/evidence/app-0.6.0-beta.1-20261021/gui-result.json)记录全新 App 0.6.0/build3 普通 Release 隔离副本，从默认正式目录下载两款公开包，经实际按钮预览、确认安装；实际磁盘字节与公开冻结包一致，均停用、全部权限 requested，Staging / Storage 为空，副本正常退出。此次没有授予权限、启用插件或请求物理悬停；不冒充已公开 DMG 的干净 Mac 安装，也不替代 T39 新作者走查。此前工具失效的未完成记录保留其历史范围，该界面补验缺口现已关闭。
+
 - **T38 / T40 已验收，当前原计划为 39 verified / 1 in progress。** [SDK 发布与匿名下载](t38-sdk-release-20261020.md)和[T40 官方包 / Registry 公开验收](t40-registry-publication-20261020.md)分别保留证据。T39 新开发者仅按发布文档独立构建安装的门槛按当前安排先跳过并保留，既有用户的协助复测不替代此门槛；本轮不要求新的人工操作。以下人工历史记录保留原范围。
 
 - **2026-10-20/21 T40 公开链路已完成，无新增强制人工项。** [本轮结果](evidence/t40-publication-20261020/result.json)记录 `plugins-0.6.0` prerelease 四资产匿名 HTTP 200 / 字节一致、Registry 两文件 PR #3 通过必需检查后合入 main。真实生产 Host 固定 SHA 目录为 1 passed / 0 skipped / 0 failures（7.715 秒），默认 main 官方 URL 为 1 passed / 0 skipped / 0 failures（8.230 秒、`defaultSource=true`）；真实下载 / 安装后停用 / requested、逐项测试临时授权、VM 预设 KV、新 Host 对象图的磁盘恢复及 Staging 清空通过。Registry 回归 29 total / 28 passed / 1 skipped / 0 failures，跳过项为锁屏原生 AppKit 输入，Release 构建通过。普通 Release 发现页已捕获初始离线与刷新后的两个公开条目，副本正常退出；本轮 GUI 安装未完成，未将对象图恢复记作 App 进程重启，也未新增真实 GitHub 数据 / Open 验收。既有 T35 / T36 物理验收按原范围保留。

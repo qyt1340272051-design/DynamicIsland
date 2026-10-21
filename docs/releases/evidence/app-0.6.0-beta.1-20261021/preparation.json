@@ -35,13 +35,16 @@
   "unverified": [
     "T39 independent human first author",
     "nine beta hardware scenarios",
-    "clean Mac first install and permissions",
-    "public-network GUI install repeat"
+    "clean Mac first install and permissions"
   ],
   "logSHA256": {
     "full-ci.log": "e0661529f7d99133f3e2acd8ba4c3e0e4426bc939ba2698eff8cc2e1c6f5a306",
     "stability.log": "4e3f0b63000d81ec98c92c97d088b74c61e2423c90c262a071837ebd61ef5b33",
     "live-registry.log": "6b1bf31b478dc2cddc60bf0b3f997a3cee4878b101bb9e5494db64571e608fd3",
     "config-validation.log": "a9d7c54301f50eeda3f0d39e7c25dbbc5f28089ac8971462adc395245075cf50"
+  },
+  "guiInstallRepeat": {
+    "result": "passed",
+    "details": "gui-result.json"
   }
 }

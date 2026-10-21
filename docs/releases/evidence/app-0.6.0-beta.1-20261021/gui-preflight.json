@@ -1,0 +1,11 @@
+{
+  "source": "/tmp/dynamic-island-ci-derived-data/Build/Products/Release/Dynamic Island.app",
+  "copy": "/tmp/dynamic-island-app060-release-20261021/Dynamic Island 060 Acceptance.app",
+  "bundleIdentifier": "com.rong5.dynamic-island.acceptance.release060.20261021",
+  "version": "0.6.0",
+  "build": "3",
+  "sourceHEAD": "b987507b400ded15ba510cc3e9562124db60bf26",
+  "sourceExecutableSHA256": "d3d9696ea0a1758a820c59c49af4d6b8043df376d4f87907edc72e353e5645bd",
+  "changes": "fresh sandbox bundle ID and display name, no production source or test transport changes",
+  "scope": "normal local arm64 Release, not a downloaded published DMG"
+}
