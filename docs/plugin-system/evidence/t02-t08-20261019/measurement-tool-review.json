@@ -1,0 +1,22 @@
+{
+  "date": "2026-10-19",
+  "historicalObserver": "../t31-background-20261014/EnergySampler.swift",
+  "historicalObserverSHA256": "89525311f9a04ff669cac793fbedaa59a6f608733e842f8a7be48875cd7f8dad",
+  "reusableObserver": "../../../../Scripts/ActivityProcessSampler.swift",
+  "reusableObserverSHA256": "76d0acd482ca2a59ca7d5c8e16a666740ebee19ed540257e681a73d47ef4aef1",
+  "onlyChanges": [
+    "Minimum accepted measurement duration relaxed from900 to300seconds.",
+    "Added exact no-plugins phase label without conflating zero plugins with installed-disabled.",
+    "Help/minimum and completion text generalized.",
+    "Provenance header added."
+  ],
+  "exactExpectedDiffVerified": true,
+  "counterAndIdentityLogicUnchanged": true,
+  "historicalWindowsIndependentlyRecomputed": [
+    "historical-disabled-review.json",
+    "historical-running-review.json"
+  ],
+  "historicalSampleCountEach": 173,
+  "wrapperCLIAndOwnedProcessIdentitySmokePassed": true,
+  "productAcceptanceInferred": false
+}

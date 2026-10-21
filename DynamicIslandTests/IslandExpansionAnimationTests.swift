@@ -38,4 +38,15 @@ final class IslandExpansionAnimationTests: XCTestCase {
         XCTAssertGreaterThan(IslandExpansionAnimation.pointerHoverScale, 1)
         XCTAssertLessThanOrEqual(IslandExpansionAnimation.pointerHoverScale, 1.06)
     }
+
+    func testCompactActivityRevealIsFastAndSubtle() {
+        XCTAssertGreaterThanOrEqual(IslandExpansionAnimation.compactActivityShellDuration, 0.18)
+        XCTAssertLessThanOrEqual(IslandExpansionAnimation.compactActivityShellDuration, 0.35)
+        XCTAssertGreaterThan(IslandExpansionAnimation.compactActivityContentScale, 0.9)
+        XCTAssertLessThan(IslandExpansionAnimation.compactActivityContentScale, 1)
+        XCTAssertLessThan(
+            IslandExpansionAnimation.compactActivityShellDuration,
+            IslandExpansionAnimation.shellDuration
+        )
+    }
 }

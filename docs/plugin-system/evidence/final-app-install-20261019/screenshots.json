@@ -1,0 +1,62 @@
+[
+  {
+    "file": "status-review.jpg",
+    "begin": 1792420042865,
+    "end": 1792420042925,
+    "sha256": "651f07ceee4182757b1522fcbb08a4cfe14d7ead89960858485047053104463d"
+  },
+  {
+    "file": "status-running.jpg",
+    "begin": 1792420108476,
+    "end": 1792420108557,
+    "sha256": "1d40630849edbb0a08f5148c05b799601adcb59291126ff1e068f6f00a763b8e"
+  },
+  {
+    "file": "counter-disabled.jpg",
+    "begin": 1792420150452,
+    "end": 1792420150502,
+    "sha256": "f597d5e93bc85934a90cfc040a8a379256403b7e0b6e89c22cd61b5495cf6f9c"
+  },
+  {
+    "file": "counter-running.jpg",
+    "begin": 1792420151312,
+    "end": 1792420151393,
+    "sha256": "36f59f2625e54fd27d8ea58a7d125173f268adaf7f42004cbff7dda5c5f02abe"
+  },
+  {
+    "file": "progress-disabled.jpg",
+    "begin": 1792420155893,
+    "end": 1792420155955,
+    "sha256": "3a6ce42d9a3104d44ffa9abc3afdbd2c4ab76360e357df64ad830c29e01b8bb0"
+  },
+  {
+    "file": "progress-running.jpg",
+    "begin": 1792420156793,
+    "end": 1792420156855,
+    "sha256": "db19befd175c1c8e0733d191a24dc5c23a4048d8c8f6ad1771f622292746bc26"
+  },
+  {
+    "file": "timer-presentations-disabled.jpg",
+    "begin": 1792420162006,
+    "end": 1792420162052,
+    "sha256": "a1eeef3770269dfea4d25a487b0892ca5f2a35c7eadd70ade8ddaf6bc22d8804"
+  },
+  {
+    "file": "timer-presentations-running.jpg",
+    "begin": 1792420162878,
+    "end": 1792420162944,
+    "sha256": "c02ae766bd9cc64401fdb2ce70f88093b460d6a89798421e71f877757985c837"
+  },
+  {
+    "file": "independent-status-disabled.jpg",
+    "begin": 1792420167800,
+    "end": 1792420167859,
+    "sha256": "7f281416e96aab48685ec945d8d59e67f5e377c70b51e7d6fe78cfe2b19dc024"
+  },
+  {
+    "file": "independent-status-running.jpg",
+    "begin": 1792420168694,
+    "end": 1792420168760,
+    "sha256": "c4a1eb51d8ad86413e83b0dcc71f39fbfc5067334df74e3e26e80857ccbb8048"
+  }
+]

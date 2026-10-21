@@ -1,0 +1,2 @@
+{"command": "validate", "ok": true, "scope": "authoring-preflight", "sdkVersion": "1.0.0", "summary": {"bytes": 4464, "files": 3}}
+{"command": "package", "ok": true, "scope": "authoring-preflight", "sdkVersion": "1.0.0", "summary": {"bytes": 4464, "files": 3}}

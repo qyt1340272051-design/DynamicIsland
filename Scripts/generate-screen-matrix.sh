@@ -20,8 +20,8 @@ xcodebuild test \
   CODE_SIGN_ENTITLEMENTS=
 
 SNAPSHOT_COUNT="$(find "$OUTPUT_DIR" -type f -name '*.png' | wc -l | tr -d ' ')"
-if [[ "$SNAPSHOT_COUNT" != "64" ]]; then
-  printf 'Expected 64 snapshots, found %s.\n' "$SNAPSHOT_COUNT" >&2
+if [[ "$SNAPSHOT_COUNT" != "104" ]]; then
+  printf 'Expected 104 snapshots, found %s.\n' "$SNAPSHOT_COUNT" >&2
   exit 1
 fi
 

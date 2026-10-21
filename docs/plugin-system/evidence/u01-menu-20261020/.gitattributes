@@ -1,0 +1,3 @@
+# Keep original Xcode output byte-for-byte, including its whitespace.
+release-build.txt -whitespace
+targeted-tests.txt -whitespace

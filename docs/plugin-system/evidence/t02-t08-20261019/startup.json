@@ -1,0 +1,13 @@
+{
+  "app": "/tmp/dynamic-island-final-20261019/Dynamic Island Baseline.app",
+  "PID": 92924,
+  "observation": "Root CUA app launch and AX state, followed by actual shell screenshot",
+  "launchRequestEpochMilliseconds": 1792390703491,
+  "firstAXWindowObservationEpochMilliseconds": 1792390705974,
+  "AXObservationElapsedSeconds": 2.483,
+  "shellScreenshotObservationEpochMilliseconds": 1792390727607,
+  "screenshot": "startup.jpg",
+  "screenshotSHA256": "298256f10c3a471455657fa4ce3aa2e34cb5aa63c848033aedf38f34c0a20cfa",
+  "scope": "Request-to-first-AX-window observation includes CUA launch and observation latency; not exact first-pixel or cache-cold startup timing. Later screenshot independently confirms visible shell.",
+  "source": "Root agent actual CUA observation; timing and pixels kept distinct."
+}

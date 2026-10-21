@@ -1,0 +1,138 @@
+[
+  {
+    "file": "ui-01.jpg",
+    "callID": "call_3737424704f24e8ab0c53a4856862c97",
+    "completedUTC": "2026-10-19T01:15:45.065Z",
+    "action": "检查 GitHub 插件安装预览与权限",
+    "sha256": "5807a401362af0d668f7469cb75a76158603c2f63a8f31755189bb2c5a067628",
+    "source": "Unmodified actual CUA image output"
+  },
+  {
+    "file": "ui-02.jpg",
+    "callID": "call_c25ef6522aab4456ad450f58d4802716",
+    "completedUTC": "2026-10-19T01:15:53.488Z",
+    "action": "确认安装并检查保持停用提示",
+    "sha256": "fa15b343a0a1d6c723e95a1e9cbdec880e1a6d7b83465572e3bf95631636fcdc",
+    "source": "Unmodified actual CUA image output"
+  },
+  {
+    "file": "ui-03.jpg",
+    "callID": "call_40ec67338d8d49dfa82a68356176933c",
+    "completedUTC": "2026-10-19T01:16:02.278Z",
+    "action": "检查打开公开 GitHub 网页的单项授权说明",
+    "sha256": "e6ae9c7bcda2c2d126f7aa192ad37b28f76ad6bd00d47f2cc05c78eb68192c7f",
+    "source": "Unmodified actual CUA image output"
+  },
+  {
+    "file": "ui-04.jpg",
+    "callID": "call_e0f74bd6dae7400982d7ab4208c07b9f",
+    "completedUTC": "2026-10-19T01:16:57.412Z",
+    "action": "确认三项权限分别批准且插件仍停用",
+    "sha256": "438172ad81efd8d5a422cbf2def0ca1da4594a5923a38c915ae9270f390097d1",
+    "source": "Unmodified actual CUA image output"
+  },
+  {
+    "file": "ui-05.jpg",
+    "callID": "call_616631baf1de460fac9aa53c6d7a28fd",
+    "completedUTC": "2026-10-19T01:17:06.042Z",
+    "action": "启用已经分别授权的 GitHub 插件",
+    "sha256": "5aa62de12ee3a4ad7f581c36704b09d8d126395882116483f09db734100c4f1c",
+    "source": "Unmodified actual CUA image output"
+  },
+  {
+    "file": "ui-06.jpg",
+    "callID": "call_ae8fd3e2500845b3815e3b7f4fac475e",
+    "completedUTC": "2026-10-19T01:17:28.762Z",
+    "action": "关闭剩余设置窗口并返回刘海",
+    "sha256": "298256f10c3a471455657fa4ce3aa2e34cb5aa63c848033aedf38f34c0a20cfa",
+    "source": "Unmodified actual CUA image output"
+  },
+  {
+    "file": "ui-07.jpg",
+    "callID": "call_a50e08ad96644fc787ab8c689235f4b1",
+    "completedUTC": "2026-10-19T01:17:53.230Z",
+    "action": "定位展开后的 GitHub 工具选择入口",
+    "sha256": "1f1a1150bf0ce34bffc33c0f1781fbe55457b61de770ac54816b4f7420be2266",
+    "source": "Unmodified actual CUA image output"
+  },
+  {
+    "file": "ui-08.jpg",
+    "callID": "call_089a7609b2af4b54ba6bfcfcdcce631f",
+    "completedUTC": "2026-10-19T01:18:09.562Z",
+    "action": "查看 GitHub 五行工具与当前公开数据",
+    "sha256": "a740d391f0c08d73441f647b75cbacfdebc79401741ad06fe4bd20118addb1b0",
+    "source": "Unmodified actual CUA image output"
+  },
+  {
+    "file": "ui-09.jpg",
+    "callID": "call_5527da64d5d14c7e956deae1dd34f4b3",
+    "completedUTC": "2026-10-19T01:18:32.302Z",
+    "action": "切换到 cli/cli 并检查数据更新",
+    "sha256": "bbb6cf2359590bae00d482fa29736a263cb333fec65b3d9882cb1d8b4fa88110",
+    "source": "Unmodified actual CUA image output"
+  },
+  {
+    "file": "ui-10.jpg",
+    "callID": "call_3c21aff04b26479bb681459f2333678e",
+    "completedUTC": "2026-10-19T01:18:55.510Z",
+    "action": "确认 cli/cli 的实际 CI 和 PR 返回结果",
+    "sha256": "1232f2963bea4d32bff2f27d5720f6c24d2a079fcc3698a909dda69d081c3387",
+    "source": "Unmodified actual CUA image output"
+  },
+  {
+    "file": "ui-11.jpg",
+    "callID": "call_1fd50ee624124011a09479bc729517d6",
+    "completedUTC": "2026-10-19T01:19:03.302Z",
+    "action": "通过真实刷新按钮复核当前仓库",
+    "sha256": "b02343c9eb3e83450bbf0d90e8ca5144c932020d55541ba0024fe6b6e8ee7f11",
+    "source": "Unmodified actual CUA image output"
+  },
+  {
+    "file": "ui-12.jpg",
+    "callID": "call_fe85bb7a749742bf9e001473c56bc4a7",
+    "completedUTC": "2026-10-19T01:19:34.024Z",
+    "action": "确认刷新完成并定位当前构建链接按钮",
+    "sha256": "9f42c6bbc8c3617344b4ad930385be91af0cdf294ee807a863ebef95bd629ee6",
+    "source": "Unmodified actual CUA image output"
+  },
+  {
+    "file": "ui-13.jpg",
+    "callID": "call_056414dcf8f247cc88524bd4b0859bdf",
+    "completedUTC": "2026-10-19T01:20:23.057Z",
+    "action": "记录默认浏览器实际打开的当前构建地址",
+    "sha256": "0837785d6e540f6b10e102d7d856c5241609bb0bf0632c3285cc837ab8fcbff6",
+    "source": "Unmodified actual CUA image output"
+  },
+  {
+    "file": "ui-14.jpg",
+    "callID": "call_298c350fb8c64e3e8faf350baa553ddb",
+    "completedUTC": "2026-10-19T01:20:57.023Z",
+    "action": "核对真实 PR 网页地址与当前插件数据一致",
+    "sha256": "10f6e8464c33073c0d3ff1beac4f83116da2e05345c55bc08b40bf83106d31f8",
+    "source": "Unmodified actual CUA image output"
+  },
+  {
+    "file": "ui-15.jpg",
+    "callID": "call_91431c0b227848af818325a372ccc056",
+    "completedUTC": "2026-10-19T01:21:28.314Z",
+    "action": "撤销网页权限并确认即时状态",
+    "sha256": "4c0cabdc0d1ecf703d8611d6918c88dfc2aa3b9f86f39b6284e0e8d77b37028b",
+    "source": "Unmodified actual CUA image output"
+  },
+  {
+    "file": "ui-16.jpg",
+    "callID": "call_e86af19232da4f88916813c8bf132868",
+    "completedUTC": "2026-10-19T01:21:37.234Z",
+    "action": "返回 GitHub 工具验证撤销后的行为",
+    "sha256": "683b4353de1a5cafd94c5a960abe4d07dea84197de3f9719f91bbffa6529c09c",
+    "source": "Unmodified actual CUA image output"
+  },
+  {
+    "file": "ui-17.jpg",
+    "callID": "call_7b419331b0d240859d08677d3df9eccb",
+    "completedUTC": "2026-10-19T01:21:45.922Z",
+    "action": "检查撤销后拒绝打开并显示清楚提示",
+    "sha256": "a26764e54123222c4de3627225c1d55e2c83fb7f9bee6debda1e5a1765dcd842",
+    "source": "Unmodified actual CUA image output"
+  }
+]

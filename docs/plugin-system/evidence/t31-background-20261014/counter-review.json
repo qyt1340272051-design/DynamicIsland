@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "sameIdentityBothWindows": true,
+  "independentlyRecomputedCPUAndEnergyMatch": true,
+  "windows": {
+    "disabled": {
+      "firstUTC": "2026-10-14T13:17:24Z",
+      "lastUTC": "2026-10-14T13:32:25Z",
+      "maximumSampleGapSeconds": 5.334623917,
+      "firstPhysicalFootprintBytes": 51102824,
+      "lastPhysicalFootprintBytes": 51086440
+    },
+    "running": {
+      "firstUTC": "2026-10-14T13:41:28Z",
+      "lastUTC": "2026-10-14T13:56:29Z",
+      "maximumSampleGapSeconds": 5.33515325,
+      "firstPhysicalFootprintBytes": 89572504,
+      "lastPhysicalFootprintBytes": 99009688
+    }
+  },
+  "cpuMeanDeltaPercentagePoints": 0.38392464569966855,
+  "cpuMeanRelativeIncreasePercent": 24.613439535393123,
+  "cpuMeanPowerDeltaMilliwatts": 1.3914788414424857,
+  "cpuMeanPowerRelativeIncreasePercent": 82.0724710827869
+}

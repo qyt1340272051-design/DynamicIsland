@@ -1,0 +1,12 @@
+{
+  "result": "Passed",
+  "totalTestCount": 1009,
+  "passedTests": 1002,
+  "skippedTests": 7,
+  "failedTests": 0,
+  "expectedFailures": 0,
+  "startTime": 1792245446.413,
+  "finishTime": 1792245537.844,
+  "environmentDescription": "Dynamic Island · Built with macOS 26.6.2",
+  "testFailures": []
+}

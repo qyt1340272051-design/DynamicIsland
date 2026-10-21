@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 1,
+  "id": "com.example.sdk-fixture",
+  "name": "SDK Fixture",
+  "version": "0.1.0",
+  "engine": "javascriptcore",
+  "entry": "index.js",
+  "minimumHostVersion": "0.6.0",
+  "permissions": [],
+  "capabilities": [
+    "activity.publish",
+    "activity.end",
+    "ui.islandNode",
+    "actions.handle"
+  ]
+}

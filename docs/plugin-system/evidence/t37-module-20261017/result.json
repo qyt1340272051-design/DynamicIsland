@@ -1,0 +1,143 @@
+{
+  "utc": "2026-10-17T13:31:47.588656+00:00",
+  "status": "Explicit compatible Module lifecycle/action component verified; T37 remains in progress",
+  "baseCommit": "2d0007f0236c68ff389f42cac3111864f37d4ef2",
+  "upstreamCommit": "68cce87205a88a004e74e33f40bbcb253f8287e9",
+  "protocolSources": [
+    "https://github.com/shobhit99/SuperIsland/blob/68cce87205a88a004e74e33f40bbcb253f8287e9/ExtensionHost/ExtensionJSRuntime.swift",
+    "https://github.com/shobhit99/SuperIsland/blob/68cce87205a88a004e74e33f40bbcb253f8287e9/SUPER-ISLAND-EXTENSION-API.md"
+  ],
+  "implementation": "Independent protocol implementation and independently authored fixtures; no copied upstream implementation or distributed upstream plugin",
+  "selectedTests": {
+    "result": "Passed",
+    "totalTestCount": 133,
+    "passedTests": 133,
+    "skippedTests": 0,
+    "failedTests": 0,
+    "expectedFailures": 0,
+    "startTime": 1792243659.459,
+    "finishTime": 1792243687.284,
+    "environmentDescription": "Dynamic Island · Built with macOS 26.6.2",
+    "testFailures": []
+  },
+  "fullCI": {
+    "result": "Passed",
+    "totalTestCount": 962,
+    "passedTests": 955,
+    "skippedTests": 7,
+    "failedTests": 0,
+    "expectedFailures": 0,
+    "startTime": 1792243708.996,
+    "finishTime": 1792243795.857,
+    "environmentDescription": "Dynamic Island · Built with macOS 26.6.2",
+    "testFailures": []
+  },
+  "skips": [
+    {
+      "suite": "GitHubPluginTests",
+      "test": "testLivePublicGitHubAPIThroughOfficialPluginWhenExplicitlyEnabled",
+      "reason": "Set DYNAMIC_ISLAND_GITHUB_LIVE=1 to verify the anonymous public GitHub API."
+    },
+    {
+      "suite": "IslandQuitCancellationTests",
+      "test": "testCancellationDuringAnimationPreventsLateTerminationAndRestoresNativeClicks",
+      "reason": "Real AppKit mouse input requires an unlocked macOS session."
+    },
+    {
+      "suite": "IslandQuitCancellationTests",
+      "test": "testCancelledTerminationRestoresRenderedIslandHitTestingAndAllowsAnotherQuit",
+      "reason": "Real AppKit mouse input requires an unlocked macOS session."
+    },
+    {
+      "suite": "PluginActionBridgeTests",
+      "test": "testActualActionMockSwiftUIButtonToggleSliderAndTypedCommitReachJavaScript",
+      "reason": "Real AppKit mouse input requires an unlocked macOS session."
+    },
+    {
+      "suite": "PluginExtensionsUITests",
+      "test": "testNativeButtonsRequireExplicitConsentAndUninstallConfirmation",
+      "reason": "Real AppKit mouse input requires an unlocked macOS session."
+    },
+    {
+      "suite": "PluginInstallerUITests",
+      "test": "testNativeCancelWindowCloseAndInstallButtonsUseTheCurrentReview",
+      "reason": "Real AppKit mouse input requires an unlocked macOS session."
+    },
+    {
+      "suite": "ScreenSnapshotMatrixTests",
+      "test": "testGenerateSnapshotMatrix",
+      "reason": "Run Scripts/generate-screen-matrix.sh to generate the screenshot matrix."
+    }
+  ],
+  "testBreakdown": {
+    "PluginActionBridgeTests": 18,
+    "PluginInstallerTests": 20,
+    "PluginManifestTests": 18,
+    "PluginPermissionPersistenceTests": 16,
+    "PluginRuntimeTests": 29,
+    "SuperIslandModuleConverterTests": 4,
+    "SuperIslandModuleRuntimeTests": 17,
+    "SuperIslandViewConverterTests": 11
+  },
+  "releaseBuild": "passed",
+  "ordinaryReleaseStrictDeepSignature": "passed",
+  "releaseExecutableSHA256": "7d77d00cd100b52111960ea6b54d88251558e51fc0656f836d5ab632abe7b4ae",
+  "testOnlyEntitlements": false,
+  "sourceSHA256": {
+    "DynamicIsland/Compatibility/SuperIslandAdapter/SuperIslandModuleBootstrap.swift": "6cf8b7904df0ac2e70487fe43f59e9b5f23db72efab1e40a5b17d790b453344d",
+    "DynamicIsland/Compatibility/SuperIslandAdapter/SuperIslandModuleConverter.swift": "b67f833511776cafbf02a161326c912c6ae60c19cff1cea8491fa113685ae5f1",
+    "DynamicIsland/Plugins/PluginDiagnostics.swift": "342fe39f6b0889cbb62f3b1012cb7382992e696f7712e0af1d44fb3ee500d2c0",
+    "DynamicIsland/Plugins/PluginDiagnosticsUI.swift": "99ef777647a76670448b2a07f539b78cbee566214c9e3aec1e8cace1e494d1a3",
+    "DynamicIsland/Plugins/PluginExtensionsUI.swift": "776a86c31b2615f22d9e2a07d722eab7d609a21976f9406b9e2cf4f00de115da",
+    "DynamicIsland/Plugins/PluginInstaller.swift": "13987478bc69781e28d65871b47afa4702e393dc136585fd2302dc15cd3a8b55",
+    "DynamicIsland/Plugins/PluginInstallerUI.swift": "432fdf18d5d5bc1d85597590fb68837e1d296f3931e7c9e6388b06ffdddc0dd2",
+    "DynamicIsland/Plugins/PluginJSBridge.swift": "f9b467424fd1f2210e5582afb84dba3b41cae64b1f9dac92e6a75fcfd1389fa2",
+    "DynamicIsland/Plugins/PluginJSBridgeBootstrap.swift": "9bd03d2c232b4e96c457315ddc1981dc369895b2392df89997750ed5d05f5dec",
+    "DynamicIsland/Plugins/PluginManifest.swift": "586526d097b748e04e8b29c101357f2b07d35560c71756cdab0346e8251ff9af",
+    "DynamicIsland/Plugins/PluginRuntime.swift": "31febca64dd6dca32dd7b4860655404830c54d92d0d0c1060b04837aac6534f4",
+    "DynamicIslandTests/PluginInstallerTests.swift": "f14b10a4b055f464b64863d50374a007c900b0c5a1a1942280d5487e4a79d8e9",
+    "DynamicIslandTests/PluginManifestTests.swift": "84fe459ce47c08b14bdae11c1a4d63c03c42d1007471491b0cb3a787af06d035",
+    "DynamicIslandTests/PluginPermissionPersistenceTests.swift": "8640bd32e6dc3a88a11dd5849e4eede3ec8e4fd7be9ec3900f3f496fb0c203b8",
+    "DynamicIslandTests/SuperIslandModuleConverterTests.swift": "9aeb63f7e3781251a3cc131614f2344dc70cedef4cad11946ca56ca51b6ed30c",
+    "DynamicIslandTests/SuperIslandModuleRuntimeTests.swift": "34a6b8d0b59e560f7d80113d82f50957655086e6b63d37f3ec4f4d6b67dcb39d",
+    "docs/plugin-system/schema/plugin-manifest-v1.schema.json": "b73dec6e16fd89ec58a00c9bb6a5205af51fbca4bb9ff7541c4d6980368356ed"
+  },
+  "verified": [
+    "Explicit engine without automatic profile detection or fallback",
+    "Single module lifecycle in the current private worker VM",
+    "Six View factories through the existing Swift data converter",
+    "Host-owned background persistent tool identity and selected-only compact policy",
+    "Existing ActionRouter and current execution registrations; old snapshots rejected after restart",
+    "Failed render rolls back new actions while retaining previous visible controls",
+    "Captured primordials and protected private Promise chains survive entry pollution",
+    "Mode changes revoke saved decisions, old permission leases and old reviews",
+    "Installation preview declares limited compatibility and installs disabled without execution"
+  ],
+  "pending": [
+    "Host-admitted PresentationRequest for activate/dismiss",
+    "Detailed compatibility limitation reporting",
+    "Actual fixed upstream plugin acceptance with license basis",
+    "T35 completion-notice capture and T36 actual UI acceptance from the manual ledger"
+  ],
+  "manualAcceptance": {
+    "ledger": "../../MANUAL_ACCEPTANCE.md",
+    "t35AcceptanceAppLaunched": false,
+    "t36AcceptanceAppLaunched": false,
+    "productionPID": 21458,
+    "productionAlive": true
+  },
+  "logs": {
+    "tests.log": {
+      "path": "/tmp/dynamic-island-t37-module-20261017/tests.log",
+      "sha256": "8b815f91c29af6b623b41fbfa5c6846f29dd1bd57d5164e507d691fcf9c00c98"
+    },
+    "ci.log": {
+      "path": "/tmp/dynamic-island-t37-module-20261017/ci.log",
+      "sha256": "f1441a9048e8e3c6251fa6ecf56dd9676dfa5313413510cddd53e90df5504ac5"
+    }
+  },
+  "testResultPaths": {
+    "selected": "/tmp/dynamic-island-t37-module-20261017/Tests.xcresult",
+    "fullCI": "/tmp/dynamic-island-t37-module-20261017/FullTests.xcresult"
+  }
+}

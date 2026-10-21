@@ -1,0 +1,46 @@
+{
+  "devicesAndConfigurations": [
+    {
+      "device": {
+        "architecture": "arm64",
+        "deviceName": "My Mac",
+        "modelName": "MacBook Air",
+        "osBuildNumber": "25G83",
+        "osVersion": "26.6.2",
+        "platform": "macOS"
+      },
+      "expectedFailures": 0,
+      "failedTests": 0,
+      "passedTests": 1060,
+      "skippedTests": 8,
+      "testPlanConfiguration": {
+        "configurationId": "1",
+        "configurationName": "Test Scheme Action"
+      }
+    }
+  ],
+  "environmentDescription": "Dynamic Island · Built with macOS 26.6.2",
+  "expectedFailures": 0,
+  "failedTests": 0,
+  "finishTime": 1792322598.678,
+  "passedTests": 1060,
+  "result": "Passed",
+  "skippedTests": 8,
+  "startTime": 1792322493.014,
+  "statistics": [
+    {
+      "subtitle": "1 test run",
+      "title": "1 test collected performance metrics"
+    }
+  ],
+  "testFailures": [],
+  "title": "Test - Dynamic Island",
+  "topInsights": [
+    {
+      "category": "Longest Test Runs",
+      "impact": "57% of duration",
+      "text": "9 longest test runs with outlier durations exceeding 2.37s (three standard deviations)"
+    }
+  ],
+  "totalTestCount": 1068
+}

@@ -1,0 +1,2 @@
+/Users/rong5/Applications/Dynamic Island T35 Tool Acceptance.app: valid on disk
+/Users/rong5/Applications/Dynamic Island T35 Tool Acceptance.app: satisfies its Designated Requirement

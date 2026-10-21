@@ -1,0 +1,35 @@
+{
+  "date": "2026-10-15",
+  "baseCommit": "789111d",
+  "scope": "T35 3A official Pomodoro public-API timer/preset/completion package only",
+  "result": "Passed",
+  "targetedTests": 10,
+  "newPomodoroTests": 7,
+  "failures": 0,
+  "testResults": "/tmp/dynamic-island-t35-pomodoro-3a-20261015/TestResults.xcresult",
+  "log": "/tmp/dynamic-island-t35-pomodoro-3a-20261015.log",
+  "sourceSHA256": {
+    "docs/plugin-system/examples/pomodoro/manifest.json": "115e29b743f0b06e3fcfd39c65fb72c79ab19d2a1f741a592f22f1e9141c5f8d",
+    "docs/plugin-system/examples/pomodoro/index.js": "948193b74de628dc67786b1d18c18572ed894ca9552b923ee83cb19a00dd3d20",
+    "docs/plugin-system/examples/pomodoro/README.md": "a207523959d9845c096931d7078d74866a464cafc6408591228a56549eda86b7",
+    "DynamicIslandTests/PomodoroPluginTests.swift": "1d70a9c5df0b57bba5f507dd59efb7338830295753cdbc65727707d0aba386b8"
+  },
+  "validation": [
+    "Actual PluginValidator and JavaScriptCore PluginRuntime with real Router actions",
+    "All four presets start with exact Host duration",
+    "Nanosecond pause/resume and new generation",
+    "Running preset ignored; paused preset stops before idle",
+    "One bounded transient completion; no automatic restart",
+    "Host display advances without per-second JS Activity updates",
+    "Dual suspension conditions restore owner/generation and 45 minute preset in new VM",
+    "Disable/enable rotates owner and returns idle without starting"
+  ],
+  "testEnvironment": "Deterministic injected Host countdown clock; injected incrementing Activity admission clock avoids artificial stress of action loops hitting the separate write-rate limiter",
+  "limitations": [
+    "No real 15-minute device completion in this substep",
+    "Storage and Scheduler integration remain 3B",
+    "Dedicated native Pomodoro Swift is still present",
+    "No .dip installation or ordinary Release product UI acceptance yet",
+    "Last full Host CI is 868 total / 864 passed / 4 skipped, Release build passed at 789111d; this change adds package and tests only"
+  ]
+}

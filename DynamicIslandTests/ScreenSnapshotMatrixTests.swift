@@ -6,16 +6,154 @@ import XCTest
 final class ScreenSnapshotMatrixTests: XCTestCase {
     func testMatrixCoversEveryProfileAndRequiredIslandState() {
         XCTAssertEqual(SimulatedScreenProfile.allCases.count, 8)
-        XCTAssertEqual(ScreenSnapshotScenario.allCases.count, 8)
+        XCTAssertEqual(ScreenSnapshotScenario.allCases.count, 12)
         XCTAssertEqual(
             SimulatedScreenProfile.allCases.count * ScreenSnapshotScenario.allCases.count,
-            64
+            96
         )
+        XCTAssertTrue(ScreenSnapshotScenario.allCases.contains(.compactVolume))
+        XCTAssertTrue(ScreenSnapshotScenario.allCases.contains(.expandedVolume))
+        XCTAssertTrue(ScreenSnapshotScenario.allCases.contains(.compactBatteryCharging))
+        XCTAssertTrue(ScreenSnapshotScenario.allCases.contains(.expandedBatteryLow))
+        XCTAssertTrue(ScreenSnapshotScenario.allCases.contains(.expandedBatteryCritical))
         XCTAssertTrue(ScreenSnapshotScenario.allCases.contains(.expandedMusic))
         XCTAssertTrue(ScreenSnapshotScenario.allCases.contains(.expandedFileTray))
         XCTAssertTrue(ScreenSnapshotScenario.allCases.contains(.expandedToolsStopwatch))
-        XCTAssertTrue(ScreenSnapshotScenario.allCases.contains(.expandedToolsPomodoro))
         XCTAssertTrue(ScreenSnapshotScenario.allCases.contains(.expandedToolsCountdown))
+    }
+
+    @MainActor
+    func testCompactBatteryContentRemainsVisibleOutsidePhysicalNotch() async throws {
+        let configuration = SimulatedScreenProfile.macBookAir13.defaultConfiguration
+        let environment = configuration.makeEnvironment()
+        let context = try await makeContext(for: .compactBatteryCharging, environment: environment)
+        let canvas = ScreenSnapshotCanvas(
+            environment: environment,
+            viewModel: context.viewModel,
+            activityRuntime: context.activityRuntime
+        )
+        .environment(\.colorScheme, .dark)
+        let renderer = ScreenSnapshotRenderer(size: ScreenSnapshotCanvas.size)
+        defer { renderer.close() }
+        let rendered = try renderer.render(canvas, scale: environment.backingScaleFactor)
+        let bitmap = try XCTUnwrap(NSBitmapImageRep(data: rendered.data))
+
+        let scale = environment.backingScaleFactor
+        let notchHalfWidth = configuration.notchWidth * scale / 2
+        let centerX = ScreenSnapshotCanvas.size.width * scale / 2
+        let notchMinimumX = Int((centerX - notchHalfWidth).rounded())
+        let notchMaximumX = Int((centerX + notchHalfWidth).rounded())
+
+        var titleMinimumX = bitmap.pixelsWide
+        var titleMaximumX = -1
+        var chargingMinimumX = bitmap.pixelsWide
+        var chargingMaximumX = -1
+        for y in 0..<bitmap.pixelsHigh {
+            for x in 0..<bitmap.pixelsWide {
+                guard let pixel = bitmap.colorAt(x: x, y: y), pixel.alphaComponent > 0.8 else { continue }
+                if x < notchMinimumX,
+                   pixel.redComponent > 0.75,
+                   pixel.greenComponent > 0.75,
+                   pixel.blueComponent > 0.75 {
+                    titleMinimumX = min(titleMinimumX, x)
+                    titleMaximumX = max(titleMaximumX, x)
+                }
+                if x > notchMaximumX,
+                   pixel.greenComponent > 0.20,
+                   pixel.greenComponent > pixel.redComponent + 0.10,
+                   pixel.greenComponent > pixel.blueComponent + 0.08 {
+                    chargingMinimumX = min(chargingMinimumX, x)
+                    chargingMaximumX = max(chargingMaximumX, x)
+                }
+            }
+        }
+
+        XCTAssertGreaterThanOrEqual(
+            titleMaximumX - titleMinimumX + 1,
+            70,
+            "The full charging title must fit in the left display wing."
+        )
+        XCTAssertGreaterThanOrEqual(
+            notchMinimumX - titleMaximumX,
+            8,
+            "The charging title needs clearance from the physical notch."
+        )
+        XCTAssertGreaterThanOrEqual(
+            chargingMaximumX - chargingMinimumX + 1,
+            135,
+            "The percentage and battery fill must fit in the right display wing."
+        )
+        XCTAssertGreaterThanOrEqual(
+            chargingMinimumX - notchMaximumX,
+            8,
+            "The charging metrics need clearance from the physical notch."
+        )
+    }
+
+    @MainActor
+    func testCompactVolumeContentRemainsVisibleOutsidePhysicalNotch() async throws {
+        let configuration = SimulatedScreenProfile.macBookAir13.defaultConfiguration
+        let environment = configuration.makeEnvironment()
+        let context = try await makeContext(for: .compactVolume, environment: environment)
+        let canvas = ScreenSnapshotCanvas(
+            environment: environment,
+            viewModel: context.viewModel,
+            activityRuntime: context.activityRuntime
+        )
+        .environment(\.colorScheme, .dark)
+        let renderer = ScreenSnapshotRenderer(size: ScreenSnapshotCanvas.size)
+        defer { renderer.close() }
+        let rendered = try renderer.render(canvas, scale: environment.backingScaleFactor)
+        let bitmap = try XCTUnwrap(NSBitmapImageRep(data: rendered.data))
+
+        let scale = environment.backingScaleFactor
+        let notchHalfWidth = configuration.notchWidth * scale / 2
+        let centerX = ScreenSnapshotCanvas.size.width * scale / 2
+        let notchMinimumX = Int((centerX - notchHalfWidth).rounded())
+        let notchMaximumX = Int((centerX + notchHalfWidth).rounded())
+
+        var iconMinimumX = bitmap.pixelsWide
+        var iconMaximumX = -1
+        var percentageMinimumX = bitmap.pixelsWide
+        var percentageMaximumX = -1
+        for y in 0..<bitmap.pixelsHigh {
+            for x in 0..<bitmap.pixelsWide {
+                guard let pixel = bitmap.colorAt(x: x, y: y),
+                      pixel.alphaComponent > 0.8,
+                      pixel.redComponent > 0.75,
+                      pixel.greenComponent > 0.75,
+                      pixel.blueComponent > 0.75 else { continue }
+                if x < notchMinimumX {
+                    iconMinimumX = min(iconMinimumX, x)
+                    iconMaximumX = max(iconMaximumX, x)
+                }
+                if x > notchMaximumX {
+                    percentageMinimumX = min(percentageMinimumX, x)
+                    percentageMaximumX = max(percentageMaximumX, x)
+                }
+            }
+        }
+
+        XCTAssertGreaterThanOrEqual(
+            iconMaximumX - iconMinimumX + 1,
+            28,
+            "The full volume icon must fit in the left display wing."
+        )
+        XCTAssertGreaterThanOrEqual(
+            notchMinimumX - iconMaximumX,
+            8,
+            "The volume icon needs clearance from the physical notch."
+        )
+        XCTAssertGreaterThanOrEqual(
+            percentageMaximumX - percentageMinimumX + 1,
+            46,
+            "The full 100% label must fit in the right display wing."
+        )
+        XCTAssertGreaterThanOrEqual(
+            percentageMinimumX - notchMaximumX,
+            8,
+            "The volume percentage needs clearance from the physical notch."
+        )
     }
 
     func testGenerateSnapshotMatrix() async throws {
@@ -40,6 +178,8 @@ final class ScreenSnapshotMatrixTests: XCTestCase {
         try fileManager.createDirectory(at: outputDirectory, withIntermediateDirectories: true)
 
         var records: [ScreenSnapshotRecord] = []
+        let renderer = ScreenSnapshotRenderer(size: ScreenSnapshotCanvas.size)
+        defer { renderer.close() }
         for profile in SimulatedScreenProfile.allCases {
             let configuration = profile.defaultConfiguration
             let environment = configuration.makeEnvironment()
@@ -47,14 +187,19 @@ final class ScreenSnapshotMatrixTests: XCTestCase {
             try fileManager.createDirectory(at: profileDirectory, withIntermediateDirectories: true)
 
             for scenario in ScreenSnapshotScenario.allCases {
-                let viewModel = await makeViewModel(for: scenario, environment: environment)
-                let canvas = ScreenSnapshotCanvas(environment: environment, viewModel: viewModel)
-                    .environment(\.colorScheme, .dark)
-                let rendered = try ScreenSnapshotRenderer.render(
-                    canvas,
-                    size: ScreenSnapshotCanvas.size,
-                    scale: environment.backingScaleFactor
+                let context = try await makeContext(for: scenario, environment: environment)
+                let canvas = ScreenSnapshotCanvas(
+                    environment: environment,
+                    viewModel: context.viewModel,
+                    activityRuntime: context.activityRuntime
                 )
+                    .environment(\.colorScheme, .dark)
+                let rendered = try autoreleasepool {
+                    try renderer.render(
+                        canvas,
+                        scale: environment.backingScaleFactor
+                    )
+                }
                 let relativePath = "\(profile.rawValue)/\(scenario.rawValue).png"
                 try rendered.data.write(
                     to: outputDirectory.appendingPathComponent(relativePath),
@@ -79,16 +224,16 @@ final class ScreenSnapshotMatrixTests: XCTestCase {
             }
         }
 
-        XCTAssertEqual(records.count, 64)
+        XCTAssertEqual(records.count, 96)
         try writeManifest(records: records, to: outputDirectory)
         try writeIndex(records: records, to: outputDirectory)
     }
 
     @MainActor
-    private func makeViewModel(
+    private func makeContext(
         for scenario: ScreenSnapshotScenario,
         environment: ScreenEnvironment
-    ) async -> IslandViewModel {
+    ) async throws -> ScreenSnapshotContext {
         let musicInfo = scenario.usesPlayingTrack ? Self.sampleNowPlaying : .empty
         let viewModel = IslandViewModel(
             volumeService: ScreenMatrixVolumeService(),
@@ -107,8 +252,10 @@ final class ScreenSnapshotMatrixTests: XCTestCase {
         }
 
         switch scenario {
-        case .compact, .compactPlaying:
+        case .compact, .compactPlaying, .compactVolume, .compactBatteryCharging:
             break
+        case .expandedVolume, .expandedBatteryLow, .expandedBatteryCritical:
+            viewModel.setHovering(true)
         case .expandedMusic:
             viewModel.setHovering(true)
             viewModel.selectExpandedSurface(.music)
@@ -121,17 +268,39 @@ final class ScreenSnapshotMatrixTests: XCTestCase {
             viewModel.timerTools.selectedMode = .stopwatch
             viewModel.setHovering(true)
             viewModel.selectExpandedSurface(.tools)
-        case .expandedToolsPomodoro:
-            viewModel.timerTools.selectedMode = .pomodoro
-            viewModel.setHovering(true)
-            viewModel.selectExpandedSurface(.tools)
         case .expandedToolsCountdown:
             viewModel.timerTools.selectedMode = .countdown
             viewModel.setHovering(true)
             viewModel.selectExpandedSurface(.tools)
         }
 
-        return viewModel
+        let activityRuntime = IslandActivityRuntime(viewModel: viewModel)
+        if scenario.usesVolumeActivity {
+            try activityRuntime.manager.publish(VolumeActivityProvider.makeActivity(
+                for: VolumeActivityEvent(volume: 1, isMuted: false),
+                createdAt: Date()
+            ))
+            try activityRuntime.manager.end(
+                id: MusicActivityProvider.activityID,
+                source: MusicActivityProvider.source
+            )
+        }
+        if let batteryScenario = scenario.batteryScenario {
+            try activityRuntime.manager.publish(BatteryActivityProvider.makeActivity(
+                for: batteryScenario.state,
+                classification: batteryScenario.classification,
+                createdAt: Date()
+            ))
+            try activityRuntime.manager.end(
+                id: MusicActivityProvider.activityID,
+                source: MusicActivityProvider.source
+            )
+        }
+
+        return ScreenSnapshotContext(
+            viewModel: viewModel,
+            activityRuntime: activityRuntime
+        )
     }
 
     private func writeManifest(records: [ScreenSnapshotRecord], to outputDirectory: URL) throws {
@@ -222,11 +391,15 @@ final class ScreenSnapshotMatrixTests: XCTestCase {
 private enum ScreenSnapshotScenario: String, CaseIterable {
     case compact
     case compactPlaying = "compact-playing"
+    case compactVolume = "compact-volume"
+    case expandedVolume = "expanded-volume"
+    case compactBatteryCharging = "compact-battery-charging"
+    case expandedBatteryLow = "expanded-battery-low"
+    case expandedBatteryCritical = "expanded-battery-critical"
     case expandedMusic = "expanded-music"
     case expandedFileTray = "expanded-file-tray"
     case draggingFile = "dragging-file"
     case expandedToolsStopwatch = "expanded-tools-stopwatch"
-    case expandedToolsPomodoro = "expanded-tools-pomodoro"
     case expandedToolsCountdown = "expanded-tools-countdown"
 
     var displayName: String {
@@ -235,6 +408,16 @@ private enum ScreenSnapshotScenario: String, CaseIterable {
             return "收起"
         case .compactPlaying:
             return "收起 · 音乐播放"
+        case .compactVolume:
+            return "收起 · 系统音量"
+        case .expandedVolume:
+            return "展开 · 系统音量"
+        case .compactBatteryCharging:
+            return "收起 · 电池充电"
+        case .expandedBatteryLow:
+            return "展开 · 低电量"
+        case .expandedBatteryCritical:
+            return "展开 · 严重低电量"
         case .expandedMusic:
             return "展开 · 音乐"
         case .expandedFileTray:
@@ -243,8 +426,6 @@ private enum ScreenSnapshotScenario: String, CaseIterable {
             return "展开 · 文件拖入"
         case .expandedToolsStopwatch:
             return "展开 · 秒表"
-        case .expandedToolsPomodoro:
-            return "展开 · 番茄钟"
         case .expandedToolsCountdown:
             return "展开 · 倒计时"
         }
@@ -257,6 +438,58 @@ private enum ScreenSnapshotScenario: String, CaseIterable {
     var usesTrayItems: Bool {
         self == .expandedFileTray || self == .draggingFile
     }
+
+    var usesVolumeActivity: Bool {
+        self == .compactVolume || self == .expandedVolume
+    }
+
+    var batteryScenario: ScreenMatrixBatteryScenario? {
+        switch self {
+        case .compactBatteryCharging:
+            return ScreenMatrixBatteryScenario(
+                state: BatteryState(
+                    level: 0.72,
+                    powerSource: .ac,
+                    isCharging: true,
+                    isCharged: false
+                ),
+                classification: .charging
+            )
+        case .expandedBatteryLow:
+            return ScreenMatrixBatteryScenario(
+                state: BatteryState(
+                    level: 0.18,
+                    powerSource: .battery,
+                    isCharging: false,
+                    isCharged: false
+                ),
+                classification: .low
+            )
+        case .expandedBatteryCritical:
+            return ScreenMatrixBatteryScenario(
+                state: BatteryState(
+                    level: 0.08,
+                    powerSource: .battery,
+                    isCharging: false,
+                    isCharged: false
+                ),
+                classification: .critical
+            )
+        default:
+            return nil
+        }
+    }
+}
+
+private struct ScreenMatrixBatteryScenario {
+    let state: BatteryState
+    let classification: BatteryActivityProvider.Classification
+}
+
+@MainActor
+private struct ScreenSnapshotContext {
+    let viewModel: IslandViewModel
+    let activityRuntime: IslandActivityRuntime
 }
 
 private struct ScreenSnapshotCanvas: View {
@@ -264,6 +497,7 @@ private struct ScreenSnapshotCanvas: View {
 
     let environment: ScreenEnvironment
     @ObservedObject var viewModel: IslandViewModel
+    let activityRuntime: IslandActivityRuntime
 
     var body: some View {
         ZStack(alignment: .top) {
@@ -273,18 +507,19 @@ private struct ScreenSnapshotCanvas: View {
                 .fill(Color.white.opacity(0.08))
                 .frame(height: min(topReservedHeight, 60))
 
-            if environment.hasNotch {
-                Rectangle()
-                    .fill(Color.black)
-                    .frame(width: notchWidth, height: environment.safeAreaInsets.top)
-            }
-
-            IslandView(viewModel: viewModel)
+            IslandView(viewModel: viewModel, activityRuntime: activityRuntime)
                 .frame(
                     width: IslandPanelGeometry.expandedSize.width,
                     height: IslandPanelGeometry.expandedSize.height,
                     alignment: .top
                 )
+
+            if environment.hasNotch {
+                Rectangle()
+                    .fill(Color.black)
+                    .frame(width: notchWidth, height: environment.safeAreaInsets.top)
+                    .allowsHitTesting(false)
+            }
         }
         .frame(width: Self.size.width, height: Self.size.height, alignment: .top)
         .clipped()
@@ -299,17 +534,30 @@ private struct ScreenSnapshotCanvas: View {
     }
 }
 
-private enum ScreenSnapshotRenderer {
+@MainActor
+private final class ScreenSnapshotRenderer {
     struct RenderedImage {
         let data: Data
         let pixelWidth: Int
         let pixelHeight: Int
     }
 
-    @MainActor
-    static func render<Content: View>(
+    private let size: CGSize
+    private let window: NSWindow
+
+    init(size: CGSize) {
+        self.size = size
+        window = NSWindow(
+            contentRect: NSRect(origin: .zero, size: size),
+            styleMask: .borderless,
+            backing: .buffered,
+            defer: false
+        )
+        window.isReleasedWhenClosed = false
+    }
+
+    func render<Content: View>(
         _ content: Content,
-        size: CGSize,
         scale: CGFloat
     ) throws -> RenderedImage {
         let pixelWidth = Int((size.width * scale).rounded())
@@ -333,13 +581,6 @@ private enum ScreenSnapshotRenderer {
         hostingView.frame = NSRect(origin: .zero, size: size)
         hostingView.appearance = NSAppearance(named: .darkAqua)
 
-        let window = NSWindow(
-            contentRect: hostingView.frame,
-            styleMask: .borderless,
-            backing: .buffered,
-            defer: false
-        )
-        window.isReleasedWhenClosed = false
         window.contentView = hostingView
         hostingView.layoutSubtreeIfNeeded()
         hostingView.displayIfNeeded()
@@ -356,6 +597,11 @@ private enum ScreenSnapshotRenderer {
             pixelWidth: pixelWidth,
             pixelHeight: pixelHeight
         )
+    }
+
+    func close() {
+        window.contentView = nil
+        window.close()
     }
 }
 

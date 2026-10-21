@@ -1,0 +1,29 @@
+{
+  "result": "Failed",
+  "totalTestCount": 2,
+  "passedTests": 0,
+  "skippedTests": 0,
+  "failedTests": 2,
+  "expectedFailures": 0,
+  "startTime": 1792245181.079,
+  "finishTime": 1792245194.23,
+  "environmentDescription": "Dynamic Island · Built with macOS 26.6.2",
+  "testFailures": [
+    {
+      "failureText": "XCTAssertEqual failed: (\"accepted\") is not equal to (\"rejected\")",
+      "targetName": "DynamicIslandTests",
+      "testIdentifier": 1,
+      "testIdentifierString": "ActivityPresentationRequestTests/testSynchronousHostRevocationDuringPublicationCannotLeaveGhostPresentation()",
+      "testIdentifierURL": "test://com.apple.xcode/DynamicIsland/DynamicIslandTests/ActivityPresentationRequestTests/testSynchronousHostRevocationDuringPublicationCannotLeaveGhostPresentation",
+      "testName": "testSynchronousHostRevocationDuringPublicationCannotLeaveGhostPresentation()"
+    },
+    {
+      "failureText": "XCTAssertEqual failed: (\"accepted\") is not equal to (\"rejected\")",
+      "targetName": "DynamicIslandTests",
+      "testIdentifier": 2,
+      "testIdentifierString": "ActivityPresentationRequestTests/testSynchronousSourceRemovalDuringPublicationCannotRestoreOrRetainItsState()",
+      "testIdentifierURL": "test://com.apple.xcode/DynamicIsland/DynamicIslandTests/ActivityPresentationRequestTests/testSynchronousSourceRemovalDuringPublicationCannotRestoreOrRetainItsState",
+      "testName": "testSynchronousSourceRemovalDuringPublicationCannotRestoreOrRetainItsState()"
+    }
+  ]
+}

@@ -1,0 +1,86 @@
+{
+  "T38TaskStatus": "in progress",
+  "artifact": {
+    "archiveRoot": "DynamicIslandSDK",
+    "bytes": 83967,
+    "files": 53,
+    "humanWalkthroughDirectory": "/tmp/dynamic-island-sdk-1.0.0-walkthrough-20261019/DynamicIslandSDK",
+    "manifest": "distribution-manifest.json",
+    "path": "/Users/rong5/Dynamiclsland/artifacts/sdk/dynamic-island-sdk-1.0.0.zip",
+    "sdkVersion": "1.0.0",
+    "sha256": "b92a911594b8e7dafa723dc70ba6e851cc35e21ec0e730ef2857a8cf5ccf0808"
+  },
+  "date": "2026-10-19",
+  "environment": {
+    "architecture": "arm64",
+    "macOS": "26.6.2",
+    "python": "3.9.6"
+  },
+  "helloFixture": {
+    "change": "README version and SDK-relative command documentation only. JavaScript and Manifest unchanged.",
+    "historicalManualEvidenceRewritten": false,
+    "newBytes": 2690,
+    "newSHA256": "d0e94985f688832de8227f524cecb2bef83aef09c50af6ddebf33129d077c976",
+    "oldBytes": 2667,
+    "oldSHA256": "fd4c3fac92d500a8e804aaaa3c4a78e5196b38c54f7ff388c9dd4475d45ae280"
+  },
+  "licenseMatchesRepository": true,
+  "logs": {
+    "portable-check.txt": "c45051f6c7876faa9b1e291cd69b6eb23b235ceb39912878f368e6718aa3615d",
+    "sdk-check.txt": "a5d4eee5aecf1b166184efb97afc97cd43840fe7e772b7fccedc4de78dba7ab5"
+  },
+  "manifestSchemaVersion": 1,
+  "minimumHostVersion": "0.6.0",
+  "npmPrivate": true,
+  "npmPublished": false,
+  "observedUTC": "2026-10-19T06:34:16.894187+00:00",
+  "officialPluginPrerequisites": [
+    "../t35-manual-20261019/result.json",
+    "../t36-manual-20261019/result.json"
+  ],
+  "permissionSemanticsChanged": false,
+  "publiclyPublished": false,
+  "releaseChannel": "release-candidate",
+  "remaining": [
+    "Final candidate material review and public SDK distribution.",
+    "Independent developer walkthrough and actual time evidence are tracked by T39."
+  ],
+  "remotePush": false,
+  "runtimeAPISurfaceExpanded": false,
+  "sdkVersion": "1.0.0",
+  "sourceBaseCommit": "eaa2bc3220d346794516fb5e9292b8c5e3a25580",
+  "sourceState": "Working tree SDK files identified by file-inventory.json; not an assertion that HEAD contains the candidate.",
+  "status": "SDK 1.0.0 release candidate prepared and verified locally; not publicly published",
+  "tagCreated": false,
+  "validation": {
+    "archiveFileHashesMatched": 53,
+    "completeArchiveMarkdownLinksChecked": true,
+    "deterministicArchiveBytesComparedTwice": true,
+    "expectedTypeErrors": 47,
+    "handbook": {
+      "documents": 15,
+      "localLinks": 33,
+      "sourceBoundExamples": 9
+    },
+    "hostContractTests": "Root will run PluginSDKContractTests and PluginDocumentationTests against the final fixture; not rerun by this subtask.",
+    "interactiveZshEntryExecutedFromExtractedSDK": true,
+    "portableSDKPython": {
+      "failed": 0,
+      "passed": 37,
+      "skipReasons": [
+        "Official repository examples are outside standalone SDK.",
+        "Legacy repository wrapper is outside standalone SDK."
+      ],
+      "skipped": 2,
+      "total": 39
+    },
+    "repositorySDKPython": {
+      "failed": 0,
+      "passed": 39,
+      "skipped": 0,
+      "total": 39
+    },
+    "typeCheckPassed": true
+  },
+  "wireAPIVersion": "1.0.0"
+}

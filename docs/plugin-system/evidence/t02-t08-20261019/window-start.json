@@ -1,0 +1,11 @@
+{
+  "utc": "2026-10-19T06:24:55.688967+00:00",
+  "target": {
+    "pid": 92924,
+    "uid": 501,
+    "executable": "/private/tmp/dynamic-island-final-20261019/Dynamic Island Baseline.app/Contents/MacOS/Dynamic Island",
+    "processStartText": "Mon Oct 19 14:18:23 2026",
+    "executableSHA256": "b20659a21a0c1e94d3f625c8925d6ff9e3877df4dc20c2642ff11db83da73ba6"
+  },
+  "power": "Now drawing from 'Battery Power'\n -InternalBattery-0 (id=22544483)\t98%; discharging; 4:48 remaining present: true"
+}

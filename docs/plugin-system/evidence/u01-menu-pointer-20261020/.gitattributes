@@ -1,0 +1,3 @@
+# Preserve original Xcode output byte-for-byte.
+pointer-regression.txt -whitespace
+release-build.txt -whitespace

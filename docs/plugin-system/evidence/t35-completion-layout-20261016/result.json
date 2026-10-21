@@ -1,0 +1,62 @@
+{
+  "version": "0.2.1",
+  "status": "Implemented and automated; actual ordinary Release upgrade/completion pending",
+  "CI": {
+    "devicesAndConfigurations": [
+      {
+        "device": {
+          "architecture": "arm64",
+          "deviceId": "00008132-001E49513A0B801C",
+          "deviceName": "My Mac",
+          "modelName": "MacBook Air",
+          "osBuildNumber": "25G83",
+          "osVersion": "26.6.2",
+          "platform": "macOS"
+        },
+        "expectedFailures": 0,
+        "failedTests": 0,
+        "passedTests": 891,
+        "skippedTests": 1,
+        "testPlanConfiguration": {
+          "configurationId": "1",
+          "configurationName": "Test Scheme Action"
+        }
+      }
+    ],
+    "environmentDescription": "Dynamic Island · Built with macOS 26.6.2",
+    "expectedFailures": 0,
+    "failedTests": 0,
+    "finishTime": 1792148581.852,
+    "passedTests": 891,
+    "result": "Passed",
+    "skippedTests": 1,
+    "startTime": 1792148479.052,
+    "statistics": [
+      {
+        "subtitle": "1 test run",
+        "title": "1 test collected performance metrics"
+      }
+    ],
+    "testFailures": [],
+    "title": "Test - Dynamic Island",
+    "topInsights": [
+      {
+        "category": "Longest Test Runs",
+        "impact": "58% of duration",
+        "text": "7 longest test runs with outlier durations exceeding 2.60s (three standard deviations)"
+      }
+    ],
+    "totalTestCount": 892
+  },
+  "firstAttempts": [
+    "Removed invalid write to read-only accessibilityReduceMotion environment",
+    "Moved PNG output from global tmp to sandbox temporaryDirectory"
+  ],
+  "package": "/tmp/dynamic-island-t35-completion-layout-20261016/pomodoro-0.2.1.dip",
+  "sha256": {
+    "docs/plugin-system/examples/pomodoro/index.js": "6a0782e1788b009ddea8321aad4370ebc6d3d8b746315616b15e8bea0e03f6b2",
+    "docs/plugin-system/examples/pomodoro/manifest.json": "42e1f96131e433b47badce3acc2af88f0e0dc585f730690592f1423362b4fbb3",
+    "DynamicIslandTests/PomodoroCompletionLayoutTests.swift": "eb670f6c80a0c63d6b08b314dc00704d70c4af8710703dd7aa4e3abaab5c8119"
+  },
+  "actualOldVersionEvidence": "../t35-pomodoro-final-20261016/result.json"
+}

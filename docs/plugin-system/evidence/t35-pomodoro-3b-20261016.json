@@ -1,0 +1,70 @@
+{
+  "captureUTC": "2026-10-16T02:42:18.291074+00:00",
+  "baseCommit": "0ee490f580e8622d3a7faa32efe15b43c2d45120",
+  "stage": "T35 3B; native migration and real UI acceptance pending",
+  "ciSummary": {
+    "devicesAndConfigurations": [
+      {
+        "device": {
+          "architecture": "arm64",
+          "deviceId": "00008132-001E49513A0B801C",
+          "deviceName": "My Mac",
+          "modelName": "MacBook Air",
+          "osBuildNumber": "25G83",
+          "osVersion": "26.6.2",
+          "platform": "macOS"
+        },
+        "expectedFailures": 0,
+        "failedTests": 0,
+        "passedTests": 891,
+        "skippedTests": 1,
+        "testPlanConfiguration": {
+          "configurationId": "1",
+          "configurationName": "Test Scheme Action"
+        }
+      }
+    ],
+    "environmentDescription": "Dynamic Island · Built with macOS 26.6.2",
+    "expectedFailures": 0,
+    "failedTests": 0,
+    "finishTime": 1792118494.501,
+    "passedTests": 891,
+    "result": "Passed",
+    "skippedTests": 1,
+    "startTime": 1792118398.594,
+    "statistics": [
+      {
+        "subtitle": "1 test run",
+        "title": "1 test collected performance metrics"
+      }
+    ],
+    "testFailures": [],
+    "title": "Test - Dynamic Island",
+    "topInsights": [
+      {
+        "category": "Longest Test Runs",
+        "impact": "60% of duration",
+        "text": "7 longest test runs with outlier durations exceeding 2.60s (three standard deviations)"
+      }
+    ],
+    "totalTestCount": 892
+  },
+  "resultBundle": "/tmp/dynamic-island-t35-pomodoro-3b-20261016-final/TestResults.xcresult",
+  "log": "/tmp/dynamic-island-t35-pomodoro-3b-20261016-final-ci.log",
+  "sourceSHA256": {
+    "DynamicIsland/Plugins/PluginBridgeTransport.swift": "0d03f967eebfecdf14ecb34556e91d7d2c3c030859f48372628c48ad3b6b4d63",
+    "DynamicIslandTests/PomodoroPluginTests.swift": "e3588a1750025eb5874fdb6b2bc0d128519772a9ac9bc4ed96a0c8ea3e08a184",
+    "DynamicIslandTests/PomodoroPluginStorageTests.swift": "20405f7ddcd16646e33775470bf7aa7c7adec64192773a0293f644fc3edf4594",
+    "DynamicIslandTests/PomodoroPluginSchedulerTests.swift": "ab91926d21d2a90728f0b7c8222bb3f0ced5249582f10aeecc29a11725d981a0",
+    "DynamicIslandTests/PomodoroPluginTransportTests.swift": "18317a14c04ab5f6178294c61c0dad2d30df6741fcd8ecc1f120792495e382d5",
+    "docs/plugin-system/examples/pomodoro/index.js": "2ab2fa95b4d1de34a045596b4683f3acda10590a287b98643ae0e6fb358d2274",
+    "docs/plugin-system/examples/pomodoro/manifest.json": "72e28bac33acf3030e09aadbfabccf6d712bb039c63b633c386694ee6a300110"
+  },
+  "targetedTests": {
+    "passed": 64,
+    "failed": 0,
+    "resultBundle": "/tmp/dynamic-island-t35-pomodoro-3b-20261016-fixed/TestResults.xcresult"
+  },
+  "initialFailure": "Queue capacity test exposed two dequeued requests missing from admission count; fixed to count queued and in-flight requests under the shared lock.",
+  "normalReleaseBuild": "passed"
+}

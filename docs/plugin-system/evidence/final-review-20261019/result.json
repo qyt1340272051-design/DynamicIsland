@@ -1,0 +1,61 @@
+{
+  "baseCommit": "eaa2bc3220d346794516fb5e9292b8c5e3a25580",
+  "checks": {
+    "SDKArchiveSourceFilesMatched": 53,
+    "brokenChangedMarkdownLinks": 0,
+    "changedJSONParsed": 59,
+    "changedMarkdownLocalLinksChecked": 337,
+    "gitDiffCheckPassed": true,
+    "gitDiffCheckScope": "Staged changes excluding one original raw transcript with a captured Python version trailing space.",
+    "rawTranscriptBytesPreserved": "t39-independent-20261019/process.txt remains byte-identical to its recorded authorship hash; one trailing space is intentional source evidence.",
+    "testedSourceHashesMatched": 111
+  },
+  "isolatedAcceptanceCleanup": "../final-app-install-20261019/cleanup.json",
+  "manualGroupsDeferredByUser": [
+    "M03",
+    "M04",
+    "M05"
+  ],
+  "observedUTC": "2026-10-19T14:49:27.867726+00:00",
+  "plan": {
+    "in progress": 6,
+    "verified": 34
+  },
+  "publicReleaseOrRegistryPublicationPerformed": false,
+  "regressionBatches": [
+    {
+      "evidence": "../final-regression-20261019/result.json",
+      "failed": 0,
+      "ordinaryReleaseBuildPassed": true,
+      "passed": 1070,
+      "scope": "Full CI before added independent Host test and final SDK archive-tool fix",
+      "skipped": 2
+    },
+    {
+      "evidence": "../t38-independent-host-20261019/result.json",
+      "failed": 0,
+      "passed": 8,
+      "scope": "Added independent package plus existing SDK and documentation Host tests",
+      "skipped": 0
+    },
+    {
+      "evidence": "../t38-final-audit-20261019/result.json",
+      "failed": 0,
+      "passed": 40,
+      "scope": "Final SDK archive tools, extracted Quick Start, fixtures, validator and documentation",
+      "skipped": 0,
+      "typeExpectedErrors": 47
+    }
+  ],
+  "remainingTasks": [
+    "T02",
+    "T11",
+    "T37",
+    "T38",
+    "T39",
+    "T40"
+  ],
+  "runtimeAPIOrPermissionExpansion": false,
+  "sdkArtifactSHA256": "dd9ba3e40c856343271e8088643276fc329526191213fa1bbee1973eab299433",
+  "sourceState": "Uncommitted worktree checked before local commit; test evidence remains identified by its own hashes."
+}

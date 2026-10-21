@@ -1,0 +1,97 @@
+{
+  "schemaVersion": 1,
+  "marker": "T31_RERUN_ENABLE_CHECK",
+  "captures": [
+    {
+      "captureCompletedUTC": "2026-10-14T13:35:41.055Z",
+      "callID": "call_dbbd1e45819e4200bfa139aa6aec4fa3",
+      "rawJSONText": "{\"marker\":\"T31_RERUN_ENABLE_CHECK\",\"captureUTC\":\"2026-10-14T13:35:40.580Z\",\"checks\":[{\"id\":\"com.example.t31.idle01\",\"rawRow\":\"\\t\\t\\t\\t7 button Description: T31 Idle Scheduler 01, v1.0.1, 运行中, ID: plugin-extensions-plugin-com.example.t31.idle01\"},{\"id\":\"com.example.t31.idle02\",\"rawRow\":\"\\t\\t\\t\\t8 button Description: T31 Idle Scheduler 02, v1.0.1, 运行中, ID: plugin-extensions-plugin-com.example.t31.idle02\"},{\"id\":\"com.example.t31.idle03\",\"rawRow\":\"\\t\\t\\t\\t9 button Description: T31 Idle Scheduler 03, v1.0.1, 运行中, ID: plugin-extensions-plugin-com.example.t31.idle03\"},{\"id\":\"com.example.t31.idle04\",\"rawRow\":\"\\t\\t\\t\\t10 button Description: T31 Idle Scheduler 04, v1.0.1, 运行中, ID: plugin-extensions-plugin-com.example.t31.idle04\"},{\"id\":\"com.example.t31.idle05\",\"rawRow\":\"\\t\\t\\t\\t11 button Description: T31 Idle Scheduler 05, v1.0.1, 运行中, ID: plugin-extensions-plugin-com.example.t31.idle05\"},{\"id\":\"com.example.t31.idle06\",\"rawRow\":\"\\t\\t\\t\\t12 button Description: T31 Idle Scheduler 06, v1.0.1, 运行中, ID: plugin-extensions-plugin-com.example.t31.idle06\"},{\"id\":\"com.example.t31.idle07\",\"rawRow\":\"\\t\\t\\t\\t13 button Description: T31 Idle Scheduler 07, v1.0.1, 运行中, ID: plugin-extensions-plugin-com.example.t31.idle07\"},{\"id\":\"com.example.t31.idle08\",\"rawRow\":\"\\t\\t\\t\\t14 button Description: T31 Idle Scheduler 08, v1.0.1, 运行中, ID: plugin-extensions-plugin-com.example.t31.idle08\"},{\"id\":\"com.example.t31.idle09\",\"rawRow\":\"\\t\\t\\t\\t15 button Description: T31 Idle Scheduler 09, v1.0.1, 运行中, ID: plugin-extensions-plugin-com.example.t31.idle09\"},{\"id\":\"com.example.t31.idle10\",\"rawRow\":\"\\t\\t\\t\\t16 button Description: T31 Idle Scheduler 10, v1.0.1, 运行中, ID: plugin-extensions-plugin-com.example.t31.idle10\"},{\"id\":\"com.example.t31.idle11\",\"rawRow\":\"\\t\\t\\t\\t17 button Description: T31 Idle Scheduler 11, v1.0.1, 运行中, ID: plugin-extensions-plugin-com.example.t31.idle11\"},{\"id\":\"com.example.t31.idle12\",\"rawRow\":\"\\t\\t\\t\\t18 button Description: T31 Idle Scheduler 12, v1.0.1, 运行中, ID: plugin-extensions-plugin-com.example.t31.idle12\"},{\"id\":\"com.example.t31.idle13\",\"rawRow\":\"\\t\\t\\t\\t19 button Description: T31 Idle Scheduler 13, v1.0.1, 运行中, ID: plugin-extensions-plugin-com.example.t31.idle13\"},{\"id\":\"com.example.t31.idle14\",\"rawRow\":\"\\t\\t\\t\\t20 button Description: T31 Idle Scheduler 14, v1.0.1, 运行中, ID: plugin-extensions-plugin-com.example.t31.idle14\"},{\"id\":\"com.example.t31.idle15\",\"rawRow\":\"\\t\\t\\t\\t21 button Description: T31 Idle Scheduler 15, v1.0.1, 运行中, ID: plugin-extensions-plugin-com.example.t31.idle15\"},{\"id\":\"com.example.t31.idle16\",\"rawRow\":\"\\t\\t\\t\\t22 button Description: T31 Idle Scheduler 16, v1.0.1, 运行中, ID: plugin-extensions-plugin-com.example.t31.idle16\"},{\"id\":\"com.example.t31.idle17\",\"rawRow\":\"\\t\\t\\t\\t23 button Description: T31 Idle Scheduler 17, v1.0.1, 运行中, ID: plugin-extensions-plugin-com.example.t31.idle17\"},{\"id\":\"com.example.t31.idle18\",\"rawRow\":\"\\t\\t\\t\\t24 button Description: T31 Idle Scheduler 18, v1.0.1, 运行中, ID: plugin-extensions-plugin-com.example.t31.idle18\"},{\"id\":\"com.example.t31.idle19\",\"rawRow\":\"\\t\\t\\t\\t25 button Description: T31 Idle Scheduler 19, v1.0.1, 运行中, ID: plugin-extensions-plugin-com.example.t31.idle19\"},{\"id\":\"com.example.t31.idle20\",\"rawRow\":\"\\t\\t\\t\\t26 button Description: T31 Idle Scheduler 20, v1.0.1, 运行中, ID: plugin-extensions-plugin-com.example.t31.idle20\"}]}",
+      "value": {
+        "marker": "T31_RERUN_ENABLE_CHECK",
+        "captureUTC": "2026-10-14T13:35:40.580Z",
+        "checks": [
+          {
+            "id": "com.example.t31.idle01",
+            "rawRow": "\t\t\t\t7 button Description: T31 Idle Scheduler 01, v1.0.1, 运行中, ID: plugin-extensions-plugin-com.example.t31.idle01"
+          },
+          {
+            "id": "com.example.t31.idle02",
+            "rawRow": "\t\t\t\t8 button Description: T31 Idle Scheduler 02, v1.0.1, 运行中, ID: plugin-extensions-plugin-com.example.t31.idle02"
+          },
+          {
+            "id": "com.example.t31.idle03",
+            "rawRow": "\t\t\t\t9 button Description: T31 Idle Scheduler 03, v1.0.1, 运行中, ID: plugin-extensions-plugin-com.example.t31.idle03"
+          },
+          {
+            "id": "com.example.t31.idle04",
+            "rawRow": "\t\t\t\t10 button Description: T31 Idle Scheduler 04, v1.0.1, 运行中, ID: plugin-extensions-plugin-com.example.t31.idle04"
+          },
+          {
+            "id": "com.example.t31.idle05",
+            "rawRow": "\t\t\t\t11 button Description: T31 Idle Scheduler 05, v1.0.1, 运行中, ID: plugin-extensions-plugin-com.example.t31.idle05"
+          },
+          {
+            "id": "com.example.t31.idle06",
+            "rawRow": "\t\t\t\t12 button Description: T31 Idle Scheduler 06, v1.0.1, 运行中, ID: plugin-extensions-plugin-com.example.t31.idle06"
+          },
+          {
+            "id": "com.example.t31.idle07",
+            "rawRow": "\t\t\t\t13 button Description: T31 Idle Scheduler 07, v1.0.1, 运行中, ID: plugin-extensions-plugin-com.example.t31.idle07"
+          },
+          {
+            "id": "com.example.t31.idle08",
+            "rawRow": "\t\t\t\t14 button Description: T31 Idle Scheduler 08, v1.0.1, 运行中, ID: plugin-extensions-plugin-com.example.t31.idle08"
+          },
+          {
+            "id": "com.example.t31.idle09",
+            "rawRow": "\t\t\t\t15 button Description: T31 Idle Scheduler 09, v1.0.1, 运行中, ID: plugin-extensions-plugin-com.example.t31.idle09"
+          },
+          {
+            "id": "com.example.t31.idle10",
+            "rawRow": "\t\t\t\t16 button Description: T31 Idle Scheduler 10, v1.0.1, 运行中, ID: plugin-extensions-plugin-com.example.t31.idle10"
+          },
+          {
+            "id": "com.example.t31.idle11",
+            "rawRow": "\t\t\t\t17 button Description: T31 Idle Scheduler 11, v1.0.1, 运行中, ID: plugin-extensions-plugin-com.example.t31.idle11"
+          },
+          {
+            "id": "com.example.t31.idle12",
+            "rawRow": "\t\t\t\t18 button Description: T31 Idle Scheduler 12, v1.0.1, 运行中, ID: plugin-extensions-plugin-com.example.t31.idle12"
+          },
+          {
+            "id": "com.example.t31.idle13",
+            "rawRow": "\t\t\t\t19 button Description: T31 Idle Scheduler 13, v1.0.1, 运行中, ID: plugin-extensions-plugin-com.example.t31.idle13"
+          },
+          {
+            "id": "com.example.t31.idle14",
+            "rawRow": "\t\t\t\t20 button Description: T31 Idle Scheduler 14, v1.0.1, 运行中, ID: plugin-extensions-plugin-com.example.t31.idle14"
+          },
+          {
+            "id": "com.example.t31.idle15",
+            "rawRow": "\t\t\t\t21 button Description: T31 Idle Scheduler 15, v1.0.1, 运行中, ID: plugin-extensions-plugin-com.example.t31.idle15"
+          },
+          {
+            "id": "com.example.t31.idle16",
+            "rawRow": "\t\t\t\t22 button Description: T31 Idle Scheduler 16, v1.0.1, 运行中, ID: plugin-extensions-plugin-com.example.t31.idle16"
+          },
+          {
+            "id": "com.example.t31.idle17",
+            "rawRow": "\t\t\t\t23 button Description: T31 Idle Scheduler 17, v1.0.1, 运行中, ID: plugin-extensions-plugin-com.example.t31.idle17"
+          },
+          {
+            "id": "com.example.t31.idle18",
+            "rawRow": "\t\t\t\t24 button Description: T31 Idle Scheduler 18, v1.0.1, 运行中, ID: plugin-extensions-plugin-com.example.t31.idle18"
+          },
+          {
+            "id": "com.example.t31.idle19",
+            "rawRow": "\t\t\t\t25 button Description: T31 Idle Scheduler 19, v1.0.1, 运行中, ID: plugin-extensions-plugin-com.example.t31.idle19"
+          },
+          {
+            "id": "com.example.t31.idle20",
+            "rawRow": "\t\t\t\t26 button Description: T31 Idle Scheduler 20, v1.0.1, 运行中, ID: plugin-extensions-plugin-com.example.t31.idle20"
+          }
+        ]
+      }
+    }
+  ]
+}

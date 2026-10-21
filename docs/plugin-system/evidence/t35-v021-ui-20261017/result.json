@@ -1,0 +1,78 @@
+{
+  "status": "partial; T35 remains in progress",
+  "utc": "2026-10-16T17:10:36.853971+00:00",
+  "version": "0.2.1",
+  "pid": 17040,
+  "verified": [
+    "Actual import preview shows replacement 0.2.0 to 0.2.1 and no implicit execution or permission grant",
+    "Installed 0.2.1 remains disabled and storage requested",
+    "Enable starts the plugin while storage remains requested",
+    "Actual per-permission dialog explicitly confirms current 0.2.1 code",
+    "Storage becomes granted after explicit confirmation",
+    "Installed manifest, script and README exactly match source and archive",
+    "Ordinary Release signature verification passed",
+    "Actual 0.2.1 UI 15-minute round completed naturally; see ../t35-v021-final-20261017/result.json"
+  ],
+  "pending": [
+    "Capture actual short completion notice with safe compact wings"
+  ],
+  "inheritedCI": "../t35-completion-layout-20261016/result.json",
+  "inheritedActualOldVersion": "../t35-pomodoro-final-20261016/result.json",
+  "continuation": {
+    "appPath": "/Users/rong5/Applications/Dynamic Island T35 Pomodoro.app",
+    "running": false,
+    "pid": 32762,
+    "lastObservedUI": "idle compact after actual natural completion, then standard Cmd+Q; PID absence verified",
+    "countdownStarted": true,
+    "next": "User explicitly deferred repeat to next session. Launch the isolated app and verify a new PID before a new real UI Start and fresh deadline/capture state.",
+    "countdownCompleted": true,
+    "cleanup": "../t35-v021-final-20261017/cleanup.json",
+    "manualDeferral": {
+      "userReply": "留待下次",
+      "recordedUTC": "2026-10-17T09:43:36.726535+00:00",
+      "repeatStarted": false
+    }
+  },
+  "productionAppPID": 66831,
+  "productionAppAndDataUntouched": true,
+  "manualDeferral": {
+    "utc": "2026-10-16T17:19:48.653428+00:00",
+    "userRequest": "需要我操作的部分先跳过,统计好下次我再来处理",
+    "ledger": "../../MANUAL_ACCEPTANCE.md",
+    "countdownStarted": false,
+    "userActions": 2
+  },
+  "deferredCleanup": {
+    "pid17040Alive": false,
+    "stagingEntries": [],
+    "method": "Actual standard menu Quit via CUA; isolated app and plugin data retained"
+  },
+  "resumedAttempt": {
+    "utc": "2026-10-17T05:58:00.880419+00:00",
+    "pid": 32762,
+    "productionAppPID": 21458,
+    "version": "0.2.1",
+    "installedFilesMatchSource": true,
+    "strictSignatureVerified": true,
+    "pluginEnabled": true,
+    "storagePermission": "granted",
+    "countdownStarted": false,
+    "uiBlocker": "CUA remains on a menu tree; element actions return -10005 even after rebinding/reset. No Start click has occurred.",
+    "pendingUserAction": "Close menu with physical Escape, leave/reenter top hover region and keep expanded.",
+    "sourceSHA256": {
+      "manifest.json": "42e1f96131e433b47badce3acc2af88f0e0dc585f730690592f1423362b4fbb3",
+      "index.js": "6a0782e1788b009ddea8321aad4370ebc6d3d8b746315616b15e8bea0e03f6b2",
+      "README.md": "f3100e511f4d8ed3ac3a6343bad4019908dafa2596f31279b6b64f1df9aa54d2"
+    },
+    "followUp": {
+      "utc": "2026-10-17T08:45:44.957488+00:00",
+      "userEscapeAndHoverConfirmed": true,
+      "initialMenuBlockerCleared": true,
+      "actualObservedUI": "compact in repeated exact-app CUA observations",
+      "countdownStarted": false,
+      "privateStartOrClockAdjustmentUsed": false,
+      "next": "Manual M01 remains deferred; wait for actual expansion before a new Start click."
+    },
+    "naturalRunEvidence": "../t35-v021-final-20261017/result.json"
+  }
+}

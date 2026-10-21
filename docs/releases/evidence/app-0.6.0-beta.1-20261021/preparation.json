@@ -1,0 +1,56 @@
+{
+  "phase": "pre-publication",
+  "preparedUTC": "2026-10-21T02:47:24.946586+00:00",
+  "tag": "v0.6.0-beta.1",
+  "appVersion": "0.6.0",
+  "build": "3",
+  "baseHEAD": "5e1d0e06453c37d837dad72fee36f35cee16e030",
+  "productionSwiftChanged": false,
+  "publishedSDKChanged": false,
+  "localCI": {
+    "total": 1092,
+    "passed": 1089,
+    "skipped": 3,
+    "failures": 0,
+    "releaseBuildPassed": true,
+    "skips": [
+      "explicit snapshot matrix",
+      "opt-in live GitHub API",
+      "opt-in live Registry"
+    ]
+  },
+  "stability": {
+    "total": 49,
+    "skipped": 0,
+    "failures": 0,
+    "scope": "automated geometry/window-policy/service scenarios, not hardware topology tests"
+  },
+  "liveOfficialRegistry": {
+    "passed": 1,
+    "skipped": 0,
+    "failures": 0,
+    "defaultSource": true,
+    "restart": "fresh Host service object graph, not App process"
+  },
+  "unverified": [
+    "T39 independent human first author",
+    "nine beta hardware scenarios",
+    "clean Mac first install and permissions"
+  ],
+  "logSHA256": {
+    "full-ci.log": "e0661529f7d99133f3e2acd8ba4c3e0e4426bc939ba2698eff8cc2e1c6f5a306",
+    "stability.log": "4e3f0b63000d81ec98c92c97d088b74c61e2423c90c262a071837ebd61ef5b33",
+    "live-registry.log": "6b1bf31b478dc2cddc60bf0b3f997a3cee4878b101bb9e5494db64571e608fd3",
+    "config-validation.log": "a9d7c54301f50eeda3f0d39e7c25dbbc5f28089ac8971462adc395245075cf50"
+  },
+  "guiInstallRepeat": {
+    "result": "passed",
+    "details": "gui-result.json"
+  },
+  "postOCRFixUIRegression": {
+    "passed": 12,
+    "skipped": 0,
+    "failures": 0,
+    "details": "ui-recognition-fix.json"
+  }
+}

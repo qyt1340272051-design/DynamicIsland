@@ -1,0 +1,18 @@
+[
+  {
+    "file": "installed-running.jpg",
+    "callID": "call_f9561589864846d8828ab46ffb1436f8",
+    "completedUTC": "2026-10-19T01:44:05.966Z",
+    "actualObservedValue": null,
+    "sha256": "92f96334ce6a53daa7036acd89a600a7c4d48439806d2fcb3d452d3c7aab0d70",
+    "source": "Unmodified actual CUA screenshot"
+  },
+  {
+    "file": "counter-2.jpg",
+    "callID": "call_82c0e161ff254e6ebfe1063354f85283",
+    "completedUTC": "2026-10-19T01:48:07.694Z",
+    "actualObservedValue": 2,
+    "sha256": "2128275948ae8dc36b593edd994a167263e93a22e6683b90ae8dfc57c21e36ce",
+    "source": "Unmodified actual CUA screenshot"
+  }
+]

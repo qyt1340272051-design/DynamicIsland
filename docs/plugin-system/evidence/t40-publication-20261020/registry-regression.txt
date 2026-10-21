@@ -1,0 +1,262 @@
+Command line invocation:
+    /Applications/Xcode.app/Contents/Developer/usr/bin/xcodebuild test -project DynamicIsland.xcodeproj -scheme "Dynamic Island" -destination platform=macOS -derivedDataPath /tmp/dynamic-island-ci-derived-data -resultBundlePath /tmp/dynamic-island-t40-publish-20261020/registry-regression.xcresult -parallel-testing-enabled NO "-only-testing:DynamicIslandTests/PluginRegistryTests" "-only-testing:DynamicIslandTests/PluginRegistryModelTests" "-only-testing:DynamicIslandTests/PluginRegistryUITests"
+
+Writing result bundle at path:
+	/tmp/dynamic-island-t40-publish-20261020/registry-regression.xcresult
+
+--- xcodebuild: WARNING: Using the first of multiple matching destinations:
+{ platform:macOS, arch:arm64, id:00008132-001E49513A0B801C, name:My Mac }
+{ platform:macOS, arch:x86_64, id:00008132-001E49513A0B801C, name:My Mac }
+ComputePackagePrebuildTargetDependencyGraph
+
+Prepare packages
+
+CreateBuildRequest
+
+SendProjectDescription
+
+CreateBuildOperation
+
+ComputeTargetDependencyGraph
+note: Building targets in dependency order
+note: Target dependency graph (2 targets)
+    Target 'DynamicIslandTests' in project 'DynamicIsland'
+        ➜ Explicit dependency on target 'Dynamic Island' in project 'DynamicIsland'
+    Target 'Dynamic Island' in project 'DynamicIsland' (no dependencies)
+
+GatherProvisioningInputs
+
+CreateBuildDescription
+
+ExecuteExternalTool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -v -E -dM -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.5.sdk -x c -c /dev/null
+
+ExecuteExternalTool /Applications/Xcode.app/Contents/Developer/usr/bin/actool --version --output-format xml1
+
+ExecuteExternalTool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc --version
+
+ExecuteExternalTool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ld -version_details
+
+Build description signature: 655b20e63212048ab31030edd46f60bb
+Build description path: /tmp/dynamic-island-ci-derived-data/Build/Intermediates.noindex/XCBuildData/655b20e63212048ab31030edd46f60bb.xcbuilddata
+ClangStatCache /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang-stat-cache /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.5.sdk /tmp/dynamic-island-ci-derived-data/SDKStatCaches.noindex/macosx26.5-25F70-688ef53f1462e2c8f657fdc38a81448fe082c4a02f00227109f4ed75e425c832.sdkstatcache
+    cd /Users/rong5/Dynamiclsland/DynamicIsland.xcodeproj
+    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang-stat-cache /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.5.sdk -o /tmp/dynamic-island-ci-derived-data/SDKStatCaches.noindex/macosx26.5-25F70-688ef53f1462e2c8f657fdc38a81448fe082c4a02f00227109f4ed75e425c832.sdkstatcache
+
+ProcessInfoPlistFile /tmp/dynamic-island-ci-derived-data/Build/Products/Debug/Dynamic\ Island.app/Contents/Info.plist /Users/rong5/Dynamiclsland/DynamicIsland/Info.plist (in target 'Dynamic Island' from project 'DynamicIsland')
+    cd /Users/rong5/Dynamiclsland
+    builtin-infoPlistUtility /Users/rong5/Dynamiclsland/DynamicIsland/Info.plist -producttype com.apple.product-type.application -genpkginfo /tmp/dynamic-island-ci-derived-data/Build/Products/Debug/Dynamic\ Island.app/Contents/PkgInfo -expandbuildsettings -platform macosx -additionalcontentfile /tmp/dynamic-island-ci-derived-data/Build/Intermediates.noindex/DynamicIsland.build/Debug/Dynamic\ Island.build/assetcatalog_generated_info.plist -o /tmp/dynamic-island-ci-derived-data/Build/Products/Debug/Dynamic\ Island.app/Contents/Info.plist
+
+SwiftDriver DynamicIslandTests normal arm64 com.apple.xcode.tools.swift.compiler (in target 'DynamicIslandTests' from project 'DynamicIsland')
+    cd /Users/rong5/Dynamiclsland
+    builtin-SwiftDriver -- /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc -module-name DynamicIslandTests -Onone @/tmp/dynamic-island-ci-derived-data/Build/Intermediates.noindex/DynamicIsland.build/Debug/DynamicIslandTests.build/Objects-normal/arm64/DynamicIslandTests.SwiftFileList -DDEBUG -plugin-path /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing -enable-bare-slash-regex -enable-experimental-feature DebugDescriptionMacro -sdk /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.5.sdk -target arm64-apple-macos26.0 -g -module-cache-path /tmp/dynamic-island-ci-derived-data/ModuleCache.noindex -Xfrontend -serialize-debugging-options -profile-coverage-mapping -profile-generate -enable-testing -index-store-path /tmp/dynamic-island-ci-derived-data/Index.noindex/DataStore -Xcc -D_LIBCPP_HARDENING_MODE\=_LIBCPP_HARDENING_MODE_DEBUG -swift-version 5 -I /tmp/dynamic-island-ci-derived-data/Build/Products/Debug -Isystem /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib -F /tmp/dynamic-island-ci-derived-data/Build/Products/Debug -F /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks -c -j10 -enable-batch-mode -incremental -Xcc -ivfsstatcache -Xcc /tmp/dynamic-island-ci-derived-data/SDKStatCaches.noindex/macosx26.5-25F70-688ef53f1462e2c8f657fdc38a81448fe082c4a02f00227109f4ed75e425c832.sdkstatcache -output-file-map /tmp/dynamic-island-ci-derived-data/Build/Intermediates.noindex/DynamicIsland.build/Debug/DynamicIslandTests.build/Objects-normal/arm64/DynamicIslandTests-OutputFileMap.json -use-frontend-parseable-output -save-temps -no-color-diagnostics -explicit-module-build -module-cache-path /tmp/dynamic-island-ci-derived-data/Build/Intermediates.noindex/SwiftExplicitPrecompiledModules -clang-scanner-module-cache-path /tmp/dynamic-island-ci-derived-data/ModuleCache.noindex -sdk-module-cache-path /tmp/dynamic-island-ci-derived-data/ModuleCache.noindex -serialize-diagnostics -emit-dependencies -emit-module -emit-module-path /tmp/dynamic-island-ci-derived-data/Build/Intermediates.noindex/DynamicIsland.build/Debug/DynamicIslandTests.build/Objects-normal/arm64/DynamicIslandTests.swiftmodule -validate-clang-modules-once -clang-build-session-file /tmp/dynamic-island-ci-derived-data/ModuleCache.noindex/Session.modulevalidation -Xcc -I/tmp/dynamic-island-ci-derived-data/Build/Intermediates.noindex/DynamicIsland.build/Debug/DynamicIslandTests.build/swift-overrides.hmap -emit-const-values -Xfrontend -const-gather-protocols-file -Xfrontend /tmp/dynamic-island-ci-derived-data/Build/Intermediates.noindex/DynamicIsland.build/Debug/DynamicIslandTests.build/Objects-normal/arm64/DynamicIslandTests_const_extract_protocols.json -Xcc -iquote -Xcc /tmp/dynamic-island-ci-derived-data/Build/Intermediates.noindex/DynamicIsland.build/Debug/DynamicIslandTests.build/DynamicIslandTests-generated-files.hmap -Xcc -I/tmp/dynamic-island-ci-derived-data/Build/Intermediates.noindex/DynamicIsland.build/Debug/DynamicIslandTests.build/DynamicIslandTests-own-target-headers.hmap -Xcc -I/tmp/dynamic-island-ci-derived-data/Build/Intermediates.noindex/DynamicIsland.build/Debug/DynamicIslandTests.build/DynamicIslandTests-all-target-headers.hmap -Xcc -iquote -Xcc /tmp/dynamic-island-ci-derived-data/Build/Intermediates.noindex/DynamicIsland.build/Debug/DynamicIslandTests.build/DynamicIslandTests-project-headers.hmap -Xcc -I/tmp/dynamic-island-ci-derived-data/Build/Products/Debug/include -Xcc -I/tmp/dynamic-island-ci-derived-data/Build/Intermediates.noindex/DynamicIsland.build/Debug/DynamicIslandTests.build/DerivedSources-normal/arm64 -Xcc -I/tmp/dynamic-island-ci-derived-data/Build/Intermediates.noindex/DynamicIsland.build/Debug/DynamicIslandTests.build/DerivedSources/arm64 -Xcc -I/tmp/dynamic-island-ci-derived-data/Build/Intermediates.noindex/DynamicIsland.build/Debug/DynamicIslandTests.build/DerivedSources -Xcc -DDEBUG\=1 -emit-objc-header -emit-objc-header-path /tmp/dynamic-island-ci-derived-data/Build/Intermediates.noindex/DynamicIsland.build/Debug/DynamicIslandTests.build/Objects-normal/arm64/DynamicIslandTests-Swift.h -working-directory /Users/rong5/Dynamiclsland -experimental-emit-module-separately -disable-cmo
+
+CopySwiftLibs /tmp/dynamic-island-ci-derived-data/Build/Products/Debug/Dynamic\ Island.app (in target 'Dynamic Island' from project 'DynamicIsland')
+    cd /Users/rong5/Dynamiclsland
+    builtin-swiftStdLibTool --copy --verbose --sign - --scan-executable /tmp/dynamic-island-ci-derived-data/Build/Products/Debug/Dynamic\ Island.app/Contents/MacOS/Dynamic\ Island.debug.dylib --scan-folder /tmp/dynamic-island-ci-derived-data/Build/Products/Debug/Dynamic\ Island.app/Contents/Frameworks --scan-folder /tmp/dynamic-island-ci-derived-data/Build/Products/Debug/Dynamic\ Island.app/Contents/PlugIns --scan-folder /tmp/dynamic-island-ci-derived-data/Build/Products/Debug/Dynamic\ Island.app/Contents/Library/SystemExtensions --scan-folder /tmp/dynamic-island-ci-derived-data/Build/Products/Debug/Dynamic\ Island.app/Contents/Extensions --platform macosx --toolchain /Users/rong5/Library/Developer/DVTDownloads/MetalToolchain/mounts/5f4a441a6d0a11f2e9b28c67384263afe92320f7/Metal.xctoolchain --toolchain /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain --destination /tmp/dynamic-island-ci-derived-data/Build/Products/Debug/Dynamic\ Island.app/Contents/Frameworks --strip-bitcode --strip-bitcode-tool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/bitcode_strip --emit-dependency-info /tmp/dynamic-island-ci-derived-data/Build/Intermediates.noindex/DynamicIsland.build/Debug/Dynamic\ Island.build/SwiftStdLibToolInputDependencies.dep --filter-for-swift-os
+
+ProcessInfoPlistFile /tmp/dynamic-island-ci-derived-data/Build/Products/Debug/Dynamic\ Island.app/Contents/PlugIns/DynamicIslandTests.xctest/Contents/Info.plist /tmp/dynamic-island-ci-derived-data/Build/Intermediates.noindex/DynamicIsland.build/Debug/DynamicIslandTests.build/empty-DynamicIslandTests.plist (in target 'DynamicIslandTests' from project 'DynamicIsland')
+    cd /Users/rong5/Dynamiclsland
+    builtin-infoPlistUtility /tmp/dynamic-island-ci-derived-data/Build/Intermediates.noindex/DynamicIsland.build/Debug/DynamicIslandTests.build/empty-DynamicIslandTests.plist -producttype com.apple.product-type.bundle.unit-test -expandbuildsettings -platform macosx -o /tmp/dynamic-island-ci-derived-data/Build/Products/Debug/Dynamic\ Island.app/Contents/PlugIns/DynamicIslandTests.xctest/Contents/Info.plist
+
+SwiftEmitModule normal arm64 Emitting\ module\ for\ DynamicIslandTests (in target 'DynamicIslandTests' from project 'DynamicIsland')
+
+EmitSwiftModule normal arm64 (in target 'DynamicIslandTests' from project 'DynamicIsland')
+    cd /Users/rong5/Dynamiclsland
+    
+/Users/rong5/Dynamiclsland/DynamicIslandTests/IslandCountdownRendererTests.swift:192:88: warning: main actor-isolated static property 'generation' can not be referenced from a nonisolated context; this is an error in the Swift 6 language mode
+    private func twoLeafPresentation(generation: String = IslandCountdownRendererTests.generation) -> ActivityPresentation {
+                                                                                       ^
+/Users/rong5/Dynamiclsland/DynamicIslandTests/IslandCountdownRendererTests.swift:190:24: note: static property declared here
+    private static let generation = "12345678-1234-1234-1234-123456789abc"
+                       ^
+/Users/rong5/Dynamiclsland/DynamicIslandTests/PluginCountdownNodeBridgeTests.swift:265:77: warning: main actor-isolated static property 'capabilities' can not be referenced from a nonisolated context; this is an error in the Swift 6 language mode
+              capabilities: [PluginCapability] = CountdownNodeBridgeFixture.capabilities) throws -> ValidatedPluginPackage {
+                                                                            ^
+/Users/rong5/Dynamiclsland/DynamicIslandTests/PluginCountdownNodeBridgeTests.swift:253:16: note: static property declared here
+    static let capabilities: [PluginCapability] = [.publishActivity, .updateActivity, .islandNodeUI, .handleActions, .countdown]
+               ^
+
+SwiftCompile normal arm64 Compiling\ PluginRegistryTests.swift /Users/rong5/Dynamiclsland/DynamicIslandTests/PluginRegistryTests.swift (in target 'DynamicIslandTests' from project 'DynamicIsland')
+
+SwiftCompile normal arm64 /Users/rong5/Dynamiclsland/DynamicIslandTests/PluginRegistryTests.swift (in target 'DynamicIslandTests' from project 'DynamicIsland')
+    cd /Users/rong5/Dynamiclsland
+    
+
+SwiftDriverJobDiscovery normal arm64 Compiling PluginRegistryTests.swift (in target 'DynamicIslandTests' from project 'DynamicIsland')
+
+SwiftDriverJobDiscovery normal arm64 Emitting module for DynamicIslandTests (in target 'DynamicIslandTests' from project 'DynamicIsland')
+
+SwiftDriver\ Compilation\ Requirements DynamicIslandTests normal arm64 com.apple.xcode.tools.swift.compiler (in target 'DynamicIslandTests' from project 'DynamicIsland')
+    cd /Users/rong5/Dynamiclsland
+    builtin-Swift-Compilation-Requirements -- /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc -module-name DynamicIslandTests -Onone @/tmp/dynamic-island-ci-derived-data/Build/Intermediates.noindex/DynamicIsland.build/Debug/DynamicIslandTests.build/Objects-normal/arm64/DynamicIslandTests.SwiftFileList -DDEBUG -plugin-path /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing -enable-bare-slash-regex -enable-experimental-feature DebugDescriptionMacro -sdk /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.5.sdk -target arm64-apple-macos26.0 -g -module-cache-path /tmp/dynamic-island-ci-derived-data/ModuleCache.noindex -Xfrontend -serialize-debugging-options -profile-coverage-mapping -profile-generate -enable-testing -index-store-path /tmp/dynamic-island-ci-derived-data/Index.noindex/DataStore -Xcc -D_LIBCPP_HARDENING_MODE\=_LIBCPP_HARDENING_MODE_DEBUG -swift-version 5 -I /tmp/dynamic-island-ci-derived-data/Build/Products/Debug -Isystem /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib -F /tmp/dynamic-island-ci-derived-data/Build/Products/Debug -F /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks -c -j10 -enable-batch-mode -incremental -Xcc -ivfsstatcache -Xcc /tmp/dynamic-island-ci-derived-data/SDKStatCaches.noindex/macosx26.5-25F70-688ef53f1462e2c8f657fdc38a81448fe082c4a02f00227109f4ed75e425c832.sdkstatcache -output-file-map /tmp/dynamic-island-ci-derived-data/Build/Intermediates.noindex/DynamicIsland.build/Debug/DynamicIslandTests.build/Objects-normal/arm64/DynamicIslandTests-OutputFileMap.json -use-frontend-parseable-output -save-temps -no-color-diagnostics -explicit-module-build -module-cache-path /tmp/dynamic-island-ci-derived-data/Build/Intermediates.noindex/SwiftExplicitPrecompiledModules -clang-scanner-module-cache-path /tmp/dynamic-island-ci-derived-data/ModuleCache.noindex -sdk-module-cache-path /tmp/dynamic-island-ci-derived-data/ModuleCache.noindex -serialize-diagnostics -emit-dependencies -emit-module -emit-module-path /tmp/dynamic-island-ci-derived-data/Build/Intermediates.noindex/DynamicIsland.build/Debug/DynamicIslandTests.build/Objects-normal/arm64/DynamicIslandTests.swiftmodule -validate-clang-modules-once -clang-build-session-file /tmp/dynamic-island-ci-derived-data/ModuleCache.noindex/Session.modulevalidation -Xcc -I/tmp/dynamic-island-ci-derived-data/Build/Intermediates.noindex/DynamicIsland.build/Debug/DynamicIslandTests.build/swift-overrides.hmap -emit-const-values -Xfrontend -const-gather-protocols-file -Xfrontend /tmp/dynamic-island-ci-derived-data/Build/Intermediates.noindex/DynamicIsland.build/Debug/DynamicIslandTests.build/Objects-normal/arm64/DynamicIslandTests_const_extract_protocols.json -Xcc -iquote -Xcc /tmp/dynamic-island-ci-derived-data/Build/Intermediates.noindex/DynamicIsland.build/Debug/DynamicIslandTests.build/DynamicIslandTests-generated-files.hmap -Xcc -I/tmp/dynamic-island-ci-derived-data/Build/Intermediates.noindex/DynamicIsland.build/Debug/DynamicIslandTests.build/DynamicIslandTests-own-target-headers.hmap -Xcc -I/tmp/dynamic-island-ci-derived-data/Build/Intermediates.noindex/DynamicIsland.build/Debug/DynamicIslandTests.build/DynamicIslandTests-all-target-headers.hmap -Xcc -iquote -Xcc /tmp/dynamic-island-ci-derived-data/Build/Intermediates.noindex/DynamicIsland.build/Debug/DynamicIslandTests.build/DynamicIslandTests-project-headers.hmap -Xcc -I/tmp/dynamic-island-ci-derived-data/Build/Products/Debug/include -Xcc -I/tmp/dynamic-island-ci-derived-data/Build/Intermediates.noindex/DynamicIsland.build/Debug/DynamicIslandTests.build/DerivedSources-normal/arm64 -Xcc -I/tmp/dynamic-island-ci-derived-data/Build/Intermediates.noindex/DynamicIsland.build/Debug/DynamicIslandTests.build/DerivedSources/arm64 -Xcc -I/tmp/dynamic-island-ci-derived-data/Build/Intermediates.noindex/DynamicIsland.build/Debug/DynamicIslandTests.build/DerivedSources -Xcc -DDEBUG\=1 -emit-objc-header -emit-objc-header-path /tmp/dynamic-island-ci-derived-data/Build/Intermediates.noindex/DynamicIsland.build/Debug/DynamicIslandTests.build/Objects-normal/arm64/DynamicIslandTests-Swift.h -working-directory /Users/rong5/Dynamiclsland -experimental-emit-module-separately -disable-cmo
+
+SwiftDriver\ Compilation DynamicIslandTests normal arm64 com.apple.xcode.tools.swift.compiler (in target 'DynamicIslandTests' from project 'DynamicIsland')
+    cd /Users/rong5/Dynamiclsland
+    builtin-Swift-Compilation -- /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc -module-name DynamicIslandTests -Onone @/tmp/dynamic-island-ci-derived-data/Build/Intermediates.noindex/DynamicIsland.build/Debug/DynamicIslandTests.build/Objects-normal/arm64/DynamicIslandTests.SwiftFileList -DDEBUG -plugin-path /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing -enable-bare-slash-regex -enable-experimental-feature DebugDescriptionMacro -sdk /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.5.sdk -target arm64-apple-macos26.0 -g -module-cache-path /tmp/dynamic-island-ci-derived-data/ModuleCache.noindex -Xfrontend -serialize-debugging-options -profile-coverage-mapping -profile-generate -enable-testing -index-store-path /tmp/dynamic-island-ci-derived-data/Index.noindex/DataStore -Xcc -D_LIBCPP_HARDENING_MODE\=_LIBCPP_HARDENING_MODE_DEBUG -swift-version 5 -I /tmp/dynamic-island-ci-derived-data/Build/Products/Debug -Isystem /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib -F /tmp/dynamic-island-ci-derived-data/Build/Products/Debug -F /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks -c -j10 -enable-batch-mode -incremental -Xcc -ivfsstatcache -Xcc /tmp/dynamic-island-ci-derived-data/SDKStatCaches.noindex/macosx26.5-25F70-688ef53f1462e2c8f657fdc38a81448fe082c4a02f00227109f4ed75e425c832.sdkstatcache -output-file-map /tmp/dynamic-island-ci-derived-data/Build/Intermediates.noindex/DynamicIsland.build/Debug/DynamicIslandTests.build/Objects-normal/arm64/DynamicIslandTests-OutputFileMap.json -use-frontend-parseable-output -save-temps -no-color-diagnostics -explicit-module-build -module-cache-path /tmp/dynamic-island-ci-derived-data/Build/Intermediates.noindex/SwiftExplicitPrecompiledModules -clang-scanner-module-cache-path /tmp/dynamic-island-ci-derived-data/ModuleCache.noindex -sdk-module-cache-path /tmp/dynamic-island-ci-derived-data/ModuleCache.noindex -serialize-diagnostics -emit-dependencies -emit-module -emit-module-path /tmp/dynamic-island-ci-derived-data/Build/Intermediates.noindex/DynamicIsland.build/Debug/DynamicIslandTests.build/Objects-normal/arm64/DynamicIslandTests.swiftmodule -validate-clang-modules-once -clang-build-session-file /tmp/dynamic-island-ci-derived-data/ModuleCache.noindex/Session.modulevalidation -Xcc -I/tmp/dynamic-island-ci-derived-data/Build/Intermediates.noindex/DynamicIsland.build/Debug/DynamicIslandTests.build/swift-overrides.hmap -emit-const-values -Xfrontend -const-gather-protocols-file -Xfrontend /tmp/dynamic-island-ci-derived-data/Build/Intermediates.noindex/DynamicIsland.build/Debug/DynamicIslandTests.build/Objects-normal/arm64/DynamicIslandTests_const_extract_protocols.json -Xcc -iquote -Xcc /tmp/dynamic-island-ci-derived-data/Build/Intermediates.noindex/DynamicIsland.build/Debug/DynamicIslandTests.build/DynamicIslandTests-generated-files.hmap -Xcc -I/tmp/dynamic-island-ci-derived-data/Build/Intermediates.noindex/DynamicIsland.build/Debug/DynamicIslandTests.build/DynamicIslandTests-own-target-headers.hmap -Xcc -I/tmp/dynamic-island-ci-derived-data/Build/Intermediates.noindex/DynamicIsland.build/Debug/DynamicIslandTests.build/DynamicIslandTests-all-target-headers.hmap -Xcc -iquote -Xcc /tmp/dynamic-island-ci-derived-data/Build/Intermediates.noindex/DynamicIsland.build/Debug/DynamicIslandTests.build/DynamicIslandTests-project-headers.hmap -Xcc -I/tmp/dynamic-island-ci-derived-data/Build/Products/Debug/include -Xcc -I/tmp/dynamic-island-ci-derived-data/Build/Intermediates.noindex/DynamicIsland.build/Debug/DynamicIslandTests.build/DerivedSources-normal/arm64 -Xcc -I/tmp/dynamic-island-ci-derived-data/Build/Intermediates.noindex/DynamicIsland.build/Debug/DynamicIslandTests.build/DerivedSources/arm64 -Xcc -I/tmp/dynamic-island-ci-derived-data/Build/Intermediates.noindex/DynamicIsland.build/Debug/DynamicIslandTests.build/DerivedSources -Xcc -DDEBUG\=1 -emit-objc-header -emit-objc-header-path /tmp/dynamic-island-ci-derived-data/Build/Intermediates.noindex/DynamicIsland.build/Debug/DynamicIslandTests.build/Objects-normal/arm64/DynamicIslandTests-Swift.h -working-directory /Users/rong5/Dynamiclsland -experimental-emit-module-separately -disable-cmo
+
+Copy /tmp/dynamic-island-ci-derived-data/Build/Products/Debug/DynamicIslandTests.swiftmodule/Project/arm64-apple-macos.swiftsourceinfo /tmp/dynamic-island-ci-derived-data/Build/Intermediates.noindex/DynamicIsland.build/Debug/DynamicIslandTests.build/Objects-normal/arm64/DynamicIslandTests.swiftsourceinfo (in target 'DynamicIslandTests' from project 'DynamicIsland')
+    cd /Users/rong5/Dynamiclsland
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks -rename /tmp/dynamic-island-ci-derived-data/Build/Intermediates.noindex/DynamicIsland.build/Debug/DynamicIslandTests.build/Objects-normal/arm64/DynamicIslandTests.swiftsourceinfo /tmp/dynamic-island-ci-derived-data/Build/Products/Debug/DynamicIslandTests.swiftmodule/Project/arm64-apple-macos.swiftsourceinfo
+
+Copy /tmp/dynamic-island-ci-derived-data/Build/Products/Debug/DynamicIslandTests.swiftmodule/arm64-apple-macos.swiftmodule /tmp/dynamic-island-ci-derived-data/Build/Intermediates.noindex/DynamicIsland.build/Debug/DynamicIslandTests.build/Objects-normal/arm64/DynamicIslandTests.swiftmodule (in target 'DynamicIslandTests' from project 'DynamicIsland')
+    cd /Users/rong5/Dynamiclsland
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks -rename /tmp/dynamic-island-ci-derived-data/Build/Intermediates.noindex/DynamicIsland.build/Debug/DynamicIslandTests.build/Objects-normal/arm64/DynamicIslandTests.swiftmodule /tmp/dynamic-island-ci-derived-data/Build/Products/Debug/DynamicIslandTests.swiftmodule/arm64-apple-macos.swiftmodule
+
+Copy /tmp/dynamic-island-ci-derived-data/Build/Products/Debug/DynamicIslandTests.swiftmodule/arm64-apple-macos.abi.json /tmp/dynamic-island-ci-derived-data/Build/Intermediates.noindex/DynamicIsland.build/Debug/DynamicIslandTests.build/Objects-normal/arm64/DynamicIslandTests.abi.json (in target 'DynamicIslandTests' from project 'DynamicIsland')
+    cd /Users/rong5/Dynamiclsland
+    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -resolve-src-symlinks -rename /tmp/dynamic-island-ci-derived-data/Build/Intermediates.noindex/DynamicIsland.build/Debug/DynamicIslandTests.build/Objects-normal/arm64/DynamicIslandTests.abi.json /tmp/dynamic-island-ci-derived-data/Build/Products/Debug/DynamicIslandTests.swiftmodule/arm64-apple-macos.abi.json
+
+Ld /tmp/dynamic-island-ci-derived-data/Build/Products/Debug/Dynamic\ Island.app/Contents/PlugIns/DynamicIslandTests.xctest/Contents/MacOS/DynamicIslandTests normal (in target 'DynamicIslandTests' from project 'DynamicIsland')
+    cd /Users/rong5/Dynamiclsland
+    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -Xlinker -reproducible -target arm64-apple-macos26.0 -bundle -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.5.sdk -O0 -L/tmp/dynamic-island-ci-derived-data/Build/Intermediates.noindex/EagerLinkingTBDs/Debug -L/tmp/dynamic-island-ci-derived-data/Build/Products/Debug -L/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib -F/tmp/dynamic-island-ci-derived-data/Build/Intermediates.noindex/EagerLinkingTBDs/Debug -F/tmp/dynamic-island-ci-derived-data/Build/Products/Debug -iframework /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks -filelist /tmp/dynamic-island-ci-derived-data/Build/Intermediates.noindex/DynamicIsland.build/Debug/DynamicIslandTests.build/Objects-normal/arm64/DynamicIslandTests.LinkFileList -Xlinker -rpath -Xlinker @loader_path/../Frameworks -Xlinker -rpath -Xlinker @executable_path/../Frameworks -bundle_loader /tmp/dynamic-island-ci-derived-data/Build/Products/Debug/Dynamic\ Island.app/Contents/MacOS/Dynamic\ Island -Xlinker -object_path_lto -Xlinker /tmp/dynamic-island-ci-derived-data/Build/Intermediates.noindex/DynamicIsland.build/Debug/DynamicIslandTests.build/Objects-normal/arm64/DynamicIslandTests_lto.o -rdynamic -Xlinker -no_deduplicate -Xlinker -debug_variant -Xlinker -dependency_info -Xlinker /tmp/dynamic-island-ci-derived-data/Build/Intermediates.noindex/DynamicIsland.build/Debug/DynamicIslandTests.build/Objects-normal/arm64/DynamicIslandTests_dependency_info.dat -fobjc-link-runtime -fprofile-instr-generate -L/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/macosx -L/usr/lib/swift -Xlinker -add_ast_path -Xlinker /tmp/dynamic-island-ci-derived-data/Build/Intermediates.noindex/DynamicIsland.build/Debug/DynamicIslandTests.build/Objects-normal/arm64/DynamicIslandTests.swiftmodule @/tmp/dynamic-island-ci-derived-data/Build/Intermediates.noindex/DynamicIsland.build/Debug/DynamicIslandTests.build/Objects-normal/arm64/DynamicIslandTests-linker-args.resp -Xlinker -needed_framework -Xlinker XCTest -framework XCTest -Xlinker -needed-lXCTestSwiftSupport -lXCTestSwiftSupport /tmp/dynamic-island-ci-derived-data/Build/Products/Debug/Dynamic\ Island.app/Contents/MacOS/Dynamic\ Island.debug.dylib -Xlinker -no_adhoc_codesign -o /tmp/dynamic-island-ci-derived-data/Build/Products/Debug/Dynamic\ Island.app/Contents/PlugIns/DynamicIslandTests.xctest/Contents/MacOS/DynamicIslandTests
+
+CopySwiftLibs /tmp/dynamic-island-ci-derived-data/Build/Products/Debug/Dynamic\ Island.app/Contents/PlugIns/DynamicIslandTests.xctest (in target 'DynamicIslandTests' from project 'DynamicIsland')
+    cd /Users/rong5/Dynamiclsland
+    builtin-swiftStdLibTool --copy --verbose --sign - --scan-executable /tmp/dynamic-island-ci-derived-data/Build/Products/Debug/Dynamic\ Island.app/Contents/PlugIns/DynamicIslandTests.xctest/Contents/MacOS/DynamicIslandTests --scan-folder /tmp/dynamic-island-ci-derived-data/Build/Products/Debug/Dynamic\ Island.app/Contents/PlugIns/DynamicIslandTests.xctest/Contents/Frameworks --scan-folder /tmp/dynamic-island-ci-derived-data/Build/Products/Debug/Dynamic\ Island.app/Contents/PlugIns/DynamicIslandTests.xctest/Contents/PlugIns --scan-folder /tmp/dynamic-island-ci-derived-data/Build/Products/Debug/Dynamic\ Island.app/Contents/PlugIns/DynamicIslandTests.xctest/Contents/Library/SystemExtensions --scan-folder /tmp/dynamic-island-ci-derived-data/Build/Products/Debug/Dynamic\ Island.app/Contents/PlugIns/DynamicIslandTests.xctest/Contents/Extensions --platform macosx --toolchain /Users/rong5/Library/Developer/DVTDownloads/MetalToolchain/mounts/5f4a441a6d0a11f2e9b28c67384263afe92320f7/Metal.xctoolchain --toolchain /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain --destination /tmp/dynamic-island-ci-derived-data/Build/Products/Debug/Dynamic\ Island.app/Contents/PlugIns/DynamicIslandTests.xctest/Contents/Frameworks --strip-bitcode --scan-executable /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib/libXCTestSwiftSupport.dylib --strip-bitcode-tool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/bitcode_strip --emit-dependency-info /tmp/dynamic-island-ci-derived-data/Build/Intermediates.noindex/DynamicIsland.build/Debug/DynamicIslandTests.build/SwiftStdLibToolInputDependencies.dep --filter-for-swift-os
+
+ExtractAppIntentsMetadata (in target 'DynamicIslandTests' from project 'DynamicIsland')
+    cd /Users/rong5/Dynamiclsland
+    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/appintentsmetadataprocessor --toolchain-dir /Users/rong5/Library/Developer/DVTDownloads/MetalToolchain/mounts/5f4a441a6d0a11f2e9b28c67384263afe92320f7/Metal.xctoolchain --module-name DynamicIslandTests --sdk-root /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.5.sdk --xcode-version 17F113 --platform-family macOS --deployment-target 26.0 --bundle-identifier com.rong5.dynamic-island-mac.tests --output /tmp/dynamic-island-ci-derived-data/Build/Products/Debug/Dynamic\ Island.app/Contents/PlugIns/DynamicIslandTests.xctest/Contents/Resources --target-triple arm64-apple-macos26.0 --binary-file /tmp/dynamic-island-ci-derived-data/Build/Products/Debug/Dynamic\ Island.app/Contents/PlugIns/DynamicIslandTests.xctest/Contents/MacOS/DynamicIslandTests --dependency-file /tmp/dynamic-island-ci-derived-data/Build/Intermediates.noindex/DynamicIsland.build/Debug/DynamicIslandTests.build/Objects-normal/arm64/DynamicIslandTests_dependency_info.dat --stringsdata-file /tmp/dynamic-island-ci-derived-data/Build/Intermediates.noindex/DynamicIsland.build/Debug/DynamicIslandTests.build/Objects-normal/arm64/ExtractedAppShortcutsMetadata.stringsdata --source-file-list /tmp/dynamic-island-ci-derived-data/Build/Intermediates.noindex/DynamicIsland.build/Debug/DynamicIslandTests.build/Objects-normal/arm64/DynamicIslandTests.SwiftFileList --metadata-file-list /tmp/dynamic-island-ci-derived-data/Build/Intermediates.noindex/DynamicIsland.build/Debug/DynamicIslandTests.build/DynamicIslandTests.DependencyMetadataFileList --static-metadata-file-list /tmp/dynamic-island-ci-derived-data/Build/Intermediates.noindex/DynamicIsland.build/Debug/DynamicIslandTests.build/DynamicIslandTests.DependencyStaticMetadataFileList --swift-const-vals-list /tmp/dynamic-island-ci-derived-data/Build/Intermediates.noindex/DynamicIsland.build/Debug/DynamicIslandTests.build/Objects-normal/arm64/DynamicIslandTests.SwiftConstValuesFileList --compile-time-extraction --deployment-aware-processing --validate-assistant-intents --no-app-shortcuts-localization
+2026-10-20 23:59:05.618 appintentsmetadataprocessor[32707:17210243] Starting appintentsmetadataprocessor export
+2026-10-20 23:59:05.622 appintentsmetadataprocessor[32707:17210243] warning: Metadata extraction skipped. No AppIntents.framework dependency found.
+
+CodeSign /tmp/dynamic-island-ci-derived-data/Build/Products/Debug/Dynamic\ Island.app/Contents/PlugIns/DynamicIslandTests.xctest (in target 'DynamicIslandTests' from project 'DynamicIsland')
+    cd /Users/rong5/Dynamiclsland
+    
+    Signing Identity:     "Sign to Run Locally"
+    
+    /usr/bin/codesign --force --sign - --timestamp\=none --generate-entitlement-der /tmp/dynamic-island-ci-derived-data/Build/Products/Debug/Dynamic\ Island.app/Contents/PlugIns/DynamicIslandTests.xctest
+
+CodeSign /tmp/dynamic-island-ci-derived-data/Build/Products/Debug/Dynamic\ Island.app/Contents/MacOS/Dynamic\ Island.debug.dylib (in target 'Dynamic Island' from project 'DynamicIsland')
+    cd /Users/rong5/Dynamiclsland
+    
+    Signing Identity:     "Sign to Run Locally"
+    
+    /usr/bin/codesign --force --sign - --timestamp\=none --generate-entitlement-der /tmp/dynamic-island-ci-derived-data/Build/Products/Debug/Dynamic\ Island.app/Contents/MacOS/Dynamic\ Island.debug.dylib
+/tmp/dynamic-island-ci-derived-data/Build/Products/Debug/Dynamic Island.app/Contents/MacOS/Dynamic Island.debug.dylib: replacing existing signature
+
+CodeSign /tmp/dynamic-island-ci-derived-data/Build/Products/Debug/Dynamic\ Island.app/Contents/MacOS/__preview.dylib (in target 'Dynamic Island' from project 'DynamicIsland')
+    cd /Users/rong5/Dynamiclsland
+    
+    Signing Identity:     "Sign to Run Locally"
+    
+    /usr/bin/codesign --force --sign - --timestamp\=none --generate-entitlement-der /tmp/dynamic-island-ci-derived-data/Build/Products/Debug/Dynamic\ Island.app/Contents/MacOS/__preview.dylib
+/tmp/dynamic-island-ci-derived-data/Build/Products/Debug/Dynamic Island.app/Contents/MacOS/__preview.dylib: replacing existing signature
+
+CodeSign /tmp/dynamic-island-ci-derived-data/Build/Products/Debug/Dynamic\ Island.app (in target 'Dynamic Island' from project 'DynamicIsland')
+    cd /Users/rong5/Dynamiclsland
+    
+    Signing Identity:     "Sign to Run Locally"
+    
+    /usr/bin/codesign --force --sign - --entitlements /tmp/dynamic-island-ci-derived-data/Build/Intermediates.noindex/DynamicIsland.build/Debug/Dynamic\ Island.build/Dynamic\ Island.app.xcent --timestamp\=none --generate-entitlement-der /tmp/dynamic-island-ci-derived-data/Build/Products/Debug/Dynamic\ Island.app
+/tmp/dynamic-island-ci-derived-data/Build/Products/Debug/Dynamic Island.app: replacing existing signature
+
+Validate /tmp/dynamic-island-ci-derived-data/Build/Products/Debug/Dynamic\ Island.app (in target 'Dynamic Island' from project 'DynamicIsland')
+    cd /Users/rong5/Dynamiclsland
+    builtin-validationUtility /tmp/dynamic-island-ci-derived-data/Build/Products/Debug/Dynamic\ Island.app -no-validate-extension -infoplist-subpath Contents/Info.plist
+
+RegisterWithLaunchServices /tmp/dynamic-island-ci-derived-data/Build/Products/Debug/Dynamic\ Island.app (in target 'Dynamic Island' from project 'DynamicIsland')
+    cd /Users/rong5/Dynamiclsland
+    /System/Library/Frameworks/CoreServices.framework/Versions/Current/Frameworks/LaunchServices.framework/Versions/Current/Support/lsregister -f -R -trusted /tmp/dynamic-island-ci-derived-data/Build/Products/Debug/Dynamic\ Island.app
+
+note: Disabling hardened runtime with ad-hoc codesigning. (in target 'Dynamic Island' from project 'DynamicIsland')
+2026-10-20 23:59:06.471838+0800 Dynamic Island[32713:17210330] [Connection] Unable to get synchronousRemoteObjectProxy, error: Error Domain=NSCocoaErrorDomain Code=4097 "connection to service named com.apple.linkd.autoShortcut" UserInfo={NSDebugDescription=connection to service named com.apple.linkd.autoShortcut}
+2026-10-20 23:59:06.472024+0800 Dynamic Island[32713:17210330] [Application] Error registering app with intents framework: Error Domain=NSCocoaErrorDomain Code=4097 "connection to service named com.apple.linkd.autoShortcut" UserInfo={NSDebugDescription=connection to service named com.apple.linkd.autoShortcut}
+2026-10-20 23:59:06.473016+0800 Dynamic Island[32713:17210331] [Connection] Unable to get synchronousRemoteObjectProxy, error: Error Domain=NSCocoaErrorDomain Code=4097 "connection to service named com.apple.linkd.autoShortcut" UserInfo={NSDebugDescription=connection to service named com.apple.linkd.autoShortcut}
+2026-10-20 23:59:06.473030+0800 Dynamic Island[32713:17210331] [Connection] Unable to re-register with Process Instance Registry, error: Error Domain=NSCocoaErrorDomain Code=4097 "connection to service named com.apple.linkd.autoShortcut" UserInfo={NSDebugDescription=connection to service named com.apple.linkd.autoShortcut}
+2026-10-20 23:59:06.474115+0800 Dynamic Island[32713:17210329] [Connection] Unable to get synchronousRemoteObjectProxy, error: Error Domain=NSCocoaErrorDomain Code=4097 "connection to service named com.apple.linkd.autoShortcut" UserInfo={NSDebugDescription=connection to service named com.apple.linkd.autoShortcut}
+2026-10-20 23:59:06.474125+0800 Dynamic Island[32713:17210329] [Connection] Unable to re-register with Process Instance Registry, error: Error Domain=NSCocoaErrorDomain Code=4097 "connection to service named com.apple.linkd.autoShortcut" UserInfo={NSDebugDescription=connection to service named com.apple.linkd.autoShortcut}
+2026-10-20 23:59:06.475185+0800 Dynamic Island[32713:17210329] [Connection] Will NOT re-try to establish the connection
+2026-10-20 23:59:06.475203+0800 Dynamic Island[32713:17210330] [Connection] Unable to get synchronousRemoteObjectProxy, error: Error Domain=NSCocoaErrorDomain Code=4097 "connection to service named com.apple.linkd.autoShortcut" UserInfo={NSDebugDescription=connection to service named com.apple.linkd.autoShortcut}
+2026-10-20 23:59:06.475217+0800 Dynamic Island[32713:17210330] [Connection] Unable to re-register with Process Instance Registry, error: Error Domain=NSCocoaErrorDomain Code=4097 "connection to service named com.apple.linkd.autoShortcut" UserInfo={NSDebugDescription=connection to service named com.apple.linkd.autoShortcut}
+Test Suite 'Selected tests' started at 2026-10-20 23:59:06.519.
+Test Suite 'DynamicIslandTests.xctest' started at 2026-10-20 23:59:06.519.
+Test Suite 'PluginRegistryModelTests' started at 2026-10-20 23:59:06.520.
+Test Case '-[DynamicIslandTests.PluginRegistryModelTests testCallerCancellationCleansLateSuccessfulReview]' started.
+Test Case '-[DynamicIslandTests.PluginRegistryModelTests testCallerCancellationCleansLateSuccessfulReview]' passed (0.019 seconds).
+Test Case '-[DynamicIslandTests.PluginRegistryModelTests testCancelledLateReviewCleanupFailureBlocksNextImportUntilExplicitRetry]' started.
+Test Case '-[DynamicIslandTests.PluginRegistryModelTests testCancelledLateReviewCleanupFailureBlocksNextImportUntilExplicitRetry]' passed (0.028 seconds).
+Test Case '-[DynamicIslandTests.PluginRegistryModelTests testCancelRefreshDropsLateSuccessAndRejectsOverlappingRefresh]' started.
+Test Case '-[DynamicIslandTests.PluginRegistryModelTests testCancelRefreshDropsLateSuccessAndRejectsOverlappingRefresh]' passed (0.015 seconds).
+Test Case '-[DynamicIslandTests.PluginRegistryModelTests testDiscoveryStartsOfflineAndRefreshPublishesOnlyAValidCatalog]' started.
+Test Case '-[DynamicIslandTests.PluginRegistryModelTests testDiscoveryStartsOfflineAndRefreshPublishesOnlyAValidCatalog]' passed (0.002 seconds).
+Test Case '-[DynamicIslandTests.PluginRegistryModelTests testDownloadRequiresCurrentExactEntryAndCompatibleHost]' started.
+Test Case '-[DynamicIslandTests.PluginRegistryModelTests testDownloadRequiresCurrentExactEntryAndCompatibleHost]' passed (0.003 seconds).
+Test Case '-[DynamicIslandTests.PluginRegistryModelTests testLocalImportAndCoordinatorCannotReplaceDownloadingRegistryReview]' started.
+Test Case '-[DynamicIslandTests.PluginRegistryModelTests testLocalImportAndCoordinatorCannotReplaceDownloadingRegistryReview]' passed (0.028 seconds).
+Test Case '-[DynamicIslandTests.PluginRegistryModelTests testRefreshFailureClearsPreviousEntriesAndUsesFixedMessages]' started.
+Test Case '-[DynamicIslandTests.PluginRegistryModelTests testRefreshFailureClearsPreviousEntriesAndUsesFixedMessages]' passed (0.106 seconds).
+Test Case '-[DynamicIslandTests.PluginRegistryModelTests testRegistryFailuresAreFixedAndLeaveInstallerReusable]' started.
+Test Case '-[DynamicIslandTests.PluginRegistryModelTests testRegistryFailuresAreFixedAndLeaveInstallerReusable]' passed (0.022 seconds).
+Test Case '-[DynamicIslandTests.PluginRegistryModelTests testRegistryPreviewUsesExistingInstallConsentAndKeepsPermissionsRequested]' started.
+Test Case '-[DynamicIslandTests.PluginRegistryModelTests testRegistryPreviewUsesExistingInstallConsentAndKeepsPermissionsRequested]' passed (0.011 seconds).
+Test Case '-[DynamicIslandTests.PluginRegistryModelTests testShutdownCancelsRefreshAndExplicitlyResumesAfterAbandonedQuit]' started.
+Test Case '-[DynamicIslandTests.PluginRegistryModelTests testShutdownCancelsRefreshAndExplicitlyResumesAfterAbandonedQuit]' passed (0.130 seconds).
+Test Case '-[DynamicIslandTests.PluginRegistryModelTests testShutdownCleansLateReviewAndNeverPublishesInstallableSuccess]' started.
+Test Case '-[DynamicIslandTests.PluginRegistryModelTests testShutdownCleansLateReviewAndNeverPublishesInstallableSuccess]' passed (0.142 seconds).
+Test Suite 'PluginRegistryModelTests' passed at 2026-10-20 23:59:07.028.
+	 Executed 11 tests, with 0 failures (0 unexpected) in 0.505 (0.509) seconds
+Test Suite 'PluginRegistryTests' started at 2026-10-20 23:59:07.029.
+Test Case '-[DynamicIslandTests.PluginRegistryTests testArchiveTransferHasIndependentStreamingAndDeclaredBounds]' started.
+Test Case '-[DynamicIslandTests.PluginRegistryTests testArchiveTransferHasIndependentStreamingAndDeclaredBounds]' passed (0.102 seconds).
+Test Case '-[DynamicIslandTests.PluginRegistryTests testCancellationBeforeStartingMakesNoNetworkRequest]' started.
+Test Case '-[DynamicIslandTests.PluginRegistryTests testCancellationBeforeStartingMakesNoNetworkRequest]' passed (0.002 seconds).
+Test Case '-[DynamicIslandTests.PluginRegistryTests testCancelledDownloadReleasesClientAndNeverCreatesAReview]' started.
+Test Case '-[DynamicIslandTests.PluginRegistryTests testCancelledDownloadReleasesClientAndNeverCreatesAReview]' passed (0.009 seconds).
+Test Case '-[DynamicIslandTests.PluginRegistryTests testCatalogBoundsAndURLPoliciesRejectAlternativeDestinations]' started.
+Test Case '-[DynamicIslandTests.PluginRegistryTests testCatalogBoundsAndURLPoliciesRejectAlternativeDestinations]' passed (0.011 seconds).
+Test Case '-[DynamicIslandTests.PluginRegistryTests testCatalogMetadataCannotReplaceValidatedManifestOrLeaveStaging]' started.
+Test Case '-[DynamicIslandTests.PluginRegistryTests testCatalogMetadataCannotReplaceValidatedManifestOrLeaveStaging]' passed (0.007 seconds).
+Test Case '-[DynamicIslandTests.PluginRegistryTests testCatalogPreservesExactIdentityAndRejectsDuplicateIDs]' started.
+Test Case '-[DynamicIslandTests.PluginRegistryTests testCatalogPreservesExactIdentityAndRejectsDuplicateIDs]' passed (0.001 seconds).
+Test Case '-[DynamicIslandTests.PluginRegistryTests testCatalogRejectsMalformedClosedFieldsAndUnsafeNames]' started.
+Test Case '-[DynamicIslandTests.PluginRegistryTests testCatalogRejectsMalformedClosedFieldsAndUnsafeNames]' passed (0.002 seconds).
+Test Case '-[DynamicIslandTests.PluginRegistryTests testCatalogTransportIsEphemeralAndRejectsStatusAndSize]' started.
+Test Case '-[DynamicIslandTests.PluginRegistryTests testCatalogTransportIsEphemeralAndRejectsStatusAndSize]' passed (0.001 seconds).
+Test Case '-[DynamicIslandTests.PluginRegistryTests testDownloadedArchiveUsesSameBufferHashAndInstallsOnlyAfterReview]' started.
+Test Case '-[DynamicIslandTests.PluginRegistryTests testDownloadedArchiveUsesSameBufferHashAndInstallsOnlyAfterReview]' passed (0.006 seconds).
+Test Case '-[DynamicIslandTests.PluginRegistryTests testHashMismatchRejectsBeforeExtractionAndCanRetry]' started.
+Test Case '-[DynamicIslandTests.PluginRegistryTests testHashMismatchRejectsBeforeExtractionAndCanRetry]' passed (0.005 seconds).
+Test Case '-[DynamicIslandTests.PluginRegistryTests testMatchingHashDoesNotBypassZIPOrMinimumHostValidation]' started.
+Test Case '-[DynamicIslandTests.PluginRegistryTests testMatchingHashDoesNotBypassZIPOrMinimumHostValidation]' passed (0.003 seconds).
+Test Case '-[DynamicIslandTests.PluginRegistryTests testRedirectDelegateStripsHeadersBoundsHopsAndRefusesCatalogRedirects]' started.
+Test Case '-[DynamicIslandTests.PluginRegistryTests testRedirectDelegateStripsHeadersBoundsHopsAndRefusesCatalogRedirects]' passed (0.101 seconds).
+Test Case '-[DynamicIslandTests.PluginRegistryTests testRepositoryCatalogPinsPublishedOfficialPluginReleaseAssets]' started.
+Test Case '-[DynamicIslandTests.PluginRegistryTests testRepositoryCatalogPinsPublishedOfficialPluginReleaseAssets]' passed (0.001 seconds).
+Test Suite 'PluginRegistryTests' passed at 2026-10-20 23:59:07.282.
+	 Executed 13 tests, with 0 failures (0 unexpected) in 0.251 (0.253) seconds
+Test Suite 'PluginRegistryUITests' started at 2026-10-20 23:59:07.282.
+Test Case '-[DynamicIslandTests.PluginRegistryUITests testClosingDiscoveryCancelsRefreshAndDropsLateCatalog]' started.
+T40_SCREENSHOT=/Users/rong5/Library/Containers/com.rong5.dynamic-island-mac/Data/tmp/dynamic-island-t40-registry-loading.png
+Test Case '-[DynamicIslandTests.PluginRegistryUITests testClosingDiscoveryCancelsRefreshAndDropsLateCatalog]' passed (0.971 seconds).
+Test Case '-[DynamicIslandTests.PluginRegistryUITests testClosingInstallerCancelsActualPendingDownloadAndAllowsRetry]' started.
+T40_SCREENSHOT=/Users/rong5/Library/Containers/com.rong5.dynamic-island-mac/Data/tmp/dynamic-island-t40-registry-downloading.png
+Test Case '-[DynamicIslandTests.PluginRegistryUITests testClosingInstallerCancelsActualPendingDownloadAndAllowsRetry]' passed (0.624 seconds).
+Test Case '-[DynamicIslandTests.PluginRegistryUITests testDiscoveryToolbarFitsExistingMinimumManagementWindow]' started.
+T40_SCREENSHOT=/Users/rong5/Library/Containers/com.rong5.dynamic-island-mac/Data/tmp/dynamic-island-t40-registry-management-entry.png
+Test Case '-[DynamicIslandTests.PluginRegistryUITests testDiscoveryToolbarFitsExistingMinimumManagementWindow]' passed (0.624 seconds).
+Test Case '-[DynamicIslandTests.PluginRegistryUITests testMinimumWindowRendersInitialEmptyFailureAndCompatibilityStates]' started.
+T40_SCREENSHOT=/Users/rong5/Library/Containers/com.rong5.dynamic-island-mac/Data/tmp/dynamic-island-t40-registry-initial.png
+T40_SCREENSHOT=/Users/rong5/Library/Containers/com.rong5.dynamic-island-mac/Data/tmp/dynamic-island-t40-registry-empty.png
+T40_SCREENSHOT=/Users/rong5/Library/Containers/com.rong5.dynamic-island-mac/Data/tmp/dynamic-island-t40-registry-unavailable.png
+T40_SCREENSHOT=/Users/rong5/Library/Containers/com.rong5.dynamic-island-mac/Data/tmp/dynamic-island-t40-registry-entries.png
+Test Case '-[DynamicIslandTests.PluginRegistryUITests testMinimumWindowRendersInitialEmptyFailureAndCompatibilityStates]' passed (2.582 seconds).
+Test Case '-[DynamicIslandTests.PluginRegistryUITests testNativeRefreshDownloadAndInstallPreserveExplicitConsent]' started.
+/Users/rong5/Dynamiclsland/DynamicIslandTests/PluginRegistryUITests.swift:114: -[DynamicIslandTests.PluginRegistryUITests testNativeRefreshDownloadAndInstallPreserveExplicitConsent] : Test skipped - Real AppKit mouse input requires an unlocked macOS session.
+Test Case '-[DynamicIslandTests.PluginRegistryUITests testNativeRefreshDownloadAndInstallPreserveExplicitConsent]' skipped (0.002 seconds).
+Test Suite 'PluginRegistryUITests' passed at 2026-10-20 23:59:12.086.
+	 Executed 5 tests, with 1 test skipped and 0 failures (0 unexpected) in 4.803 (4.804) seconds
+Test Suite 'DynamicIslandTests.xctest' passed at 2026-10-20 23:59:12.086.
+	 Executed 29 tests, with 1 test skipped and 0 failures (0 unexpected) in 5.558 (5.567) seconds
+Test Suite 'Selected tests' passed at 2026-10-20 23:59:12.086.
+	 Executed 29 tests, with 1 test skipped and 0 failures (0 unexpected) in 5.558 (5.567) seconds
+2026-10-20 23:59:12.382 xcodebuild[32692:17210016] [MT] IDETestOperationsObserverDebug: 6.628 elapsed -- Testing started completed.
+2026-10-20 23:59:12.382 xcodebuild[32692:17210016] [MT] IDETestOperationsObserverDebug: 0.000 sec, +0.000 sec -- start
+2026-10-20 23:59:12.382 xcodebuild[32692:17210016] [MT] IDETestOperationsObserverDebug: 6.628 sec, +6.628 sec -- end
+
+Test session results, code coverage, and logs:
+	/tmp/dynamic-island-t40-publish-20261020/registry-regression.xcresult
+
+** TEST SUCCEEDED **
+
+Testing started

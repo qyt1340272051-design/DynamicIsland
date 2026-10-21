@@ -1,0 +1,3115 @@
+{
+  "startedEpochMs": 1792483303721,
+  "endedEpochMs": 1792483325756,
+  "observations": [
+    {
+      "startedEpochMs": 1792483303721,
+      "observedEpochMs": 1792483303830,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483303880,
+      "observedEpochMs": 1792483303923,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483303923,
+      "observedEpochMs": 1792483303973,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483303973,
+      "observedEpochMs": 1792483304030,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483304030,
+      "observedEpochMs": 1792483304072,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483304072,
+      "observedEpochMs": 1792483304123,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483304123,
+      "observedEpochMs": 1792483304172,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483304172,
+      "observedEpochMs": 1792483304229,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483304229,
+      "observedEpochMs": 1792483304273,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483304273,
+      "observedEpochMs": 1792483304324,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483304324,
+      "observedEpochMs": 1792483304374,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483304374,
+      "observedEpochMs": 1792483304424,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483304424,
+      "observedEpochMs": 1792483304473,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483304473,
+      "observedEpochMs": 1792483304524,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483304524,
+      "observedEpochMs": 1792483304574,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483304574,
+      "observedEpochMs": 1792483304624,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483304624,
+      "observedEpochMs": 1792483304680,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483304680,
+      "observedEpochMs": 1792483304722,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483304722,
+      "observedEpochMs": 1792483304774,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483304774,
+      "observedEpochMs": 1792483304823,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483304823,
+      "observedEpochMs": 1792483304873,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483304873,
+      "observedEpochMs": 1792483304924,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483304924,
+      "observedEpochMs": 1792483304973,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483304973,
+      "observedEpochMs": 1792483305024,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483305024,
+      "observedEpochMs": 1792483305072,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483305072,
+      "observedEpochMs": 1792483305123,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483305123,
+      "observedEpochMs": 1792483305174,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483305174,
+      "observedEpochMs": 1792483305223,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483305223,
+      "observedEpochMs": 1792483305273,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483305273,
+      "observedEpochMs": 1792483305322,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483305322,
+      "observedEpochMs": 1792483305373,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483305373,
+      "observedEpochMs": 1792483305424,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483305424,
+      "observedEpochMs": 1792483305474,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483305474,
+      "observedEpochMs": 1792483305531,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483305531,
+      "observedEpochMs": 1792483305579,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483305579,
+      "observedEpochMs": 1792483305624,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483305624,
+      "observedEpochMs": 1792483305674,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483305674,
+      "observedEpochMs": 1792483305730,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483305730,
+      "observedEpochMs": 1792483305774,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483305774,
+      "observedEpochMs": 1792483305814,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483305814,
+      "observedEpochMs": 1792483305863,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483305863,
+      "observedEpochMs": 1792483305908,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483305908,
+      "observedEpochMs": 1792483305967,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483305967,
+      "observedEpochMs": 1792483306015,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483306015,
+      "observedEpochMs": 1792483306064,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483306064,
+      "observedEpochMs": 1792483306115,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483306115,
+      "observedEpochMs": 1792483306164,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483306164,
+      "observedEpochMs": 1792483306217,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483306217,
+      "observedEpochMs": 1792483306282,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483306282,
+      "observedEpochMs": 1792483306331,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483306331,
+      "observedEpochMs": 1792483306383,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483306383,
+      "observedEpochMs": 1792483306433,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483306433,
+      "observedEpochMs": 1792483306482,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483306482,
+      "observedEpochMs": 1792483306533,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483306533,
+      "observedEpochMs": 1792483306581,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483306581,
+      "observedEpochMs": 1792483306631,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483306631,
+      "observedEpochMs": 1792483306681,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483306681,
+      "observedEpochMs": 1792483306724,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483306724,
+      "observedEpochMs": 1792483306774,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483306774,
+      "observedEpochMs": 1792483306831,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483306831,
+      "observedEpochMs": 1792483306882,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483306882,
+      "observedEpochMs": 1792483306929,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483306929,
+      "observedEpochMs": 1792483306973,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483306973,
+      "observedEpochMs": 1792483307023,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483307023,
+      "observedEpochMs": 1792483307074,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483307074,
+      "observedEpochMs": 1792483307123,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483307123,
+      "observedEpochMs": 1792483307172,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483307172,
+      "observedEpochMs": 1792483307223,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483307223,
+      "observedEpochMs": 1792483307272,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483307272,
+      "observedEpochMs": 1792483307322,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483307322,
+      "observedEpochMs": 1792483307372,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483307372,
+      "observedEpochMs": 1792483307423,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483307423,
+      "observedEpochMs": 1792483307472,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483307472,
+      "observedEpochMs": 1792483307522,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483307522,
+      "observedEpochMs": 1792483307573,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483307573,
+      "observedEpochMs": 1792483307623,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483307623,
+      "observedEpochMs": 1792483307672,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483307672,
+      "observedEpochMs": 1792483307723,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483307723,
+      "observedEpochMs": 1792483307772,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483307772,
+      "observedEpochMs": 1792483307822,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483307822,
+      "observedEpochMs": 1792483307873,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483307873,
+      "observedEpochMs": 1792483307923,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483307923,
+      "observedEpochMs": 1792483307972,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483307972,
+      "observedEpochMs": 1792483308022,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483308022,
+      "observedEpochMs": 1792483308073,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483308073,
+      "observedEpochMs": 1792483308123,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483308123,
+      "observedEpochMs": 1792483308173,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483308173,
+      "observedEpochMs": 1792483308222,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483308222,
+      "observedEpochMs": 1792483308273,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483308273,
+      "observedEpochMs": 1792483308323,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483308323,
+      "observedEpochMs": 1792483308373,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483308373,
+      "observedEpochMs": 1792483308422,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483308422,
+      "observedEpochMs": 1792483308474,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483308474,
+      "observedEpochMs": 1792483308523,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483308523,
+      "observedEpochMs": 1792483308581,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483308581,
+      "observedEpochMs": 1792483308631,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483308631,
+      "observedEpochMs": 1792483308686,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483308686,
+      "observedEpochMs": 1792483308731,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483308731,
+      "observedEpochMs": 1792483308779,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483308779,
+      "observedEpochMs": 1792483308824,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483308824,
+      "observedEpochMs": 1792483308881,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483308931,
+      "observedEpochMs": 1792483308972,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483308972,
+      "observedEpochMs": 1792483309028,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483309028,
+      "observedEpochMs": 1792483309072,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483309072,
+      "observedEpochMs": 1792483309122,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483309122,
+      "observedEpochMs": 1792483309173,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483309173,
+      "observedEpochMs": 1792483309216,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483309216,
+      "observedEpochMs": 1792483309255,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483309255,
+      "observedEpochMs": 1792483309306,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483309306,
+      "observedEpochMs": 1792483309356,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483309356,
+      "observedEpochMs": 1792483309406,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483309406,
+      "observedEpochMs": 1792483309456,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483309456,
+      "observedEpochMs": 1792483309506,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483309506,
+      "observedEpochMs": 1792483309556,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483309556,
+      "observedEpochMs": 1792483309597,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483309597,
+      "observedEpochMs": 1792483309639,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483309639,
+      "observedEpochMs": 1792483309690,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483309690,
+      "observedEpochMs": 1792483309747,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483309747,
+      "observedEpochMs": 1792483309805,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483309805,
+      "observedEpochMs": 1792483309854,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483309854,
+      "observedEpochMs": 1792483309898,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483309898,
+      "observedEpochMs": 1792483309939,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483309939,
+      "observedEpochMs": 1792483309990,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483309990,
+      "observedEpochMs": 1792483310039,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483310039,
+      "observedEpochMs": 1792483310089,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483310089,
+      "observedEpochMs": 1792483310141,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483310141,
+      "observedEpochMs": 1792483310190,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483310190,
+      "observedEpochMs": 1792483310242,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483310242,
+      "observedEpochMs": 1792483310291,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483310291,
+      "observedEpochMs": 1792483310340,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483310340,
+      "observedEpochMs": 1792483310396,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483310396,
+      "observedEpochMs": 1792483310441,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483310441,
+      "observedEpochMs": 1792483310489,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483310489,
+      "observedEpochMs": 1792483310540,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483310540,
+      "observedEpochMs": 1792483310589,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483310589,
+      "observedEpochMs": 1792483310642,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483310642,
+      "observedEpochMs": 1792483310696,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483310696,
+      "observedEpochMs": 1792483310739,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483310739,
+      "observedEpochMs": 1792483310790,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483310790,
+      "observedEpochMs": 1792483310839,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483310839,
+      "observedEpochMs": 1792483310891,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483310891,
+      "observedEpochMs": 1792483310947,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483310947,
+      "observedEpochMs": 1792483310989,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483310989,
+      "observedEpochMs": 1792483311041,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483311041,
+      "observedEpochMs": 1792483311091,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483311091,
+      "observedEpochMs": 1792483311147,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483311147,
+      "observedEpochMs": 1792483311195,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483311195,
+      "observedEpochMs": 1792483311240,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483311240,
+      "observedEpochMs": 1792483311290,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483311290,
+      "observedEpochMs": 1792483311339,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483311339,
+      "observedEpochMs": 1792483311389,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483311389,
+      "observedEpochMs": 1792483311439,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483311439,
+      "observedEpochMs": 1792483311490,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483311490,
+      "observedEpochMs": 1792483311541,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483311541,
+      "observedEpochMs": 1792483311589,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483311589,
+      "observedEpochMs": 1792483311640,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483311640,
+      "observedEpochMs": 1792483311690,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483311690,
+      "observedEpochMs": 1792483311739,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483311739,
+      "observedEpochMs": 1792483311789,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483311789,
+      "observedEpochMs": 1792483311840,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483311840,
+      "observedEpochMs": 1792483311890,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483311890,
+      "observedEpochMs": 1792483311940,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483311940,
+      "observedEpochMs": 1792483311990,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483311990,
+      "observedEpochMs": 1792483312039,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483312039,
+      "observedEpochMs": 1792483312089,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483312089,
+      "observedEpochMs": 1792483312140,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483312140,
+      "observedEpochMs": 1792483312188,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483312188,
+      "observedEpochMs": 1792483312239,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483312239,
+      "observedEpochMs": 1792483312280,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483312280,
+      "observedEpochMs": 1792483312324,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483312324,
+      "observedEpochMs": 1792483312373,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483312373,
+      "observedEpochMs": 1792483312423,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483312423,
+      "observedEpochMs": 1792483312472,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483312472,
+      "observedEpochMs": 1792483312522,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483312522,
+      "observedEpochMs": 1792483312572,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483312572,
+      "observedEpochMs": 1792483312623,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483312623,
+      "observedEpochMs": 1792483312663,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483312663,
+      "observedEpochMs": 1792483312705,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483312705,
+      "observedEpochMs": 1792483312756,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483312756,
+      "observedEpochMs": 1792483312806,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483312806,
+      "observedEpochMs": 1792483312856,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483312856,
+      "observedEpochMs": 1792483312906,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483312906,
+      "observedEpochMs": 1792483312956,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483312956,
+      "observedEpochMs": 1792483313006,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483313006,
+      "observedEpochMs": 1792483313056,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483313056,
+      "observedEpochMs": 1792483313106,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483313106,
+      "observedEpochMs": 1792483313155,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483313155,
+      "observedEpochMs": 1792483313206,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483313206,
+      "observedEpochMs": 1792483313255,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483313255,
+      "observedEpochMs": 1792483313306,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483313306,
+      "observedEpochMs": 1792483313356,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483313356,
+      "observedEpochMs": 1792483313405,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483313405,
+      "observedEpochMs": 1792483313455,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483313455,
+      "observedEpochMs": 1792483313506,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483313506,
+      "observedEpochMs": 1792483313556,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483313556,
+      "observedEpochMs": 1792483313605,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483313605,
+      "observedEpochMs": 1792483313655,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483313655,
+      "observedEpochMs": 1792483313707,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483313707,
+      "observedEpochMs": 1792483313755,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483313755,
+      "observedEpochMs": 1792483313806,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483313806,
+      "observedEpochMs": 1792483313858,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483313858,
+      "observedEpochMs": 1792483313905,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483313962,
+      "observedEpochMs": 1792483314006,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483314006,
+      "observedEpochMs": 1792483314057,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483314057,
+      "observedEpochMs": 1792483314105,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483314105,
+      "observedEpochMs": 1792483314156,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483314156,
+      "observedEpochMs": 1792483314206,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483314206,
+      "observedEpochMs": 1792483314256,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483314256,
+      "observedEpochMs": 1792483314306,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483314306,
+      "observedEpochMs": 1792483314357,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483314357,
+      "observedEpochMs": 1792483314405,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483314405,
+      "observedEpochMs": 1792483314456,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483314456,
+      "observedEpochMs": 1792483314506,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483314506,
+      "observedEpochMs": 1792483314556,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483314556,
+      "observedEpochMs": 1792483314605,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483314606,
+      "observedEpochMs": 1792483314655,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483314655,
+      "observedEpochMs": 1792483314706,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483314706,
+      "observedEpochMs": 1792483314756,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483314756,
+      "observedEpochMs": 1792483314806,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483314806,
+      "observedEpochMs": 1792483314856,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483314856,
+      "observedEpochMs": 1792483314905,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483314905,
+      "observedEpochMs": 1792483314956,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483314956,
+      "observedEpochMs": 1792483315006,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483315006,
+      "observedEpochMs": 1792483315072,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483315072,
+      "observedEpochMs": 1792483315114,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483315114,
+      "observedEpochMs": 1792483315163,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483315163,
+      "observedEpochMs": 1792483315212,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483315212,
+      "observedEpochMs": 1792483315256,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483315256,
+      "observedEpochMs": 1792483315307,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483315307,
+      "observedEpochMs": 1792483315355,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483315355,
+      "observedEpochMs": 1792483315406,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483315406,
+      "observedEpochMs": 1792483315457,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483315457,
+      "observedEpochMs": 1792483315506,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483315506,
+      "observedEpochMs": 1792483315556,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483315556,
+      "observedEpochMs": 1792483315606,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483315606,
+      "observedEpochMs": 1792483315657,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483315657,
+      "observedEpochMs": 1792483315706,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483315706,
+      "observedEpochMs": 1792483315756,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483315756,
+      "observedEpochMs": 1792483315807,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483315807,
+      "observedEpochMs": 1792483315856,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483315856,
+      "observedEpochMs": 1792483315906,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483315906,
+      "observedEpochMs": 1792483315957,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483315957,
+      "observedEpochMs": 1792483316008,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483316008,
+      "observedEpochMs": 1792483316065,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483316065,
+      "observedEpochMs": 1792483316113,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483316113,
+      "observedEpochMs": 1792483316156,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483316156,
+      "observedEpochMs": 1792483316206,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483316206,
+      "observedEpochMs": 1792483316257,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483316257,
+      "observedEpochMs": 1792483316313,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483316313,
+      "observedEpochMs": 1792483316358,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483316358,
+      "observedEpochMs": 1792483316400,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483316400,
+      "observedEpochMs": 1792483316446,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483316446,
+      "observedEpochMs": 1792483316491,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483316491,
+      "observedEpochMs": 1792483316539,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483316539,
+      "observedEpochMs": 1792483316590,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483316590,
+      "observedEpochMs": 1792483316647,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483316647,
+      "observedEpochMs": 1792483316691,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483316691,
+      "observedEpochMs": 1792483316740,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483316740,
+      "observedEpochMs": 1792483316798,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483316798,
+      "observedEpochMs": 1792483316839,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483316839,
+      "observedEpochMs": 1792483316896,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483316896,
+      "observedEpochMs": 1792483316941,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483316941,
+      "observedEpochMs": 1792483316989,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483316989,
+      "observedEpochMs": 1792483317039,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483317039,
+      "observedEpochMs": 1792483317088,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483317088,
+      "observedEpochMs": 1792483317139,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483317139,
+      "observedEpochMs": 1792483317189,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483317189,
+      "observedEpochMs": 1792483317239,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483317239,
+      "observedEpochMs": 1792483317289,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483317289,
+      "observedEpochMs": 1792483317340,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483317340,
+      "observedEpochMs": 1792483317391,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483317391,
+      "observedEpochMs": 1792483317439,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483317439,
+      "observedEpochMs": 1792483317489,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483317489,
+      "observedEpochMs": 1792483317531,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483317531,
+      "observedEpochMs": 1792483317572,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483317572,
+      "observedEpochMs": 1792483317623,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483317623,
+      "observedEpochMs": 1792483317674,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483317674,
+      "observedEpochMs": 1792483317723,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483317723,
+      "observedEpochMs": 1792483317772,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483317772,
+      "observedEpochMs": 1792483317822,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483317822,
+      "observedEpochMs": 1792483317873,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483317873,
+      "observedEpochMs": 1792483317922,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483317922,
+      "observedEpochMs": 1792483317972,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483317972,
+      "observedEpochMs": 1792483318023,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483318023,
+      "observedEpochMs": 1792483318072,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483318072,
+      "observedEpochMs": 1792483318122,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483318122,
+      "observedEpochMs": 1792483318172,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483318172,
+      "observedEpochMs": 1792483318222,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483318222,
+      "observedEpochMs": 1792483318272,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483318272,
+      "observedEpochMs": 1792483318323,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483318323,
+      "observedEpochMs": 1792483318373,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483318373,
+      "observedEpochMs": 1792483318422,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483318422,
+      "observedEpochMs": 1792483318473,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483318473,
+      "observedEpochMs": 1792483318522,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483318522,
+      "observedEpochMs": 1792483318572,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483318572,
+      "observedEpochMs": 1792483318623,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483318623,
+      "observedEpochMs": 1792483318673,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483318673,
+      "observedEpochMs": 1792483318724,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483318724,
+      "observedEpochMs": 1792483318779,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483318779,
+      "observedEpochMs": 1792483318829,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483318829,
+      "observedEpochMs": 1792483318872,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483318872,
+      "observedEpochMs": 1792483318923,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483318973,
+      "observedEpochMs": 1792483319032,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483319032,
+      "observedEpochMs": 1792483319080,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483319080,
+      "observedEpochMs": 1792483319123,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483319123,
+      "observedEpochMs": 1792483319172,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483319172,
+      "observedEpochMs": 1792483319224,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483319224,
+      "observedEpochMs": 1792483319273,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483319273,
+      "observedEpochMs": 1792483319323,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483319323,
+      "observedEpochMs": 1792483319373,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483319373,
+      "observedEpochMs": 1792483319423,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483319423,
+      "observedEpochMs": 1792483319473,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483319473,
+      "observedEpochMs": 1792483319524,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483319524,
+      "observedEpochMs": 1792483319572,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483319572,
+      "observedEpochMs": 1792483319623,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483319623,
+      "observedEpochMs": 1792483319672,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483319672,
+      "observedEpochMs": 1792483319723,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483319723,
+      "observedEpochMs": 1792483319773,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483319773,
+      "observedEpochMs": 1792483319822,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483319822,
+      "observedEpochMs": 1792483319874,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483319874,
+      "observedEpochMs": 1792483319924,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483319924,
+      "observedEpochMs": 1792483319972,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483319972,
+      "observedEpochMs": 1792483320023,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483320023,
+      "observedEpochMs": 1792483320072,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483320072,
+      "observedEpochMs": 1792483320122,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483320122,
+      "observedEpochMs": 1792483320180,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483320180,
+      "observedEpochMs": 1792483320233,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483320233,
+      "observedEpochMs": 1792483320291,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483320291,
+      "observedEpochMs": 1792483320347,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483320347,
+      "observedEpochMs": 1792483320396,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483320396,
+      "observedEpochMs": 1792483320441,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483320441,
+      "observedEpochMs": 1792483320491,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483320491,
+      "observedEpochMs": 1792483320546,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483320546,
+      "observedEpochMs": 1792483320591,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483320591,
+      "observedEpochMs": 1792483320647,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483320647,
+      "observedEpochMs": 1792483320696,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483320696,
+      "observedEpochMs": 1792483320746,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483320746,
+      "observedEpochMs": 1792483320791,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483320791,
+      "observedEpochMs": 1792483320846,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483320846,
+      "observedEpochMs": 1792483320891,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483320891,
+      "observedEpochMs": 1792483320932,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483320932,
+      "observedEpochMs": 1792483320974,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483320974,
+      "observedEpochMs": 1792483321030,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483321030,
+      "observedEpochMs": 1792483321080,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483321080,
+      "observedEpochMs": 1792483321132,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483321132,
+      "observedEpochMs": 1792483321180,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483321180,
+      "observedEpochMs": 1792483321224,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483321224,
+      "observedEpochMs": 1792483321273,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483321273,
+      "observedEpochMs": 1792483321323,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483321323,
+      "observedEpochMs": 1792483321374,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483321374,
+      "observedEpochMs": 1792483321423,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483321423,
+      "observedEpochMs": 1792483321473,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483321473,
+      "observedEpochMs": 1792483321523,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483321523,
+      "observedEpochMs": 1792483321573,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483321573,
+      "observedEpochMs": 1792483321622,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483321622,
+      "observedEpochMs": 1792483321673,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483321673,
+      "observedEpochMs": 1792483321723,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483321723,
+      "observedEpochMs": 1792483321773,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483321773,
+      "observedEpochMs": 1792483321823,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483321823,
+      "observedEpochMs": 1792483321872,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483321872,
+      "observedEpochMs": 1792483321923,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483321923,
+      "observedEpochMs": 1792483321973,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483321973,
+      "observedEpochMs": 1792483322024,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483322024,
+      "observedEpochMs": 1792483322073,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483322073,
+      "observedEpochMs": 1792483322123,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483322123,
+      "observedEpochMs": 1792483322173,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483322173,
+      "observedEpochMs": 1792483322222,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483322222,
+      "observedEpochMs": 1792483322272,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483322272,
+      "observedEpochMs": 1792483322324,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483322324,
+      "observedEpochMs": 1792483322372,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483322372,
+      "observedEpochMs": 1792483322422,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483322422,
+      "observedEpochMs": 1792483322472,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483322472,
+      "observedEpochMs": 1792483322529,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483322529,
+      "observedEpochMs": 1792483322571,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483322571,
+      "observedEpochMs": 1792483322613,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483322613,
+      "observedEpochMs": 1792483322656,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483322656,
+      "observedEpochMs": 1792483322705,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483322705,
+      "observedEpochMs": 1792483322757,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483322757,
+      "observedEpochMs": 1792483322805,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483322805,
+      "observedEpochMs": 1792483322856,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483322856,
+      "observedEpochMs": 1792483322905,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483322905,
+      "observedEpochMs": 1792483322956,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483322956,
+      "observedEpochMs": 1792483323006,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483323006,
+      "observedEpochMs": 1792483323056,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483323056,
+      "observedEpochMs": 1792483323107,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483323107,
+      "observedEpochMs": 1792483323156,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483323156,
+      "observedEpochMs": 1792483323205,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483323205,
+      "observedEpochMs": 1792483323255,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483323255,
+      "observedEpochMs": 1792483323307,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483323307,
+      "observedEpochMs": 1792483323355,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483323355,
+      "observedEpochMs": 1792483323405,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483323405,
+      "observedEpochMs": 1792483323457,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483323457,
+      "observedEpochMs": 1792483323507,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483323507,
+      "observedEpochMs": 1792483323556,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483323556,
+      "observedEpochMs": 1792483323606,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483323606,
+      "observedEpochMs": 1792483323656,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483323656,
+      "observedEpochMs": 1792483323705,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483323705,
+      "observedEpochMs": 1792483323756,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483323756,
+      "observedEpochMs": 1792483323805,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483323805,
+      "observedEpochMs": 1792483323857,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483323857,
+      "observedEpochMs": 1792483323899,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483323899,
+      "observedEpochMs": 1792483323939,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483323990,
+      "observedEpochMs": 1792483324040,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483324040,
+      "observedEpochMs": 1792483324090,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483324090,
+      "observedEpochMs": 1792483324132,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483324132,
+      "observedEpochMs": 1792483324172,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483324172,
+      "observedEpochMs": 1792483324222,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483324222,
+      "observedEpochMs": 1792483324273,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483324273,
+      "observedEpochMs": 1792483324322,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483324322,
+      "observedEpochMs": 1792483324372,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483324372,
+      "observedEpochMs": 1792483324424,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483324424,
+      "observedEpochMs": 1792483324472,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483324472,
+      "observedEpochMs": 1792483324516,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483324516,
+      "observedEpochMs": 1792483324555,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483324555,
+      "observedEpochMs": 1792483324606,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483324606,
+      "observedEpochMs": 1792483324657,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483324657,
+      "observedEpochMs": 1792483324706,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483324706,
+      "observedEpochMs": 1792483324755,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483324755,
+      "observedEpochMs": 1792483324806,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483324806,
+      "observedEpochMs": 1792483324857,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483324857,
+      "observedEpochMs": 1792483324906,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483324906,
+      "observedEpochMs": 1792483324955,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483324955,
+      "observedEpochMs": 1792483325007,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483325007,
+      "observedEpochMs": 1792483325056,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483325056,
+      "observedEpochMs": 1792483325106,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483325106,
+      "observedEpochMs": 1792483325156,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483325156,
+      "observedEpochMs": 1792483325209,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483325209,
+      "observedEpochMs": 1792483325256,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483325256,
+      "observedEpochMs": 1792483325307,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483325307,
+      "observedEpochMs": 1792483325357,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483325357,
+      "observedEpochMs": 1792483325406,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483325406,
+      "observedEpochMs": 1792483325457,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483325457,
+      "observedEpochMs": 1792483325513,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483325513,
+      "observedEpochMs": 1792483325557,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483325557,
+      "observedEpochMs": 1792483325607,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483325607,
+      "observedEpochMs": 1792483325656,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483325656,
+      "observedEpochMs": 1792483325705,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    },
+    {
+      "startedEpochMs": 1792483325705,
+      "observedEpochMs": 1792483325756,
+      "expanded": true,
+      "menuVisible": true,
+      "focusVisible": true
+    }
+  ],
+  "frames": [
+    {
+      "label": "pointer-watch-0",
+      "axObservedEpochMs": 1792483303830,
+      "imageObservedEpochMs": 1792483303880,
+      "axFile": "pointer-watch-0.txt",
+      "imageFile": "pointer-watch-0.jpg",
+      "imageSHA256": "a1a4475b8fb8ce297c7db4daf115eab8bf12b18c302aeffe880d70c55f1e7575"
+    },
+    {
+      "label": "pointer-watch-1",
+      "axObservedEpochMs": 1792483308881,
+      "imageObservedEpochMs": 1792483308931,
+      "axFile": "pointer-watch-1.txt",
+      "imageFile": "pointer-watch-1.jpg",
+      "imageSHA256": "087181e4c288acfb0b7860ee426148806f65a60c9517fa895dc1c383f60cc6ea"
+    },
+    {
+      "label": "pointer-watch-2",
+      "axObservedEpochMs": 1792483313905,
+      "imageObservedEpochMs": 1792483313962,
+      "axFile": "pointer-watch-2.txt",
+      "imageFile": "pointer-watch-2.jpg",
+      "imageSHA256": "6a5c3e17cb8e38d1afa9adc57c5ec23c83ba63e945fe77a63e6c2a8a87078dbf"
+    },
+    {
+      "label": "pointer-watch-3",
+      "axObservedEpochMs": 1792483318923,
+      "imageObservedEpochMs": 1792483318973,
+      "axFile": "pointer-watch-3.txt",
+      "imageFile": "pointer-watch-3.jpg",
+      "imageSHA256": "a1214ee28fa55bafe7ea8cb972829a7582d13a170df244d35c2c8574b2c8163d"
+    },
+    {
+      "label": "pointer-watch-4",
+      "axObservedEpochMs": 1792483323939,
+      "imageObservedEpochMs": 1792483323990,
+      "axFile": "pointer-watch-4.txt",
+      "imageFile": "pointer-watch-4.jpg",
+      "imageSHA256": "ce5dc01c61a4c7c9a9553008ab93c73d25f1d8674e76a5587628743a063ad991"
+    }
+  ],
+  "scope": "Read-only AX observations and selected raw screenshots; no physical pointer coordinates were read."
+}

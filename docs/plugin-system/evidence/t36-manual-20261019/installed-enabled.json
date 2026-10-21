@@ -1,0 +1,47 @@
+{
+  "observedUTC": "2026-10-19T01:18:46.778596+00:00",
+  "pid": 82621,
+  "pluginSHA256": {
+    "index.js": "931812cfd596ee612e7ea5f1573d81b71597ec2499326aa25c4257b55b38c971",
+    "README.md": "f2b03f50150e539347a8c20624edd906c8bab166361b60823b93cf859e9ee391",
+    "manifest.json": "bfb1c8d9b1f6efdafc896ce5964cd8acb5576b8ff52f3f389d95f5a842a644ed"
+  },
+  "manager": {
+    "plugins": {
+      "com.dynamicisland.github": {
+        "isEnabled": true,
+        "version": "0.1.0"
+      }
+    },
+    "schemaVersion": 1
+  },
+  "permissions": {
+    "records": {
+      "com.dynamicisland.github": {
+        "fingerprint": "338ca295ebc242c2232b6a51ab5bc1e18aee46e3d8f4736b059402468e6cf075",
+        "pluginID": "com.dynamicisland.github",
+        "states": {
+          "links.open": "granted",
+          "network": "granted",
+          "storage.local": "granted"
+        }
+      }
+    },
+    "schemaVersion": 1
+  },
+  "storage": {
+    "pluginID": "com.dynamicisland.github",
+    "schemaVersion": 1,
+    "values": {
+      "settings": {
+        "notifiedResults": [
+          "39115930522.1",
+          "39184461294.1"
+        ],
+        "repository": "cli/cli",
+        "schemaVersion": 1
+      }
+    }
+  },
+  "stagingEntries": []
+}

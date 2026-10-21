@@ -1,0 +1,24 @@
+{
+  "date": "2026-10-19",
+  "status": "Local release materials only; no public release",
+  "deterministicRepeatBytesMatched": true,
+  "assets": {
+    "SHA256SUMS": "ebe1dfdfc31d70618cf96daf5c18ccd3eade956490bbfdfac250e0c9b430f392",
+    "github-0.1.0.dip": "277c8eda20d2a34648e5255ccf39504c54d0f88b3173c8b361725e74531281a6",
+    "pomodoro-0.2.1.dip": "7b33c55615d2043d432eaef2cca84b856f0eaa6817c5fef086c1cc9bcc4b7ef3",
+    "registry.candidate.json": "cb980a02d07129c13669323c4c21186e8e67691578eb0fa6009b828501f0d0b9",
+    "release-manifest.json": "f36fb58ca9e6227a4b60553d0e10fdfc8a25dde12833bcf6f0e56f73eccf8c04"
+  },
+  "archiveCount": 2,
+  "sourceMembersPerArchive": 4,
+  "licenseAddedToBothPackages": true,
+  "sourceFilesMatchedCurrentWorkspace": true,
+  "formalRegistryEmpty": true,
+  "publicReleaseCreated": false,
+  "tagCreated": false,
+  "remotePush": false,
+  "publicNetworkInstallationVerified": false,
+  "packageIdentityChangedByLicenseAddition": true,
+  "permissionRule": "Review the new package identity. Installation remains disabled. Enabling grants no permissions.",
+  "preparerSHA256": "bcde5f22df406c4bd32e2e247f631fdecbaebf1f23f94fa7562b7ee403ccefa0"
+}

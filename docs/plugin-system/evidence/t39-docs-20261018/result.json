@@ -1,0 +1,72 @@
+{
+  "date": "2026-10-18",
+  "task": "T39",
+  "status": "automatic implementation complete; first-author acceptance pending",
+  "baselineCommit": "12cf042",
+  "productionSwiftChanged": false,
+  "documentation": {
+    "topics": 13,
+    "pages": 15,
+    "sourceBoundExamples": 8,
+    "localLinks": 33
+  },
+  "python": {
+    "passed": 37,
+    "skipped": 0,
+    "failed": 0
+  },
+  "typecheck": {
+    "passed": true,
+    "expectedErrors": 47,
+    "newJavaScriptSnippets": 4
+  },
+  "hostTests": {
+    "passed": 7,
+    "skipped": 0,
+    "failed": 0,
+    "resultBundle": "/tmp/dynamic-island-t39-20261018/DocumentationTests.xcresult"
+  },
+  "externalEffects": {
+    "liveNetwork": false,
+    "systemLinkOpener": false,
+    "acceptanceAppsStarted": false,
+    "stableSDKPublished": false
+  },
+  "pending": [
+    "T38 dependencies",
+    "First author installs and uses Hello from documentation only",
+    "Ten-minute target measurement",
+    "Existing T35/T36 manual acceptance"
+  ],
+  "sourceSHA256": {
+    "DynamicIslandTests/PluginDocumentationTests.swift": "04d63d6de33810e220630e892fc2487b8881dff1390a3d40f0bb29f87f0bd332",
+    "SDK/docs/README.md": "180a6e97f9a0b95b83e42f1936e3af8a7e75ec013ba38c3b8e232365f0ba7d6c",
+    "SDK/docs/actions.md": "01ba73e1543f4bb58102da196e4e8c27f84b3d57f5cbdc89b39782c18f218f58",
+    "SDK/docs/activity.md": "647f985ad2bb79aba2fe0d3db69c4cfb0d59dac26ce45075405951f4c91173ed",
+    "SDK/docs/debugging.md": "93c462329e5a3267b94bdbef8f4d953d24727f97e1c1507dbd858b97a8133267",
+    "SDK/docs/lifecycle.md": "0eff722e2e3f69f8956cd4bacf1d78492102c1adb8be829889885d3290806e28",
+    "SDK/docs/manifest.md": "9278fe80a1c95a3bf1ccaa501933b62d6e0119d59f472d14d2f9eedbd4900ab6",
+    "SDK/docs/network.md": "14e0c1c614c58547ce7829767c4468d56e2b752f088a3ccaa5c1c0158e4590e6",
+    "SDK/docs/packaging.md": "c88a6950c73eb2091382218349bbeff8ce20dd7fd8579a7b6a38f4044c3ea4d9",
+    "SDK/docs/permissions.md": "f65e1df30c8d7e8f445b9a8e01c339c2d590cbffb7754bae3b633a4eaa5e8e7a",
+    "SDK/docs/publishing.md": "4c59af9bff4f3082a93493bfe8175433945a52d14e573ef917e48e075d069078",
+    "SDK/docs/quick-start.md": "e8af959f6b843ebf1e8d18ba508ce98a20895d768fe6349226283176bb81bbfb",
+    "SDK/docs/quick-start.sh": "a312674bc39d84165ea5c27413172a32e82d8bfca2c373794615e2f9964989e1",
+    "SDK/docs/settings.md": "33c00cae68ed0aac958be5b9cb63037e2f8953cb06dd53a363e52f3b20d63e36",
+    "SDK/docs/snippets/activity.js": "559e70655f26aaa8fed2d989ea7291c105a6f1e41885f97fa4440d9b81b8c357",
+    "SDK/docs/snippets/network.js": "0fa8046a8473fa3b960abce5bdec4a4ed241a03d9a5974cbcbfef6d8a8491831",
+    "SDK/docs/snippets/open-link.js": "b6996f43a48e66475e10f6bfad8761547e752c3df1f261a4f335d5fec56fffcc",
+    "SDK/docs/snippets/progress.json": "101e7384049f99108f6b3b747170c075bee265b4eca36c6059cf6b181c613e66",
+    "SDK/docs/snippets/settings.js": "a579ab40ef26eec6aa67460a15fcf59f3775c1e7133cf2feb24051eabe6e9aa7",
+    "SDK/docs/storage.md": "3736745878d219fc9a19eed65040b975c8703725cfd4b9bb21780c4e4ccfd6b1",
+    "SDK/docs/ui-components.md": "16a7923f8f5d892c91fd0cab4490b9ac2a63db444f47e18bb8bdd00dfa05263d",
+    "SDK/docs/verification.md": "565e834bd185a8c42e3dcda28c14f3ea8f09001f45128f87bc57694dabd7f399",
+    "SDK/tests/test_docs.py": "c802e53f975185fd2589215a6dbed321c3320b7b8bc0295a7db3737d34300df3",
+    "SDK/tools/check_docs.py": "d25fbaa5097dafe6a1ba4006b4101238cfab4aade8a0813f6d3433ef49b80f76",
+    "SDK/tsconfig.json": "3c509c6cb1308914fbb18e3462d86b2c9c1c18dd07bd68b829cced511ef8bdb8"
+  },
+  "logs": {
+    "/tmp/dynamic-island-t39-20261018/selected.log": "d743686ac4e0f14a4564cc9d46988564513093baf8046721d29f4cc825dfa969",
+    "/tmp/dynamic-island-t39-20261018/sdk-check.log": "760ed2ed81c5eff8786922aa18c52dee2b1183806c533db3872f9e93f8cf9c77"
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "schemaVersion": 1,
+  "id": "com.dynamicisland.github",
+  "name": "GitHub",
+  "developer": "DynamicIsland",
+  "version": "0.1.0",
+  "engine": "javascriptcore",
+  "entry": "index.js",
+  "minimumHostVersion": "0.6.0",
+  "permissions": ["network", "storage.local", "links.open"],
+  "capabilities": ["activity.publish", "activity.update", "activity.end", "ui.islandNode", "actions.handle", "storage.local", "scheduler", "links.open"]
+}

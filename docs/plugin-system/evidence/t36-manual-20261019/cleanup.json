@@ -1,0 +1,47 @@
+{
+  "observedUTC": "2026-10-19T01:25:37.705642+00:00",
+  "pid": 82621,
+  "pidAlive": false,
+  "normalQuitRequestedUTC": "2026-10-19T01:24:51.654Z",
+  "method": "CUA exact-app normal Command-Q",
+  "stagingEntries": [],
+  "manager": {
+    "plugins": {
+      "com.dynamicisland.github": {
+        "isEnabled": true,
+        "version": "0.1.0"
+      }
+    },
+    "schemaVersion": 1
+  },
+  "permissions": {
+    "records": {
+      "com.dynamicisland.github": {
+        "fingerprint": "338ca295ebc242c2232b6a51ab5bc1e18aee46e3d8f4736b059402468e6cf075",
+        "pluginID": "com.dynamicisland.github",
+        "states": {
+          "links.open": "granted",
+          "network": "granted",
+          "storage.local": "granted"
+        }
+      }
+    },
+    "schemaVersion": 1
+  },
+  "storage": {
+    "pluginID": "com.dynamicisland.github",
+    "schemaVersion": 1,
+    "values": {
+      "settings": {
+        "notifiedResults": [
+          "39115930522.1",
+          "39184461294.1"
+        ],
+        "repository": "cli/cli",
+        "schemaVersion": 1
+      }
+    }
+  },
+  "testBrowserTabsClosedAfterArchiving": true,
+  "unrelatedUserTabsPreserved": true
+}

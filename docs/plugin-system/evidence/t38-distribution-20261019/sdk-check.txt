@@ -1,0 +1,10 @@
+.......................................
+----------------------------------------------------------------------
+Ran 39 tests in 2.014s
+
+OK
+{"command": "validate", "ok": true, "scope": "authoring-preflight", "sdkVersion": "1.0.0", "summary": {"bytes": 4464, "files": 3}}
+{"command": "validate", "ok": true, "scope": "authoring-preflight", "sdkVersion": "1.0.0", "summary": {"bytes": 17565, "files": 3}}
+{"command": "validate", "ok": true, "scope": "authoring-preflight", "sdkVersion": "1.0.0", "summary": {"bytes": 26066, "files": 3}}
+{"command": "validate-node", "ok": true, "scope": "authoring-preflight", "sdkVersion": "1.0.0", "summary": {"depth": 4, "nodes": 10}}
+SDK authoring, packaging, and type checks passed.

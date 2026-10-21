@@ -1,0 +1,10 @@
+{
+  "captureUTC": "2026-10-16T03:10:28.670227+00:00",
+  "appPath": "/Users/rong5/Applications/Dynamic Island T35 Pomodoro.app",
+  "bundleID": "com.rong5.dynamic-island.t35-pomodoro.20261016",
+  "executableSHA256": "85f39a176a42dc05cb8cb159077d0b80dc3bfa67a19c95b53b99e9087f510d9a",
+  "quitSourceSHA256": "fee9a11027f3141fefa3c48e48d68c7edea05a6fde1b9b82446d3636cd38fcee",
+  "stalledPID": 99942,
+  "stalledProcessAbsent": true,
+  "userAssistance": "User confirmed force quitting PID 99942 after CUA Activity Monitor confirmation capture failed."
+}

@@ -1,0 +1,13 @@
+{
+  "requestStartedEpochMs": 1792424972792,
+  "action": {
+    "needle": "button 开始三态验收",
+    "expected": "三态计时 · minimal · 计时中",
+    "startEpochMs": 1792424972855,
+    "observedEpochMs": 1792424973548,
+    "capture": "m04-started-minimal-expanded"
+  },
+  "durationMs": 300000,
+  "requestedRefreshMs": 30000,
+  "realUIButton": true
+}

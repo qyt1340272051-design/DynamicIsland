@@ -3,7 +3,6 @@ import Foundation
 
 public enum IslandTimerToolMode: String, CaseIterable, Identifiable, Sendable {
     case stopwatch
-    case pomodoro
     case countdown
 
     public nonisolated var id: Self { self }
@@ -12,8 +11,6 @@ public enum IslandTimerToolMode: String, CaseIterable, Identifiable, Sendable {
         switch self {
         case .stopwatch:
             return "秒表"
-        case .pomodoro:
-            return "番茄钟"
         case .countdown:
             return "倒计时"
         }
@@ -23,8 +20,6 @@ public enum IslandTimerToolMode: String, CaseIterable, Identifiable, Sendable {
         switch self {
         case .stopwatch:
             return "stopwatch.fill"
-        case .pomodoro:
-            return "timer"
         case .countdown:
             return "hourglass"
         }
@@ -33,17 +28,12 @@ public enum IslandTimerToolMode: String, CaseIterable, Identifiable, Sendable {
 
 @MainActor
 public final class IslandTimerToolsModel: ObservableObject {
-    public nonisolated static let pomodoroPresetMinutes = [15, 25, 45, 60]
-    public nonisolated static let defaultPomodoroMinutes = 25
-    public nonisolated static let defaultPomodoroDuration: TimeInterval = TimeInterval(defaultPomodoroMinutes * 60)
     public nonisolated static let defaultCountdownDuration: TimeInterval = 5 * 60
     public nonisolated static let minimumCountdownMinutes = 1
     public nonisolated static let maximumCountdownMinutes = 120
 
     @Published public var selectedMode: IslandTimerToolMode = .stopwatch
     @Published public private(set) var stopwatchElapsed: TimeInterval = 0
-    @Published public private(set) var pomodoroDuration = IslandTimerToolsModel.defaultPomodoroDuration
-    @Published public private(set) var pomodoroRemaining = IslandTimerToolsModel.defaultPomodoroDuration
     @Published public private(set) var countdownDuration = IslandTimerToolsModel.defaultCountdownDuration
     @Published public private(set) var countdownRemaining = IslandTimerToolsModel.defaultCountdownDuration
     @Published public private(set) var runningMode: IslandTimerToolMode?
@@ -67,8 +57,6 @@ public final class IslandTimerToolsModel: ObservableObject {
         switch selectedMode {
         case .stopwatch:
             return stopwatchElapsed
-        case .pomodoro:
-            return pomodoroRemaining
         case .countdown:
             return countdownRemaining
         }
@@ -96,11 +84,6 @@ public final class IslandTimerToolsModel: ObservableObject {
         switch selectedMode {
         case .stopwatch:
             return nil
-        case .pomodoro:
-            return Self.progress(
-                remaining: pomodoroRemaining,
-                duration: pomodoroDuration
-            )
         case .countdown:
             return Self.progress(
                 remaining: countdownRemaining,
@@ -122,19 +105,9 @@ public final class IslandTimerToolsModel: ObservableObject {
         switch selectedMode {
         case .stopwatch:
             return "准备计时"
-        case .pomodoro:
-            return "\(pomodoroMinutes) 分钟专注"
         case .countdown:
             return "设置时长"
         }
-    }
-
-    public var pomodoroMinutes: Int {
-        Int((pomodoroDuration / 60).rounded())
-    }
-
-    public var canSelectPomodoroPreset: Bool {
-        runningMode != .pomodoro
     }
 
     public var countdownMinutes: Int {
@@ -169,21 +142,6 @@ public final class IslandTimerToolsModel: ObservableObject {
             completedMode = nil
         }
         if sessionMode == selectedMode {
-            sessionMode = nil
-        }
-    }
-
-    public func selectPomodoroMinutes(_ minutes: Int) {
-        guard Self.pomodoroPresetMinutes.contains(minutes), canSelectPomodoroPreset else {
-            return
-        }
-
-        pomodoroDuration = TimeInterval(minutes * 60)
-        pomodoroRemaining = pomodoroDuration
-        if completedMode == .pomodoro {
-            completedMode = nil
-        }
-        if sessionMode == .pomodoro {
             sessionMode = nil
         }
     }
@@ -257,11 +215,6 @@ public final class IslandTimerToolsModel: ObservableObject {
         switch runningMode {
         case .stopwatch:
             stopwatchElapsed = valueAtStart + elapsed
-        case .pomodoro:
-            pomodoroRemaining = max(0, valueAtStart - elapsed)
-            if pomodoroRemaining == 0 {
-                complete(runningMode)
-            }
         case .countdown:
             countdownRemaining = max(0, valueAtStart - elapsed)
             if countdownRemaining == 0 {
@@ -350,8 +303,6 @@ public final class IslandTimerToolsModel: ObservableObject {
         switch mode {
         case .stopwatch:
             return stopwatchElapsed
-        case .pomodoro:
-            return pomodoroRemaining
         case .countdown:
             return countdownRemaining
         }
@@ -361,8 +312,6 @@ public final class IslandTimerToolsModel: ObservableObject {
         switch mode {
         case .stopwatch:
             stopwatchElapsed = 0
-        case .pomodoro:
-            pomodoroRemaining = pomodoroDuration
         case .countdown:
             countdownRemaining = countdownDuration
         }
@@ -372,8 +321,6 @@ public final class IslandTimerToolsModel: ObservableObject {
         switch mode {
         case .stopwatch:
             return stopwatchElapsed > 0
-        case .pomodoro:
-            return pomodoroRemaining < pomodoroDuration && pomodoroRemaining > 0
         case .countdown:
             return countdownRemaining < countdownDuration && countdownRemaining > 0
         }

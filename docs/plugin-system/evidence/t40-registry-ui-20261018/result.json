@@ -1,0 +1,185 @@
+{
+  "date": "2026-10-18",
+  "task": "T40 Registry discovery UI and shared installation",
+  "baselineCommit": "23a039c",
+  "status": "automatic implementation complete; published catalog and dependency acceptance pending",
+  "ci": {
+    "total": 1068,
+    "passed": 1060,
+    "skipped": 8,
+    "failed": 0,
+    "releaseBuild": "passed",
+    "strictDeepSignature": "passed",
+    "resultBundle": "/tmp/dynamic-island-t40-ui-20261018/FullCI.xcresult"
+  },
+  "selected": {
+    "modelTests": {
+      "passed": 23,
+      "skipped": 0,
+      "failed": 0,
+      "bundle": "/tmp/dynamic-island-t40-ui-20261018/ModelTests.xcresult"
+    },
+    "initialUI": {
+      "total": 19,
+      "passed": 18,
+      "failedTests": 1,
+      "skipped": 0,
+      "bundle": "/tmp/dynamic-island-t40-ui-20261018/UITests.xcresult",
+      "failure": "OCR substring matched the explanatory paragraph instead of the Refresh button; exact button-label matching fixed the test."
+    },
+    "nativeUIAfterFix": {
+      "passed": 1,
+      "skipped": 0,
+      "failed": 0,
+      "bundle": "/tmp/dynamic-island-t40-ui-20261018/UINativeRetry.xcresult"
+    }
+  },
+  "sdk": {
+    "pythonPassed": 37,
+    "expectedTypeErrors": 47,
+    "typeCheck": "passed",
+    "finalDocumentationChecked": true
+  },
+  "registryModelAndUIResultsInFullCI": [
+    {
+      "name": "PluginRegistryModelTests/testCallerCancellationCleansLateSuccessfulReview()",
+      "result": "Passed"
+    },
+    {
+      "name": "PluginRegistryModelTests/testCancelledLateReviewCleanupFailureBlocksNextImportUntilExplicitRetry()",
+      "result": "Passed"
+    },
+    {
+      "name": "PluginRegistryModelTests/testCancelRefreshDropsLateSuccessAndRejectsOverlappingRefresh()",
+      "result": "Passed"
+    },
+    {
+      "name": "PluginRegistryModelTests/testDiscoveryStartsOfflineAndRefreshPublishesOnlyAValidCatalog()",
+      "result": "Passed"
+    },
+    {
+      "name": "PluginRegistryModelTests/testDownloadRequiresCurrentExactEntryAndCompatibleHost()",
+      "result": "Passed"
+    },
+    {
+      "name": "PluginRegistryModelTests/testLocalImportAndCoordinatorCannotReplaceDownloadingRegistryReview()",
+      "result": "Passed"
+    },
+    {
+      "name": "PluginRegistryModelTests/testRefreshFailureClearsPreviousEntriesAndUsesFixedMessages()",
+      "result": "Passed"
+    },
+    {
+      "name": "PluginRegistryModelTests/testRegistryFailuresAreFixedAndLeaveInstallerReusable()",
+      "result": "Passed"
+    },
+    {
+      "name": "PluginRegistryModelTests/testRegistryPreviewUsesExistingInstallConsentAndKeepsPermissionsRequested()",
+      "result": "Passed"
+    },
+    {
+      "name": "PluginRegistryModelTests/testShutdownCancelsRefreshAndExplicitlyResumesAfterAbandonedQuit()",
+      "result": "Passed"
+    },
+    {
+      "name": "PluginRegistryModelTests/testShutdownCleansLateReviewAndNeverPublishesInstallableSuccess()",
+      "result": "Passed"
+    },
+    {
+      "name": "PluginRegistryUITests/testClosingDiscoveryCancelsRefreshAndDropsLateCatalog()",
+      "result": "Passed"
+    },
+    {
+      "name": "PluginRegistryUITests/testClosingInstallerCancelsActualPendingDownloadAndAllowsRetry()",
+      "result": "Passed"
+    },
+    {
+      "name": "PluginRegistryUITests/testDiscoveryToolbarFitsExistingMinimumManagementWindow()",
+      "result": "Passed"
+    },
+    {
+      "name": "PluginRegistryUITests/testMinimumWindowRendersInitialEmptyFailureAndCompatibilityStates()",
+      "result": "Passed"
+    },
+    {
+      "name": "PluginRegistryUITests/testNativeRefreshDownloadAndInstallPreserveExplicitConsent()",
+      "result": "Skipped"
+    }
+  ],
+  "skippedTests": [
+    "GitHubPluginTests/testLivePublicGitHubAPIThroughOfficialPluginWhenExplicitlyEnabled()",
+    "IslandQuitCancellationTests/testCancellationDuringAnimationPreventsLateTerminationAndRestoresNativeClicks()",
+    "IslandQuitCancellationTests/testCancelledTerminationRestoresRenderedIslandHitTestingAndAllowsAnotherQuit()",
+    "PluginActionBridgeTests/testActualActionMockSwiftUIButtonToggleSliderAndTypedCommitReachJavaScript()",
+    "PluginExtensionsUITests/testNativeButtonsRequireExplicitConsentAndUninstallConfirmation()",
+    "PluginInstallerUITests/testNativeCancelWindowCloseAndInstallButtonsUseTheCurrentReview()",
+    "PluginRegistryUITests/testNativeRefreshDownloadAndInstallPreserveExplicitConsent()",
+    "ScreenSnapshotMatrixTests/testGenerateSnapshotMatrix()"
+  ],
+  "inputEvidence": {
+    "registryNativeFlow": "Passed in single-test retry after exact OCR matching correction",
+    "existingInstallerNativeFlow": "Passed in first 19-test UI run",
+    "fourOtherNativeTests": "Passed in previous Registry core full CI; skipped in current locked run, not claimed as newly passed"
+  },
+  "validation": {
+    "minimumDiscoveryWindow": [
+      720,
+      480
+    ],
+    "minimumManagementWindow": [
+      800,
+      600
+    ],
+    "explicitRefreshThenDownloadThenInstall": true,
+    "installedDisabled": true,
+    "permissionsRequested": true,
+    "runtimeStarts": 0,
+    "stagingEmptyAfterInstallAndCancel": true,
+    "cancelledLateReviewCleanupFailureBlocksNewImport": true,
+    "allNineScreenshotsVisuallyInspected": true
+  },
+  "externalEffects": {
+    "appRegistryUIWired": true,
+    "liveRegistryNetwork": false,
+    "catalogPublished": false,
+    "pluginsPublished": false,
+    "acceptanceAppsStarted": false,
+    "newPhysicalPointerActionsRequired": false
+  },
+  "pending": [
+    "T35/T36 physical acceptance and T38 dependency",
+    "T39 new-author walkthrough",
+    "Official package fixed release URLs and matching catalog hashes",
+    "Live public Registry discovery/download/install acceptance"
+  ],
+  "sourceSHA256": {
+    "DynamicIsland/DynamicIslandApp.swift": "9c9e183cab31ff76ae5fe2478cc90d262c26b2d9cd91d7395a98e0288ed529ba",
+    "DynamicIsland/Plugins/PluginExtensionsUI.swift": "4301c28627b2184d1dc06b5595f6b80d1ba7ba8d9063f41ca1173f4f65bce527",
+    "DynamicIsland/Plugins/PluginInstallerUI.swift": "74df2a48b0445dd6e047be3255ec5032f434743612a8c23cb531899e13d52fa6",
+    "DynamicIsland/Plugins/PluginRegistryUI.swift": "bdfee10581dfa5a7d7ae37c5ff6b1536c0da2c2017fccf65ee93d934ff21420c",
+    "DynamicIslandTests/PluginRegistryModelTests.swift": "746f275350b716c54ac58215f6df8c1d57478bac54bc5c70e35e6d3089feb65c",
+    "DynamicIslandTests/PluginRegistryUITests.swift": "049425fda5038ca15e0d06295cb8b87313fdcbafdf7770fd8766d50114d0961c",
+    "Registry/README.md": "a78773fdffc9f592c85af5cb8c3eba5147bd345a968d920137a39f4436cb7a96",
+    "SDK/docs/publishing.md": "5d529abea907103f7aa7addf101a654b08e54a2a48e1d5f6f74c47bf5aedf5a7"
+  },
+  "screenshotsSHA256": {
+    "initial.png": "3010ba036687162656fc50c384480bfc19f781a7a2f0aedb3aa941d91ea5c84e",
+    "empty.png": "66589425b5ff55a5ba7004a0e06146ab266ca7be05ea957fef9ab011b90a34aa",
+    "unavailable.png": "3971b4bcd61ddb951c246688ac34ed57a57c6294530abc3458e80eafe81aaf2e",
+    "entries.png": "b63ff25ce3335fd5c1b0ab7abadba56f8e2907137b48ac59a7d1ba7abb4c95ad",
+    "management-entry.png": "9d111a83d477fc9a917862f482aa6170d55f1cc66e8cfe0aa0587d91dcc6c948",
+    "loading.png": "88c92f5bd74fa1dd6ba4f558c5d12ceae2f15d4e514d0b3096ee550bab211ae9",
+    "downloading.png": "36ae82175b5c4b75f489f47164981cc64002a61de28e26643de807bf06d4ae37",
+    "preview.png": "f315dc8fd2675ab810c9f4683eafa9b22c9fd6b9f92ab95866ef3160b313fa0c",
+    "installed-disabled.png": "5109a96c9feefec4511f857e83534e011aa5795e5e263501059f82fa1ce527bb"
+  },
+  "logsSHA256": {
+    "/tmp/dynamic-island-t40-ui-20261018/model-tests.log": "9d6ef6af469f454ab5509a05d999705106adf888006f35d850e7557df3dd749c",
+    "/tmp/dynamic-island-t40-ui-20261018/ui-tests.log": "4ba7fbfe91e37583241aa1e0aa5e20f388ed4abd1ca9dd4e3894019584a004eb",
+    "/tmp/dynamic-island-t40-ui-20261018/ui-native-retry.log": "4e3104650108b9a39169ad15ebba833827388366b22f3099f466ea3e05f2fe5e",
+    "/tmp/dynamic-island-t40-ui-20261018/full-ci.log": "b804a0efb7e06b0c40dd4a85f0514e29f9a42432c6c24ac036726aac7acf5842",
+    "/tmp/dynamic-island-t40-ui-20261018/sdk-final.log": "11bfa94035546f522e1930f480235ed346d83f84a95702fb60a62d6444934381",
+    "/tmp/dynamic-island-t40-ui-20261018/codesign-verify.log": "4917d2dc3607fbea8bf1833cd8c11c251f49710aa7342ec56e64224a507efb41",
+    "/tmp/dynamic-island-t40-ui-20261018/entitlements.plist": "2b62e63bb42c37c31fe92eb362732f49e031a847d438d72024a5d8c77eff8516"
+  }
+}

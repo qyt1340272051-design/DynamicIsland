@@ -1,0 +1,68 @@
+{
+  "status": "partial acceptance; T35 remains in progress",
+  "capturedUTC": "2026-10-16T10:45:29.736895+00:00",
+  "scope": "Final ordinary Release isolated sandbox app; public Pomodoro 0.2.0 and no test entitlements",
+  "codeCommit": "0b96caba42f6ea124ada40765820115d79a2d6d1",
+  "bundleID": "com.rong5.dynamic-island.t35-pomodoro.20261016",
+  "pid": 11953,
+  "inherited": {
+    "installationPermissionsRestart": "../t35-pomodoro-ui-20261016/result.json",
+    "quitCancellationAndCI": "../t35-quit-cancellation-20261016/result.json"
+  },
+  "verifiedThisRun": [
+    "Invalid selectedMinutes string restores default 25-minute idle state with settings-not-saved hint; does not start",
+    "Invalid settings file bytes unchanged until actual user preset action",
+    "Actual 15-minute run completes naturally after 900.282 to 900.292 seconds from Start click bounds",
+    "Same process remains completed; no automatic compact countdown restarts",
+    "Actual compact physical notch shows timer icon left and time right; 04:41 to 04:31 advances without center text",
+    "Native stopwatch start/pause/reset",
+    "Native countdown duration decrement/start/pause/reset",
+    "Music and empty tray switching; reselected Pomodoro still running at 13:30",
+    "Physical fold and re-expansion restores native countdown 4:00; explicit reselection shows completed Pomodoro 00:00 and 100%"
+  ],
+  "naturalRun": {
+    "clickBeforeEpochMs": 1792146463345,
+    "clickAfterEpochMs": 1792146463355,
+    "startUTC": "2026-10-16T10:27:43.345Z",
+    "pid": 11953,
+    "expectedDurationSeconds": 900,
+    "commit": "0b96cab",
+    "method": "Actual ordinary Release UI preset 15 minutes and Start click"
+  },
+  "naturalCompletion": {
+    "observedUTC": "2026-10-16T10:42:43.637672+00:00",
+    "observedEpochMs": 1792147363637,
+    "millisecondsAfterClickBefore": 900292,
+    "millisecondsAfterClickAfter": 900282,
+    "watchDurationSeconds": 893.371,
+    "settings": {
+      "lastSession": "completed",
+      "schemaVersion": 1,
+      "selectedMinutes": 15
+    },
+    "method": "Read-only observation of the isolated plugin Storage; no Host clock changes or private VM calls."
+  },
+  "noticeEvidence": {
+    "accepted": false,
+    "oldVersionActivityCaptured": true,
+    "firstNoticeUTC": "2026-10-16T11:04:05.265Z",
+    "reason": "0.2.0 actual completion Activity is centered inside physical camera region. Fixed public-node package 0.2.1 passes VM and pixel tests; actual installation and completion acceptance still pending."
+  },
+  "pending": [
+    "Install/review 0.2.1 and capture actual completion with safe compact wings"
+  ],
+  "continuation": {
+    "appPath": "/Users/rong5/Applications/Dynamic Island T35 Pomodoro.app",
+    "running": false,
+    "samePID": 11953,
+    "isolatedDataRetained": true,
+    "lastSession": "completed",
+    "selectedMinutes": 15,
+    "next": "Import 0.2.1 package, review changed code and explicitly grant storage, enable, then perform actual natural completion capture."
+  },
+  "limits": [
+    "Single actual MacBook Air and ordinary Release build; inherits existing automated lifecycle/permission/generation coverage",
+    "No real sleep or low-power retest in this run",
+    "No production app/data or .dip default handler changed"
+  ]
+}

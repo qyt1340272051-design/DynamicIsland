@@ -1,0 +1,129 @@
+{
+  "inspection": {
+    "capturedAtUTC": "2026-10-20T15:28:22.381027+00:00",
+    "scope": "Final frozen stable SDK1.0.0 b64d87 only; previous ee5915 stable draft and 8f4da7 historical candidate excluded from final statistics.",
+    "auditRoot": "/tmp/dynamic-island-sdk-final-frozen-audit-20261020-kv9nl85u",
+    "canonical": "/tmp/dynamic-island-t38-publish-20261020/dynamic-island-sdk-1.0.0-frozen.zip",
+    "canonicalBytes": 85192,
+    "canonicalSHA256": "b64d87e400a90f730bd098cce23dc7b743cf78dcbfcb4f878f7cfeb16a494ac9",
+    "archiveEntries": 54,
+    "manifestSourceFiles": 53,
+    "workspaceSourceFiles": 53,
+    "allManifestSourceFilesMatchWorkspaceAndArchive": true,
+    "zipCRCValid": true,
+    "manifestMetadata": {
+      "artifactFormatVersion": 1,
+      "manifestSchemaVersion": 1,
+      "minimumHostVersion": "0.6.0",
+      "sdkVersion": "1.0.0",
+      "status": "stable",
+      "wireAPIVersion": "1.0.0"
+    },
+    "license": "MIT",
+    "licenseSHA256": "72ab5fec769e2affe1fc9bdc33fc6b52b8bb35ff27907db3e4bb7d4ef43e8610",
+    "helloFixture": {
+      "bytes": 2679,
+      "sha256": "512f953ca7005297b413179efef029bd07996f320e764d9ea243a8feabcad8f4"
+    },
+    "forbiddenPathFindings": [],
+    "knownSecretPatternFindings": [],
+    "securityScanScope": "Hidden/cache/node_modules/key/credential filenames and four common credential patterns; not an exhaustive secret detection guarantee.",
+    "extractedSDK": "/tmp/dynamic-island-sdk-final-frozen-audit-20261020-kv9nl85u/unpacked/DynamicIslandSDK",
+    "diffFromPrevious": {
+      "previous": "/tmp/dynamic-island-sdk-stable-independent-20261020-vrnl4xlm/canonical-reviewed.zip",
+      "previousBytes": 85191,
+      "previousSHA256": "ee5915ecc9904f2892ebc1e6941ab8af8cd9bf011771ffd4c53d36b2ab20896a",
+      "changedArchiveMembers": [
+        "DynamicIslandSDK/distribution-manifest.json",
+        "DynamicIslandSDK/docs/verification.md"
+      ],
+      "changedSourceManifestRecords": [
+        "docs/verification.md"
+      ],
+      "onlyDocumentedCountCorrection": true,
+      "diff": "/tmp/dynamic-island-sdk-final-frozen-audit-20261020-kv9nl85u/verification-doc.diff"
+    }
+  },
+  "standaloneTests": {
+    "discovered": 40,
+    "passed": 38,
+    "skipped": 2,
+    "failed": 0,
+    "durationSeconds": 1.137,
+    "skipDetails": [
+      {
+        "test": "test_both_official_manifests_use_the_closed_host_vocabulary (test_validator.ValidatorTests)",
+        "reason": "Repository official examples are outside the portable SDK."
+      },
+      {
+        "test": "test_repository_wrapper_preserves_legacy_cli_and_archive_bytes (test_validator.ValidatorTests)",
+        "reason": "Repository compatibility wrapper is outside the portable SDK."
+      }
+    ],
+    "exitCode": 0,
+    "logSHA256": "dc126070c28d8a2895f338863052f7ce0850518be1f10afb643ee89e40803b21"
+  },
+  "reproducibility": {
+    "python": "3.9.6 (default, May 22 2026, 11:13:45) \n[Clang 21.0.0 (clang-2100.1.1.101)]",
+    "platform": "macOS-26.6.2-arm64-arm-64bit",
+    "zlibCompileVersion": "1.2.12",
+    "zlibRuntimeVersion": "1.2.12",
+    "records": [
+      {
+        "command": [
+          "/Applications/Xcode.app/Contents/Developer/usr/bin/python3",
+          "-B",
+          "-m",
+          "unittest",
+          "discover",
+          "-s",
+          "tests",
+          "-p",
+          "test_*.py",
+          "-v"
+        ],
+        "cwd": "/tmp/dynamic-island-sdk-final-frozen-audit-20261020-kv9nl85u/unpacked/DynamicIslandSDK",
+        "exitCode": 0,
+        "log": "/tmp/dynamic-island-sdk-final-frozen-audit-20261020-kv9nl85u/standalone-python-tests.log"
+      },
+      {
+        "command": [
+          "/Applications/Xcode.app/Contents/Developer/usr/bin/python3",
+          "-B",
+          "tools/package_sdk.py",
+          "/tmp/dynamic-island-sdk-final-frozen-audit-20261020-kv9nl85u/repacked-1.zip"
+        ],
+        "cwd": "/tmp/dynamic-island-sdk-final-frozen-audit-20261020-kv9nl85u/unpacked/DynamicIslandSDK",
+        "exitCode": 0,
+        "log": "/tmp/dynamic-island-sdk-final-frozen-audit-20261020-kv9nl85u/repack-1.log",
+        "summary": {
+          "bytes": 85192,
+          "files": 53,
+          "sdkVersion": "1.0.0",
+          "sha256": "b64d87e400a90f730bd098cce23dc7b743cf78dcbfcb4f878f7cfeb16a494ac9"
+        }
+      },
+      {
+        "command": [
+          "/Applications/Xcode.app/Contents/Developer/usr/bin/python3",
+          "-B",
+          "tools/package_sdk.py",
+          "/tmp/dynamic-island-sdk-final-frozen-audit-20261020-kv9nl85u/repacked-2.zip"
+        ],
+        "cwd": "/tmp/dynamic-island-sdk-final-frozen-audit-20261020-kv9nl85u/unpacked/DynamicIslandSDK",
+        "exitCode": 0,
+        "log": "/tmp/dynamic-island-sdk-final-frozen-audit-20261020-kv9nl85u/repack-2.log",
+        "summary": {
+          "bytes": 85192,
+          "files": 53,
+          "sdkVersion": "1.0.0",
+          "sha256": "b64d87e400a90f730bd098cce23dc7b743cf78dcbfcb4f878f7cfeb16a494ac9"
+        }
+      }
+    ],
+    "repackedFilesByteIdenticalToEachOtherAndFrozenCanonical": true
+  },
+  "extractedSourceStillMatchesManifestAfterTests": true,
+  "repositoryEdits": false,
+  "xcodebuildInvoked": false
+}

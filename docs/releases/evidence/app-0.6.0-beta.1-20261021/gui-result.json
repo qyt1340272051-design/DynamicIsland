@@ -1,0 +1,41 @@
+{
+  "observedUTC": "2026-10-21T02:53:07.190765+00:00",
+  "result": "passed",
+  "source": "normal local Release 0.6.0 build3, with isolated bundle ID/display name, not the published DMG",
+  "catalog": "https://raw.githubusercontent.com/qyt1340272051-design/DynamicIsland/main/Registry/registry.json",
+  "transport": "production App Registry client and actual public Release downloads; no injected URL or fixture",
+  "method": "CUA real discovery, download-and-review and explicit install buttons; physical hover not used",
+  "initialInstalledCount": 0,
+  "packages": [
+    {
+      "id": "com.dynamicisland.pomodoro",
+      "version": "0.2.1",
+      "installedBytesIdenticalToPublicFrozenArchive": true,
+      "enabled": false,
+      "permissionStates": {
+        "storage.local": "requested"
+      }
+    },
+    {
+      "id": "com.dynamicisland.github",
+      "version": "0.1.0",
+      "installedBytesIdenticalToPublicFrozenArchive": true,
+      "enabled": false,
+      "permissionStates": {
+        "links.open": "requested",
+        "network": "requested",
+        "storage.local": "requested"
+      }
+    }
+  ],
+  "permissionGrantsClicked": false,
+  "pluginsEnabled": false,
+  "runtimeExecuted": false,
+  "stagingEmpty": true,
+  "storageEmpty": true,
+  "normallyQuit": true,
+  "productionPluginDataChanged": false,
+  "humanAuthorGate": "T39 unchanged and deferred",
+  "installedStateSHA256": "7f268ed646dd52590958fb036ead6e537a0fd61944e006903c16b6a74504b940",
+  "permissionStateSHA256": "e87ca282cc869f781af32230bfbc8cd5cd1ea624874f33e64e7079bce27420a2"
+}

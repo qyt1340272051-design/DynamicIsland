@@ -1,0 +1,248 @@
+Command line invocation:
+    /Applications/Xcode.app/Contents/Developer/usr/bin/xcodebuild test -project DynamicIsland.xcodeproj -scheme "Dynamic Island" -destination platform=macOS -derivedDataPath /tmp/dynamic-island-ci-derived-data -resultBundlePath /tmp/dynamic-island-t38-publish-20261020/SDKHost.xcresult -parallel-testing-enabled NO "-only-testing:DynamicIslandTests/PluginSDKContractTests" "-only-testing:DynamicIslandTests/PluginDocumentationTests"
+
+Writing result bundle at path:
+	/tmp/dynamic-island-t38-publish-20261020/SDKHost.xcresult
+
+--- xcodebuild: WARNING: Using the first of multiple matching destinations:
+{ platform:macOS, arch:arm64, id:00008132-001E49513A0B801C, name:My Mac }
+{ platform:macOS, arch:x86_64, id:00008132-001E49513A0B801C, name:My Mac }
+ComputePackagePrebuildTargetDependencyGraph
+
+Prepare packages
+
+CreateBuildRequest
+
+SendProjectDescription
+
+CreateBuildOperation
+
+ComputeTargetDependencyGraph
+note: Building targets in dependency order
+note: Target dependency graph (2 targets)
+    Target 'DynamicIslandTests' in project 'DynamicIsland'
+        ➜ Explicit dependency on target 'Dynamic Island' in project 'DynamicIsland'
+    Target 'Dynamic Island' in project 'DynamicIsland' (no dependencies)
+
+GatherProvisioningInputs
+
+CreateBuildDescription
+
+ExecuteExternalTool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -v -E -dM -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.5.sdk -x c -c /dev/null
+
+ExecuteExternalTool /Applications/Xcode.app/Contents/Developer/usr/bin/actool --version --output-format xml1
+
+ExecuteExternalTool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc --version
+
+ExecuteExternalTool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ld -version_details
+
+Build description signature: eaf78b53df4bf79a3013c78b7e2347c4
+Build description path: /tmp/dynamic-island-ci-derived-data/Build/Intermediates.noindex/XCBuildData/eaf78b53df4bf79a3013c78b7e2347c4.xcbuilddata
+ClangStatCache /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang-stat-cache /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.5.sdk /tmp/dynamic-island-ci-derived-data/SDKStatCaches.noindex/macosx26.5-25F70-688ef53f1462e2c8f657fdc38a81448fe082c4a02f00227109f4ed75e425c832.sdkstatcache
+    cd /Users/rong5/Dynamiclsland/DynamicIsland.xcodeproj
+    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang-stat-cache /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.5.sdk -o /tmp/dynamic-island-ci-derived-data/SDKStatCaches.noindex/macosx26.5-25F70-688ef53f1462e2c8f657fdc38a81448fe082c4a02f00227109f4ed75e425c832.sdkstatcache
+
+ProcessInfoPlistFile /tmp/dynamic-island-ci-derived-data/Build/Products/Debug/Dynamic\ Island.app/Contents/Info.plist /Users/rong5/Dynamiclsland/DynamicIsland/Info.plist (in target 'Dynamic Island' from project 'DynamicIsland')
+    cd /Users/rong5/Dynamiclsland
+    builtin-infoPlistUtility /Users/rong5/Dynamiclsland/DynamicIsland/Info.plist -producttype com.apple.product-type.application -genpkginfo /tmp/dynamic-island-ci-derived-data/Build/Products/Debug/Dynamic\ Island.app/Contents/PkgInfo -expandbuildsettings -platform macosx -additionalcontentfile /tmp/dynamic-island-ci-derived-data/Build/Intermediates.noindex/DynamicIsland.build/Debug/Dynamic\ Island.build/assetcatalog_generated_info.plist -o /tmp/dynamic-island-ci-derived-data/Build/Products/Debug/Dynamic\ Island.app/Contents/Info.plist
+
+CopySwiftLibs /tmp/dynamic-island-ci-derived-data/Build/Products/Debug/Dynamic\ Island.app (in target 'Dynamic Island' from project 'DynamicIsland')
+    cd /Users/rong5/Dynamiclsland
+    builtin-swiftStdLibTool --copy --verbose --sign - --scan-executable /tmp/dynamic-island-ci-derived-data/Build/Products/Debug/Dynamic\ Island.app/Contents/MacOS/Dynamic\ Island.debug.dylib --scan-folder /tmp/dynamic-island-ci-derived-data/Build/Products/Debug/Dynamic\ Island.app/Contents/Frameworks --scan-folder /tmp/dynamic-island-ci-derived-data/Build/Products/Debug/Dynamic\ Island.app/Contents/PlugIns --scan-folder /tmp/dynamic-island-ci-derived-data/Build/Products/Debug/Dynamic\ Island.app/Contents/Library/SystemExtensions --scan-folder /tmp/dynamic-island-ci-derived-data/Build/Products/Debug/Dynamic\ Island.app/Contents/Extensions --platform macosx --toolchain /Users/rong5/Library/Developer/DVTDownloads/MetalToolchain/mounts/5f4a441a6d0a11f2e9b28c67384263afe92320f7/Metal.xctoolchain --toolchain /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain --destination /tmp/dynamic-island-ci-derived-data/Build/Products/Debug/Dynamic\ Island.app/Contents/Frameworks --strip-bitcode --strip-bitcode-tool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/bitcode_strip --emit-dependency-info /tmp/dynamic-island-ci-derived-data/Build/Intermediates.noindex/DynamicIsland.build/Debug/Dynamic\ Island.build/SwiftStdLibToolInputDependencies.dep --filter-for-swift-os
+
+ProcessInfoPlistFile /tmp/dynamic-island-ci-derived-data/Build/Products/Debug/Dynamic\ Island.app/Contents/PlugIns/DynamicIslandTests.xctest/Contents/Info.plist /tmp/dynamic-island-ci-derived-data/Build/Intermediates.noindex/DynamicIsland.build/Debug/DynamicIslandTests.build/empty-DynamicIslandTests.plist (in target 'DynamicIslandTests' from project 'DynamicIsland')
+    cd /Users/rong5/Dynamiclsland
+    builtin-infoPlistUtility /tmp/dynamic-island-ci-derived-data/Build/Intermediates.noindex/DynamicIsland.build/Debug/DynamicIslandTests.build/empty-DynamicIslandTests.plist -producttype com.apple.product-type.bundle.unit-test -expandbuildsettings -platform macosx -o /tmp/dynamic-island-ci-derived-data/Build/Products/Debug/Dynamic\ Island.app/Contents/PlugIns/DynamicIslandTests.xctest/Contents/Info.plist
+
+CopySwiftLibs /tmp/dynamic-island-ci-derived-data/Build/Products/Debug/Dynamic\ Island.app/Contents/PlugIns/DynamicIslandTests.xctest (in target 'DynamicIslandTests' from project 'DynamicIsland')
+    cd /Users/rong5/Dynamiclsland
+    builtin-swiftStdLibTool --copy --verbose --sign - --scan-executable /tmp/dynamic-island-ci-derived-data/Build/Products/Debug/Dynamic\ Island.app/Contents/PlugIns/DynamicIslandTests.xctest/Contents/MacOS/DynamicIslandTests --scan-folder /tmp/dynamic-island-ci-derived-data/Build/Products/Debug/Dynamic\ Island.app/Contents/PlugIns/DynamicIslandTests.xctest/Contents/Frameworks --scan-folder /tmp/dynamic-island-ci-derived-data/Build/Products/Debug/Dynamic\ Island.app/Contents/PlugIns/DynamicIslandTests.xctest/Contents/PlugIns --scan-folder /tmp/dynamic-island-ci-derived-data/Build/Products/Debug/Dynamic\ Island.app/Contents/PlugIns/DynamicIslandTests.xctest/Contents/Library/SystemExtensions --scan-folder /tmp/dynamic-island-ci-derived-data/Build/Products/Debug/Dynamic\ Island.app/Contents/PlugIns/DynamicIslandTests.xctest/Contents/Extensions --platform macosx --toolchain /Users/rong5/Library/Developer/DVTDownloads/MetalToolchain/mounts/5f4a441a6d0a11f2e9b28c67384263afe92320f7/Metal.xctoolchain --toolchain /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain --destination /tmp/dynamic-island-ci-derived-data/Build/Products/Debug/Dynamic\ Island.app/Contents/PlugIns/DynamicIslandTests.xctest/Contents/Frameworks --strip-bitcode --scan-executable /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib/libXCTestSwiftSupport.dylib --strip-bitcode-tool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/bitcode_strip --emit-dependency-info /tmp/dynamic-island-ci-derived-data/Build/Intermediates.noindex/DynamicIsland.build/Debug/DynamicIslandTests.build/SwiftStdLibToolInputDependencies.dep --filter-for-swift-os
+
+CodeSign /tmp/dynamic-island-ci-derived-data/Build/Products/Debug/Dynamic\ Island.app/Contents/MacOS/Dynamic\ Island.debug.dylib (in target 'Dynamic Island' from project 'DynamicIsland')
+    cd /Users/rong5/Dynamiclsland
+    
+    Signing Identity:     "Sign to Run Locally"
+    
+    /usr/bin/codesign --force --sign - --timestamp\=none --generate-entitlement-der /tmp/dynamic-island-ci-derived-data/Build/Products/Debug/Dynamic\ Island.app/Contents/MacOS/Dynamic\ Island.debug.dylib
+/tmp/dynamic-island-ci-derived-data/Build/Products/Debug/Dynamic Island.app/Contents/MacOS/Dynamic Island.debug.dylib: replacing existing signature
+
+CodeSign /tmp/dynamic-island-ci-derived-data/Build/Products/Debug/Dynamic\ Island.app/Contents/MacOS/__preview.dylib (in target 'Dynamic Island' from project 'DynamicIsland')
+    cd /Users/rong5/Dynamiclsland
+    
+    Signing Identity:     "Sign to Run Locally"
+    
+    /usr/bin/codesign --force --sign - --timestamp\=none --generate-entitlement-der /tmp/dynamic-island-ci-derived-data/Build/Products/Debug/Dynamic\ Island.app/Contents/MacOS/__preview.dylib
+/tmp/dynamic-island-ci-derived-data/Build/Products/Debug/Dynamic Island.app/Contents/MacOS/__preview.dylib: replacing existing signature
+
+CodeSign /tmp/dynamic-island-ci-derived-data/Build/Products/Debug/Dynamic\ Island.app (in target 'Dynamic Island' from project 'DynamicIsland')
+    cd /Users/rong5/Dynamiclsland
+    
+    Signing Identity:     "Sign to Run Locally"
+    
+    /usr/bin/codesign --force --sign - --entitlements /tmp/dynamic-island-ci-derived-data/Build/Intermediates.noindex/DynamicIsland.build/Debug/Dynamic\ Island.build/Dynamic\ Island.app.xcent --timestamp\=none --generate-entitlement-der /tmp/dynamic-island-ci-derived-data/Build/Products/Debug/Dynamic\ Island.app
+/tmp/dynamic-island-ci-derived-data/Build/Products/Debug/Dynamic Island.app: replacing existing signature
+
+Validate /tmp/dynamic-island-ci-derived-data/Build/Products/Debug/Dynamic\ Island.app (in target 'Dynamic Island' from project 'DynamicIsland')
+    cd /Users/rong5/Dynamiclsland
+    builtin-validationUtility /tmp/dynamic-island-ci-derived-data/Build/Products/Debug/Dynamic\ Island.app -no-validate-extension -infoplist-subpath Contents/Info.plist
+
+RegisterWithLaunchServices /tmp/dynamic-island-ci-derived-data/Build/Products/Debug/Dynamic\ Island.app (in target 'Dynamic Island' from project 'DynamicIsland')
+    cd /Users/rong5/Dynamiclsland
+    /System/Library/Frameworks/CoreServices.framework/Versions/Current/Frameworks/LaunchServices.framework/Versions/Current/Support/lsregister -f -R -trusted /tmp/dynamic-island-ci-derived-data/Build/Products/Debug/Dynamic\ Island.app
+
+note: Disabling hardened runtime with ad-hoc codesigning. (in target 'Dynamic Island' from project 'DynamicIsland')
+2026-10-20 23:22:21.023140+0800 Dynamic Island[28432:17122096] [Connection] Unable to get synchronousRemoteObjectProxy, error: Error Domain=NSCocoaErrorDomain Code=4097 "connection to service named com.apple.linkd.autoShortcut" UserInfo={NSDebugDescription=connection to service named com.apple.linkd.autoShortcut}
+2026-10-20 23:22:21.057242+0800 Dynamic Island[28432:17122132] [Connection] Unable to get synchronousRemoteObjectProxy, error: Error Domain=NSCocoaErrorDomain Code=4097 "connection to service named com.apple.linkd.autoShortcut" UserInfo={NSDebugDescription=connection to service named com.apple.linkd.autoShortcut}
+2026-10-20 23:22:21.059627+0800 Dynamic Island[28432:17122134] [Connection] Unable to get synchronousRemoteObjectProxy, error: Error Domain=NSCocoaErrorDomain Code=4097 "connection to service named com.apple.linkd.autoShortcut" UserInfo={NSDebugDescription=connection to service named com.apple.linkd.autoShortcut}
+2026-10-20 23:22:21.060683+0800 Dynamic Island[28432:17122135] [Connection] Una2026-10-20 23:22:21.050016+0800 Dynamic Island[28432:17122126] [Connection] Unable to get synchronousRemoteObjectProxy, error: Error Domain=NSCocoaErrorDomain Code=4097 "connection to service named com.apple.linkd.autoShortcut" UserInfo={NSDebugDescription=connection to service named com.apple.linkd.autoShortcut}
+2026-10-20 23:22:21.037882+0800 Dynamic Island[28432:17122114] [Connection] Unable to get synchronousRemoteObjectProxy, error: Error Domain=NSCocoaErrorDomain Code=4097 "connection to service named com.apple.linkd.autoShortcut" UserInfo={NSDebugDescription=connection to service named com.apple.linkd.autoShortcut}
+2026-10-20 23:22:21.040032+0800 Dynamic Island[28432:17122116] [Connection] Unable to get synchronousRemoteObjectProxy, error: Error Domain=NSCocoaErrorDomain Code=4097 "connection to service named com.apple.linkd.autoShortcut" UserInfo={NSDebugDescription=connection to service named com.apple.linkd.autoShortcut}
+2026-10-20 23:22:21.041028+0800 Dynamic Island[28432:17122117] [Connection] Una2026-10-20 23:22:21.066649+0800 Dynamic Island[28432:17122116] [Connection] Unable to re-register with Process Instance Registry, error: Error Domain=NSCocoaErrorDomain Code=4097 "connection to service named com.apple.linkd.autoShortcut" UserInfo={NSDebugDescription=connection to service named com.apple.linkd.autoShortcut}
+2026-10-20 23:22:21.052445+0800 Dynamic Island[28432:17122128] [Connection] Unable to get synchronousRemoteObjectProxy, error: Error Domain=NSCocoaErrorDomain Code=4097 "connection to service named com.apple.linkd.autoShortcut" UserInfo={NSDebugDescription=connection to service named com.apple.linkd.autoShortcut}
+ble to get synchronousRemoteObjectProxy, error: Error Domain=NSCocoaErrorDomain Code=4097 "connection to service named com.apple.linkd.autoShortcut" UserInfo={NSDebugDescription=connection to service named com.apple.linkd.autoShortcut}
+2026-10-20 23:22:21.066630+0800 Dynamic Island[28432:17122134] [Connection] Unable to re-register with Process Instance Registry, error: Error Domai2026-10-20 23:22:21.027590+0800 Dynamic Island[28432:17122103] [Connection] Unable to get synchronousRemoteObjectProxy, error: Error Domain=NSCocoaErrorDomain Code=4097 "connection to service named com.apple.linkd.autoShortcut" UserInfo={NSDebugDescription=connection to service named com.apple.linkd.autoShortcut}
+2026-10-20 23:22:21.046085+0800 Dynamic Island[28432:17122122] [Connection] Unable to get synchronousRemoteObjectProxy, error: Error Domain=NSCocoaErrorDomain Code=4097 "connection to service named com.apple.linkd.autoShortcut" UserInfo={NSDebugDescription=connection to service named com.apple.linkd.autoShortcut}
+2026-10-20 23:22:21.058481+0800 Dynamic Island[28432:17122133] [Connection] Unable to get synchronousRemoteObjectProxy, error: Error Domain=NSCocoaErrorDomain Code=4097 "connection to service named com.apple.linkd.autoShortcut" UserInfo={NSDebugDescription=connection to service named com.apple.linkd.autoShortcut}
+n=NSCocoaErrorDomain Code=4097 "connection to service named com.apple.linkd.aut2026-10-20 23:22:21.054922+0800 Dynamic Island[28432:17122130] [Connection] Unable to get synchronousRemoteObjectProxy, error: Error Domain=NSCocoaErrorDomain Code=4097 "connection to service named com.apple.linkd.autoShortcut" UserInfo={NSDebugDescription=connection to service named com.apple.linkd.autoShortcut}
+2026-10-20 23:22:21.026547+0800 Dynamic Island[28432:17122102] [Connection] Unable to get synchronousRemoteObjectProxy, error: Error Domain=NSCocoaErrorDomain Code=4097 "connection to service named com.apple.linkd.autoShortcut" UserInfo={NSDebugDescription=connection to service named com.apple.linkd.autoShortcut}
+oShortcut" UserInfo={NSDebugDescription=connection to service named com.apple.linkd.autoShortcut}
+2026-10-20 23:22:21.068741+0800 Dynamic Island[28432:17122102] [Connection] Unable to re-register with Process Instance Registry, error: Error Domain=NSCocoaErrorDomain Code=4097 "connection to service named com.apple.linkd.autoShortcut" UserInfo={NSDebugDescription=connection to service named c2026-10-20 23:22:21.062814+0800 Dynamic Island[28432:17122137] [Connection] Unable to get synchronousRemoteObjectProxy, error: Error Domain=NSCocoaErrorDomain Code=4097 "connection to service named com.apple.linkd.autoShortcut" UserInfo={NSDebugDescription=connection to service named com.apple.linkd.autoShortcut}
+2026-10-20 23:22:21.068582+0800 Dynamic Island[28432:17122103] [Connection] Unable to re-register with Process Instance Registry, error: Error Domain=NSCocoaErrorDomain Code=4097 "connection to service named com.apple.linkd.autoShortcut" UserInfo={NSDebugDescription=connection to service named com.apple.linkd.autoShortcut}
+2026-10-20 23:22:21.029570+0800 Dynamic Island[28432:17122105] [Connection] Unable to get synchronousRemoteObjectProxy, error: Error Domain=NSCocoaErrorDomain Code=4097 "connection to service named com.apple.linkd.autoShortcut" UserInfo={NSDebugDescription=connection to service named com.apple.linkd.autoShortcut}
+2026-10-20 23:22:21.048956+0800 Dynamic Island[28432:17122125] [Conne2026-10-20 23:22:21.053838+0800 Dynamic Island[28432:17122129] [Connection] Unable to get synchronousRemoteObjectProxy, error: Error Domain=NSCocoaErrorDomain Code=4097 "connection to service named com.apple.linkd.autoShortcut" UserInfo={NSDebugDescription=connection to service named com.apple.linkd.autoShortcut}
+om.apple.linkd.autoShortcut}
+2026-10-20 23:22:21.024332+0800 Dynamic Island[28432:17122098] [Connection] Unable to get synchronousRemoteObjectProxy, error: Error Domain=NSCocoaErrorDomain Code=4097 "connection to service named com.apple.linkd.autoShortcut" UserInfo={NSDebugDescription=connection to service named com.apple.linkd.autoShortcut}
+2026-10-20 23:22:21.066661+0800 Dynamic Island[28432:17122114] [Connection] Unable to re-register with Process Instance Registry, error: Error Domain=NSCocoaErrorDomain Code=4097 "connection to service named com.apple.linkd.autoShortcut" UserInfo={NSDebugDescription=connection to service named com.apple.linkd.autoShortcut}
+2026-10-20 23:22:21.025397+0800 Dynamic 2026-10-20 23:22:21.030520+0800 Dynamic Island[28432:17122106] [Connection] Unable to get synchronousRemoteObjectProxy, error: Error Domain=NSCocoaErrorDomain Code=4097 "connection to service named com.apple.linkd.autoShortcut" UserInfo={NSDebugDescription=connection to service named com.apple.linkd.autoShortcut}
+2026-10-20 23:22:21.038925+0800 Dynamic Island[28432:17122115] [Connection] Unable to get synchronousRemoteObjectProxy, error: Error Domain=NSCocoaErrorDomain Code=4097 "connection to service named com.apple.linkd.autoShortcut" UserInfo={NSDebugDescription=connection to service named com.apple.linkd.autoShortcut}
+2026-10-20 23:22:21.032654+0800 Dynamic Island[28432:17122108] [Connection] Unable to get synchronousRemoteObjectProxy, error: Error Domain=NSCocoaErrorDomain Code=4097 "connection to service named com.apple.linkd.autoShortcut" UserInfo={NSDebugDescription=connection to service named com.apple.linkd.autoShortcut}
+2026-10-20 23:22:21.068750+0800 Dynamic Island[28432:17122130] [Connection] Una2026-10-20 23:22:21.051073+0800 Dynamic Island[28432:17122127] [Connection] Unable to get synchronousRemoteObjectProxy, error: Error Domain=NSCocoaErrorDomain Code=4097 "connection to service named com.apple.linkd.autoShortcut" UserInfo={NSDebugDescription=connection to service named com.apple.linkd.autoShortcut}
+2026-10-20 23:22:21.068300+0800 Dynamic Island[28432:17122128] [Connection] Unable to re-register with Process Instance Registry, error: Error Domain=NSCocoaErrorDomain Code=4097 "connection to service named com.apple.linkd.autoShortcut" UserInfo={NSDebugDescription=connection to service named com.apple.linkd.autoShortcut}
+2026-10-20 23:22:21.033806+0800 Dynamic Island[28432:17122109] [Connection] Unable to get synchronousRemoteObjectProxy, error: Error Domain=NSCocoaErrorDomain Code=4097 "connection to service named com.apple.linkd.autoShortcut" UserInfo={NSDebugDescription=connection to service named com.apple.linkd.autoShortcut}
+2026-10-20 23:22:21.028596+0800 Dynamic Island[28432:17122104] [Conne2026-10-20 23:22:21.069270+0800 Dynamic Island[28432:17122115] [Connection] Unable to re-register with Process Instance Registry, error: Error Domain=NSCocoaErrorDomain Code=4097 "connection to service named com.apple.linkd.autoShortcut" UserInfo={NSDebugDescription=connection to service named com.apple.linkd.autoShortcut}
+2026-10-20 23:22:21.069100+0800 Dynamic Island[28432:17122129] [Connection] Unable to re-register with Process Instance Registry, error: Error Domain=NSCocoaErrorDomain Code=4097 "connection to service named com.apple.linkd.autoShortcut" UserInfo={NSDebugDescription=connection to service named com.apple.linkd.autoShortcut}
+2026-10-20 23:22:21.042073+0800 Dynamic Island[28432:17122118] [Connection] Unable to get synchronousRemoteObjectProxy, error: Error Domain=NSCocoaErrorDomain Code=4097 "connection to service named com.apple.linkd.autoShortcut" UserInfo={NSDebugDescription=connection to service named com.apple.linkd.autoShortcut}
+2026-10-20 23:22:21.066630+0800 Dynamic Island[28432:17122132] [Connection] Unable to re-register with Process Instance Registry, error: Error Domain=NSCocoaErrorDomain Code=4097 "connection to service named com.apple.linkd.autoShortcut" UserInfo={NSDebugDescription=connection to service named com.apple.linkd.autoShortcut}
+2026-10-20 23:22:21.069453+0800 Dynamic Island[28432:17122109] [Connection] Unable to re-register with Process Instance Registry, error: Error Domain=NSCocoaErrorDomain Code=4097 "connection to service named com.apple.linkd.autoShortcut" UserInfo={NSDebugDescription=connection to service named com.apple.linkd.autoShortcut}
+2026-10-20 23:22:21.045139+0800 Dynamic Island[28432:17122121] [Connection] Unable to get synchronousRemoteObjectProxy, error: Error Domain=NSCocoaErrorDomain Code=4097 "connection to service named com.apple.linkd.autoShortcut" UserInfo={NSDebugDescription=connection to service named com.apple.linkd.autoShortcut}
+2026-10-20 23:22:21.066630+0800 Dynamic Island[28432:17122096] [Application] Error registering app with intents framew2026-10-20 23:22:21.064879+0800 Dynamic Island[28432:17122139] [Connection] Unable to get synchronousRemoteObjectProxy, error: Error Domain=NSCocoaErrorDomain Code=4097 "connection to service named com.apple.linkd.autoShortcut" UserInfo={NSDebugDescription=connection to service named com.apple.linkd.autoShortcut}
+2026-10-20 23:22:21.043071+0800 Dynamic Island[28432:17122119] [Connection] Unable to get synchronousRemoteObjectProxy, error: Error Domain=NSCocoaErrorDomain Code=4097 "connection to service named com.apple.linkd.autoShortcut" UserInfo={NSDebugDescription=connection to service named com.apple.linkd.autoShortcut}
+2026-10-20 23:22:21.069454+0800 Dynamic Island[28432:17122127] [Connection] Unable to re-register with Process Instance Registry, error: Error Domain=NSCocoaErrorDomain Code=4097 "connection to service named com.apple.linkd.autoShortcut" UserInfo={NSDebugDescription=connection to service named com.apple.linkd.autoShortcut}
+2026-10-20 23:22:21.047046+0800 Dynamic Island[28432:17122123] [Connection] Unable to get synchronousRemoteObjectProxy, error: Error Domain=NSCocoaErrorDomain Code=4097 "connection to service named com.apple.linkd.autoShortcut" UserInfo={NSDebugDescription=connection to service named com.apple.linkd.autoShortcut}
+2026-10-20 23:22:21.068331+0800 Dynamic Island[28432:17122142] [Connection] Unable to get synchronousRemoteObjectProxy, error: Error Domain=NSCocoaErrorDomain Code=4097 "connection to service named com.apple.linkd.autoShortcut" UserInfo={NSDebugDescription=connection to service named com.apple.linkd.autoShortcut}
+2026-10-20 23:22:21.063842+0800 Dynamic Island[28432:17122138] [Connection] Unable to get synchronousRemoteObjectProxy, error: Error Domain=NSCocoaErrorDomain Code=4097 "connection to service named com.apple.linkd.autoShortcut" UserInfo={NSDebugDescription=connection to service named com.apple.linkd.autoShortcut}
+2026-10-20 23:22:21.069895+0800 Dynamic Island[28432:17122139] [Connection] Unable to re-register with Process Instance Registry, error: Error Domai2026-10-20 23:22:21.069896+0800 Dynamic Island[28432:17122119] [Connection] Unable to re-register with Process Instance Registry, error: Error Domain=NSCocoaErrorDomain Code=4097 "connection to service named com.apple.linkd.autoShortcut" UserInfo={NSDebugDescription=connection to service named com.apple.linkd.autoShortcut}
+2026-10-20 23:22:21.070025+0800 Dynamic Island[28432:17122142] [Connection] Unable to re-register with Process Instance Registry, error: Error Domain=NSCocoaErrorDomain Code=4097 "connection to service named com.apple.linkd.autoShortcut" UserInfo={NSDebugDescription=connection to service named com.apple.linkd.autoShortcut}
+2026-10-20 23:22:21.070025+0800 Dynamic Island[28432:17122138] [Connection] Unable to re-register with Process Instance Registry, error: Error Domain=NSCocoaErrorDomain Code=4097 "connection to service named com.apple.linkd.autoShortcut" UserInfo={NSDebugDescription=connection to service named com.apple.linkd.autoShortcut}
+2026-10-20 23:22:21.066646+0800 Dynamic Island[28432:17122126] [Connection] Unable to re-register with Process Instance Registry, error: Error Domain=NSCocoaErrorDomain Code=4097 "connection to service named com.apple.linkd.autoShortcut" UserInfo={NSDebugDescription=connection to service named com.apple.linkd.autoShortcut}
+ction] Unable to get synchronousRemoteObjectProxy, error: Error Domain=NSCocoaErrorDomain Code=4097 "connection to service named com.apple.linkd.autoShortcut" UserInfo={NSDebugDescription=connection to service named com.apple.linkd.autoShortcut}
+2026-10-20 23:22:21.067267+0800 Dynamic Island[28432:17122141] [Connection] Unable to get synchronousRemoteObjectProxy, error: Error Domain=NSCocoaErrorDomain Code=4097 "connection to service named com.apple.linkd.autoShortcut" UserInfo={NSDebugDescription=connection to service named com.apple.linkd.autoShortcut}
+2026-10-20 23:22:21.068244+0800 Dynamic Island[28432:17122117] [Connection] Unable to re-register with Process Instance Registry, error: Error Domain=NSCocoaErrorDomain Code=4097 "connection to service named com.apple.linkd.autoShortcut" UserInfo={NSDebugDescription=connection to service named com.apple.linkd.autoShortcut}
+ble to get synchronousRemoteObjectProxy, error: Error Domain=NSCocoaErrorDomain Code=4097 "connection to service named com.apple.linkd.autoShortcut" UserInfo={NSDebugDescription=connection to service named com.apple.linkd.autoShortcut}
+2026-10-20 23:22:21.069762+0800 Dynamic Island[28432:17122121] [Connection] Unable to re-register with Process Instance Registry, error: Error Domain=NSCocoaErrorDomain Code=4097 "connection to service named com.apple.linkd.autoShortcut" UserInfo={NSDebugDescription=connection to service named com.apple.linkd.autoShortcut}
+2026-10-20 23:22:21.048003+0800 Dynamic Island[28432:17122124] [Connection] Unable to get synchronousRemoteObjectProxy, error: Error Domain=NSCocoaErrorDomain Code=4097 "connection to service named com.apple.linkd.autoShortcut" UserInfo={NSDebugDescription=connection to service named com.apple.linkd.autoShortcut}
+2026-10-20 23:22:21.068599+0800 Dynamic Island[28432:17122122] [Connection] Unable to re-register with Process Instance Registry, error: Error Domain=NSCocoaErrorDomain Code=4097 "connection to service named com.apple.linkd.autoShortcut" UserInfo={NSDebugDescription=connection to service named com.apple.linkd.autoShortcut}
+ction] Unable to get synchronousRemoteObjectProxy, error: Error Domain=NSCocoaErrorDomain Code=4097 "connection to service named com.apple.linkd.autoShortcut" UserInfo={NSDebugDescription=connection to service named com.apple.linkd.autoShortcut}
+Island[28432:17122100] [Connection] Unable to get synchronousRemoteObjectProxy, error: Error Domain=NSCocoaErrorDomain Code=4097 "connection to service named com.apple.linkd.autoShortcut" UserInfo={NSDebugDescription=connection to service named com.apple.linkd.autoShortcut}
+2026-10-20 23:22:21.069319+0800 Dynamic Island[28432:17122102] [Connection] Will NOT re-try to establish the connection
+2026-10-20 23:22:21.068958+0800 Dynamic Island[28432:17122137] [Connection] Unable to re-register with Process Instance Registry, error: Error Domain=NSCocoaErrorDomain Code=4097 "connection to service named com.apple.linkd.autoShortcut" UserInfo={NSDebugDescription=connection to service named com.apple.linkd.autoShortcut}
+2026-10-20 23:22:21.070421+0800 Dynamic Island[28432:17122135] [Connection] Unable to re-register with Process Instance Registry, error: Error Domain=NSCocoaErrorDomain Code=4097 "connection to service named com.apple.linkd.autoShortcut" UserInfo={NSDebugDescription=connection to service named com.apple.linkd.autoShortcut}
+ble to re-register with Process Instance Registry, error: Error Domain=NSCocoaErrorDomain Code=4097 "connection to service named com.apple.linkd.autoShortcut" UserInfo={NSDebugDescription=connection to service named com.apple.linkd.autoShortcut}
+2026-10-20 23:22:21.068958+0800 Dynamic Island[28432:17122105] [Connection] Unable to re-register with Process Instance Registry, error: Error Domain=NSCocoaErrorDomain Code=4097 "connection to se2026-10-20 23:22:21.069270+0800 Dynamic Island[28432:17122106] [Connection] Unable to re-register with Process Instance Registry, error: Error Domain=NSCocoaErrorDomain Code=4097 "connection to service named com.apple.linkd.autoShortcut" UserInfo={NSDebugDescription=connection to service named com.apple.linkd.autoShortcut}
+rvice named com.apple.linkd.autoShortcut" UserInfo={NSDebugDescription=connection to service named com.apple.linkd.autoShortcut}
+2026-10-20 23:22:21.036929+0800 Dynamic Island[28432:17122113] [Connection] Unable to get synchronousRemoteObjectProxy, error: Error Domain=NSCocoaErrorDomain Code=4097 "connection to service named com.apple.linkd.autoShortcut" UserInfo={NSDebugDescription=connection to service named com.apple.linkd.autoShortcut}
+ork: Error Domain=NSCocoaErrorDomain Code=4097 "connection to service named com.apple.linkd.autoShortcut" UserInfo={NSDebugDescription=connection to service named com.apple.linkd.autoShortcut}
+2026-10-20 23:22:21.070029+0800 Dynamic Island[28432:17122123] [Connection] Unable to re-register with Process Instance Registry, error: Error Domain=NSCocoaErrorDomain Code=4097 "connection to service named com.apple.linkd.autoShortcut" UserInfo={NSDebugDescription=connection to service named com.apple.linkd.autoShortcut}
+2026-10-20 23:22:21.069634+0800 Dynamic Island[28432:17122118] [Connection] Unable to re-register with Process Instance Registry, error: Error Domain=NSCocoaErrorDomain Code=4097 "connection to service named com.apple.linkd.autoShortcut" UserInfo={NSDebugDescription=connection to service named com.apple.linkd.autoShortcut}
+2026-10-20 23:22:21.070534+0800 Dynamic Island[28432:17122125] [Connection] Unable to re-register with Process Instance Registry, error: Error Domain=NSCocoaErrorDomain Code=4097 "connection to service named com.apple.linkd.autoShortcut" UserInfo={NSDebugDescription=connection to service named com.apple.linkd.autoShortcut}
+2026-10-20 23:22:21.070772+0800 Dynamic Island[28432:17122113] [Connection] Unable to re-register with Process 2026-10-20 23:22:21.069110+0800 Dynamic Island[28432:17122098] [Connection] Unable to re-register with Process Instance Registry, error: Error Domain=NSCocoaErrorDomain Code=4097 "connection to service named com.apple.linkd.autoShortcut" UserInfo={NSDebugDescription=connection to service named com.apple.linkd.autoShortcut}
+Instance Registry, error: Error Domain=NSCocoaErrorDomain Code=4097 "connection to service named com.apple.linkd.autoShortcut" UserInfo={NSDebugDescription=connection to service named com.apple.linkd.autoShortcut}
+2026-10-20 23:22:21.070290+0800 Dynamic Island[28432:17122104] [Connection] Unable to re-register with Process Instance Registry, error: Error Domain=NSCocoaErrorDomain Code=4097 "connection to service named com.apple.linkd.autoShortcut" UserInfo={NSDebugDescription=connection to service named com.apple.linkd.autoShortcut}
+2026-10-20 23:22:21.069289+0800 Dynamic Island[28432:17122108] [Connection] Unable to re-register with Process Instance Registry, error: Error Domain=NSCocoaErr2026-10-20 23:22:21.070439+0800 Dynamic Island[28432:17122124] [Connection] Unable to re-register with Process Instance Registry, error: Error Domain=NSCocoaErrorDomain Code=4097 "connection to service named com.apple.linkd.autoShortcut" UserInfo={NSDebugDescription=connection to service named com.apple.linkd.autoShortcut}
+orDomain Code=4097 "connection to service named com.apple.linkd.autoShortcut" UserInfo={NSDebugDescription=connection to service named com.apple.linkd.autoShortcut}
+2026-10-20 23:22:21.034905+0800 Dynamic Island[28432:17122110] [Connection] Unable to get synchronousRemoteObjectProxy, error: Error Domain=NSCocoaErrorDomain Code=4097 "connection to service named com.apple.linkd.autoShortcut" UserInfo={NSDebugDescription=connection to service named com.apple.linkd.autoShortcut}
+2026-10-20 23:22:21.044127+0800 Dynamic Island[28432:17122120] [Connection] Unable to get synchronousRemoteObjectProxy, error: Error Domain=NSCocoaErrorDomain Code=4097 "connection to service named com.apple.linkd.autoShortcut" UserInfo={NSDebugDescription=connection to service named com.apple.linkd.autoShortcut}
+2026-10-20 23:22:21.066062+0800 Dynamic Island[28432:17122140] [Connection] Unable to get synchronousRemoteObjectProxy, error: Error Domain=NSCocoaErrorDomain Code=4097 "connection to service named com.apple.linkd.autoShortcut" UserInfo={NSDebugDescription=connection to service named com.apple.linkd.autoShortcut}
+n=NSCocoaErrorDomain Code=4097 "connection to service named com.apple.linkd.autoShortcut" UserInfo={NSDebugDescription=connection to service named com.apple.linkd.autoShortcut}
+2026-10-20 23:22:21.070535+0800 Dynamic Island[28432:17122100] [Connection] Unable to re-register with Process Instance Registry, error: Error Domain=NSCocoaErrorDomain Code=4097 "connection to service named com.apple.linkd.autoShortcut" UserInfo={NSDebugDescription=connection to service named com.apple.linkd.autoShortcut}
+2026-10-20 23:22:21.071083+0800 Dynamic Island[28432:17122110] [Connection] Unable to re-register with Process 2026-10-20 23:22:21.071178+0800 Dynamic Island[28432:17122140] [Connection] Unable to re-register with Process Instance Registry, error: Error Domain=NSCocoaErrorDomain Code=4097 "connection to service named com.apple.linkd.autoShortcut" UserInfo={NSDebugDescription=connection to service named com.apple.linkd.autoShortcut}
+Instance Registry, error: Error Domain=NSCocoaErrorDomain Code=4097 "connection to service named com.apple.linkd.autoShortcut" UserInfo={NSDebugDescription=connection to service named com.apple.linkd.autoShortcut}
+2026-10-20 23:22:21.070547+0800 Dynamic Island[28432:17122111] [Connection] Unable to get synchronousRemoteObjectProxy, error: Error Domain=NSCocoaErrorDomain Code=4097 "connection to service named com.apple.linkd.autoShortcut" UserInfo={NSDebugDescription=connection to service named com.apple.linkd.autoShortcut}
+2026-10-20 23:22:21.071179+0800 Dynamic Island[28432:17122120] [Connection] Unable to re-register with Process Instance Registry, error: Error Domain=NSCocoaErrorDomain Code=4097 "connection to service named com.apple.linkd.autoShortcut" UserInfo={NSDebugDescription=connection to service named com.apple.linkd.autoShortcut}
+2026-10-20 23:22:21.061755+0800 Dynamic Island[28432:17122136] [Connection] Unable to get synchronousRemoteObjectProxy, error: Error Domain=NSCocoaErrorDomain Code=4097 "connection to service named com.apple.linkd.autoShortcut" UserInfo={NSDebugDescription=connection to service named com.apple.linkd.autoShortcut}
+2026-10-20 23:22:21.056116+0800 Dynamic Island[28432:17122131] [Connection] Unable to get synchronousRemoteObjectProxy, error: Error Domain=NSCocoaErrorDomain Code=4097 "connection to service named com.apple.linkd.autoShortcut" UserInfo={NSDebugDescription=connection to service named com.apple.linkd.autoShortcut}
+2026-10-20 23:22:21.071278+0800 Dynamic Island[28432:17122111] [Connection] Unable to re-register with Process Instance Registry, error: Error Domain=NSCocoaErrorDomain Code=4097 "connection to service named com.apple.linkd.autoShortcut" U2026-10-20 23:22:21.035905+0800 Dynamic Island[28432:17122112] [Connection] Unable to get synchronousRemoteObjectProxy, error: Error Domain=NSCocoaErrorDomain Code=4097 "connection to service named com.apple.linkd.autoShortcut" UserInfo={NSDebugDescription=connection to service named com.apple.linkd.autoShortcut}
+serInfo={NSDebugDescription=connection to service named com.apple.linkd.autoShortcut}
+2026-10-20 23:22:21.068576+0800 Dynamic Island[28432:17122133] [Connection] Unable to re-register with Process Instance Registry, error: Error Domain=NSCocoaErrorDomain Code=4097 "connection to service named com.apple.linkd.autoShortcut" UserInfo={NSDebugDescription=connection to service named com.apple.linkd.autoShortcut}
+2026-10-20 23:22:21.070290+0800 Dynamic Island[28432:17122141] [Connection] Unable to re-register with Process Instance Registry, error: Error Domain=NSCocoaErrorDomain Code=4097 "connection to service named com.apple.linkd.autoShortcut" UserInfo={NSDebugDescription=connection to service named com.apple.linkd.autoShortcut}
+2026-10-20 23:22:21.071369+0800 Dynamic Island[28432:17122136] [Connection] Unable to re-register with Process Instance Registry, error: Error Domain=NSCocoaErrorDomain Code=4097 "connection to service named com.apple.linkd.autoShortcut" UserInfo={NSDebugDescription=connection to service named com.apple.linkd.autoShortcut}
+2026-10-20 23:22:21.071372+0800 Dynamic Island[28432:17122131] [Connection] Unable to re-register with Process Instance Registry, error: Error Domain=NSCocoaErrorDomain Code=4097 "connection to service named com.apple.linkd.autoShortcut" UserInfo={NSDebugDescription=connection to service named com.apple.linkd.autoShortcut}
+2026-10-20 23:22:21.031589+0800 Dynamic Island[28432:17122107] [Connection] Unable to get synchronousRemoteObjectProxy, error: Error Domain=NSCocoaErrorDomain Code=4097 "connection to service named com.apple.linkd.autoShortcut" UserInfo={NSDebugDescription=connection to service named com.apple.linkd.autoShortcut}
+2026-10-20 23:22:21.071460+0800 2026-10-20 23:22:21.071567+0800 Dynamic Island[28432:17122107] [Connection] Unable to re-register with Process Instance Registry, error: Error Domain=NSCocoaErrorDomain Code=4097 "connection to service named com.apple.linkd.autoShortcut" UserInfo={NSDebugDescription=connection to service named com.apple.linkd.autoShortcut}
+Dynamic Island[28432:17122112] [Connection] Unable to re-register with Process Instance Registry, error: Error Domain=NSCocoaErrorDomain Code=4097 "connection to service named com.apple.linkd.autoShortcut" UserInfo={NSDebugDescription=connection to service named com.apple.linkd.autoShortcut}
+Test Suite 'Selected tests' started at 2026-10-20 23:22:21.236.
+Test Suite 'DynamicIslandTests.xctest' started at 2026-10-20 23:22:21.237.
+Test Suite 'PluginDocumentationTests' started at 2026-10-20 23:22:21.237.
+Test Case '-[DynamicIslandTests.PluginDocumentationTests testDocumentedActivityFunctionsPublishReplaceAndEndInHost]' started.
+2026-10-20 23:22:21.339979+0800 Dynamic Island[28432:17121992] [ActivityManager] source=com.example.documentation id=plugin:com.example.documentation:reading from=none to=queued reason=publish
+2026-10-20 23:22:21.379438+0800 Dynamic Island[28432:17121992] [ActivityManager] source=com.example.documentation id=plugin:com.example.documentation:reading from=queued to=queued reason=update
+2026-10-20 23:22:21.386346+0800 Dynamic Island[28432:17121992] [ActivityManager] source=com.example.documentation id=plugin:com.example.documentation:reading from=queued to=ended reason=sourceEnd
+Test Case '-[DynamicIslandTests.PluginDocumentationTests testDocumentedActivityFunctionsPublishReplaceAndEndInHost]' passed (0.157 seconds).
+Test Case '-[DynamicIslandTests.PluginDocumentationTests testDocumentedLinkHandlerOnlyOpensFromCurrentAuthorizedAction]' started.
+2026-10-20 23:22:21.406485+0800 Dynamic Island[28432:17121992] [ActivityManager] source=com.example.documentation id=plugin:com.example.documentation:links from=none to=queued reason=publish
+2026-10-20 23:22:21.413064+0800 Dynamic Island[28432:17121992] [ActivityManager] source=com.example.documentation id=plugin:com.example.documentation:links from=queued to=presented reason=select
+2026-10-20 23:22:21.426411+0800 Dynamic Island[28432:17121992] [ActivityManager] source=com.example.documentation id=plugin:com.example.documentation:links from=presented to=background reason=toolSelectionCleared
+2026-10-20 23:22:21.426441+0800 Dynamic Island[28432:17121992] [ActivityManager] source=com.example.documentation id=plugin:com.example.documentation:links from=background to=ended reason=sourceStopped
+Test Case '-[DynamicIslandTests.PluginDocumentationTests testDocumentedLinkHandlerOnlyOpensFromCurrentAuthorizedAction]' passed (0.033 seconds).
+Test Case '-[DynamicIslandTests.PluginDocumentationTests testDocumentedNetworkFunctionUsesHostPolicyAndValidatesBusinessJSON]' started.
+Test Case '-[DynamicIslandTests.PluginDocumentationTests testDocumentedNetworkFunctionUsesHostPolicyAndValidatesBusinessJSON]' passed (0.077 seconds).
+Test Case '-[DynamicIslandTests.PluginDocumentationTests testDocumentedSettingsDefaultWithoutGrantAndValidateStoredShape]' started.
+Test Case '-[DynamicIslandTests.PluginDocumentationTests testDocumentedSettingsDefaultWithoutGrantAndValidateStoredShape]' passed (0.089 seconds).
+Test Suite 'PluginDocumentationTests' passed at 2026-10-20 23:22:21.595.
+	 Executed 4 tests, with 0 failures (0 unexpected) in 0.357 (0.358) seconds
+Test Suite 'PluginSDKContractTests' started at 2026-10-20 23:22:21.595.
+Test Case '-[DynamicIslandTests.PluginSDKContractTests testBundledManifestSchemaIsAnExactOfflineCopyOfHostContract]' started.
+Test Case '-[DynamicIslandTests.PluginSDKContractTests testBundledManifestSchemaIsAnExactOfflineCopyOfHostContract]' passed (0.007 seconds).
+Test Case '-[DynamicIslandTests.PluginSDKContractTests testIndependentAuthorPackageRoutesBothButtonsThroughCurrentHostInstance]' started.
+2026-10-20 23:22:21.617496+0800 Dynamic Island[28432:17121992] [ActivityManager] source=com.example.independent-status id=plugin:com.example.independent-status:status-switch from=none to=queued reason=publish
+2026-10-20 23:22:21.622109+0800 Dynamic Island[28432:17121992] [ActivityManager] source=com.example.independent-status id=plugin:com.example.independent-status:status-switch from=queued to=presented reason=select
+2026-10-20 23:22:21.624291+0800 Dynamic Island[28432:17121992] [ActivityManager] source=com.example.independent-status id=plugin:com.example.independent-status:status-switch from=presented to=presented reason=update
+2026-10-20 23:22:21.637506+0800 Dynamic Island[28432:17121992] [ActivityManager] source=com.example.independent-status id=plugin:com.example.independent-status:status-switch from=presented to=presented reason=update
+2026-10-20 23:22:21.647680+0800 Dynamic Island[28432:17121992] [ActivityManager] source=com.example.independent-status id=plugin:com.example.independent-status:status-switch from=presented to=background reason=toolSelectionCleared
+2026-10-20 23:22:21.647788+0800 Dynamic Island[28432:17121992] [ActivityManager] source=com.example.independent-status id=plugin:com.example.independent-status:status-switch from=background to=ended reason=sourceStopped
+2026-10-20 23:22:21.656365+0800 Dynamic Island[28432:17121992] [ActivityManager] source=com.example.independent-status id=plugin:com.example.independent-status:status-switch from=none to=queued reason=publish
+2026-10-20 23:22:21.660680+0800 Dynamic Island[28432:17121992] [ActivityManager] source=com.example.independent-status id=plugin:com.example.independent-status:status-switch from=queued to=presented reason=select
+2026-10-20 23:22:21.663203+0800 Dynamic Island[28432:17121992] [ActivityManager] source=com.example.independent-status id=plugin:com.example.independent-status:status-switch from=presented to=presented reason=update
+2026-10-20 23:22:21.673522+0800 Dynamic Island[28432:17121992] [ActivityManager] source=com.example.independent-status id=plugin:com.example.independent-status:status-switch from=presented to=background reason=toolSelectionCleared
+2026-10-20 23:22:21.673630+0800 Dynamic Island[28432:17121992] [ActivityManager] source=com.example.independent-status id=plugin:com.example.independent-status:status-switch from=background to=ended reason=sourceStopped
+Test Case '-[DynamicIslandTests.PluginSDKContractTests testIndependentAuthorPackageRoutesBothButtonsThroughCurrentHostInstance]' passed (0.073 seconds).
+Test Case '-[DynamicIslandTests.PluginSDKContractTests testSDKPackagedHelloRunsInProductionVMAndRoutesOnlyCurrentInstances]' started.
+2026-10-20 23:22:21.689571+0800 Dynamic Island[28432:17121992] [ActivityManager] source=com.example.hello-world id=plugin:com.example.hello-world:counter from=none to=queued reason=publish
+2026-10-20 23:22:21.695714+0800 Dynamic Island[28432:17121992] [ActivityManager] source=com.example.hello-world id=plugin:com.example.hello-world:counter from=queued to=presented reason=select
+2026-10-20 23:22:21.698100+0800 Dynamic Island[28432:17121992] [ActivityManager] source=com.example.hello-world id=plugin:com.example.hello-world:counter from=presented to=presented reason=update
+2026-10-20 23:22:21.708297+0800 Dynamic Island[28432:17121992] [ActivityManager] source=com.example.hello-world id=plugin:com.example.hello-world:counter from=presented to=background reason=toolSelectionCleared
+2026-10-20 23:22:21.708347+0800 Dynamic Island[28432:17121992] [ActivityManager] source=com.example.hello-world id=plugin:com.example.hello-world:counter from=background to=ended reason=sourceStopped
+2026-10-20 23:22:21.714971+0800 Dynamic Island[28432:17121992] [ActivityManager] source=com.example.hello-world id=plugin:com.example.hello-world:counter from=none to=queued reason=publish
+2026-10-20 23:22:21.721208+0800 Dynamic Island[28432:17121992] [ActivityManager] source=com.example.hello-world id=plugin:com.example.hello-world:counter from=queued to=presented reason=select
+2026-10-20 23:22:21.724473+0800 Dynamic Island[28432:17121992] [ActivityManager] source=com.example.hello-world id=plugin:com.example.hello-world:counter from=presented to=presented reason=update
+2026-10-20 23:22:21.732339+0800 Dynamic Island[28432:17121992] [ActivityManager] source=com.example.hello-world id=plugin:com.example.hello-world:counter from=presented to=background reason=toolSelectionCleared
+2026-10-20 23:22:21.732469+0800 Dynamic Island[28432:17121992] [ActivityManager] source=com.example.hello-world id=plugin:com.example.hello-world:counter from=background to=ended reason=sourceStopped
+Test Case '-[DynamicIslandTests.PluginSDKContractTests testSDKPackagedHelloRunsInProductionVMAndRoutesOnlyCurrentInstances]' passed (0.058 seconds).
+Test Case '-[DynamicIslandTests.PluginSDKContractTests testSharedAuthoringCasesAgreeWithProductionManifestAndNodeConverters]' started.
+Test Case '-[DynamicIslandTests.PluginSDKContractTests testSharedAuthoringCasesAgreeWithProductionManifestAndNodeConverters]' passed (0.021 seconds).
+Test Suite 'PluginSDKContractTests' passed at 2026-10-20 23:22:21.757.
+	 Executed 4 tests, with 0 failures (0 unexpected) in 0.159 (0.161) seconds
+Test Suite 'DynamicIslandTests.xctest' passed at 2026-10-20 23:22:21.757.
+	 Executed 8 tests, with 0 failures (0 unexpected) in 0.516 (0.520) seconds
+Test Suite 'Selected tests' passed at 2026-10-20 23:22:21.757.
+	 Executed 8 tests, with 0 failures (0 unexpected) in 0.516 (0.521) seconds
+2026-10-20 23:22:22.055 xcodebuild[28395:17121578] [MT] IDETestOperationsObserverDebug: 1.661 elapsed -- Testing started completed.
+2026-10-20 23:22:22.055 xcodebuild[28395:17121578] [MT] IDETestOperationsObserverDebug: 0.000 sec, +0.000 sec -- start
+2026-10-20 23:22:22.055 xcodebuild[28395:17121578] [MT] IDETestOperationsObserverDebug: 1.661 sec, +1.661 sec -- end
+
+Test session results, code coverage, and logs:
+	/tmp/dynamic-island-t38-publish-20261020/SDKHost.xcresult
+
+** TEST SUCCEEDED **
+
+Testing started

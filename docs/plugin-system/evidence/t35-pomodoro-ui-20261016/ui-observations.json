@@ -1,0 +1,123 @@
+[
+  {
+    "phase": "install-preview",
+    "utc": "2026-10-16T02:51:57.481Z",
+    "ax": "The following is a diff from the previous accessibility tree for Window: \"安装插件\" with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.\nRemoved element IDs: 10-96\n~7 standard window 安装插件, Secondary Actions: Raise\n~\t8 container\n~\t\t9 image puzzlepiece.extension\n+\t\t10 text 安装插件 检查插件信息与权限\n+\t\t11 scroll area\n+\t\t\t12 text 番茄钟 版本：0.2.0 开发者：DynamicIsland（插件自行声明，未验证） 插件 ID：com.dynamicisland.pomodoro 插件声明的权限 保存插件数据 安装后另行授权 在本机保存此插件的数据和偏好设置，与其他插件分开存放。\n+\t\t13 text 安装不会授予权限或自动运行插件。\n+\t\t14 button Description: 取消, ID: plugin-installer-cancel\n+\t\t15 button Description: 安装插件, ID: plugin-installer-confirm\n+\t16 close button\n+\t17 zoom button\n+\t18 minimize button\n+\t19 text 安装插件\nThe focused UI element is 7 standard window 安装插件, Secondary Actions: Raise"
+  },
+  {
+    "phase": "installed-disabled",
+    "utc": "2026-10-16T02:52:05.649Z",
+    "ax": "The following is a diff from the previous accessibility tree for Window: \"插件管理\" with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.\nRemoved element IDs: 12-14, 16-19\n~7 standard window 插件管理, Secondary Actions: Raise\n~\t\t9 text 已安装 1 番茄钟\n~\t\t10 button Description: 导入插件, ID: plugin-extensions-import\n~\t\t11 button Description: 刷新, ID: plugin-extensions-refresh\n+\t\t12 scroll area\n+\t\t\t13 list Secondary Actions: AXScrollToTop, AXScrollToBottom\n+\t\t\t\t14 button Description: 番茄钟, v0.2.0, 已停用, ID: plugin-extensions-plugin-com.dynamicisland.pomodoro\n~\t\t15 text v0.2.0 · 已停用\n+\t\t16 scroll area plugin-extensions-detail\n+\t\t\t17 text Value: 开发者：DynamicIsland（插件自行声明，未验证） 原生 JavaScriptCore 最低主程序版本 0.6.0, ID: plugin-extensions-developer\n+\t\t\t18 button Description: 启用插件, ID: plugin-extensions-enable\n+\t\t\t19 button Description: 查看诊断, ID: plugin-extensions-diagnostics\n+\t\t\t20 button Description: 卸载…, ID: plugin-extensions-uninstall\n+\t\t\t21 text 权限 启用插件不会自动授权。授权仅适用于当前代码，并保存在本机；代码或权限声明变化后需重新确认。撤销立即生效。\n+\t\t\t22 container plugin-extensions-permission-storage.local\n+\t\t\t\t23 text 保存插件数据 待授权\n+\t\t\t\t24 button Description: 拒绝, ID: plugin-extensions-deny-storage.local\n+\t\t\t\t25 button Description: 授权…, ID: plugin-extensions-approve-storage.local\n+\t\t\t\t26 text 在本机保存此插件的数据和偏好设置，与其他插件分开存放。\n+\t27 close button\n+\t28 zoom button\n+\t29 minimize button\n+\t30 text 插件管理\nThe focused UI element is 7 standard window 插件管理, Secondary Actions: Raise"
+  },
+  {
+    "phase": "enabled-still-requested",
+    "utc": "2026-10-16T02:52:16.817Z",
+    "ax": "The following is a diff from the previous accessibility tree for Window: \"插件管理\" with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.\n~\t\t\t\t14 button Description: 番茄钟, v0.2.0, 运行中, ID: plugin-extensions-plugin-com.dynamicisland.pomodoro\n~\t\t15 text v0.2.0 · 运行中\n~\t\t\t18 button Description: 停用插件, ID: plugin-extensions-enable\nThe focused UI element is 7 standard window 插件管理, Secondary Actions: Raise"
+  },
+  {
+    "phase": "storage-denied",
+    "utc": "2026-10-16T02:52:25.273Z",
+    "ax": "The following is a diff from the previous accessibility tree for Window: \"插件管理\" with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.\nRemoved element IDs: 24\n~\t\t\t\t23 text 保存插件数据 已拒绝\n~\t\t\t\t25 button Description: 重新授权…, ID: plugin-extensions-approve-storage.local\nThe focused UI element is 7 standard window 插件管理, Secondary Actions: Raise"
+  },
+  {
+    "phase": "physical-hover-expanded",
+    "utc": "2026-10-16T02:54:15.705Z",
+    "ax": "The following is a diff from the previous accessibility tree for Window: \"\" with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.\n+\t8 container\n+\t\t9 button Description: 音乐, ID: island-surface-music\n+\t\t10 button Description: 拖盘, ID: island-surface-tray\n+\t\t11 menu button Description: 计时, Help: 计时与插件工具, ID: island-tool-selector\n+\t\t12 button Description: 退出 Dynamic Island, ID: power\n+\t\t13 image Description: Image unavailable, ID: music.note\n+\t\t14 text 未在播放 在 Apple Music 播放后显示曲目信息 0:00 --:--\n+\t\t15 button Description: 上一首, ID: backward.fill\n+\t\t16 button Description: 播放, ID: play.fill\n+\t\t17 button Description: 下一首, ID: forward.fill\n+\t\t18 button Description: 取消静音, ID: speaker.slash.fill\n+\t\t19 button Description: 减小音量, ID: minus\n+\t\t20 slider Description: 音量, Value: 0, Secondary Actions: Increment, Decrement\n+\t\t\t21 value indicator 0\n+\t\t22 button Description: 增大音量, ID: plus\n+\t\t23 text 静音"
+  },
+  {
+    "phase": "denied-idle-tool",
+    "utc": "2026-10-16T02:54:40.663Z",
+    "ax": "The following is a diff from the previous accessibility tree for Window: \"\" with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.\n~\t\t\t\t26 (selected) 番茄钟, ID: island-tool-plugin:com.dynamicisland.pomodoro:session"
+  },
+  {
+    "phase": "denied-idle-tool-settled",
+    "utc": "2026-10-16T02:54:54.127Z",
+    "ax": "There has been no change in the accessibility tree for Window: \"\"."
+  },
+  {
+    "phase": "denied-tool-controls",
+    "utc": "2026-10-16T02:55:04.906Z",
+    "ax": "Window: \"\", App: Dynamic Island T35 Pomodoro.\n0 system dialog Secondary Actions: Raise\n\t1 container\n\t\t2 button Description: 音乐, ID: island-surface-music\n\t\t3 button Description: 拖盘, ID: island-surface-tray\n\t\t4 menu button Alarm, Description: 计时, Help: 计时与插件工具, ID: island-tool-selector\n\t\t5 button Description: 退出 Dynamic Island, ID: power\n\t\t6 text 25 分钟 · 准备专注 · 设置未保存 25:00\n\t\t7 progress indicator Description: Progress, Value: 0, Details: 0 percent\n\t\t8 button 15 分钟\n\t\t9 button 25 分钟，当前预设\n\t\t10 button 45 分钟\n\t\t11 button 60 分钟\n\t\t12 button 开始\n\t\t13 button 结束\n14 menu bar\n\t15 Dynamic Island T35 Pomodoro\n\t16 Edit\n\t17 View\n\t18 Window\n\t19 Help\n"
+  },
+  {
+    "phase": "denied-running",
+    "utc": "2026-10-16T02:55:13.843Z",
+    "ax": "The following is a diff from the previous accessibility tree for Window: \"\" with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.\nRemoved element IDs: 7\n~\t\t6 text 25 分钟 · 专注中 · 设置未保存 25:00\n+\t\t20 progress indicator Description: Countdown progress, Value: 4.218000000055788e-06, Details: 0 percent\n~\t\t12 button 暂停"
+  },
+  {
+    "phase": "denied-paused",
+    "utc": "2026-10-16T02:55:24.698Z",
+    "ax": "The following is a diff from the previous accessibility tree for Window: \"\" with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.\n~\t\t6 text 25 分钟 · 已暂停 · 设置未保存 24:50\n~\t\t20 progress indicator Description: Countdown progress, Value: 0.007235491916666725, Details: 1 percent\n~\t\t12 button 继续"
+  },
+  {
+    "phase": "storage-approval-confirmation",
+    "utc": "2026-10-16T02:55:46.648Z",
+    "ax": "The following is a diff from the previous accessibility tree for Window: \"Unknown\" with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.\nRemoved element IDs: 22-41\n~20 sheet Description: alert, Secondary Actions: Raise\n~\t21 text 允许“番茄钟”保存插件数据？ 插件版本：0.2.0\n\n在本机保存此插件的数据和偏好设置，与其他插件分开存放。\n\n仅向此版本的当前代码授权；代码或权限声明变化后需要重新确认。\n+\t22 button 取消, ID: action-button-2\n+\t23 button 允许此权限, ID: action-button-1\nThe focused UI element is 20 sheet Description: alert, Secondary Actions: Raise"
+  },
+  {
+    "phase": "storage-granted",
+    "utc": "2026-10-16T02:55:58.770Z",
+    "ax": "The following is a diff from the previous accessibility tree for Window: \"Dynamic Island T35 Pomodoro Settings\" with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.\nRemoved element IDs: 22-23\n~20 standard window Dynamic Island T35 Pomodoro Settings, ID: com_apple_SwiftUI_Settings_window, Secondary Actions: Raise\n~\t21 container\n+\t\t22 text 已安装 1 番茄钟\n+\t\t23 button Description: 导入插件, ID: plugin-extensions-import\n+\t\t24 button Description: 刷新, ID: plugin-extensions-refresh\n+\t\t25 scroll area\n+\t\t\t26 list Secondary Actions: AXScrollToTop, AXScrollToBottom\n+\t\t\t\t27 button Description: 番茄钟, v0.2.0, 运行中, ID: plugin-extensions-plugin-com.dynamicisland.pomodoro\n+\t\t28 text v0.2.0 · 运行中\n+\t\t29 scroll area plugin-extensions-detail\n+\t\t\t30 text Value: 开发者：DynamicIsland（插件自行声明，未验证） 原生 JavaScriptCore 最低主程序版本 0.6.0, ID: plugin-extensions-developer\n+\t\t\t31 button Description: 停用插件, ID: plugin-extensions-enable\n+\t\t\t32 button Description: 查看诊断, ID: plugin-extensions-diagnostics\n+\t\t\t33 button Description: 卸载…, ID: plugin-extensions-uninstall\n+\t\t\t34 text 权限 启用插件不会自动授权。授权仅适用于当前代码，并保存在本机；代码或权限声明变化后需重新确认。撤销立即生效。\n+\t\t\t35 container plugin-extensions-permission-storage.local\n+\t\t\t\t36 text 保存插件数据 已允许\n+\t\t\t\t37 button Description: 撤销, ID: plugin-extensions-revoke-storage.local\n+\t\t\t\t38 text 在本机保存此插件的数据和偏好设置，与其他插件分开存放。\n+\t39 close button\n+\t40 zoom button (disabled)\n+\t41 text Dynamic Island T35 Pomodoro Settings\nThe focused UI element is 20 standard window Dynamic Island T35 Pomodoro Settings, ID: com_apple_SwiftUI_Settings_window, Secondary Actions: Raise"
+  },
+  {
+    "phase": "granted-preset-60",
+    "utc": "2026-10-16T02:56:24.124Z",
+    "ax": "The following is a diff from the previous accessibility tree for Window: \"\" with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.\nRemoved element IDs: 1-13"
+  },
+  {
+    "phase": "saved-60-visible",
+    "utc": "2026-10-16T02:57:20.185Z",
+    "ax": "Window: \"\", App: Dynamic Island T35 Pomodoro.\n0 system dialog Secondary Actions: Raise\n\t1 container\n\t\t2 button Description: 音乐, ID: island-surface-music\n\t\t3 button Description: 拖盘, ID: island-surface-tray\n\t\t4 menu button Description: 计时, Help: 计时与插件工具, ID: island-tool-selector\n\t\t5 button Description: 退出 Dynamic Island, ID: power\n\t\t6 text 60 分钟 · 准备专注 1:00:00\n\t\t7 progress indicator Description: Progress, Value: 0, Details: 0 percent\n\t\t8 button 15 分钟\n\t\t9 button 25 分钟\n\t\t10 button 45 分钟\n\t\t11 button 60 分钟，当前预设\n\t\t12 button 开始\n\t\t13 button 结束\n14 menu bar\n\t15 Dynamic Island T35 Pomodoro\n\t16 Edit\n\t17 View\n\t18 Window\n\t19 Help\n"
+  },
+  {
+    "phase": "saved-15-ready",
+    "utc": "2026-10-16T02:57:29.921Z",
+    "ax": "The following is a diff from the previous accessibility tree for Window: \"\" with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.\n~\t\t6 text 15 分钟 · 准备专注 15:00\n~\t\t8 button 15 分钟，当前预设\n~\t\t11 button 60 分钟"
+  },
+  {
+    "phase": "running-before-revoke",
+    "utc": "2026-10-16T02:57:53.660Z",
+    "ax": "The following is a diff from the previous accessibility tree for Window: \"\" with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.\nRemoved element IDs: 7\n~\t\t6 text 15 分钟 · 专注中 15:00\n+\t\t20 progress indicator Description: Countdown progress, Value: 2.003662000005235e-05, Details: 0 percent\n~\t\t12 button 暂停"
+  },
+  {
+    "phase": "storage-revoked",
+    "utc": "2026-10-16T02:58:03.694Z",
+    "ax": "The following is a diff from the previous accessibility tree for Window: \"Dynamic Island T35 Pomodoro Settings\" with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.\nRemoved element IDs: 37\n~\t\t\t\t36 text 保存插件数据 已撤销\n+\t\t\t\t42 button Description: 授权…, ID: plugin-extensions-approve-storage.local\nThe focused UI element is 20 standard window Dynamic Island T35 Pomodoro Settings, ID: com_apple_SwiftUI_Settings_window, Secondary Actions: Raise"
+  },
+  {
+    "phase": "revoked-paused",
+    "utc": "2026-10-16T02:58:16.944Z",
+    "ax": "The following is a diff from the previous accessibility tree for Window: \"\" with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.\n~\t\t6 text 15 分钟 · 已暂停 · 设置未保存 14:37\n~\t\t7 progress indicator Description: Countdown progress, Value: 0.02587040819444442, Details: 3 percent\n~\t\t12 button 继续"
+  },
+  {
+    "phase": "revoked-resumed",
+    "utc": "2026-10-16T02:58:25.253Z",
+    "ax": "The following is a diff from the previous accessibility tree for Window: \"\" with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.\n~\t\t6 text 15 分钟 · 专注中 14:37\n~\t\t7 progress indicator Description: Countdown progress, Value: 0.02588113245333334, Details: 3 percent\n~\t\t12 button 暂停"
+  },
+  {
+    "phase": "running-before-app-restart",
+    "utc": "2026-10-16T02:59:39.546Z",
+    "ax": "Window: \"\", App: Dynamic Island T35 Pomodoro.\n0 system dialog Secondary Actions: Raise\n\t1 container\n\t\t2 button Description: 音乐, ID: island-surface-music\n\t\t3 button Description: 拖盘, ID: island-surface-tray\n\t\t4 menu button Description: 计时, Help: 计时与插件工具, ID: island-tool-selector\n\t\t5 button Description: 退出 Dynamic Island, ID: power\n\t\t6 text 15 分钟 · 专注中 13:24\n\t\t7 progress indicator Description: Countdown progress, Value: 0.1076942049533333, Details: 11 percent\n\t\t8 button 15 分钟，当前预设\n\t\t9 button 25 分钟\n\t\t10 button 45 分钟\n\t\t11 button 60 分钟\n\t\t12 button 暂停\n\t\t13 button 结束\n14 menu bar\n\t15 Dynamic Island T35 Pomodoro\n\t16 Edit\n\t17 View\n\t18 Window\n\t19 Help\n"
+  },
+  {
+    "phase": "permission-still-granted-after-failed-restart",
+    "utc": "2026-10-16T03:00:34.397Z",
+    "ax": "The following is a diff from the previous accessibility tree for Window: \"Dynamic Island T35 Pomodoro Settings\" with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.\nRemoved element IDs: 0\n+7 standard window Dynamic Island T35 Pomodoro Settings, ID: com_apple_SwiftUI_Settings_window, Secondary Actions: Raise\n+\t8 container\n+\t\t9 text 已安装 1 番茄钟\n+\t\t10 busy indicator 0\n+\t\t11 button Description: 导入插件, ID: plugin-extensions-import\n+\t\t12 button (disabled) Description: 刷新, ID: plugin-extensions-refresh\n+\t\t13 scroll area\n+\t\t\t14 list Secondary Actions: AXScrollToTop, AXScrollToBottom\n+\t\t\t\t15 button Description: 番茄钟, v0.2.0, 运行中, ID: plugin-extensions-plugin-com.dynamicisland.pomodoro\n+\t\t16 text v0.2.0 · 运行中\n+\t\t17 scroll area plugin-extensions-detail\n+\t\t\t18 text Value: 开发者：DynamicIsland（插件自行声明，未验证） 原生 JavaScriptCore 最低主程序版本 0.6.0, ID: plugin-extensions-developer\n+\t\t\t19 button (disabled) Description: 停用插件, ID: plugin-extensions-enable\n+\t\t\t20 button (disabled) Description: 查看诊断, ID: plugin-extensions-diagnostics\n+\t\t\t21 button (disabled) Description: 卸载…, ID: plugin-extensions-uninstall\n+\t\t\t22 text 权限 启用插件不会自动授权。授权仅适用于当前代码，并保存在本机；代码或权限声明变化后需重新确认。撤销立即生效。\n+\t\t\t23 container plugin-extensions-permission-storage.local\n+\t\t\t\t24 text 保存插件数据 已允许\n+\t\t\t\t25 button (disabled) Description: 撤销, ID: plugin-extensions-revoke-storage.local\n+\t\t\t\t26 text 在本机保存此插件的数据和偏好设置，与其他插件分开存放。\n+\t27 close button\n+\t28 zoom button (disabled)\n+\t29 text Dynamic Island T35 Pomodoro Settings\nThe focused UI element is 7 standard window Dynamic Island T35 Pomodoro Settings, ID: com_apple_SwiftUI_Settings_window, Secondary Actions: Raise"
+  },
+  {
+    "phase": "restart-attempt-rejected",
+    "utc": "2026-10-16T03:08:30.302Z",
+    "pid": 99942,
+    "reason": "Process start time remained 10:49:19 after the animated quit; no restart or natural 15-minute completion has been accepted."
+  },
+  {
+    "phase": "genuine-restart-idle-restored",
+    "utc": "2026-10-16T03:16:57.164Z",
+    "ax": "Window: \"\", App: Dynamic Island T35 Pomodoro.\n0 system dialog Secondary Actions: Raise\n\t1 container\n\t\t2 button Description: 音乐, ID: island-surface-music\n\t\t3 button Description: 拖盘, ID: island-surface-tray\n\t\t4 menu button Alarm, Description: 计时, Help: 计时与插件工具, ID: island-tool-selector\n\t\t5 button Description: 退出 Dynamic Island, ID: power\n\t\t6 text 15 分钟 · 准备专注 15:00\n\t\t7 progress indicator Description: Progress, Value: 0, Details: 0 percent\n\t\t8 button 15 分钟，当前预设\n\t\t9 button 25 分钟\n\t\t10 button 45 分钟\n\t\t11 button 60 分钟\n\t\t12 button 开始\n\t\t13 button 结束\n14 menu bar\n\t15 Dynamic Island T35 Pomodoro\n\t16 Edit\n\t17 View\n\t18 Window\n\t19 Help\n"
+  },
+  {
+    "phase": "fixed-animated-quit-requested",
+    "utc": "2026-10-16T03:17:22.311Z",
+    "pid": 1244
+  }
+]

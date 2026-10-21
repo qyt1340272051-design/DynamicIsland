@@ -1,0 +1,32 @@
+{
+  "result": "Passed",
+  "totalTestCount": 733,
+  "passedTests": 732,
+  "failedTests": 0,
+  "skippedTests": 1,
+  "startTime": 1792044724.828,
+  "finishTime": 1792044795.948,
+  "baseCommit": "a30b75e",
+  "ordinaryReleaseBuildPassed": true,
+  "testResults": "/tmp/dynamic-island-t35-tools-20261015-fixed/TestResults.xcresult",
+  "log": "/tmp/dynamic-island-t35-tools-20261015-fixed-ci.log",
+  "sourceSHA256": {
+    "DynamicIsland/Core/Activity/ActivityManager.swift": "d74d5eb1dd1bf63b2841bc7074854bd340838de0607d9ea69828403280d54cf5",
+    "DynamicIsland/Core/Activity/IslandActivity.swift": "eb08488f2220b4ae24c9164bea85d55b19edbfaf9e9869a8d3805c37419ed054",
+    "DynamicIsland/Core/Activity/IslandActivityRuntime.swift": "181a79fea560354e92d7edb06877db0578ebb061cc7862957842578d2872cb70",
+    "DynamicIsland/IslandPanelController.swift": "3a1558a0f68255477719788fc21083557273090e9f7ac68a4f62b17b37802c3a",
+    "DynamicIsland/IslandView.swift": "2b5fc26b4d4feb3e4ebee35ad9fdfb82f6e48e05c622aba1ffe5de811bcbfeb2",
+    "DynamicIsland/IslandVisualStyle.swift": "672faa523671d7944031b74191a2e588210ca8f7e57171d88dd3c2f0ae74733d",
+    "DynamicIsland/Plugins/PluginActivityConverter.swift": "1858e47bcb05a1dc2e18817c1174d627df65eb7dca362cdc6f9bb63c58497c79",
+    "DynamicIsland/Plugins/PluginJSBridgeBootstrap.swift": "8a429afca8719df0e7177ed14400e93597b38f1c7328f75ed18d3e980be31abe",
+    "DynamicIslandTests/ActivityPresentationTests.swift": "c5b21bdb84a817dd6c5671b59e7e599ae65c62f21fa5475f61f60868679c9661",
+    "DynamicIslandTests/IslandActivityRuntimeTests.swift": "fc355c88f8beffd4f7d8acfb1a4c679913c916896de625c488355d9c19f981d4",
+    "DynamicIslandTests/IslandVisualStyleTests.swift": "fc0ef56c681c64dcdfe7f3645b9a520f56a68ab0031038b109d8b34f84da4ef7",
+    "DynamicIslandTests/PluginActivityBridgeTests.swift": "b61bbfd4e271e509a01741044b9461bdac49b278f43558aa8d247443e8dda0c3",
+    "DynamicIslandTests/ActivityToolSelectionTests.swift": "298effc6f35ce02770325e9c99635d14e5616db720c5f3b3631b4f3cc10f96fd",
+    "docs/plugin-system/examples/tool-demo/index.js": "cc3955ba83941964b885d65c156c28fb3b2b8120ffe7add61e79dec0e919d86b",
+    "docs/plugin-system/examples/tool-demo/manifest.json": "1bde15ec1eee0257eb2949e3f3433c20efbe62dbb97939dc3c19f3745cedb2a3"
+  },
+  "skipReason": "Existing explicit screenshot-matrix generation test",
+  "initialCompileFixes": "Required album in paused-music fixture and .none payload in new routed-action fixtures"
+}

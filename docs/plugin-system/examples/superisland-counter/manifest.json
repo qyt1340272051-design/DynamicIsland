@@ -1,0 +1,12 @@
+{
+  "schemaVersion": 1,
+  "id": "com.dynamicisland.compat-counter",
+  "name": "兼容·计数",
+  "developer": "DynamicIsland",
+  "version": "0.1.0",
+  "engine": "superisland",
+  "entry": "index.js",
+  "minimumHostVersion": "0.6.0",
+  "permissions": [],
+  "capabilities": ["activity.publish", "activity.update", "activity.end", "ui.islandNode", "actions.handle"]
+}

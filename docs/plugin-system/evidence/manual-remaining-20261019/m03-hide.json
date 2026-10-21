@@ -1,0 +1,11 @@
+{
+  "observedUTC": "2026-10-19T15:42:15.876577+00:00",
+  "userReply": "Found the menu and clicked Hide",
+  "requestWasHiddenStateWithoutShowingAgain": true,
+  "acceptancePIDStillPresent": [
+    7794
+  ],
+  "AXObservation": "Computer Use server error -10005: timeoutReached",
+  "screenshotObtained": false,
+  "scope": "User-reported hide action; no pixel or AX absence claimed from a timeout. Explicit disappearance/reappearance confirmation requested next."
+}

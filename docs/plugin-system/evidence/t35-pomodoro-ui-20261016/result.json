@@ -1,0 +1,45 @@
+{
+  "status": "partial acceptance; T35 remains in progress",
+  "scope": "Ordinary Release isolated sandbox app; same public Pomodoro code and no test entitlements",
+  "verified": [
+    "Real .dip import preview includes storage explanation",
+    "Install remains disabled and storage requested",
+    "Enable does not grant storage",
+    "Actual denied storage still allows start/pause/stop",
+    "Revoked storage still allows pause/resume of running timer",
+    "Explicit per-permission confirmation grants current code only",
+    "Selected 60-minute preset saved in isolated Storage and shown as 1:00:00",
+    "Running countdown expanded layout is visible and unclipped",
+    "Fixed standard menu quit exits the real process (PID 1059 absent)",
+    "Genuine new PID restores 15-minute preset to idle, despite saved lastSession running",
+    "Animated quit on the fixed build exits the real process (PID 1244 absent)"
+  ],
+  "withdrawn": "The first animated quit left PID 99942 alive; the resulting attempted restart is not accepted. Process was stopped by the user, then replaced with a fixed build.",
+  "pending": [
+    "Actual 15-minute natural completion and completion Activity",
+    "Compact physical notch and old surfaces regression in final build",
+    "Ordinary Release invalid-settings fallback screenshot; automated malformed cases already pass"
+  ],
+  "sourceScreenshots": {
+    "granted-settings.jpg": {
+      "originalPath": "/tmp/dynamic-island-t35-pomodoro-ui-20261016/granted-settings.jpg",
+      "sha256": "2ba4b67b38c4ed9b3ee097256225e9032fb4b27db650ecae2dcc6039b3ae6e3b"
+    },
+    "running-before-restart.jpg": {
+      "originalPath": "/tmp/dynamic-island-t35-pomodoro-ui-20261016/running-before-restart.jpg",
+      "sha256": "4969eddba62115a2340eca2cc7afc7bdf42b80ad9df4b9bf29326dcfa503fe5b"
+    },
+    "restarted-idle-15.jpg": {
+      "originalPath": "/tmp/dynamic-island-t35-pomodoro-ui-20261016/restarted-idle-15.jpg",
+      "sha256": "23b983053939a3370e27d09362db8528dafab5c2806a0ec76688b52d3f40e976"
+    }
+  },
+  "sameBundleID": "com.rong5.dynamic-island.t35-pomodoro.20261016",
+  "productionAppUntouched": true,
+  "continuation": {
+    "appPath": "/Users/rong5/Applications/Dynamic Island T35 Pomodoro.app",
+    "appRunning": false,
+    "isolatedDataRetained": true,
+    "next": "Launch the fixed copy, physically hover to expand, select Pomodoro and start an actual 15-minute session; finish UI/compact/old-surface acceptance before T35 verified."
+  }
+}

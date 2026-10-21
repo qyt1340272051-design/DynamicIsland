@@ -1,0 +1,13 @@
+{
+  "startedUTC": "2026-10-19T15:36:40.727228+00:00",
+  "HEAD": "0fa8da4fde4f788e9717d16ced81bf054c1f3a0d",
+  "app": "/tmp/dynamic-island-final-20261019/Dynamic Island Acceptance.app",
+  "bundleID": "com.rong5.dynamic-island.acceptance.20261019",
+  "executableSHA256": "5ba2f9371f63c2c993b5baa6331a24dee6fde8e448fbb65050bdc71a942cae38",
+  "productionSourceHashesMatched": 101,
+  "signatureStrictDeepPassed": true,
+  "sameKnownAcceptanceBuild": true,
+  "appMarketingVersion": "0.5.0",
+  "versionScope": "Development metadata retained; internal Host plugin version is 0.6.0. Not a public 0.6.0 binary release.",
+  "userRequestedManualAcceptance": true
+}

@@ -1,0 +1,26 @@
+Window: "插件诊断", App: Dynamic Island Acceptance.
+0 standard window 插件诊断, Secondary Actions: Raise
+	1 container
+		2 text 插件 5 计时三态验收
+		3 button Description: 刷新, ID: plugin-diagnostics-refresh
+		4 button Description: 重启插件, ID: plugin-diagnostics-restart
+		5 scroll area
+			6 list Secondary Actions: AXScrollToTop, AXScrollToBottom
+				7 button Description: 计时三态验收, v0.1.0, 运行中, ID: plugin-diagnostics-plugin-com.dynamicisland.acceptance.timer-presentations
+				8 button Description: 兼容·计数, v0.1.0, 运行中, ID: plugin-diagnostics-plugin-com.dynamicisland.compat-counter
+				9 button Description: 兼容·进度, v0.1.0, 运行中, ID: plugin-diagnostics-plugin-com.dynamicisland.compat-progress
+				10 button Description: 兼容·状态, v0.1.0, 运行中, ID: plugin-diagnostics-plugin-com.dynamicisland.compat-status
+				11 button Description: 双按钮状态, v0.1.0, 运行中, ID: plugin-diagnostics-plugin-com.example.independent-status
+		12 text v0.1.0 · 运行中 主程序调度策略：background App 活跃（NSApp）：是 App 在前台：是 低功耗模式：关 这是刷新时的状态快照；点击刷新更新。读取状态不会改变调度策略。 仅保留固定的诊断类别和错误代码；插件原始日志与异常内容不会保存。记录仅在本次运行中保留。 暂无诊断记录 插件运行产生的诊断记录会显示在这里。
+	13 close button
+	14 zoom button
+	15 minimize button
+	16 text 插件诊断
+17 menu bar
+	18 Dynamic Island Acceptance
+	19 Edit
+	20 View
+	21 Window
+	22 Help
+
+The focused UI element is 0 standard window 插件诊断, Secondary Actions: Raise

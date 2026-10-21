@@ -123,6 +123,84 @@ final class MusicControlServiceTests: XCTestCase {
         XCTAssertNil(AppleMusicControlService.seekScript(position: 10, trackIdentifier: ""))
     }
 
+    func testMissingArtworkRetriesQuicklyBeforeBackingOff() {
+        XCTAssertEqual(AppleMusicControlService.artworkRetryInterval(afterMisses: 1), 1)
+        XCTAssertEqual(AppleMusicControlService.artworkRetryInterval(afterMisses: 2), 1)
+        XCTAssertEqual(AppleMusicControlService.artworkRetryInterval(afterMisses: 3), 10)
+    }
+
+    func testArtworkResourceLimitsAreInclusive() {
+        XCTAssertTrue(
+            AppleMusicControlService.artworkFitsResourceLimits(
+                byteCount: AppleMusicControlService.maximumArtworkByteCount,
+                pixelWidth: AppleMusicControlService.maximumArtworkPixelDimension,
+                pixelHeight: AppleMusicControlService.maximumArtworkPixelDimension
+            )
+        )
+    }
+
+    func testArtworkResourceLimitsRejectOversizedOrEmptyInput() {
+        let byteLimit = AppleMusicControlService.maximumArtworkByteCount
+        let pixelLimit = AppleMusicControlService.maximumArtworkPixelDimension
+
+        XCTAssertFalse(
+            AppleMusicControlService.artworkFitsResourceLimits(
+                byteCount: byteLimit + 1,
+                pixelWidth: 1,
+                pixelHeight: 1
+            )
+        )
+        XCTAssertFalse(
+            AppleMusicControlService.artworkFitsResourceLimits(
+                byteCount: 1,
+                pixelWidth: pixelLimit + 1,
+                pixelHeight: 1
+            )
+        )
+        XCTAssertFalse(
+            AppleMusicControlService.artworkFitsResourceLimits(
+                byteCount: 1,
+                pixelWidth: 1,
+                pixelHeight: pixelLimit + 1
+            )
+        )
+        XCTAssertFalse(
+            AppleMusicControlService.artworkFitsResourceLimits(
+                byteCount: 0,
+                pixelWidth: 1,
+                pixelHeight: 1
+            )
+        )
+    }
+
+    func testValidatedArtworkAcceptsDecodableImageAtPixelLimit() throws {
+        let data = try pngData(
+            width: AppleMusicControlService.maximumArtworkPixelDimension,
+            height: 1
+        )
+
+        XCTAssertEqual(AppleMusicControlService.validatedArtworkData(data), data)
+    }
+
+    func testValidatedArtworkRejectsImageBeyondDecodedPixelLimit() throws {
+        let data = try pngData(
+            width: AppleMusicControlService.maximumArtworkPixelDimension + 1,
+            height: 1
+        )
+
+        XCTAssertNil(AppleMusicControlService.validatedArtworkData(data))
+    }
+
+    func testValidatedArtworkRejectsPayloadBeyondByteLimitBeforeDecode() {
+        let data = Data(count: AppleMusicControlService.maximumArtworkByteCount + 1)
+
+        XCTAssertNil(AppleMusicControlService.validatedArtworkData(data))
+    }
+
+    func testValidatedArtworkRejectsUndecodableData() {
+        XCTAssertNil(AppleMusicControlService.validatedArtworkData(Data("not an image".utf8)))
+    }
+
     func testAppleMusicPreviousTrackScriptResetsProgressBeforeSingleSkip() throws {
         let script = AppleMusicControlService.skipBackwardScript
         let reset = try XCTUnwrap(script.range(of: "set player position to 0"))
@@ -189,5 +267,23 @@ final class MusicControlServiceTests: XCTestCase {
 
         XCTAssertEqual(error, .executionFailed(code: nil, message: "未知错误"))
         XCTAssertEqual(error.localizedDescription, "Apple Music 控制失败：未知错误")
+    }
+
+    private func pngData(width: Int, height: Int) throws -> Data {
+        let representation = try XCTUnwrap(
+            NSBitmapImageRep(
+                bitmapDataPlanes: nil,
+                pixelsWide: width,
+                pixelsHigh: height,
+                bitsPerSample: 8,
+                samplesPerPixel: 4,
+                hasAlpha: true,
+                isPlanar: false,
+                colorSpaceName: .deviceRGB,
+                bytesPerRow: 0,
+                bitsPerPixel: 0
+            )
+        )
+        return try XCTUnwrap(representation.representation(using: .png, properties: [:]))
     }
 }

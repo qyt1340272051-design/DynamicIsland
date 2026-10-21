@@ -1,0 +1,13 @@
+{
+  "captureUTC": "2026-10-14T14:15:45.448545+00:00",
+  "acceptanceExited": true,
+  "acceptancePID": 76335,
+  "selfCreatedAppUnregisteredAndArchived": "/tmp/dynamic-island-t31-energy-rerun-20261014/measured-app.app",
+  "isolatedPluginsArchivedAt": "/tmp/dynamic-island-t31-energy-rerun-20261014/isolated-plugin-data-after-experiment",
+  "archivedInstalledCount": 20,
+  "originalAppPidPreserved": 66831,
+  "originalInstalledCount": 0,
+  "originalStagingEmpty": true,
+  "defaultHandlerSettingsChanged": false,
+  "activityMonitorRestoredToCPUAndEmptySearch": true
+}

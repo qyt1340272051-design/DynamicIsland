@@ -1,0 +1,32 @@
+Window: "插件管理", App: Dynamic Island Acceptance.
+0 standard window 插件管理, Secondary Actions: Raise
+	1 container
+		2 text 已安装 2 兼容·计数
+		3 button Description: 导入插件, ID: plugin-extensions-import
+		4 button Description: 发现, ID: plugin-extensions-discover
+		5 button Description: 刷新, ID: plugin-extensions-refresh
+		6 scroll area
+			7 list Secondary Actions: AXScrollToTop, AXScrollToBottom
+				8 button Description: 兼容·计数, v0.1.0, 已停用, ID: plugin-extensions-plugin-com.dynamicisland.compat-counter
+				9 button Description: 兼容·状态, v0.1.0, 运行中, ID: plugin-extensions-plugin-com.dynamicisland.compat-status
+		10 text v0.1.0 · 已停用
+		11 scroll area plugin-extensions-detail
+			12 text Value: 开发者：DynamicIsland（插件自行声明，未验证） 有限兼容，SuperIsland 最低主程序版本 0.6.0, ID: plugin-extensions-developer
+			13 button Description: 启用插件, ID: plugin-extensions-enable
+			14 button Description: 查看诊断, ID: plugin-extensions-diagnostics
+			15 button Description: 卸载…, ID: plugin-extensions-uninstall
+			16 container plugin-compatibility-details
+				17 text 兼容详情 当前未运行 当前没有本次执行的兼容布局结果，启用偏好不代表插件正在运行。 兼容范围 有限视图类型：支持文字、图标、横排、竖排、进度和按钮；视图深度、数量和字段受主程序限制。 仅同步模块回调：模块生命周期与动作回调须同步返回，不支持异步或生成器回调。 展示请求由主程序裁决：展开与收起会转换为有期限的展示请求，仍由主程序检查能力声明和当前交互状态。 不提供上游窗口状态：不提供上游窗口状态读取或全局窗口控制。 不提供上游资源接口：不映射上游文件、网络或其他系统资源接口；主程序资源访问仍须使用已支持的接口与授权。 刷新由主程序驱动：布局随模块启动、动作和展示请求刷新，不支持上游的任意刷新调度接口。
+			18 text 权限 启用插件不会自动授权。授权仅适用于当前代码，并保存在本机；代码或权限声明变化后需重新确认。撤销立即生效。 此插件未请求额外权限。
+	19 close button
+	20 zoom button
+	21 minimize button
+	22 text 插件管理
+23 menu bar
+	24 Dynamic Island Acceptance
+	25 Edit
+	26 View
+	27 Window
+	28 Help
+
+The focused UI element is 0 standard window 插件管理, Secondary Actions: Raise

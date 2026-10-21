@@ -1,0 +1,19 @@
+{
+  "wrapperSHA256": "0b3436a7ab71acb2969bdbc3efa0a41b9d8a9a01b12603ece1485b98f9ed57d7",
+  "negativeChecks": [
+    {
+      "case": "wrong-expected-executable",
+      "rejectedBeforeOutputCreation": true
+    },
+    {
+      "case": "insufficient-duration",
+      "rejectedBeforeOutputCreation": true
+    },
+    {
+      "case": "invalid-PID",
+      "rejectedBeforeOutputCreation": true
+    }
+  ],
+  "targetProcessMutated": false,
+  "outputsCreated": false
+}

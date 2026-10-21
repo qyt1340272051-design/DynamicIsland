@@ -1,0 +1,1157 @@
+{
+  "manifests": [
+    {
+      "name": "minimal authoring manifest",
+      "accept": true,
+      "source": "{\"schemaVersion\": 1, \"id\": \"com.example.hello-world\", \"name\": \"你好，计数器\", \"developer\": \"示例开发者\", \"version\": \"0.1.0\", \"engine\": \"javascriptcore\", \"entry\": \"index.js\", \"minimumHostVersion\": \"0.6.0\", \"permissions\": [], \"capabilities\": [\"activity.publish\", \"activity.update\", \"ui.islandNode\", \"actions.handle\"]}"
+    },
+    {
+      "name": "numeric schema generation",
+      "accept": true,
+      "source": "{\"schemaVersion\": 1.0, \"id\": \"com.example.hello-world\", \"name\": \"你好，计数器\", \"developer\": \"示例开发者\", \"version\": \"0.1.0\", \"engine\": \"javascriptcore\", \"entry\": \"index.js\", \"minimumHostVersion\": \"0.6.0\", \"permissions\": [], \"capabilities\": [\"activity.publish\", \"activity.update\", \"ui.islandNode\", \"actions.handle\"]}"
+    },
+    {
+      "name": "unknown field",
+      "accept": false,
+      "source": "{\"schemaVersion\": 1, \"id\": \"com.example.hello-world\", \"name\": \"你好，计数器\", \"developer\": \"示例开发者\", \"version\": \"0.1.0\", \"engine\": \"javascriptcore\", \"entry\": \"index.js\", \"minimumHostVersion\": \"0.6.0\", \"permissions\": [], \"capabilities\": [\"activity.publish\", \"activity.update\", \"ui.islandNode\", \"actions.handle\"], \"compatibilityLevel\": \"compatible\"}"
+    },
+    {
+      "name": "boolean schema generation",
+      "accept": false,
+      "source": "{\"schemaVersion\": true, \"id\": \"com.example.hello-world\", \"name\": \"你好，计数器\", \"developer\": \"示例开发者\", \"version\": \"0.1.0\", \"engine\": \"javascriptcore\", \"entry\": \"index.js\", \"minimumHostVersion\": \"0.6.0\", \"permissions\": [], \"capabilities\": [\"activity.publish\", \"activity.update\", \"ui.islandNode\", \"actions.handle\"]}"
+    },
+    {
+      "name": "duplicate permissions",
+      "accept": false,
+      "source": "{\"schemaVersion\": 1, \"id\": \"com.example.hello-world\", \"name\": \"你好，计数器\", \"developer\": \"示例开发者\", \"version\": \"0.1.0\", \"engine\": \"javascriptcore\", \"entry\": \"index.js\", \"minimumHostVersion\": \"0.6.0\", \"permissions\": [\"network\", \"network\"], \"capabilities\": [\"activity.publish\", \"activity.update\", \"ui.islandNode\", \"actions.handle\"]}"
+    },
+    {
+      "name": "unknown capability",
+      "accept": false,
+      "source": "{\"schemaVersion\": 1, \"id\": \"com.example.hello-world\", \"name\": \"你好，计数器\", \"developer\": \"示例开发者\", \"version\": \"0.1.0\", \"engine\": \"javascriptcore\", \"entry\": \"index.js\", \"minimumHostVersion\": \"0.6.0\", \"permissions\": [], \"capabilities\": [\"native.window\"]}"
+    },
+    {
+      "name": "parent traversal",
+      "accept": false,
+      "source": "{\"schemaVersion\": 1, \"id\": \"com.example.hello-world\", \"name\": \"你好，计数器\", \"developer\": \"示例开发者\", \"version\": \"0.1.0\", \"engine\": \"javascriptcore\", \"entry\": \"../entry.js\", \"minimumHostVersion\": \"0.6.0\", \"permissions\": [], \"capabilities\": [\"activity.publish\", \"activity.update\", \"ui.islandNode\", \"actions.handle\"]}"
+    },
+    {
+      "name": "bad semantic version",
+      "accept": false,
+      "source": "{\"schemaVersion\": 1, \"id\": \"com.example.hello-world\", \"name\": \"你好，计数器\", \"developer\": \"示例开发者\", \"version\": \"1.02.0\", \"engine\": \"javascriptcore\", \"entry\": \"index.js\", \"minimumHostVersion\": \"0.6.0\", \"permissions\": [], \"capabilities\": [\"activity.publish\", \"activity.update\", \"ui.islandNode\", \"actions.handle\"]}"
+    },
+    {
+      "name": "large decimal version component",
+      "accept": true,
+      "source": "{\"schemaVersion\": 1, \"id\": \"com.example.hello-world\", \"name\": \"你好，计数器\", \"developer\": \"示例开发者\", \"version\": \"999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999.0.0\", \"engine\": \"javascriptcore\", \"entry\": \"index.js\", \"minimumHostVersion\": \"0.6.0\", \"permissions\": [], \"capabilities\": [\"activity.publish\", \"activity.update\", \"ui.islandNode\", \"actions.handle\"]}"
+    },
+    {
+      "name": "printable scalar name boundary",
+      "accept": true,
+      "source": "{\"schemaVersion\": 1, \"id\": \"com.example.hello-world\", \"name\": \"界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界\", \"developer\": \"示例开发者\", \"version\": \"0.1.0\", \"engine\": \"javascriptcore\", \"entry\": \"index.js\", \"minimumHostVersion\": \"0.6.0\", \"permissions\": [], \"capabilities\": [\"activity.publish\", \"activity.update\", \"ui.islandNode\", \"actions.handle\"]}"
+    },
+    {
+      "name": "name scalar overflow",
+      "accept": false,
+      "source": "{\"schemaVersion\": 1, \"id\": \"com.example.hello-world\", \"name\": \"界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界\", \"developer\": \"示例开发者\", \"version\": \"0.1.0\", \"engine\": \"javascriptcore\", \"entry\": \"index.js\", \"minimumHostVersion\": \"0.6.0\", \"permissions\": [], \"capabilities\": [\"activity.publish\", \"activity.update\", \"ui.islandNode\", \"actions.handle\"]}"
+    },
+    {
+      "name": "escaped duplicate key",
+      "accept": false,
+      "source": "{\"schemaVersion\": 1, \"id\": \"com.example.hello-world\", \"name\": \"\\u4f60\\u597d\\uff0c\\u8ba1\\u6570\\u5668\", \"developer\": \"\\u793a\\u4f8b\\u5f00\\u53d1\\u8005\", \"version\": \"0.1.0\", \"engine\": \"javascriptcore\", \"entry\": \"index.js\", \"minimumHostVersion\": \"0.6.0\", \"permissions\": [], \"capabilities\": [\"activity.publish\", \"activity.update\", \"ui.islandNode\", \"actions.handle\"],\"\\u0069d\":\"com.example.replacement\"}"
+    }
+  ],
+  "nodes": [
+    {
+      "name": "text bytes boundary",
+      "accept": true,
+      "node": {
+        "type": "text",
+        "content": "界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界a"
+      }
+    },
+    {
+      "name": "text bytes overflow",
+      "accept": false,
+      "node": {
+        "type": "text",
+        "content": "界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界界"
+      }
+    },
+    {
+      "name": "known semantic color",
+      "accept": true,
+      "node": {
+        "type": "text",
+        "content": "Okay",
+        "color": "success"
+      }
+    },
+    {
+      "name": "unknown color",
+      "accept": false,
+      "node": {
+        "type": "text",
+        "content": "Bad",
+        "color": "red"
+      }
+    },
+    {
+      "name": "null optional color",
+      "accept": false,
+      "node": {
+        "type": "text",
+        "content": "Bad",
+        "color": null
+      }
+    },
+    {
+      "name": "normalized progress",
+      "accept": true,
+      "node": {
+        "type": "progress",
+        "value": 1,
+        "style": "battery",
+        "color": "success"
+      }
+    },
+    {
+      "name": "boolean progress",
+      "accept": false,
+      "node": {
+        "type": "progress",
+        "value": true
+      }
+    },
+    {
+      "name": "out of range progress",
+      "accept": false,
+      "node": {
+        "type": "progress",
+        "value": 1.01
+      }
+    },
+    {
+      "name": "unknown layout property",
+      "accept": false,
+      "node": {
+        "type": "spacer",
+        "width": 12
+      }
+    },
+    {
+      "name": "valid countdown",
+      "accept": true,
+      "node": {
+        "type": "countdown",
+        "id": "session",
+        "generation": "12345678-1234-1234-1234-123456789abc",
+        "style": "time"
+      }
+    },
+    {
+      "name": "noncanonical countdown generation",
+      "accept": false,
+      "node": {
+        "type": "countdown",
+        "id": "session",
+        "generation": "12345678-1234-1234-1234-123456789ABC"
+      }
+    },
+    {
+      "name": "button and stack",
+      "accept": true,
+      "node": {
+        "type": "button",
+        "actionID": "increase",
+        "label": {
+          "type": "hStack",
+          "children": [
+            {
+              "type": "icon",
+              "symbolName": "plus.circle"
+            },
+            {
+              "type": "text",
+              "content": "Add"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "colon in plugin action",
+      "accept": false,
+      "node": {
+        "type": "button",
+        "actionID": "scope:action",
+        "label": {
+          "type": "text",
+          "content": "Add"
+        }
+      }
+    },
+    {
+      "name": "children limit",
+      "accept": false,
+      "node": {
+        "type": "hStack",
+        "children": [
+          {
+            "type": "spacer"
+          },
+          {
+            "type": "spacer"
+          },
+          {
+            "type": "spacer"
+          },
+          {
+            "type": "spacer"
+          },
+          {
+            "type": "spacer"
+          },
+          {
+            "type": "spacer"
+          },
+          {
+            "type": "spacer"
+          },
+          {
+            "type": "spacer"
+          },
+          {
+            "type": "spacer"
+          },
+          {
+            "type": "spacer"
+          },
+          {
+            "type": "spacer"
+          },
+          {
+            "type": "spacer"
+          },
+          {
+            "type": "spacer"
+          },
+          {
+            "type": "spacer"
+          },
+          {
+            "type": "spacer"
+          },
+          {
+            "type": "spacer"
+          },
+          {
+            "type": "spacer"
+          }
+        ]
+      }
+    },
+    {
+      "name": "depth 8",
+      "accept": true,
+      "node": {
+        "type": "vStack",
+        "children": [
+          {
+            "type": "vStack",
+            "children": [
+              {
+                "type": "vStack",
+                "children": [
+                  {
+                    "type": "vStack",
+                    "children": [
+                      {
+                        "type": "vStack",
+                        "children": [
+                          {
+                            "type": "vStack",
+                            "children": [
+                              {
+                                "type": "vStack",
+                                "children": [
+                                  {
+                                    "type": "text",
+                                    "content": "Depth"
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "depth 9",
+      "accept": false,
+      "node": {
+        "type": "vStack",
+        "children": [
+          {
+            "type": "vStack",
+            "children": [
+              {
+                "type": "vStack",
+                "children": [
+                  {
+                    "type": "vStack",
+                    "children": [
+                      {
+                        "type": "vStack",
+                        "children": [
+                          {
+                            "type": "vStack",
+                            "children": [
+                              {
+                                "type": "vStack",
+                                "children": [
+                                  {
+                                    "type": "vStack",
+                                    "children": [
+                                      {
+                                        "type": "text",
+                                        "content": "Depth"
+                                      }
+                                    ]
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "node count 128",
+      "accept": true,
+      "node": {
+        "type": "vStack",
+        "children": [
+          {
+            "type": "hStack",
+            "children": [
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              }
+            ]
+          },
+          {
+            "type": "hStack",
+            "children": [
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              }
+            ]
+          },
+          {
+            "type": "hStack",
+            "children": [
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              }
+            ]
+          },
+          {
+            "type": "hStack",
+            "children": [
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              }
+            ]
+          },
+          {
+            "type": "hStack",
+            "children": [
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              }
+            ]
+          },
+          {
+            "type": "hStack",
+            "children": [
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              }
+            ]
+          },
+          {
+            "type": "hStack",
+            "children": [
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              }
+            ]
+          },
+          {
+            "type": "spacer"
+          },
+          {
+            "type": "spacer"
+          },
+          {
+            "type": "spacer"
+          },
+          {
+            "type": "spacer"
+          },
+          {
+            "type": "spacer"
+          },
+          {
+            "type": "spacer"
+          },
+          {
+            "type": "spacer"
+          },
+          {
+            "type": "spacer"
+          }
+        ]
+      }
+    },
+    {
+      "name": "node count 129",
+      "accept": false,
+      "node": {
+        "type": "vStack",
+        "children": [
+          {
+            "type": "hStack",
+            "children": [
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              }
+            ]
+          },
+          {
+            "type": "hStack",
+            "children": [
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              }
+            ]
+          },
+          {
+            "type": "hStack",
+            "children": [
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              }
+            ]
+          },
+          {
+            "type": "hStack",
+            "children": [
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              }
+            ]
+          },
+          {
+            "type": "hStack",
+            "children": [
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              }
+            ]
+          },
+          {
+            "type": "hStack",
+            "children": [
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              }
+            ]
+          },
+          {
+            "type": "hStack",
+            "children": [
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              },
+              {
+                "type": "spacer"
+              }
+            ]
+          },
+          {
+            "type": "spacer"
+          },
+          {
+            "type": "spacer"
+          },
+          {
+            "type": "spacer"
+          },
+          {
+            "type": "spacer"
+          },
+          {
+            "type": "spacer"
+          },
+          {
+            "type": "spacer"
+          },
+          {
+            "type": "spacer"
+          },
+          {
+            "type": "spacer"
+          },
+          {
+            "type": "spacer"
+          }
+        ]
+      }
+    }
+  ]
+}

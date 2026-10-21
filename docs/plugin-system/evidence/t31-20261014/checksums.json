@@ -1,0 +1,15 @@
+{
+  "EnergySampler.swift": "89525311f9a04ff669cac793fbedaa59a6f608733e842f8a7be48875cd7f8dad",
+  "EnergySamplerBaseline.swift": "c942a225945d039b57e0e6f98508ca7cf52af6640d589c7037d7442e6cfe4ebc",
+  "audited-fixture.js": "33b05e93277c467cf8bf4edef6dd529631ff5fe8314d6c1f31338bef0618ec93",
+  "baseline-clock-review.json": "f5d74b8e61555876d04afc5c297e8604b83e4cc6aa8431b9e2c4368b2da78deb",
+  "cleanup.json": "053a497c46e2c671fc2d361d92d695f3cfdd8008eaf01aedfb4fb8d40e6f1c55",
+  "disabled-samples.csv": "790776ddb63d28ce3e6021db66b9413cee981ae5c79dfd51104c658ae51acd07",
+  "energy-impact-observations.jsonl": "4bd03c8c8d33f0c15a7f0cb663483d46c0a15776a28fff0e0848f64def0c2c85",
+  "power-observations.jsonl": "bc90935973eb15b9417651aa561c8c7f9c7f3e6974abf0e300248d5e2fd9bf4f",
+  "result.json": "017669e33fe54f634b1b58d7bd2dfdc755d6ca0b55521492a7f9afe5e3929602",
+  "running-samples.csv": "6402cd5722640c48be9aab213f66b44667bca8768ee61155c650862c99eb7bf3",
+  "sampler-clock-audit.json": "090b336d3a51e157d2b0010b3f0d09c3cba99579fd090f1c414a13d266f22671",
+  "sleep-wake-review.txt": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+  "ui-enable-outcome.json": "d7e5f5623b55dbea4e68205f3cc45d0b351e7cc1919354467a4ea3e106205a35"
+}

@@ -1,0 +1,32 @@
+Window: "Dynamic Island Acceptance Settings", App: Dynamic Island Acceptance.
+0 standard window Dynamic Island Acceptance Settings, ID: com_apple_SwiftUI_Settings_window, Secondary Actions: Raise
+	1 container
+		2 text 已安装 5 计时三态验收
+		3 button Description: 导入插件, ID: plugin-extensions-import
+		4 button Description: 发现, ID: plugin-extensions-discover
+		5 button Description: 刷新, ID: plugin-extensions-refresh
+		6 scroll area
+			7 list Secondary Actions: AXScrollToTop, AXScrollToBottom
+				8 button Description: 计时三态验收, v0.1.0, 已加载, ID: plugin-extensions-plugin-com.dynamicisland.acceptance.timer-presentations
+				9 button Description: 兼容·计数, v0.1.0, 已加载, ID: plugin-extensions-plugin-com.dynamicisland.compat-counter
+				10 button Description: 兼容·进度, v0.1.0, 已加载, ID: plugin-extensions-plugin-com.dynamicisland.compat-progress
+				11 button Description: 兼容·状态, v0.1.0, 已加载, ID: plugin-extensions-plugin-com.dynamicisland.compat-status
+				12 button Description: 双按钮状态, v0.1.0, 已加载, ID: plugin-extensions-plugin-com.example.independent-status
+		13 text v0.1.0 · 已加载
+		14 scroll area plugin-extensions-detail
+			15 text Value: 开发者：DynamicIsland（插件自行声明，未验证） 原生，JavaScriptCore 最低主程序版本 0.6.0, ID: plugin-extensions-developer
+			16 button Description: 停用插件, ID: plugin-extensions-enable
+			17 button Description: 查看诊断, ID: plugin-extensions-diagnostics
+			18 button Description: 卸载…, ID: plugin-extensions-uninstall
+			19 text 权限 启用插件不会自动授权。授权仅适用于当前代码，并保存在本机；代码或权限声明变化后需重新确认。撤销立即生效。 此插件未请求额外权限。
+	20 close button
+	21 zoom button (disabled)
+	22 text Dynamic Island Acceptance Settings
+23 menu bar
+	24 Dynamic Island Acceptance
+	25 Edit
+	26 View
+	27 Window
+	28 Help
+
+The focused UI element is 0 standard window Dynamic Island Acceptance Settings, ID: com_apple_SwiftUI_Settings_window, Secondary Actions: Raise

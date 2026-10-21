@@ -1,0 +1,16 @@
+{
+  "preparedBeforeStart": true,
+  "preflightObservedFrames": 66,
+  "preflightDurationSeconds": 3,
+  "preflightComplete": true,
+  "preflightStoredFrames": 0,
+  "reasonNoStoredFrames": "More than two minutes before deadline; no complete phase observed",
+  "captureAPI": "CUA getAXStateAndScreenshot only",
+  "applicationCountdownModified": false,
+  "plannedContinuousCaptureStartSecondsBeforeDeadline": 120,
+  "maximumChunkSeconds": 45,
+  "startBoundsEpochMs": [
+    1792371436160,
+    1792371436187
+  ]
+}

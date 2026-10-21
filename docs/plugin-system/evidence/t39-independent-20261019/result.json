@@ -1,0 +1,20 @@
+{
+  "date": "2026-10-19",
+  "actor": "Fresh-context AI developer; not a human first-author acceptance",
+  "sourceSDKCandidateSHA256": "b92a911594b8e7dafa723dc70ba6e851cc35e21ec0e730ef2857a8cf5ccf0808",
+  "SDKOnlyNoMainAppSwiftRead": true,
+  "elapsedOfflineSeconds": 137.701879,
+  "offlineHelloAndOriginalTwoButtonPackageBuilt": true,
+  "mainAppInstalledOrClicked": false,
+  "humanTenMinuteCriterionVerified": false,
+  "followup": "README receipt wording corrected in later candidate; formal Host and unassisted human retry separately recorded.",
+  "filesSHA256": {
+    "artifacts.json": "ba1fb22b90c10cfafa185017c228c5291a3057a91c46410762b191eb1b15dd53",
+    "process.txt": "f5e881c1e0fa774f2460f45549ba3e211ad1cd3bc9975884c253d894ce3fe2f5",
+    "review.md": "bb5d586a73b48f9c50c75373475fe1d4bebf158eee05957c6bdce048e36fe3cd",
+    "status-switch/README.md": "ef998b9ba7dde83084371f5b0c7e1241922a868e7642564a95728a97b51fcdda",
+    "status-switch/index.js": "1d2dad443530f1e2c2d9b53f818bf5627e992d995e4c03245295b37cdebee2e9",
+    "status-switch/manifest.json": "603534f5ff7510dcf738fde8dda46dd4006534ae31679f078f6a1ebb4b9d21e8",
+    "status-switch-0.1.0.dip": "c4a68d98adff6205e9f712feeebab86d610ac5230a128ebd28281d4741e90f0b"
+  }
+}

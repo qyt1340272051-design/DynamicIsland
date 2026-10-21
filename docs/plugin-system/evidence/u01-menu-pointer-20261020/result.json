@@ -1,0 +1,51 @@
+{
+  "observedUTC": "2026-10-20T14:51:20.857041+00:00",
+  "status": "Current-device seven-entry tool menu acceptance complete; normal quit and cleanup passed",
+  "U01TaskStatus": "verified",
+  "previousPhysicalAttempt": "../u01-menu-repair-20261020/physical-return-attempt-2.json",
+  "previousPhysicalAttemptPassed": false,
+  "observedPreviousGraceSeconds": [
+    1.097395,
+    1.047012
+  ],
+  "previousRootCauseConfirmed": false,
+  "changes": [
+    "Fixed two-second return grace without entry-based extension",
+    "Keep existing 30 Hz pointer timer in common RunLoop modes",
+    "Controller force refresh reconciles its pointer cache and VM before deadline releases token; recheck token after refresh"
+  ],
+  "menuReturnGraceSeconds": 2,
+  "targetedTests": {
+    "total": 96,
+    "failures": 0,
+    "skipped": 0,
+    "menu": 18,
+    "viewModel": 50,
+    "runtime": 24,
+    "hoverRegion": 4
+  },
+  "releaseBuildPassed": true,
+  "strictDeepSignaturePassed": true,
+  "physicalReturnPassed": true,
+  "sourceBinding": "preflight.json",
+  "candidateApp": "/tmp/dynamic-island-u01-pointer-20261020/Dynamic Island Menu Return.app",
+  "publiclyPublished": false,
+  "remotePushed": false,
+  "appPID": 23408,
+  "appRunning": false,
+  "traceCaptureSessionID": 93233,
+  "traceTemporaryPath": "/tmp/dynamic-island-u01-pointer-20261020/menu-trace.ndjson",
+  "traceCaptureActive": false,
+  "pendingHumanRequest": null,
+  "keyboardCancelAndCleanupPassed": true,
+  "physicalReturnEvidence": "physical-return-attempt-3.json",
+  "normalExitReopenPassed": true,
+  "normalExitReopenSource": "User confirms native timer shown after exiting for three seconds and returning; post-reply screenshot is compact only",
+  "nativeMenuAcceptance": "native-menu-acceptance.json",
+  "cleanup": "cleanup.json",
+  "automatedWheelObservedContentChange": false,
+  "acceptanceScope": "Current device, seven real entries; physical mouse bottom/return and normal cleanup user-confirmed; native keyboard/cancel/pages observed",
+  "readOnlyReview": "No blocking findings; checked capture hashes and lagging/transitional AX and screenshots",
+  "wholeAppCIRerun": false,
+  "productSourceChangedSince62dcb74": false
+}

@@ -1,0 +1,45 @@
+{
+  "capturedAtUTC": "2026-10-20T15:28:22.381027+00:00",
+  "scope": "Final frozen stable SDK1.0.0 b64d87 only; previous ee5915 stable draft and 8f4da7 historical candidate excluded from final statistics.",
+  "auditRoot": "/tmp/dynamic-island-sdk-final-frozen-audit-20261020-kv9nl85u",
+  "canonical": "/tmp/dynamic-island-t38-publish-20261020/dynamic-island-sdk-1.0.0-frozen.zip",
+  "canonicalBytes": 85192,
+  "canonicalSHA256": "b64d87e400a90f730bd098cce23dc7b743cf78dcbfcb4f878f7cfeb16a494ac9",
+  "archiveEntries": 54,
+  "manifestSourceFiles": 53,
+  "workspaceSourceFiles": 53,
+  "allManifestSourceFilesMatchWorkspaceAndArchive": true,
+  "zipCRCValid": true,
+  "manifestMetadata": {
+    "artifactFormatVersion": 1,
+    "manifestSchemaVersion": 1,
+    "minimumHostVersion": "0.6.0",
+    "sdkVersion": "1.0.0",
+    "status": "stable",
+    "wireAPIVersion": "1.0.0"
+  },
+  "license": "MIT",
+  "licenseSHA256": "72ab5fec769e2affe1fc9bdc33fc6b52b8bb35ff27907db3e4bb7d4ef43e8610",
+  "helloFixture": {
+    "bytes": 2679,
+    "sha256": "512f953ca7005297b413179efef029bd07996f320e764d9ea243a8feabcad8f4"
+  },
+  "forbiddenPathFindings": [],
+  "knownSecretPatternFindings": [],
+  "securityScanScope": "Hidden/cache/node_modules/key/credential filenames and four common credential patterns; not an exhaustive secret detection guarantee.",
+  "extractedSDK": "/tmp/dynamic-island-sdk-final-frozen-audit-20261020-kv9nl85u/unpacked/DynamicIslandSDK",
+  "diffFromPrevious": {
+    "previous": "/tmp/dynamic-island-sdk-stable-independent-20261020-vrnl4xlm/canonical-reviewed.zip",
+    "previousBytes": 85191,
+    "previousSHA256": "ee5915ecc9904f2892ebc1e6941ab8af8cd9bf011771ffd4c53d36b2ab20896a",
+    "changedArchiveMembers": [
+      "DynamicIslandSDK/distribution-manifest.json",
+      "DynamicIslandSDK/docs/verification.md"
+    ],
+    "changedSourceManifestRecords": [
+      "docs/verification.md"
+    ],
+    "onlyDocumentedCountCorrection": true,
+    "diff": "/tmp/dynamic-island-sdk-final-frozen-audit-20261020-kv9nl85u/verification-doc.diff"
+  }
+}

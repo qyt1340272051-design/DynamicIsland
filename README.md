@@ -4,23 +4,21 @@
 
 [![CI](https://github.com/qyt1340272051-design/DynamicIsland/actions/workflows/ci.yml/badge.svg)](https://github.com/qyt1340272051-design/DynamicIsland/actions/workflows/ci.yml)
 
-一个贴合 Mac 刘海区域的开源 SwiftUI 菜单栏应用。通过无标题 `NSPanel` 在屏幕顶部提供系统音量、Apple Music、文件托盘、AirDrop 和计时工具，并在活动进行时保留紧凑状态提示。
+一个贴合 Mac 刘海区域的开源 SwiftUI 菜单栏应用。提供系统音量、Apple Music、文件托盘、AirDrop、内置计时和可安装插件；通过统一 Activity 展示紧凑提示与展开工具。
 
-> 当前版本为 `0.5.0`。GitHub Release 提供本地 ad hoc 签名、未经 Apple 公证的公开测试 DMG，不是 Developer ID 正式安装包。macOS 26.0 或更高版本首次运行时可能拦截；请核对来源和 SHA-256，仅在信任此包时按下方步骤手动批准。
+> 当前源码为 App `0.6.0` 开发预览，候选标签 `v0.6.0-beta.1`（build 3）；下载以对应 Release 实际资产为准。测试 DMG 使用 ad hoc 签名，未经 Apple 公证，不是 Developer ID 正式安装包。首次运行可能被 macOS 拦截；请先核对可信来源和 SHA-256，再按下方步骤手动批准。插件系统仍保留新作者独立体验与跨设备验收，不代表整个 Plugin 1.0 已验收。
 
 ## 界面预览
 
-以下图片由工程的屏幕矩阵工具生成，展示模拟状态；不代表真实设备兼容性验收结果。完整截图位于 [`docs/images/`](docs/images/)。
+以下是 0.5.0 时期由屏幕矩阵工具生成的历史模拟图，仅用于介绍布局；不代表 0.6.0 当前插件界面或真实设备兼容性验收。历史图片位于 [`docs/images/`](docs/images/)。
 
 ### Apple Music
 
 ![Apple Music 控制界面](docs/images/expanded-music.png)
 
-### 文件托盘与番茄钟
+### 文件托盘
 
-| 文件托盘 | 番茄钟 |
-| --- | --- |
-| ![文件托盘界面](docs/images/expanded-file-tray.png) | ![番茄钟界面](docs/images/expanded-tools-pomodoro.png) |
+![历史文件托盘模拟界面](docs/images/expanded-file-tray.png)
 
 ### 紧凑播放状态
 
@@ -32,7 +30,10 @@
 - 系统音量：实时读取和调节默认输出设备音量，支持增减、滑杆与静音。
 - Apple Music：读取封面、曲名、歌手和播放进度，支持播放、暂停、上一曲、下一曲和实时拖动进度条；悬停进度条时显示拖动圆点。
 - 文件托盘：把拖入文件复制到沙盒临时目录，支持锁定展开、单项移除和清空，并通过系统 AirDrop 分享面板发送。
-- 计时工具：通过闹钟图标选择秒表、多个番茄钟时段和可长按快速调节的倒计时；岛体随当前内容调整高度。
+- 内置计时：闹钟工具菜单中的「内置计时」提供秒表和可长按快速调节的倒计时。番茄钟改为独立安装的官方插件。
+- 插件管理：支持 `.dip` 导入、信息与权限预览、安装后停用、逐项授权、启停和卸载。发现页可主动读取正式目录，下载固定版本后进入同一安装预览。
+- 官方插件：番茄钟 0.2.1 提供 15 / 25 / 45 / 60 分钟预设；GitHub 0.1.0 展示两个公开仓库的构建与 PR 状态。两款均需另外安装，不随主程序自动启用。
+- 充电提示：接入电源后在刘海两侧展示充电文字、电量与填充电池图标。
 - 岛内退出：展开后可点击电源图标关闭应用。
 - 紧凑活动态：音乐播放时显示微缩封面与六点动态指示，计时运行时显示功能图标和实时数据。
 - 多屏适配：按当前屏幕、刘海安全区、菜单栏可见状态和显示器变化重新计算面板位置。
@@ -43,13 +44,13 @@
 
 - macOS 26.0 或更高版本
 - Xcode 26.6
-- Swift 5
+- 随 Xcode 提供的 Swift 6 工具链；工程当前采用 Swift 5 语言模式
 
 刘海 MacBook 是主要使用场景；无刘海内建屏幕和外接显示器也有对应的几何回退与模拟测试。
 
 ## 快速开始
 
-可以从 [GitHub Releases](https://github.com/qyt1340272051-design/DynamicIsland/releases) 下载 `0.5.0` 测试 DMG，也可以克隆源码运行：
+查看 [App 0.6.0 开发预览 Release](https://github.com/qyt1340272051-design/DynamicIsland/releases/tag/v0.6.0-beta.1)，以该页实际提供的 `-local.dmg`、校验和及 manifest 为准；若尚无资产，可从源码运行：
 
 ```bash
 git clone https://github.com/qyt1340272051-design/DynamicIsland.git
@@ -57,7 +58,7 @@ cd DynamicIsland
 open DynamicIsland.xcodeproj
 ```
 
-在 Xcode 中选择共享 scheme `Dynamic Island`，目标选 `My Mac`，按 `Command-R`。应用使用 `LSUIElement` 作为菜单栏配件启动，不会显示普通主窗口。鼠标移入屏幕顶边的岛以展开；菜单栏图标提供显示、隐藏、诊断与退出。
+在 Xcode 中选择共享 scheme `Dynamic Island`，目标选 `My Mac`，按 `Command-R`。应用使用 `LSUIElement` 作为菜单栏配件启动，不会显示普通主窗口。鼠标移入屏幕顶边的岛以展开；菜单栏图标提供显示、隐藏、插件管理、诊断与退出。
 
 详细操作见 [使用说明](docs/USAGE.md)；Xcode、命令行编译、测试和本地打包步骤见 [编译说明](docs/BUILDING.md)。
 
@@ -73,13 +74,25 @@ xcodebuild build \
   -destination 'platform=macOS'
 ```
 
+## 安装官方插件
+
+1. 点击屏幕右上角菜单栏的岛形小图标，打开「插件管理…」，再选择「发现」。
+2. 点击「刷新目录」，选择番茄钟或 GitHub 的「下载并查看」。打开发现页本身不会联网。
+3. 确认目录中的最低 Host 与来源，核对安装预览中的名称、版本和权限，再点「安装插件」。安装后保持停用，不会自动运行或授予权限。
+4. 回到插件管理，阅读每项权限说明，按需要单独授权，再点「启用插件」。启用本身不会批准任何权限；拒绝的能力保持不可用。
+5. 展开刘海，点击闹钟图标，从工具菜单选择已启用的插件。
+
+也可从[官方插件包 Release](https://github.com/qyt1340272051-design/DynamicIsland/releases/tag/plugins-0.6.0)下载 `.dip`，使用「导入插件」安装。番茄钟只请求保存设置的 `storage.local`；GitHub 分别请求 `network`、`storage.local`、`links.open`。没有 Token 输入或私有仓库支持。详细操作与拒绝权限后的行为见[使用说明](docs/USAGE.md#插件管理与官方插件)。
+
+目录只提供发现元数据，不证明发布者身份。只安装你信任的代码；代码或权限声明改变后需要重新确认授权，没有自动安装、自动升级或自动授权。
+
 ## 权限说明
 
 - **Apple Music 自动化**：首次读取或控制音乐时，macOS 会请求允许“Dynamic Island”控制“音乐”。拒绝后可前往“系统设置 > 隐私与安全性 > 自动化”重新开启。
 - **用户选择的文件**：文件托盘使用沙盒的用户所选文件读写权限；导入内容会复制到应用临时托盘目录。
 - **AirDrop**：分享由系统 `NSSharingService` 提供，实际可用性取决于当前 Mac 的 AirDrop 状态。
 
-项目启用了 App Sandbox，只声明上述功能所需的文件和 Apple Events 权限。
+应用启用 App Sandbox，并声明文件选择、Apple Events、网络客户端及 JavaScriptCore JIT 所需能力。插件只能通过 Host 的受限接口申请服务；插件权限是应用内决策，JavaScriptCore 运行于主应用进程，不能当作每个插件独立的操作系统安全边界。
 
 ## 工程结构
 
@@ -92,13 +105,17 @@ xcodebuild build \
 | 系统服务 | `DynamicIsland/Services/` | CoreAudio、Apple Music、文件托盘、AirDrop 和触觉反馈 |
 | 屏幕适配 | `ScreenManager.swift`、`ScreenEnvironment.swift` | 多屏选择、拓扑变化和模拟环境 |
 | Beta 诊断 | `DynamicIsland/Diagnostics/` | 脱敏诊断报告、剪贴板与反馈入口 |
-| 测试 | `DynamicIslandTests/` | 几何、状态机、系统服务适配和快照矩阵 |
+| Activity 与渲染 | `DynamicIsland/Core/Activity/`、`DynamicIsland/IslandUI/` | 活动队列、展示策略、受限节点和动作路由 |
+| 插件 Host | `DynamicIsland/Plugins/` | Manifest、JavaScriptCore、权限 Broker、存储、安装和发现 |
+| SDK 与目录 | `SDK/`、`Registry/` | 独立作者工具、文档、类型与固定插件下载清单 |
+| 测试 | `DynamicIslandTests/` | 几何、状态机、系统服务、插件闭环和快照矩阵 |
 
 ## 验证
 
 运行与 GitHub Actions 相同的完整测试和 Release 构建：
 
 ```bash
+npm ci --prefix SDK --ignore-scripts --no-audit --no-fund
 ./Scripts/ci.sh
 ```
 
@@ -128,7 +145,7 @@ open artifacts/screen-matrix/index.html
 本地可用下列命令构建通用架构测试 DMG、SHA-256 和 manifest：
 
 ```bash
-./Scripts/release.sh --local
+RELEASE_TAG=v0.6.0-beta.1 ./Scripts/release.sh --local
 ```
 
 此包采用 ad hoc 签名，未经 Developer ID 签名或 Apple 公证，可作为明确标注风险的 GitHub 预发布测试包，但不能声称可无提示双击启动。`v*` Tag 的自动打包与预发布流程见 [发布指南](docs/RELEASING.md)。
@@ -136,7 +153,10 @@ open artifacts/screen-matrix/index.html
 ## 已知限制
 
 - 音乐集成目前只支持 macOS 自带的 Apple Music，不支持 Spotify 等第三方播放器。
-- 秒表、番茄钟和倒计时状态不会跨应用重启恢复。
+- 秒表和倒计时、官方番茄钟的业务计时不跨应用重启恢复；番茄钟可在获准后保存预设，但不会自动开始新一轮。
+- SuperIsland 兼容仅覆盖已实现的简单子集，不保证任意上游插件可运行。
+- 插件异常有隔离、日志与停用处理，但当前不能强制抢占无限循环 JavaScript；不要运行未知来源的插件。
+- T39 新作者仅按文档独立构建安装的验收仍待完成；SDK 和官方包公开不代表该人工门槛已经通过。
 - 正式 Developer ID 签名与公证需要发布团队凭据；自动更新尚未实现。
 - 屏幕模拟矩阵已覆盖常见几何组合；真机 Beta 矩阵的待验证项以 `docs/beta-device-matrix.json` 为准。
 

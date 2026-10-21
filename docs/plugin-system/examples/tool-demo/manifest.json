@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "id": "com.example.tool-demo",
+  "name": "工具选择示例",
+  "version": "1.0.0",
+  "engine": "javascriptcore",
+  "entry": "index.js",
+  "minimumHostVersion": "0.6.0",
+  "permissions": [],
+  "capabilities": ["activity.publish", "activity.update", "ui.islandNode", "actions.handle"]
+}

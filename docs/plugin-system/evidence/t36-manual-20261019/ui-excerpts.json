@@ -1,0 +1,225 @@
+[
+  {
+    "callID": "call_c2cef5d6b9c948f8bcb62466148fb958",
+    "completedUTC": "2026-10-19T01:16:09.875Z",
+    "action": "批准 GitHub 当前代码的网页打开权限",
+    "evidenceLines": [
+      "+\t\t\t\t35 text 打开网页 已允许"
+    ]
+  },
+  {
+    "callID": "call_94201f7a73274be5a55417208e1c6616",
+    "completedUTC": "2026-10-19T01:16:40.750Z",
+    "action": "确认网络授权后的当前状态",
+    "evidenceLines": [
+      "\t\t\t\t16 text 打开网页 已允许",
+      "\t\t\t\t20 text 访问网络 已允许"
+    ]
+  },
+  {
+    "callID": "call_e0f74bd6dae7400982d7ab4208c07b9f",
+    "completedUTC": "2026-10-19T01:16:57.412Z",
+    "action": "确认三项权限分别批准且插件仍停用",
+    "evidenceLines": [
+      "+\t\t\t\t54 text 打开网页 已允许",
+      "+\t\t\t\t58 text 访问网络 已允许",
+      "+\t\t\t\t62 text 保存插件数据 已允许"
+    ]
+  },
+  {
+    "callID": "call_089a7609b2af4b54ba6bfcfcdcce631f",
+    "completedUTC": "2026-10-19T01:18:09.562Z",
+    "action": "查看 GitHub 五行工具与当前公开数据",
+    "evidenceLines": [
+      "\t\t6 text GitHub · actions/checkout CI · 构建成功 PR #1687 · Change the default value of persist-credentials to false"
+    ]
+  },
+  {
+    "callID": "call_5527da64d5d14c7e956deae1dd34f4b3",
+    "completedUTC": "2026-10-19T01:18:32.302Z",
+    "action": "切换到 cli/cli 并检查数据更新",
+    "evidenceLines": [
+      "~\t\t6 text GitHub · cli/cli CI · 暂无构建 · 正在读取 PR · 暂无打开的 PR"
+    ]
+  },
+  {
+    "callID": "call_3c21aff04b26479bb681459f2333678e",
+    "completedUTC": "2026-10-19T01:18:55.510Z",
+    "action": "确认 cli/cli 的实际 CI 和 PR 返回结果",
+    "evidenceLines": [
+      "+\t\t18 text GitHub · cli/cli CI · 构建成功 PR #14727 · fix(issue create): resolve --type before creating the issue"
+    ]
+  },
+  {
+    "callID": "call_1fd50ee624124011a09479bc729517d6",
+    "completedUTC": "2026-10-19T01:19:03.302Z",
+    "action": "通过真实刷新按钮复核当前仓库",
+    "evidenceLines": [
+      "~\t\t18 text GitHub · cli/cli CI · 构建成功 · 正在读取 PR #14727 · fix(issue create): resolve --type before creating the issue"
+    ]
+  },
+  {
+    "callID": "call_fe85bb7a749742bf9e001473c56bc4a7",
+    "completedUTC": "2026-10-19T01:19:34.024Z",
+    "action": "确认刷新完成并定位当前构建链接按钮",
+    "evidenceLines": [
+      "~\t\t18 text GitHub · cli/cli CI · 构建成功 PR #14727 · fix(issue create): resolve --type before creating the issue"
+    ]
+  },
+  {
+    "callID": "call_a4560721dbcc4fad9e754d59603956d3",
+    "completedUTC": "2026-10-19T01:19:42.515Z",
+    "action": "点击当前构建并通过系统默认浏览器打开",
+    "evidenceLines": [
+      "  t36Open: 'build',",
+      "  expectedURL: 'https://github.com/cli/cli/actions/runs/39184461294',"
+    ]
+  },
+  {
+    "callID": "call_93b79c1eddf442819a2aa3b72b120c58",
+    "completedUTC": "2026-10-19T01:20:12.774Z",
+    "action": "核对系统网页打开后的实际浏览器窗口",
+    "evidenceLines": [
+      "\t\t\t116 文本栏 (settable) Description: 智能搜索栏, Value: https://github.com/cli/cli/actions/runs/39184461294, ID: WEB_BROWSER_ADDRESS_AND_SEARCH_FIELD"
+    ]
+  },
+  {
+    "callID": "call_08467a400bd34dc49a0129c8227e419a",
+    "completedUTC": "2026-10-19T01:20:36.923Z",
+    "action": "回到当前 GitHub 工具以验证 PR 打开",
+    "evidenceLines": [
+      "\t\t6 text GitHub · cli/cli CI · 构建成功 PR #14727 · fix(issue create): resolve --type before creating the issue"
+    ]
+  },
+  {
+    "callID": "call_507ac7a96a9644c18c50f13867720d21",
+    "completedUTC": "2026-10-19T01:20:45.716Z",
+    "action": "从当前真实按钮打开 PR",
+    "evidenceLines": [
+      "  t36Open: 'pullRequest',",
+      "  expectedURL: 'https://github.com/cli/cli/pull/14727',"
+    ]
+  },
+  {
+    "callID": "call_298c350fb8c64e3e8faf350baa553ddb",
+    "completedUTC": "2026-10-19T01:20:57.023Z",
+    "action": "核对真实 PR 网页地址与当前插件数据一致",
+    "evidenceLines": [
+      "\t\t\t297 文本栏 (settable) Description: 智能搜索栏, Value: https://github.com/cli/cli/pull/14727, ID: WEB_BROWSER_ADDRESS_AND_SEARCH_FIELD"
+    ]
+  },
+  {
+    "callID": "call_96b2379cde4740399c562c9563d39bbc",
+    "completedUTC": "2026-10-19T01:21:18.860Z",
+    "action": "进入权限管理验证网页权限撤销",
+    "evidenceLines": [
+      "\t\t\t\t16 text 打开网页 已允许",
+      "\t\t\t\t20 text 访问网络 已允许",
+      "\t\t\t\t24 text 保存插件数据 已允许"
+    ]
+  },
+  {
+    "callID": "call_91431c0b227848af818325a372ccc056",
+    "completedUTC": "2026-10-19T01:21:28.314Z",
+    "action": "撤销网页权限并确认即时状态",
+    "evidenceLines": [
+      "~\t\t\t\t16 text 打开网页 已撤销"
+    ]
+  },
+  {
+    "callID": "call_e86af19232da4f88916813c8bf132868",
+    "completedUTC": "2026-10-19T01:21:37.234Z",
+    "action": "返回 GitHub 工具验证撤销后的行为",
+    "evidenceLines": [
+      "+\t\t42 text GitHub · cli/cli CI · 构建成功 PR #14727 · fix(issue create): resolve --type before creating the issue"
+    ]
+  },
+  {
+    "callID": "call_7b419331b0d240859d08677d3df9eccb",
+    "completedUTC": "2026-10-19T01:21:45.922Z",
+    "action": "检查撤销后拒绝打开并显示清楚提示",
+    "evidenceLines": [
+      "~\t\t42 text GitHub · cli/cli CI · 构建成功 · 无法打开，请检查授权 PR #14727 · fix(issue create): resolve --type before creating the issue",
+      "{ t36Open: 'revokedPR', beforeEpochMs: 1792372905460 }"
+    ]
+  },
+  {
+    "callID": "call_816f2d3cc1c8441cb238fd219d9397e8",
+    "completedUTC": "2026-10-19T01:21:57.695Z",
+    "action": "重新打开权限管理恢复网页权限",
+    "evidenceLines": [
+      "\t\t\t\t16 text 打开网页 已撤销",
+      "\t\t\t\t20 text 访问网络 已允许",
+      "\t\t\t\t24 text 保存插件数据 已允许"
+    ]
+  },
+  {
+    "callID": "call_384d8070511a4dcf9f87defbb911c0fc",
+    "completedUTC": "2026-10-19T01:22:29.935Z",
+    "action": "核对恢复授权结果",
+    "evidenceLines": [
+      "\t\t\t\t16 text 打开网页 已允许",
+      "\t\t\t\t20 text 访问网络 已允许",
+      "\t\t\t\t24 text 保存插件数据 已允许"
+    ]
+  },
+  {
+    "callID": "call_021eace670e7417ba475722d6cfe2cce",
+    "completedUTC": "2026-10-19T01:22:58.625Z",
+    "action": "恢复 GitHub 工具页当前按钮",
+    "evidenceLines": [
+      "~\t\t42 text GitHub · cli/cli CI · 构建成功 PR #14727 · fix(issue create): resolve --type before creating the issue"
+    ]
+  },
+  {
+    "callID": "call_c15853ce83c84a46b2c630fe0fbab430",
+    "completedUTC": "2026-10-19T01:23:27.925Z",
+    "action": "记录重新授权后新动作的浏览器基线",
+    "evidenceLines": [
+      "\t\t6 text GitHub · cli/cli CI · 构建成功 PR #14727 · fix(issue create): resolve --type before creating the issue"
+    ]
+  },
+  {
+    "callID": "call_3b98886f52a84764ac2aa4761b1c734d",
+    "completedUTC": "2026-10-19T01:23:37.805Z",
+    "action": "验证重新授权后的新 PR 动作确实再次打开网页",
+    "evidenceLines": [
+      "{ t36Open: 'restoredNewPRClick', beforeEpochMs: 1792373017135 }{",
+      "  activeAddressLine: '\\t\\t\\t297 文本栏 (settable) Description: 智能搜索栏, Value: https://github.com/cli/cli/pull/14727, ID: WEB_BROWSER_ADDRESS_AND_SEARCH_FIELD',"
+    ]
+  },
+  {
+    "callID": "call_7441e1edf3e6427e88e3252f97021a08",
+    "completedUTC": "2026-10-19T01:24:04.373Z",
+    "action": "定位已打开的构建标签以验证下一次 PR 导航",
+    "evidenceLines": [
+      "  addressLine: '\\t\\t\\t297 文本栏 (settable) Description: 智能搜索栏, Value: https://github.com/cli/cli/pull/14727, ID: WEB_BROWSER_ADDRESS_AND_SEARCH_FIELD'"
+    ]
+  },
+  {
+    "callID": "call_dac59c0924f244ef985ec9720e6fe40e",
+    "completedUTC": "2026-10-19T01:24:22.875Z",
+    "action": "将浏览器切回构建页作为恢复测试基线",
+    "evidenceLines": [
+      "\t\t6 text GitHub · cli/cli CI · 构建成功 PR #14727 · fix(issue create): resolve --type before creating the issue",
+      "  baselineAddressLine: '\\t\\t\\t116 文本栏 (settable) Description: 智能搜索栏, Value: https://github.com/cli/cli/actions/runs/39184461294, ID: WEB_BROWSER_ADDRESS_AND_SEARCH_FIELD'"
+    ]
+  },
+  {
+    "callID": "call_129f33f4dff040f3adf7ef5a30ff4b0f",
+    "completedUTC": "2026-10-19T01:24:37.559Z",
+    "action": "确认恢复授权后从构建页切到正确 PR 页面",
+    "evidenceLines": [
+      "  t36Open: 'restoredPRFromBuildBaseline',",
+      "  recoveredAddressLine: '\\t\\t\\t297 文本栏 (settable) Description: 智能搜索栏, Value: https://github.com/cli/cli/pull/14727, ID: WEB_BROWSER_ADDRESS_AND_SEARCH_FIELD',"
+    ]
+  },
+  {
+    "callID": "call_d52536d2f1bd4f388b2bd7141fbe1cda",
+    "completedUTC": "2026-10-19T01:24:52.134Z",
+    "action": "正常退出完成实机验收的 GitHub 副本",
+    "evidenceLines": [
+      "{ t36NormalQuitRequestedUTC: '2026-10-19T01:24:51.654Z' }"
+    ]
+  }
+]

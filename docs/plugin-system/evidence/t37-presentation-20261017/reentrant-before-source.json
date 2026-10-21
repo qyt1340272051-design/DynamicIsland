@@ -1,0 +1,7 @@
+{
+  "utc": "2026-10-17T13:53:12.505211+00:00",
+  "sourceSHA256": {
+    "DynamicIsland/Core/Activity/ActivityManager.swift": "c3fb1e9de06b06f0c9dfc4da361b797869fb964f4c406b6f80c8be4ce0aac246",
+    "DynamicIslandTests/ActivityPresentationRequestTests.swift": "08c3805e43138c006aaebc0742a0e94965215a210359c01ba3d3e104aad31df8"
+  }
+}

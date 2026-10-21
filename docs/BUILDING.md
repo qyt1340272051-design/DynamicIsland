@@ -3,10 +3,11 @@
 ## 环境
 
 - macOS 26.0 或更高版本
-- Xcode 26.6，使用其中的 macOS SDK 和命令行工具
+- Xcode 26.6，使用其中的 macOS SDK 与 Swift 6 工具链；工程当前采用 Swift 5 语言模式
+- 运行完整 CI / SDK 检查时需要 Python 3、Node.js 和 npm
 - 可访问公开 GitHub 仓库的网络连接
 
-本工程没有第三方包依赖。Xcode 工程为 `DynamicIsland.xcodeproj`，App 的共享 scheme 为 `Dynamic Island`。默认 Debug 构建使用本地运行签名；不需要 Developer ID 证书即可在开发机编译和测试，但产物不能视为正式安装包。
+App 没有第三方 Swift 包依赖；SDK 类型检查使用 `SDK/package-lock.json` 锁定的开发期 TypeScript，不是插件运行时依赖。Xcode 工程为 `DynamicIsland.xcodeproj`，App 的共享 scheme 为 `Dynamic Island`。默认 Debug 构建使用本地运行签名；不需要 Developer ID 证书即可在开发机编译和测试，但产物不能视为正式安装包。
 
 ## Xcode
 
@@ -36,6 +37,7 @@ open '/tmp/dynamic-island-build/Build/Products/Debug/Dynamic Island.app'
 `/tmp/dynamic-island-build` 是示例构建目录，可以换成你自己的路径。需要完整测试、Beta 矩阵校验与 Release 构建时运行：
 
 ```bash
+npm ci --prefix SDK --ignore-scripts --no-audit --no-fund
 ./Scripts/ci.sh
 ```
 
@@ -43,8 +45,12 @@ open '/tmp/dynamic-island-build/Build/Products/Debug/Dynamic Island.app'
 
 ## 本地打包与测试预发布
 
+当前候选为 App `0.6.0`（build 3）、标签 `v0.6.0-beta.1`。在准备好的源码上执行：
+
 ```bash
-./Scripts/release.sh --local
+RELEASE_TAG=v0.6.0-beta.1 ./Scripts/release.sh --local
 ```
 
 本地模式生成双架构 ad hoc 签名的 Archive、DMG、SHA-256 与 manifest。该 DMG 可以明确标为“未公证测试包”上传 GitHub 预发布；没有 Developer ID 签名和 Apple 公证，macOS 首次运行可能要求在“系统设置 > 隐私与安全性 > 仍要打开”手动放行。不能承诺双击即启动，也不能将它称为正式签名公证安装包。Tag 自动发布和测试者安装步骤见 [发布指南](RELEASING.md)。
+
+输出文件为 `Dynamic-Island-0.6.0-beta.1-local.dmg`、对应 `.dmg.sha256` 和 `.json`，默认目录是 `build/release/`。本地构建不自动发布；T39 新作者独立体验和九项真机 Beta 场景仍待验收，不能据打包成功将其标为完成。SDK 作者文档见 [SDK Quick Start](../SDK/docs/quick-start.md)。

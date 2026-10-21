@@ -1,0 +1,344 @@
+{
+  "startedUTC": "2026-10-16T11:03:32.089Z",
+  "endedUTC": "2026-10-16T11:04:06.310Z",
+  "foundCompletionActivity": true,
+  "firstNoticeUTC": "2026-10-16T11:04:05.265Z",
+  "frames": [
+    {
+      "utc": "2026-10-16T11:03:33.170Z",
+      "ax": "Window: \"\", App: Dynamic Island T35 Pomodoro.\n0 system dialog Secondary Actions: Raise\n\t1 container\n\t\t2 image timer\n\t\t3 text Description: Countdown, Value: 00:32\n4 menu bar\n\t5 Dynamic Island T35 Pomodoro\n\t6 Edit\n\t7 View\n\t8 Window\n\t9 Help\n",
+      "completionActivity": false,
+      "screenshot": "run2-deadline-burst-000.jpg"
+    },
+    {
+      "utc": "2026-10-16T11:03:33.698Z",
+      "ax": "Window: \"\", App: Dynamic Island T35 Pomodoro.\n0 system dialog Secondary Actions: Raise\n\t1 container\n\t\t2 image timer\n\t\t3 text Description: Countdown, Value: 00:31\n4 menu bar\n\t5 Dynamic Island T35 Pomodoro\n\t6 Edit\n\t7 View\n\t8 Window\n\t9 Help\n",
+      "completionActivity": false,
+      "screenshot": "run2-deadline-burst-001.jpg"
+    },
+    {
+      "utc": "2026-10-16T11:03:34.718Z",
+      "ax": "Window: \"\", App: Dynamic Island T35 Pomodoro.\n0 system dialog Secondary Actions: Raise\n\t1 container\n\t\t2 image timer\n\t\t3 text Description: Countdown, Value: 00:30\n4 menu bar\n\t5 Dynamic Island T35 Pomodoro\n\t6 Edit\n\t7 View\n\t8 Window\n\t9 Help\n",
+      "completionActivity": false,
+      "screenshot": "run2-deadline-burst-002.jpg"
+    },
+    {
+      "utc": "2026-10-16T11:03:35.798Z",
+      "ax": "Window: \"\", App: Dynamic Island T35 Pomodoro.\n0 system dialog Secondary Actions: Raise\n\t1 container\n\t\t2 image timer\n\t\t3 text Description: Countdown, Value: 00:29\n4 menu bar\n\t5 Dynamic Island T35 Pomodoro\n\t6 Edit\n\t7 View\n\t8 Window\n\t9 Help\n",
+      "completionActivity": false,
+      "screenshot": "run2-deadline-burst-003.jpg"
+    },
+    {
+      "utc": "2026-10-16T11:03:36.872Z",
+      "ax": "Window: \"\", App: Dynamic Island T35 Pomodoro.\n0 system dialog Secondary Actions: Raise\n\t1 container\n\t\t2 image timer\n\t\t3 text Description: Countdown, Value: 00:28\n4 menu bar\n\t5 Dynamic Island T35 Pomodoro\n\t6 Edit\n\t7 View\n\t8 Window\n\t9 Help\n",
+      "completionActivity": false,
+      "screenshot": "run2-deadline-burst-004.jpg"
+    },
+    {
+      "utc": "2026-10-16T11:03:37.907Z",
+      "ax": "Window: \"\", App: Dynamic Island T35 Pomodoro.\n0 system dialog Secondary Actions: Raise\n\t1 container\n\t\t2 image timer\n\t\t3 text Description: Countdown, Value: 00:27\n4 menu bar\n\t5 Dynamic Island T35 Pomodoro\n\t6 Edit\n\t7 View\n\t8 Window\n\t9 Help\n",
+      "completionActivity": false,
+      "screenshot": "run2-deadline-burst-005.jpg"
+    },
+    {
+      "utc": "2026-10-16T11:03:38.477Z",
+      "ax": "Window: \"\", App: Dynamic Island T35 Pomodoro.\n0 system dialog Secondary Actions: Raise\n\t1 container\n\t\t2 image timer\n\t\t3 text Description: Countdown, Value: 00:26\n4 menu bar\n\t5 Dynamic Island T35 Pomodoro\n\t6 Edit\n\t7 View\n\t8 Window\n\t9 Help\n",
+      "completionActivity": false,
+      "screenshot": "run2-deadline-burst-006.jpg"
+    },
+    {
+      "utc": "2026-10-16T11:03:40.025Z",
+      "ax": "Window: \"\", App: Dynamic Island T35 Pomodoro.\n0 system dialog Secondary Actions: Raise\n\t1 container\n\t\t2 image timer\n\t\t3 text Description: Countdown, Value: 00:25\n4 menu bar\n\t5 Dynamic Island T35 Pomodoro\n\t6 Edit\n\t7 View\n\t8 Window\n\t9 Help\n",
+      "completionActivity": false,
+      "screenshot": "run2-deadline-burst-007.jpg"
+    },
+    {
+      "utc": "2026-10-16T11:03:41.107Z",
+      "ax": "Window: \"\", App: Dynamic Island T35 Pomodoro.\n0 system dialog Secondary Actions: Raise\n\t1 container\n\t\t2 image timer\n\t\t3 text Description: Countdown, Value: 00:24\n4 menu bar\n\t5 Dynamic Island T35 Pomodoro\n\t6 Edit\n\t7 View\n\t8 Window\n\t9 Help\n",
+      "completionActivity": false,
+      "screenshot": "run2-deadline-burst-008.jpg"
+    },
+    {
+      "utc": "2026-10-16T11:03:41.623Z",
+      "ax": "Window: \"\", App: Dynamic Island T35 Pomodoro.\n0 system dialog Secondary Actions: Raise\n\t1 container\n\t\t2 image timer\n\t\t3 text Description: Countdown, Value: 00:23\n4 menu bar\n\t5 Dynamic Island T35 Pomodoro\n\t6 Edit\n\t7 View\n\t8 Window\n\t9 Help\n",
+      "completionActivity": false,
+      "screenshot": "run2-deadline-burst-009.jpg"
+    },
+    {
+      "utc": "2026-10-16T11:03:43.214Z",
+      "ax": "Window: \"\", App: Dynamic Island T35 Pomodoro.\n0 system dialog Secondary Actions: Raise\n\t1 container\n\t\t2 image timer\n\t\t3 text Description: Countdown, Value: 00:22\n4 menu bar\n\t5 Dynamic Island T35 Pomodoro\n\t6 Edit\n\t7 View\n\t8 Window\n\t9 Help\n",
+      "completionActivity": false,
+      "screenshot": "run2-deadline-burst-010.jpg"
+    },
+    {
+      "utc": "2026-10-16T11:03:44.296Z",
+      "ax": "Window: \"\", App: Dynamic Island T35 Pomodoro.\n0 system dialog Secondary Actions: Raise\n\t1 container\n\t\t2 image timer\n\t\t3 text Description: Countdown, Value: 00:21\n4 menu bar\n\t5 Dynamic Island T35 Pomodoro\n\t6 Edit\n\t7 View\n\t8 Window\n\t9 Help\n",
+      "completionActivity": false,
+      "screenshot": "run2-deadline-burst-011.jpg"
+    },
+    {
+      "utc": "2026-10-16T11:03:44.830Z",
+      "ax": "Window: \"\", App: Dynamic Island T35 Pomodoro.\n0 system dialog Secondary Actions: Raise\n\t1 container\n\t\t2 image timer\n\t\t3 text Description: Countdown, Value: 00:20\n4 menu bar\n\t5 Dynamic Island T35 Pomodoro\n\t6 Edit\n\t7 View\n\t8 Window\n\t9 Help\n",
+      "completionActivity": false,
+      "screenshot": "run2-deadline-burst-012.jpg"
+    },
+    {
+      "utc": "2026-10-16T11:03:46.407Z",
+      "ax": "Window: \"\", App: Dynamic Island T35 Pomodoro.\n0 system dialog Secondary Actions: Raise\n\t1 container\n\t\t2 image timer\n\t\t3 text Description: Countdown, Value: 00:18\n4 menu bar\n\t5 Dynamic Island T35 Pomodoro\n\t6 Edit\n\t7 View\n\t8 Window\n\t9 Help\n",
+      "completionActivity": false,
+      "screenshot": "run2-deadline-burst-013.jpg"
+    },
+    {
+      "utc": "2026-10-16T11:03:47.476Z",
+      "ax": "Window: \"\", App: Dynamic Island T35 Pomodoro.\n0 system dialog Secondary Actions: Raise\n\t1 container\n\t\t2 image timer\n\t\t3 text Description: Countdown, Value: 00:17\n4 menu bar\n\t5 Dynamic Island T35 Pomodoro\n\t6 Edit\n\t7 View\n\t8 Window\n\t9 Help\n",
+      "completionActivity": false,
+      "screenshot": "run2-deadline-burst-014.jpg"
+    },
+    {
+      "utc": "2026-10-16T11:03:48.546Z",
+      "ax": "Window: \"\", App: Dynamic Island T35 Pomodoro.\n0 system dialog Secondary Actions: Raise\n\t1 container\n\t\t2 image timer\n\t\t3 text Description: Countdown, Value: 00:16\n4 menu bar\n\t5 Dynamic Island T35 Pomodoro\n\t6 Edit\n\t7 View\n\t8 Window\n\t9 Help\n",
+      "completionActivity": false,
+      "screenshot": "run2-deadline-burst-015.jpg"
+    },
+    {
+      "utc": "2026-10-16T11:03:49.579Z",
+      "ax": "Window: \"\", App: Dynamic Island T35 Pomodoro.\n0 system dialog Secondary Actions: Raise\n\t1 container\n\t\t2 image timer\n\t\t3 text Description: Countdown, Value: 00:15\n4 menu bar\n\t5 Dynamic Island T35 Pomodoro\n\t6 Edit\n\t7 View\n\t8 Window\n\t9 Help\n",
+      "completionActivity": false,
+      "screenshot": "run2-deadline-burst-016.jpg"
+    },
+    {
+      "utc": "2026-10-16T11:03:50.607Z",
+      "ax": "Window: \"\", App: Dynamic Island T35 Pomodoro.\n0 system dialog Secondary Actions: Raise\n\t1 container\n\t\t2 image timer\n\t\t3 text Description: Countdown, Value: 00:14\n4 menu bar\n\t5 Dynamic Island T35 Pomodoro\n\t6 Edit\n\t7 View\n\t8 Window\n\t9 Help\n",
+      "completionActivity": false,
+      "screenshot": "run2-deadline-burst-017.jpg"
+    },
+    {
+      "utc": "2026-10-16T11:03:51.695Z",
+      "ax": "Window: \"\", App: Dynamic Island T35 Pomodoro.\n0 system dialog Secondary Actions: Raise\n\t1 container\n\t\t2 image timer\n\t\t3 text Description: Countdown, Value: 00:13\n4 menu bar\n\t5 Dynamic Island T35 Pomodoro\n\t6 Edit\n\t7 View\n\t8 Window\n\t9 Help\n",
+      "completionActivity": false,
+      "screenshot": "run2-deadline-burst-018.jpg"
+    },
+    {
+      "utc": "2026-10-16T11:03:52.745Z",
+      "ax": "Window: \"\", App: Dynamic Island T35 Pomodoro.\n0 system dialog Secondary Actions: Raise\n\t1 container\n\t\t2 image timer\n\t\t3 text Description: Countdown, Value: 00:12\n4 menu bar\n\t5 Dynamic Island T35 Pomodoro\n\t6 Edit\n\t7 View\n\t8 Window\n\t9 Help\n",
+      "completionActivity": false,
+      "screenshot": "run2-deadline-burst-019.jpg"
+    },
+    {
+      "utc": "2026-10-16T11:03:53.824Z",
+      "ax": "Window: \"\", App: Dynamic Island T35 Pomodoro.\n0 system dialog Secondary Actions: Raise\n\t1 container\n\t\t2 image timer\n\t\t3 text Description: Countdown, Value: 00:11\n4 menu bar\n\t5 Dynamic Island T35 Pomodoro\n\t6 Edit\n\t7 View\n\t8 Window\n\t9 Help\n",
+      "completionActivity": false,
+      "screenshot": "run2-deadline-burst-020.jpg"
+    },
+    {
+      "utc": "2026-10-16T11:03:54.898Z",
+      "ax": "Window: \"\", App: Dynamic Island T35 Pomodoro.\n0 system dialog Secondary Actions: Raise\n\t1 container\n\t\t2 image timer\n\t\t3 text Description: Countdown, Value: 00:10\n4 menu bar\n\t5 Dynamic Island T35 Pomodoro\n\t6 Edit\n\t7 View\n\t8 Window\n\t9 Help\n",
+      "completionActivity": false,
+      "screenshot": "run2-deadline-burst-021.jpg"
+    },
+    {
+      "utc": "2026-10-16T11:03:55.882Z",
+      "ax": "Window: \"\", App: Dynamic Island T35 Pomodoro.\n0 system dialog Secondary Actions: Raise\n\t1 container\n\t\t2 image timer\n\t\t3 text Description: Countdown, Value: 00:09\n4 menu bar\n\t5 Dynamic Island T35 Pomodoro\n\t6 Edit\n\t7 View\n\t8 Window\n\t9 Help\n",
+      "completionActivity": false,
+      "screenshot": "run2-deadline-burst-022.jpg"
+    },
+    {
+      "utc": "2026-10-16T11:03:56.943Z",
+      "ax": "Window: \"\", App: Dynamic Island T35 Pomodoro.\n0 system dialog Secondary Actions: Raise\n\t1 container\n\t\t2 image timer\n\t\t3 text Description: Countdown, Value: 00:08\n4 menu bar\n\t5 Dynamic Island T35 Pomodoro\n\t6 Edit\n\t7 View\n\t8 Window\n\t9 Help\n",
+      "completionActivity": false,
+      "screenshot": "run2-deadline-burst-023.jpg"
+    },
+    {
+      "utc": "2026-10-16T11:03:57.460Z",
+      "ax": "Window: \"\", App: Dynamic Island T35 Pomodoro.\n0 system dialog Secondary Actions: Raise\n\t1 container\n\t\t2 image timer\n\t\t3 text Description: Countdown, Value: 00:07\n4 menu bar\n\t5 Dynamic Island T35 Pomodoro\n\t6 Edit\n\t7 View\n\t8 Window\n\t9 Help\n",
+      "completionActivity": false,
+      "screenshot": "run2-deadline-burst-024.jpg"
+    },
+    {
+      "utc": "2026-10-16T11:03:59.071Z",
+      "ax": "Window: \"\", App: Dynamic Island T35 Pomodoro.\n0 system dialog Secondary Actions: Raise\n\t1 container\n\t\t2 image timer\n\t\t3 text Description: Countdown, Value: 00:06\n4 menu bar\n\t5 Dynamic Island T35 Pomodoro\n\t6 Edit\n\t7 View\n\t8 Window\n\t9 Help\n",
+      "completionActivity": false,
+      "screenshot": "run2-deadline-burst-025.jpg"
+    },
+    {
+      "utc": "2026-10-16T11:04:00.107Z",
+      "ax": "Window: \"\", App: Dynamic Island T35 Pomodoro.\n0 system dialog Secondary Actions: Raise\n\t1 container\n\t\t2 image timer\n\t\t3 text Description: Countdown, Value: 00:05\n4 menu bar\n\t5 Dynamic Island T35 Pomodoro\n\t6 Edit\n\t7 View\n\t8 Window\n\t9 Help\n",
+      "completionActivity": false,
+      "screenshot": "run2-deadline-burst-026.jpg"
+    },
+    {
+      "utc": "2026-10-16T11:04:00.689Z",
+      "ax": "Window: \"\", App: Dynamic Island T35 Pomodoro.\n0 system dialog Secondary Actions: Raise\n\t1 container\n\t\t2 image timer\n\t\t3 text Description: Countdown, Value: 00:04\n4 menu bar\n\t5 Dynamic Island T35 Pomodoro\n\t6 Edit\n\t7 View\n\t8 Window\n\t9 Help\n",
+      "completionActivity": false,
+      "screenshot": "run2-deadline-burst-027.jpg"
+    },
+    {
+      "utc": "2026-10-16T11:04:02.258Z",
+      "ax": "Window: \"\", App: Dynamic Island T35 Pomodoro.\n0 system dialog Secondary Actions: Raise\n\t1 container\n\t\t2 image timer\n\t\t3 text Description: Countdown, Value: 00:03\n4 menu bar\n\t5 Dynamic Island T35 Pomodoro\n\t6 Edit\n\t7 View\n\t8 Window\n\t9 Help\n",
+      "completionActivity": false,
+      "screenshot": "run2-deadline-burst-028.jpg"
+    },
+    {
+      "utc": "2026-10-16T11:04:03.281Z",
+      "ax": "Window: \"\", App: Dynamic Island T35 Pomodoro.\n0 system dialog Secondary Actions: Raise\n\t1 container\n\t\t2 image timer\n\t\t3 text Description: Countdown, Value: 00:02\n4 menu bar\n\t5 Dynamic Island T35 Pomodoro\n\t6 Edit\n\t7 View\n\t8 Window\n\t9 Help\n",
+      "completionActivity": false,
+      "screenshot": "run2-deadline-burst-029.jpg"
+    },
+    {
+      "utc": "2026-10-16T11:04:03.857Z",
+      "ax": "Window: \"\", App: Dynamic Island T35 Pomodoro.\n0 system dialog Secondary Actions: Raise\n\t1 container\n\t\t2 image timer\n\t\t3 text Description: Countdown, Value: 00:01\n4 menu bar\n\t5 Dynamic Island T35 Pomodoro\n\t6 Edit\n\t7 View\n\t8 Window\n\t9 Help\n",
+      "completionActivity": false,
+      "screenshot": "run2-deadline-burst-030.jpg"
+    },
+    {
+      "utc": "2026-10-16T11:04:04.766Z",
+      "ax": "Window: \"\", App: Dynamic Island T35 Pomodoro.\n0 system dialog Secondary Actions: Raise\n1 menu bar\n\t2 Dynamic Island T35 Pomodoro\n\t3 Edit\n\t4 View\n\t5 Window\n\t6 Help\n",
+      "completionActivity": false,
+      "screenshot": "run2-deadline-burst-031.jpg"
+    },
+    {
+      "utc": "2026-10-16T11:04:05.265Z",
+      "ax": "Window: \"\", App: Dynamic Island T35 Pomodoro.\n0 system dialog Secondary Actions: Raise\n\t1 container\n\t\t2 image (selected) Description: checkmark circle fill, ID: checkmark.circle.fill\n\t\t3 text 专注完成\n4 menu bar\n\t5 Dynamic Island T35 Pomodoro\n\t6 Edit\n\t7 View\n\t8 Window\n\t9 Help\n",
+      "completionActivity": true,
+      "screenshot": "run2-deadline-burst-032.jpg"
+    },
+    {
+      "utc": "2026-10-16T11:04:05.311Z",
+      "ax": "Window: \"\", App: Dynamic Island T35 Pomodoro.\n0 system dialog Secondary Actions: Raise\n\t1 container\n\t\t2 image (selected) Description: checkmark circle fill, ID: checkmark.circle.fill\n\t\t3 text 专注完成\n4 menu bar\n\t5 Dynamic Island T35 Pomodoro\n\t6 Edit\n\t7 View\n\t8 Window\n\t9 Help\n",
+      "completionActivity": true,
+      "screenshot": "run2-deadline-burst-033.jpg"
+    },
+    {
+      "utc": "2026-10-16T11:04:05.362Z",
+      "ax": "Window: \"\", App: Dynamic Island T35 Pomodoro.\n0 system dialog Secondary Actions: Raise\n\t1 container\n\t\t2 image (selected) Description: checkmark circle fill, ID: checkmark.circle.fill\n\t\t3 text 专注完成\n4 menu bar\n\t5 Dynamic Island T35 Pomodoro\n\t6 Edit\n\t7 View\n\t8 Window\n\t9 Help\n",
+      "completionActivity": true,
+      "screenshot": "run2-deadline-burst-034.jpg"
+    },
+    {
+      "utc": "2026-10-16T11:04:05.406Z",
+      "ax": "Window: \"\", App: Dynamic Island T35 Pomodoro.\n0 system dialog Secondary Actions: Raise\n\t1 container\n\t\t2 image (selected) Description: checkmark circle fill, ID: checkmark.circle.fill\n\t\t3 text 专注完成\n4 menu bar\n\t5 Dynamic Island T35 Pomodoro\n\t6 Edit\n\t7 View\n\t8 Window\n\t9 Help\n",
+      "completionActivity": true,
+      "screenshot": "run2-deadline-burst-035.jpg"
+    },
+    {
+      "utc": "2026-10-16T11:04:05.462Z",
+      "ax": "Window: \"\", App: Dynamic Island T35 Pomodoro.\n0 system dialog Secondary Actions: Raise\n\t1 container\n\t\t2 image (selected) Description: checkmark circle fill, ID: checkmark.circle.fill\n\t\t3 text 专注完成\n4 menu bar\n\t5 Dynamic Island T35 Pomodoro\n\t6 Edit\n\t7 View\n\t8 Window\n\t9 Help\n",
+      "completionActivity": true,
+      "screenshot": "run2-deadline-burst-036.jpg"
+    },
+    {
+      "utc": "2026-10-16T11:04:05.512Z",
+      "ax": "Window: \"\", App: Dynamic Island T35 Pomodoro.\n0 system dialog Secondary Actions: Raise\n\t1 container\n\t\t2 image (selected) Description: checkmark circle fill, ID: checkmark.circle.fill\n\t\t3 text 专注完成\n4 menu bar\n\t5 Dynamic Island T35 Pomodoro\n\t6 Edit\n\t7 View\n\t8 Window\n\t9 Help\n",
+      "completionActivity": true,
+      "screenshot": "run2-deadline-burst-037.jpg"
+    },
+    {
+      "utc": "2026-10-16T11:04:05.562Z",
+      "ax": "Window: \"\", App: Dynamic Island T35 Pomodoro.\n0 system dialog Secondary Actions: Raise\n\t1 container\n\t\t2 image (selected) Description: checkmark circle fill, ID: checkmark.circle.fill\n\t\t3 text 专注完成\n4 menu bar\n\t5 Dynamic Island T35 Pomodoro\n\t6 Edit\n\t7 View\n\t8 Window\n\t9 Help\n",
+      "completionActivity": true,
+      "screenshot": "run2-deadline-burst-038.jpg"
+    },
+    {
+      "utc": "2026-10-16T11:04:05.613Z",
+      "ax": "Window: \"\", App: Dynamic Island T35 Pomodoro.\n0 system dialog Secondary Actions: Raise\n\t1 container\n\t\t2 image (selected) Description: checkmark circle fill, ID: checkmark.circle.fill\n\t\t3 text 专注完成\n4 menu bar\n\t5 Dynamic Island T35 Pomodoro\n\t6 Edit\n\t7 View\n\t8 Window\n\t9 Help\n",
+      "completionActivity": true,
+      "screenshot": "run2-deadline-burst-039.jpg"
+    },
+    {
+      "utc": "2026-10-16T11:04:05.659Z",
+      "ax": "Window: \"\", App: Dynamic Island T35 Pomodoro.\n0 system dialog Secondary Actions: Raise\n\t1 container\n\t\t2 image (selected) Description: checkmark circle fill, ID: checkmark.circle.fill\n\t\t3 text 专注完成\n4 menu bar\n\t5 Dynamic Island T35 Pomodoro\n\t6 Edit\n\t7 View\n\t8 Window\n\t9 Help\n",
+      "completionActivity": true,
+      "screenshot": "run2-deadline-burst-040.jpg"
+    },
+    {
+      "utc": "2026-10-16T11:04:05.697Z",
+      "ax": "Window: \"\", App: Dynamic Island T35 Pomodoro.\n0 system dialog Secondary Actions: Raise\n\t1 container\n\t\t2 image (selected) Description: checkmark circle fill, ID: checkmark.circle.fill\n\t\t3 text 专注完成\n4 menu bar\n\t5 Dynamic Island T35 Pomodoro\n\t6 Edit\n\t7 View\n\t8 Window\n\t9 Help\n",
+      "completionActivity": true,
+      "screenshot": "run2-deadline-burst-041.jpg"
+    },
+    {
+      "utc": "2026-10-16T11:04:05.744Z",
+      "ax": "Window: \"\", App: Dynamic Island T35 Pomodoro.\n0 system dialog Secondary Actions: Raise\n\t1 container\n\t\t2 image (selected) Description: checkmark circle fill, ID: checkmark.circle.fill\n\t\t3 text 专注完成\n4 menu bar\n\t5 Dynamic Island T35 Pomodoro\n\t6 Edit\n\t7 View\n\t8 Window\n\t9 Help\n",
+      "completionActivity": true,
+      "screenshot": "run2-deadline-burst-042.jpg"
+    },
+    {
+      "utc": "2026-10-16T11:04:05.797Z",
+      "ax": "Window: \"\", App: Dynamic Island T35 Pomodoro.\n0 system dialog Secondary Actions: Raise\n\t1 container\n\t\t2 image (selected) Description: checkmark circle fill, ID: checkmark.circle.fill\n\t\t3 text 专注完成\n4 menu bar\n\t5 Dynamic Island T35 Pomodoro\n\t6 Edit\n\t7 View\n\t8 Window\n\t9 Help\n",
+      "completionActivity": true,
+      "screenshot": "run2-deadline-burst-043.jpg"
+    },
+    {
+      "utc": "2026-10-16T11:04:05.837Z",
+      "ax": "Window: \"\", App: Dynamic Island T35 Pomodoro.\n0 system dialog Secondary Actions: Raise\n\t1 container\n\t\t2 image (selected) Description: checkmark circle fill, ID: checkmark.circle.fill\n\t\t3 text 专注完成\n4 menu bar\n\t5 Dynamic Island T35 Pomodoro\n\t6 Edit\n\t7 View\n\t8 Window\n\t9 Help\n",
+      "completionActivity": true,
+      "screenshot": "run2-deadline-burst-044.jpg"
+    },
+    {
+      "utc": "2026-10-16T11:04:05.872Z",
+      "ax": "Window: \"\", App: Dynamic Island T35 Pomodoro.\n0 system dialog Secondary Actions: Raise\n\t1 container\n\t\t2 image (selected) Description: checkmark circle fill, ID: checkmark.circle.fill\n\t\t3 text 专注完成\n4 menu bar\n\t5 Dynamic Island T35 Pomodoro\n\t6 Edit\n\t7 View\n\t8 Window\n\t9 Help\n",
+      "completionActivity": true,
+      "screenshot": "run2-deadline-burst-045.jpg"
+    },
+    {
+      "utc": "2026-10-16T11:04:05.914Z",
+      "ax": "Window: \"\", App: Dynamic Island T35 Pomodoro.\n0 system dialog Secondary Actions: Raise\n\t1 container\n\t\t2 image (selected) Description: checkmark circle fill, ID: checkmark.circle.fill\n\t\t3 text 专注完成\n4 menu bar\n\t5 Dynamic Island T35 Pomodoro\n\t6 Edit\n\t7 View\n\t8 Window\n\t9 Help\n",
+      "completionActivity": true,
+      "screenshot": "run2-deadline-burst-046.jpg"
+    },
+    {
+      "utc": "2026-10-16T11:04:05.959Z",
+      "ax": "Window: \"\", App: Dynamic Island T35 Pomodoro.\n0 system dialog Secondary Actions: Raise\n\t1 container\n\t\t2 image (selected) Description: checkmark circle fill, ID: checkmark.circle.fill\n\t\t3 text 专注完成\n4 menu bar\n\t5 Dynamic Island T35 Pomodoro\n\t6 Edit\n\t7 View\n\t8 Window\n\t9 Help\n",
+      "completionActivity": true,
+      "screenshot": "run2-deadline-burst-047.jpg"
+    },
+    {
+      "utc": "2026-10-16T11:04:05.996Z",
+      "ax": "Window: \"\", App: Dynamic Island T35 Pomodoro.\n0 system dialog Secondary Actions: Raise\n\t1 container\n\t\t2 image (selected) Description: checkmark circle fill, ID: checkmark.circle.fill\n\t\t3 text 专注完成\n4 menu bar\n\t5 Dynamic Island T35 Pomodoro\n\t6 Edit\n\t7 View\n\t8 Window\n\t9 Help\n",
+      "completionActivity": true,
+      "screenshot": "run2-deadline-burst-048.jpg"
+    },
+    {
+      "utc": "2026-10-16T11:04:06.043Z",
+      "ax": "Window: \"\", App: Dynamic Island T35 Pomodoro.\n0 system dialog Secondary Actions: Raise\n\t1 container\n\t\t2 image (selected) Description: checkmark circle fill, ID: checkmark.circle.fill\n\t\t3 text 专注完成\n4 menu bar\n\t5 Dynamic Island T35 Pomodoro\n\t6 Edit\n\t7 View\n\t8 Window\n\t9 Help\n",
+      "completionActivity": true,
+      "screenshot": "run2-deadline-burst-049.jpg"
+    },
+    {
+      "utc": "2026-10-16T11:04:06.080Z",
+      "ax": "Window: \"\", App: Dynamic Island T35 Pomodoro.\n0 system dialog Secondary Actions: Raise\n\t1 container\n\t\t2 image (selected) Description: checkmark circle fill, ID: checkmark.circle.fill\n\t\t3 text 专注完成\n4 menu bar\n\t5 Dynamic Island T35 Pomodoro\n\t6 Edit\n\t7 View\n\t8 Window\n\t9 Help\n",
+      "completionActivity": true,
+      "screenshot": "run2-deadline-burst-050.jpg"
+    },
+    {
+      "utc": "2026-10-16T11:04:06.132Z",
+      "ax": "Window: \"\", App: Dynamic Island T35 Pomodoro.\n0 system dialog Secondary Actions: Raise\n\t1 container\n\t\t2 image (selected) Description: checkmark circle fill, ID: checkmark.circle.fill\n\t\t3 text 专注完成\n4 menu bar\n\t5 Dynamic Island T35 Pomodoro\n\t6 Edit\n\t7 View\n\t8 Window\n\t9 Help\n",
+      "completionActivity": true,
+      "screenshot": "run2-deadline-burst-051.jpg"
+    },
+    {
+      "utc": "2026-10-16T11:04:06.173Z",
+      "ax": "Window: \"\", App: Dynamic Island T35 Pomodoro.\n0 system dialog Secondary Actions: Raise\n\t1 container\n\t\t2 image (selected) Description: checkmark circle fill, ID: checkmark.circle.fill\n\t\t3 text 专注完成\n4 menu bar\n\t5 Dynamic Island T35 Pomodoro\n\t6 Edit\n\t7 View\n\t8 Window\n\t9 Help\n",
+      "completionActivity": true,
+      "screenshot": "run2-deadline-burst-052.jpg"
+    },
+    {
+      "utc": "2026-10-16T11:04:06.226Z",
+      "ax": "Window: \"\", App: Dynamic Island T35 Pomodoro.\n0 system dialog Secondary Actions: Raise\n\t1 container\n\t\t2 image (selected) Description: checkmark circle fill, ID: checkmark.circle.fill\n\t\t3 text 专注完成\n4 menu bar\n\t5 Dynamic Island T35 Pomodoro\n\t6 Edit\n\t7 View\n\t8 Window\n\t9 Help\n",
+      "completionActivity": true,
+      "screenshot": "run2-deadline-burst-053.jpg"
+    },
+    {
+      "utc": "2026-10-16T11:04:06.262Z",
+      "ax": "Window: \"\", App: Dynamic Island T35 Pomodoro.\n0 system dialog Secondary Actions: Raise\n\t1 container\n\t\t2 image (selected) Description: checkmark circle fill, ID: checkmark.circle.fill\n\t\t3 text 专注完成\n4 menu bar\n\t5 Dynamic Island T35 Pomodoro\n\t6 Edit\n\t7 View\n\t8 Window\n\t9 Help\n",
+      "completionActivity": true,
+      "screenshot": "run2-deadline-burst-054.jpg"
+    },
+    {
+      "utc": "2026-10-16T11:04:06.310Z",
+      "ax": "Window: \"\", App: Dynamic Island T35 Pomodoro.\n0 system dialog Secondary Actions: Raise\n\t1 container\n\t\t2 image (selected) Description: checkmark circle fill, ID: checkmark.circle.fill\n\t\t3 text 专注完成\n4 menu bar\n\t5 Dynamic Island T35 Pomodoro\n\t6 Edit\n\t7 View\n\t8 Window\n\t9 Help\n",
+      "completionActivity": true,
+      "screenshot": "run2-deadline-burst-055.jpg"
+    }
+  ]
+}

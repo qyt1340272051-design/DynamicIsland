@@ -1,0 +1,147 @@
+{
+  "utc": "2026-10-17T15:35:22.919708+00:00",
+  "baseCommit": "99c16f6e799b9c87ce32aa0ba7fdfbdfb1b20048",
+  "selectedTests": {
+    "result": "Passed",
+    "totalTestCount": 91,
+    "passedTests": 91,
+    "skippedTests": 0,
+    "failedTests": 0,
+    "expectedFailures": 0,
+    "startTime": 1792251047.325,
+    "finishTime": 1792251067.096,
+    "environmentDescription": "Dynamic Island · Built with macOS 26.6.2",
+    "testFailures": []
+  },
+  "fullCI": {
+    "result": "Passed",
+    "totalTestCount": 1035,
+    "passedTests": 1028,
+    "skippedTests": 7,
+    "failedTests": 0,
+    "expectedFailures": 0,
+    "startTime": 1792251099.663,
+    "finishTime": 1792251199.213,
+    "environmentDescription": "Dynamic Island · Built with macOS 26.6.2",
+    "testFailures": []
+  },
+  "releaseBuild": "passed",
+  "ordinaryReleaseStrictDeepSignature": "passed",
+  "testOnlyEntitlements": false,
+  "releaseExecutableSHA256": "10c16122bd4ad4e0415e774413b722b921bf65bad82181cd539892b13ad8a682",
+  "skips": [
+    "Five real AppKit input cases require an unlocked macOS session; all five skipped in the full run",
+    "Explicit screen snapshot matrix is opt-in",
+    "Live public GitHub API is opt-in; prior T36 live result remains separate"
+  ],
+  "selectedPhysicalInputTestsPassed": [
+    "PluginExtensionsUITests/testNativeButtonsRequireExplicitConsentAndUninstallConfirmation",
+    "PluginInstallerUITests/testNativeCancelWindowCloseAndInstallButtonsUseTheCurrentReview"
+  ],
+  "manualAcceptance": {
+    "ledger": "../../MANUAL_ACCEPTANCE.md",
+    "t35AcceptanceAppLaunched": false,
+    "t36AcceptanceAppLaunched": false,
+    "previouslyRecordedProductionPID": 21458,
+    "previouslyRecordedProductionPIDAliveAtEnd": false,
+    "productionAppLaunchedByThisStep": false
+  },
+  "sourceSHA256": {
+    ".github/workflows/ci.yml": "10c71df5a4b8aab878c914f166b853aa2a0b277f67e6006dc1c23bbaff5f7ce5",
+    "DynamicIsland/Compatibility/SuperIslandAdapter/SuperIslandViewConverter.swift": "38137c11cadf9b0544ec31aeb7ec6f5f6c2aa965626fca4416a9cf0cd9f8d387",
+    "DynamicIsland/Plugins/PluginCompatibilitySnapshot.swift": "157271d0017eae6f7e4db64cdd5bc6004d4029806502433c029e0d8f4556487e",
+    "DynamicIsland/Plugins/PluginExtensionsModel.swift": "bbb3f4b1a2df19ba6cc98ab1305dc4687bef90f3a60edb320645be9fdaf8ec79",
+    "DynamicIsland/Plugins/PluginExtensionsUI.swift": "8445d8db35f381392b04cce152a39f4e831d39ccf300b35d32b8e55a6a0c0b26",
+    "DynamicIsland/Plugins/PluginInstallerUI.swift": "43f965fdd919431f6fb35d54433acb70f61c6c8c0cd7a71cfc3c8b2fe1bbde64",
+    "DynamicIsland/Plugins/PluginJSBridge.swift": "3488c484834927b427c3c59867f9a8ed33c9c7aae5e11b449a943adbab9cd381",
+    "DynamicIsland/Plugins/PluginLifecycleBridge.swift": "464493dfe11dcfe95fb17c139152b134e7935fdd5391f82e88ce444118671a04",
+    "DynamicIslandTests/PluginCompatibilityBridgeTests.swift": "d0ebe5ea77e46ca73967e47cf743afcc745a475a5ef0c10cef00a4a62dcc7b49",
+    "DynamicIslandTests/PluginCompatibilityLifecycleTests.swift": "eb4f80bcd7687dcc62e5d21e5ac84e19807f2ea6a430a559afb71bf33523105d",
+    "DynamicIslandTests/PluginCompatibilitySnapshotTests.swift": "0753659a251c05cb72eadc4d89fbc0d647bc58dfbcda586aae8f7b649e9a5158",
+    "DynamicIslandTests/PluginExtensionsModelTests.swift": "78bf02d40031ad9cd55dae332bfac42541ed323b2249c2b4666344bba0a2b3bf",
+    "DynamicIslandTests/PluginExtensionsUITests.swift": "3c7d0db873dadd2ab9d034524c4801923d8c3ee4fedcbede529ccdb37dcf5902",
+    "DynamicIslandTests/PluginInstallerUIModelTests.swift": "38c317f4d086714271b73b4a7189b3eafd5ee09379aa9e4a18c95fd93735826d",
+    "DynamicIslandTests/PluginInstallerUITests.swift": "29cdf50c2df4f61a80edc9743c1ded547a11bf7e56620650b80ac5fe0a00015b",
+    "DynamicIslandTests/PluginSDKContractTests.swift": "df16b3b83cb734633dd371b14cf0a1122c45f2b7d960b06998bf38b179d59937",
+    "SDK/.gitignore": "235f1fb09aff391a0d326e977a7675cafd2aee644c75928fdb3e3aa125b7998e",
+    "SDK/README.md": "ff12f7d775477d3363c8871650a0b4a75b54425878528ecb5fb734618157fd3c",
+    "SDK/VERSIONING.md": "934ca63b6cfa887f656ddffedc6ed407731d51b6141ebe4166ebb6a824897d63",
+    "SDK/examples/hello-world/README.md": "a82f44eb7d7c3c165aa95ee9b348a5be309255554a369211b8cdc211d5d73b79",
+    "SDK/examples/hello-world/index.js": "9acecccb94b18350bde366c2dd5c9255ce11cf7f235f36e5036d21e59c7e0730",
+    "SDK/examples/hello-world/manifest.json": "194dd52a51214415bc845ae8aaf3434398d1686d88827a37671feb871898fef9",
+    "SDK/package-lock.json": "27a69afa6d89188e5c2445b8a6febe5ba39c9047dcf67b83a445a3c64a22979d",
+    "SDK/package.json": "97d78a9d71250c1e9c1fccb40ece5eec5c6b33d22ed76e84e5f1b991cc033463",
+    "SDK/schema/island-node-v1.schema.json": "7834784e28b5723af9c2c62831f2f5a253bad4ba612db6d10f350c889c61f6c2",
+    "SDK/schema/plugin-manifest-v1.schema.json": "8187d31f0ee571ba6575362c1804ac8c1119a5bd6095d7de7a6717d282d616b9",
+    "SDK/schema/provenance.json": "a836a4730bdc2591c2e1ae365fe1a71342fe235134579970836bef02b0b40c9c",
+    "SDK/tests/fixtures/host-contract-cases.json": "909bcf2bca19b60195fe42adaddb338889e7e82444a1f9d9c94b5943fdf925a6",
+    "SDK/tests/fixtures/invalid-duplicate.json": "1920df20e7e61ebddf0f158f3de06afe9c35794835d224c67514e4a6a1b3217b",
+    "SDK/tests/fixtures/invalid-node-unknown.json": "4271f9007b30ec37b232cbcf6a83b91f5bfa1b9e33d2b9a35ceaa3510ac8ab97",
+    "SDK/tests/fixtures/valid-manifest.json": "f224a1b884b332b6a4cd8941f0fe6a60e8d4cb5a6e3d01305182cfa79068e577",
+    "SDK/tests/fixtures/valid-node.json": "e40075d546e024a178116b499b30c2cb1c84c4dab1dd6fe2222ffee8d46ac7cd",
+    "SDK/tests/test_validator.py": "8d58faaa9f1118d771fd7293fffc82cbe5c8481e1ab7c66ad1a413a686aa5db2",
+    "SDK/tests/types/README.md": "2be9de8e5981b0a1575429e4be92eeeaf2288591d24d04647eb796f2c30da21a",
+    "SDK/tests/types/official-calls.ts": "856ef5cf59a8e633eab92814d2047fae94fd6124738f327bac5f1f15c8d59fd8",
+    "SDK/tests/types/rejected-calls.ts": "b8ee8493f83022f5d31e0e2b2169b25ed72265e4ddc9d386d3062f728e683d32",
+    "SDK/tools/di_plugin.py": "1316df1d9d45ee2a4c6dd1219b0bc1539c113a215be38d6b45ef07966ce87484",
+    "SDK/tools/package_plugin.py": "3d81ec4fc68aefe8487a845e334a7ee637f8a3ac696f85c585ecaa02b1b6b64f",
+    "SDK/tsconfig.json": "9e60b202b19ba1023adb45f006a9d27a423aba24131ffbab670310b292065e90",
+    "SDK/types/island.d.ts": "eafe695634b607ec9a3d2d8f925c18e87688b303c82cebcad13d8167fda86be8",
+    "Scripts/check-plugin-sdk.sh": "da1315ceb941af56be5b923b8a88d7898641738bdbe4092b4551dddbadccf61b",
+    "Scripts/ci.sh": "50add4e1188fae96c5ded7f88ca1b8c9388db25d286cfe0a694b12eb96a55a8e",
+    "Scripts/package-plugin.py": "a7681d5f871c275b7754ea787f873c2f01ab0e0dde86995f04db1bab2e571dbb"
+  },
+  "testResultPaths": {
+    "selected": "/tmp/dynamic-island-t37-compatibility-20261017/CompletedTests.xcresult",
+    "fullCI": "/tmp/dynamic-island-t37-compatibility-20261017/FullTests.xcresult"
+  },
+  "logs": {
+    "completed-tests.log": {
+      "path": "/tmp/dynamic-island-t37-compatibility-20261017/completed-tests.log",
+      "sha256": "a019a72d048553b0030a4552101362dd53bc38c8854db3fe8c90496b54314823"
+    },
+    "ci.log": {
+      "path": "/tmp/dynamic-island-t37-compatibility-20261017/ci.log",
+      "sha256": "ed172ddb4e43fb435d40084ee9a4bb708044870873d237af689b515f7efd6fb0"
+    },
+    "sdk-check.log": {
+      "path": "/tmp/dynamic-island-t37-compatibility-20261017/sdk-check.log",
+      "sha256": "5af18dd35b1611d3c39086ba952654ae22dbdb5b6834c89dcac9b6e914432da6"
+    },
+    "sdk-npm-ci.log": {
+      "path": "/tmp/dynamic-island-t37-compatibility-20261017/sdk-npm-ci.log",
+      "sha256": "bf0edf1723b77a71c51c3e1893f7df3dd4532c467f1453438fd308cbb3d60564"
+    }
+  },
+  "status": "Host compatibility reporting and details verified; T37 remains in progress",
+  "levelPolicy": {
+    "javascriptcore": "native",
+    "superisland": "limited",
+    "successfulLayoutNeverUpgradesProfile": true
+  },
+  "staticLimitationCount": 6,
+  "layoutLimitationCount": 8,
+  "reportPersistence": "process-only; exact validated package and current execution token",
+  "screenshots": {
+    "compatibility-native.png": "9033b257443776a07208db921adc49f7fddb3fd7707c7a960b289f5174f7167c",
+    "compatibility-not-run.png": "d396754bb7f35146c0ff6782e40e3375700fc72b1ecdeea7634b29a2a20e89fa",
+    "compatibility-awaiting-layout.png": "d95953486790cfb512b34f818dca69fec4d308594a328c120cea73aee231e0f0",
+    "compatibility-plain-layout.png": "a300560ae9bfac25459f67c7f86d26611200e4f476334821e9bb36e9d93beff4",
+    "compatibility-details.png": "d65a6ec386e7b9087034f9da5c34109972fb0282fbf60708c4a82f2534648d90",
+    "superisland-preview-minimum.png": "0b0457667dac4a98ea105fdc9791a49350d4c3378ecfb6264f755b4ee55d5890",
+    "superisland-preview-details.png": "d91cb04e1b1825fc2e6de0d82791ca063b4d5a1ef22840839d315757a38832bc"
+  },
+  "visualReview": [
+    "No clipping in not-run and all-layout-limitation detail cards",
+    "Minimum 640x520 installer review keeps compatibility mode and installation consent visible",
+    "Engine name uses distinguishable monospaced letters; strict OCR no I/l substitution"
+  ],
+  "recoveryFix": "Only a still-current newly issued token notifies after synchronous start returns",
+  "actualUpstreamPluginsRun": false,
+  "pending": [
+    "T35 completion notice physical capture",
+    "T36 actual UI/Open acceptance",
+    "Original upstream samples with license basis and matching supported subset"
+  ],
+  "postValidationChanges": "Documentation and trailing-whitespace cleanup only; executable sources unchanged."
+}

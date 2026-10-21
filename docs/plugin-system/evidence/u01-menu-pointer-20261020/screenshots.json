@@ -1,0 +1,122 @@
+[
+  {
+    "label": "third-candidate-initial-state",
+    "startedEpochMs": 1792485841268,
+    "observedEpochMs": 1792485841318,
+    "axFile": "third-candidate-initial-state.txt",
+    "imageFile": "third-candidate-initial-state.jpg",
+    "imageSHA256": "298256f10c3a471455657fa4ce3aa2e34cb5aa63c848033aedf38f34c0a20cfa"
+  },
+  {
+    "label": "after-user-confirmed-retained-tool",
+    "startedEpochMs": 1792507114729,
+    "observedEpochMs": 1792507114990,
+    "axFile": "after-user-confirmed-retained-tool.txt",
+    "imageFile": "after-user-confirmed-retained-tool.jpg",
+    "imageSHA256": "298256f10c3a471455657fa4ce3aa2e34cb5aa63c848033aedf38f34c0a20cfa"
+  },
+  {
+    "label": "reopened-native-timer-after-exit",
+    "startedEpochMs": 1792507261794,
+    "observedEpochMs": 1792507261888,
+    "axFile": "reopened-native-timer-after-exit.txt",
+    "imageFile": "reopened-native-timer-after-exit.jpg",
+    "imageSHA256": "298256f10c3a471455657fa4ce3aa2e34cb5aa63c848033aedf38f34c0a20cfa"
+  },
+  {
+    "label": "escape-cancel-result",
+    "startedEpochMs": 1792507633810,
+    "observedEpochMs": 1792507634408,
+    "axFile": "escape-cancel-result.txt",
+    "imageFile": "escape-cancel-result.jpg",
+    "imageSHA256": "4519105cd5eea34d9fddf03a6eeb6955b862d84d173124dfaf35216a1f30b7ec"
+  },
+  {
+    "label": "keyboard-bottom-tool-result",
+    "startedEpochMs": 1792507644868,
+    "observedEpochMs": 1792507645290,
+    "axFile": "keyboard-bottom-tool-result.txt",
+    "imageFile": "keyboard-bottom-tool-result.jpg",
+    "imageSHA256": "1858411c9d0113e259c5112b0d63e3d7c57dc290abd0bb0aaeab2effd00f5b86"
+  },
+  {
+    "label": "keyboard-selected-tool-button-focus",
+    "startedEpochMs": 1792507660016,
+    "observedEpochMs": 1792507660056,
+    "axFile": "keyboard-selected-tool-button-focus.txt",
+    "imageFile": "keyboard-selected-tool-button-focus.jpg",
+    "imageSHA256": "93d1771d432185470b5344a11d2467c5922306c84afed9d20ffa6e4de1cfb935"
+  },
+  {
+    "label": "keyboard-tool-focus-confirmed",
+    "startedEpochMs": 1792507672865,
+    "observedEpochMs": 1792507673288,
+    "axFile": "keyboard-tool-focus-confirmed.txt",
+    "imageFile": "keyboard-tool-focus-confirmed.jpg",
+    "imageSHA256": "f88e8799d1ac88a732fcd2a7515b7ada25e0565216afde2345485da6e22a344c"
+  },
+  {
+    "label": "menu-before-outside-click",
+    "startedEpochMs": 1792507688416,
+    "observedEpochMs": 1792507688485,
+    "axFile": "menu-before-outside-click.txt",
+    "imageFile": "menu-before-outside-click.jpg",
+    "imageSHA256": "0fd0c60bba1f5140e44c34eb8ab7be35c0d5f4c7b06a862bdb01cbe34ba2a4b4"
+  },
+  {
+    "label": "outside-click-cancel-result",
+    "startedEpochMs": 1792507698713,
+    "observedEpochMs": 1792507699326,
+    "axFile": "outside-click-cancel-result.txt",
+    "imageFile": "outside-click-cancel-result.jpg",
+    "imageSHA256": "1b9f1736d4d02ca8d8b6d78b220b518b1d4f0f7a0b8a7849b510ffceae608cee"
+  },
+  {
+    "label": "legacy-music-page",
+    "startedEpochMs": 1792507699406,
+    "observedEpochMs": 1792507700038,
+    "axFile": "legacy-music-page.txt",
+    "imageFile": "legacy-music-page.jpg",
+    "imageSHA256": "bb8afc6b303fd6d6db806a6f5c5592ca9c245048362ea701b48d7c9663f4d451"
+  },
+  {
+    "label": "legacy-tray-page",
+    "startedEpochMs": 1792507700146,
+    "observedEpochMs": 1792507700735,
+    "axFile": "legacy-tray-page.txt",
+    "imageFile": "legacy-tray-page.jpg",
+    "imageSHA256": "10fe63ce1ac5e2cdcea672fedd59a821d21bfd6a86f60704f68e0a0c16a560b4"
+  },
+  {
+    "label": "native-timer-restored",
+    "startedEpochMs": 1792507713650,
+    "observedEpochMs": 1792507714092,
+    "axFile": "native-timer-restored.txt",
+    "imageFile": "native-timer-restored.jpg",
+    "imageSHA256": "9546915ee852337470cb23bf1a15f1aeab4fb64cb7704a54b37bc14472787432"
+  },
+  {
+    "label": "native-timer-stable",
+    "startedEpochMs": 1792507729609,
+    "observedEpochMs": 1792507729668,
+    "axFile": "native-timer-stable.txt",
+    "imageFile": "native-timer-stable.jpg",
+    "imageSHA256": "1b0b3710d744c5780df2815ccf23a36244f28527f435a4ef11d86298507b8b19"
+  },
+  {
+    "label": "menu-scrolled-to-bottom",
+    "startedEpochMs": 1792507732177,
+    "observedEpochMs": 1792507732609,
+    "axFile": "menu-scrolled-to-bottom.txt",
+    "imageFile": "menu-scrolled-to-bottom.jpg",
+    "imageSHA256": "7d722473d25596cbc43bfacbc1bb28b446977de231fa4aa14e1a765cbe61145c"
+  },
+  {
+    "label": "menu-coordinate-scroll-result",
+    "startedEpochMs": 1792507752737,
+    "observedEpochMs": 1792507753155,
+    "axFile": "menu-coordinate-scroll-result.txt",
+    "imageFile": "menu-coordinate-scroll-result.jpg",
+    "imageSHA256": "2f214ae2319b311beb2f57111343ec074492ce3b62d6828fbce4df4191520969"
+  }
+]

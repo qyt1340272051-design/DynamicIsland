@@ -1,0 +1,98 @@
+# T35 子步骤 2A / 2B — Host 倒计时与公开 API
+
+日期：2026-10-15。属于 T35 的通用能力，适用于任何声明 `countdown` capability 的插件。声明式时间节点、官方 Pomodoro 包及生产专用 Swift 删除仍待实施，T35 保持 `in progress`。
+
+## 公开合约
+
+Manifest 的 `capabilities` 可以包含 `countdown`；这是受限的 Host 能力，不是权限，不获得 Storage、网络或系统通知授权。开始和继续还需要 `actions.handle`，以及真实 Action 事件的 `activation`。公共命名空间和方法均冻结，`apiVersion` 沿用 `1.0.0`，`supported === true`。
+
+| 方法 | 输入 | Promise 成功值 |
+| --- | --- | --- |
+| `island.countdown.get(id)` | 本地 ID | snapshot 或 null |
+| `start({id, durationMs, activation})` | 整数 1000…86400000 ms、一次性凭证 | running snapshot |
+| `pause({id, generation})` | 当前 running generation | 新 paused snapshot |
+| `resume({id, generation, activation})` | 当前 paused generation、一次性凭证 | 新 running snapshot |
+| `stop({id, generation})` | 当前 generation | null |
+| `onComplete(handler)` | 一个函数，替换当前监听 | null |
+| `offComplete()` | 无参数 | null |
+
+snapshot 精确包含 `id`、`generation`、`state`、`durationMs`、`remainingMs`；state 为 running / paused / completed，generation 为 Host 生成的小写 UUID。对象冻结且无原型，completed 的 remainingMs 为 0。本地 ID 允许 ASCII 字母、数字、`-._`，长度 1…80。所有对象拒绝额外字段、错误类型和类型转换；SDK 安全快照不调用 getter、toJSON 或不可信 thenable，Host 独立验证。
+
+每插件仅一个业务记录；同 ID 的合法 start 可原子重开，不同 ID 需先 stop。全局 owner / 记录各最多 128。start、pause、resume 生成新 generation，旧命令及完成事件不能修改替代记录。停止、禁用、卸载或直接 Runtime teardown 会清除相应记录；shutdown 清空全部。记录仅保存在当前 Host 进程，不持久化跨 App 重启的单调时钟 instant。
+
+```javascript
+// 函数本身同步返回；异步工作在公开 Promise 链中处理。
+function onStart() {
+  void island.actions.on('start', event =>
+    island.countdown.start({id: 'focus', durationMs: 25 * 60 * 1000,
+                            activation: event.activation})
+  ).catch(handleError);
+  void island.countdown.onComplete(snapshot => {
+    // 通过公开 Activity API 发布完成提示；此事件没有 activation。
+    showCompletion(snapshot);
+  }).catch(handleError);
+}
+```
+
+## 动作凭证
+
+只有已准入的真实按钮、toggle 或 sliderCommit 动作会附带凭证；连续 slider 中间值没有凭证。每执行会话只保留最新一张，ContinuousClock 有效期 5 秒，绑定执行、动作注册、Activity source / ID / instance token / action ID。消费时再次检查当前动作准入。匹配的消费尝试先烧毁凭证，再检查过期和状态；伪造 token 不能销毁合法凭证。
+
+onStart、后台刷新、完成通知、旧 VM、旧 Activity 或旧注册不能自行 start / resume。完成回调不能重用开始时的凭证循环创建一秒倒计时。动作 authorizer 可同步重入：凭证消费返回后，Host 在资源准入锁内再次校验执行并完成无回调的 start / resume，撤销失败不留下 running 记录。普通 PluginScheduler 的 30 / 60 秒下限与合并规则保持原值。
+
+## Host 时间、暂停与完成投递
+
+Broker 使用 [ContinuousClock](https://developer.apple.com/documentation/swift/continuousclock) 的相对 Duration 持有截止时间，与墙钟无关，睡眠时间计入运行倒计时。pause 保留精确 Duration；只在 JSON 展示值向上取整毫秒，resume 不累计取整误差。所有活跃记录共用一个最近截止 alarm，没有每 VM 的秒级 Timer；暂停、完成、空闲或所有 owner 被 suspend 时不留 alarm。
+
+睡眠 / 低电池关闭执行准入并销毁旧 VM，业务记录保留。条件全部解除后，在 factory 同步回调通过最终准入检查后才激活 owner；新执行注册完成回调时交付已过期记录，不复活旧 VM / lease。禁用 / 重启则旋转 owner，旧上下文不能操作新记录。
+
+完成事件通过现有 64 项 FIFO 与动作共享容量，载荷固定且不包含 activation；交付前后检查执行、资源、owner、注册代次及 countdown generation，无需工具当前可见。Host offer 与 VM receipt 分离：真正调用当前 JS handler 后才确认接收；排队后 suspend、换注册、队列拒绝或 JS 容量不足不会消费完成通知。offer 在回调前预留以防同步 get 重入；拒绝仅释放 offer，后续 get / pump / 新注册可重试，避免立即递归。
+
+确认接收后不再重放该 generation。若 VM 已调用 handler，但 Host 确认前执行被撤销，新执行仍可再次收到同 generation；插件可用 generation 去重。handler 自身抛出或 Promise 拒绝属于已接收，使用既有固定错误诊断与 watchdog，不读取异常的 message / stack / toString。
+
+## 验证和后续边界
+
+新增 Broker、activation、typed delivery、真实 JavaScript / Lifecycle 集成、SDK 安全边界测试。证据汇总见 [CI 与源码 SHA256](evidence/t35-countdown-20261015.json)。覆盖精确暂停、截止边界、owner / generation / 注册替换、未接收补发、资源撤销原子性、factory 重入睡眠、双 owner 隔离及不可信回调。
+
+确定性时钟和真实 VM 测试验证 Host/API；本子步骤没有实机睡眠、低功耗或能耗结论。2A / 2B 当时的下一步是声明式时间节点；当前实现见下方 2C1。后续仍为官方 JS 包、存储拒绝 / 撤销处理、完整原生迁移和实际 `.dip` / UI 计时验收。T36 仍 pending。
+
+## 子步骤 2C0：只读显示底座
+
+2026-10-15：新增 Host 内部 `snapshotForDisplay(owner:id:generation:)`，仅解析活跃 owner 与精确代次。读取按当前连续时钟投影剩余时间和到期状态，不结算业务记录、不调用 JS observer；真正完成仍由原 Broker alarm / processDue 处理。错误 owner、代次、ID、暂停执行或非法时钟返回 nil，避免 Renderer 复用旧 VM 的显示绑定。
+
+纯显示值提供向上取整秒的 MM:SS / H:MM:SS、精确 Duration 的 elapsedFraction 和 requiresDisplayTick。暂停 / 到期不请求显示 tick。该独立提交只增加底座，未公开节点或创建 ticker；之后的接入见下方 2C1，T35 状态不变。验证见[独立 CI 证据](evidence/t35-countdown-display-20261015.json)。
+
+2C0 定向回归：5 项新增 display 测试 + 22 项 Broker 测试，27 passed / 0 failures。未接入 UI 的本步骤没有声称新的 Release 或视觉验收。
+
+## 子步骤 2C1：声明式节点与可见共享显示 tick
+
+新增通用纯数据节点，generation 必须来自当前 Host 倒计时快照：
+
+```javascript
+const time = {type: 'countdown', id: snapshot.id, generation: snapshot.generation};
+const progress = {...time, style: 'progress', color: 'success'};
+```
+
+精确字段为 `type`、`id`、`generation`，可选 `style`（time 默认 / progress）和 `color`（accent 默认，既有六种 semantic token）。禁止传入 deadline、duration、remaining、activation、owner、窗口尺寸及额外字段。ID 和 generation 沿用本页的闭集校验；Core Codable、SDK 安全快照和 Host Converter 分别验证。引用遍历有界并包含 button.label。time 是单行、最多 8 字符，支持 minimal / compact / expanded；progress 不支持 minimal。
+
+Activity 发布和更新要求 `ui.islandNode` 与 `countdown`，且每个引用都必须属于当前执行的 Host owner 和精确 generation，缺失 / 外来 / 旧记录原子拒绝。仅修改 priority 的 patch 也验证最终保留布局。显示时另核对完整 current ActivitySnapshot、source、执行 token、资源准入及 Host owner，不能用目录项或按 ID 重新取得一个替代实例。
+
+生产 Runtime 持有一个显示 clock。仅实际挂载、显式可见且仍在运行的 countdown 叶节点订阅它，所有 time / progress 叶共享一个 1 秒 Task，不给 VM 发 tick。compact / expanded 的 opacity 隐藏态、Panel orderOut 和退出动画均显式关闭需求；暂停、失效、到期、卸载叶节点或最后订阅释放后取消 Task。Runtime shutdown 同步关闭 clock。Brokers 的业务修改异步合并为一次 Host 显示失效，保持已暂停 / 已停止状态及时更新；纯显示读取和拒绝的命令不触发失效，不降低普通 Scheduler 的 30 / 60 秒下限。
+
+Renderer 采用 Host metric / caption 字体、monospaced digits、semantic color 与既有线性进度，带可访问性值。未解析引用显示不可用占位并不订阅 tick。真实 NSHostingView 测试还确认 ViewThatFits 的超高树退回摘要时，没有隐藏倒计时订阅。
+
+本步骤是通用显示能力；官方 Pomodoro 包、旧专用 Swift 删除与实际安装计时验收仍未完成，T35 保持 in progress。无权限公开示例见[countdown-demo](examples/countdown-demo/README.md)，完整验证及原始测试图见[证据](evidence/t35-countdown-node-20261015/result.json)。
+
+## 子步骤 2C2：自动 compact 工具与共享安全几何
+
+`presentation.compactPolicy` 可选，闭集 selectedOnly / automatic。省略保持 1B 行为；旧工具即使 showsCompact:true 也不自动出现。非 nil policy 只允许 role:tool，Core Manager、Converter 最终状态（含 priority-only patch）和 SDK snapshot 都验证；API 显式 null、错误类型或未知值拒绝。工具仍仅 persistent / progress，插件优先级仍强制 background。
+
+Host Manager 维护 compact / expanded 展示上下文，Runtime 使用 ViewModel publisher 的交付值同步切换。收起在一次事务中清除展开选择；仅 automatic 且 compact 可见的工具取得 compact 候选资格。展开后未选工具立即退出，不能靠 dwell 留住展示；音乐、拖盘、原生计时和拖入文件仍可进入。始终只有 currentSnapshot 一条显示 / 动作授权通路，目录项不授权动作。
+
+排序先保护当前不可中断 Activity，再处理 important / critical 或 normal transient status，其次用户选择 / 自动 compact 工具，最后普通 status。多个自动工具沿用确定性排序；source rate / dwell / debounce 保留，只有既有显式选择有目标豁免。Volume / Battery 等提示结束后恢复有效自动工具。隐藏、过期、停用、结束、替换或改回 selectedOnly 均失效，不增加周期唤醒。
+
+View 与 Panel hover 统一调用 Runtime.compactShellSize；实际可见 compact tree 含倒计时节点时复用 Host 126pt 计时扩展，不按插件 ID 特判。只在 expanded 中出现的节点、拒绝的 compact tree 或 showsCompact:false 都不能扩大空岛。公开示例在 compact 使用 icon / Spacer / time 两翼，避免线性进度横跨摄像头；expanded 继续用 time + progress。
+
+新增 33 项测试。完整 CI：868 total / 864 passed / 4 skipped / 0 failures，普通 Release build passed；跳过项仍为三项锁屏鼠标测试和显式截图矩阵。实际 NSHostingView 336×32 原始 PNG 覆盖 00:15、59:59、1:00:00、24:00:00，中心 210pt 区域逐像素没有非黑字形，两翼均有可见内容；这是相机遮挡区模拟，不是实机刘海验收。[完整证据和图像](evidence/t35-compact-policy-20261015/result.json)。
+
+还补充了真实 JS 回归：人为延迟 resume 的 running render，再让 Host 到期；完成事件排入同一 Promise 工作链后 fresh get，不能被迟到的 running 响应覆盖。此工作链不创建 JS timer，不自动重开倒计时。

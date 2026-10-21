@@ -3,13 +3,28 @@ import XCTest
 
 final class IslandVisualStyleTests: XCTestCase {
     func testExpandedShellCloselyFramesMusicContent() {
-        let shell = IslandVisualStyle.expandedShellSize
+        let shell = IslandVisualStyle.expandedShellSize(
+            for: .music, timerMode: .stopwatch, hasTrayItems: false,
+            hasError: false, hasTimerCompletion: false
+        )
         let content = IslandVisualStyle.expandedContentSize
         let padding = IslandVisualStyle.expandedContentPadding
         let horizontalInset = (shell.width - content.width) / 2 + padding
+        let availableMusicSurfaceHeight = shell.height
+            - 2 * padding
+            - IslandVisualStyle.expandedSurfaceSwitcherHeight
+            - IslandVisualStyle.expandedSurfaceSpacing
+        // Two metadata lines, progress track and labels, playback controls,
+        // volume controls, and the three 4pt gaps in the right-hand VStack.
+        let requiredMusicSurfaceHeight: CGFloat = 33 + 32 + 28 + 28 + 3 * 4
 
         XCTAssertEqual(shell.height, content.height)
-        XCTAssertGreaterThanOrEqual(content.height - 2 * padding, 28 + 8 + 124)
+        XCTAssertEqual(shell.height, IslandVisualStyle.expandedMusicHeight)
+        XCTAssertGreaterThanOrEqual(
+            availableMusicSurfaceHeight,
+            requiredMusicSurfaceHeight,
+            "Music controls must fit above the bottom content clip without flattening the volume buttons."
+        )
         XCTAssertGreaterThanOrEqual(horizontalInset, 16)
         XCTAssertLessThanOrEqual(horizontalInset, 24)
         XCTAssertLessThan(shell.height, IslandPanelGeometry.expandedSize.height)
@@ -28,10 +43,6 @@ final class IslandVisualStyleTests: XCTestCase {
             for: .tools, timerMode: .stopwatch, hasTrayItems: false,
             hasError: false, hasTimerCompletion: false
         )
-        let pomodoro = IslandVisualStyle.expandedShellSize(
-            for: .tools, timerMode: .pomodoro, hasTrayItems: false,
-            hasError: false, hasTimerCompletion: false
-        )
         let countdown = IslandVisualStyle.expandedShellSize(
             for: .tools, timerMode: .countdown, hasTrayItems: false,
             hasError: false, hasTimerCompletion: false
@@ -40,8 +51,7 @@ final class IslandVisualStyleTests: XCTestCase {
         XCTAssertEqual(emptyTray.height, IslandVisualStyle.expandedCompactContentHeight)
         XCTAssertEqual(filledTray.height, IslandVisualStyle.expandedFileTrayHeight)
         XCTAssertEqual(stopwatch.height, IslandVisualStyle.expandedCompactContentHeight)
-        XCTAssertEqual(pomodoro, IslandVisualStyle.expandedShellSize)
-        XCTAssertEqual(countdown, IslandVisualStyle.expandedShellSize)
+        XCTAssertEqual(countdown.height, IslandVisualStyle.expandedTimerHeight)
     }
 
     func testMessagesAndTimerCompletionKeepEnoughHeight() {
@@ -54,8 +64,43 @@ final class IslandVisualStyleTests: XCTestCase {
             hasError: false, hasTimerCompletion: true
         )
 
-        XCTAssertEqual(trayWithError, IslandVisualStyle.expandedShellSize)
-        XCTAssertEqual(completedStopwatch, IslandVisualStyle.expandedShellSize)
+        XCTAssertEqual(trayWithError.height, IslandVisualStyle.expandedTimerHeight)
+        XCTAssertEqual(completedStopwatch.height, IslandVisualStyle.expandedTimerHeight)
+    }
+
+    func testPresentedToolHasFullHostShellAnd140PointContentRegardlessOfLegacyTab() {
+        for surface in [IslandExpandedSurface.music, .fileTray, .tools] {
+            for mode in IslandTimerToolMode.allCases {
+                let shell = IslandVisualStyle.expandedShellSize(
+                    for: surface, timerMode: mode, hasTrayItems: true,
+                    hasError: true, hasTimerCompletion: true, hasPresentedTool: true
+                )
+                XCTAssertEqual(shell, CGSize(width: 480, height: 200))
+                XCTAssertEqual(
+                    ActivityPresentation.HostPolicy.expandedContentHeight(forHostShellHeight: Double(shell.height)),
+                    140
+                )
+                XCTAssertLessThan(shell.height, IslandPanelGeometry.expandedSize.height)
+            }
+        }
+    }
+
+    func testExpandedCanvasContainsEverySurfaceShell() {
+        let sizes = [IslandExpandedSurface.music, .fileTray, .tools].flatMap { surface in
+            IslandTimerToolMode.allCases.map { mode in
+                IslandVisualStyle.expandedShellSize(
+                    for: surface,
+                    timerMode: mode,
+                    hasTrayItems: true,
+                    hasError: false,
+                    hasTimerCompletion: false
+                )
+            }
+        }
+
+        XCTAssertEqual(sizes.map(\.height).max(), IslandVisualStyle.expandedShellSize.height)
+        XCTAssertEqual(IslandVisualStyle.expandedContentSize.height, IslandVisualStyle.expandedShellSize.height)
+        XCTAssertTrue(sizes.allSatisfy { $0.width <= IslandVisualStyle.expandedContentSize.width + 12 })
     }
 
     func testExpandedShellHasNoVisibleBorderOrShadow() {
@@ -80,10 +125,10 @@ final class IslandVisualStyleTests: XCTestCase {
 
     func testActiveTimerUsesWiderCompactPresentationThanMusic() {
         let baseSize = CGSize(width: 216, height: 38)
-        let musicSize = IslandVisualStyle.compactShellSize(baseSize: baseSize, isPlaying: true)
+        let musicSize = IslandVisualStyle.compactShellSize(baseSize: baseSize, hasCompactActivity: true)
         let timerSize = IslandVisualStyle.compactShellSize(
             baseSize: baseSize,
-            isPlaying: true,
+            hasCompactActivity: true,
             hasActiveTimer: true
         )
 
@@ -95,17 +140,97 @@ final class IslandVisualStyleTests: XCTestCase {
         XCTAssertGreaterThan(timerSize.width, musicSize.width)
     }
 
-    func testPlayingCompactShellExpandsHorizontallyOnly() {
+    func testActivityCompactShellExpandsHorizontallyOnly() {
         let baseSize = CGSize(width: 216, height: 38)
-        let pausedSize = IslandVisualStyle.compactShellSize(baseSize: baseSize, isPlaying: false)
-        let playingSize = IslandVisualStyle.compactShellSize(baseSize: baseSize, isPlaying: true)
-
-        XCTAssertEqual(pausedSize, baseSize)
-        XCTAssertEqual(playingSize.height, baseSize.height)
-        XCTAssertEqual(
-            playingSize.width,
-            baseSize.width + IslandVisualStyle.playingCompactHorizontalExpansion
+        let idleSize = IslandVisualStyle.compactShellSize(baseSize: baseSize, hasCompactActivity: false)
+        let activitySize = IslandVisualStyle.compactShellSize(baseSize: baseSize, hasCompactActivity: true)
+        let explicitStandardSize = IslandVisualStyle.compactShellSize(
+            baseSize: baseSize,
+            hasCompactActivity: true,
+            activityLayout: .standard
         )
+
+        XCTAssertEqual(idleSize, baseSize)
+        XCTAssertEqual(activitySize, explicitStandardSize)
+        XCTAssertEqual(activitySize.height, baseSize.height)
+        XCTAssertEqual(
+            activitySize.width,
+            baseSize.width + IslandVisualStyle.activityCompactHorizontalExpansion
+        )
+    }
+
+    func testBatteryCompactActivityUsesDedicatedBoundedWidth() {
+        let baseSize = CGSize(width: IslandPanelGeometry.compactWidth, height: 38)
+        let standardSize = IslandVisualStyle.compactShellSize(
+            baseSize: baseSize,
+            hasCompactActivity: true
+        )
+        let batterySize = IslandVisualStyle.compactShellSize(
+            baseSize: baseSize,
+            hasCompactActivity: true,
+            activityLayout: .battery
+        )
+
+        XCTAssertEqual(
+            batterySize.width,
+            baseSize.width + IslandVisualStyle.batteryCompactHorizontalExpansion
+        )
+        XCTAssertEqual(batterySize.height, baseSize.height)
+        XCTAssertGreaterThan(batterySize.width, standardSize.width)
+        XCTAssertLessThanOrEqual(batterySize.width, IslandVisualStyle.expandedShellSize.width)
+        XCTAssertLessThanOrEqual(
+            batterySize.width * IslandExpansionAnimation.pointerHoverScale,
+            IslandVisualStyle.expandedShellSize.width
+        )
+        XCTAssertLessThanOrEqual(batterySize.width, IslandPanelGeometry.expandedSize.width)
+    }
+
+    func testVolumeCompactActivityFitsItsWidestEdgeContent() {
+        let baseSize = CGSize(width: 210, height: 36)
+        let standardSize = IslandVisualStyle.compactShellSize(
+            baseSize: baseSize,
+            hasCompactActivity: true
+        )
+        let volumeSize = IslandVisualStyle.compactShellSize(
+            baseSize: baseSize,
+            hasCompactActivity: true,
+            activityLayout: .volume
+        )
+
+        XCTAssertEqual(
+            volumeSize.width,
+            baseSize.width + IslandVisualStyle.volumeCompactHorizontalExpansion
+        )
+        XCTAssertEqual(volumeSize.height, baseSize.height)
+        XCTAssertGreaterThan(volumeSize.width, standardSize.width)
+        XCTAssertLessThan(volumeSize.width, IslandVisualStyle.expandedShellSize.width)
+    }
+
+    func testTimerWidthKeepsPrecedenceOverActivityLayout() {
+        let baseSize = CGSize(width: 216, height: 38)
+        let timerSize = IslandVisualStyle.compactShellSize(
+            baseSize: baseSize,
+            hasCompactActivity: true,
+            hasActiveTimer: true,
+            activityLayout: .battery
+        )
+
+        XCTAssertEqual(
+            timerSize.width,
+            baseSize.width + IslandVisualStyle.timerCompactHorizontalExpansion
+        )
+    }
+
+    func testCompactActivityWidthNeverExceedsExpandedShell() {
+        let baseSize = CGSize(width: 400, height: 38)
+        let batterySize = IslandVisualStyle.compactShellSize(
+            baseSize: baseSize,
+            hasCompactActivity: true,
+            activityLayout: .battery
+        )
+
+        XCTAssertEqual(batterySize.width, IslandVisualStyle.expandedShellSize.width)
+        XCTAssertLessThanOrEqual(batterySize.width, IslandPanelGeometry.expandedSize.width)
     }
 
     func testCompactShellUsesStraightTopAndRoundedBottomCorners() {

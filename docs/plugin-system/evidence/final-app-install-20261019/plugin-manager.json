@@ -1,0 +1,25 @@
+{
+  "plugins": {
+    "com.dynamicisland.acceptance.timer-presentations": {
+      "isEnabled": true,
+      "version": "0.1.0"
+    },
+    "com.dynamicisland.compat-counter": {
+      "isEnabled": true,
+      "version": "0.1.0"
+    },
+    "com.dynamicisland.compat-progress": {
+      "isEnabled": true,
+      "version": "0.1.0"
+    },
+    "com.dynamicisland.compat-status": {
+      "isEnabled": true,
+      "version": "0.1.0"
+    },
+    "com.example.independent-status": {
+      "isEnabled": true,
+      "version": "0.1.0"
+    }
+  },
+  "schemaVersion": 1
+}

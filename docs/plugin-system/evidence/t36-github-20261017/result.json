@@ -1,0 +1,68 @@
+{
+  "status": "automatic implementation verified; task remains in progress pending deferred actual UI and T35 dependency",
+  "utc": "2026-10-16T17:39:26.975354+00:00",
+  "CI": {
+    "result": "Passed",
+    "totalTestCount": 926,
+    "passedTests": 919,
+    "skippedTests": 7,
+    "failedTests": 0
+  },
+  "releaseBuild": "passed",
+  "liveTest": {
+    "result": "Passed",
+    "totalTestCount": 1,
+    "passedTests": 1,
+    "skippedTests": 0,
+    "failedTests": 0
+  },
+  "liveScope": "Actual anonymous public GitHub API in JavaScriptCore/Bridge/default NetworkBroker test harness; no URLProtocol mock, no credentials; system opener stays injected",
+  "skips": [
+    "Five real AppKit mouse cases require an unlocked macOS session",
+    "Explicit screenshot matrix generation",
+    "Live public API case opt-in in default CI; subsequently selected and passed separately"
+  ],
+  "manualLedger": "../../MANUAL_ACCEPTANCE.md",
+  "pending": [
+    "M02 actual ordinary Release import/grant/presentation/Open with physical hover",
+    "Five existing mouse cases after session unlock",
+    "T35 actual 0.2.1 completion remains deferred by user"
+  ],
+  "preparedApp": {
+    "path": "/Users/rong5/Applications/Dynamic Island T36 GitHub.app",
+    "bundleID": "com.rong5.dynamic-island.t36-github.20261017",
+    "started": false,
+    "executableSHA256": "ae6d834297c759049467b0a56f018b4757208ba4eb097668e13812e694bd697f",
+    "strictSignatureVerified": true,
+    "entitlements": "unchanged ordinary Release; no test-only exceptions",
+    "documentAndURLHandlersRemoved": true
+  },
+  "preparedPlugin": {
+    "path": "/tmp/dynamic-island-t36-20261017/github-0.1.0.dip",
+    "version": "0.1.0",
+    "sha256": "81bfb05d1efe23e084425913afd18b3ad274b72b00eb32464de6850a37705a2a"
+  },
+  "sourceSHA256": {
+    "DynamicIsland/Plugins/PluginLinkBroker.swift": "b68b692f7944d282c0b7b203580c1eef1e620298184bdb7ba10e08e8ee899340",
+    "DynamicIsland/Plugins/PluginActionSession.swift": "176375af1a09b141e3390dbf7b39e9f9edde93f7e104a9ae234c32325c314b36",
+    "DynamicIsland/Plugins/PluginJSBridge.swift": "5f0709b66df1938eeb79a34b3e564ddffcd1348a3e3cbb105c9cf2c34a8bdc7a",
+    "DynamicIsland/Plugins/PluginJSBridgeBootstrap.swift": "acab9a5ae34db9095bb1d6f356adbf62769be357150412c0886e070dfe9d940f",
+    "DynamicIsland/Plugins/PluginManifest.swift": "dd4df49ba98b3d4ccc2f4bee11bdf06059ef23ed61902225a0ce0b5c37b2648c",
+    "docs/plugin-system/examples/github/index.js": "931812cfd596ee612e7ea5f1573d81b71597ec2499326aa25c4257b55b38c971",
+    "docs/plugin-system/examples/github/manifest.json": "bfb1c8d9b1f6efdafc896ce5964cd8acb5576b8ff52f3f389d95f5a842a644ed",
+    "DynamicIslandTests/PluginLinkBridgeTests.swift": "fccc3a5942e9e04e9f185dc227ae8f81241efa38c2afd99d947285daefa05b5f",
+    "DynamicIslandTests/GitHubPluginTests.swift": "b867346d40ab11f3ada4eacbdf0b33528a2c9e0eb694ce4a2a8809f03806aa18"
+  },
+  "resultsPaths": {
+    "CI": "/tmp/dynamic-island-t36-20261017/TestResults-integrated.xcresult",
+    "live": "/tmp/dynamic-island-t36-20261017/LiveResults.xcresult"
+  },
+  "repairs": [
+    "Nonthrowing test callback uses explicit do/catch",
+    "GitHub handles permissionDenied and null-prototype Storage arrays",
+    "Storage null test uses .null",
+    "Permission-set tests follow allCases instead of fixed seven",
+    "Missing Links capability tested with genuine Countdown activation"
+  ],
+  "productionAppAndDataUntouched": true
+}

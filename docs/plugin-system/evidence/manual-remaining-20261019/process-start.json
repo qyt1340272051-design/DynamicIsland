@@ -1,0 +1,35 @@
+{
+  "processes": [
+    {
+      "pid": 7794,
+      "executable": "/private/tmp/dynamic-island-final-20261019/Dynamic Island Acceptance.app/Contents/MacOS/Dynamic Island"
+    }
+  ],
+  "installedSourceFilesMatched": true,
+  "installedCount": 5,
+  "managerState": {
+    "plugins": {
+      "com.dynamicisland.acceptance.timer-presentations": {
+        "isEnabled": true,
+        "version": "0.1.0"
+      },
+      "com.dynamicisland.compat-counter": {
+        "isEnabled": true,
+        "version": "0.1.0"
+      },
+      "com.dynamicisland.compat-progress": {
+        "isEnabled": true,
+        "version": "0.1.0"
+      },
+      "com.dynamicisland.compat-status": {
+        "isEnabled": true,
+        "version": "0.1.0"
+      },
+      "com.example.independent-status": {
+        "isEnabled": true,
+        "version": "0.1.0"
+      }
+    },
+    "schemaVersion": 1
+  }
+}

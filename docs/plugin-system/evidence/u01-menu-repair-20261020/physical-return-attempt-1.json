@@ -1,0 +1,16 @@
+{
+  "date": "2026-10-20",
+  "candidateExecutableSHA256": "ca5ca436d9e5052d7e8239031c55bd7cf1441455ee9757bc98133693910d0991",
+  "candidatePID": 19822,
+  "sameAttemptReportedTwice": true,
+  "rawReports": [
+    "停顿半秒后自动收起,重新展开之后显示的是秒表界面",
+    "停顿半秒后自动收齐,重新展开后显示秒表界面"
+  ],
+  "status": "failed physical pointer return acceptance",
+  "reportedDelay": "about half a second, participant estimate",
+  "reportedReexpandedContent": "Native stopwatch instead of selected tool",
+  "exactFailureCallbackSequenceKnown": false,
+  "postReportAXScreenshot": "../u01-menu-20261020/after-user-reported-premature-fold.txt",
+  "postReportScreenshotScope": "Only collapsed island observed after reply; stopwatch pixels were not captured."
+}

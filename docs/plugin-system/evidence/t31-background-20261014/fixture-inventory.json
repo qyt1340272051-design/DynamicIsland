@@ -1,0 +1,185 @@
+{
+  "archivedPackagesVerified": true,
+  "packages": [
+    {
+      "id": "com.example.t31.idle01",
+      "version": "1.0.1",
+      "permissions": [],
+      "capabilities": [
+        "scheduler"
+      ],
+      "entrySHA256": "33b05e93277c467cf8bf4edef6dd529631ff5fe8314d6c1f31338bef0618ec93"
+    },
+    {
+      "id": "com.example.t31.idle02",
+      "version": "1.0.1",
+      "permissions": [],
+      "capabilities": [
+        "scheduler"
+      ],
+      "entrySHA256": "33b05e93277c467cf8bf4edef6dd529631ff5fe8314d6c1f31338bef0618ec93"
+    },
+    {
+      "id": "com.example.t31.idle03",
+      "version": "1.0.1",
+      "permissions": [],
+      "capabilities": [
+        "scheduler"
+      ],
+      "entrySHA256": "33b05e93277c467cf8bf4edef6dd529631ff5fe8314d6c1f31338bef0618ec93"
+    },
+    {
+      "id": "com.example.t31.idle04",
+      "version": "1.0.1",
+      "permissions": [],
+      "capabilities": [
+        "scheduler"
+      ],
+      "entrySHA256": "33b05e93277c467cf8bf4edef6dd529631ff5fe8314d6c1f31338bef0618ec93"
+    },
+    {
+      "id": "com.example.t31.idle05",
+      "version": "1.0.1",
+      "permissions": [],
+      "capabilities": [
+        "scheduler"
+      ],
+      "entrySHA256": "33b05e93277c467cf8bf4edef6dd529631ff5fe8314d6c1f31338bef0618ec93"
+    },
+    {
+      "id": "com.example.t31.idle06",
+      "version": "1.0.1",
+      "permissions": [],
+      "capabilities": [
+        "scheduler"
+      ],
+      "entrySHA256": "33b05e93277c467cf8bf4edef6dd529631ff5fe8314d6c1f31338bef0618ec93"
+    },
+    {
+      "id": "com.example.t31.idle07",
+      "version": "1.0.1",
+      "permissions": [],
+      "capabilities": [
+        "scheduler"
+      ],
+      "entrySHA256": "33b05e93277c467cf8bf4edef6dd529631ff5fe8314d6c1f31338bef0618ec93"
+    },
+    {
+      "id": "com.example.t31.idle08",
+      "version": "1.0.1",
+      "permissions": [],
+      "capabilities": [
+        "scheduler"
+      ],
+      "entrySHA256": "33b05e93277c467cf8bf4edef6dd529631ff5fe8314d6c1f31338bef0618ec93"
+    },
+    {
+      "id": "com.example.t31.idle09",
+      "version": "1.0.1",
+      "permissions": [],
+      "capabilities": [
+        "scheduler"
+      ],
+      "entrySHA256": "33b05e93277c467cf8bf4edef6dd529631ff5fe8314d6c1f31338bef0618ec93"
+    },
+    {
+      "id": "com.example.t31.idle10",
+      "version": "1.0.1",
+      "permissions": [],
+      "capabilities": [
+        "scheduler"
+      ],
+      "entrySHA256": "33b05e93277c467cf8bf4edef6dd529631ff5fe8314d6c1f31338bef0618ec93"
+    },
+    {
+      "id": "com.example.t31.idle11",
+      "version": "1.0.1",
+      "permissions": [],
+      "capabilities": [
+        "scheduler"
+      ],
+      "entrySHA256": "33b05e93277c467cf8bf4edef6dd529631ff5fe8314d6c1f31338bef0618ec93"
+    },
+    {
+      "id": "com.example.t31.idle12",
+      "version": "1.0.1",
+      "permissions": [],
+      "capabilities": [
+        "scheduler"
+      ],
+      "entrySHA256": "33b05e93277c467cf8bf4edef6dd529631ff5fe8314d6c1f31338bef0618ec93"
+    },
+    {
+      "id": "com.example.t31.idle13",
+      "version": "1.0.1",
+      "permissions": [],
+      "capabilities": [
+        "scheduler"
+      ],
+      "entrySHA256": "33b05e93277c467cf8bf4edef6dd529631ff5fe8314d6c1f31338bef0618ec93"
+    },
+    {
+      "id": "com.example.t31.idle14",
+      "version": "1.0.1",
+      "permissions": [],
+      "capabilities": [
+        "scheduler"
+      ],
+      "entrySHA256": "33b05e93277c467cf8bf4edef6dd529631ff5fe8314d6c1f31338bef0618ec93"
+    },
+    {
+      "id": "com.example.t31.idle15",
+      "version": "1.0.1",
+      "permissions": [],
+      "capabilities": [
+        "scheduler"
+      ],
+      "entrySHA256": "33b05e93277c467cf8bf4edef6dd529631ff5fe8314d6c1f31338bef0618ec93"
+    },
+    {
+      "id": "com.example.t31.idle16",
+      "version": "1.0.1",
+      "permissions": [],
+      "capabilities": [
+        "scheduler"
+      ],
+      "entrySHA256": "33b05e93277c467cf8bf4edef6dd529631ff5fe8314d6c1f31338bef0618ec93"
+    },
+    {
+      "id": "com.example.t31.idle17",
+      "version": "1.0.1",
+      "permissions": [],
+      "capabilities": [
+        "scheduler"
+      ],
+      "entrySHA256": "33b05e93277c467cf8bf4edef6dd529631ff5fe8314d6c1f31338bef0618ec93"
+    },
+    {
+      "id": "com.example.t31.idle18",
+      "version": "1.0.1",
+      "permissions": [],
+      "capabilities": [
+        "scheduler"
+      ],
+      "entrySHA256": "33b05e93277c467cf8bf4edef6dd529631ff5fe8314d6c1f31338bef0618ec93"
+    },
+    {
+      "id": "com.example.t31.idle19",
+      "version": "1.0.1",
+      "permissions": [],
+      "capabilities": [
+        "scheduler"
+      ],
+      "entrySHA256": "33b05e93277c467cf8bf4edef6dd529631ff5fe8314d6c1f31338bef0618ec93"
+    },
+    {
+      "id": "com.example.t31.idle20",
+      "version": "1.0.1",
+      "permissions": [],
+      "capabilities": [
+        "scheduler"
+      ],
+      "entrySHA256": "33b05e93277c467cf8bf4edef6dd529631ff5fe8314d6c1f31338bef0618ec93"
+    }
+  ]
+}

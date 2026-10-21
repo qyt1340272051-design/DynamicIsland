@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "module": "ESNext",
+    "moduleResolution": "Node",
+    "lib": ["ES2020"],
+    "strict": true,
+    "noEmit": true,
+    "noUncheckedIndexedAccess": true,
+    "exactOptionalPropertyTypes": true,
+    "skipLibCheck": false,
+    "types": [],
+    "allowJs": true,
+    "checkJs": true
+  },
+  "include": ["types/island.d.ts", "tests/types/**/*.ts", "examples/hello-world/index.js", "docs/snippets/*.js"]
+}

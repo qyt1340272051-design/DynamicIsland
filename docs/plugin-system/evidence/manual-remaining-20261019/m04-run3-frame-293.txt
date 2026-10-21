@@ -1,0 +1,9 @@
+Window: "", App: Dynamic Island Acceptance.
+0 system dialog Secondary Actions: Raise
+	1 text Description: Countdown, Value: 04:29
+2 menu bar
+	3 Dynamic Island Acceptance
+	4 Edit
+	5 View
+	6 Window
+	7 Help

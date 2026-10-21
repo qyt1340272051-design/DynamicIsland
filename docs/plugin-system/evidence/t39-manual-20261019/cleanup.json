@@ -1,0 +1,24 @@
+{
+  "observedUTC": "2026-10-19T01:49:58.080549+00:00",
+  "pid": 82976,
+  "pidAlive": false,
+  "normalQuitRequestedUTC": "2026-10-19T01:48:28.534Z",
+  "method": "CUA exact-app normal Command-Q",
+  "stagingEntries": [],
+  "manager": {
+    "plugins": {
+      "com.example.hello-world": {
+        "isEnabled": true,
+        "version": "0.1.0"
+      }
+    },
+    "schemaVersion": 1
+  },
+  "installedSHA256": {
+    "index.js": "9acecccb94b18350bde366c2dd5c9255ce11cf7f235f36e5036d21e59c7e0730",
+    "README.md": "a82f44eb7d7c3c165aa95ee9b348a5be309255554a369211b8cdc211d5d73b79",
+    "manifest.json": "194dd52a51214415bc845ae8aaf3434398d1686d88827a37671feb871898fef9"
+  },
+  "installedMatchesTemplate": true,
+  "productionAppModified": false
+}

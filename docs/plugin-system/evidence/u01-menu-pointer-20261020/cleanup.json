@@ -1,0 +1,109 @@
+{
+  "observedUTC": "2026-10-20T14:51:20.855461+00:00",
+  "candidatePID": 23408,
+  "normalQuitSentEpochMs": 1792507791251,
+  "candidatePIDGone": true,
+  "stagingExists": true,
+  "stagingEntries": [],
+  "installed": [
+    {
+      "id": "com.dynamicisland.acceptance.timer-presentations",
+      "version": "0.1.0",
+      "permissions": [],
+      "files": {
+        "README.md": "3c07efb32a504933bdb3a9c66807ff5698069d2bdf2486e32ff6b7ab76fb5980",
+        "index.js": "d555f742cfe0179560b404eb1dcb1dd8ccb00596270e85fbd95a3a1f8bdf51e5",
+        "manifest.json": "7de0e93046864c0d43af170285f1448d800e7f806ff54e14eb05b8ea8360e1a8"
+      }
+    },
+    {
+      "id": "com.dynamicisland.compat-counter",
+      "version": "0.1.0",
+      "permissions": [],
+      "files": {
+        "LICENSE": "72ab5fec769e2affe1fc9bdc33fc6b52b8bb35ff27907db3e4bb7d4ef43e8610",
+        "README.md": "8360f1a4f6e9fbf2cf125aa7a0888e20c3aa261b59676c3c998b3c9bd440d219",
+        "index.js": "87fe2ab2db58c7736fb18ac453f059b231241943d86ef8c7e16a27c2d9143fc1",
+        "manifest.json": "04a1dda566bde256905f0367e36c40557cb2609d8ede60b482aa8caced90a60e"
+      }
+    },
+    {
+      "id": "com.dynamicisland.compat-progress",
+      "version": "0.1.0",
+      "permissions": [],
+      "files": {
+        "LICENSE": "72ab5fec769e2affe1fc9bdc33fc6b52b8bb35ff27907db3e4bb7d4ef43e8610",
+        "README.md": "6a5dda57cac8e90928d7486e9b4c5939098db7ac599153738110b27e7ca31c38",
+        "index.js": "71e5078e5d68fdec8b6b171b6a6132f5d3b318a0e14ab857abb6865f511d5832",
+        "manifest.json": "9a6e0eb5c957536800603fa1ec36321add62117bcec19b1bf481a12c0f26f9c7"
+      }
+    },
+    {
+      "id": "com.dynamicisland.compat-status",
+      "version": "0.1.0",
+      "permissions": [],
+      "files": {
+        "LICENSE": "72ab5fec769e2affe1fc9bdc33fc6b52b8bb35ff27907db3e4bb7d4ef43e8610",
+        "README.md": "72c2ffda66775d660cc3f8d7bdaf49127fed225c47ddd605d7ea98ae4d55a7dc",
+        "index.js": "797f315d20e45308c42785b5ea118dadfbdb38a62022af539e8ac7d6355ae1fb",
+        "manifest.json": "a29b4cf79aa0e9ab7c38f92f2196c2f45d06eeaf6c6c4a8d1558cf756f75f823"
+      }
+    },
+    {
+      "id": "com.example.hello-world",
+      "version": "0.1.0",
+      "permissions": [],
+      "files": {
+        "README.md": "da8395a19fab957ad08e53358ef99e18604412bf6d06e317982696eac59fbaee",
+        "index.js": "9acecccb94b18350bde366c2dd5c9255ce11cf7f235f36e5036d21e59c7e0730",
+        "manifest.json": "194dd52a51214415bc845ae8aaf3434398d1686d88827a37671feb871898fef9"
+      }
+    },
+    {
+      "id": "com.example.independent-status",
+      "version": "0.1.0",
+      "permissions": [],
+      "files": {
+        "README.md": "ef998b9ba7dde83084371f5b0c7e1241922a868e7642564a95728a97b51fcdda",
+        "index.js": "1d2dad443530f1e2c2d9b53f818bf5627e992d995e4c03245295b37cdebee2e9",
+        "manifest.json": "603534f5ff7510dcf738fde8dda46dd4006534ae31679f078f6a1ebb4b9d21e8"
+      }
+    }
+  ],
+  "managerState": {
+    "plugins": {
+      "com.dynamicisland.acceptance.timer-presentations": {
+        "isEnabled": true,
+        "version": "0.1.0"
+      },
+      "com.dynamicisland.compat-counter": {
+        "isEnabled": true,
+        "version": "0.1.0"
+      },
+      "com.dynamicisland.compat-progress": {
+        "isEnabled": true,
+        "version": "0.1.0"
+      },
+      "com.dynamicisland.compat-status": {
+        "isEnabled": true,
+        "version": "0.1.0"
+      },
+      "com.example.hello-world": {
+        "isEnabled": true,
+        "version": "0.1.0"
+      },
+      "com.example.independent-status": {
+        "isEnabled": true,
+        "version": "0.1.0"
+      }
+    },
+    "schemaVersion": 1
+  },
+  "managerStateSHA256": "e84f6855685493e84a06c91e8f73a35e7823df2e75c22d723024a4f53b3777c3",
+  "permissionStateSHA256": "a21459c9af56ee9687eca34b52e478ba6ab4484f94d870aa35da2e8abc02d3c8",
+  "traceCaptureActive": false,
+  "traceCaptureSessionID": 93233,
+  "productionContainerModified": false,
+  "publicRelease": false,
+  "sourceUnchangedSinceCommit": "62dcb74"
+}

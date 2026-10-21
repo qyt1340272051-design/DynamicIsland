@@ -1,0 +1,32 @@
+{
+  "date": "2026-10-19",
+  "observedUTC": "2026-10-19T01:37:14.960021+00:00",
+  "userReportedError": "zsh: event not found: /usr/bin/env",
+  "oldInteractiveZshFailureReproduced": true,
+  "reproductionMethod": "zsh -f -i reading the old shebang from standard input; no user startup files or history writes",
+  "change": "First copyable code block now invokes bash docs/quick-start.sh; full Bash source is folded for reference.",
+  "meaningfulRegression": "Existing standalone SDK packaging test reads the actual first command and feeds it to interactive zsh stdin, with bash fallback, and checks exact deterministic archive bytes.",
+  "sdkPythonTests": {
+    "passed": 37,
+    "skipped": 0,
+    "failed": 0
+  },
+  "typeCheck": "passed",
+  "expectedTypeErrors": 47,
+  "documentationChecks": {
+    "documents": 15,
+    "examples": 9,
+    "localLinks": 33
+  },
+  "newIndependentHumanWalkthroughPassed": false,
+  "assistedRetryPending": false,
+  "log": "/tmp/dynamic-island-manual-20261019/sdk-quick-start-fix-final.log",
+  "logSHA256": "22025489c0d05f678868480739343098e41131abdb24a18bc2d59bd55feb3818",
+  "sourceSHA256": {
+    "SDK/docs/quick-start.md": "8cf71dc6af892e5340042dc1ace63b278b0845ca009191b333ba9a26f1e16597",
+    "SDK/docs/quick-start-command.sh": "1efc23cf779b9bf25c47d242834ceb95a7c1afbfb9b0530643be7a2316c568e2",
+    "SDK/tools/check_docs.py": "25690ce80df12039a84b7fa4328c903f51c23cac164bf8d1fc90b3a2841eaf14",
+    "SDK/tests/test_docs.py": "180eca7c8da8f397d59066567438ad9484ec86385ae0b94e46a821dfcc04190f"
+  },
+  "assistedRetryUserReportedSuccess": true
+}

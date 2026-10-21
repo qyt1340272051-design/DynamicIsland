@@ -1,0 +1,22 @@
+{
+  "captureUTC": "2026-10-16T02:49:08.923775+00:00",
+  "baseCommit": "955ac0c6c95afc79242199179f3eb999caf32fe5",
+  "appPath": "/Users/rong5/Applications/Dynamic Island T35 Pomodoro.app",
+  "bundleID": "com.rong5.dynamic-island.t35-pomodoro.20261016",
+  "appExecutableSHA256": "bf5ffd1840ddd5ad661e6f5ee5964d77b99c59cb6b5563c2ed3a1a44859b1446",
+  "dipSHA256": "e4dc56227ed5dc1041111352458da401aa598f026a0e7216675f56d7853c8eed",
+  "sandbox": true,
+  "hardenedRuntime": true,
+  "JIT": true,
+  "testOnlyEntitlements": false,
+  "documentTypeDeclarations": false,
+  "nativePomodoroSwiftMatches": 0,
+  "sourceSHA256": {
+    "DynamicIsland/IslandTimerToolsModel.swift": "2f83e4eee2f3124df9c8dc4d56d20ef7325c5ba7d80b332b4b14d0dd6ac33df7",
+    "DynamicIsland/IslandTimerToolsView.swift": "ddae6b281ecdaddd301bd099b99ffca3997db93235940d228e015d116f4f400d",
+    "DynamicIsland/IslandView.swift": "ef0bfc33a456c1fdbbfceba32dce2994cd8499033cfc0aed5386660b1a2b6b18",
+    "DynamicIsland/Plugins/PluginBridgeTransport.swift": "a35992279f4bc54cb74e1bfcd466183889cb027dd0529211ec3ac292bd6a0a82",
+    "docs/plugin-system/examples/pomodoro/index.js": "2ab2fa95b4d1de34a045596b4683f3acda10590a287b98643ae0e6fb358d2274",
+    "docs/plugin-system/examples/pomodoro/manifest.json": "72e28bac33acf3030e09aadbfabccf6d712bb039c63b633c386694ee6a300110"
+  }
+}

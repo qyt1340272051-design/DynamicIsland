@@ -1,0 +1,41 @@
+{
+  "observedUTC": "2026-10-20T15:35:06.070903+00:00",
+  "releaseURL": "https://github.com/qyt1340272051-design/DynamicIsland/releases/tag/sdk-v1.0.0",
+  "releaseID": 418563161,
+  "publishedUTC": "2026-10-20T15:33:53Z",
+  "draft": false,
+  "prerelease": false,
+  "anonymousReleaseAndDownloadPassed": true,
+  "authorizationHeaderSent": false,
+  "cookiesSent": false,
+  "assets": {
+    "dynamic-island-sdk-1.0.0.manifest.json": {
+      "url": "https://github.com/qyt1340272051-design/DynamicIsland/releases/download/sdk-v1.0.0/dynamic-island-sdk-1.0.0.manifest.json",
+      "status": 200,
+      "bytes": 7752,
+      "sha256": "428aff80c5597fddd7675a305655c87f841a6c391a42b470d4e43381530a4a94"
+    },
+    "dynamic-island-sdk-1.0.0.zip": {
+      "url": "https://github.com/qyt1340272051-design/DynamicIsland/releases/download/sdk-v1.0.0/dynamic-island-sdk-1.0.0.zip",
+      "status": 200,
+      "bytes": 85192,
+      "sha256": "b64d87e400a90f730bd098cce23dc7b743cf78dcbfcb4f878f7cfeb16a494ac9"
+    },
+    "dynamic-island-sdk-1.0.0.zip.sha256": {
+      "url": "https://github.com/qyt1340272051-design/DynamicIsland/releases/download/sdk-v1.0.0/dynamic-island-sdk-1.0.0.zip.sha256",
+      "status": 200,
+      "bytes": 95,
+      "sha256": "cde4e4d599000a2690cc547ca8680e0788038fcab035701df7248c24c0c2723f"
+    }
+  },
+  "allThreeAssetsByteIdenticalToFrozenLocal": true,
+  "all53FileHashesMatched": true,
+  "publicQuickStartPassed": true,
+  "publicHelloPackageSHA256": "512f953ca7005297b413179efef029bd07996f320e764d9ea243a8feabcad8f4",
+  "publicHelloFixtureByteIdentical": true,
+  "checksumCommandOutput": "dynamic-island-sdk-1.0.0.zip: OK",
+  "sdkStatus": "stable",
+  "minimumHostVersion": "0.6.0",
+  "humanIndependentInstallationClaimed": false,
+  "RegistryInstallationClaimed": false
+}

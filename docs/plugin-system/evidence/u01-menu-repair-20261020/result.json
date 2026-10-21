@@ -1,0 +1,42 @@
+{
+  "observedUTC": "2026-10-20T08:20:33.638252+00:00",
+  "status": "Second physical return attempt failed; full one-second grace observed with no pointer enter",
+  "U01TaskStatus": "in progress",
+  "firstPhysicalAttempt": "physical-return-attempt-1.json",
+  "firstPhysicalAttemptPassed": false,
+  "oldCallbackRootCauseConfirmed": false,
+  "fixedMechanisms": [
+    "Transfer bounded return hold to VM before tool selection can rebuild native control",
+    "Remove redundant didClose callback-order prerequisite",
+    "Keep original return deadline through transient pointer entry/exit without extending it"
+  ],
+  "menuReturnGraceSeconds": 1,
+  "targetedTests": {
+    "total": 92,
+    "failures": 0,
+    "skipped": 0,
+    "menuTests": 14,
+    "existingTests": 78
+  },
+  "redVMRegression": {
+    "tests": 2,
+    "assertionFailures": 8,
+    "scope": "VM deadline correction not yet applied; native completion ordering had already changed"
+  },
+  "releaseBuildPassed": true,
+  "strictDeepSignaturePassed": true,
+  "currentSourceBinding": "preflight.json",
+  "appPID": 22058,
+  "appRunning": false,
+  "traceCaptureSessionID": 68771,
+  "traceTemporaryPath": "/tmp/dynamic-island-u01-repair-20261020/menu-trace.ndjson",
+  "traceContent": "Fixed event codes, random Host session ID, pointerInside and hovering booleans; no plugin names or pointer coordinates",
+  "secondPhysicalAttemptPassed": false,
+  "pendingHumanRequest": null,
+  "publiclyPublished": false,
+  "remotePushed": false,
+  "secondPhysicalAttempt": "physical-return-attempt-2.json",
+  "traceCaptureActive": false,
+  "normallyQuitEpochMs": 1792485704652,
+  "supersededBy": "../u01-menu-pointer-20261020/result.json"
+}

@@ -1,0 +1,2 @@
+There has been no change in the accessibility tree for Window: "安装插件".
+The focused UI element is 7 standard window 安装插件, Secondary Actions: Raise

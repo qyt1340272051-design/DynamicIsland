@@ -1,0 +1,12 @@
+{
+  "schemaVersion": 1,
+  "id": "com.example.independent-status",
+  "name": "双按钮状态",
+  "developer": "SDK 独立资料走查",
+  "version": "0.1.0",
+  "engine": "javascriptcore",
+  "entry": "index.js",
+  "minimumHostVersion": "0.6.0",
+  "permissions": [],
+  "capabilities": ["activity.publish", "activity.update", "ui.islandNode", "actions.handle"]
+}

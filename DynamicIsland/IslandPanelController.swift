@@ -5,6 +5,7 @@ import SwiftUI
 @MainActor
 final class IslandPanelController {
     private let viewModel: IslandViewModel
+    private let activityRuntime: IslandActivityRuntime
     private let screenManager: ScreenManager
     private let workspaceNotificationCenter: NotificationCenter
     private let applicationNotificationCenter: NotificationCenter
@@ -27,23 +28,28 @@ final class IslandPanelController {
         panel?.isVisible ?? false
     }
 
-    init(viewModel: IslandViewModel) {
-        self.viewModel = viewModel
-        self.screenManager = ScreenManager()
-        self.workspaceNotificationCenter = NSWorkspace.shared.notificationCenter
-        self.applicationNotificationCenter = .default
-        observeScreenChanges()
+    convenience init(viewModel: IslandViewModel) {
+        self.init(viewModel: viewModel, screenManager: ScreenManager())
     }
 
-    init(viewModel: IslandViewModel, screenManager: ScreenManager) {
+    init(
+        viewModel: IslandViewModel,
+        screenManager: ScreenManager,
+        activityRuntime: IslandActivityRuntime? = nil
+    ) {
         self.viewModel = viewModel
+        self.activityRuntime = activityRuntime ?? IslandActivityRuntime(viewModel: viewModel)
         self.screenManager = screenManager
         self.workspaceNotificationCenter = NSWorkspace.shared.notificationCenter
         self.applicationNotificationCenter = .default
+        viewModel.refreshPointerContainmentBeforeToolMenuReturn = { [weak self] in
+            self?.updatePointerContainment(force: true)
+        }
         observeScreenChanges()
     }
 
     func show() {
+        viewModel.setIslandPanelVisible(true)
         screenManager.startMonitoring()
         let panel = panel ?? makePanel()
         self.panel = panel
@@ -54,6 +60,7 @@ final class IslandPanelController {
     }
 
     func hide() {
+        viewModel.setIslandPanelVisible(false)
         stopHoverTracking()
         stabilityMonitor.stop()
         screenManager.stopMonitoring()
@@ -75,7 +82,7 @@ final class IslandPanelController {
         panel.titlebarAppearsTransparent = true
         IslandPanelWindowPolicy.apply(to: panel)
 
-        let rootView = IslandView(viewModel: viewModel)
+        let rootView = IslandView(viewModel: viewModel, activityRuntime: activityRuntime)
         panel.contentViewController = NSHostingController(rootView: rootView)
         return panel
     }
@@ -99,11 +106,7 @@ final class IslandPanelController {
 
     private func currentCompactPresentationFrame(in screen: ScreenEnvironment) -> CGRect {
         let baseFrame = currentCompactFrame(in: screen)
-        let presentationSize = IslandVisualStyle.compactShellSize(
-            baseSize: baseFrame.size,
-            isPlaying: viewModel.isPlaying,
-            hasActiveTimer: viewModel.compactTimerMode != nil
-        )
+        let presentationSize = activityRuntime.compactShellSize(forBaseSize: baseFrame.size)
 
         return CGRect(
             x: baseFrame.midX - presentationSize.width / 2,
@@ -149,11 +152,13 @@ final class IslandPanelController {
         }
 
         updatePointerContainment()
-        hoverTimer = Timer.scheduledTimer(withTimeInterval: 1.0 / 30.0, repeats: true) { _ in
+        let timer = Timer(timeInterval: 1.0 / 30.0, repeats: true) { _ in
             Task { @MainActor [weak self] in
                 self?.updatePointerContainment()
             }
         }
+        hoverTimer = timer
+        RunLoop.main.add(timer, forMode: .common)
     }
 
     private func stopHoverTracking() {
@@ -163,14 +168,14 @@ final class IslandPanelController {
         viewModel.endHovering()
     }
 
-    private func updatePointerContainment() {
+    private func updatePointerContainment(force: Bool = false) {
         guard let panel, panel.isVisible else {
             return
         }
 
         let hoverFrame = currentHoverFrame(for: panel)
         let containsPointer = IslandPanelHoverRegion.contains(NSEvent.mouseLocation, in: hoverFrame)
-        guard containsPointer != isPointerInsidePanel else {
+        guard force || containsPointer != isPointerInsidePanel else {
             return
         }
 
@@ -192,13 +197,7 @@ final class IslandPanelController {
             compactFrame: currentCompactPresentationFrame(in: screen),
             presentationState: viewModel.presentationState,
             isPointerInside: isPointerInsidePanel,
-            expandedShellSize: IslandVisualStyle.expandedShellSize(
-                for: viewModel.expandedSurface,
-                timerMode: viewModel.timerTools.selectedMode,
-                hasTrayItems: !viewModel.trayItems.isEmpty,
-                hasError: viewModel.lastErrorMessage != nil,
-                hasTimerCompletion: viewModel.timerTools.completedMode != nil
-            )
+            expandedShellSize: activityRuntime.expandedShellSize
         )
     }
 }

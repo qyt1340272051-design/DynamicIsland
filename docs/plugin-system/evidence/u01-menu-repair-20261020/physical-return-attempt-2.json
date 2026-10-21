@@ -1,0 +1,220 @@
+{
+  "observedUTC": "2026-10-20T08:41:15.303204+00:00",
+  "candidatePID": 22058,
+  "userReport": "仍然意外收起",
+  "physicalAttemptPassed": false,
+  "rawTrace": "physical-return-attempt-2-trace.ndjson",
+  "rawTraceSHA256": "7f0de042210a6cf9c7d1d245d183ca00401bb1da98fb8abcd729cd755736a794",
+  "sessions": [
+    {
+      "session": "AA89AD55-08CD-432B-A855-04E5A745A741",
+      "graceSeconds": 1.097395,
+      "pointerEnterEvents": 0,
+      "cancelEvents": 0,
+      "events": [
+        {
+          "timestamp": "2026-10-20 16:34:51.287334+0800",
+          "pid": 22058,
+          "event": "vm.begin",
+          "session": "AA89AD55-08CD-432B-A855-04E5A745A741",
+          "pointerInside": "true",
+          "hovering": "true"
+        },
+        {
+          "timestamp": "2026-10-20 16:34:51.287433+0800",
+          "pid": 22058,
+          "event": "native.begin",
+          "session": "AA89AD55-08CD-432B-A855-04E5A745A741",
+          "pointerInside": "-",
+          "hovering": "-"
+        },
+        {
+          "timestamp": "2026-10-20 16:34:51.301660+0800",
+          "pid": 22058,
+          "event": "native.willOpen",
+          "session": "AA89AD55-08CD-432B-A855-04E5A745A741",
+          "pointerInside": "-",
+          "hovering": "-"
+        },
+        {
+          "timestamp": "2026-10-20 16:34:53.932151+0800",
+          "pid": 22058,
+          "event": "native.didClose",
+          "session": "AA89AD55-08CD-432B-A855-04E5A745A741",
+          "pointerInside": "-",
+          "hovering": "-"
+        },
+        {
+          "timestamp": "2026-10-20 16:34:53.933258+0800",
+          "pid": 22058,
+          "event": "native.choose",
+          "session": "AA89AD55-08CD-432B-A855-04E5A745A741",
+          "pointerInside": "-",
+          "hovering": "-"
+        },
+        {
+          "timestamp": "2026-10-20 16:34:53.961251+0800",
+          "pid": 22058,
+          "event": "native.popUpReturn.selected",
+          "session": "AA89AD55-08CD-432B-A855-04E5A745A741",
+          "pointerInside": "-",
+          "hovering": "-"
+        },
+        {
+          "timestamp": "2026-10-20 16:34:53.961355+0800",
+          "pid": 22058,
+          "event": "native.finish",
+          "session": "AA89AD55-08CD-432B-A855-04E5A745A741",
+          "pointerInside": "-",
+          "hovering": "-"
+        },
+        {
+          "timestamp": "2026-10-20 16:34:53.961399+0800",
+          "pid": 22058,
+          "event": "native.end",
+          "session": "AA89AD55-08CD-432B-A855-04E5A745A741",
+          "pointerInside": "-",
+          "hovering": "-"
+        },
+        {
+          "timestamp": "2026-10-20 16:34:53.961413+0800",
+          "pid": 22058,
+          "event": "vm.grace.begin",
+          "session": "AA89AD55-08CD-432B-A855-04E5A745A741",
+          "pointerInside": "true",
+          "hovering": "true"
+        },
+        {
+          "timestamp": "2026-10-20 16:34:53.961441+0800",
+          "pid": 22058,
+          "event": "native.selection",
+          "session": "AA89AD55-08CD-432B-A855-04E5A745A741",
+          "pointerInside": "-",
+          "hovering": "-"
+        },
+        {
+          "timestamp": "2026-10-20 16:34:53.996275+0800",
+          "pid": 22058,
+          "event": "vm.pointerExit.hold",
+          "session": "AA89AD55-08CD-432B-A855-04E5A745A741",
+          "pointerInside": "false",
+          "hovering": "true"
+        },
+        {
+          "timestamp": "2026-10-20 16:34:55.058808+0800",
+          "pid": 22058,
+          "event": "vm.grace.expired",
+          "session": "AA89AD55-08CD-432B-A855-04E5A745A741",
+          "pointerInside": "false",
+          "hovering": "true"
+        }
+      ]
+    },
+    {
+      "session": "6475DABC-F32C-4BDF-ADCF-E8BCC52A14D2",
+      "graceSeconds": 1.047012,
+      "pointerEnterEvents": 0,
+      "cancelEvents": 0,
+      "events": [
+        {
+          "timestamp": "2026-10-20 16:35:10.454442+0800",
+          "pid": 22058,
+          "event": "vm.begin",
+          "session": "6475DABC-F32C-4BDF-ADCF-E8BCC52A14D2",
+          "pointerInside": "true",
+          "hovering": "true"
+        },
+        {
+          "timestamp": "2026-10-20 16:35:10.454478+0800",
+          "pid": 22058,
+          "event": "native.begin",
+          "session": "6475DABC-F32C-4BDF-ADCF-E8BCC52A14D2",
+          "pointerInside": "-",
+          "hovering": "-"
+        },
+        {
+          "timestamp": "2026-10-20 16:35:10.459500+0800",
+          "pid": 22058,
+          "event": "native.willOpen",
+          "session": "6475DABC-F32C-4BDF-ADCF-E8BCC52A14D2",
+          "pointerInside": "-",
+          "hovering": "-"
+        },
+        {
+          "timestamp": "2026-10-20 16:35:12.045034+0800",
+          "pid": 22058,
+          "event": "native.didClose",
+          "session": "6475DABC-F32C-4BDF-ADCF-E8BCC52A14D2",
+          "pointerInside": "-",
+          "hovering": "-"
+        },
+        {
+          "timestamp": "2026-10-20 16:35:12.045621+0800",
+          "pid": 22058,
+          "event": "native.choose",
+          "session": "6475DABC-F32C-4BDF-ADCF-E8BCC52A14D2",
+          "pointerInside": "-",
+          "hovering": "-"
+        },
+        {
+          "timestamp": "2026-10-20 16:35:12.045790+0800",
+          "pid": 22058,
+          "event": "native.popUpReturn.selected",
+          "session": "6475DABC-F32C-4BDF-ADCF-E8BCC52A14D2",
+          "pointerInside": "-",
+          "hovering": "-"
+        },
+        {
+          "timestamp": "2026-10-20 16:35:12.045805+0800",
+          "pid": 22058,
+          "event": "native.finish",
+          "session": "6475DABC-F32C-4BDF-ADCF-E8BCC52A14D2",
+          "pointerInside": "-",
+          "hovering": "-"
+        },
+        {
+          "timestamp": "2026-10-20 16:35:12.045821+0800",
+          "pid": 22058,
+          "event": "native.end",
+          "session": "6475DABC-F32C-4BDF-ADCF-E8BCC52A14D2",
+          "pointerInside": "-",
+          "hovering": "-"
+        },
+        {
+          "timestamp": "2026-10-20 16:35:12.045834+0800",
+          "pid": 22058,
+          "event": "vm.grace.begin",
+          "session": "6475DABC-F32C-4BDF-ADCF-E8BCC52A14D2",
+          "pointerInside": "true",
+          "hovering": "true"
+        },
+        {
+          "timestamp": "2026-10-20 16:35:12.045866+0800",
+          "pid": 22058,
+          "event": "native.selection",
+          "session": "6475DABC-F32C-4BDF-ADCF-E8BCC52A14D2",
+          "pointerInside": "-",
+          "hovering": "-"
+        },
+        {
+          "timestamp": "2026-10-20 16:35:12.072915+0800",
+          "pid": 22058,
+          "event": "vm.pointerExit.hold",
+          "session": "6475DABC-F32C-4BDF-ADCF-E8BCC52A14D2",
+          "pointerInside": "false",
+          "hovering": "true"
+        },
+        {
+          "timestamp": "2026-10-20 16:35:13.092846+0800",
+          "pid": 22058,
+          "event": "vm.grace.expired",
+          "session": "6475DABC-F32C-4BDF-ADCF-E8BCC52A14D2",
+          "pointerInside": "false",
+          "hovering": "true"
+        }
+      ]
+    }
+  ],
+  "interpretation": "Native selected/finished and VM grace fully expired without pointer enter or cancellation. This one user-reported round contains two logged menu sessions; not counted as two independent human acceptance rounds.",
+  "rootCauseConfirmed": false
+}

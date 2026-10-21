@@ -1,0 +1,34 @@
+{
+  "utc": "2026-10-16T17:07:01.054629+00:00",
+  "commit": "60cb5ce7e901bcf2eb833ff3b8a76ad126420f39",
+  "pid": 17040,
+  "originalAppPID": 66831,
+  "appPath": "/Users/rong5/Applications/Dynamic Island T35 Pomodoro.app",
+  "bundleID": "com.rong5.dynamic-island.t35-pomodoro.20261016",
+  "executableSHA256": "bf0ee3f884598a0ab8b5adc1b5fd794797b71ac62437f213773894572dc221d0",
+  "packageVersion": "0.2.1",
+  "packageArchive": "/tmp/dynamic-island-t35-completion-layout-20261016/pomodoro-0.2.1.dip",
+  "packageSHA256": "cc5e90bdb1d996337c4a9ef947005dd5eac5efe11339463d0ca38745e1bde55f",
+  "installedSourceAndArchiveIdentity": {
+    "manifest.json": {
+      "installedSHA256": "42e1f96131e433b47badce3acc2af88f0e0dc585f730690592f1423362b4fbb3",
+      "sourceSHA256": "42e1f96131e433b47badce3acc2af88f0e0dc585f730690592f1423362b4fbb3",
+      "archiveMemberSHA256": "42e1f96131e433b47badce3acc2af88f0e0dc585f730690592f1423362b4fbb3",
+      "allEqual": true
+    },
+    "index.js": {
+      "installedSHA256": "6a0782e1788b009ddea8321aad4370ebc6d3d8b746315616b15e8bea0e03f6b2",
+      "sourceSHA256": "6a0782e1788b009ddea8321aad4370ebc6d3d8b746315616b15e8bea0e03f6b2",
+      "archiveMemberSHA256": "6a0782e1788b009ddea8321aad4370ebc6d3d8b746315616b15e8bea0e03f6b2",
+      "allEqual": true
+    },
+    "README.md": {
+      "installedSHA256": "f3100e511f4d8ed3ac3a6343bad4019908dafa2596f31279b6b64f1df9aa54d2",
+      "sourceSHA256": "f3100e511f4d8ed3ac3a6343bad4019908dafa2596f31279b6b64f1df9aa54d2",
+      "archiveMemberSHA256": "f3100e511f4d8ed3ac3a6343bad4019908dafa2596f31279b6b64f1df9aa54d2",
+      "allEqual": true
+    }
+  },
+  "hasDocumentTypeDeclarations": false,
+  "method": "Read-only identity checks; installation and permission decisions performed via actual UI"
+}

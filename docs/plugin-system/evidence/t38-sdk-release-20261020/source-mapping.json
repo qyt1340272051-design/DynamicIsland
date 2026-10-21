@@ -1,0 +1,13 @@
+{
+  "sourceCommit": "69a9fe72b706930132f8b2d7e319d394c46ddf9e",
+  "sdkSubtreeCommit": "da3e6273b01f197b7044ed7d036b6a5f0f95f092",
+  "sdkTree": "79bc3ace4e378dddf29eb332be171b9379daffee",
+  "reachableSDKOnlyCommits": 7,
+  "allAncestorPathsWithinSDK": true,
+  "originMainIsAncestor": false,
+  "tag": "sdk-v1.0.0",
+  "subtreeRootFiles": 54,
+  "distributionFiles": 53,
+  "artifactSHA256": "b64d87e400a90f730bd098cce23dc7b743cf78dcbfcb4f878f7cfeb16a494ac9",
+  "privateHostBranchPushed": false
+}

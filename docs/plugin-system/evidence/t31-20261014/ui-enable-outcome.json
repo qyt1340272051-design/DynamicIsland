@@ -1,0 +1,28 @@
+{
+  "method": "CUA native Settings selection -> enable -> fresh AX running check,20 iterations",
+  "version": "1.0.1",
+  "ids": [
+    "com.example.t31.idle01",
+    "com.example.t31.idle02",
+    "com.example.t31.idle03",
+    "com.example.t31.idle04",
+    "com.example.t31.idle05",
+    "com.example.t31.idle06",
+    "com.example.t31.idle07",
+    "com.example.t31.idle08",
+    "com.example.t31.idle09",
+    "com.example.t31.idle10",
+    "com.example.t31.idle11",
+    "com.example.t31.idle12",
+    "com.example.t31.idle13",
+    "com.example.t31.idle14",
+    "com.example.t31.idle15",
+    "com.example.t31.idle16",
+    "com.example.t31.idle17",
+    "com.example.t31.idle18",
+    "com.example.t31.idle19",
+    "com.example.t31.idle20"
+  ],
+  "allRunning": true,
+  "permissionRequests": []
+}

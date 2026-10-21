@@ -1,0 +1,149 @@
+{
+  "date": "2026-10-19",
+  "state": "Real ordinary Release import/disabled/enable completed; manual pointer and button checks deferred by user",
+  "host": "preflight.json",
+  "installedPackages": {
+    "com.dynamicisland.acceptance.timer-presentations": {
+      "manifest": {
+        "schemaVersion": 1,
+        "id": "com.dynamicisland.acceptance.timer-presentations",
+        "name": "\u8ba1\u65f6\u4e09\u6001\u9a8c\u6536",
+        "developer": "DynamicIsland",
+        "version": "0.1.0",
+        "engine": "javascriptcore",
+        "entry": "index.js",
+        "minimumHostVersion": "0.6.0",
+        "permissions": [],
+        "capabilities": [
+          "activity.publish",
+          "activity.update",
+          "ui.islandNode",
+          "actions.handle",
+          "countdown",
+          "scheduler"
+        ]
+      },
+      "fileSHA256": {
+        "index.js": "d555f742cfe0179560b404eb1dcb1dd8ccb00596270e85fbd95a3a1f8bdf51e5",
+        "README.md": "3c07efb32a504933bdb3a9c66807ff5698069d2bdf2486e32ff6b7ab76fb5980",
+        "manifest.json": "7de0e93046864c0d43af170285f1448d800e7f806ff54e14eb05b8ea8360e1a8"
+      }
+    },
+    "com.dynamicisland.compat-counter": {
+      "manifest": {
+        "schemaVersion": 1,
+        "id": "com.dynamicisland.compat-counter",
+        "name": "\u517c\u5bb9\u00b7\u8ba1\u6570",
+        "developer": "DynamicIsland",
+        "version": "0.1.0",
+        "engine": "superisland",
+        "entry": "index.js",
+        "minimumHostVersion": "0.6.0",
+        "permissions": [],
+        "capabilities": [
+          "activity.publish",
+          "activity.update",
+          "activity.end",
+          "ui.islandNode",
+          "actions.handle"
+        ]
+      },
+      "fileSHA256": {
+        "LICENSE": "72ab5fec769e2affe1fc9bdc33fc6b52b8bb35ff27907db3e4bb7d4ef43e8610",
+        "index.js": "87fe2ab2db58c7736fb18ac453f059b231241943d86ef8c7e16a27c2d9143fc1",
+        "README.md": "8360f1a4f6e9fbf2cf125aa7a0888e20c3aa261b59676c3c998b3c9bd440d219",
+        "manifest.json": "04a1dda566bde256905f0367e36c40557cb2609d8ede60b482aa8caced90a60e"
+      }
+    },
+    "com.dynamicisland.compat-progress": {
+      "manifest": {
+        "schemaVersion": 1,
+        "id": "com.dynamicisland.compat-progress",
+        "name": "\u517c\u5bb9\u00b7\u8fdb\u5ea6",
+        "developer": "DynamicIsland",
+        "version": "0.1.0",
+        "engine": "superisland",
+        "entry": "index.js",
+        "minimumHostVersion": "0.6.0",
+        "permissions": [],
+        "capabilities": [
+          "activity.publish",
+          "activity.update",
+          "activity.end",
+          "ui.islandNode",
+          "actions.handle",
+          "presentation.request"
+        ]
+      },
+      "fileSHA256": {
+        "LICENSE": "72ab5fec769e2affe1fc9bdc33fc6b52b8bb35ff27907db3e4bb7d4ef43e8610",
+        "index.js": "71e5078e5d68fdec8b6b171b6a6132f5d3b318a0e14ab857abb6865f511d5832",
+        "README.md": "6a5dda57cac8e90928d7486e9b4c5939098db7ac599153738110b27e7ca31c38",
+        "manifest.json": "9a6e0eb5c957536800603fa1ec36321add62117bcec19b1bf481a12c0f26f9c7"
+      }
+    },
+    "com.dynamicisland.compat-status": {
+      "manifest": {
+        "schemaVersion": 1,
+        "id": "com.dynamicisland.compat-status",
+        "name": "\u517c\u5bb9\u00b7\u72b6\u6001",
+        "developer": "DynamicIsland",
+        "version": "0.1.0",
+        "engine": "superisland",
+        "entry": "index.js",
+        "minimumHostVersion": "0.6.0",
+        "permissions": [],
+        "capabilities": [
+          "activity.publish",
+          "activity.update",
+          "activity.end",
+          "ui.islandNode",
+          "actions.handle"
+        ]
+      },
+      "fileSHA256": {
+        "LICENSE": "72ab5fec769e2affe1fc9bdc33fc6b52b8bb35ff27907db3e4bb7d4ef43e8610",
+        "index.js": "797f315d20e45308c42785b5ea118dadfbdb38a62022af539e8ac7d6355ae1fb",
+        "README.md": "72c2ffda66775d660cc3f8d7bdaf49127fed225c47ddd605d7ea98ae4d55a7dc",
+        "manifest.json": "a29b4cf79aa0e9ab7c38f92f2196c2f45d06eeaf6c6c4a8d1558cf756f75f823"
+      }
+    },
+    "com.example.independent-status": {
+      "manifest": {
+        "schemaVersion": 1,
+        "id": "com.example.independent-status",
+        "name": "\u53cc\u6309\u94ae\u72b6\u6001",
+        "developer": "SDK \u72ec\u7acb\u8d44\u6599\u8d70\u67e5",
+        "version": "0.1.0",
+        "engine": "javascriptcore",
+        "entry": "index.js",
+        "minimumHostVersion": "0.6.0",
+        "permissions": [],
+        "capabilities": [
+          "activity.publish",
+          "activity.update",
+          "ui.islandNode",
+          "actions.handle"
+        ]
+      },
+      "fileSHA256": {
+        "index.js": "1d2dad443530f1e2c2d9b53f818bf5627e992d995e4c03245295b37cdebee2e9",
+        "README.md": "ef998b9ba7dde83084371f5b0c7e1241922a868e7642564a95728a97b51fcdda",
+        "manifest.json": "603534f5ff7510dcf738fde8dda46dd4006534ae31679f078f6a1ebb4b9d21e8"
+      }
+    }
+  },
+  "allFiveInstalledDisabledBeforeExplicitEnable": true,
+  "allFiveReachedRunningInManagementUI": true,
+  "extraPermissionsRequested": false,
+  "timerStarted": false,
+  "toolButtonsClicked": false,
+  "physicalCameraTransitionsVerified": false,
+  "userInstruction": "Not convenient now; skip manual operations first.",
+  "T02HideShowVerified": false,
+  "T11PhysicalTimerVerified": false,
+  "T37RealToolButtonsVerified": false,
+  "nativeIndependentAuthorUIButtonsVerified": false,
+  "cleanup": "cleanup.json",
+  "screenshots": "screenshots.json"
+}

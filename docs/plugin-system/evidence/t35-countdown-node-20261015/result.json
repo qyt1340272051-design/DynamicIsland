@@ -1,0 +1,119 @@
+{
+  "devicesAndConfigurations": [
+    {
+      "device": {
+        "architecture": "arm64",
+        "deviceId": "00008132-001E49513A0B801C",
+        "deviceName": "My Mac",
+        "modelName": "MacBook Air",
+        "osBuildNumber": "25G83",
+        "osVersion": "26.6.2",
+        "platform": "macOS"
+      },
+      "expectedFailures": 0,
+      "failedTests": 0,
+      "passedTests": 831,
+      "skippedTests": 4,
+      "testPlanConfiguration": {
+        "configurationId": "1",
+        "configurationName": "Test Scheme Action"
+      }
+    }
+  ],
+  "environmentDescription": "Dynamic Island · Built with macOS 26.6.2",
+  "expectedFailures": 0,
+  "failedTests": 0,
+  "finishTime": 1792066891.598,
+  "passedTests": 831,
+  "result": "Passed",
+  "skippedTests": 4,
+  "startTime": 1792066807.933,
+  "statistics": [
+    {
+      "subtitle": "1 test run",
+      "title": "1 test collected performance metrics"
+    }
+  ],
+  "testFailures": [],
+  "title": "Test - Dynamic Island",
+  "topInsights": [
+    {
+      "category": "Longest Test Runs",
+      "impact": "63% of duration",
+      "text": "6 longest test runs with outlier durations exceeding 2.56s (three standard deviations)"
+    }
+  ],
+  "totalTestCount": 835,
+  "baseCommit": "db36b9c",
+  "ordinaryReleaseBuildPassed": true,
+  "testResults": "/tmp/dynamic-island-t35-countdown-node-20261015-final/TestResults.xcresult",
+  "log": "/tmp/dynamic-island-t35-countdown-node-20261015-final-ci.log",
+  "newTests": 35,
+  "sourceSHA256": {
+    "DynamicIsland/Core/Activity/IslandActivityRuntime.swift": "b7c9a94b28b144a51c43a4d2ea45476584ad0e6c29223aee1f790ee600ce8032",
+    "DynamicIsland/IslandPanelController.swift": "979a02687c185c6e7e0ae3c21d841da90b41c80bc625113764ba66ee02597773",
+    "DynamicIsland/IslandUI/ActivityPresentationPolicy.swift": "ab82afd697272a8db70938eeb091cbf10c76524e6c0b68effdc0a765bee05179",
+    "DynamicIsland/IslandUI/IslandCountdownDisplayClock.swift": "ecd3e22dc24c73eee80b3d86432ece1a6fadd892e82982c176c0b404617e9a6b",
+    "DynamicIsland/IslandUI/IslandCountdownNodeView.swift": "54c4681b6666288d0740d31217ca16d1f9f88854b61eb7f74742f5be2007fe33",
+    "DynamicIsland/IslandUI/IslandRenderer.swift": "dae7aa5a4eac5c6aeab7e228da1561f5dd35fc9c52c93dcfb6d05c3069e85f80",
+    "DynamicIsland/IslandUI/Schema/IslandNode.swift": "ba9bda9dce9a85699b6bb1711ebbb7bf9cf150d4498d2c0add3177a51dfae2f4",
+    "DynamicIsland/IslandView.swift": "b8bb6e308a4a86993ee5e38d6fc5c11b8096ca38d4b6064e72fab34cecaa44f9",
+    "DynamicIsland/IslandViewModel.swift": "c1247a4438decfcbd8f5f62b33fc9714a8bad9d4e6c33925e7d38ca70c060e9e",
+    "DynamicIsland/Plugins/PluginCountdownBroker.swift": "053e76bf6535b7122999d4a5d5b5f1df1fc189f08719835add64e44f542c9df5",
+    "DynamicIsland/Plugins/PluginIslandNodeConverter.swift": "d4e3ff39fc4518cb3a52d20cba0bf7d5cd6d5c1c4451d58342cd9175a4cea9cd",
+    "DynamicIsland/Plugins/PluginJSBridge.swift": "d8eff91676020fc0e69785daf0a6f6410b7be26002f977d5dac607c3e24e884e",
+    "DynamicIsland/Plugins/PluginJSBridgeBootstrap.swift": "b6d83d8f36df65f0a038d4f6f5fdbe12ab90556626a393fed4b698eadf5341a8",
+    "DynamicIsland/Plugins/PluginLifecycleBridge.swift": "6dbb86fe2922513c5010386ea1eb05c4c3277037c49587ca5a2dc6802dc52e25",
+    "DynamicIslandTests/IslandActivityRuntimeTests.swift": "d04740c6c157f7284c4521ae11c4e0bf17565d20b5fd4488f8836860b334f782",
+    "DynamicIslandTests/IslandCountdownExampleTests.swift": "8123770e0b475adaba6961e0b5315b37e68def62fa32072eaa5cf7d0dc18c05a",
+    "DynamicIslandTests/IslandCountdownNodeTests.swift": "98ef30aa0a29a698bcf27a262655a41614e97252c6660fcc24888a821f211b20",
+    "DynamicIslandTests/IslandCountdownRendererTests.swift": "44dc28c747c18cc98b61380e82ca3575d0cc1959ce907507b45ad96e2d399b36",
+    "DynamicIslandTests/PluginCountdownDeliveryTests.swift": "7723574b15089e6d926c246e9724a838603502678932efda6090683bec3ac47d",
+    "DynamicIslandTests/PluginCountdownDisplayObservationTests.swift": "47cdf34d2fe68fc4d7eaf48844af298aa41b275e42f63ba13ede3c62e12e1e5b",
+    "DynamicIslandTests/PluginCountdownNodeBridgeTests.swift": "52cb5da326e8518a1710ff59b534de3514431de186b34a0286fd06aba26fbf74",
+    "DynamicIslandTests/PluginCountdownNodeSDKTests.swift": "4b8b644de687b84c60518aa923e41b59f7f4eaee71453c6fc1f31a6077892470",
+    "docs/plugin-system/examples/countdown-demo/README.md": "f4350cbe63a2a53e5680de498369587700d0b9229a03aaa280e4ff8b90761d43",
+    "docs/plugin-system/examples/countdown-demo/index.js": "96182864eee0c1626d555468007f125b79ff30f8d3108dfb1954434e785c1166",
+    "docs/plugin-system/examples/countdown-demo/manifest.json": "95f3bd9cce2b09a450edcc003314ad2eb5c05909641947e2e3dae4894d1eeb70"
+  },
+  "skipReasons": [
+    "Three existing AppKit mouse tests require unlocked macOS session",
+    "Existing explicit screen snapshot matrix generation"
+  ],
+  "images": [
+    {
+      "file": "overflow-summary.png",
+      "source": "DFDCCEB9-A0A6-4EBE-8D08-A6016F96101F.png",
+      "test": "IslandCountdownRendererTests/testAcceptedOverflowTreeUsesSummaryWithoutHiddenCountdownConsumers()",
+      "sha256": "bca2a07e9d7e2d0a35fce3204f2d4ee50b3ffb5a0b28b6d32a4243d475a050a9"
+    },
+    {
+      "file": "completed.png",
+      "source": "4F475560-0FE2-4119-89F8-B7BD89EB7F94.png",
+      "test": "IslandCountdownRendererTests/testMountedTimeAndProgressRefreshThenProjectCompletionWithoutBusinessCallback()",
+      "sha256": "65bf9260d335b726d223e8db7c27e98c6b5a37affe5acaab9aa21a8a1dfeb0f9"
+    },
+    {
+      "file": "running-03.png",
+      "source": "BD17E3E1-582A-4BF3-9419-B493FC1C046D.png",
+      "test": "IslandCountdownRendererTests/testMountedTimeAndProgressRefreshThenProjectCompletionWithoutBusinessCallback()",
+      "sha256": "d8d3e654a2005cb99cd9e3fdd7c286f33ec0829de46166ae68fbee151454cecc"
+    },
+    {
+      "file": "running-04.png",
+      "source": "8FCD776A-6AC2-4CAA-BA4C-075A27C5235E.png",
+      "test": "IslandCountdownRendererTests/testMountedTimeAndProgressRefreshThenProjectCompletionWithoutBusinessCallback()",
+      "sha256": "deb71cc813432f80fadfdc68a71be2a991a455bf84691de182b0cfd447b7ec90"
+    }
+  ],
+  "review": {
+    "code": "Independent read-only review found no remaining blocking issue",
+    "visual": "Inspected time/progress and overflow summary screenshots from actual NSHostingView tests",
+    "fixedBoundary": "Recheck execution admission after reactivation callback before issuing new resources"
+  },
+  "limitations": [
+    "Screenshots are actual Debug test NSHostingView output, not ordinary Release product UI acceptance",
+    "No actual device sleep/low-power/energy conclusions",
+    "Official Pomodoro package and dedicated Swift removal remain pending"
+  ]
+}

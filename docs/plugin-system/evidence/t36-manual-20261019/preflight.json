@@ -1,0 +1,21 @@
+{
+  "observedUTC": "2026-10-19T01:06:27.404281+00:00",
+  "status": "Prepared; not launched in this session; actual UI acceptance pending",
+  "appPath": "/Users/rong5/Applications/Dynamic Island T36 GitHub.app",
+  "bundleID": "com.rong5.dynamic-island.t36-github.20261017",
+  "productVersion": "0.5.0",
+  "build": "2",
+  "hostExecutableSHA256": "ae6d834297c759049467b0a56f018b4757208ba4eb097668e13812e694bd697f",
+  "package": "/tmp/dynamic-island-t36-20261017/github-0.1.0.dip",
+  "packageSHA256": "81bfb05d1efe23e084425913afd18b3ad274b72b00eb32464de6850a37705a2a",
+  "strictDeepSignaturePassed": true,
+  "hostIsCurrentHEADBinary": false,
+  "hostProvenance": "Historical ordinary Release prepared for original T36; same hash as prior evidence. Do not equate with checkpoint 253c588.",
+  "scope": "Only public actions/checkout and cli/cli; no token or private repository",
+  "threeIndependentPluginPermissions": [
+    "network",
+    "storage.local",
+    "links.open"
+  ],
+  "productionAppModified": false
+}

@@ -1,0 +1,26 @@
+{
+  "enabled-v021-storage-requested.jpg": {
+    "source": "/tmp/dynamic-island-t35-v021-ui-20261017/enabled-v021-storage-requested.jpg",
+    "sha256": "2742d5f7de4eec9a9c84ccf049a5b82f533c76075e0a43fc4b727fe78d402b4d"
+  },
+  "v021-storage-granted.jpg": {
+    "source": "/tmp/dynamic-island-t35-v021-ui-20261017/v021-storage-granted.jpg",
+    "sha256": "d16f4c2fdbbab275b4ccc9385cdbbb6624853fbaa2a24998afec7f3d9b8d6fcf"
+  },
+  "installed-v021-disabled.jpg": {
+    "source": "/tmp/dynamic-island-t35-v021-ui-20261017/installed-v021-disabled.jpg",
+    "sha256": "5b78400ef628037d05681d4b3d884fd78a3786c7f4684a85cf047661ea560203"
+  },
+  "before-upgrade-v020.jpg": {
+    "source": "/tmp/dynamic-island-t35-v021-ui-20261017/before-upgrade-v020.jpg",
+    "sha256": "286b2795a9b7c9d2bc0742fe2e53b9a63240c4f24073eb5f4090565dcbd98012"
+  },
+  "v021-storage-consent.jpg": {
+    "source": "/tmp/dynamic-island-t35-v021-ui-20261017/v021-storage-consent.jpg",
+    "sha256": "2b00026bdde5bb1fc149af02abe0739115b7d8393372d52dac13d7a51373310d"
+  },
+  "upgrade-preview-v021.jpg": {
+    "source": "/tmp/dynamic-island-t35-v021-ui-20261017/upgrade-preview-v021.jpg",
+    "sha256": "be430dc93626d6070f9dddeb066612cb883bfbcc376b049c1d3b611558ec1540"
+  }
+}

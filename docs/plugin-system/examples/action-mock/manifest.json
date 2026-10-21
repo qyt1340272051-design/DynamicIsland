@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "id": "com.example.action-mock",
+  "name": "Action Mock",
+  "version": "1.0.0",
+  "engine": "javascriptcore",
+  "entry": "index.js",
+  "minimumHostVersion": "0.6.0",
+  "permissions": [],
+  "capabilities": ["activity.publish", "activity.update", "activity.end", "ui.islandNode", "actions.handle"]
+}

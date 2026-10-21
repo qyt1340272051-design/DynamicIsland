@@ -1,0 +1,86 @@
+{
+  "utc": "2026-10-17T08:45:44.956121+00:00",
+  "status": "View conversion component verified; T37 remains in progress, Runtime not connected",
+  "upstreamCommit": "68cce87205a88a004e74e33f40bbcb253f8287e9",
+  "upstreamProtocolSources": [
+    "https://github.com/shobhit99/SuperIsland/blob/68cce87205a88a004e74e33f40bbcb253f8287e9/ExtensionHost/ExtensionJSRuntime.swift",
+    "https://github.com/shobhit99/SuperIsland/blob/68cce87205a88a004e74e33f40bbcb253f8287e9/ExtensionHost/ExtensionViewNode.swift"
+  ],
+  "implementation": "Independent data conversion; no copied upstream implementation or plugin",
+  "tests": {
+    "result": "Passed",
+    "totalTestCount": 28,
+    "passedTests": 28,
+    "skippedTests": 0,
+    "failedTests": 0
+  },
+  "testBreakdown": {
+    "SuperIslandViewConverterTests": 11,
+    "PluginManifestTests": 17
+  },
+  "releaseBuild": "passed",
+  "ordinaryReleaseStrictSignature": "passed",
+  "schemaCorrection": {
+    "oldMaxItems": {
+      "permissions": 7,
+      "capabilities": 7
+    },
+    "currentMaxItems": {
+      "permissions": 8,
+      "capabilities": 9
+    },
+    "allSevenExamples": {
+      "action-mock": {
+        "permissions": 0,
+        "capabilities": 5
+      },
+      "countdown-demo": {
+        "permissions": 0,
+        "capabilities": 5
+      },
+      "github": {
+        "permissions": 3,
+        "capabilities": 8
+      },
+      "github-mock": {
+        "permissions": 0,
+        "capabilities": 3
+      },
+      "node-mock": {
+        "permissions": 0,
+        "capabilities": 4
+      },
+      "pomodoro": {
+        "permissions": 1,
+        "capabilities": 8
+      },
+      "tool-demo": {
+        "permissions": 0,
+        "capabilities": 4
+      }
+    },
+    "reason": "Published arrays lagged existing Swift finite sets; both official Pomodoro and GitHub examples already declare eight capabilities",
+    "hostResourceQuotasChanged": false
+  },
+  "sourceSHA256": {
+    "DynamicIsland/Compatibility/SuperIslandAdapter/SuperIslandViewConverter.swift": "2d0111faab987c7ed204eb0d4fcc5aaec390f7cdb26dd1159bbe0feed6d31087",
+    "DynamicIslandTests/SuperIslandViewConverterTests.swift": "e03263ed2f7f7438374324b4f448cdaa7fe3cbf4a5ea6e6bb8fc1749a6e7f0ce",
+    "DynamicIslandTests/PluginManifestTests.swift": "cece8b4516a5cf2ec1ee7ebe7b2bb404032c469b5de4ab3b2ecdb7647ee7614d",
+    "docs/plugin-system/schema/plugin-manifest-v1.schema.json": "8110aefbd01da93cb3fc7a1df493c6c05cbb614832828f406c077df1b1e61e99"
+  },
+  "testResultPath": "/tmp/dynamic-island-t37-view-20261017/Tests.xcresult",
+  "releaseLog": "/tmp/dynamic-island-t37-view-20261017/release.log",
+  "pending": [
+    "Explicit compatibility package mode",
+    "Module lifecycle and action delivery in current VM",
+    "PresentationRequest admission and revocation",
+    "Compatibility labels and actual upstream plugin acceptance"
+  ],
+  "manualAcceptance": {
+    "t35PID": 32762,
+    "productionPID": 21458,
+    "actualT35Observed": "compact; no Start click",
+    "countdownStarted": false,
+    "ledger": "../../MANUAL_ACCEPTANCE.md"
+  }
+}

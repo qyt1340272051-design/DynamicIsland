@@ -1,0 +1,22 @@
+{
+  "date": "2026-10-19",
+  "bundleID": "com.rong5.dynamic-island.t35-pomodoro.20261016",
+  "pid": 80223,
+  "pluginVersion": "0.2.1",
+  "sourceCheckpoint": "253c588",
+  "hostExecutableSHA256": "bf0ee3f884598a0ab8b5adc1b5fd794797b71ac62437f213773894572dc221d0",
+  "hostBuildProvenance": "Same historical ordinary Release as t35-v021-final-20261017/run.json; not built from current HEAD",
+  "startBeforeEpochMs": 1792371436160,
+  "startAfterEpochMs": 1792371436187,
+  "expectedDeadlineEpochMs": 1792372336187,
+  "expectedDurationSeconds": 900,
+  "realUIStart": true,
+  "privateStartOrClockChangeUsed": false,
+  "capturePreparedBeforeStart": true,
+  "state": "completed; visible completion and normal exit verified",
+  "completionAXBoundsEpochMs": [
+    1792372337023,
+    1792372337090
+  ],
+  "result": "result.json"
+}

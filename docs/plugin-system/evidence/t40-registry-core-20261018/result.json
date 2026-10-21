@@ -1,0 +1,89 @@
+{
+  "date": "2026-10-18",
+  "task": "T40 Registry core",
+  "baselineCommit": "6c4b841",
+  "status": "core implemented; UI wiring and published catalog acceptance pending",
+  "ci": {
+    "total": 1052,
+    "passed": 1050,
+    "skipped": 2,
+    "failed": 0,
+    "releaseBuild": "passed",
+    "strictDeepSignature": "passed",
+    "resultBundle": "/tmp/dynamic-island-t40-20261018/FullTests.xcresult"
+  },
+  "selectedFirstRun": {
+    "passed": 47,
+    "skipped": 0,
+    "failed": 0,
+    "note": "Before adding three transport boundary tests; all current tests passed in full CI."
+  },
+  "sdk": {
+    "pythonPassed": 37,
+    "pythonSkipped": 0,
+    "typeCheck": "passed",
+    "expectedTypeErrors": 47
+  },
+  "registryTestsPassed": [
+    "PluginRegistryTests/testArchiveTransferHasIndependentStreamingAndDeclaredBounds",
+    "PluginRegistryTests/testCancellationBeforeStartingMakesNoNetworkRequest",
+    "PluginRegistryTests/testCancelledDownloadReleasesClientAndNeverCreatesAReview",
+    "PluginRegistryTests/testCatalogBoundsAndURLPoliciesRejectAlternativeDestinations",
+    "PluginRegistryTests/testCatalogMetadataCannotReplaceValidatedManifestOrLeaveStaging",
+    "PluginRegistryTests/testCatalogPreservesExactIdentityAndRejectsDuplicateIDs",
+    "PluginRegistryTests/testCatalogRejectsMalformedClosedFieldsAndUnsafeNames",
+    "PluginRegistryTests/testCatalogTransportIsEphemeralAndRejectsStatusAndSize",
+    "PluginRegistryTests/testDownloadedArchiveUsesSameBufferHashAndInstallsOnlyAfterReview",
+    "PluginRegistryTests/testHashMismatchRejectsBeforeExtractionAndCanRetry",
+    "PluginRegistryTests/testMatchingHashDoesNotBypassZIPOrMinimumHostValidation",
+    "PluginRegistryTests/testRedirectDelegateStripsHeadersBoundsHopsAndRefusesCatalogRedirects",
+    "PluginRegistryTests/testRepositoryCatalogIsEmptyUntilActualReleaseAssetsExist"
+  ],
+  "previousInputGapsClosed": [
+    "IslandQuitCancellationTests/testCancellationDuringAnimationPreventsLateTerminationAndRestoresNativeClicks",
+    "IslandQuitCancellationTests/testCancelledTerminationRestoresRenderedIslandHitTestingAndAllowsAnotherQuit",
+    "PluginActionBridgeTests/testActualActionMockSwiftUIButtonToggleSliderAndTypedCommitReachJavaScript",
+    "PluginExtensionsUITests/testNativeButtonsRequireExplicitConsentAndUninstallConfirmation",
+    "PluginInstallerUITests/testNativeCancelWindowCloseAndInstallButtonsUseTheCurrentReview"
+  ],
+  "skippedTests": [
+    "GitHubPluginTests/testLivePublicGitHubAPIThroughOfficialPluginWhenExplicitlyEnabled",
+    "ScreenSnapshotMatrixTests/testGenerateSnapshotMatrix"
+  ],
+  "validation": {
+    "actualHelloArchiveToPreviewAndDisabledInstall": true,
+    "sameBufferSHA256AndExtraction": true,
+    "catalogMetadataMatchesManifest": true,
+    "streamedArchiveLimitBytes": 41943040,
+    "catalogLimitBytes": 262144,
+    "maximumEntries": 100,
+    "redirectTests": "URLSession delegate methods with injected requests; no live CDN"
+  },
+  "externalEffects": {
+    "liveRegistryNetwork": false,
+    "appRegistryUIWired": false,
+    "catalogPublished": false,
+    "pluginsPublished": false,
+    "acceptanceAppsStarted": false
+  },
+  "pending": [
+    "Discovery UI and App wiring",
+    "Shared import busy and shutdown behavior",
+    "Real release URLs and catalog publication",
+    "T38 and original manual dependencies"
+  ],
+  "sourceSHA256": {
+    "DynamicIsland/Plugins/PluginRegistry.swift": "f3813c2de66b0fd540fb2f158fc120edfc4ddc9cbacf9f4fdb4a9547c92415cc",
+    "DynamicIsland/Plugins/PluginRegistryClient.swift": "c289b3a304ec439047f82e3c7b86d09ceff192e5a9a6912fe83dc67c7a81ce71",
+    "DynamicIsland/Plugins/PluginInstaller.swift": "5e366497870c4db298afa4287707aba285b84de11e72ae80b4e679b0378349a2",
+    "DynamicIsland/Plugins/PluginPackageArchive.swift": "d57e2b6c3ccdd1b56fb1248d7913534e2f4c52b68395bc388c2809808c6da72a",
+    "DynamicIslandTests/PluginRegistryTests.swift": "938be544a687106fdd78dd319d4c5b96764a946cd832e50b085811957436fac1",
+    "Registry/registry.json": "e997728a5b7b42bb636fd38e4cd095213380818c702f9dc5ea18006938a86344",
+    "Registry/README.md": "c27a5e5f1666cf8e6ad41a65481adb5a504dbbd7acf9f73747466aeec7c43767"
+  },
+  "logs": {
+    "/tmp/dynamic-island-t40-20261018/ci.log": "89caa060474cc5056f185d768526c9caedf418e73a71aae357913fe09f735d51",
+    "/tmp/dynamic-island-t40-20261018/selected.log": "9e94738c55004d0b4452e73349a47b0c9a28319db05d2d48b3e9942e64cec91c",
+    "/tmp/dynamic-island-t40-20261018/codesign-verify.log": "4917d2dc3607fbea8bf1833cd8c11c251f49710aa7342ec56e64224a507efb41"
+  }
+}

@@ -1,0 +1,156 @@
+[
+  {
+    "needle": "button 切换状态",
+    "expected": "当前状态：暂停",
+    "startEpochMs": 1792424804698,
+    "observedEpochMs": 1792424805162,
+    "capture": "m03-status-paused"
+  },
+  {
+    "needle": "button 加一",
+    "expected": "已计数 1 次",
+    "startEpochMs": 1792424806597,
+    "observedEpochMs": 1792424807034,
+    "capture": "m03-counter-one"
+  },
+  {
+    "needle": "button 下一步",
+    "expected": "手动步骤 1/4",
+    "startEpochMs": 1792424823485,
+    "observedEpochMs": 1792424823948,
+    "capture": "m03-progress-1"
+  },
+  {
+    "needle": "button 下一步",
+    "expected": "手动步骤 2/4",
+    "startEpochMs": 1792424823999,
+    "observedEpochMs": 1792424824464,
+    "capture": "m03-progress-2"
+  },
+  {
+    "needle": "button 下一步",
+    "expected": "手动步骤 3/4",
+    "startEpochMs": 1792424824511,
+    "observedEpochMs": 1792424824949,
+    "capture": "m03-progress-3"
+  },
+  {
+    "needle": "button 下一步",
+    "expected": "手动步骤 4/4",
+    "startEpochMs": 1792424824999,
+    "observedEpochMs": 1792424825447,
+    "capture": "m03-progress-4"
+  },
+  {
+    "needle": "button 请求展示",
+    "expected": "展示意图：已请求",
+    "startEpochMs": 1792424825497,
+    "observedEpochMs": 1792424825925,
+    "capture": "m03-progress-request"
+  },
+  {
+    "needle": "button 撤回请求",
+    "expected": "展示意图：已撤回",
+    "startEpochMs": 1792424825965,
+    "observedEpochMs": 1792424826431,
+    "capture": "m03-progress-dismiss"
+  },
+  {
+    "needle": "button 切换状态",
+    "expected": "当前状态：就绪",
+    "startEpochMs": 1792424853780,
+    "observedEpochMs": 1792424854262,
+    "capture": "m03-status-restored"
+  },
+  {
+    "needle": "button 归零",
+    "expected": "已计数 0 次",
+    "startEpochMs": 1792424855721,
+    "observedEpochMs": 1792424856187,
+    "capture": "m03-counter-reset"
+  },
+  {
+    "needle": "button 归零",
+    "expected": "手动步骤 0/4",
+    "startEpochMs": 1792424857592,
+    "observedEpochMs": 1792424858069,
+    "capture": "m03-progress-reset"
+  },
+  {
+    "needle": "button 切换到专注状态",
+    "expected": "当前状态：专注中",
+    "startEpochMs": 1792424870230,
+    "observedEpochMs": 1792424870702,
+    "capture": "m03-independent-focus"
+  },
+  {
+    "needle": "button 切换到休息状态",
+    "expected": "当前状态：休息中",
+    "startEpochMs": 1792424870745,
+    "observedEpochMs": 1792424871191,
+    "capture": "m03-independent-rest"
+  },
+  {
+    "needle": "button 切换状态",
+    "expected": "当前状态：暂停",
+    "startEpochMs": 1792424894342,
+    "observedEpochMs": 1792424894809,
+    "capture": "m03-reload-status-noninitial"
+  },
+  {
+    "needle": "button 加一",
+    "expected": "已计数 1 次",
+    "startEpochMs": 1792424896180,
+    "observedEpochMs": 1792424896629,
+    "capture": "m03-reload-counter-noninitial"
+  },
+  {
+    "needle": "button 下一步",
+    "expected": "手动步骤 1/4",
+    "startEpochMs": 1792424897977,
+    "observedEpochMs": 1792424898447,
+    "capture": "m03-reload-progress-noninitial"
+  },
+  {
+    "needle": "button 开始三态验收",
+    "expected": "三态计时 · minimal · 计时中",
+    "startEpochMs": 1792424972855,
+    "observedEpochMs": 1792424973548,
+    "capture": "m04-started-minimal-expanded"
+  },
+  {
+    "needle": "button 结束验收",
+    "expected": "三态计时 · idle · 等待开始",
+    "startEpochMs": 1792425093951,
+    "observedEpochMs": 1792425094615,
+    "capture": "m04-run1-stopped"
+  },
+  {
+    "needle": "button 开始三态验收",
+    "expected": "三态计时 · minimal · 计时中",
+    "startEpochMs": 1792425094663,
+    "observedEpochMs": 1792425095314,
+    "capture": "m04-run2-started"
+  },
+  {
+    "needle": "button 结束验收",
+    "expected": "三态计时 · idle · 等待开始",
+    "startEpochMs": 1792425389868,
+    "observedEpochMs": 1792425390550,
+    "capture": "m04-run2-stopped"
+  },
+  {
+    "needle": "button 开始三态验收",
+    "expected": "三态计时 · minimal · 计时中",
+    "startEpochMs": 1792474449062,
+    "observedEpochMs": 1792474449732,
+    "capture": "m04-run3-started"
+  },
+  {
+    "needle": "button 结束验收",
+    "expected": "三态计时 · idle · 等待开始",
+    "startEpochMs": 1792474567548,
+    "observedEpochMs": 1792474568246,
+    "capture": "m04-run3-stopped"
+  }
+]

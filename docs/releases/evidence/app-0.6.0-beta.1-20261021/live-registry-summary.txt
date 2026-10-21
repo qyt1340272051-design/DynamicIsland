@@ -1,0 +1,8 @@
+LIVE_REGISTRY catalog=https://raw.githubusercontent.com/qyt1340272051-design/DynamicIsland/main/Registry/registry.json defaultSource=true
+LIVE_REGISTRY package=com.dynamicisland.pomodoro version=0.2.1 sha256=444647bb7a2f40dc0c66418b62e94210c76f2b890f3df2681c2fd179ce5e25b2
+LIVE_REGISTRY package=com.dynamicisland.github version=0.1.0 sha256=5a090cbc251b48d34ffed3bd82d8fd5ff42214e7c6386b769e1ba70477bae0fa
+LIVE_REGISTRY observed=real-download,explicit-install,disabled-requested,individual-grants,vm-tool,preset-storage,stale-actions,restart,empty-staging
+	 Executed 1 test, with 0 failures (0 unexpected) in 14.313 (14.313) seconds
+	 Executed 1 test, with 0 failures (0 unexpected) in 14.313 (14.314) seconds
+	 Executed 1 test, with 0 failures (0 unexpected) in 14.313 (14.314) seconds
+** TEST EXECUTE SUCCEEDED **

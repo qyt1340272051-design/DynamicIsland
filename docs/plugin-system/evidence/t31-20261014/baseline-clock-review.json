@@ -1,0 +1,8 @@
+{
+  "baselineUTCSeconds": 905.0,
+  "baselineMonotonicSeconds": 905.00906075,
+  "maximumUTCGapSeconds": 6.0,
+  "samplerSourceChangedAfterStart": true,
+  "observerCompileDurationSeconds": 1.819672167,
+  "scope": "CPU/energy formulas unchanged; old binary hash unavailable"
+}

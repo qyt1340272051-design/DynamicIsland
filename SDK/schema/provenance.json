@@ -1,0 +1,45 @@
+{
+  "status": "stable-limited-authoring-preflight",
+  "sdkVersion": "1.0.0",
+  "manifestSchema": {
+    "canonicalRepositoryPath": "docs/plugin-system/schema/plugin-manifest-v1.schema.json",
+    "canonicalSHA256": "8187d31f0ee571ba6575362c1804ac8c1119a5bd6095d7de7a6717d282d616b9",
+    "copyPath": "plugin-manifest-v1.schema.json",
+    "copiedWithoutSemanticChanges": true,
+    "driftPolicy": "Host parity tests must compare this copy with the canonical JSON. Update both deliberately; this copy is not an independent authority."
+  },
+  "nodeSchema": {
+    "hostSources": [
+      "DynamicIsland/Plugins/PluginIslandNodeConverter.swift",
+      "DynamicIsland/IslandUI/Schema/IslandNode.swift",
+      "DynamicIsland/IslandUI/DesignTokens.swift"
+    ],
+    "kinds": [
+      "text",
+      "icon",
+      "hStack",
+      "vStack",
+      "spacer",
+      "progress",
+      "countdown",
+      "button"
+    ],
+    "narrowerThanHost": true
+  },
+  "cliOnlyChecks": [
+    "raw JSON UTF-8 byte limit 65536",
+    "valid Unicode scalar values and no BOM/NUL bytes",
+    "duplicate object member rejection at every level",
+    "non-finite JSON numbers",
+    "UTF-8 text byte limit 256",
+    "tree depth 8, children per stack 16, total nodes 128",
+    "regular files, no source symlinks/hardlinks/special files and package path/capacity limits"
+  ],
+  "notGuaranteed": [
+    "Host installation acceptance",
+    "runtime permissions or capability authorization",
+    "current countdown or action instance validity",
+    "full Host contract or resource authorization",
+    "JavaScript correctness or execution"
+  ]
+}

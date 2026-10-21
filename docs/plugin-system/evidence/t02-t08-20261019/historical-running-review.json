@@ -1,0 +1,42 @@
+{
+  "schemaVersion": 1,
+  "state": "independently_verified_counter_window",
+  "rawSHA256": "ccc37093929dc54b246125efa20591435024005f07fa0e557cadfd88ce08fb80",
+  "summarySHA256": "3b5c1f918aa0d232951bb8f454f680f7f73ccc0a19198762d9f129b521490add",
+  "identity": {
+    "executable": "/Users/rong5/Applications/Dynamic Island T31 Energy Acceptance.app/Contents/MacOS/Dynamic Island",
+    "executableUUIDBase64": "923svN9ONpyFQXkoJieOmA==",
+    "pid": 76335,
+    "processStartMachTicks": 13526123745965,
+    "uid": 501
+  },
+  "sampleCount": 173,
+  "firstUTC": "2026-10-14T13:41:28Z",
+  "lastUTC": "2026-10-14T13:56:29Z",
+  "maximumSampleGapSeconds": 5.33515325,
+  "recomputedMetrics": {
+    "measuredDurationSeconds": 900.562805916,
+    "cpuSeconds": 17.504615458333333,
+    "meanSingleCoreCPUPercent": 1.9437417738487055,
+    "maximumIntervalSingleCoreCPUPercent": 3.659812121884481,
+    "p95IntervalSingleCoreCPUPercent": 3.209711507134679,
+    "attributedCPUEnergyJoules": 2.779952594,
+    "equivalentMeanCPUPowerMilliwatts": 3.086905850139341,
+    "packageIdleWakeups": 6236,
+    "packageIdleWakeupsPerMinute": 415.47352116038843,
+    "interruptWakeups": 28716,
+    "interruptWakeupsPerMinute": 1913.203597440942,
+    "diskReadBytes": 3612672,
+    "diskWrittenBytes": 0,
+    "peakPhysicalFootprintBytes": 156435608
+  },
+  "firstPhysicalFootprintBytes": 89572504,
+  "lastPhysicalFootprintBytes": 99009688,
+  "medianPhysicalFootprintBytes": 93832344,
+  "cpuEnergyCounterAdvanced": true,
+  "limits": [
+    "Identity and monotonic counters verified; display/power/workload conditions need separate evidence.",
+    "CPU energy attribution is not Energy Impact or whole-device/battery/GPU/display/network energy.",
+    "No historical performance equivalence, animation smoothness or product acceptance is inferred."
+  ]
+}

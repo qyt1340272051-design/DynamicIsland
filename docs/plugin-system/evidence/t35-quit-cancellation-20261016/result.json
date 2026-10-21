@@ -1,0 +1,140 @@
+{
+  "captureUTC": "2026-10-16T08:04:44.609288+00:00",
+  "baseCommit": "b61ced4",
+  "scope": "Focused Debug NSHostingView tests; not ordinary Release manual UI acceptance",
+  "finding": "A failed plugin cleanup cancels process termination, but the old local quit state left the hosted island faded and noninteractive.",
+  "fix": "Trusted Host cancellation resets all three presentation flags without animation and cancels any still-pending quit animation task.",
+  "targetedSummary": {
+    "devicesAndConfigurations": [
+      {
+        "device": {
+          "architecture": "arm64",
+          "deviceId": "00008132-001E49513A0B801C",
+          "deviceName": "My Mac",
+          "modelName": "MacBook Air",
+          "osBuildNumber": "25G83",
+          "osVersion": "26.6.2",
+          "platform": "macOS"
+        },
+        "expectedFailures": 0,
+        "failedTests": 0,
+        "passedTests": 6,
+        "skippedTests": 0,
+        "testPlanConfiguration": {
+          "configurationId": "1",
+          "configurationName": "Test Scheme Action"
+        }
+      }
+    ],
+    "environmentDescription": "Dynamic Island · Built with macOS 26.6.2",
+    "expectedFailures": 0,
+    "failedTests": 0,
+    "finishTime": 1792137742.647,
+    "passedTests": 6,
+    "result": "Passed",
+    "skippedTests": 0,
+    "startTime": 1792137721.066,
+    "statistics": [],
+    "testFailures": [],
+    "title": "Test - Dynamic Island",
+    "topInsights": [],
+    "totalTestCount": 6
+  },
+  "sourceSHA256": {
+    "DynamicIsland/DynamicIslandApp.swift": "ba4e11ab35448cb59e2589940d2649ac3e9494e007e3a61de6be75b308e97637",
+    "DynamicIsland/IslandQuitAnimation.swift": "7a38aedc1c35108da586e74efc9552d3a1f4b6429abcd8c4cfc0f65146dc5ec7",
+    "DynamicIsland/IslandView.swift": "66790be54325fdf44a2896c17819fc9af10b981b8c45c602d309b6e199083b6a",
+    "DynamicIslandTests/IslandQuitCancellationTests.swift": "12ed032be051b6f331022dfee1fd1315e8f9ea43f9725b3bede83c94c10c0db8"
+  },
+  "screenshots": {
+    "before.png": {
+      "originalPath": "/tmp/dynamic-island-t35-quit-cancellation-20261016-fixed/attachments/6D00073F-20B9-4E62-A201-8DDF7361BCC7.png",
+      "sha256": "1780bec5a7b15801b47e517eba07e1e288264a04790276c19dffcc105b79ce74"
+    },
+    "faded.png": {
+      "originalPath": "/tmp/dynamic-island-t35-quit-cancellation-20261016-fixed/attachments/65BEE0AC-3516-4172-BA8D-1F58E2E76740.png",
+      "sha256": "efd8f1ced6e31f5712186af536ef73c2c27c092157d68170405219c8ed028416"
+    },
+    "restored.png": {
+      "originalPath": "/tmp/dynamic-island-t35-quit-cancellation-20261016-fixed/attachments/0660DECA-9302-42F0-B62C-7FD6C3115B3E.png",
+      "sha256": "1780bec5a7b15801b47e517eba07e1e288264a04790276c19dffcc105b79ce74"
+    },
+    "mid-animation-restored.png": {
+      "originalPath": "/tmp/dynamic-island-t35-quit-cancellation-20261016-fixed/attachments/F91F95C9-2DC5-4105-BFF2-70901ED939F3.png",
+      "sha256": "1780bec5a7b15801b47e517eba07e1e288264a04790276c19dffcc105b79ce74"
+    }
+  },
+  "compilerRepair": "Reduce Motion is a read-only SwiftUI environment value in this SDK. Tests read the system preference and explicitly skip when enabled rather than modifying user settings.",
+  "fullCI": {
+    "devicesAndConfigurations": [
+      {
+        "device": {
+          "architecture": "arm64",
+          "deviceId": "00008132-001E49513A0B801C",
+          "deviceName": "My Mac",
+          "modelName": "MacBook Air",
+          "osBuildNumber": "25G83",
+          "osVersion": "26.6.2",
+          "platform": "macOS"
+        },
+        "expectedFailures": 0,
+        "failedTests": 0,
+        "passedTests": 889,
+        "skippedTests": 1,
+        "testPlanConfiguration": {
+          "configurationId": "1",
+          "configurationName": "Test Scheme Action"
+        }
+      }
+    ],
+    "environmentDescription": "Dynamic Island · Built with macOS 26.6.2",
+    "expectedFailures": 0,
+    "failedTests": 0,
+    "finishTime": 1792137869.687,
+    "passedTests": 889,
+    "result": "Passed",
+    "skippedTests": 1,
+    "startTime": 1792137768.893,
+    "statistics": [
+      {
+        "subtitle": "1 test run",
+        "title": "1 test collected performance metrics"
+      }
+    ],
+    "testFailures": [],
+    "title": "Test - Dynamic Island",
+    "topInsights": [
+      {
+        "category": "Longest Test Runs",
+        "impact": "58% of duration",
+        "text": "7 longest test runs with outlier durations exceeding 2.61s (three standard deviations)"
+      }
+    ],
+    "totalTestCount": 890
+  },
+  "T35": "in progress; real 15-minute and remaining actual UI acceptance still pending",
+  "normalReleaseBuild": "passed",
+  "fullResultBundle": "/tmp/dynamic-island-t35-final-20261016/TestResults.xcresult",
+  "fullLog": "/tmp/dynamic-island-t35-final-20261016-ci.log",
+  "actualUI": {
+    "scope": "Ordinary Release sandbox/hardened/JIT copy. App-menu quit with a pending preview; local test directory identity was deliberately replaced, then restored.",
+    "verified": [
+      "Cleanup failure preserves both original held directory and replacement identity; does not delete a replacement",
+      "Host displays cleanupFailed, retains current review and disables install",
+      "Retry cancel succeeds after restoring the original directory identity",
+      "Installed plugin remains running and storage permission remains granted",
+      "Second normal quit succeeds and owned Staging is empty"
+    ],
+    "doesNotClaim": "Animated cancellation is covered by the focused NSHostingView render/input tests; this actual fault case uses the standard app menu.",
+    "screenshots": {
+      "pending-import-review.jpg": {
+        "originalPath": "/tmp/dynamic-island-t35-final-20261016/pending-import-review.jpg",
+        "sha256": "bc68a55cbda79960ba754b7a4616a7b694768cbb7b01473290f166bc256446dd"
+      },
+      "cleanup-refused-exit-remains-reviewing.jpg": {
+        "originalPath": "/tmp/dynamic-island-t35-final-20261016/cleanup-refused-exit-remains-reviewing.jpg",
+        "sha256": "3dbf51b8a7a801ac4ded1853de5711dc0b2dabaa0e8823bb37a44c71917ea8b3"
+      }
+    }
+  }
+}

@@ -1,0 +1,87 @@
+{
+  "devicesAndConfigurations": [
+    {
+      "device": {
+        "architecture": "arm64",
+        "deviceId": "00008132-001E49513A0B801C",
+        "deviceName": "My Mac",
+        "modelName": "MacBook Air",
+        "osBuildNumber": "25G83",
+        "osVersion": "26.6.2",
+        "platform": "macOS"
+      },
+      "expectedFailures": 0,
+      "failedTests": 0,
+      "passedTests": 794,
+      "skippedTests": 1,
+      "testPlanConfiguration": {
+        "configurationId": "1",
+        "configurationName": "Test Scheme Action"
+      }
+    }
+  ],
+  "environmentDescription": "Dynamic Island · Built with macOS 26.6.2",
+  "expectedFailures": 0,
+  "failedTests": 0,
+  "finishTime": 1792048011.328,
+  "passedTests": 794,
+  "result": "Passed",
+  "skippedTests": 1,
+  "startTime": 1792047948.448,
+  "statistics": [
+    {
+      "subtitle": "1 test run",
+      "title": "1 test collected performance metrics"
+    }
+  ],
+  "testFailures": [],
+  "title": "Test - Dynamic Island",
+  "topInsights": [
+    {
+      "category": "Longest Test Runs",
+      "impact": "56% of duration",
+      "text": "3 longest test runs with outlier durations exceeding 2.38s (three standard deviations)"
+    }
+  ],
+  "totalTestCount": 795,
+  "baseCommit": "88a3351",
+  "ordinaryReleaseBuildPassed": true,
+  "testResults": "/tmp/dynamic-island-t35-countdown-20261015-final/TestResults.xcresult",
+  "log": "/tmp/dynamic-island-t35-countdown-20261015-final-ci.log",
+  "sourceSHA256": {
+    "DynamicIsland/Plugins/PluginActionSession.swift": "32c50d564b5fce8c3be56f73c79bc5acc0b5bbf54e4de1c4ee0de45ed7b3278b",
+    "DynamicIsland/Plugins/PluginBridgeTransport.swift": "e2a4353cf62c158dd8bda444c0713ad4c517418a9cd0356aa743cd04fabd3072",
+    "DynamicIsland/Plugins/PluginCountdownBroker.swift": "4950f4648e8ad94f21f92aa1de3117fc9386cd9117975405cb1757e8bc4c5a56",
+    "DynamicIsland/Plugins/PluginCountdownSession.swift": "eb90d7af9991ec8115817bc765d2937778e57ac242bcc8bc990f2fdaa7d22dfa",
+    "DynamicIsland/Plugins/PluginCountdownWire.swift": "bee4027a6d89a82fc14b76cfab9f5291fff1b8d1f4a7f5847a2c3f48b309da65",
+    "DynamicIsland/Plugins/PluginJSBridge.swift": "7df8cc6115564f0a071217aa64b18da8d05f8c004abab57de99d5707ea0fdd32",
+    "DynamicIsland/Plugins/PluginJSBridgeBootstrap.swift": "1b92677164464ecb9e18e395ba24d250d508a69d81e9f085149145b013b1954a",
+    "DynamicIsland/Plugins/PluginLifecycleBridge.swift": "bdd1b542407261eebde7a72ec3d43fd01e8bb9f27758c7bde2e343a4541a1782",
+    "DynamicIsland/Plugins/PluginManifest.swift": "d9e99b411798de7dfb0412c33c69744f8427b7aa7dddaf7c1ee4c483694ee6d5",
+    "DynamicIsland/Plugins/PluginRuntime.swift": "56bc99672a05658db07a85c5d24ff2d084ace3419f00d3cc4ef7701826146894",
+    "DynamicIslandTests/PluginCountdownActivationTests.swift": "3c61073e7584d4d492a90a4bfd8e23a6b86fe9a000da35d61fcca5676ce542fd",
+    "DynamicIslandTests/PluginCountdownBridgeTests.swift": "0cea3f98704a00e50e5d0e2d390abf374e0df5557791aabfe2e9782a1da7158d",
+    "DynamicIslandTests/PluginCountdownBrokerTests.swift": "3b61cafc908cedb7193aac0ff487a5de4e9353a4b59aef2d8faab87866b815af",
+    "DynamicIslandTests/PluginCountdownDeliveryTests.swift": "cdc3f28a46c1f70cbdc1d85c1406c75f3519c0fe6225ee4e02417542a5022ee4",
+    "DynamicIslandTests/PluginCountdownSDKTests.swift": "d5c5dda51133405495b1361511943949ccde353e82a2938fa4cfda046eb2e299",
+    "docs/plugin-system/schema/plugin-manifest-v1.schema.json": "f471e05cc470fcec8c610a73a76463820357d8771f79938e7a4ebe0093b999a0"
+  },
+  "newCountdownTests": {
+    "broker": 22,
+    "activation": 13,
+    "delivery": 14,
+    "bridge": 5,
+    "sdk": 8
+  },
+  "skipReason": "Existing explicit screenshot-matrix generation test",
+  "reviewFixes": [
+    "Separate Host offer from VM receipt ACK and retain unreceived completion across suspension or registration replacement",
+    "Reactivate owner only after factory callback admission checks",
+    "Recheck resource admission after activation consumption and atomically start/resume"
+  ],
+  "limitations": [
+    "No declarative time node or visible shared display tick yet",
+    "No official JS Pomodoro package or dedicated Swift removal yet",
+    "No device sleep/low-power/energy or final Pomodoro UI acceptance in this substep"
+  ]
+}

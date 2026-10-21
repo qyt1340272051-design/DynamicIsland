@@ -1,0 +1,113 @@
+{
+  "scope": "Historical 2026-10-20 output-clarity stable-candidate 8f4da7; no future SDK source change is included.",
+  "inspection": {
+    "capturedAtUTC": "2026-10-20T15:18:59.161179+00:00",
+    "auditRoot": "/tmp/dynamic-island-sdk-independent-release-20261020-wll7tmf7",
+    "canonical": "/Users/rong5/Dynamiclsland/artifacts/sdk/dynamic-island-sdk-1.0.0.zip",
+    "canonicalBytes": 84717,
+    "canonicalSHA256": "8f4da7d24c1def1db6087b9c9124b427761975c3458075248afb831217d161ab",
+    "archiveEntries": 54,
+    "manifestSourceFiles": 53,
+    "workspaceSourceFiles": 53,
+    "allManifestSourceFilesMatchWorkspaceAndArchive": true,
+    "zipCRCValid": true,
+    "manifestMetadata": {
+      "artifactFormatVersion": 1,
+      "manifestSchemaVersion": 1,
+      "minimumHostVersion": "0.6.0",
+      "sdkVersion": "1.0.0",
+      "status": "stable-candidate",
+      "wireAPIVersion": "1.0.0"
+    },
+    "license": "MIT",
+    "licenseSHA256": "72ab5fec769e2affe1fc9bdc33fc6b52b8bb35ff27907db3e4bb7d4ef43e8610",
+    "forbiddenPathFindings": [],
+    "knownSecretPatternFindings": [],
+    "extractedSDK": "/tmp/dynamic-island-sdk-independent-release-20261020-wll7tmf7/unpacked/DynamicIslandSDK",
+    "securityScanScope": "Hidden/cache/node_modules/key/credential filenames and four known credential patterns; not a proof against every possible secret."
+  },
+  "standaloneTests": {
+    "discovered": 40,
+    "passed": 38,
+    "skipped": 2,
+    "failed": 0,
+    "durationSeconds": 1.305,
+    "skipDetails": [
+      {
+        "test": "test_both_official_manifests_use_the_closed_host_vocabulary (test_validator.ValidatorTests)",
+        "reason": "Repository official examples are outside the portable SDK."
+      },
+      {
+        "test": "test_repository_wrapper_preserves_legacy_cli_and_archive_bytes (test_validator.ValidatorTests)",
+        "reason": "Repository compatibility wrapper is outside the portable SDK."
+      }
+    ],
+    "exitCode": 0,
+    "logSHA256": "2b2f612b7cb4e559d3069aba51d37ec41564b63b7b2f4a0512aeb52bfda954fd"
+  },
+  "reproducibility": {
+    "baselineSHA256": "8f4da7d24c1def1db6087b9c9124b427761975c3458075248afb831217d161ab",
+    "python": "3.9.6 (default, May 22 2026, 11:13:45) \n[Clang 21.0.0 (clang-2100.1.1.101)]",
+    "platform": "macOS-26.6.2-arm64-arm-64bit",
+    "zlibCompileVersion": "1.2.12",
+    "zlibRuntimeVersion": "1.2.12",
+    "sourceSDK": "/tmp/dynamic-island-sdk-independent-release-20261020-wll7tmf7/unpacked/DynamicIslandSDK",
+    "records": [
+      {
+        "command": [
+          "/Applications/Xcode.app/Contents/Developer/usr/bin/python3",
+          "-B",
+          "-m",
+          "unittest",
+          "discover",
+          "-s",
+          "tests",
+          "-p",
+          "test_*.py",
+          "-v"
+        ],
+        "cwd": "/tmp/dynamic-island-sdk-independent-release-20261020-wll7tmf7/unpacked/DynamicIslandSDK",
+        "exitCode": 0,
+        "log": "/tmp/dynamic-island-sdk-independent-release-20261020-wll7tmf7/standalone-python-tests.log"
+      },
+      {
+        "command": [
+          "/Applications/Xcode.app/Contents/Developer/usr/bin/python3",
+          "-B",
+          "tools/package_sdk.py",
+          "/tmp/dynamic-island-sdk-independent-release-20261020-wll7tmf7/repacked-1.zip"
+        ],
+        "cwd": "/tmp/dynamic-island-sdk-independent-release-20261020-wll7tmf7/unpacked/DynamicIslandSDK",
+        "exitCode": 0,
+        "log": "/tmp/dynamic-island-sdk-independent-release-20261020-wll7tmf7/repack-1.log",
+        "summary": {
+          "bytes": 84717,
+          "files": 53,
+          "sdkVersion": "1.0.0",
+          "sha256": "8f4da7d24c1def1db6087b9c9124b427761975c3458075248afb831217d161ab"
+        }
+      },
+      {
+        "command": [
+          "/Applications/Xcode.app/Contents/Developer/usr/bin/python3",
+          "-B",
+          "tools/package_sdk.py",
+          "/tmp/dynamic-island-sdk-independent-release-20261020-wll7tmf7/repacked-2.zip"
+        ],
+        "cwd": "/tmp/dynamic-island-sdk-independent-release-20261020-wll7tmf7/unpacked/DynamicIslandSDK",
+        "exitCode": 0,
+        "log": "/tmp/dynamic-island-sdk-independent-release-20261020-wll7tmf7/repack-2.log",
+        "summary": {
+          "bytes": 84717,
+          "files": 53,
+          "sdkVersion": "1.0.0",
+          "sha256": "8f4da7d24c1def1db6087b9c9124b427761975c3458075248afb831217d161ab"
+        }
+      }
+    ],
+    "repackedFilesByteIdenticalToEachOtherAndBaseline": true
+  },
+  "extractedSourceStillMatchesManifestAfterTests": true,
+  "repositoryEdits": false,
+  "xcodebuildInvoked": false
+}

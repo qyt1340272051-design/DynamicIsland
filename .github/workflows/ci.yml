@@ -31,6 +31,9 @@ jobs:
       - name: Show toolchain
         run: xcodebuild -version
 
+      - name: Install SDK type checker
+        run: npm ci --prefix SDK --ignore-scripts --no-audit --no-fund
+
       - name: Test and build
         run: ./Scripts/ci.sh
 

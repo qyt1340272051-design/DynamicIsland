@@ -14,7 +14,7 @@ body:
     attributes:
       label: Beta 版本
       description: 请填写 DMG 文件或 About 中显示的版本。
-      placeholder: v0.5.0
+      placeholder: v0.6.0-beta.1 (App 0.6.0 / build 3)
     validations:
       required: true
   - type: dropdown
@@ -54,7 +54,8 @@ body:
         - 音乐
         - 系统音量
         - 文件托盘与 AirDrop
-        - 秒表、番茄钟与倒计时
+        - 内置计时与番茄钟插件
+        - 插件管理、发现与权限
         - 安装、启动与权限
         - 全部正常
         - 其他
