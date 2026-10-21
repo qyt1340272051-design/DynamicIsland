@@ -1,0 +1,4 @@
+bb71e1b8be0ffe4c6ed86a18e9a81c96a664bde6	refs/tags/v0.6.0-beta.1
+ebc99064232e7063a6f80e7d3e94e2781eca7184	refs/tags/v0.6.0-beta.1^{}
+4a6de2495c95b828817b28c31b578bc14e08d2ff	refs/tags/v0.6.0-beta.2
+eacec4d1d385bc90946e8d0df1731dbd22c23428	refs/tags/v0.6.0-beta.2^{}

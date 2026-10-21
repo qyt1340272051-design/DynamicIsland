@@ -34,11 +34,17 @@
 
 用户要求开始下一步任务后，[T38 SDK 1.0.0](t38-sdk-release-20261020.md)已正式公开，并通过三构件匿名下载、摘要、53 源文件和真实 Quick Start 打包验证。当时 **38 项 verified / 2 项 in progress**；T39 保留新开发者无指导构建安装体验，T40 保留官方插件包与目录发布、真实网络安装。补充 U01 已独立验收。SDK 标签只推送 SDK 专用源码树，主程序 0.6.0 安装包另行处理。
 
-## 2026-10-20/21 官方插件与 Registry 公开（当前）
+## 2026-10-20/21 官方插件与 Registry 公开（T40 发布时）
 
 [T40 发布与公网验收](t40-registry-publication-20261020.md)及[结构化结果](evidence/t40-publication-20261020/result.json)已关闭原 T40：`plugins-0.6.0` prerelease 四资产匿名 HTTP 200 / 字节摘要一致；仅修改 Registry 两个文件的 PR #3 通过必需 Test and build 后正常 squash 合入 main，merge `7193cdc5021b603abd3a046fed74b027d07c177a`。真实生产 Host 分别通过固定 SHA 目录与默认 main 官方 URL 的网络下载 / 安装，默认来源明确为 `defaultSource=true`；安装后停用 / requested、逐项测试临时授权、VM 预设 KV、新 Host 对象图的磁盘恢复及 Staging 清空均已核对。Registry 回归 29 total / 28 passed / 1 skipped / 0 failures，跳过项为锁屏原生 AppKit 输入，Release 构建通过。
 
 普通 Release 发现页已实测初始离线、点击刷新显示两个公开条目并正常退出；本轮 GUI 安装未完成。Host 对象图恢复不记作 App 进程重启，本轮没有新增真实 GitHub 数据 / Open 结论，既有物理验收按原范围保留。当前 **39 项 verified / 1 项 in progress**；T39 的独立新作者人工门槛按当前安排先跳过并保留，不新增强制人工作业。主程序 0.6.0 安装包与整体 Plugin 1.0 验收继续分别管理。
+
+## 2026-10-21 App 0.6.0 beta.2 公开（当前）
+
+[App 发布与公开构件核验](app-0.6.0-beta.2-release-20261021.md)已完成：PR #5、main 和 beta.2 标签的完整检查均为 1087 passed / 5 skipped / 0 failures，Release 构建通过；标签流水线公开三个未公证 prerelease 资产。三个文件匿名 HTTP 200 下载，DMG 实际摘要、App 0.6.0/build4、双架构、签名与 entitlement 独立核验通过，只读挂载后正常卸载。beta.1 源码标签及失败记录保持原样，SDK 1.0.0 源码未改。
+
+此前真实目录 GUI 安装缺口已另行关闭：普通 Release build3 的全新隔离副本完成两个官方包的真实下载、预览和显式停用安装，权限均 requested，正常退出。它与公开 beta.2 DMG 的只读核验分别记录。当前仍为 **39 verified / 1 in progress**；T39 独立新作者、九项硬件 Beta 场景和干净 Mac 首次安装继续待人工，按用户安排先跳过。本次为 App 开发预览发布，不代表整体 Plugin 1.0 验收完成。
 
 ## Phase 0 — 准备阶段：项目审计、分支与基线
 

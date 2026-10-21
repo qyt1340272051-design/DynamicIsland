@@ -1,0 +1,51 @@
+{
+  "assets": [
+    {
+      "apiUrl": "https://api.github.com/repos/qyt1340272051-design/DynamicIsland/releases/assets/661330365",
+      "contentType": "application/x-apple-diskimage",
+      "createdAt": "2026-10-21T04:19:47Z",
+      "digest": "sha256:5168a80105a7e561154940d59fa8d3796443c22471d5ed45b1638bf2c194766b",
+      "downloadCount": 0,
+      "id": "RA_kwDOUSAKJ84naxm9",
+      "label": "",
+      "name": "Dynamic-Island-0.6.0-beta.2-local.dmg",
+      "size": 5554615,
+      "state": "uploaded",
+      "updatedAt": "2026-10-21T04:19:48Z",
+      "url": "https://github.com/qyt1340272051-design/DynamicIsland/releases/download/v0.6.0-beta.2/Dynamic-Island-0.6.0-beta.2-local.dmg"
+    },
+    {
+      "apiUrl": "https://api.github.com/repos/qyt1340272051-design/DynamicIsland/releases/assets/661330362",
+      "contentType": "application/octet-stream",
+      "createdAt": "2026-10-21T04:19:47Z",
+      "digest": "sha256:33e644f4f9d220be9c9dd8b5c88ed88b06ff3e9e605f4dab7e71744e6bc3ed01",
+      "downloadCount": 0,
+      "id": "RA_kwDOUSAKJ84naxm6",
+      "label": "",
+      "name": "Dynamic-Island-0.6.0-beta.2-local.dmg.sha256",
+      "size": 104,
+      "state": "uploaded",
+      "updatedAt": "2026-10-21T04:19:47Z",
+      "url": "https://github.com/qyt1340272051-design/DynamicIsland/releases/download/v0.6.0-beta.2/Dynamic-Island-0.6.0-beta.2-local.dmg.sha256"
+    },
+    {
+      "apiUrl": "https://api.github.com/repos/qyt1340272051-design/DynamicIsland/releases/assets/661330361",
+      "contentType": "application/json",
+      "createdAt": "2026-10-21T04:19:47Z",
+      "digest": "sha256:cc30098813ea4ce1726ce7884754dd0d86f134ac871d4caf2bc590c8d454e678",
+      "downloadCount": 0,
+      "id": "RA_kwDOUSAKJ84naxm5",
+      "label": "",
+      "name": "Dynamic-Island-0.6.0-beta.2-local.json",
+      "size": 321,
+      "state": "uploaded",
+      "updatedAt": "2026-10-21T04:19:47Z",
+      "url": "https://github.com/qyt1340272051-design/DynamicIsland/releases/download/v0.6.0-beta.2/Dynamic-Island-0.6.0-beta.2-local.json"
+    }
+  ],
+  "isDraft": false,
+  "isPrerelease": true,
+  "name": "Dynamic Island v0.6.0-beta.2 (未公证测试版)",
+  "tagName": "v0.6.0-beta.2",
+  "url": "https://github.com/qyt1340272051-design/DynamicIsland/releases/tag/v0.6.0-beta.2"
+}

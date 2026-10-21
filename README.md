@@ -6,7 +6,7 @@
 
 一个贴合 Mac 刘海区域的开源 SwiftUI 菜单栏应用。提供系统音量、Apple Music、文件托盘、AirDrop、内置计时和可安装插件；通过统一 Activity 展示紧凑提示与展开工具。
 
-> 当前源码为 App `0.6.0` 开发预览，候选标签 `v0.6.0-beta.2`（build 4）；下载以对应 Release 实际资产为准。测试 DMG 使用 ad hoc 签名，未经 Apple 公证，不是 Developer ID 正式安装包。首次运行可能被 macOS 拦截；请先核对可信来源和 SHA-256，再按下方步骤手动批准。插件系统仍保留新作者独立体验与跨设备验收，不代表整个 Plugin 1.0 已验收。
+> App `0.6.0` 开发预览已发布：[v0.6.0-beta.2（build 4）](https://github.com/qyt1340272051-design/DynamicIsland/releases/tag/v0.6.0-beta.2)。测试 DMG 使用 ad hoc 签名，未经 Apple 公证，不是 Developer ID 正式安装包。首次运行可能被 macOS 拦截；请先核对可信来源和 SHA-256，再按下方步骤手动批准。插件系统仍保留新作者独立体验与跨设备验收，不代表整个 Plugin 1.0 已验收。
 
 ## 界面预览
 
@@ -43,14 +43,15 @@
 ## 环境要求
 
 - macOS 26.0 或更高版本
-- Xcode 26.6
-- 随 Xcode 提供的 Swift 6 工具链；工程当前采用 Swift 5 语言模式
+- 从源码构建需 Xcode 26.6 及其 Swift 6 工具链；工程当前采用 Swift 5 语言模式。安装预编译 DMG 无需 Xcode。
 
 刘海 MacBook 是主要使用场景；无刘海内建屏幕和外接显示器也有对应的几何回退与模拟测试。
 
 ## 快速开始
 
-查看 [App 0.6.0 开发预览 Release](https://github.com/qyt1340272051-design/DynamicIsland/releases/tag/v0.6.0-beta.2)，以该页实际提供的 `-local.dmg`、校验和及 manifest 为准；若尚无资产，可从源码运行：
+从 [App 0.6.0 开发预览 Release](https://github.com/qyt1340272051-design/DynamicIsland/releases/tag/v0.6.0-beta.2)下载 `Dynamic-Island-0.6.0-beta.2-local.dmg`、对应 `.dmg.sha256` 和 `.json`。公开下载的三个文件已核对摘要，DMG 的版本、双架构与签名已独立检查；完整范围见[发布核验记录](docs/plugin-system/app-0.6.0-beta.2-release-20261021.md)。
+
+从源码运行：
 
 ```bash
 git clone https://github.com/qyt1340272051-design/DynamicIsland.git

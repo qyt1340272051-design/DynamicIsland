@@ -1,6 +1,6 @@
 # 发布 Dynamic Island
 
-当前采用 GitHub **公开测试预发布**。本轮候选为 App `0.6.0`（build 4）、标签 `v0.6.0-beta.2`。每个 `v*` Tag 在 macOS CI 上测试，再通过 `Scripts/release.sh --local` 生成双架构 DMG、SHA-256 和 JSON manifest，作为 GitHub 预发布附件提供。下载以对应 Release 实际资产为准。
+当前采用 GitHub **公开测试预发布**。App `0.6.0`（build 4）、标签 `v0.6.0-beta.2` 已发布，[发布记录](plugin-system/app-0.6.0-beta.2-release-20261021.md)保存源码身份、CI、公开下载和独立 DMG 核验。每个 `v*` Tag 在 macOS CI 上测试，再通过 `Scripts/release.sh --local` 生成双架构 DMG、SHA-256 和 JSON manifest，作为 GitHub 预发布附件提供。
 
 产物只有 ad hoc 本地签名，**没有 Developer ID 签名或 Apple 公证**，不能承诺下载后双击即可运行。九项真机 Beta 场景与 T39 新作者独立上手仍待验收；开发预览用于收集证据，不表示整个 Plugin 1.0 或稳定版出口条件已通过。状态见 [Beta 手册](BETA_TESTING.md)与[插件计划](plugin-system/PROGRESS.md)。
 
@@ -30,6 +30,8 @@ RELEASE_TAG=v0.6.0-beta.2 ./Scripts/release.sh --local
 默认输出 `build/release/Dynamic-Island-0.6.0-beta.2-local.dmg`、`.dmg.sha256` 和 `.json`。`notarized` 必须为 `false`；保留 `-local` 标识，不要改名为正式签名安装包。本地构建不自动上传。
 
 ## Tag 与自动预发布
+
+下方命令保留本轮已执行的标签作为过程示例。后续发布需先更新版本和 build、选择尚不存在的新标签；已发布的 `v0.6.0-beta.2` 标签与资产保持不变。
 
 1. 确认发布提交已经进入 `main` 且 CI 通过，记录对应 commit；检查同名 Tag / Release 不存在。
 2. 在已审阅的 `main` 目标提交创建并推送 annotated Tag，例如：
@@ -64,7 +66,7 @@ shasum -a 256 -c Dynamic-Island-0.6.0-beta.2-local.dmg.sha256
 
 - App 的 `CFBundleShortVersionString` 使用纯数字三段式，例如 `0.6.0`。
 - Git Tag 可使用 `v0.6.0-beta.2`，与文件名一致；当前流水线即使 Tag 没有后缀，也只能生成未公证测试预发布。
-- 每次提交 App 二进制递增 `CURRENT_PROJECT_VERSION`；本轮候选为 build 4。
+- 每次提交 App 二进制递增 `CURRENT_PROJECT_VERSION`；当前已发布预览为 build 4。
 - Tag 的三段版本必须与 `MARKETING_VERSION` 完全一致，否则发布脚本失败。
 
 如将来发布 Developer ID 版，须另行配置签名、Apple 公证与 staple，并在干净 Mac 上验证 Gatekeeper 自动放行。ad hoc 预览不能替代这些步骤。

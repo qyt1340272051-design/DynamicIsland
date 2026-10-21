@@ -1,0 +1,22 @@
+{
+  "headRefOid": "589452f2b8fcf2060b0a7f2aca4c5e19d1ced4db",
+  "mergeCommit": {
+    "oid": "eacec4d1d385bc90946e8d0df1731dbd22c23428"
+  },
+  "mergedAt": "2026-10-21T04:01:17Z",
+  "number": 5,
+  "state": "MERGED",
+  "statusCheckRollup": [
+    {
+      "__typename": "CheckRun",
+      "completedAt": "2026-10-21T04:01:01Z",
+      "conclusion": "SUCCESS",
+      "detailsUrl": "https://github.com/qyt1340272051-design/DynamicIsland/actions/runs/39541138606/job/119028904949",
+      "name": "Test and build",
+      "startedAt": "2026-10-21T03:54:43Z",
+      "status": "COMPLETED",
+      "workflowName": "CI"
+    }
+  ],
+  "url": "https://github.com/qyt1340272051-design/DynamicIsland/pull/5"
+}

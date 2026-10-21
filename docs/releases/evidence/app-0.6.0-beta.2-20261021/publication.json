@@ -1,0 +1,58 @@
+{
+  "status": "published-and-independently-verified",
+  "tag": "v0.6.0-beta.2",
+  "version": "0.6.0",
+  "build": "4",
+  "releaseURL": "https://github.com/qyt1340272051-design/DynamicIsland/releases/tag/v0.6.0-beta.2",
+  "prURL": "https://github.com/qyt1340272051-design/DynamicIsland/pull/5",
+  "sourceCommit": "eacec4d1d385bc90946e8d0df1731dbd22c23428",
+  "tagObject": "4a6de2495c95b828817b28c31b578bc14e08d2ff",
+  "sourceTree": "bdd86a0787f8f3d28c311ee678f1d5cced7f9eb5",
+  "sdkTree": "79bc3ace4e378dddf29eb332be171b9379daffee",
+  "notarized": false,
+  "prerelease": true,
+  "remoteCI": {
+    "runs": [
+      39541138606,
+      39541741218,
+      39542326315
+    ],
+    "each": {
+      "total": 1092,
+      "passed": 1087,
+      "skipped": 5,
+      "failed": 0,
+      "releaseBuildPassed": true
+    }
+  },
+  "allThreeAnonymousDownloadsHTTP200": true,
+  "independentArtifactAuditPassed": true,
+  "auditAppLaunched": false,
+  "normalDetach": true,
+  "assets": {
+    "Dynamic-Island-0.6.0-beta.2-local.dmg": {
+      "bytes": 5554615,
+      "sha256": "5168a80105a7e561154940d59fa8d3796443c22471d5ed45b1638bf2c194766b"
+    },
+    "Dynamic-Island-0.6.0-beta.2-local.dmg.sha256": {
+      "bytes": 104,
+      "sha256": "33e644f4f9d220be9c9dd8b5c88ed88b06ff3e9e605f4dab7e71744e6bc3ed01"
+    },
+    "Dynamic-Island-0.6.0-beta.2-local.json": {
+      "bytes": 321,
+      "sha256": "cc30098813ea4ce1726ce7884754dd0d86f134ac871d4caf2bc590c8d454e678"
+    }
+  },
+  "previousBeta1TagUnchanged": true,
+  "listenerNetworkRecoveryOnly": true,
+  "retainedHumanGates": [
+    "T39 independent new author walkthrough",
+    "nine beta hardware scenarios",
+    "clean Mac first installation"
+  ],
+  "plan": {
+    "verified": 39,
+    "inProgress": 1
+  },
+  "scope": "Publication receipt recorded after tag creation; no change to the released source/tag/assets"
+}

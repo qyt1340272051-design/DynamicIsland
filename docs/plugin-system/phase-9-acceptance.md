@@ -4,11 +4,17 @@
 
 当前实现记录：[SDK 候选复核](t38-stability-review-20261019.md)、[独立原包 Host 闭环](t38-independent-host-20261019.md)、[开发手册](phase-9-t39-developer-docs.md)、[Registry 核心](phase-9-t40-registry-core.md)、[发现与安装 UI](phase-9-t40-registry-ui.md)及[T40 公开结果](evidence/t40-publication-20261020/result.json)。较早的 [SDK 草案](phase-9-t38-sdk-draft.md)及「尚未开始 T39 / UI」记录表示对应提交时的状态，当前进度以 [PROGRESS](PROGRESS.md) 为准。
 
+## 2026-10-21 发布后归并
+
+- [App 0.6.0 beta.2 发布与公开构件核验](app-0.6.0-beta.2-release-20261021.md)已完成。PR #5、main 与标签的三次完整远端检查各为 1087 passed / 5 skipped / 0 failures，Release 构建通过；三个 prerelease 资产匿名下载 HTTP 200，公开 DMG 的摘要、App 0.6.0/build4、双架构、签名与 entitlement 经独立只读挂载核验通过，并正常卸载。未启动该 DMG 内的 App，不能记作干净 Mac 安装或 Intel 运行验收。
+- [真实目录 GUI 安装补验](../releases/evidence/app-0.6.0-beta.1-20261021/gui-result.json)使用普通 Release 0.6.0/build3 的全新隔离副本，从默认正式目录下载两款公开包，经实际预览与确认安装；包字节与公开构件一致，均保持停用、所有权限 requested，Staging / Storage 为空且正常退出。该项关闭此前 GUI 安装缺口，与 beta.2 DMG 的只读核验分别记录；没有新增授权、启用、真实 GitHub 数据或系统 Open 结论。
+- 原计划仍为 **39 verified / 1 in progress**。T39 独立新作者体验、九项硬件 Beta 场景及干净 Mac 首次安装继续按用户安排待人工；本次发布是未公证开发预览，不关闭整体 Plugin 1.0 门槛。下表保留 T40 发布当时及较早测试的原范围。
+
 ## 统一检查
 
 | 项目 | 证据与实际边界 |
 | --- | --- |
-| 功能 | SDK Hello 经正式 Host 解包、Validator、VM、ActivityManager、Router 完成点击更新、停用旧动作拒绝与重启归零。完整 CI 包含既有音乐、音量、充电、计时及插件回归；Registry 点击链路经过真实 AppKit 控件、受控测试传输和正式安装器。[T40 本轮公开链路](t40-registry-publication-20261020.md)另通过真实网络生产 Host 下载 / 安装、停用 / requested、逐项测试临时授权、VM 预设 KV、新 Host 对象图磁盘恢复与 Staging 清空；普通 Release 发现页刷新后两个公开条目已截图，本轮 GUI 安装未完成，对象图恢复未记为 App 进程重启。[T35 完成提示](evidence/t35-manual-20261019/result.json)及[T36 真实网络 / 系统 Open](evidence/t36-manual-20261019/result.json)已于 2026-10-19 验收，独立历史 Host 与当前 HEAD 的范围分别保留，本轮没有新增真实 GitHub 数据 / Open 结论。[T39 早期协助功能复测](evidence/t39-manual-20261019/result.json)已完成；[本轮 M05](t39-manual-retry-20261020.md)已在协助下确认打包成功、打开正确 Hello 预览，用户已安装启用，管理页显示共六款插件且 Hello 运行中；随后实际显示已点击 3 次，助手未点击计数；副本正常退出且 Staging 为空，首次独立作者体验仍待验证。 |
+| 功能 | SDK Hello 经正式 Host 解包、Validator、VM、ActivityManager、Router 完成点击更新、停用旧动作拒绝与重启归零。完整 CI 包含既有音乐、音量、充电、计时及插件回归；Registry 点击链路经过真实 AppKit 控件、受控测试传输和正式安装器。[T40 本轮公开链路](t40-registry-publication-20261020.md)另通过真实网络生产 Host 下载 / 安装、停用 / requested、逐项测试临时授权、VM 预设 KV、新 Host 对象图磁盘恢复与 Staging 清空；T40 发布时的普通 Release 发现页刷新后两个公开条目已截图，该次 GUI 安装未完成，对象图恢复未记为 App 进程重启；后续 build3 GUI 补验见上节。[T35 完成提示](evidence/t35-manual-20261019/result.json)及[T36 真实网络 / 系统 Open](evidence/t36-manual-20261019/result.json)已于 2026-10-19 验收，独立历史 Host 与当前 HEAD 的范围分别保留，本轮没有新增真实 GitHub 数据 / Open 结论。[T39 早期协助功能复测](evidence/t39-manual-20261019/result.json)已完成；[本轮 M05](t39-manual-retry-20261020.md)已在协助下确认打包成功、打开正确 Hello 预览，用户已安装启用，管理页显示共六款插件且 Hello 运行中；随后实际显示已点击 3 次，助手未点击计数；副本正常退出且 Staging 为空，首次独立作者体验仍待验证。 |
 | 架构 | SDK 暴露现有有限数据接口，不授予 SwiftUI / AppKit 或原生服务对象。Registry 是 Host 发现服务，归档继续走原 Extractor / Validator / Installer，不另建 Runtime 或绕过权限。发现 UI 不发布或执行 Activity。 |
 | 并发 | 目录刷新由一个任务拥有，取消 / 退出后的迟到结果丢弃。下载在 await 前占用共享导入槽位；本地导入、Finder 请求不能替换它。取消后迟到 review 必须清理，失败保留占用。模型在 MainActor，传输与安装使用既有 actor。 |
 | 性能 | 目录最多 256 KiB / 100 项，包最多 40 MiB；网络逐块受限，摘要与解包共用同一 Data，未新增临时下载文件。未实测公开下载吞吐或声称全应用内存 / 帧率不回退；[2026-10-19 T02 / T08 基线](t02-t08-acceptance-20261019.md)另行记录真实静置 CPU、物理内存及 CPU 能量计数，作为修正前冻结起点，未冒充新 UI 或重构前后对照。 |
@@ -25,7 +31,7 @@
 | --- | --- | --- |
 | T38 | 稳定有限接口、版本策略、许可、独立 CLI / 模板、可重复 ZIP、SDK 专用标签及三资产正式公开；仓库 40 项 SDK / 8 项 Host 契约，独立 38 passed / 2 repo-only skipped，匿名下载及实际 Hello 打包通过 | 已验收，见[发布记录](t38-sdk-release-20261020.md)。T39 新作者门槛继续独立保留；T40 采用另行公开链路证据验收。 |
 | T39 | 计划全部 13 主题、示例源码对照、独立 Quick Start 打包及真实 Host 执行；2026-10-19 的交互式 zsh 单行入口回归及用户协助功能复测通过，2026-10-20 补充成功输出和包路径说明 | 首轮 zsh 卡点保留；本轮 M05 已有终端输出解释与预览定位协助，协助功能复测已确认安装启用、实际计数 3 次及正常退出，不能当作独立新作者门槛通过。首次独立体验与约十分钟目标按当前安排先跳过人工走查并保留，状态仍为 in progress。 |
-| T40 | 严格目录、下载校验、发现 UI、共享安装与取消、显式确认 / disabled 提交；`plugins-0.6.0` prerelease 四公开资产匿名 HTTP 200 / 摘要一致，Registry 两文件 PR #3 通过必需 Test and build 后正常 squash 合入 main；真实生产 Host 固定 SHA 与默认 main 官方来源下载 / 安装及新对象图磁盘恢复通过 | 已验收，见[公开记录](t40-registry-publication-20261020.md)及[结构化结果](evidence/t40-publication-20261020/result.json)。本轮 GUI 证据覆盖发现页初始离线 / 刷新后的两公开条目与正常退出；实际 GUI 安装未完成，没有新增强制人工项。 |
+| T40 | 严格目录、下载校验、发现 UI、共享安装与取消、显式确认 / disabled 提交；`plugins-0.6.0` prerelease 四公开资产匿名 HTTP 200 / 摘要一致，Registry 两文件 PR #3 通过必需 Test and build 后正常 squash 合入 main；真实生产 Host 固定 SHA 与默认 main 官方来源下载 / 安装及新对象图磁盘恢复通过 | 已验收，见[公开记录](t40-registry-publication-20261020.md)及[结构化结果](evidence/t40-publication-20261020/result.json)。T40 发布时 GUI 证据仅覆盖发现页初始离线 / 刷新后的两公开条目与正常退出；后续 build3 的[真实 GUI 安装补验](../releases/evidence/app-0.6.0-beta.1-20261021/gui-result.json)已通过，完整范围见上节，不把对象图恢复当作 App 进程重启。 |
 
 ## 2026-10-19 作者走查发现与修正
 
@@ -40,3 +46,5 @@
 [本轮 M05 记录](t39-manual-retry-20261020.md)保留用户终端两条 `ok: true` 的实际成功输出、助手解释及正确包预览定位。用户已安装并启用 Hello，管理页显示共六款插件且 Hello 运行中；实际计数为 3 次，助手未点击计数；副本已正常退出，Staging 为空。用户后续回忆似乎没有查看 Swift 源码，估计打包 / 安装环节约需 1 分钟，未进行全流程计时。本次已有协助，不能据此认定独立新作者或完整约十分钟目标通过。剩余安排见[人工清单](MANUAL_ACCEPTANCE.md)。
 
 当前 T38 / T40 均为 `verified`，原计划 **39 verified / 1 in progress**；T39 的独立新作者构建安装门槛按当前安排先跳过并保留。公开分发包括 SDK 专用标签、`plugins-0.6.0` prerelease 与正式 Registry；PR #3 仅合入 Registry 两文件，merge 为 `7193cdc5021b603abd3a046fed74b027d07c177a`，完整 Host 开发分支未作为本次 Registry 变更合入。SDK 1.0.0 与 App 0.6.0、整体 Plugin 1.0 的验收分别管理。
+
+随后主 App 已经独立完成 [beta.2 公开发布](app-0.6.0-beta.2-release-20261021.md)，由 PR #5 合入 main 的源码生成 build4 安装包；这不改变前述 PR #3 的历史变更范围。SDK 1.0.0 源码和既有冻结资产保持不变，T39 与硬件 / 干净 Mac 人工门槛继续保留。

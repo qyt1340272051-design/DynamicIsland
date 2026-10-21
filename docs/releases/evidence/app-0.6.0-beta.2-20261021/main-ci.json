@@ -1,0 +1,84 @@
+{
+  "conclusion": "success",
+  "event": "push",
+  "headSha": "eacec4d1d385bc90946e8d0df1731dbd22c23428",
+  "jobs": [
+    {
+      "completedAt": "2026-10-21T04:07:04Z",
+      "conclusion": "success",
+      "databaseId": 119030798046,
+      "name": "Test and build",
+      "startedAt": "2026-10-21T04:01:26Z",
+      "status": "completed",
+      "steps": [
+        {
+          "completedAt": "2026-10-21T04:01:28Z",
+          "conclusion": "success",
+          "name": "Set up job",
+          "number": 1,
+          "startedAt": "2026-10-21T04:01:27Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-21T04:01:30Z",
+          "conclusion": "success",
+          "name": "Check out repository",
+          "number": 2,
+          "startedAt": "2026-10-21T04:01:28Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-21T04:01:30Z",
+          "conclusion": "success",
+          "name": "Show toolchain",
+          "number": 3,
+          "startedAt": "2026-10-21T04:01:30Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-21T04:01:31Z",
+          "conclusion": "success",
+          "name": "Install SDK type checker",
+          "number": 4,
+          "startedAt": "2026-10-21T04:01:30Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-21T04:07:00Z",
+          "conclusion": "success",
+          "name": "Test and build",
+          "number": 5,
+          "startedAt": "2026-10-21T04:01:31Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-21T04:07:00Z",
+          "conclusion": "skipped",
+          "name": "Upload test diagnostics",
+          "number": 6,
+          "startedAt": "2026-10-21T04:07:00Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-21T04:07:01Z",
+          "conclusion": "success",
+          "name": "Post Check out repository",
+          "number": 12,
+          "startedAt": "2026-10-21T04:07:00Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-21T04:07:02Z",
+          "conclusion": "success",
+          "name": "Complete job",
+          "number": 13,
+          "startedAt": "2026-10-21T04:07:01Z",
+          "status": "completed"
+        }
+      ],
+      "url": "https://github.com/qyt1340272051-design/DynamicIsland/actions/runs/39541741218/job/119030798046"
+    }
+  ],
+  "status": "completed",
+  "url": "https://github.com/qyt1340272051-design/DynamicIsland/actions/runs/39541741218"
+}

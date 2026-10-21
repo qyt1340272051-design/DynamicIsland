@@ -1,0 +1,63 @@
+{
+  "runs": [
+    {
+      "run": 39541138606,
+      "url": "https://github.com/qyt1340272051-design/DynamicIsland/actions/runs/39541138606",
+      "total": 1092,
+      "passed": 1087,
+      "skipped": 5,
+      "failed": 0,
+      "releaseBuildPassed": true,
+      "logSHA256": "7b83259022b0bce75c789f43f56cf9240dd385a9585e358e965c2b7a2f52fcbd",
+      "summaryLines": [
+        "Test and build\tTest and build\t2026-10-21T03:59:32.3485570Z \t Executed 1092 tests, with 5 tests skipped and 0 failures (0 unexpected) in 183.446 (184.240) seconds",
+        "Test and build\tTest and build\t2026-10-21T03:59:32.3487150Z \t Executed 1092 tests, with 5 tests skipped and 0 failures (0 unexpected) in 183.446 (184.242) seconds",
+        "Test and build\tTest and build\t2026-10-21T04:00:56.7720180Z Tests and Release build passed."
+      ]
+    },
+    {
+      "run": 39541741218,
+      "url": "https://github.com/qyt1340272051-design/DynamicIsland/actions/runs/39541741218",
+      "total": 1092,
+      "passed": 1087,
+      "skipped": 5,
+      "failed": 0,
+      "releaseBuildPassed": true,
+      "logSHA256": "453f17483fec369e0934d19f14596afba586819f390976b1317c85e5c0c87117",
+      "summaryLines": [
+        "Test and build\tTest and build\t2026-10-21T04:05:52.7982980Z \t Executed 1092 tests, with 5 tests skipped and 0 failures (0 unexpected) in 172.235 (173.470) seconds",
+        "Test and build\tTest and build\t2026-10-21T04:05:52.7983870Z \t Executed 1092 tests, with 5 tests skipped and 0 failures (0 unexpected) in 172.235 (173.473) seconds",
+        "Test and build\tTest and build\t2026-10-21T04:07:00.8395190Z Tests and Release build passed."
+      ]
+    },
+    {
+      "run": 39542326315,
+      "url": "https://github.com/qyt1340272051-design/DynamicIsland/actions/runs/39542326315",
+      "total": 1092,
+      "passed": 1087,
+      "skipped": 5,
+      "failed": 0,
+      "releaseBuildPassed": true,
+      "logSHA256": "7cab298a811af573e89cefb1f02379fcbd1a263035d420369ab1fcf4c16d707a",
+      "summaryLines": [
+        "Test and build\tTest and build\t2026-10-21T04:15:13.2510290Z \t Executed 1092 tests, with 5 tests skipped and 0 failures (0 unexpected) in 270.744 (272.256) seconds",
+        "Test and build\tTest and build\t2026-10-21T04:15:13.2515330Z \t Executed 1092 tests, with 5 tests skipped and 0 failures (0 unexpected) in 270.744 (272.258) seconds",
+        "Test and build\tTest and build\t2026-10-21T04:17:38.9091130Z Tests and Release build passed."
+      ]
+    }
+  ],
+  "skipReasons": {
+    "optInPublicGitHub": 1,
+    "optInPublicRegistry": 1,
+    "optInScreenSnapshotMatrix": 1,
+    "animatedQuitRunnerReduceMotionEnabled": 2
+  },
+  "localFullSuite": {
+    "total": 1092,
+    "passed": 1089,
+    "skipped": 3,
+    "failed": 0,
+    "scope": "before final six-line storage UI wait; six storage tests then passed locally; exact final source passed all three remote gates"
+  },
+  "noNewSkipsAdded": true
+}
