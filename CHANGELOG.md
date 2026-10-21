@@ -4,12 +4,13 @@
 
 ## [0.6.0-beta.2] - 2026-10-21
 
-App 0.6.0（build 4）开发预览候选，包含下方 beta.1 源码准备记录中的插件系统功能。beta.1 发布验证失败后递增标签与 build，下载以 beta.2 Release 实际资产为准，不覆盖旧标签。本轮仍采用 ad hoc 本地签名、未经 Apple 公证的测试 DMG；T39 新作者独立上手、干净 Mac 安装与九项跨设备 Beta 场景继续待验收，不代表整体 Plugin 1.0 或正式稳定版已完成。
+App 0.6.0（build 4）开发预览已[公开发布](https://github.com/qyt1340272051-design/DynamicIsland/releases/tag/v0.6.0-beta.2)，包含下方 beta.1 源码准备记录中的插件系统功能。beta.1 发布验证失败后递增标签与 build，原标签与失败记录保留。本轮采用 ad hoc 本地签名、未经 Apple 公证的测试 DMG；T39 新作者独立上手、干净 Mac 安装与九项跨设备 Beta 场景继续待验收，不代表整体 Plugin 1.0 或正式稳定版已完成。
 
 ### 验证调整
 
 - 修正 ActionMock 原生输入测试流程的事件处理与回调等待，继续验证按钮、Toggle、Slider 的真实输入及 JavaScript 回传，不取消必需发布测试。
-- 该调整针对测试流程，不据此宣称已确认或根治产品逻辑问题；新的 PR 与标签发布工作流仍须实际通过，才生成并分发本轮安装包。
+- 存储测试等待精确持久值提交后的 Promise 回调与界面提示更新，保留原业务和持久值断言。
+- PR、main 与标签流水线的完整检查均为 1087 passed / 5 skipped / 0 failures，Release 构建通过；公开三资产匿名下载、摘要及 DMG 独立核验通过，见[发布记录](docs/plugin-system/app-0.6.0-beta.2-release-20261021.md)。上述调整针对测试流程，未据此宣称已定位生产问题的唯一根因。
 
 ## [0.6.0-beta.1] - 2026-10-21
 

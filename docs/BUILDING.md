@@ -45,7 +45,7 @@ npm ci --prefix SDK --ignore-scripts --no-audit --no-fund
 
 ## 本地打包与测试预发布
 
-当前候选为 App `0.6.0`（build 4）、标签 `v0.6.0-beta.2`。在准备好的源码上执行：
+当前已发布开发预览为 App `0.6.0`（build 4）、标签 `v0.6.0-beta.2`，公开构件见[发布记录](plugin-system/app-0.6.0-beta.2-release-20261021.md)。需要从源码本地打包时，在准备好的源码上执行：
 
 ```bash
 RELEASE_TAG=v0.6.0-beta.2 ./Scripts/release.sh --local
