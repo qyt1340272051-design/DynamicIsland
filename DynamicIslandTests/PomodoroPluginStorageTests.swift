@@ -80,6 +80,12 @@ final class PomodoroPluginStorageTests: XCTestCase {
         try f.act("stop")
         try await f.waitForState("准备专注", minutes: 15)
         try await waitForSettings(f, equals: settings(15, "idle"))
+        // The Storage actor exposes the new value before the JavaScript
+        // Promise completion queues and publishes its cleared save hint.
+        // Observe that separate public UI commit instead of racing it.
+        try await f.waitUntil {
+            f.tool?.presentation.subtitle == "15 分钟 · 准备专注" && !f.hasUnsavedSettingsHint
+        }
         XCTAssertNil(try f.record())
         XCTAssertFalse(f.hasUnsavedSettingsHint)
         f.assertNoFailures()

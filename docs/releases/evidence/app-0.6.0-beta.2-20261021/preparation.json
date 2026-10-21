@@ -19,7 +19,8 @@
     "Wait for key before real mouse dispatch; up queued then down synchronously dispatched",
     "Bounded retry of native key requests only when no attached sheet",
     "No NSApp activation, OS settings, skip additions or callback/router substitute",
-    "App metadata build4, beta2 docs and matrix; production Swift and frozen SDK unchanged"
+    "App metadata build4, beta2 docs and matrix; production Swift and frozen SDK unchanged",
+    "Wait for the public cleared Pomodoro save hint after exact durable metadata assertion; no production/plugin change"
   ],
   "firstLocalFullCI": {
     "total": 1092,
@@ -58,6 +59,22 @@
     "full-ci.log": "8df7c71a52c8e69a21bbbf85f375efd7787d56d6b3e84e123a5258b99b713a21",
     "full-ci-final.log": "2d65ab9de705f430a257a68b0e274805f99098aeb222fb3c22be3e1ef68d6fc6",
     "stability.log": "71c52b81305c2fd842726406981e2a463490af9fc2b4ed828e17123a31e792f5",
-    "native-input-regression.log": "f65feaec75f94c833b42f19529149540ff94f006f0cff011b5c3c05a3b0ec5dd"
+    "native-input-regression.log": "f65feaec75f94c833b42f19529149540ff94f006f0cff011b5c3c05a3b0ec5dd",
+    "pr-ci-failed.log": "7e5fba35d993d6dd087ee6b20a9f8a3ee294aaa72b5ad517b815a2a1769cad63",
+    "pomodoro-storage-regression.log": "79519abc4b9157f2cba6a5d749988beecc740de3cf71d4dfb6045b2380f51552"
+  },
+  "firstPullRequestCI": {
+    "run": 39540252419,
+    "head": "26e88259a7cf4c6bcb3cb0c053d42fae1785f836",
+    "conclusion": "failure",
+    "failedTests": 1,
+    "failure": "PomodoroPluginStorageTests.testPresetActionsAndBusinessTransitionsSaveOnlyTheVersionedMetadata observed durable actor value before Promise completion published cleared hint",
+    "nativeInputTestsPassed": true
+  },
+  "pomodoroStorageRegression": {
+    "passed": 6,
+    "skipped": 0,
+    "failed": 0,
+    "scope": "after storage UI observation fix; full protected CI still required"
   }
 }
