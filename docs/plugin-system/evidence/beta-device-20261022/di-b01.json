@@ -101,7 +101,7 @@
       "playbackTest": "skipped-by-user-for-now"
     },
     "files": {
-      "status": "pending-human-drop",
+      "status": "partial-import-lock-control-and-single-removal-observed",
       "syntheticFilename": "DI-B01-test.txt",
       "originalTrayVisibleCount": 0,
       "airDropTransmission": false,
@@ -113,7 +113,19 @@
         "clearExecuted": false,
         "airDropPanelOpened": false,
         "preservedExistingItems": true
-      }
+      },
+      "importedVisibleName": "DI-B01-test.txt",
+      "visibleBytes": 91,
+      "uniqueSyntheticCopyHashMatched": true,
+      "lockControlToggleObserved": true,
+      "physicalLockHoldAfterPointerExitVerified": false,
+      "lockRestoredToOriginalUnlocked": true,
+      "singleRemoveObserved": true,
+      "remainingUIItems": 0,
+      "sourceRetainedUnchanged": true,
+      "temporaryDirectoryCountAfterRemoval": 2,
+      "clearExecuted": false,
+      "airDropPanelOpened": false
     },
     "cleanup": {
       "volumeZeroAndMuted": true,
@@ -127,7 +139,7 @@
     "Confirm actual default scaling and menu bar always visible.",
     "Verify slider interaction and physical volume HUD visibility.",
     "Run actual Apple Music controls and automatic artwork/metadata checks when the user is ready.",
-    "Complete synthetic file tray, lock, remove, safe clear and system AirDrop panel checks.",
+    "Verify physical lock hold; safe clear and AirDrop panel remain deferred because two pre-existing temporary files were preserved.",
     "Complete published-build official-plugin workflows and normal show/hide/quit checks.",
     "Current-device observations do not close other hardware, clean Mac installation or T39 new-author gates."
   ],
@@ -221,6 +233,36 @@
       "path": "captures/b01-volume-restored-after-key.jpg",
       "sha256": "585e67cc2bc57f2e854b87e46d0f7e85dadf43cc1ae17fef22602bc28546d4e0",
       "bytes": 38174
+    },
+    {
+      "path": "captures/b01-tray-imported.txt",
+      "sha256": "69a3b3c8e6700b2aac4dd7a48cfa0f6090f0cb7467bbd5b7659c6f973d8dcb1e",
+      "bytes": 715
+    },
+    {
+      "path": "captures/b01-tray-imported.jpg",
+      "sha256": "9a59424fa2ebfbd2d6e3b47b0c669f166dd4a873aac085dde64957a75163948b",
+      "bytes": 30844
+    },
+    {
+      "path": "captures/b01-tray-locked.txt",
+      "sha256": "b125116c5a29b606e3ae87ac6139e85b123ac47da6bc9392c296a63d675ed64b",
+      "bytes": 739
+    },
+    {
+      "path": "captures/b01-tray-locked.jpg",
+      "sha256": "dda6435fb0e259f2908a10f68e525f6d2dd39781344bec1a1738f2289e65df9f",
+      "bytes": 31502
+    },
+    {
+      "path": "captures/b01-tray-removed.txt",
+      "sha256": "b26a95d01c97e69d7f130e7ab6779a3e3bf460363d2ec77df426fa6ed17c5476",
+      "bytes": 520
+    },
+    {
+      "path": "captures/b01-tray-removed.jpg",
+      "sha256": "d3607d8669a95f429c732e77718ae3eff1a959d664527d46c6e54de868c796c5",
+      "bytes": 31426
     }
   ],
   "privacy": {
