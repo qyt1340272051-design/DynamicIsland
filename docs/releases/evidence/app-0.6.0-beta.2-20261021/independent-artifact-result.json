@@ -1,0 +1,187 @@
+{
+  "tag": "v0.6.0-beta.2",
+  "startedUTC": "2026-10-21T04:45:03.361811+00:00",
+  "ok": true,
+  "scope": "Already-downloaded public assets and read-only mounted App verification; no App launch",
+  "commands": [
+    {
+      "command": [
+        "hdiutil",
+        "verify",
+        "/Users/rong5/Dynamiclsland/build/release/v0.6.0-beta.2/Dynamic-Island-0.6.0-beta.2-local.dmg"
+      ],
+      "exitCode": 0,
+      "stdoutTail": "正在检查“Protective Master Boot Record (MBR : 0)”的校验和…\nProtective Master Boot Record (MBR :：已验证CRC32 $FBD8284B\n正在检查“GPT Header (Primary GPT Header : 1)”的校验和…\n GPT Header (Primary GPT Header : 1)：已验证CRC32 $51670F74\n正在检查“GPT Partition Data (Primary GPT Table : 2)”的校验和…\nGPT Partition Data (Primary GPT Tabl：已验证CRC32 $679D2AC1\n正在检查“ (Apple_Free : 3)”的校验和…\n                    (Apple_Free : 3)：已验证CRC32 $00000000\n正在检查“disk image (Apple_APFS : 4)”的校验和…\n         disk image (Apple_APFS : 4)：已验证CRC32 $7F527FA7\n正在检查“ (Apple_Free : 5)”的校验和…\n                    (Apple_Free : 5)：已验证CRC32 $00000000\n正在检查“GPT Partition Data (Backup GPT Table : 6)”的校验和…\nGPT Partition Data (Backup GPT Table：已验证CRC32 $679D2AC1\n正在检查“GPT Header (Backup GPT Header : 7)”的校验和…\n  GPT Header (Backup GPT Header : 7)：已验证CRC32 $123D6DAB\n已验证CRC32 $C341CC06\n",
+      "stderrTail": "hdiutil: verify: checksum of \"/Users/rong5/Dynamiclsland/build/release/v0.6.0-beta.2/Dynamic-Island-0.6.0-beta.2-local.dmg\" is VALID\n"
+    },
+    {
+      "command": [
+        "hdiutil",
+        "attach",
+        "/Users/rong5/Dynamiclsland/build/release/v0.6.0-beta.2/Dynamic-Island-0.6.0-beta.2-local.dmg",
+        "-nobrowse",
+        "-readonly",
+        "-mountpoint",
+        "/tmp/dynamic-island-public-artifact-aulflejy/mount",
+        "-plist"
+      ],
+      "exitCode": 0,
+      "stdoutTail": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!DOCTYPE plist PUBLIC \"-//Apple//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">\n<plist version=\"1.0\">\n<dict>\n\t<key>system-entities</key>\n\t<array>\n\t\t<dict>\n\t\t\t<key>content-hint</key>\n\t\t\t<string>GUID_partition_scheme</string>\n\t\t\t<key>dev-entry</key>\n\t\t\t<string>/dev/disk9</string>\n\t\t\t<key>potentially-mountable</key>\n\t\t\t<false/>\n\t\t\t<key>unmapped-content-hint</key>\n\t\t\t<string>GUID_partition_scheme</string>\n\t\t</dict>\n\t\t<dict>\n\t\t\t<key>content-hint</key>\n\t\t\t<string>41504653-0000-11AA-AA11-00306543ECAC</string>\n\t\t\t<key>dev-entry</key>\n\t\t\t<string>/dev/disk10s1</string>\n\t\t\t<key>mount-point</key>\n\t\t\t<string>/private/tmp/dynamic-island-public-artifact-aulflejy/mount</string>\n\t\t\t<key>potentially-mountable</key>\n\t\t\t<true/>\n\t\t\t<key>unmapped-content-hint</key>\n\t\t\t<string>41504653-0000-11AA-AA11-00306543ECAC</string>\n\t\t\t<key>volume-kind</key>\n\t\t\t<string>apfs</string>\n\t\t</dict>\n\t\t<dict>\n\t\t\t<key>content-hint</key>\n\t\t\t<string>Apple_APFS</string>\n\t\t\t<key>dev-entry</key>\n\t\t\t<string>/dev/disk9s1</string>\n\t\t\t<key>potentially-mountable</key>\n\t\t\t<false/>\n\t\t\t<key>unmapped-content-hint</key>\n\t\t\t<string>7C3457EF-0000-11AA-AA11-00306543ECAC</string>\n\t\t</dict>\n\t\t<dict>\n\t\t\t<key>content-hint</key>\n\t\t\t<string>EF57347C-0000-11AA-AA11-00306543ECAC</string>\n\t\t\t<key>dev-entry</key>\n\t\t\t<string>/dev/disk10</string>\n\t\t\t<key>potentially-mountable</key>\n\t\t\t<false/>\n\t\t\t<key>unmapped-content-hint</key>\n\t\t\t<string>EF57347C-0000-11AA-AA11-00306543ECAC</string>\n\t\t</dict>\n\t</array>\n</dict>\n</plist>\n",
+      "stderrTail": ""
+    },
+    {
+      "command": [
+        "lipo",
+        "-archs",
+        "/tmp/dynamic-island-public-artifact-aulflejy/mount/Dynamic Island.app/Contents/MacOS/Dynamic Island"
+      ],
+      "exitCode": 0,
+      "stdoutTail": "x86_64 arm64\n",
+      "stderrTail": ""
+    },
+    {
+      "command": [
+        "codesign",
+        "--verify",
+        "--deep",
+        "--strict",
+        "--verbose=2",
+        "/tmp/dynamic-island-public-artifact-aulflejy/mount/Dynamic Island.app"
+      ],
+      "exitCode": 0,
+      "stdoutTail": "",
+      "stderrTail": "/tmp/dynamic-island-public-artifact-aulflejy/mount/Dynamic Island.app: valid on disk\n/tmp/dynamic-island-public-artifact-aulflejy/mount/Dynamic Island.app: satisfies its Designated Requirement\n"
+    },
+    {
+      "command": [
+        "codesign",
+        "-d",
+        "--verbose=4",
+        "/tmp/dynamic-island-public-artifact-aulflejy/mount/Dynamic Island.app"
+      ],
+      "exitCode": 0,
+      "stdoutTail": "",
+      "stderrTail": "Executable=/private/tmp/dynamic-island-public-artifact-aulflejy/mount/Dynamic Island.app/Contents/MacOS/Dynamic Island\nIdentifier=com.rong5.dynamic-island-mac\nFormat=app bundle with Mach-O universal (x86_64 arm64)\nCodeDirectory v=20500 size=6845 flags=0x10002(adhoc,runtime) hashes=203+7 location=embedded\nVersionPlatform=1\nVersionMin=1703936\nVersionSDK=1705216\nHash type=sha256 size=32\nCandidateCDHash sha256=bf49774c41d551bc69c70d2bf5ed30e107390605\nCandidateCDHashFull sha256=bf49774c41d551bc69c70d2bf5ed30e1073906050c09c66f114176953e018aff\nHash choices=sha256\nCMSDigest=bf49774c41d551bc69c70d2bf5ed30e1073906050c09c66f114176953e018aff\nCMSDigestType=2\nExecutable Segment base=0\nExecutable Segment limit=2801664\nExecutable Segment flags=0x1\nPage size=16384\nCDHash=bf49774c41d551bc69c70d2bf5ed30e107390605\nSignature=adhoc\nInfo.plist entries=28\nTeamIdentifier=not set\nRuntime Version=26.5.0\nSealed Resources version=2 rules=13 files=2\nInternal requirements count=0 size=12\n"
+    },
+    {
+      "command": [
+        "codesign",
+        "-d",
+        "--entitlements",
+        ":-",
+        "/tmp/dynamic-island-public-artifact-aulflejy/mount/Dynamic Island.app"
+      ],
+      "exitCode": 0,
+      "stderrTail": "Executable=/private/tmp/dynamic-island-public-artifact-aulflejy/mount/Dynamic Island.app/Contents/MacOS/Dynamic Island\nwarning: Specifying ':' in the path is deprecated and will not work in a future release\n"
+    },
+    {
+      "command": [
+        "hdiutil",
+        "detach",
+        "/tmp/dynamic-island-public-artifact-aulflejy/mount"
+      ],
+      "exitCode": 0,
+      "stdoutTail": "\"disk9\" ejected.\n",
+      "stderrTail": ""
+    }
+  ],
+  "checks": {
+    "exactThreeAssetNames": true,
+    "manifestAndChecksumMatchActualBytes": true,
+    "diskImageIntegrity": true,
+    "applicationsLink": "/Applications",
+    "versionBuildBundleMinimumOSAndUniversalExecutable": true,
+    "distributionSignatureAndEntitlements": true
+  },
+  "cleanup": {
+    "mountCreated": true,
+    "normalDetach": true,
+    "temporaryDirectoryRemoved": true,
+    "temporaryDirectory": "/tmp/dynamic-island-public-artifact-aulflejy"
+  },
+  "assetsDirectory": "/Users/rong5/Dynamiclsland/build/release/v0.6.0-beta.2",
+  "assets": {
+    "Dynamic-Island-0.6.0-beta.2-local.dmg": {
+      "bytes": 5554615,
+      "sha256": "5168a80105a7e561154940d59fa8d3796443c22471d5ed45b1638bf2c194766b"
+    },
+    "Dynamic-Island-0.6.0-beta.2-local.dmg.sha256": {
+      "bytes": 104,
+      "sha256": "33e644f4f9d220be9c9dd8b5c88ed88b06ff3e9e605f4dab7e71744e6bc3ed01"
+    },
+    "Dynamic-Island-0.6.0-beta.2-local.json": {
+      "bytes": 321,
+      "sha256": "cc30098813ea4ce1726ce7884754dd0d86f134ac871d4caf2bc590c8d454e678"
+    }
+  },
+  "manifest": {
+    "sha256": "5168a80105a7e561154940d59fa8d3796443c22471d5ed45b1638bf2c194766b",
+    "product": "Dynamic Island",
+    "architectures": "x86_64 arm64",
+    "marketingVersion": "0.6.0",
+    "bundleIdentifier": "com.rong5.dynamic-island-mac",
+    "tag": "v0.6.0-beta.2",
+    "buildNumber": "4",
+    "artifact": "Dynamic-Island-0.6.0-beta.2-local.dmg",
+    "notarized": false
+  },
+  "mount": {
+    "readonlyRequested": true,
+    "nobrowse": true,
+    "devices": [
+      {
+        "dev-entry": "/dev/disk9",
+        "content-hint": "GUID_partition_scheme"
+      },
+      {
+        "dev-entry": "/dev/disk10s1",
+        "mount-point": "/private/tmp/dynamic-island-public-artifact-aulflejy/mount",
+        "content-hint": "41504653-0000-11AA-AA11-00306543ECAC"
+      },
+      {
+        "dev-entry": "/dev/disk9s1",
+        "content-hint": "Apple_APFS"
+      },
+      {
+        "dev-entry": "/dev/disk10",
+        "content-hint": "EF57347C-0000-11AA-AA11-00306543ECAC"
+      }
+    ]
+  },
+  "appInfo": {
+    "CFBundleShortVersionString": "0.6.0",
+    "CFBundleVersion": "4",
+    "CFBundleIdentifier": "com.rong5.dynamic-island-mac",
+    "CFBundleExecutable": "Dynamic Island",
+    "LSMinimumSystemVersion": "26.0",
+    "LSUIElement": true
+  },
+  "executable": {
+    "architectures": [
+      "x86_64",
+      "arm64"
+    ],
+    "sha256": "339773f56666bcc3a514500b70d9fa6cd21a8bbdc9c1d7682e83796a1584fb92",
+    "bytes": 6863376
+  },
+  "signature": {
+    "strictDeepVerificationPassed": true,
+    "adHoc": true,
+    "hardenedRuntime": true,
+    "metadata": "Executable=/private/tmp/dynamic-island-public-artifact-aulflejy/mount/Dynamic Island.app/Contents/MacOS/Dynamic Island\nIdentifier=com.rong5.dynamic-island-mac\nFormat=app bundle with Mach-O universal (x86_64 arm64)\nCodeDirectory v=20500 size=6845 flags=0x10002(adhoc,runtime) hashes=203+7 location=embedded\nVersionPlatform=1\nVersionMin=1703936\nVersionSDK=1705216\nHash type=sha256 size=32\nCandidateCDHash sha256=bf49774c41d551bc69c70d2bf5ed30e107390605\nCandidateCDHashFull sha256=bf49774c41d551bc69c70d2bf5ed30e1073906050c09c66f114176953e018aff\nHash choices=sha256\nCMSDigest=bf49774c41d551bc69c70d2bf5ed30e1073906050c09c66f114176953e018aff\nCMSDigestType=2\nExecutable Segment base=0\nExecutable Segment limit=2801664\nExecutable Segment flags=0x1\nPage size=16384\nCDHash=bf49774c41d551bc69c70d2bf5ed30e107390605\nSignature=adhoc\nInfo.plist entries=28\nTeamIdentifier=not set\nRuntime Version=26.5.0\nSealed Resources version=2 rules=13 files=2\nInternal requirements count=0 size=12\n"
+  },
+  "entitlements": {
+    "com.apple.security.app-sandbox": true,
+    "com.apple.security.automation.apple-events": true,
+    "com.apple.security.cs.allow-jit": true,
+    "com.apple.security.files.user-selected.read-write": true,
+    "com.apple.security.network.client": true,
+    "com.apple.security.scripting-targets": {
+      "com.apple.Music": [
+        "com.apple.Music.playback",
+        "com.apple.Music.library.read"
+      ]
+    }
+  },
+  "finishedUTC": "2026-10-21T04:45:16.929327+00:00"
+}

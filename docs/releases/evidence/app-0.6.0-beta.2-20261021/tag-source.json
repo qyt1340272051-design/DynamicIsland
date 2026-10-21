@@ -1,0 +1,9 @@
+{
+  "tag": "v0.6.0-beta.2",
+  "commit": "eacec4d1d385bc90946e8d0df1731dbd22c23428",
+  "tagObject": "4a6de2495c95b828817b28c31b578bc14e08d2ff",
+  "tree": "bdd86a0787f8f3d28c311ee678f1d5cced7f9eb5",
+  "sdkTree": "79bc3ace4e378dddf29eb332be171b9379daffee",
+  "mainCIPassed": true,
+  "previousTagUnchanged": true
+}

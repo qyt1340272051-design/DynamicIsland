@@ -1,0 +1,151 @@
+{
+  "conclusion": "success",
+  "event": "push",
+  "headSha": "eacec4d1d385bc90946e8d0df1731dbd22c23428",
+  "jobs": [
+    {
+      "completedAt": "2026-10-21T04:17:48Z",
+      "conclusion": "success",
+      "databaseId": 119032641898,
+      "name": "Test and build",
+      "startedAt": "2026-10-21T04:07:59Z",
+      "status": "completed",
+      "steps": [
+        {
+          "completedAt": "2026-10-21T04:08:01Z",
+          "conclusion": "success",
+          "name": "Set up job",
+          "number": 1,
+          "startedAt": "2026-10-21T04:08:00Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-21T04:08:08Z",
+          "conclusion": "success",
+          "name": "Check out repository",
+          "number": 2,
+          "startedAt": "2026-10-21T04:08:01Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-21T04:08:11Z",
+          "conclusion": "success",
+          "name": "Install SDK type checker",
+          "number": 3,
+          "startedAt": "2026-10-21T04:08:08Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-21T04:17:39Z",
+          "conclusion": "success",
+          "name": "Test and build",
+          "number": 4,
+          "startedAt": "2026-10-21T04:08:11Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-21T04:17:39Z",
+          "conclusion": "skipped",
+          "name": "Upload test diagnostics",
+          "number": 5,
+          "startedAt": "2026-10-21T04:17:39Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-21T04:17:41Z",
+          "conclusion": "success",
+          "name": "Post Check out repository",
+          "number": 10,
+          "startedAt": "2026-10-21T04:17:39Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-21T04:17:46Z",
+          "conclusion": "success",
+          "name": "Complete job",
+          "number": 11,
+          "startedAt": "2026-10-21T04:17:41Z",
+          "status": "completed"
+        }
+      ],
+      "url": "https://github.com/qyt1340272051-design/DynamicIsland/actions/runs/39542326315/job/119032641898"
+    },
+    {
+      "completedAt": "2026-10-21T04:19:51Z",
+      "conclusion": "success",
+      "databaseId": 119035567538,
+      "name": "Build and publish unnotarized test DMG",
+      "startedAt": "2026-10-21T04:17:54Z",
+      "status": "completed",
+      "steps": [
+        {
+          "completedAt": "2026-10-21T04:17:55Z",
+          "conclusion": "success",
+          "name": "Set up job",
+          "number": 1,
+          "startedAt": "2026-10-21T04:17:54Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-21T04:17:57Z",
+          "conclusion": "success",
+          "name": "Check out tagged source",
+          "number": 2,
+          "startedAt": "2026-10-21T04:17:55Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-21T04:19:42Z",
+          "conclusion": "success",
+          "name": "Build unnotarized test DMG",
+          "number": 3,
+          "startedAt": "2026-10-21T04:17:57Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-21T04:19:42Z",
+          "conclusion": "success",
+          "name": "Verify test artifact and checksum",
+          "number": 4,
+          "startedAt": "2026-10-21T04:19:42Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-21T04:19:44Z",
+          "conclusion": "success",
+          "name": "Upload release artifacts",
+          "number": 5,
+          "startedAt": "2026-10-21T04:19:42Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-21T04:19:48Z",
+          "conclusion": "success",
+          "name": "Publish GitHub release",
+          "number": 6,
+          "startedAt": "2026-10-21T04:19:44Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-21T04:19:49Z",
+          "conclusion": "success",
+          "name": "Post Check out tagged source",
+          "number": 12,
+          "startedAt": "2026-10-21T04:19:48Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-21T04:19:49Z",
+          "conclusion": "success",
+          "name": "Complete job",
+          "number": 13,
+          "startedAt": "2026-10-21T04:19:49Z",
+          "status": "completed"
+        }
+      ],
+      "url": "https://github.com/qyt1340272051-design/DynamicIsland/actions/runs/39542326315/job/119035567538"
+    }
+  ],
+  "status": "completed",
+  "url": "https://github.com/qyt1340272051-design/DynamicIsland/actions/runs/39542326315"
+}

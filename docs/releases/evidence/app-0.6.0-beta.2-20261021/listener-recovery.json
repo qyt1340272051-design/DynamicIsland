@@ -1,0 +1,7 @@
+{
+  "cause": "gh run watch API transport failed; authoritative completed run independently fetched",
+  "releaseRun": 39542326315,
+  "workflowRerun": false,
+  "tagReplaced": false,
+  "result": "remote workflow success"
+}
