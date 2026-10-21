@@ -17,7 +17,7 @@
 | 合入 main | 同上 | [CI 39541741218](https://github.com/qyt1340272051-design/DynamicIsland/actions/runs/39541741218) |
 | beta.2 标签 | 同上；后续打包与发布 job 均成功 | [Release 39542326315](https://github.com/qyt1340272051-design/DynamicIsland/actions/runs/39542326315) |
 
-五项 skip 是显式开启的真实 GitHub、真实 Registry、截图矩阵，以及 runner 开启 Reduce Motion 时不适用的两项动画退出测试。本机完整检查为 1089 passed / 3 skipped / 0 failures，相关原生输入 30 passed，稳定性脚本 49 passed。最后六行存储测试观察修正后，另有本机存储回归 6 passed；随后最终源码通过表中三个完整远端门槛。各次结果独立记录，不混作一次本机运行。
+五项 skip 是默认关闭、需显式开启的真实 GitHub、真实 Registry、截图矩阵选测，以及 runner 开启 Reduce Motion 时不适用的两项动画退出测试。本机完整检查为 1089 passed / 3 skipped / 0 failures，相关原生输入 30 passed，稳定性脚本 49 passed。最后六行存储测试观察修正后，另有本机存储回归 6 passed；随后最终源码通过表中三个完整远端门槛。各次结果独立记录，不混作一次本机运行。
 
 本轮修正测试窗口焦点、实际鼠标事件分派，以及 Storage actor 提交后等待 Promise 回调发布清除提示的观察边界。保留真实控件、JS 回调、精确持久值与业务断言，未新增 skip，未改生产插件或冻结 SDK。证据见[发布结果](../releases/evidence/app-0.6.0-beta.2-20261021/publication.json)、[逐轮 CI 汇总](../releases/evidence/app-0.6.0-beta.2-20261021/ci-verification.json)及[准备与失败记录](../releases/evidence/app-0.6.0-beta.2-20261021/preparation.json)。
 
