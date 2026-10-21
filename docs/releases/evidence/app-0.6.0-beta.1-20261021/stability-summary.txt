@@ -1,0 +1,11 @@
+	 Executed 8 tests, with 0 failures (0 unexpected) in 0.006 (0.007) seconds
+	 Executed 2 tests, with 0 failures (0 unexpected) in 0.001 (0.002) seconds
+	 Executed 2 tests, with 0 failures (0 unexpected) in 0.029 (0.030) seconds
+	 Executed 1 test, with 0 failures (0 unexpected) in 0.001 (0.001) seconds
+	 Executed 21 tests, with 0 failures (0 unexpected) in 0.114 (0.127) seconds
+	 Executed 10 tests, with 0 failures (0 unexpected) in 0.009 (0.010) seconds
+	 Executed 5 tests, with 0 failures (0 unexpected) in 0.002 (0.003) seconds
+	 Executed 49 tests, with 0 failures (0 unexpected) in 0.161 (0.192) seconds
+	 Executed 49 tests, with 0 failures (0 unexpected) in 0.161 (0.193) seconds
+** TEST SUCCEEDED **
+P3 stability matrix passed.
