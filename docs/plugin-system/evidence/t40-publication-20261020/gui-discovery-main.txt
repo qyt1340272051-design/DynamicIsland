@@ -1,0 +1,26 @@
+Window: "发现插件", App: Dynamic Island Registry Acceptance.
+0 standard window 发现插件, Secondary Actions: Raise
+	1 container
+		2 image puzzlepiece.extension
+		3 text 发现插件
+		4 button Description: 刷新目录, ID: plugin-registry-refresh
+		5 text 从项目目录查看可用插件
+		6 scroll area
+			7 text 番茄钟
+			8 button Description: 下载并查看, ID: plugin-registry-download-com.dynamicisland.pomodoro
+			9 text 版本 0.2.1 · 最低主程序 0.6.0 com.dynamicisland.pomodoro 来源：https://github.com/qyt1340272051-design/DynamicIsland GitHub
+			10 button Description: 下载并查看, ID: plugin-registry-download-com.dynamicisland.github
+			11 text 版本 0.1.0 · 最低主程序 0.6.0 com.dynamicisland.github 来源：https://github.com/qyt1340272051-design/DynamicIsland
+		12 text 目录提供来源信息，不代表身份认证。下载后仍需检查插件信息与权限；安装不会自动启用或授权。
+	13 close button
+	14 zoom button
+	15 minimize button
+	16 text 发现插件
+17 menu bar
+	18 Dynamic Island Registry Acceptance
+	19 Edit
+	20 View
+	21 Window
+	22 Help
+
+The focused UI element is 0 standard window 发现插件, Secondary Actions: Raise

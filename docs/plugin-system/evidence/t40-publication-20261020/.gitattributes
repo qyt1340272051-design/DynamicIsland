@@ -1,2 +1,6 @@
 independent-audit.txt -whitespace
 independent-prepare.txt -whitespace
+premerge-live.txt -whitespace
+default-main-live.txt -whitespace
+registry-regression.txt -whitespace
+release-build.txt -whitespace

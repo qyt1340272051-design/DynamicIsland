@@ -1,0 +1,8 @@
+{
+  "sourceApp": "/tmp/dynamic-island-ci-derived-data/Build/Products/Release/Dynamic Island.app",
+  "copyApp": "/tmp/dynamic-island-t40-publish-20261020/Dynamic Island Registry Acceptance.app",
+  "bundleID": "com.rong5.dynamic-island.acceptance.t40.20261020",
+  "baseHEAD": "a518361097c156585609f7bdf5173eeb3a3fb417",
+  "sourceExecutableSHA256": "b07921ad454b8f962022b5763b619ad0ea5e06b26354cd7765ff719ab101d079",
+  "changes": "Bundle ID and display name only, fresh test container, normal Release, no production Swift changes."
+}

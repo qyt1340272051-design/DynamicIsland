@@ -1,0 +1,20 @@
+{
+  "sourceCommit": "a518361097c156585609f7bdf5173eeb3a3fb417",
+  "pluginOnlyCommit": "e4f0bb373c9a6fb610c68f6d156261d9902033b7",
+  "pluginOnlyTree": "54b230ea665507a716997b1860220263a44438b2",
+  "tag": "plugins-0.6.0",
+  "files": {
+    "README.md": "013d9a29b4894643275fe8d8355e3b8a75e171201bbb6c153a97e2f8ae5dd237",
+    "LICENSE": "72ab5fec769e2affe1fc9bdc33fc6b52b8bb35ff27907db3e4bb7d4ef43e8610",
+    "pomodoro/LICENSE": "72ab5fec769e2affe1fc9bdc33fc6b52b8bb35ff27907db3e4bb7d4ef43e8610",
+    "pomodoro/README.md": "89c97f0d1fead5b10627778f631d278cda6ffaba3f6b3092816d0a7689afe4db",
+    "pomodoro/index.js": "6a0782e1788b009ddea8321aad4370ebc6d3d8b746315616b15e8bea0e03f6b2",
+    "pomodoro/manifest.json": "42e1f96131e433b47badce3acc2af88f0e0dc585f730690592f1423362b4fbb3",
+    "github/LICENSE": "72ab5fec769e2affe1fc9bdc33fc6b52b8bb35ff27907db3e4bb7d4ef43e8610",
+    "github/README.md": "bf9f4f0ac411296de98b810300d4530e08f9dc43ceeb358e7c526cc22bf0637d",
+    "github/index.js": "931812cfd596ee612e7ea5f1573d81b71597ec2499326aa25c4257b55b38c971",
+    "github/manifest.json": "bfb1c8d9b1f6efdafc896ce5964cd8acb5576b8ff52f3f389d95f5a842a644ed"
+  },
+  "hasParents": false,
+  "fullHostBranchIncluded": false
+}

@@ -8,9 +8,27 @@ final class PluginRegistryTests: XCTestCase {
     private let repository = URL(fileURLWithPath: #filePath).deletingLastPathComponent().deletingLastPathComponent()
     private let catalogURL = URL(string: "https://raw.githubusercontent.com/example/plugins/main/Registry/registry.json")!
 
-    func testRepositoryCatalogIsEmptyUntilActualReleaseAssetsExist() throws {
+    func testRepositoryCatalogPinsPublishedOfficialPluginReleaseAssets() throws {
         let data = try Data(contentsOf: repository.appendingPathComponent("Registry/registry.json"))
-        XCTAssertEqual(try PluginRegistryCatalog.decode(data).entries.count, 0)
+        let entries = try PluginRegistryCatalog.decode(data).entries
+        let expected = [
+            (id: "com.dynamicisland.pomodoro", name: "番茄钟", version: "0.2.1", archive: "pomodoro-0.2.1.dip",
+             hash: "444647bb7a2f40dc0c66418b62e94210c76f2b890f3df2681c2fd179ce5e25b2"),
+            (id: "com.dynamicisland.github", name: "GitHub", version: "0.1.0", archive: "github-0.1.0.dip",
+             hash: "5a090cbc251b48d34ffed3bd82d8fd5ff42214e7c6386b769e1ba70477bae0fa")
+        ]
+        XCTAssertEqual(entries.count, expected.count)
+        XCTAssertEqual(Set(entries.map(\.id)), Set(expected.map { $0.id }))
+        let source = "https://github.com/qyt1340272051-design/DynamicIsland"
+        for specification in expected {
+            let entry = try XCTUnwrap(entries.first { $0.id == specification.id })
+            XCTAssertEqual(entry.name, specification.name)
+            XCTAssertEqual(entry.version.description, specification.version)
+            XCTAssertEqual(entry.source.absoluteString, source)
+            XCTAssertEqual(entry.download.absoluteString, source + "/releases/download/plugins-0.6.0/" + specification.archive)
+            XCTAssertEqual(entry.minHostVersion.description, "0.6.0")
+            XCTAssertEqual(entry.hash, specification.hash)
+        }
     }
 
     func testCatalogPreservesExactIdentityAndRejectsDuplicateIDs() throws {

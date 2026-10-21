@@ -24,3 +24,7 @@ python3 Scripts/prepare-plugin-release.py --tag plugins-0.6.0 --output /tmp/dyna
 | GitHub 0.1.0 | `277c8eda20d2a34648e5255ccf39504c54d0f88b3173c8b361725e74531281a6` |
 
 没有以这些候选地址替换正式 Registry，也没有将本地打包通过写成真实公开网络安装通过。
+
+## 后续结果
+
+以上为 2026-10-19 本地准备时的历史状态与旧摘要。2026-10-20/21 已更新 README、重新冻结包，并完成公开发布、目录登记和真实生产 Host 网络安装，见 [T40 正式验收](t40-registry-publication-20261020.md)。公开包使用该后续记录的新摘要，不沿用本页旧候选身份。

@@ -1,0 +1,168 @@
+{
+  "task": "T40",
+  "status": "verified",
+  "startedLocalDate": "2026-10-20",
+  "completedUTC": "2026-10-20T16:04:56.241861+00:00",
+  "scope": "Official plugin assets + main Registry publication + production Host real-network install/runtime acceptance",
+  "hostBaseHEAD": "a518361097c156585609f7bdf5173eeb3a3fb417",
+  "release": {
+    "url": "https://github.com/qyt1340272051-design/DynamicIsland/releases/tag/plugins-0.6.0",
+    "tag": "plugins-0.6.0",
+    "draft": false,
+    "prerelease": true,
+    "sourceCommit": "e4f0bb373c9a6fb610c68f6d156261d9902033b7",
+    "sourceTree": "54b230ea665507a716997b1860220263a44438b2",
+    "parents": [],
+    "sourceFiles": 10,
+    "sdkFrozenUnchanged": true,
+    "anonymousAssets": 4
+  },
+  "packages": {
+    "status": "release-source-snapshot; publication verified separately",
+    "repository": "https://github.com/qyt1340272051-design/DynamicIsland",
+    "tag": "plugins-0.6.0",
+    "sources": {
+      "pomodoro-0.2.1.dip": {
+        "source": "docs/plugin-system/examples/pomodoro",
+        "filesSHA256": {
+          "manifest.json": "42e1f96131e433b47badce3acc2af88f0e0dc585f730690592f1423362b4fbb3",
+          "index.js": "6a0782e1788b009ddea8321aad4370ebc6d3d8b746315616b15e8bea0e03f6b2",
+          "README.md": "89c97f0d1fead5b10627778f631d278cda6ffaba3f6b3092816d0a7689afe4db",
+          "LICENSE": "72ab5fec769e2affe1fc9bdc33fc6b52b8bb35ff27907db3e4bb7d4ef43e8610"
+        },
+        "archiveBytes": 7319
+      },
+      "github-0.1.0.dip": {
+        "source": "docs/plugin-system/examples/github",
+        "filesSHA256": {
+          "manifest.json": "bfb1c8d9b1f6efdafc896ce5964cd8acb5576b8ff52f3f389d95f5a842a644ed",
+          "index.js": "931812cfd596ee612e7ea5f1573d81b71597ec2499326aa25c4257b55b38c971",
+          "README.md": "bf9f4f0ac411296de98b810300d4530e08f9dc43ceeb358e7c526cc22bf0637d",
+          "LICENSE": "72ab5fec769e2affe1fc9bdc33fc6b52b8bb35ff27907db3e4bb7d4ef43e8610"
+        },
+        "archiveBytes": 10215
+      }
+    },
+    "permissionRule": "Install disabled. Enabling grants no permissions. Review each declared permission."
+  },
+  "registry": {
+    "url": "https://raw.githubusercontent.com/qyt1340272051-design/DynamicIsland/main/Registry/registry.json",
+    "sha256": "9392649799c432bbf2f1efe1dd25e61956695abc1fa35c6a98d7975089d63c2f",
+    "bytes": 879,
+    "entries": 2,
+    "pr": "https://github.com/qyt1340272051-design/DynamicIsland/pull/3",
+    "headCommit": "7c198aee3ee8b839ec24c4bd702e11a7d0bbff5a",
+    "mergeCommit": "7193cdc5021b603abd3a046fed74b027d07c177a",
+    "requiredCheck": "Test and build",
+    "requiredCheckConclusion": "SUCCESS",
+    "branchProtectionBypassed": false,
+    "changedMainPaths": [
+      "Registry/README.md",
+      "Registry/registry.json"
+    ]
+  },
+  "tests": {
+    "candidatePublicRef": {
+      "passed": 1,
+      "skipped": 0,
+      "failed": 0,
+      "seconds": 7.715,
+      "defaultSource": false,
+      "summary": "premerge-live-summary.json",
+      "log": "premerge-live.txt"
+    },
+    "defaultOfficialSource": {
+      "passed": 1,
+      "skipped": 0,
+      "failed": 0,
+      "seconds": 8.23,
+      "defaultSource": true,
+      "summary": "default-main-live-summary.json",
+      "log": "default-main-live.txt"
+    },
+    "registryRegression": {
+      "total": 29,
+      "passed": 28,
+      "skipped": 1,
+      "failed": 0,
+      "skip": "Native AppKit real mouse input requires unlocked macOS session",
+      "summary": "registry-regression-summary.json",
+      "log": "registry-regression.txt"
+    },
+    "releaseBuild": {
+      "passed": true,
+      "log": "release-build.txt"
+    },
+    "productionTransport": "PluginRegistryClient URLSession, no URLProtocol or archive substitution",
+    "observed": [
+      "download and review do not install or execute",
+      "explicit installer confirmation",
+      "installed disabled with requested permissions",
+      "temporary per-permission Host decisions",
+      "real JavaScriptCore tool publication",
+      "safe 15-minute preset persisted without starting countdown",
+      "disable and old action refusal",
+      "fresh Host graph restores disk settings, enablement and grants",
+      "Staging empty"
+    ],
+    "restartScope": "Fresh Host service object graph in XCTest, not an App process restart",
+    "notAsserted": [
+      "volatile real GitHub CI/PR payload",
+      "system browser opening",
+      "new 15-minute natural completion"
+    ]
+  },
+  "gui": {
+    "app": "Dynamic Island Registry Acceptance",
+    "freshBundleID": "com.rong5.dynamic-island.acceptance.t40.20261020",
+    "initiallyInstalled": 0,
+    "observed": [
+      "initial offline discovery view",
+      "actual refresh from default main source",
+      "two published compatible entries visible"
+    ],
+    "screenshots": [
+      "gui-discovery-initial.png",
+      "gui-discovery-main.png"
+    ],
+    "publicNetworkInstallClicked": false,
+    "limitation": "After capturing full AX state indices reset; an obsolete index opened Help. CUA then retained invalid menu elements (-10005), screenshot unavailable. Esc, rebind and session reset did not recover. Subsequent GUI install not claimed.",
+    "normallyQuit": true,
+    "productionPluginDataChanged": false
+  },
+  "remaining": {
+    "T39": "Human new-author independent published-SDK build/install experience remains deferred at user request",
+    "app060DMG": "Separate App release, not created by this task",
+    "extraGUIRepeat": "Optional public-network App GUI install repeat omitted because CUA menu references became invalid; real production Host and historical AppKit input gates kept distinct"
+  },
+  "evidenceFileSHA256": {
+    ".gitattributes": "158fbd9d7b33526a397c59343346c62202df00b992bca2a1ef4e871693526504",
+    "README.md": "bd73916acbdd355370d4f3675a7bccc3bfe65bcca8fef85d5e63db8670c69df2",
+    "SHA256SUMS": "349ed6855da66a63c36348b34ac297f6e116f49e9bc0c780755a8213c7345f81",
+    "anonymous-result.json": "c9c35a6183571ee4b36b44f79096a133cb6bdb1812d51fef265ebe91b91d1638",
+    "default-main-live-summary.json": "5917bfd1c9c7dbe3eb03d74ce48dea41e3f9616723afab076b8a2397f4d1b980",
+    "default-main-live.txt": "8727f99f0bd1e21265d858be3c8c18e008ff5f88efaf092cbc9ab40de65facfc",
+    "gui-cleanup-attempt.json": "9d459ac23abb47f613dce4d4423d88408754ca64da7b1f5e99ab6e49d1a86bc4",
+    "gui-discovery-initial.png": "325ebfb2202a6c1d770bf76993f14d9b6611c1456012e3433ad27f6d8a5c2b05",
+    "gui-discovery-initial.txt": "d3b0a2f552597a999df3db197f920023735c6b048cddfd68cb2327815da934e5",
+    "gui-discovery-main.png": "8007a2ccd4ef08d72c6955fbb6048e90842fc5c51c187e4924dfac3a1e7d2392",
+    "gui-discovery-main.txt": "36b2d42479e7c8a2d0d8fb395fbe13e2c4644bc0e763b31539b3cfbc4877ecc2",
+    "gui-preflight.json": "a58cc4b4a602ede24f0281a236e9ec301843beb91ff0e660409af34e645cdbcb",
+    "independent-audit.txt": "5aba3202e466f5d5630e5e54212c2b765abe9e12fe2b860d9d6ac6dc06e1a4a2",
+    "independent-prepare.txt": "622a54af86b8bc4991d5e93918b7327de11be92d661b45b119543bacb8c0e840",
+    "independent-result.json": "5ebe8b0a112bb359c37ae9707af84673dfad74cfdeb3e6ba320b97bb6e649ccf",
+    "merged-pr.json": "951adf2c3373be6a657e4bbfa83f736524e206cfeeee6b0fc254fbf1608d6d65",
+    "old-candidate-result.json": "4a9381f4b7b0b505c6dccf383015e9037c0ff4f7cb391c4ebb64af247403dfa8",
+    "premerge-live-summary.json": "983bae77113cf0bee0c8a9d2a5dbece3085f3caf468b0503fada5f7c985ded88",
+    "premerge-live.txt": "f552b207c0039c32b7f656c364a951bd2f637f0fbe82f09f849bf5bf150b829a",
+    "published-release.json": "f845fca783f71236dece5d4643f5e6a02e073ce9809e2be6dc43679545f91b20",
+    "registry-main-result.json": "708365ab875e02244ad4e8196a7df4b13be558e96254206031ed8da54f649e98",
+    "registry-regression-summary.json": "17ab79d6a2451583a876a7cd122568a855cb27b215d2e73c01ad845ef4de35f4",
+    "registry-regression.txt": "ba7c09d48bda7680721eddb1ea14103457ff655699b2699d5b9e5e7412ada345",
+    "registry.candidate.json": "9392649799c432bbf2f1efe1dd25e61956695abc1fa35c6a98d7975089d63c2f",
+    "release-build.txt": "77c42c980196272fefcff507166c6eae7e2ed1c80cfbc6f6dcf5a619bf60ebaa",
+    "release-manifest.json": "fa26c320f46603423d93f9182cde6e8dde9e25fbf2f6544c40659a54bd22fa78",
+    "source-mapping.json": "5b484d458609eca6911671e18272a6c8b12ebf2d5c783b97722a11c45ece63f7"
+  },
+  "publicationWorktreeArchived": true
+}

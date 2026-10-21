@@ -30,9 +30,15 @@
 
 用户要求「来完成人工操作部分」。[M03](t02-t37-manual-acceptance-20261019.md)已关闭 T02 / T37；[2026-10-20 第三轮 M04](t11-manual-acceptance-20261020.md)完成真实收起 minimal → compact、重新展开和停止，T11 标为 verified。当前共 **37 项 verified、3 项 in progress**；[M05](t39-manual-retry-20261020.md)已完成协助功能复测，实际 Hello 显示已点击 3 次并正常退出；新作者仅按文档完成的原门槛继续保留，T38 / T40 的公开发布门槛仍保留。本轮没有修改生产源码、扩大权限或公开发布。
 
-## 2026-10-20 SDK 正式发布（当前）
+## 2026-10-20 SDK 正式发布（T38 发布时）
 
-用户要求开始下一步任务后，[T38 SDK 1.0.0](t38-sdk-release-20261020.md)已正式公开，并通过三构件匿名下载、摘要、53 源文件和真实 Quick Start 打包验证。当前 **38 项 verified / 2 项 in progress**；T39 保留新开发者无指导构建安装体验，T40 保留官方插件包与目录发布、真实网络安装。补充 U01 已独立验收。SDK 标签只推送 SDK 专用源码树，主程序 0.6.0 安装包另行处理。
+用户要求开始下一步任务后，[T38 SDK 1.0.0](t38-sdk-release-20261020.md)已正式公开，并通过三构件匿名下载、摘要、53 源文件和真实 Quick Start 打包验证。当时 **38 项 verified / 2 项 in progress**；T39 保留新开发者无指导构建安装体验，T40 保留官方插件包与目录发布、真实网络安装。补充 U01 已独立验收。SDK 标签只推送 SDK 专用源码树，主程序 0.6.0 安装包另行处理。
+
+## 2026-10-20/21 官方插件与 Registry 公开（当前）
+
+[T40 发布与公网验收](t40-registry-publication-20261020.md)及[结构化结果](evidence/t40-publication-20261020/result.json)已关闭原 T40：`plugins-0.6.0` prerelease 四资产匿名 HTTP 200 / 字节摘要一致；仅修改 Registry 两个文件的 PR #3 通过必需 Test and build 后正常 squash 合入 main，merge `7193cdc5021b603abd3a046fed74b027d07c177a`。真实生产 Host 分别通过固定 SHA 目录与默认 main 官方 URL 的网络下载 / 安装，默认来源明确为 `defaultSource=true`；安装后停用 / requested、逐项测试临时授权、VM 预设 KV、新 Host 对象图的磁盘恢复及 Staging 清空均已核对。Registry 回归 29 total / 28 passed / 1 skipped / 0 failures，跳过项为锁屏原生 AppKit 输入，Release 构建通过。
+
+普通 Release 发现页已实测初始离线、点击刷新显示两个公开条目并正常退出；本轮 GUI 安装未完成。Host 对象图恢复不记作 App 进程重启，本轮没有新增真实 GitHub 数据 / Open 结论，既有物理验收按原范围保留。当前 **39 项 verified / 1 项 in progress**；T39 的独立新作者人工门槛按当前安排先跳过并保留，不新增强制人工作业。主程序 0.6.0 安装包与整体 Plugin 1.0 验收继续分别管理。
 
 ## Phase 0 — 准备阶段：项目审计、分支与基线
 
@@ -128,15 +134,15 @@
 
 | ID | 任务 | 前置依赖 | 状态 | 验收证据 |
 | --- | --- | --- | --- | --- |
-| T38 | DynamicIsland SDK | T36 | `verified` | [SDK 1.0.0 正式发布](t38-sdk-release-20261020.md)：[sdk-v1.0.0](https://github.com/qyt1340272051-design/DynamicIsland/releases/tag/sdk-v1.0.0) 的 SDK 专用源码标签、85,192-byte ZIP、SHA-256 与清单已公开；未推送 Host 开发分支。仓库 SDK 40 passed、类型正例 / 47 项预期错误、15 页 / 9 块 / 34 链接通过；正式 Host 契约 8 passed，独立 SDK 38 passed / 2 repo-only skipped，重打字节一致。三份公开资产匿名 HTTP 200 / 摘要 / 53 文件校验及下载后的实际 Hello 打包通过。有限 API / 兼容与版本策略已冻结，两个官方插件实战依赖满足；T39 新作者体验、T40 公网目录和 App 0.6.0 安装包分别保留。 |
-| T39 | 开发者文档与模板 | T38 | `in progress` | [13 主题手册](../../SDK/docs/README.md)及[T39 记录](phase-9-t39-developer-docs.md)已实现；[SDK 1.0.0](t38-sdk-release-20261020.md)公开构件的 15 页 / 9 源码块 / 34 本地链接通过。用户首轮 zsh 卡点与成功输出 / 路径说明已修正，[2026-10-20 M05](t39-manual-retry-20261020.md)保留打包解释、预览定位协助，正确 Hello 已安装启用、实际计数 3 次并正常退出。AI 独立离线编写与 Host 自动闭环、用户协助复测均不代替新作者无指导门槛；仍须用发布 SDK 验证新开发者仅按文档完成构建安装及约十分钟目标。T38 前置已满足。 |
-| T40 | Plugin Registry | T38 | `in progress` | [目录核心](phase-9-t40-registry-core.md)与[发现 UI](phase-9-t40-registry-ui.md)已完成；[历史完整回归](evidence/final-regression-20261019/result.json)为 1070 passed / 2 skipped / 0 failures、Release build passed。[发布准备](t40-release-preparation-20261019.md)已生成含 MIT 许可的官方包、摘要与候选目录并重复重打一致。T38 SDK 正式发布前置已满足；正式 [registry.json](../../Registry/registry.json)仍为空，待公开官方插件包、登记真实下载地址并验收实际网络安装。SDK 公开下载验证不代替此插件发现 / 安装链路。 |
+| T38 | DynamicIsland SDK | T36 | `verified` | [SDK 1.0.0 正式发布](t38-sdk-release-20261020.md)：[sdk-v1.0.0](https://github.com/qyt1340272051-design/DynamicIsland/releases/tag/sdk-v1.0.0) 的 SDK 专用源码标签、85,192-byte ZIP、SHA-256 与清单已公开；未推送 Host 开发分支。仓库 SDK 40 passed、类型正例 / 47 项预期错误、15 页 / 9 块 / 34 链接通过；正式 Host 契约 8 passed，独立 SDK 38 passed / 2 repo-only skipped，重打字节一致。三份公开资产匿名 HTTP 200 / 摘要 / 53 文件校验及下载后的实际 Hello 打包通过。有限 API / 兼容与版本策略已冻结，两个官方插件实战依赖满足；T39 新作者体验和 App 0.6.0 安装包分别保留，T40 按独立公网证据验收。 |
+| T39 | 开发者文档与模板 | T38 | `in progress` | [13 主题手册](../../SDK/docs/README.md)及[T39 记录](phase-9-t39-developer-docs.md)已实现；[SDK 1.0.0](t38-sdk-release-20261020.md)公开构件的 15 页 / 9 源码块 / 34 本地链接通过。用户首轮 zsh 卡点与成功输出 / 路径说明已修正，[2026-10-20 M05](t39-manual-retry-20261020.md)保留打包解释、预览定位协助，正确 Hello 已安装启用、实际计数 3 次并正常退出。AI 独立离线编写与 Host 自动闭环、用户协助复测均不代替新作者无指导门槛；使用发布 SDK 的独立构建安装及约十分钟目标按当前安排先跳过并保留。T38 前置已满足。 |
+| T40 | Plugin Registry | T38 | `verified` | [公开发布与真实网络验收](t40-registry-publication-20261020.md)、[结构化结果](evidence/t40-publication-20261020/result.json)：`plugins-0.6.0` prerelease 四资产匿名 HTTP 200 / 摘要一致，Registry 两文件 PR #3 通过必需检查后正常合入 main。生产 Host 的固定 SHA 与默认 main 官方 URL 网络安装分别 1 passed / 0 skipped / 0 failures；核对停用 / requested、逐项测试临时授权、VM 预设 KV、新 Host 对象图磁盘恢复及 Staging 清空。Registry 回归 29 total / 28 passed / 1 skipped / 0 failures（锁屏原生 AppKit 输入），Release 构建通过。普通 Release 发现页初始离线、刷新后两公开条目已截图；本轮 GUI 安装与 App 进程重启未作为通过项，不新增强制人工门槛。历史完整回归及[本地发布准备](t40-release-preparation-20261019.md)保留原范围。 |
 
-[Phase 9 统一检查](phase-9-acceptance.md)已归并 T38 的稳定 SDK 发布与匿名下载证据；T39 / T40 仍为 `in progress`，SDK 1.0.0 不等同于主 App 或整体 Plugin 1.0 发布验收。
+[Phase 9 统一检查](phase-9-acceptance.md)已归并 T38 的稳定 SDK 发布和 T40 官方包 / 公开目录 / 真实网络 Host 安装证据；仅 T39 保持 `in progress`，独立新作者人工门槛按当前安排先跳过并保留。SDK 1.0.0 与主 App、整体 Plugin 1.0 发布验收分别管理。
 
 ## 用户补充待办
 
-以下项目独立于原 T01–T40；原计划当前为 38 项 verified / 2 项 in progress，补充 U01 已 verified。
+以下项目独立于原 T01–T40；原计划当前为 39 项 verified / 1 项 in progress，补充 U01 已 verified。
 
 | ID | 任务 | 状态 | 安排与验收 |
 | --- | --- | --- | --- |
