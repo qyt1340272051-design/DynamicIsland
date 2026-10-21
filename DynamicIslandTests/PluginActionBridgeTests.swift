@@ -30,9 +30,14 @@ final class PluginActionBridgeTests: XCTestCase {
         let witness = ActionRenderWitness()
         let view = NSHostingView(rootView: ActionBridgeRenderedView(manager: fixture.manager, router: fixture.router, witness: witness))
         view.frame = CGRect(x: 0, y: 0, width: 480, height: 200)
-        let window = NSWindow(contentRect: view.frame, styleMask: [.titled], backing: .buffered, defer: false)
+        // A key-capable nonactivating surface hosts the actual renderer
+        // without relying on activation of the XCTest Host application.
+        let window = NSPanel(contentRect: view.frame,
+            styleMask: [.titled, .closable, .nonactivatingPanel], backing: .buffered, defer: false)
+        window.hidesOnDeactivate = false
         window.isReleasedWhenClosed = false
         window.contentView = view
+        window.center()
         window.makeKeyAndOrderFront(nil)
         defer { window.close() }
         try await settle(view)
@@ -42,15 +47,15 @@ final class PluginActionBridgeTests: XCTestCase {
             try bitmap.representation(using: .png, properties: [:])?.write(to: path)
             print("T26 render: \(path.path)")
         }
-        try click(view, window: window, atTopLeftPoint: .init(x: 40, y: 62))
+        try await click(view, window: window, atTopLeftPoint: .init(x: 40, y: 62))
         try await log(fixture, id: package.manifest.id, message: "action.pause")
         XCTAssertEqual(fixture.manager.current?.presentation.title, "已暂停")
         try await settle(view)
-        try click(view, window: window, atTopLeftPoint: .init(x: 76, y: 93))
+        try await click(view, window: window, atTopLeftPoint: .init(x: 76, y: 93))
         try await log(fixture, id: package.manifest.id, message: "action.toggle")
         XCTAssertEqual(control(fixture.manager.current?.presentation.expanded, id: "enabled"), .toggle(.init(title: "启用示例", isOn: true, actionID: "enabled")))
         try await settle(view)
-        try click(view, window: window, atTopLeftPoint: .init(x: 340, y: 134))
+        try await click(view, window: window, atTopLeftPoint: .init(x: 340, y: 134))
         try await log(fixture, id: package.manifest.id, message: "action.slider")
         try await log(fixture, id: package.manifest.id, message: "action.sliderCommit")
         XCTAssertGreaterThan(try XCTUnwrap(fixture.manager.current?.presentation.progress), 0.1)
@@ -522,17 +527,39 @@ final class PluginActionBridgeTests: XCTestCase {
         view.layoutSubtreeIfNeeded()
         view.displayIfNeeded()
     }
-    private func click(_ view: NSView, window: NSWindow, atTopLeftPoint point: CGPoint) throws {
+    private func click<Content: View>(_ view: NSHostingView<Content>, window: NSWindow,
+                                     atTopLeftPoint point: CGPoint) async throws {
+        window.makeKeyAndOrderFront(nil)
+        try await settle(view)
+        let deadline = ContinuousClock.now.advanced(by: .seconds(2))
+        while !window.isKeyWindow {
+            guard ContinuousClock.now < deadline else {
+                NativeWindowTestingDiagnostics.keyTimeout(window)
+                XCTFail("The native ActionMock window did not become key before mouse delivery.")
+                throw ActionBridgeTestError.timedOut
+            }
+            // A window transition may have dropped the first key request.
+            // Retry inside the same bound, without activating the Host or
+            // taking key away from an attached confirmation sheet.
+            if window.attachedSheet == nil { window.makeKey() }
+            try await Task.sleep(for: .milliseconds(10))
+        }
         // Fixed Host canvas positions were checked in the rendered fixture.
-        // Posting both events lets AppKit's control tracking consume mouseUp.
+        // Queue up before synchronously dispatching down: AppKit controls may
+        // consume up in a nested tracking loop, while SwiftUI may leave it for
+        // explicit dispatch. Both paths still go through real native controls.
         let local = CGPoint(x: point.x, y: view.isFlipped ? point.y : view.bounds.height - point.y)
         let location = view.convert(local, to: nil)
-        let types: [NSEvent.EventType] = [.leftMouseDown, .leftMouseUp]
-        for type in types {
-            let event = try XCTUnwrap(NSEvent.mouseEvent(with: type, location: location,
+        let events = try [NSEvent.EventType.leftMouseDown, .leftMouseUp].map { type in
+            try XCTUnwrap(NSEvent.mouseEvent(with: type, location: location,
                 modifierFlags: [], timestamp: ProcessInfo.processInfo.systemUptime,
                 windowNumber: window.windowNumber, context: nil, eventNumber: 0, clickCount: 1, pressure: 1))
-            NSApplication.shared.postEvent(event, atStart: false)
+        }
+        NSApp.postEvent(events[1], atStart: true)
+        NSApp.sendEvent(events[0])
+        if let up = NSApp.nextEvent(matching: .leftMouseUp, until: .distantPast,
+                                    inMode: .eventTracking, dequeue: true) {
+            NSApp.sendEvent(up)
         }
     }
     private func control(_ node: IslandNode?, id: String) -> IslandNode? {

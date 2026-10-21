@@ -1,6 +1,6 @@
 # Dynamic Island Beta 验收手册
 
-本轮目标版本为 `v0.6.0-beta.1`（App 0.6.0 / build 3）。目标是用真实 Mac 硬件找出模拟屏幕无法替代的定位、权限和稳定性问题。机器可读的任务状态保存在 [`beta-device-matrix.json`](beta-device-matrix.json)，提交前由 `Scripts/validate-beta-matrix.rb` 校验覆盖范围。当前九项真机场景均为 `pending`，不得把单元测试、模拟快照或本地 DMG 构建当作验收通过。
+本轮目标版本为 `v0.6.0-beta.2`（App 0.6.0 / build 4）。目标是用真实 Mac 硬件找出模拟屏幕无法替代的定位、权限和稳定性问题。机器可读的任务状态保存在 [`beta-device-matrix.json`](beta-device-matrix.json)，提交前由 `Scripts/validate-beta-matrix.rb` 校验覆盖范围。当前九项真机场景均为 `pending`，不得把单元测试、模拟快照或本地 DMG 构建当作验收通过。
 
 ## 安装原则
 
@@ -47,7 +47,7 @@
 | `S2` | 明显异常或间歇失效，但有可接受的临时规避方法 | 分配模块并排入近期修复 |
 | `S3` | 轻微视觉、文案或文档问题 | 可随后续迭代处理 |
 
-新 Issue 首先标记 `needs-triage`，填写实际测试版本；如有对应的 `v0.6.0-beta.1` 里程碑，再加入该里程碑。完成去重与复现后，添加一个 `severity:S0` 至 `severity:S3` 和相应 `area:*` 标签。修复后必须在原矩阵场景复测，将 Issue 和证据写回 JSON 再关闭。
+新 Issue 首先标记 `needs-triage`，填写实际测试版本；如有对应的 `v0.6.0-beta.2` 里程碑，再加入该里程碑。完成去重与复现后，添加一个 `severity:S0` 至 `severity:S3` 和相应 `area:*` 标签。修复后必须在原矩阵场景复测，将 Issue 和证据写回 JSON 再关闭。
 
 ## Beta 出口条件
 

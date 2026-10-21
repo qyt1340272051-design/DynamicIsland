@@ -261,7 +261,15 @@ final class PluginExtensionsUITests: XCTestCase {
         // run through NSApplication's native event dispatcher.
         window.makeKeyAndOrderFront(nil)
         try await settle(window)
-        do { try await waitUntil { window.isKeyWindow } }
+        do {
+            try await waitUntil {
+                // A sheet can detach before the key-window handoff finishes.
+                // Reissue only this native request within the existing bound;
+                // never steal key from an attached confirmation sheet.
+                if !window.isKeyWindow, window.attachedSheet == nil { window.makeKey() }
+                return window.isKeyWindow
+            }
+        }
         catch {
             NativeWindowTestingDiagnostics.keyTimeout(window)
             throw error

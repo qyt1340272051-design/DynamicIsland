@@ -53,7 +53,7 @@ xcodebuild \
 assert_setting PRODUCT_NAME "Dynamic Island"
 assert_setting PRODUCT_MODULE_NAME DynamicIsland
 assert_setting MARKETING_VERSION "$EXPECTED_VERSION"
-assert_setting CURRENT_PROJECT_VERSION 3
+assert_setting CURRENT_PROJECT_VERSION 4
 assert_setting ENABLE_HARDENED_RUNTIME YES
 assert_setting CODE_SIGN_INJECT_BASE_ENTITLEMENTS NO
 assert_setting CODE_SIGN_ENTITLEMENTS DynamicIsland/DynamicIsland.entitlements
