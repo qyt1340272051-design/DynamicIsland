@@ -2,7 +2,9 @@
 
 本轮目标版本为 `v0.6.0-beta.2`（App 0.6.0 / build 4）。目标是用真实 Mac 硬件找出模拟屏幕无法替代的定位、权限和稳定性问题。机器可读的任务状态保存在 [`beta-device-matrix.json`](beta-device-matrix.json)，提交前由 `Scripts/validate-beta-matrix.rb` 校验覆盖范围。当前九项真机场景均为 `pending`，不得把单元测试、模拟快照或本地 DMG 构建当作验收通过。
 
-2026-10-22 已完成公开 build4 的[首批当前设备观察](plugin-system/evidence/beta-device-20261022/README.md)及[补充观察](plugin-system/evidence/beta-device-followup-20261022/README.md)：默认显示配置、内置计时、音量同步、托盘锁定与 AirDrop 打开／取消、两款官方插件操作及权限撤销、真实退出重启与菜单隐藏／显示。实际切换过非默认分辨率和自动隐藏并恢复原设置，但 B02 的物理全屏／Space 尚未验证。DI-B01／B02 仍为 pending；音乐、物理滑杆／HUD、托盘安全清空等保留缺口，其他场景未因此通过。
+2026-10-22 已完成公开 build4 的[首批当前设备观察](plugin-system/evidence/beta-device-20261022/README.md)及[补充观察](plugin-system/evidence/beta-device-followup-20261022/README.md)：默认显示配置、内置计时、音量同步、托盘锁定与 AirDrop 打开／取消、两款官方插件操作及权限撤销、真实退出重启与菜单隐藏／显示。实际切换过非默认分辨率和自动隐藏并恢复原设置，但 B02 的物理全屏／Space 尚未验证。DI-B01／B02 仍为 pending；音乐、物理 HUD、托盘安全清空等保留缺口，其他场景未因此通过。
+
+2026-10-22 后续[滑杆与七项菜单补验](plugin-system/evidence/beta-controls-20261022/README.md)已捕获真实拖动后的 10% 数值并恢复静音；用户确认底部工具停顿后返回正常，实际七项菜单与工具按钮另行核对。六个临时样本已移除，原两官方插件停用／撤销状态保留。物理 HUD、音乐、托盘清空和完整离开／重开等仍保留，DI-B01 未升级为通过。
 
 ## 安装原则
 

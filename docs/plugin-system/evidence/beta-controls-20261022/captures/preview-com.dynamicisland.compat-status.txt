@@ -1,0 +1,25 @@
+Window: "安装插件", App: Dynamic Island.
+0 standard window 安装插件, Secondary Actions: Raise
+	1 container
+		2 image puzzlepiece.extension
+		3 text 安装插件 检查插件信息与权限
+		4 scroll area
+			5 text 兼容·状态 版本：0.1.0 有限兼容，SuperIsland 开发者：DynamicIsland（插件自行声明，未验证） 插件 ID：com.dynamicisland.compat-status
+			6 container plugin-compatibility-details
+				7 text 兼容详情 当前未运行 当前没有本次执行的兼容布局结果，启用偏好不代表插件正在运行。 兼容范围 有限视图类型：支持文字、图标、横排、竖排、进度和按钮；视图深度、数量和字段受主程序限制。 仅同步模块回调：模块生命周期与动作回调须同步返回，不支持异步或生成器回调。 展示请求由主程序裁决：展开与收起会转换为有期限的展示请求，仍由主程序检查能力声明和当前交互状态。 不提供上游窗口状态：不提供上游窗口状态读取或全局窗口控制。 不提供上游资源接口：不映射上游文件、网络或其他系统资源接口；主程序资源访问仍须使用已支持的接口与授权。 刷新由主程序驱动：布局随模块启动、动作和展示请求刷新，不支持上游的任意刷新调度接口。
+			8 text 插件声明的权限 此插件未申请权限。
+		9 text 安装不会授予权限或自动运行插件。
+		10 button Description: 取消, ID: plugin-installer-cancel
+		11 button Description: 安装插件, ID: plugin-installer-confirm
+	12 close button
+	13 zoom button
+	14 minimize button
+	15 text 安装插件
+16 menu bar
+	17 Dynamic Island
+	18 Edit
+	19 View
+	20 Window
+	21 Help
+
+The focused UI element is 0 standard window 安装插件, Secondary Actions: Raise

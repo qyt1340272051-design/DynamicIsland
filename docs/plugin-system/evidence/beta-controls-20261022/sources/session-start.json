@@ -1,0 +1,16 @@
+{
+  "startedUTC": "2026-10-22T12:23:02.484947+00:00",
+  "sourceVersion": "0.6.0",
+  "build": "4",
+  "pidAtStart": 68587,
+  "executableSHA256": "339773f56666bcc3a514500b70d9fa6cd21a8bbdc9c1d7682e83796a1584fb92",
+  "initialVolume": 0,
+  "initialMuted": true,
+  "musicPlaybackAllowed": false,
+  "scope": [
+    "physical slider",
+    "published-build long-menu return",
+    "safe tray clear if a disposable baseline can be established"
+  ],
+  "hardwareScenarioStatus": "pending"
+}

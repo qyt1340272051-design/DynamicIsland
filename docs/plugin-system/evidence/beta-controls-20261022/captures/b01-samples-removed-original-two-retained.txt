@@ -1,0 +1,41 @@
+Window: "Dynamic Island Settings", App: Dynamic Island.
+0 standard window Dynamic Island Settings, ID: com_apple_SwiftUI_Settings_window, Secondary Actions: Raise
+	1 container
+		2 text 已安装 2 GitHub
+		3 button Description: 导入插件, ID: plugin-extensions-import
+		4 button Description: 发现, ID: plugin-extensions-discover
+		5 button Description: 刷新, ID: plugin-extensions-refresh
+		6 scroll area
+			7 list Secondary Actions: AXScrollToTop, AXScrollToBottom
+				8 button Description: GitHub, v0.1.0, 已停用, ID: plugin-extensions-plugin-com.dynamicisland.github
+				9 button Description: 番茄钟, v0.2.1, 已停用, ID: plugin-extensions-plugin-com.dynamicisland.pomodoro
+		10 text v0.1.0 · 已停用
+		11 scroll area plugin-extensions-detail
+			12 text Value: 开发者：DynamicIsland（插件自行声明，未验证） 原生，JavaScriptCore 最低主程序版本 0.6.0, ID: plugin-extensions-developer
+			13 button Description: 启用插件, ID: plugin-extensions-enable
+			14 button Description: 查看诊断, ID: plugin-extensions-diagnostics
+			15 button Description: 卸载…, ID: plugin-extensions-uninstall
+			16 text 权限 启用插件不会自动授权。授权仅适用于当前代码，并保存在本机；代码或权限声明变化后需重新确认。撤销立即生效。
+			17 container plugin-extensions-permission-links.open
+				18 text 打开网页 已撤销
+				19 button Description: 授权…, ID: plugin-extensions-approve-links.open
+				20 text 在你点击插件按钮后，用默认浏览器打开主程序允许的 HTTPS 网页。当前仅允许 github.com；浏览器打开后的网站跳转由浏览器处理。
+			21 container plugin-extensions-permission-network
+				22 text 访问网络 已撤销
+				23 button Description: 授权…, ID: plugin-extensions-approve-network
+				24 text 允许访问受限制的 HTTPS 服务，读取在线数据。
+			25 container plugin-extensions-permission-storage.local
+				26 text 保存插件数据 已撤销
+				27 button Description: 授权…, ID: plugin-extensions-approve-storage.local
+				28 text 在本机保存此插件的数据和偏好设置，与其他插件分开存放。
+	29 close button
+	30 zoom button (disabled)
+	31 text Dynamic Island Settings
+32 menu bar
+	33 Dynamic Island
+	34 Edit
+	35 View
+	36 Window
+	37 Help
+
+The focused UI element is 0 standard window Dynamic Island Settings, ID: com_apple_SwiftUI_Settings_window, Secondary Actions: Raise

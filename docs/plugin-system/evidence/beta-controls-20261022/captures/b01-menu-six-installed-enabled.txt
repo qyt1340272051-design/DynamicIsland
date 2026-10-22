@@ -1,0 +1,36 @@
+Window: "插件管理", App: Dynamic Island.
+0 standard window 插件管理, Secondary Actions: Raise
+	1 container
+		2 text 已安装 8 工具选择示例
+		3 button Description: 导入插件, ID: plugin-extensions-import
+		4 button Description: 发现, ID: plugin-extensions-discover
+		5 button Description: 刷新, ID: plugin-extensions-refresh
+		6 scroll area
+			7 list Secondary Actions: AXScrollToTop, AXScrollToBottom
+				8 button Description: 计时三态验收, v0.1.0, 运行中, ID: plugin-extensions-plugin-com.dynamicisland.acceptance.timer-presentations
+				9 button Description: 兼容·计数, v0.1.0, 运行中, ID: plugin-extensions-plugin-com.dynamicisland.compat-counter
+				10 button Description: 兼容·进度, v0.1.0, 运行中, ID: plugin-extensions-plugin-com.dynamicisland.compat-progress
+				11 button Description: 兼容·状态, v0.1.0, 运行中, ID: plugin-extensions-plugin-com.dynamicisland.compat-status
+				12 button Description: GitHub, v0.1.0, 已停用, ID: plugin-extensions-plugin-com.dynamicisland.github
+				13 button Description: 番茄钟, v0.2.1, 已停用, ID: plugin-extensions-plugin-com.dynamicisland.pomodoro
+				14 button Description: 你好，计数器, v0.1.0, 运行中, ID: plugin-extensions-plugin-com.example.hello-world
+				15 button Description: 工具选择示例, v1.0.0, 运行中, ID: plugin-extensions-plugin-com.example.tool-demo
+		16 text v1.0.0 · 运行中
+		17 scroll area plugin-extensions-detail
+			18 text Value: 开发者：未提供（插件自行声明，未验证） 原生，JavaScriptCore 最低主程序版本 0.6.0, ID: plugin-extensions-developer
+			19 button Description: 停用插件, ID: plugin-extensions-enable
+			20 button Description: 查看诊断, ID: plugin-extensions-diagnostics
+			21 button Description: 卸载…, ID: plugin-extensions-uninstall
+			22 text 权限 启用插件不会自动授权。授权仅适用于当前代码，并保存在本机；代码或权限声明变化后需重新确认。撤销立即生效。 此插件未请求额外权限。
+	23 close button
+	24 zoom button
+	25 minimize button
+	26 text 插件管理
+27 menu bar
+	28 Dynamic Island
+	29 Edit
+	30 View
+	31 Window
+	32 Help
+
+The focused UI element is 0 standard window 插件管理, Secondary Actions: Raise
