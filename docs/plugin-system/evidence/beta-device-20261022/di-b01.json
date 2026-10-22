@@ -1,0 +1,275 @@
+{
+  "schemaVersion": 1,
+  "scenarioID": "DI-B01",
+  "dateLocal": "2026-10-22",
+  "timeZone": "Asia/Shanghai",
+  "targetVersion": "v0.6.0-beta.2",
+  "appVersion": "0.6.0",
+  "build": "4",
+  "bundleIdentifier": "com.rong5.dynamic-island-mac",
+  "appSourceCommit": "eacec4d1d385bc90946e8d0df1731dbd22c23428",
+  "executableSHA256": "339773f56666bcc3a514500b70d9fa6cd21a8bbdc9c1d7682e83796a1584fb92",
+  "packageSHA256": "5168a80105a7e561154940d59fa8d3796443c22471d5ed45b1638bf2c194766b",
+  "distribution": {
+    "adHoc": true,
+    "notarized": false,
+    "originalPublishedBundle": true,
+    "bundleModified": false,
+    "strictDeepSignatureVerified": true,
+    "cleanMac": false,
+    "browserQuarantineInstallTest": false
+  },
+  "device": {
+    "model": "Mac16,12",
+    "architecture": "arm64",
+    "macOSVersion": "26.6.2",
+    "macOSBuild": "25G83",
+    "singleBuiltInDisplay": true,
+    "physicalPixels": "2560x1664",
+    "defaultScalingConfirmed": false,
+    "menuBarAlwaysVisibleConfirmed": false,
+    "logicalFrame": null,
+    "backingScale": null
+  },
+  "scenarioStatus": "pending",
+  "scope": "Partial real-device observations on the published build; remaining prerequisites and focus items have not passed.",
+  "observations": {
+    "launch": {
+      "observed": true,
+      "pidAtObservation": 63049,
+      "ordinaryMainWindow": false,
+      "installedPluginsAtLaunch": 0
+    },
+    "hover": {
+      "expandedAndCollapsedObserved": true,
+      "userConfirmedCurrentCompactDisplayNormal": true,
+      "fullPhysicalTopEdgeScreenshot": false
+    },
+    "stopwatch": {
+      "start": "00:00.3",
+      "later": "00:47.0",
+      "compact": "02:39.6",
+      "pauseStable": "04:42.7",
+      "resume": "04:43.0",
+      "reset": "00:00.0",
+      "leftIconAndRightTimeInAX": true,
+      "userConfirmedNoOcclusionAtCurrentResolution": true
+    },
+    "countdown": {
+      "originalPresetMinutes": 5,
+      "longPressMilliseconds": 1200,
+      "adjustedPresetMinutes": 1,
+      "completionObservedMillisecondsAfterStart": 60149,
+      "completionUIObserved": true,
+      "confirmAndCollapseObserved": true,
+      "restoredPresetMinutes": 5,
+      "runningAtLastCheck": false
+    },
+    "volume": {
+      "originalSlider": 0,
+      "originalMuted": true,
+      "agentControlledInitialMaximum": 0.0625,
+      "increaseDecreaseMuteUnmuteObserved": true,
+      "externalKeyAXPercentages": [
+        38,
+        44,
+        50,
+        56,
+        63,
+        69,
+        63,
+        56,
+        50,
+        44
+      ],
+      "externalKeySynthesizedByAgent": false,
+      "expandedAfterExternalKeySlider": 0.4374999701976776,
+      "finalSlider": 0,
+      "finalMuted": true,
+      "sliderDragVerified": false,
+      "hudPhysicalVisualCompletenessVerified": false,
+      "notes": [
+        "User allowed volume testing and declined music playback.",
+        "Agent-controlled initial test reached 6.25% then restored zero and mute.",
+        "External user/system input produced multiple volume changes during capture; this was not a verified single-keypress test.",
+        "AX confirms external changes and the subsequent expanded 44% value. Native App-window HUD captures do not establish physical unobstructed rendering.",
+        "Slider setValue was not supported; a native drag failed with noWindowsAvailable. Neither is recorded as a product failure."
+      ]
+    },
+    "music": {
+      "idleUIObserved": true,
+      "playbackTest": "skipped-by-user-for-now"
+    },
+    "files": {
+      "status": "partial-import-lock-control-and-single-removal-observed",
+      "syntheticFilename": "DI-B01-test.txt",
+      "originalTrayVisibleCount": 0,
+      "airDropTransmission": false,
+      "preflight": {
+        "visibleUIItems": 0,
+        "candidateDirectoryEntries": 2,
+        "emptyBaseline": false,
+        "candidateAppTemporaryDirectoryConfirmedBySyntheticImport": false,
+        "clearExecuted": false,
+        "airDropPanelOpened": false,
+        "preservedExistingItems": true
+      },
+      "importedVisibleName": "DI-B01-test.txt",
+      "visibleBytes": 91,
+      "uniqueSyntheticCopyHashMatched": true,
+      "lockControlToggleObserved": true,
+      "physicalLockHoldAfterPointerExitVerified": false,
+      "lockRestoredToOriginalUnlocked": true,
+      "singleRemoveObserved": true,
+      "remainingUIItems": 0,
+      "sourceRetainedUnchanged": true,
+      "temporaryDirectoryCountAfterRemoval": 2,
+      "clearExecuted": false,
+      "airDropPanelOpened": false
+    },
+    "cleanup": {
+      "volumeZeroAndMuted": true,
+      "stopwatchReset": true,
+      "countdownPresetMinutes": 5,
+      "countdownRunning": false,
+      "appNormalQuitVerified": false
+    }
+  },
+  "remaining": [
+    "Confirm actual default scaling and menu bar always visible.",
+    "Verify slider interaction and physical volume HUD visibility.",
+    "Run actual Apple Music controls and automatic artwork/metadata checks when the user is ready.",
+    "Verify physical lock hold; safe clear and AirDrop panel remain deferred because two pre-existing temporary files were preserved.",
+    "Complete published-build official-plugin workflows and normal show/hide/quit checks.",
+    "Current-device observations do not close other hardware, clean Mac installation or T39 new-author gates."
+  ],
+  "captures": [
+    {
+      "path": "captures/b01-expanded-music-initial.txt",
+      "sha256": "eb3acca4d0d6e8ff6c87f8cea595bd2d51ad801ec045f25beb426269824215f5",
+      "bytes": 952
+    },
+    {
+      "path": "captures/b01-expanded-music-initial.jpg",
+      "sha256": "10d618844c19166cd2d8e72338f598a402e68a41ee966c2d525a6dcc2b5b651e",
+      "bytes": 18122
+    },
+    {
+      "path": "captures/b01-stopwatch-running.txt",
+      "sha256": "8b15ad5f07a57b94a5fd561f9610cdd3f24575da849b12363098a93eedf5a6a7",
+      "bytes": 634
+    },
+    {
+      "path": "captures/b01-stopwatch-running.jpg",
+      "sha256": "d4ea57b68ded6db348d560d9d411507c0e443abd277b170207960396f8e24195",
+      "bytes": 15850
+    },
+    {
+      "path": "captures/b01-stopwatch-paused.txt",
+      "sha256": "b51e3288e15fb051724e14a75582da78283799700a8f6ba137909be7275d3aeb",
+      "bytes": 592
+    },
+    {
+      "path": "captures/b01-stopwatch-paused.jpg",
+      "sha256": "5afc6958ecefd8d655d9066a0808183310b98329ea26ec387a34dbc3fc7864c2",
+      "bytes": 32635
+    },
+    {
+      "path": "captures/b01-hover-out-probe-2026-10-21T16-02-00.010Z.txt",
+      "sha256": "c28b3092102e3a07b611799c9540e8c13af1437614710d710eb1d3d57b8d498d",
+      "bytes": 165
+    },
+    {
+      "path": "captures/b01-hover-out-probe-2026-10-21T16-02-00.010Z.jpg",
+      "sha256": "d63e14978b8921767f45e0dde8b12e67f9b77660662236ae4ad57db303ebe71d",
+      "bytes": 16051
+    },
+    {
+      "path": "captures/b01-countdown-frame-004.txt",
+      "sha256": "205fe6e18572033438691d0c64a9357f82b639dccc8318bd282136bd201a8b7d",
+      "bytes": 507
+    },
+    {
+      "path": "captures/b01-countdown-frame-004.jpg",
+      "sha256": "b2d73347445d2f82c7d15a94a0354712f3b34c38378f10b78f4b9c619325f64f",
+      "bytes": 29899
+    },
+    {
+      "path": "captures/b01-countdown-confirmed.txt",
+      "sha256": "537bd3c9ac5491b17d8ff3b9f5e2bc17125a0b235abaa9279bf14fdd0ca8e75d",
+      "bytes": 137
+    },
+    {
+      "path": "captures/b01-countdown-confirmed.jpg",
+      "sha256": "6e0ada36b5b7406d33a07ec2de8323f38fc19681694bd4eee13298409c83a532",
+      "bytes": 14613
+    },
+    {
+      "path": "captures/b01-volume-6-percent.txt",
+      "sha256": "47df1791d8c63f63aa760375384fb62e1d3dcbd091e0c24716ae765850042a92",
+      "bytes": 953
+    },
+    {
+      "path": "captures/b01-volume-6-percent.jpg",
+      "sha256": "4746f5bab70cb375c6688f0cb7b4b3b1bdf778dcc25b92cf9483bbe528bea469",
+      "bytes": 38288
+    },
+    {
+      "path": "captures/b01-volume-muted-at-6.txt",
+      "sha256": "02a61308b1a1746a102206ebc6f4618817adbef322142e8d92732f43665f4862",
+      "bytes": 962
+    },
+    {
+      "path": "captures/b01-volume-muted-at-6.jpg",
+      "sha256": "23c36ae08b856f18a5d41c2a9424f93cb6eda60d6f2946551d943f46636bfb50",
+      "bytes": 37942
+    },
+    {
+      "path": "captures/b01-volume-restored-after-key.txt",
+      "sha256": "eb3acca4d0d6e8ff6c87f8cea595bd2d51ad801ec045f25beb426269824215f5",
+      "bytes": 952
+    },
+    {
+      "path": "captures/b01-volume-restored-after-key.jpg",
+      "sha256": "585e67cc2bc57f2e854b87e46d0f7e85dadf43cc1ae17fef22602bc28546d4e0",
+      "bytes": 38174
+    },
+    {
+      "path": "captures/b01-tray-imported.txt",
+      "sha256": "69a3b3c8e6700b2aac4dd7a48cfa0f6090f0cb7467bbd5b7659c6f973d8dcb1e",
+      "bytes": 715
+    },
+    {
+      "path": "captures/b01-tray-imported.jpg",
+      "sha256": "9a59424fa2ebfbd2d6e3b47b0c669f166dd4a873aac085dde64957a75163948b",
+      "bytes": 30844
+    },
+    {
+      "path": "captures/b01-tray-locked.txt",
+      "sha256": "b125116c5a29b606e3ae87ac6139e85b123ac47da6bc9392c296a63d675ed64b",
+      "bytes": 739
+    },
+    {
+      "path": "captures/b01-tray-locked.jpg",
+      "sha256": "dda6435fb0e259f2908a10f68e525f6d2dd39781344bec1a1738f2289e65df9f",
+      "bytes": 31502
+    },
+    {
+      "path": "captures/b01-tray-removed.txt",
+      "sha256": "b26a95d01c97e69d7f130e7ab6779a3e3bf460363d2ec77df426fa6ed17c5476",
+      "bytes": 520
+    },
+    {
+      "path": "captures/b01-tray-removed.jpg",
+      "sha256": "d3607d8669a95f429c732e77718ae3eff1a959d664527d46c6e54de868c796c5",
+      "bytes": 31426
+    }
+  ],
+  "privacy": {
+    "privateUserDataBackupPublished": false,
+    "serialNumberRecorded": false,
+    "privateMusicOrFileContentsPublished": false,
+    "captureScope": "App window and synthetic test data only"
+  },
+  "captureFormatNote": "Native tool screenshot bytes are JPEG/JFIF. Files use .jpg in this archive; bytes were preserved without conversion or redrawing."
+}

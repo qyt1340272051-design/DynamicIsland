@@ -1,0 +1,87 @@
+[
+  {
+    "stem": "b01-external-volume-000",
+    "elapsedMs": 94,
+    "state": "Window: \"\", App: Dynamic Island.\n0 system dialog Secondary Actions: Raise\n\t1 container\n\t\t2 image Description: speaker wave 2 fill, ID: speaker.wave.2.fill\n\t\t3 text 38%\n4 menu bar\n\t5 Dynamic Island\n\t6 Edit\n\t7 View\n\t8 Window\n\t9 Help\n"
+  },
+  {
+    "stem": "b01-external-volume-001",
+    "elapsedMs": 1519,
+    "state": "Window: \"\", App: Dynamic Island.\n0 system dialog Secondary Actions: Raise\n1 menu bar\n\t2 Dynamic Island\n\t3 Edit\n\t4 View\n\t5 Window\n\t6 Help\n"
+  },
+  {
+    "stem": "b01-external-volume-002",
+    "elapsedMs": 4222,
+    "state": "Window: \"\", App: Dynamic Island.\n0 system dialog Secondary Actions: Raise\n\t1 container\n\t\t2 image Description: speaker wave 2 fill, ID: speaker.wave.2.fill\n\t\t3 text 44%\n4 menu bar\n\t5 Dynamic Island\n\t6 Edit\n\t7 View\n\t8 Window\n\t9 Help\n"
+  },
+  {
+    "stem": "b01-external-volume-003",
+    "elapsedMs": 5720,
+    "state": "Window: \"\", App: Dynamic Island.\n0 system dialog Secondary Actions: Raise\n1 menu bar\n\t2 Dynamic Island\n\t3 Edit\n\t4 View\n\t5 Window\n\t6 Help\n"
+  },
+  {
+    "stem": "b01-external-volume-004",
+    "elapsedMs": 7195,
+    "state": "Window: \"\", App: Dynamic Island.\n0 system dialog Secondary Actions: Raise\n\t1 container\n\t\t2 image Description: speaker wave 2 fill, ID: speaker.wave.2.fill\n\t\t3 text 50%\n4 menu bar\n\t5 Dynamic Island\n\t6 Edit\n\t7 View\n\t8 Window\n\t9 Help\n"
+  },
+  {
+    "stem": "b01-external-volume-005",
+    "elapsedMs": 8669,
+    "state": "Window: \"\", App: Dynamic Island.\n0 system dialog Secondary Actions: Raise\n1 menu bar\n\t2 Dynamic Island\n\t3 Edit\n\t4 View\n\t5 Window\n\t6 Help\n"
+  },
+  {
+    "stem": "b01-external-volume-006",
+    "elapsedMs": 9152,
+    "state": "Window: \"\", App: Dynamic Island.\n0 system dialog Secondary Actions: Raise\n\t1 container\n\t\t2 image Description: speaker wave 2 fill, ID: speaker.wave.2.fill\n\t\t3 text 56%\n4 menu bar\n\t5 Dynamic Island\n\t6 Edit\n\t7 View\n\t8 Window\n\t9 Help\n"
+  },
+  {
+    "stem": "b01-external-volume-007",
+    "elapsedMs": 10536,
+    "state": "Window: \"\", App: Dynamic Island.\n0 system dialog Secondary Actions: Raise\n1 menu bar\n\t2 Dynamic Island\n\t3 Edit\n\t4 View\n\t5 Window\n\t6 Help\n"
+  },
+  {
+    "stem": "b01-external-volume-008",
+    "elapsedMs": 11712,
+    "state": "Window: \"\", App: Dynamic Island.\n0 system dialog Secondary Actions: Raise\n\t1 container\n\t\t2 image Description: speaker wave 2 fill, ID: speaker.wave.2.fill\n\t\t3 text 63%\n4 menu bar\n\t5 Dynamic Island\n\t6 Edit\n\t7 View\n\t8 Window\n\t9 Help\n"
+  },
+  {
+    "stem": "b01-external-volume-009",
+    "elapsedMs": 13170,
+    "state": "Window: \"\", App: Dynamic Island.\n0 system dialog Secondary Actions: Raise\n1 menu bar\n\t2 Dynamic Island\n\t3 Edit\n\t4 View\n\t5 Window\n\t6 Help\n"
+  },
+  {
+    "stem": "b01-external-volume-010",
+    "elapsedMs": 13952,
+    "state": "Window: \"\", App: Dynamic Island.\n0 system dialog Secondary Actions: Raise\n\t1 container\n\t\t2 image Description: speaker wave 3 fill, ID: speaker.wave.3.fill\n\t\t3 text 69%\n4 menu bar\n\t5 Dynamic Island\n\t6 Edit\n\t7 View\n\t8 Window\n\t9 Help\n"
+  },
+  {
+    "stem": "b01-external-volume-011",
+    "elapsedMs": 14830,
+    "state": "Window: \"\", App: Dynamic Island.\n0 system dialog Secondary Actions: Raise\n\t1 container\n\t\t2 image Description: speaker wave 2 fill, ID: speaker.wave.2.fill\n\t\t3 text 63%\n4 menu bar\n\t5 Dynamic Island\n\t6 Edit\n\t7 View\n\t8 Window\n\t9 Help\n"
+  },
+  {
+    "stem": "b01-external-volume-012",
+    "elapsedMs": 15490,
+    "state": "Window: \"\", App: Dynamic Island.\n0 system dialog Secondary Actions: Raise\n\t1 container\n\t\t2 image Description: speaker wave 2 fill, ID: speaker.wave.2.fill\n\t\t3 text 56%\n4 menu bar\n\t5 Dynamic Island\n\t6 Edit\n\t7 View\n\t8 Window\n\t9 Help\n"
+  },
+  {
+    "stem": "b01-external-volume-013",
+    "elapsedMs": 17018,
+    "state": "Window: \"\", App: Dynamic Island.\n0 system dialog Secondary Actions: Raise\n1 menu bar\n\t2 Dynamic Island\n\t3 Edit\n\t4 View\n\t5 Window\n\t6 Help\n"
+  },
+  {
+    "stem": "b01-external-volume-014",
+    "elapsedMs": 17902,
+    "state": "Window: \"\", App: Dynamic Island.\n0 system dialog Secondary Actions: Raise\n\t1 container\n\t\t2 image Description: speaker wave 2 fill, ID: speaker.wave.2.fill\n\t\t3 text 50%\n4 menu bar\n\t5 Dynamic Island\n\t6 Edit\n\t7 View\n\t8 Window\n\t9 Help\n"
+  },
+  {
+    "stem": "b01-external-volume-015",
+    "elapsedMs": 19369,
+    "state": "Window: \"\", App: Dynamic Island.\n0 system dialog Secondary Actions: Raise\n1 menu bar\n\t2 Dynamic Island\n\t3 Edit\n\t4 View\n\t5 Window\n\t6 Help\n"
+  },
+  {
+    "stem": "b01-external-volume-016",
+    "elapsedMs": 20041,
+    "state": "Window: \"\", App: Dynamic Island.\n0 system dialog Secondary Actions: Raise\n\t1 container\n\t\t2 image Description: speaker wave 2 fill, ID: speaker.wave.2.fill\n\t\t3 text 44%\n4 menu bar\n\t5 Dynamic Island\n\t6 Edit\n\t7 View\n\t8 Window\n\t9 Help\n"
+  }
+]

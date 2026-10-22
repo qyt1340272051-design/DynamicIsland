@@ -1,0 +1,46 @@
+{
+  "schemaVersion": 1,
+  "recordedDateLocal": "2026-10-22",
+  "timeZone": "Asia/Shanghai",
+  "scope": "Remote CI verification of the exact recorded main commit via one workflow_dispatch",
+  "run": 39627546396,
+  "url": "https://github.com/qyt1340272051-design/DynamicIsland/actions/runs/39627546396",
+  "headSha": "3ce61ecb73d7b07ae6525180af4901ab656dc69f",
+  "event": "workflow_dispatch",
+  "attempt": 1,
+  "conclusion": "success",
+  "dispatchCount": 1,
+  "workflowRerun": false,
+  "executionStartedUTC": "2026-10-21T15:38:46Z",
+  "executionStartedLocal": "2026-10-21T23:38:46+08:00",
+  "executionUpdatedUTC": "2026-10-21T15:44:22Z",
+  "executionUpdatedLocal": "2026-10-21T23:44:22+08:00",
+  "jobs": [
+    {
+      "id": 119316667258,
+      "name": "Test and build",
+      "status": "completed",
+      "conclusion": "success"
+    }
+  ],
+  "tests": {
+    "total": 1092,
+    "passed": 1087,
+    "skipped": 5,
+    "failed": 0
+  },
+  "releaseBuildPassed": true,
+  "skipReasons": [
+    "Set DYNAMIC_ISLAND_GITHUB_LIVE=1 to verify the anonymous public GitHub API.",
+    "The animated quit path requires Reduce Motion to be off; the test does not change system settings.",
+    "The animated quit path requires Reduce Motion to be off; the test does not change system settings.",
+    "Public-network acceptance is opt-in: set DYNAMIC_ISLAND_LIVE_REGISTRY=1.",
+    "Run Scripts/generate-screen-matrix.sh to generate the screenshot matrix."
+  ],
+  "pushTriggerCauseResolved": false,
+  "acceptanceScope": "Automated CI only; does not close T39, hardware Beta scenarios or clean Mac installation",
+  "sourceHashes": {
+    "resultJSONSHA256": "dd0a2d92876138d3f67f404066d903e15c3a490d86e400150877ded9ba99742c",
+    "ciLogSHA256": "f20f33309c35f859f72c8cffae52c5447aea528cd36b38f928d4251660756980"
+  }
+}

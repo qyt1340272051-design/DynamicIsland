@@ -1,0 +1,20 @@
+Window: "", App: Dynamic Island.
+0 system dialog Secondary Actions: Raise
+	1 container
+		2 button Description: 音乐, ID: island-surface-music
+		3 button Description: 拖盘, ID: island-surface-tray
+		4 button Description: 计时, ID: island-surface-tools
+		5 button Description: 退出 Dynamic Island, ID: power
+		6 text 文件托盘
+		7 button AirDrop
+		8 button 清空文件托盘
+		9 button Description: 锁定文件托盘, ID: lock.open
+		10 scroll area
+			11 image Help: DI-B01-test.txt, Secondary Actions: 移除 DI-B01-test.txt
+			12 text Help: DI-B01-test.txt, Value: 91 bytes DI-B01-test.txt, Secondary Actions: 移除 DI-B01-test.txt
+13 menu bar
+	14 Dynamic Island
+	15 Edit
+	16 View
+	17 Window
+	18 Help

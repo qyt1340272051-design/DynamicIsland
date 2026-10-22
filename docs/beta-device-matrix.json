@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "targetVersion": "v0.6.0-beta.2",
-  "lastUpdated": "2026-10-21",
+  "lastUpdated": "2026-10-22",
   "scenarios": [
     {
       "id": "DI-B01",
@@ -14,7 +14,7 @@
       "menuBarModes": ["visible"],
       "focus": ["launch", "compact-frame", "hover", "volume", "music", "files", "timers"],
       "status": "pending",
-      "evidence": []
+      "evidence": ["plugin-system/evidence/beta-device-20261022/di-b01.json"]
     },
     {
       "id": "DI-B02",
