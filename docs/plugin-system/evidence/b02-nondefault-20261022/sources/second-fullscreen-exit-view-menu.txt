@@ -1,0 +1,10 @@
+Window: "未命名", App: 文本编辑.
+0 显示, Secondary Actions: Cancel, Pick
+	1 菜单 Secondary Actions: Cancel
+		2 显示标签页栏, ID: toggleTabBar:
+		3 显示所有标签页, ID: toggleTabOverview:
+		4 为窗口使用深色背景
+		5 实际大小
+		6 放大
+		7 缩小
+		8 退出全屏幕

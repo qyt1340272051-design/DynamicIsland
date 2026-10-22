@@ -1,0 +1,16 @@
+{
+  "recordedUTC": "2026-10-22T13:42:49.620601+00:00",
+  "fullscreenDirectUserReply": "刘海显示正常",
+  "fullscreenNativeExitMenuObserved": true,
+  "fullscreenEnteredAndExitedByAgent": true,
+  "fullscreenPhysicalTopEdgeImageReceived": false,
+  "spacesDirectUserReply": "已切换并返回，两边都正常；使用已有桌面",
+  "secondOrdinaryDesktopUserConfirmed": true,
+  "returnedToOriginalDesktopUserConfirmed": true,
+  "hoverCollapseTimingAndSideContentIncludedInPrompt": true,
+  "temporaryDesktopCreated": false,
+  "temporaryDesktopRemovalRequired": false,
+  "globalSpaceIDIndependentlyMeasured": false,
+  "afterReturnAppAX": "秒表，08:13.3",
+  "scope": "Direct physical confirmation and subsequent App AX are separate evidence; no physical image received yet."
+}

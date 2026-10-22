@@ -26,8 +26,8 @@
       "scaling": "non-default",
       "menuBarModes": ["auto-hide"],
       "focus": ["compact-frame", "hover", "full-screen", "spaces", "menu-bar-transition"],
-      "status": "pending",
-      "evidence": ["plugin-system/evidence/beta-device-followup-20261022/di-b02.json"]
+      "status": "passed",
+      "evidence": ["plugin-system/evidence/beta-device-followup-20261022/di-b02.json", "plugin-system/evidence/b02-nondefault-20261022/result.json"]
     },
     {
       "id": "DI-B03",

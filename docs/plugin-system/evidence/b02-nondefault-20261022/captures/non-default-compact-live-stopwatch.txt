@@ -1,0 +1,9 @@
+Window: "", App: Dynamic Island.
+0 system dialog Secondary Actions: Raise
+	1 unknown 秒表，03:37.8
+2 menu bar
+	3 Dynamic Island
+	4 Edit
+	5 View
+	6 Window
+	7 Help

@@ -1,0 +1,19 @@
+{
+  "startedUTC": "2026-10-22T13:12:20.584311+00:00",
+  "scenarioID": "DI-B02",
+  "scenarioStatus": "pending",
+  "appVersion": "0.6.0",
+  "build": "4",
+  "bundleIdentifier": "com.rong5.dynamic-island-mac",
+  "executableSHA256": "339773f56666bcc3a514500b70d9fa6cd21a8bbdc9c1d7682e83796a1584fb92",
+  "originalPublishedBundle": true,
+  "temporarySettingsUserPreviouslyApproved": true,
+  "userAvailableThisRound": true,
+  "baselineResolution": "1470 × 956（默认）",
+  "baselineMenuBarMode": "仅在全屏幕视图下",
+  "plannedResolution": "1280 × 832",
+  "plannedMenuBarMode": "始终",
+  "restorationRequiredUntilVerified": true,
+  "musicPlaybackDeferredByUser": true,
+  "originalOfficialPluginsDisabledWithAllFourPermissionsRevoked": true
+}

@@ -1,0 +1,106 @@
+{
+  "schemaVersion": 1,
+  "dateLocal": "2026-10-22",
+  "timeZone": "Asia/Shanghai",
+  "scenarioID": "DI-B02",
+  "scenarioStatus": "passed",
+  "targetVersion": "v0.6.0-beta.2",
+  "appVersion": "0.6.0",
+  "build": "4",
+  "appSourceCommit": "eacec4d1d385bc90946e8d0df1731dbd22c23428",
+  "executableSHA256": "339773f56666bcc3a514500b70d9fa6cd21a8bbdc9c1d7682e83796a1584fb92",
+  "originalPublishedBundle": true,
+  "modifiedBinary": false,
+  "distribution": "ad hoc signed, unnotarized prerelease",
+  "newGatekeeperApprovalThisRound": false,
+  "cleanMacInstallationTest": false,
+  "deviceModel": "Mac16,12",
+  "architecture": "arm64",
+  "macOSVersion": "26.6.2",
+  "macOSBuild": "25G83",
+  "display": {
+    "count": 1,
+    "builtIn": true,
+    "notch": true,
+    "logicalSizePoints": [
+      1280,
+      832
+    ],
+    "backingScaleFactor": 2,
+    "physicalPixels": [
+      2560,
+      1664
+    ],
+    "menuBarAutoHide": "始终",
+    "panelFramePoints": [
+      380,
+      592,
+      520,
+      240
+    ],
+    "compactPanelSizePoints": [
+      156,
+      28
+    ],
+    "safeAreaTopPoints": 28,
+    "diagnosticGeneratedUTC": "2026-10-22T13:23:12.649Z"
+  },
+  "observations": {
+    "automaticDesktopPositionBeforeCopyDiagnostic": "自动位置正常，展开和收起无遮挡",
+    "nativeFullscreenUserFeedback": "刘海显示正常",
+    "ordinaryDesktopSpaceUserFeedback": "已切换并返回，两边都正常；使用已有桌面",
+    "nativeFullscreenEntryAndExitObserved": true,
+    "nativeFullscreenIntervals": 2,
+    "stopwatchStartedAfterFirstFullscreenHover": true,
+    "physicalFullscreenScreenshot": {
+      "path": "captures/physical-fullscreen-compact.png",
+      "pixels": [
+        2560,
+        1664
+      ],
+      "sha256": "fb00f198810558b00812a95251595f25f8ff195299c1e71c0ac0d85b988e15d3",
+      "method": "macOS Screenshot utility native UI, static full-screen capture",
+      "originalBytes": true,
+      "showsWholePhysicalTopEdge": true,
+      "compactStopwatch": "15:18.9",
+      "menuBarHidden": true,
+      "separateSecondStaticFullscreenInterval": true
+    },
+    "existingOrdinaryDesktopVisitedAndReturned": true,
+    "newDesktopCreated": false,
+    "independentSpaceIDMeasured": false,
+    "cleanup": {
+      "resolutionRestored": "1470 × 956（默认）",
+      "menuBarModeRestored": "仅在全屏幕视图下",
+      "selectedSettingsVerified": true,
+      "stopwatchPausedAndReset": true,
+      "stopwatchDisplay": "00:00.0",
+      "timersRunning": false,
+      "nativeFullscreenExited": true,
+      "syntheticDocumentWindowClosedUnedited": true,
+      "screenshotDesktopOutputMovedIntoEvidence": true,
+      "appLeftRunning": true,
+      "musicStarted": false,
+      "volumeChanged": false,
+      "pluginPermissionsChanged": false,
+      "trayFilesMovedOrDeleted": false
+    }
+  },
+  "scopeLimits": [
+    "Copy Diagnostic Info calls screenManager.refresh(); pre-copy physical user feedback and post-copy measured geometry are separate evidence.",
+    "App-window JPEG/AX captures do not establish the whole physical screen or continuous pointer movement. The full-screen PNG is a separate second static native-fullscreen interval.",
+    "Fullscreen visibility and ordinary desktop hover/collapse feedback are user reports; no independently measured Space ID or continuous mouse path is claimed.",
+    "The stable 520x240 NSPanel is a container, not the compact shell or active information wings. This scenario does not implement or accept U02 full-resolution adaptation.",
+    "B01, other hardware, clean-Mac installation and T39 remain pending; the T01-T40 plan remains 39 verified / 1 in progress."
+  ],
+  "sources": [
+    "sources/non-default-diagnostic-user-report.txt",
+    "sources/non-default-desktop-observation.json",
+    "sources/fullscreen-and-space-user-feedback.json",
+    "sources/physical-screenshot-acquisition.json",
+    "sources/restored-menu-bar-option.txt",
+    "sources/restored-resolution-selected.txt",
+    "sources/cleanup.json",
+    "manifest.json"
+  ]
+}

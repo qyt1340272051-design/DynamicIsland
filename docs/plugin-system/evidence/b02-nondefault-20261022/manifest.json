@@ -1,0 +1,291 @@
+{
+  "schemaVersion": 1,
+  "evidenceSet": "b02-nondefault-20261022",
+  "generatedUTC": "2026-10-22T14:07:16.576045+00:00",
+  "scope": "Selected original image and source payloads. This manifest excludes its own bytes and separately maintained scenario narrative/results.",
+  "scenarioID": "DI-B02",
+  "scenarioStatus": "passed",
+  "archivePhase": "Final settings-restoration and paused/reset stopwatch evidence included; scenario disposition is limited to the five DI-B02 matrix focus checks.",
+  "preservation": {
+    "media": "Original JPEG and PNG bytes copied without transcoding, cropping, redrawing, or other editing.",
+    "text": "Selected original UTF-8 source bytes copied without rewriting.",
+    "sourceSelection": "Only the declared sources/captures files were read for this archival pass. Root private-* files and unrelated directories were not copied."
+  },
+  "privacyReview": {
+    "allSelectedScreenshotsVisuallyReviewed": true,
+    "selectedTextPrivatePathAndEmailMatches": 0,
+    "selectedTextAbsoluteTemporaryPathMatches": 0,
+    "selectedMediaEmbeddedPrivatePathMatches": 0,
+    "fullScreenImageContainsOnlySyntheticFixtureAndNonSensitiveProjectTaskIndicator": true
+  },
+  "limitations": [
+    "The fresh non-default report describes 1280x832 AppKit points, 156x28 base compact geometry and a stable 520x240 NSPanel. The stable panel frame does not describe every painted activity-wing extent.",
+    "User observation before Copy Diagnostic Info and the report generated after its manual screen refresh are separate evidence.",
+    "The first native-full-screen user trial and the later complete-screen PNG capture are separate intervals. The PNG is a single original system screenshot, not continuous pointer or Space recording.",
+    "The ordinary second desktop and return were directly user-confirmed; global Space identifiers were not independently measured.",
+    "The early feedback receipt says no image had arrived at that time. The later screen-acquisition record and PNG provide a separate later observation.",
+    "The source preparation/session records preserve their earlier pending/planned state. They do not represent the final scenario disposition.",
+    "This archive does not change DI-B01, other hardware, clean-Mac installation, T39, or future U02 acceptance."
+  ],
+  "exclusions": [
+    {
+      "source": "sources/fixture-windowed-ax-excerpts.txt",
+      "reason": "Contains an absolute private temporary fixture URL. Public fixture preparation and native full-screen menu records retain the relevant evidence."
+    },
+    {
+      "source": "sources/after-native-fullscreen-exit-excerpts.txt",
+      "reason": "Contains an absolute private temporary fixture URL and duplicates the windowed fixture AX. The exit receipt and native menu are retained."
+    },
+    {
+      "source": "captures/non-default-desktop-before-report.jpg",
+      "reason": "Exact byte duplicate of the retained after-resolution-before-diagnostic.jpg.",
+      "duplicateOf": "captures/after-resolution-before-diagnostic.jpg"
+    },
+    {
+      "source": "captures/non-default-desktop-before-report.txt",
+      "reason": "Exact byte duplicate of the retained after-resolution-before-diagnostic.txt.",
+      "duplicateOf": "captures/after-resolution-before-diagnostic.txt"
+    }
+  ],
+  "counts": {
+    "captures": 13,
+    "sources": 18,
+    "payloadFiles": 31,
+    "jpegImages": 6,
+    "pngImages": 1,
+    "utf8TextFiles": 24
+  },
+  "files": [
+    {
+      "path": "captures/after-reported-space-return.jpg",
+      "source": "captures/after-reported-space-return.jpg",
+      "bytes": 17450,
+      "sha256": "cbc406f1647d94d72580b10e21b8ba658dda14afb0d0d91335e84d8febeb0ad8",
+      "mediaType": "image/jpeg",
+      "detectedFormat": "JPEG"
+    },
+    {
+      "path": "captures/after-reported-space-return.txt",
+      "source": "captures/after-reported-space-return.txt",
+      "bytes": 165,
+      "sha256": "fac1c87a179f21900acb589db43f141fea5ca4ad4f27108621a66a1e4f3cfc83",
+      "mediaType": "text/plain; charset=utf-8"
+    },
+    {
+      "path": "captures/after-resolution-before-diagnostic.jpg",
+      "source": "captures/after-resolution-before-diagnostic.jpg",
+      "bytes": 13462,
+      "sha256": "b1d06e57092cd308dfbee30b4da3d9dd626fdcfae9cc6269a101782cb8dafcec",
+      "mediaType": "image/jpeg",
+      "detectedFormat": "JPEG"
+    },
+    {
+      "path": "captures/after-resolution-before-diagnostic.txt",
+      "source": "captures/after-resolution-before-diagnostic.txt",
+      "bytes": 137,
+      "sha256": "537bd3c9ac5491b17d8ff3b9f5e2bc17125a0b235abaa9279bf14fdd0ca8e75d",
+      "mediaType": "text/plain; charset=utf-8"
+    },
+    {
+      "path": "captures/fullscreen-short-stopwatch-running.jpg",
+      "source": "captures/fullscreen-short-stopwatch-running.jpg",
+      "bytes": 34244,
+      "sha256": "4b9497b12311ee0655a57dc541918e6fac7d350996962c5d41f5ca34ea28b523",
+      "mediaType": "image/jpeg",
+      "detectedFormat": "JPEG"
+    },
+    {
+      "path": "captures/fullscreen-short-stopwatch-running.txt",
+      "source": "captures/fullscreen-short-stopwatch-running.txt",
+      "bytes": 634,
+      "sha256": "fd163f26ab739a4b4dbc7d29e0e41c13aa77527ebbed68bb7b720460d6366039",
+      "mediaType": "text/plain; charset=utf-8"
+    },
+    {
+      "path": "captures/island-during-fullscreen-first.jpg",
+      "source": "captures/island-during-fullscreen-first.jpg",
+      "bytes": 34366,
+      "sha256": "57fe988a83aa273fe17c3019aa1541a5bce1baf47589e4ac0aa4fd7cd603416b",
+      "mediaType": "image/jpeg",
+      "detectedFormat": "JPEG"
+    },
+    {
+      "path": "captures/island-during-fullscreen-first.txt",
+      "source": "captures/island-during-fullscreen-first.txt",
+      "bytes": 636,
+      "sha256": "a7eb90c8acea23297e141c7b3738d4f0a7f9085961939dac2b83680d26d47269",
+      "mediaType": "text/plain; charset=utf-8"
+    },
+    {
+      "path": "captures/non-default-compact-live-stopwatch.jpg",
+      "source": "captures/non-default-compact-live-stopwatch.jpg",
+      "bytes": 17463,
+      "sha256": "ccae0fffb6e311aca5092d3dab39666e85e0da64ce0ed3ebacdfba5fd17a054e",
+      "mediaType": "image/jpeg",
+      "detectedFormat": "JPEG"
+    },
+    {
+      "path": "captures/non-default-compact-live-stopwatch.txt",
+      "source": "captures/non-default-compact-live-stopwatch.txt",
+      "bytes": 165,
+      "sha256": "29126895eda74924accc56dcf9cb76e942d72833ac2ab757442db551cc62cea2",
+      "mediaType": "text/plain; charset=utf-8"
+    },
+    {
+      "path": "captures/physical-fullscreen-compact.png",
+      "source": "captures/physical-fullscreen-compact.png",
+      "bytes": 155476,
+      "sha256": "fb00f198810558b00812a95251595f25f8ff195299c1e71c0ac0d85b988e15d3",
+      "mediaType": "image/png",
+      "detectedFormat": "PNG"
+    },
+    {
+      "path": "captures/stopwatch-reset.jpg",
+      "source": "captures/stopwatch-reset.jpg",
+      "bytes": 34867,
+      "sha256": "b31ae73f2bd37a0227cb7336c6a027c1d6edb2d44aa752487521e8d4b3a2c21b",
+      "mediaType": "image/jpeg",
+      "detectedFormat": "JPEG"
+    },
+    {
+      "path": "captures/stopwatch-reset.txt",
+      "source": "captures/stopwatch-reset.txt",
+      "bytes": 595,
+      "sha256": "d1749540ab5d1ddf4b4164714581143cd417757a6d7651dc953484cf7694a757",
+      "mediaType": "text/plain; charset=utf-8"
+    },
+    {
+      "path": "sources/cleanup.json",
+      "source": "sources/cleanup.json",
+      "bytes": 735,
+      "sha256": "aed4127cc7cfb1150a2d0931dcc8283425e7cf82e9a0dcbca8d210cc91e789af",
+      "mediaType": "application/json"
+    },
+    {
+      "path": "sources/fixture-preparation.json",
+      "source": "sources/fixture-preparation.json",
+      "bytes": 575,
+      "sha256": "19d37d0464823474c706cd678121bbd7271d51aaaca748b9354ae5a84e6afad4",
+      "mediaType": "application/json"
+    },
+    {
+      "path": "sources/fullscreen-and-space-user-feedback.json",
+      "source": "sources/fullscreen-and-space-user-feedback.json",
+      "bytes": 783,
+      "sha256": "ebf993e551d31f064d52d95867c5bf4391f7d94e307e640e90d0fde5d5efe1df",
+      "mediaType": "application/json"
+    },
+    {
+      "path": "sources/fullscreen-exit.json",
+      "source": "sources/fullscreen-exit.json",
+      "bytes": 116,
+      "sha256": "581b35ea9884a9d7512149398958072e4feb5bf7f54ce09099197d5932556aec",
+      "mediaType": "application/json"
+    },
+    {
+      "path": "sources/fullscreen-native-view-menu.txt",
+      "source": "sources/fullscreen-native-view-menu.txt",
+      "bytes": 301,
+      "sha256": "0f00be5965fdf376ce7b7e231cbde192aad32f3c49cce798c8e66f438962131b",
+      "mediaType": "text/plain; charset=utf-8"
+    },
+    {
+      "path": "sources/fullscreen-start.json",
+      "source": "sources/fullscreen-start.json",
+      "bytes": 162,
+      "sha256": "1c9796052084121175e05b3f0e5a34c7c1bc5632364686378e27fd207cfac289",
+      "mediaType": "application/json"
+    },
+    {
+      "path": "sources/non-default-desktop-observation.json",
+      "source": "sources/non-default-desktop-observation.json",
+      "bytes": 951,
+      "sha256": "92d971f33feac2223087c351685b5ced00eb766333c11f1be03d8a1e1348dc7f",
+      "mediaType": "application/json"
+    },
+    {
+      "path": "sources/non-default-diagnostic-user-report.txt",
+      "source": "sources/non-default-diagnostic-user-report.txt",
+      "bytes": 1119,
+      "sha256": "56d7a1d7b903b8e80330f242d1e47ade6c9cb4d5e240aacc00e94e025a96d8a8",
+      "mediaType": "text/plain; charset=utf-8"
+    },
+    {
+      "path": "sources/original-menu-bar-option.txt",
+      "source": "sources/original-menu-bar-option.txt",
+      "bytes": 109,
+      "sha256": "89924c5bc4bce162db8f5b7546a6234f738721102df97aa9324d4b72aada3bc9",
+      "mediaType": "text/plain; charset=utf-8"
+    },
+    {
+      "path": "sources/original-resolution-options.txt",
+      "source": "sources/original-resolution-options.txt",
+      "bytes": 167,
+      "sha256": "b5f8968a7de05ba4677245a49c28734e7e2728c959fabb67c49decfa0a35ed91",
+      "mediaType": "text/plain; charset=utf-8"
+    },
+    {
+      "path": "sources/physical-screenshot-acquisition.json",
+      "source": "sources/physical-screenshot-acquisition.json",
+      "bytes": 1035,
+      "sha256": "a4810c8bb4743a0018d331d865403ce070dd61cabda59e418f14968ca00d8506",
+      "mediaType": "application/json"
+    },
+    {
+      "path": "sources/restored-menu-bar-option.txt",
+      "source": "sources/restored-menu-bar-option.txt",
+      "bytes": 109,
+      "sha256": "89924c5bc4bce162db8f5b7546a6234f738721102df97aa9324d4b72aada3bc9",
+      "mediaType": "text/plain; charset=utf-8"
+    },
+    {
+      "path": "sources/restored-resolution-selected.txt",
+      "source": "sources/restored-resolution-selected.txt",
+      "bytes": 167,
+      "sha256": "b5f8968a7de05ba4677245a49c28734e7e2728c959fabb67c49decfa0a35ed91",
+      "mediaType": "text/plain; charset=utf-8"
+    },
+    {
+      "path": "sources/second-fullscreen-exit-view-menu.txt",
+      "source": "sources/second-fullscreen-exit-view-menu.txt",
+      "bytes": 301,
+      "sha256": "0f00be5965fdf376ce7b7e231cbde192aad32f3c49cce798c8e66f438962131b",
+      "mediaType": "text/plain; charset=utf-8"
+    },
+    {
+      "path": "sources/session-start.json",
+      "source": "sources/session-start.json",
+      "bytes": 748,
+      "sha256": "fe5a16c022a051631e59e524b57275a52298ab445fa0647d14cbcb155f874271",
+      "mediaType": "application/json"
+    },
+    {
+      "path": "sources/short-stopwatch-start.json",
+      "source": "sources/short-stopwatch-start.json",
+      "bytes": 180,
+      "sha256": "1872b84b895828cce735dc0a3c35a4f8b73468839abeeae79c36aa532e668424",
+      "mediaType": "application/json"
+    },
+    {
+      "path": "sources/temporary-always-menu-option.txt",
+      "source": "sources/temporary-always-menu-option.txt",
+      "bytes": 91,
+      "sha256": "aa98df8a63e7d45213f86dd9ebd87e5e015461938e3a9cba6ab8b0a42d38889b",
+      "mediaType": "text/plain; charset=utf-8"
+    },
+    {
+      "path": "sources/temporary-resolution-selected.txt",
+      "source": "sources/temporary-resolution-selected.txt",
+      "bytes": 167,
+      "sha256": "da84cb6a7e4ecb51329b754a22cce1e5573aa36a83d1c1a16edfe94817ca630d",
+      "mediaType": "text/plain; charset=utf-8"
+    }
+  ],
+  "acceptanceScope": [
+    "compact-frame",
+    "hover",
+    "full-screen",
+    "spaces",
+    "menu-bar-transition"
+  ]
+}

@@ -1,0 +1,34 @@
+{
+  "recordedUTC": "2026-10-22T13:25:25.646838+00:00",
+  "directUserFeedbackBeforeDiagnosticCopy": "自动位置正常，展开和收起无遮挡",
+  "userObservedBeforeManualScreenRefresh": true,
+  "freshNonDefaultReportGeneratedUTC": "2026-10-22T13:23:12.649Z",
+  "logicalFramePoints": {
+    "x": 0,
+    "y": 0,
+    "width": 1280,
+    "height": 832
+  },
+  "panelFramePoints": {
+    "x": 380,
+    "y": 592,
+    "width": 520,
+    "height": 240
+  },
+  "compactPanelPoints": {
+    "width": 156,
+    "height": 28
+  },
+  "safeAreaTopPoints": 28,
+  "backingScale": 2,
+  "estimatedBackingPixels": {
+    "width": 2560,
+    "height": 1664
+  },
+  "derivedChecks": {
+    "panelTopEqualsScreenTop": true,
+    "auxiliaryGapEqualsCompactWidth": true,
+    "panelCenterEqualsScreenCenter": true
+  },
+  "manualCopyRefreshBoundary": "Copy Diagnostic Info calls screenManager.refresh(); direct user feedback before copy and post-copy geometry are separate evidence."
+}
