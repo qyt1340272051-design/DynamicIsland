@@ -1,0 +1,13 @@
+{
+  "observedUTC": "2026-10-22T06:02:32.226935+00:00",
+  "previousPID": 63049,
+  "newPID": 68525,
+  "realProcessRestartVerified": true,
+  "oldProcessGonePreviouslyVerified": true,
+  "appVersion": "0.6.0",
+  "build": "4",
+  "twoInstalledPluginsDisabledInUI": true,
+  "fourPermissionsRevokedInUI": true,
+  "noPermissionAutomaticallyRegranted": true,
+  "timersAutomaticallyStartedObserved": false
+}

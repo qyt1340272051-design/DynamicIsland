@@ -1,0 +1,906 @@
+{
+  "schemaVersion": 1,
+  "evidenceSet": "beta-device-followup-20261022",
+  "generatedUTC": "2026-10-22T06:15:32.141706+00:00",
+  "scope": "Captured image and source payloads listed below. This manifest excludes its own bytes and the separately maintained README and scenario records.",
+  "scenarioStatus": {
+    "DI-B01": "pending",
+    "DI-B02": "pending"
+  },
+  "preservation": {
+    "images": "Original JPEG bytes copied without transcoding, cropping, redrawing, or other image editing.",
+    "text": "Original source bytes copied. The default-environment draft already contained no absolute source paths and required no path removal.",
+    "pr7CIResult": "Historical pre-merge OPEN snapshot; its recorded state is preserved and is not a current PR-state claim."
+  },
+  "privacyReview": {
+    "allListedScreenshotsVisuallyReviewed": true,
+    "listedTextPrivatePathAndEmailMatches": 0,
+    "listedImageEmbeddedPrivatePathMatches": 0,
+    "excludedIdentityImageNotCopied": true,
+    "privateBackupAndUnlistedSourceDirectoriesNotTraversed": true
+  },
+  "limitations": [
+    "DI-B01 and DI-B02 remain pending; this archive does not complete device, clean-Mac, T39, or future U02 gates.",
+    "The real 900-second Pomodoro run was first observed completed 74.133 seconds after its latest expected deadline. The state transition was not continuously captured and no compact completion toast was captured; the observation delay is not a timer scheduling latency measurement.",
+    "DI-B02 records actual 1280x832 and Always menu-bar Settings plus a native TextEdit full-screen menu observation. Physical Space transitions and island visibility are not confirmed; default Settings were restored.",
+    "App-window screenshots do not independently prove physical notch or HUD visibility.",
+    "AirDrop evidence covers a verified synthetic single-item payload, native panel opening and cancellation only; no recipient was selected and no send was performed.",
+    "Tray cleanup removed only the synthetic imported copy; the two pre-existing temporary entries were retained and clear was not executed."
+  ],
+  "exclusions": [
+    {
+      "source": "captures/b02-menu-bar-temporary-always.jpg",
+      "reason": "The original System Settings screenshot contains account identity in the sidebar. It is retained privately and excluded without image editing; the filtered menu-bar AX JSON is included instead."
+    }
+  ],
+  "counts": {
+    "captures": 79,
+    "sources": 38,
+    "payloadFiles": 117,
+    "jpegImages": 42,
+    "utf8TextFiles": 75
+  },
+  "files": [
+    {
+      "path": "captures/b01-build4-before-normal-quit.jpg",
+      "source": "captures/b01-build4-before-normal-quit.jpg",
+      "bytes": 41996,
+      "sha256": "4043b10b425559b565c55da41d517027f997e4e54c6bcf6eea6b93858c1b92f2",
+      "mediaType": "image/jpeg",
+      "detectedFormat": "JPEG"
+    },
+    {
+      "path": "captures/b01-build4-before-normal-quit.txt",
+      "source": "captures/b01-build4-before-normal-quit.txt",
+      "bytes": 858,
+      "sha256": "9d6a865ef6984a8af8abef1f79a71e0289839ae79af45bc76d19791d7314c705",
+      "mediaType": "text/plain; charset=utf-8"
+    },
+    {
+      "path": "captures/b01-build4-final-show-hide-restored.jpg",
+      "source": "captures/b01-build4-final-show-hide-restored.jpg",
+      "bytes": 13501,
+      "sha256": "ec3e5167f378fc34aca3d0df0762b280a74079a359216f015b6e20527290c3e1",
+      "mediaType": "image/jpeg",
+      "detectedFormat": "JPEG"
+    },
+    {
+      "path": "captures/b01-build4-final-show-hide-restored.txt",
+      "source": "captures/b01-build4-final-show-hide-restored.txt",
+      "bytes": 137,
+      "sha256": "537bd3c9ac5491b17d8ff3b9f5e2bc17125a0b235abaa9279bf14fdd0ca8e75d",
+      "mediaType": "text/plain; charset=utf-8"
+    },
+    {
+      "path": "captures/b01-build4-github-actions-checkout.jpg",
+      "source": "captures/b01-build4-github-actions-checkout.jpg",
+      "bytes": 36359,
+      "sha256": "6df9937813127c21ba3275060259e37dfbd1b6515c81a7e1d64333dac9ac0723",
+      "mediaType": "image/jpeg",
+      "detectedFormat": "JPEG"
+    },
+    {
+      "path": "captures/b01-build4-github-actions-checkout.txt",
+      "source": "captures/b01-build4-github-actions-checkout.txt",
+      "bytes": 629,
+      "sha256": "fb71d845498fd5336856e98276b8f309c829ead099b6bb67de606b479d884a85",
+      "mediaType": "text/plain; charset=utf-8"
+    },
+    {
+      "path": "captures/b01-build4-github-all-denied.jpg",
+      "source": "captures/b01-build4-github-all-denied.jpg",
+      "bytes": 173349,
+      "sha256": "e904020857ff14e8bcd91c189dc2216e20fd882860c4cf5769ad596fd2c63481",
+      "mediaType": "image/jpeg",
+      "detectedFormat": "JPEG"
+    },
+    {
+      "path": "captures/b01-build4-github-all-denied.txt",
+      "source": "captures/b01-build4-github-all-denied.txt",
+      "bytes": 2368,
+      "sha256": "923290ccc9cad46803d9094a3824545000ce27c62de1fe5ce9e939e072508fea",
+      "mediaType": "text/plain; charset=utf-8"
+    },
+    {
+      "path": "captures/b01-build4-github-all-granted.jpg",
+      "source": "captures/b01-build4-github-all-granted.jpg",
+      "bytes": 170245,
+      "sha256": "91c46e33b02f2676cd5c2a9673a286be2ae5de6a81c3e9fea1a30c0f3e412328",
+      "mediaType": "image/jpeg",
+      "detectedFormat": "JPEG"
+    },
+    {
+      "path": "captures/b01-build4-github-all-granted.txt",
+      "source": "captures/b01-build4-github-all-granted.txt",
+      "bytes": 2338,
+      "sha256": "41faaea44c434edf9f648cfdc1f5de5f83470e94a70dd71ff12062fe4a19a835",
+      "mediaType": "text/plain; charset=utf-8"
+    },
+    {
+      "path": "captures/b01-build4-github-cli-switch.jpg",
+      "source": "captures/b01-build4-github-cli-switch.jpg",
+      "bytes": 40469,
+      "sha256": "e40eaf92cde2f7cfc660bc6d361e535ba3297f8e8408786403f6bf796fc118bc",
+      "mediaType": "image/jpeg",
+      "detectedFormat": "JPEG"
+    },
+    {
+      "path": "captures/b01-build4-github-cli-switch.txt",
+      "source": "captures/b01-build4-github-cli-switch.txt",
+      "bytes": 668,
+      "sha256": "be56b8387ec4ffc2dc1439a2966d88fa46ee3fde99d0662f788a0d5446ba0eaf",
+      "mediaType": "text/plain; charset=utf-8"
+    },
+    {
+      "path": "captures/b01-build4-github-disabled-all-revoked.jpg",
+      "source": "captures/b01-build4-github-disabled-all-revoked.jpg",
+      "bytes": 168285,
+      "sha256": "96d0593ba8b76c7f1825f52ab11d7a321f18c138bb5aaf486b42a46c52678040",
+      "mediaType": "image/jpeg",
+      "detectedFormat": "JPEG"
+    },
+    {
+      "path": "captures/b01-build4-github-disabled-all-revoked.txt",
+      "source": "captures/b01-build4-github-disabled-all-revoked.txt",
+      "bytes": 2463,
+      "sha256": "c4fb79d4b9f1114ff6b9d858d95be6ec39fcac3bb4bfe1d864bf4789471fe221",
+      "mediaType": "text/plain; charset=utf-8"
+    },
+    {
+      "path": "captures/b01-build4-github-enabled-without-grants.jpg",
+      "source": "captures/b01-build4-github-enabled-without-grants.jpg",
+      "bytes": 174524,
+      "sha256": "909994f38fc5dbf9a902fa99769361f2f11ffcd655109824ce1d1442fe3c0f16",
+      "mediaType": "image/jpeg",
+      "detectedFormat": "JPEG"
+    },
+    {
+      "path": "captures/b01-build4-github-enabled-without-grants.txt",
+      "source": "captures/b01-build4-github-enabled-without-grants.txt",
+      "bytes": 2569,
+      "sha256": "e62efa7feac271c889c613cee4b4b56cf63328ea89c79a3b297c9aea0c3dbe57",
+      "mediaType": "text/plain; charset=utf-8"
+    },
+    {
+      "path": "captures/b01-build4-github-installed-disabled.jpg",
+      "source": "captures/b01-build4-github-installed-disabled.jpg",
+      "bytes": 174961,
+      "sha256": "ebead9e3ddbe6a28e2796cbcf82287efbceda59348dcac96c4c424c48512310e",
+      "mediaType": "image/jpeg",
+      "detectedFormat": "JPEG"
+    },
+    {
+      "path": "captures/b01-build4-github-installed-disabled.txt",
+      "source": "captures/b01-build4-github-installed-disabled.txt",
+      "bytes": 2569,
+      "sha256": "f238cabf26afcdbc8d71541b2e5c74006ad60a17a1ac2682d4d837d5e15e4247",
+      "mediaType": "text/plain; charset=utf-8"
+    },
+    {
+      "path": "captures/b01-build4-github-network-revoked.jpg",
+      "source": "captures/b01-build4-github-network-revoked.jpg",
+      "bytes": 168654,
+      "sha256": "b544b373cb3874e25b76dd22d1cd953cf23a5b1d2d2d512f54084b38c76e3b0d",
+      "mediaType": "image/jpeg",
+      "detectedFormat": "JPEG"
+    },
+    {
+      "path": "captures/b01-build4-github-network-revoked.txt",
+      "source": "captures/b01-build4-github-network-revoked.txt",
+      "bytes": 2455,
+      "sha256": "f51d2bd481b38c627c0767453d86b508a4cad3c353c19e7b49485f7b549cb622",
+      "mediaType": "text/plain; charset=utf-8"
+    },
+    {
+      "path": "captures/b01-build4-github-preview.jpg",
+      "source": "captures/b01-build4-github-preview.jpg",
+      "bytes": 143300,
+      "sha256": "c7a977da8d8fae45c1ecebc29861b595ee5c8d2b6f1aa664b7f2bf8ec69dc6b2",
+      "mediaType": "image/jpeg",
+      "detectedFormat": "JPEG"
+    },
+    {
+      "path": "captures/b01-build4-github-preview.txt",
+      "source": "captures/b01-build4-github-preview.txt",
+      "bytes": 1228,
+      "sha256": "c2a1a49b1231f66fda6a8b8960ea5e19c71217cfd0fe6330610934f594ad770e",
+      "mediaType": "text/plain; charset=utf-8"
+    },
+    {
+      "path": "captures/b01-build4-github-refresh-denied-after-revoke.jpg",
+      "source": "captures/b01-build4-github-refresh-denied-after-revoke.jpg",
+      "bytes": 42142,
+      "sha256": "ad6e234ffef3d731743e3a927e1a7a3057c6b665ea950a07d91b60ce0fb572a2",
+      "mediaType": "image/jpeg",
+      "detectedFormat": "JPEG"
+    },
+    {
+      "path": "captures/b01-build4-github-refresh-denied-after-revoke.txt",
+      "source": "captures/b01-build4-github-refresh-denied-after-revoke.txt",
+      "bytes": 687,
+      "sha256": "be32775ca2ea54f1ff75e2289264380d6dc04d4f8ea05568a40bd0b9689da701",
+      "mediaType": "text/plain; charset=utf-8"
+    },
+    {
+      "path": "captures/b01-build4-github-refreshed.jpg",
+      "source": "captures/b01-build4-github-refreshed.jpg",
+      "bytes": 40340,
+      "sha256": "a8ec5d1fbe3666e949bfd7fcaf54b2ec890d6be37f18f83688602f9bac90021b",
+      "mediaType": "image/jpeg",
+      "detectedFormat": "JPEG"
+    },
+    {
+      "path": "captures/b01-build4-github-refreshed.txt",
+      "source": "captures/b01-build4-github-refreshed.txt",
+      "bytes": 668,
+      "sha256": "be56b8387ec4ffc2dc1439a2966d88fa46ee3fde99d0662f788a0d5446ba0eaf",
+      "mediaType": "text/plain; charset=utf-8"
+    },
+    {
+      "path": "captures/b01-build4-native-after-github-selection-reset.jpg",
+      "source": "captures/b01-build4-native-after-github-selection-reset.jpg",
+      "bytes": 42509,
+      "sha256": "882b3a1e392393213ec2ed659c5566dd85e2734a32cc25baed20012a64b950f5",
+      "mediaType": "image/jpeg",
+      "detectedFormat": "JPEG"
+    },
+    {
+      "path": "captures/b01-build4-native-after-github-selection-reset.txt",
+      "source": "captures/b01-build4-native-after-github-selection-reset.txt",
+      "bytes": 887,
+      "sha256": "31ea049988b839b1ab184f38ac67739e31a2979afa23bcae2a6e2a1f8340bd3e",
+      "mediaType": "text/plain; charset=utf-8"
+    },
+    {
+      "path": "captures/b01-build4-official-plugins-enabled.jpg",
+      "source": "captures/b01-build4-official-plugins-enabled.jpg",
+      "bytes": 133187,
+      "sha256": "988ced73e60ccd774db9d817b3bad5e516922fb228a72b2711fbc4359d2ae973",
+      "mediaType": "image/jpeg",
+      "detectedFormat": "JPEG"
+    },
+    {
+      "path": "captures/b01-build4-official-plugins-enabled.txt",
+      "source": "captures/b01-build4-official-plugins-enabled.txt",
+      "bytes": 1757,
+      "sha256": "c4c7d3b3beff48b03f9d4e8600dc7075bb23adfee272665fc0699460758e1624",
+      "mediaType": "text/plain; charset=utf-8"
+    },
+    {
+      "path": "captures/b01-build4-pomodoro-15-preset.jpg",
+      "source": "captures/b01-build4-pomodoro-15-preset.jpg",
+      "bytes": 33911,
+      "sha256": "20fe1c74480ab0c0e3ceb5e7460c7a3b98ca63e5d323ab65eb75e0e9601bc651",
+      "mediaType": "image/jpeg",
+      "detectedFormat": "JPEG"
+    },
+    {
+      "path": "captures/b01-build4-pomodoro-15-preset.txt",
+      "source": "captures/b01-build4-pomodoro-15-preset.txt",
+      "bytes": 667,
+      "sha256": "c20b5b08db072eba742df256ca8cc8e065b92e8e8e73a64e5bc035c582c60f39",
+      "mediaType": "text/plain; charset=utf-8"
+    },
+    {
+      "path": "captures/b01-build4-pomodoro-after-github-tests.jpg",
+      "source": "captures/b01-build4-pomodoro-after-github-tests.jpg",
+      "bytes": 39313,
+      "sha256": "289498a504a6d29f80ca69501709312b5c222f80d02fd211d67b538284ae1f89",
+      "mediaType": "image/jpeg",
+      "detectedFormat": "JPEG"
+    },
+    {
+      "path": "captures/b01-build4-pomodoro-after-github-tests.txt",
+      "source": "captures/b01-build4-pomodoro-after-github-tests.txt",
+      "bytes": 692,
+      "sha256": "79d131419d4c0d0f213cea20cb29b03d25ca2118530aacfa1e5bde11ee859d8b",
+      "mediaType": "text/plain; charset=utf-8"
+    },
+    {
+      "path": "captures/b01-build4-pomodoro-after-natural-deadline.jpg",
+      "source": "captures/b01-build4-pomodoro-after-natural-deadline.jpg",
+      "bytes": 40760,
+      "sha256": "b3d3eb15bf9a52387957da69fc473e12eefc6a67d3f3be0c04dedef75056b425",
+      "mediaType": "image/jpeg",
+      "detectedFormat": "JPEG"
+    },
+    {
+      "path": "captures/b01-build4-pomodoro-after-natural-deadline.txt",
+      "source": "captures/b01-build4-pomodoro-after-natural-deadline.txt",
+      "bytes": 682,
+      "sha256": "fce9b7e196f947dfa977213eeb94407486e1496ece93b8d69627602e9ac9693a",
+      "mediaType": "text/plain; charset=utf-8"
+    },
+    {
+      "path": "captures/b01-build4-pomodoro-disabled-storage-revoked.jpg",
+      "source": "captures/b01-build4-pomodoro-disabled-storage-revoked.jpg",
+      "bytes": 131145,
+      "sha256": "13863d3fec6e62ac07a983dfe0abc805036d987f51ebd702e57b2160a624773e",
+      "mediaType": "image/jpeg",
+      "detectedFormat": "JPEG"
+    },
+    {
+      "path": "captures/b01-build4-pomodoro-disabled-storage-revoked.txt",
+      "source": "captures/b01-build4-pomodoro-disabled-storage-revoked.txt",
+      "bytes": 1874,
+      "sha256": "c086e7bc9c0e1c84f755a0b85fa94b61736c935f7aaf3b5eb7fab766f5ffa435",
+      "mediaType": "text/plain; charset=utf-8"
+    },
+    {
+      "path": "captures/b01-build4-pomodoro-enabled-without-grant.jpg",
+      "source": "captures/b01-build4-pomodoro-enabled-without-grant.jpg",
+      "bytes": 131417,
+      "sha256": "277170a15204cabae952065cb246cb811cdc861508fe9dbb81c8dcecd6ecf23c",
+      "mediaType": "image/jpeg",
+      "detectedFormat": "JPEG"
+    },
+    {
+      "path": "captures/b01-build4-pomodoro-enabled-without-grant.txt",
+      "source": "captures/b01-build4-pomodoro-enabled-without-grant.txt",
+      "bytes": 1729,
+      "sha256": "7b3fbad10be64a023c7fb20182aec942935626e1239ab8e47a10c574afd29668",
+      "mediaType": "text/plain; charset=utf-8"
+    },
+    {
+      "path": "captures/b01-build4-pomodoro-ended.jpg",
+      "source": "captures/b01-build4-pomodoro-ended.jpg",
+      "bytes": 34712,
+      "sha256": "144b13832de02bf1dc86d6576d3b86ed0a8c5b22f3568545d201d34b1c7688c4",
+      "mediaType": "image/jpeg",
+      "detectedFormat": "JPEG"
+    },
+    {
+      "path": "captures/b01-build4-pomodoro-ended.txt",
+      "source": "captures/b01-build4-pomodoro-ended.txt",
+      "bytes": 667,
+      "sha256": "c20b5b08db072eba742df256ca8cc8e065b92e8e8e73a64e5bc035c582c60f39",
+      "mediaType": "text/plain; charset=utf-8"
+    },
+    {
+      "path": "captures/b01-build4-pomodoro-installed-disabled.jpg",
+      "source": "captures/b01-build4-pomodoro-installed-disabled.jpg",
+      "bytes": 131933,
+      "sha256": "dddcffe22d4f7f48d1653726304f9d54930eccd0b5249a97a78fd73f2e523289",
+      "mediaType": "image/jpeg",
+      "detectedFormat": "JPEG"
+    },
+    {
+      "path": "captures/b01-build4-pomodoro-installed-disabled.txt",
+      "source": "captures/b01-build4-pomodoro-installed-disabled.txt",
+      "bytes": 1729,
+      "sha256": "2551ab6a6b26e870875e6630a8edf7d505693cfd8740bdc8e32af976fff7fb0c",
+      "mediaType": "text/plain; charset=utf-8"
+    },
+    {
+      "path": "captures/b01-build4-pomodoro-natural-start.jpg",
+      "source": "captures/b01-build4-pomodoro-natural-start.jpg",
+      "bytes": 37785,
+      "sha256": "55e126faf28d2c875d8c44664ca8deda9903409dacd60a95e607fada5a249a7e",
+      "mediaType": "image/jpeg",
+      "detectedFormat": "JPEG"
+    },
+    {
+      "path": "captures/b01-build4-pomodoro-natural-start.txt",
+      "source": "captures/b01-build4-pomodoro-natural-start.txt",
+      "bytes": 694,
+      "sha256": "9497ba1cb274f29a7bf02a3b83d5b564e02b4678f73bb3b09125e65a8f67a3e3",
+      "mediaType": "text/plain; charset=utf-8"
+    },
+    {
+      "path": "captures/b01-build4-pomodoro-paused.jpg",
+      "source": "captures/b01-build4-pomodoro-paused.jpg",
+      "bytes": 37320,
+      "sha256": "a08ccec8a95d16c1a867179cdf1e1f54ac912f1fca8bbd2bfbb8f930d4c31513",
+      "mediaType": "image/jpeg",
+      "detectedFormat": "JPEG"
+    },
+    {
+      "path": "captures/b01-build4-pomodoro-paused.txt",
+      "source": "captures/b01-build4-pomodoro-paused.txt",
+      "bytes": 692,
+      "sha256": "aa6e635d3c47f23e163ba0a2ef232e97cda03e7093256c12252b9394aed605a5",
+      "mediaType": "text/plain; charset=utf-8"
+    },
+    {
+      "path": "captures/b01-build4-pomodoro-pre-deadline.jpg",
+      "source": "captures/b01-build4-pomodoro-pre-deadline.jpg",
+      "bytes": 39377,
+      "sha256": "e744731bf137c482edd9aa9bf64100b729bd11262c39bdcb23c3ca121c0ab5f3",
+      "mediaType": "image/jpeg",
+      "detectedFormat": "JPEG"
+    },
+    {
+      "path": "captures/b01-build4-pomodoro-pre-deadline.txt",
+      "source": "captures/b01-build4-pomodoro-pre-deadline.txt",
+      "bytes": 692,
+      "sha256": "9e3d3ce55f158de4e1d5c672e2dd3b84c486b5f372a113834856c4a6a6b8fab1",
+      "mediaType": "text/plain; charset=utf-8"
+    },
+    {
+      "path": "captures/b01-build4-pomodoro-preview.jpg",
+      "source": "captures/b01-build4-pomodoro-preview.jpg",
+      "bytes": 104854,
+      "sha256": "b689a8cf3ee9146cfa962da08670ef0437f9c7e2070f5d4f6cfffcc813392308",
+      "mediaType": "image/jpeg",
+      "detectedFormat": "JPEG"
+    },
+    {
+      "path": "captures/b01-build4-pomodoro-preview.txt",
+      "source": "captures/b01-build4-pomodoro-preview.txt",
+      "bytes": 929,
+      "sha256": "15dbd8e35fd1374ab57f145732080dfb8f20a1b04b3c3d17ffc50bde09307305",
+      "mediaType": "text/plain; charset=utf-8"
+    },
+    {
+      "path": "captures/b01-build4-pomodoro-storage-denied.jpg",
+      "source": "captures/b01-build4-pomodoro-storage-denied.jpg",
+      "bytes": 134298,
+      "sha256": "1980b3ab7288a6389c6a6dd08a33d8b9982b0aac76013ef38e524141c1550ec8",
+      "mediaType": "image/jpeg",
+      "detectedFormat": "JPEG"
+    },
+    {
+      "path": "captures/b01-build4-pomodoro-storage-denied.txt",
+      "source": "captures/b01-build4-pomodoro-storage-denied.txt",
+      "bytes": 1767,
+      "sha256": "31904fd66871a60797689c2667cd3469b0fd6c8833017acecdfd9575214495fd",
+      "mediaType": "text/plain; charset=utf-8"
+    },
+    {
+      "path": "captures/b01-build4-pomodoro-storage-granted.jpg",
+      "source": "captures/b01-build4-pomodoro-storage-granted.jpg",
+      "bytes": 133407,
+      "sha256": "b3fa5b50a2f0a92b6054506ee6d592b0ffe3a4ff450f479688425a3065bd9a7f",
+      "mediaType": "image/jpeg",
+      "detectedFormat": "JPEG"
+    },
+    {
+      "path": "captures/b01-build4-pomodoro-storage-granted.txt",
+      "source": "captures/b01-build4-pomodoro-storage-granted.txt",
+      "bytes": 1757,
+      "sha256": "5d1dbd30dc6fbf87f4330a498b950a93d055e21c3a5db00ddd865394ec0e5854",
+      "mediaType": "text/plain; charset=utf-8"
+    },
+    {
+      "path": "captures/b01-build4-registry-refreshed.jpg",
+      "source": "captures/b01-build4-registry-refreshed.jpg",
+      "bytes": 118098,
+      "sha256": "c413db10132bb9f195b65c7a5c1dbdcaf0c142d26788e4aeba2e5696db701e4e",
+      "mediaType": "image/jpeg",
+      "detectedFormat": "JPEG"
+    },
+    {
+      "path": "captures/b01-build4-registry-refreshed.txt",
+      "source": "captures/b01-build4-registry-refreshed.txt",
+      "bytes": 1161,
+      "sha256": "7c5abcd140fc76c358c1b0f0729944ab89a01ddce1aa1c8e1bdd3ef59c71ece8",
+      "mediaType": "text/plain; charset=utf-8"
+    },
+    {
+      "path": "captures/b01-build4-restart-github-revoked-disabled.jpg",
+      "source": "captures/b01-build4-restart-github-revoked-disabled.jpg",
+      "bytes": 169199,
+      "sha256": "5a8f1498663279e34dae45e482cb09933825adf1174c94a359149dbe9b147551",
+      "mediaType": "image/jpeg",
+      "detectedFormat": "JPEG"
+    },
+    {
+      "path": "captures/b01-build4-restart-github-revoked-disabled.txt",
+      "source": "captures/b01-build4-restart-github-revoked-disabled.txt",
+      "bytes": 2463,
+      "sha256": "57569137814dc28720900348c814ac756fce6bee6114191544d9889e7a27af8c",
+      "mediaType": "text/plain; charset=utf-8"
+    },
+    {
+      "path": "captures/b01-build4-restart-pomodoro-revoked-disabled.jpg",
+      "source": "captures/b01-build4-restart-pomodoro-revoked-disabled.jpg",
+      "bytes": 133258,
+      "sha256": "e344fe1c976833d5410cb9ae3984f62a2b6dca6f80e34b412061da6ed42b4b2b",
+      "mediaType": "image/jpeg",
+      "detectedFormat": "JPEG"
+    },
+    {
+      "path": "captures/b01-build4-restart-pomodoro-revoked-disabled.txt",
+      "source": "captures/b01-build4-restart-pomodoro-revoked-disabled.txt",
+      "bytes": 1874,
+      "sha256": "c086e7bc9c0e1c84f755a0b85fa94b61736c935f7aaf3b5eb7fab766f5ffa435",
+      "mediaType": "text/plain; charset=utf-8"
+    },
+    {
+      "path": "captures/b01-display-default-1470x956.jpg",
+      "source": "captures/b01-display-default-1470x956.jpg",
+      "bytes": 146160,
+      "sha256": "d94ba23766ed72782f8282195e8a5a685caa0a42e1ae985aa86d632297169518",
+      "mediaType": "image/jpeg",
+      "detectedFormat": "JPEG"
+    },
+    {
+      "path": "captures/b01-menu-bar-temporary-never.jpg",
+      "source": "captures/b01-menu-bar-temporary-never.jpg",
+      "bytes": 176920,
+      "sha256": "232c7de1edfbc1fce25fcfd76d8b6cc7589bd30b00a65284a445fca6337fdf0d",
+      "mediaType": "image/jpeg",
+      "detectedFormat": "JPEG"
+    },
+    {
+      "path": "captures/b01-tray-lock-hold-end.jpg",
+      "source": "captures/b01-tray-lock-hold-end.jpg",
+      "bytes": 31527,
+      "sha256": "c9d18ea4e1c81cdc7240c7f56e5c7c8fc7648acd9cc99ad9f2526c78ba2fa511",
+      "mediaType": "image/jpeg",
+      "detectedFormat": "JPEG"
+    },
+    {
+      "path": "captures/b01-tray-lock-hold-end.txt",
+      "source": "captures/b01-tray-lock-hold-end.txt",
+      "bytes": 715,
+      "sha256": "e0fadad1742caacbaf87b85285cfbf83e4a9f01422a506c02fe3ae415dd0270a",
+      "mediaType": "text/plain; charset=utf-8"
+    },
+    {
+      "path": "captures/b01-tray-lock-hold-start.jpg",
+      "source": "captures/b01-tray-lock-hold-start.jpg",
+      "bytes": 31523,
+      "sha256": "3e5933ebda9524683fa9968d1e4255e034266c9fff21baedd9256a776319606e",
+      "mediaType": "image/jpeg",
+      "detectedFormat": "JPEG"
+    },
+    {
+      "path": "captures/b01-tray-lock-hold-start.txt",
+      "source": "captures/b01-tray-lock-hold-start.txt",
+      "bytes": 715,
+      "sha256": "e0fadad1742caacbaf87b85285cfbf83e4a9f01422a506c02fe3ae415dd0270a",
+      "mediaType": "text/plain; charset=utf-8"
+    },
+    {
+      "path": "captures/b01-tray-second-cleanup-immediate.jpg",
+      "source": "captures/b01-tray-second-cleanup-immediate.jpg",
+      "bytes": 14753,
+      "sha256": "b027d17c35e55bb3ecb622078b94d75d647206fc96e207524c5891b930ffff4e",
+      "mediaType": "image/jpeg",
+      "detectedFormat": "JPEG"
+    },
+    {
+      "path": "captures/b01-tray-second-cleanup-immediate.txt",
+      "source": "captures/b01-tray-second-cleanup-immediate.txt",
+      "bytes": 137,
+      "sha256": "537bd3c9ac5491b17d8ff3b9f5e2bc17125a0b235abaa9279bf14fdd0ca8e75d",
+      "mediaType": "text/plain; charset=utf-8"
+    },
+    {
+      "path": "captures/b01-tray-second-import.jpg",
+      "source": "captures/b01-tray-second-import.jpg",
+      "bytes": 31033,
+      "sha256": "9b12775a8b94b47a10cdfad971bf1f9807f4063a064cf7d021ff522ea2f97ca0",
+      "mediaType": "image/jpeg",
+      "detectedFormat": "JPEG"
+    },
+    {
+      "path": "captures/b01-tray-second-import.txt",
+      "source": "captures/b01-tray-second-import.txt",
+      "bytes": 715,
+      "sha256": "69a3b3c8e6700b2aac4dd7a48cfa0f6090f0cb7467bbd5b7659c6f973d8dcb1e",
+      "mediaType": "text/plain; charset=utf-8"
+    },
+    {
+      "path": "captures/b02-display-1280x832.jpg",
+      "source": "captures/b02-display-1280x832.jpg",
+      "bytes": 184485,
+      "sha256": "8fc859c658f4d3a7d871c420ab95d7688cfe33bf6f36b939320d931abbe57112",
+      "mediaType": "image/jpeg",
+      "detectedFormat": "JPEG"
+    },
+    {
+      "path": "captures/b02-island-read-during-native-fullscreen.jpg",
+      "source": "captures/b02-island-read-during-native-fullscreen.jpg",
+      "bytes": 13462,
+      "sha256": "b1d06e57092cd308dfbee30b4da3d9dd626fdcfae9cc6269a101782cb8dafcec",
+      "mediaType": "image/jpeg",
+      "detectedFormat": "JPEG"
+    },
+    {
+      "path": "captures/b02-island-read-during-native-fullscreen.txt",
+      "source": "captures/b02-island-read-during-native-fullscreen.txt",
+      "bytes": 137,
+      "sha256": "537bd3c9ac5491b17d8ff3b9f5e2bc17125a0b235abaa9279bf14fdd0ca8e75d",
+      "mediaType": "text/plain; charset=utf-8"
+    },
+    {
+      "path": "captures/b02-restored-display-default.jpg",
+      "source": "captures/b02-restored-display-default.jpg",
+      "bytes": 184800,
+      "sha256": "b139828dd14b8ad95571bb0f8450b870511232679e17cdc30c2b98786e18a24f",
+      "mediaType": "image/jpeg",
+      "detectedFormat": "JPEG"
+    },
+    {
+      "path": "captures/b02-restored-menu-bar-original.jpg",
+      "source": "captures/b02-restored-menu-bar-original.jpg",
+      "bytes": 177240,
+      "sha256": "3980e971c71a79bb56c201d23e21f8799c552e9b3436de40c9784ee7bedde138",
+      "mediaType": "image/jpeg",
+      "detectedFormat": "JPEG"
+    },
+    {
+      "path": "captures/b02-textedit-windowed.jpg",
+      "source": "captures/b02-textedit-windowed.jpg",
+      "bytes": 76376,
+      "sha256": "08f390eaf7e3d5342bc264c3cd59636e2724ce2ef9ab233720309abc6245ac47",
+      "mediaType": "image/jpeg",
+      "detectedFormat": "JPEG"
+    },
+    {
+      "path": "captures/b02-textedit-windowed.txt",
+      "source": "captures/b02-textedit-windowed.txt",
+      "bytes": 3634,
+      "sha256": "6d8033fe4e4075b3d5d50aa84dbef4b37342982aee9a9df6c571d5f9d503d992",
+      "mediaType": "text/plain; charset=utf-8"
+    },
+    {
+      "path": "sources/airdrop-panel-observation.json",
+      "source": "airdrop-panel-observation.json",
+      "bytes": 383,
+      "sha256": "5ec66fae1fcb3e527b912a0531195809195331013e51a744d5a707579fdedcf7",
+      "mediaType": "application/json"
+    },
+    {
+      "path": "sources/app-after-real-restart.json",
+      "source": "app-after-real-restart.json",
+      "bytes": 396,
+      "sha256": "b3c50ac114da88e57dc2b17684897ff9dafe0ee24ffcf1c098c8d60cf092c3fe",
+      "mediaType": "application/json"
+    },
+    {
+      "path": "sources/app-before-power-quit.json",
+      "source": "app-before-power-quit.json",
+      "bytes": 397,
+      "sha256": "26272416c82a31099afcc9397212b981510c5e155b59370f043c947684f58d40",
+      "mediaType": "application/json"
+    },
+    {
+      "path": "sources/app-menu-quit-request.json",
+      "source": "app-menu-quit-request.json",
+      "bytes": 134,
+      "sha256": "c95f8c6322cc3ae80212cadd9de03dc53c7b8ef5cac3589e2c6d198a642eac86",
+      "mediaType": "application/json"
+    },
+    {
+      "path": "sources/app-menu-quit-result.json",
+      "source": "app-menu-quit-result.json",
+      "bytes": 174,
+      "sha256": "4da1ded7cd768391d8d8df251f3d863652c2d7325b65705ad7554c90c159eef4",
+      "mediaType": "application/json"
+    },
+    {
+      "path": "sources/app-native-quit-menu.txt",
+      "source": "app-native-quit-menu.txt",
+      "bytes": 706,
+      "sha256": "1fcc6fbf8c5b792aa34ecf8c43ff701d2bca6bcc682ef9a379b87de89cf80d2d",
+      "mediaType": "text/plain; charset=utf-8"
+    },
+    {
+      "path": "sources/app-normal-quit-request.json",
+      "source": "app-normal-quit-request.json",
+      "bytes": 119,
+      "sha256": "0c7abdbffea81b8af5562a5b8bde43163e319b5c678a3798ec6a351a8ad98893",
+      "mediaType": "application/json"
+    },
+    {
+      "path": "sources/app-normal-quit-result.json",
+      "source": "app-normal-quit-result.json",
+      "bytes": 174,
+      "sha256": "e660d61e2e23e25c344d15006d23a846632788b20094f7803499890ecd4d9023",
+      "mediaType": "application/json"
+    },
+    {
+      "path": "sources/b02-textedit-fullscreen-menu.txt",
+      "source": "b02-textedit-fullscreen-menu.txt",
+      "bytes": 301,
+      "sha256": "0f00be5965fdf376ce7b7e231cbde192aad32f3c49cce798c8e66f438962131b",
+      "mediaType": "text/plain; charset=utf-8"
+    },
+    {
+      "path": "sources/b02-textedit-observation.json",
+      "source": "b02-textedit-observation.json",
+      "bytes": 400,
+      "sha256": "b746fdb8e6c023cc8badf7154709d2a7a3ec897efe81fc445a41f52e525a7ecb",
+      "mediaType": "application/json"
+    },
+    {
+      "path": "sources/default-environment.json",
+      "source": "dynamic-island-b01-environment-20261022.json",
+      "bytes": 5832,
+      "sha256": "a0573b92362ae57dde411d79f467bea45138fe5f359804cb861e59ed77b37520",
+      "mediaType": "application/json"
+    },
+    {
+      "path": "sources/diagnostic-after-display-restore-20261022.txt",
+      "source": "diagnostic-after-display-restore-20261022.txt",
+      "bytes": 1123,
+      "sha256": "4a8b9eb0d4ca132f5b2d833e07af476673c9806f4ee7d76d0bf661b4c9aea2c5",
+      "mediaType": "text/plain; charset=utf-8"
+    },
+    {
+      "path": "sources/diagnostic-default-visible-20261022.txt",
+      "source": "diagnostic-default-visible-20261022.txt",
+      "bytes": 1119,
+      "sha256": "aeb1c38fa3d62313c538d34122bbc4d2f10022f4451e21df3d5e82b771a6e4c2",
+      "mediaType": "text/plain; charset=utf-8"
+    },
+    {
+      "path": "sources/display-b02-1280x832-ax-excerpts.txt",
+      "source": "display-b02-1280x832-ax-excerpts.txt",
+      "bytes": 88,
+      "sha256": "19a74f0083d071072e8aeed9d8033edefe16e35b53aed91d9ee6b4bedc4c06be",
+      "mediaType": "text/plain; charset=utf-8"
+    },
+    {
+      "path": "sources/display-before-b02-ax-excerpts.txt",
+      "source": "display-before-b02-ax-excerpts.txt",
+      "bytes": 88,
+      "sha256": "58e44af5d99cc9dc333b011774466a23aaee720c82b47bb59e5e0a7220e5de68",
+      "mediaType": "text/plain; charset=utf-8"
+    },
+    {
+      "path": "sources/display-observation.json",
+      "source": "display-observation.json",
+      "bytes": 223,
+      "sha256": "1b361ffdb92912cde41944348a604f15869f32381c4dac44f967ecf52bd54c8a",
+      "mediaType": "application/json"
+    },
+    {
+      "path": "sources/display-restore-result.json",
+      "source": "display-restore-result.json",
+      "bytes": 531,
+      "sha256": "0b0c6b76106a58f60c131919bd99fd4bdaec2fa4ba6eb2f4a55caa3abfa04985",
+      "mediaType": "application/json"
+    },
+    {
+      "path": "sources/display-restored-default-ax-excerpts.txt",
+      "source": "display-restored-default-ax-excerpts.txt",
+      "bytes": 88,
+      "sha256": "58e44af5d99cc9dc333b011774466a23aaee720c82b47bb59e5e0a7220e5de68",
+      "mediaType": "text/plain; charset=utf-8"
+    },
+    {
+      "path": "sources/github-browser-build-open.json",
+      "source": "github-browser-build-open.json",
+      "bytes": 570,
+      "sha256": "7ada21d017564cdf3e0a0e219b1a5c19630cecca752247fe8763c0c8ad7b0a66",
+      "mediaType": "application/json"
+    },
+    {
+      "path": "sources/github-browser-pr-open.json",
+      "source": "github-browser-pr-open.json",
+      "bytes": 530,
+      "sha256": "de9a891aaa6caab38f72b3eb21ccda57d4171cc0e33915329727c12b3865523e",
+      "mediaType": "application/json"
+    },
+    {
+      "path": "sources/github-denial-steps.json",
+      "source": "github-denial-steps.json",
+      "bytes": 7910,
+      "sha256": "a79ae4db7369b9683a2210eddf54da7b85b9d0dff6bbaa0c723946edf0135c85",
+      "mediaType": "application/json"
+    },
+    {
+      "path": "sources/github-disabled-removed-from-tools-menu.txt",
+      "source": "github-disabled-removed-from-tools-menu.txt",
+      "bytes": 1635,
+      "sha256": "57cf00180ac104b09e18964de5ec1f708023c2ba60b220743fd1040c657f8169",
+      "mediaType": "text/plain; charset=utf-8"
+    },
+    {
+      "path": "sources/github-permission-grant-steps.json",
+      "source": "github-permission-grant-steps.json",
+      "bytes": 9564,
+      "sha256": "bfc021541ce78799fc0195a010ff4c59c55fcf4e80ee5f2b405caeb78048e436",
+      "mediaType": "application/json"
+    },
+    {
+      "path": "sources/github-permission-revoke-steps.json",
+      "source": "github-permission-revoke-steps.json",
+      "bytes": 5313,
+      "sha256": "32eb2ae8637d6dfa78d672aac0532f0dc00c23c4eb60396e1f4ac70eeb0e6a1a",
+      "mediaType": "application/json"
+    },
+    {
+      "path": "sources/menu-bar-observation.json",
+      "source": "menu-bar-observation.json",
+      "bytes": 365,
+      "sha256": "95526c13b03681b41a16b89cf60588c3449d2136f2da2b1de5d6b9b4d4a40fc6",
+      "mediaType": "application/json"
+    },
+    {
+      "path": "sources/menu-bar-temporary-always.json",
+      "source": "menu-bar-temporary-always.json",
+      "bytes": 276,
+      "sha256": "81546b24509e9006a684f110d69739b81ff12828b66c54a54bad889bddecde87",
+      "mediaType": "application/json"
+    },
+    {
+      "path": "sources/menu-bar-temporary-never.json",
+      "source": "menu-bar-temporary-never.json",
+      "bytes": 276,
+      "sha256": "21d729b129cb423537a92f06f730edf669b087e5a513d3b65e50212941bd9501",
+      "mediaType": "application/json"
+    },
+    {
+      "path": "sources/pomodoro-build4-natural-result.json",
+      "source": "pomodoro-build4-natural-result.json",
+      "bytes": 1025,
+      "sha256": "d26167dabf9edea92dd999621fcc174f0dbdd8e5ed7652a9af6960014f909e5c",
+      "mediaType": "application/json"
+    },
+    {
+      "path": "sources/pomodoro-build4-natural-start.json",
+      "source": "pomodoro-build4-natural-start.json",
+      "bytes": 392,
+      "sha256": "be2196951c63954c15e7f6e0725ce041157f53783c9ab2485e5792cef3c70bfe",
+      "mediaType": "application/json"
+    },
+    {
+      "path": "sources/pomodoro-resume-end-check.json",
+      "source": "pomodoro-resume-end-check.json",
+      "bytes": 1554,
+      "sha256": "79824a03bf4f8e7f8df35bad0964f9e6da8dcaf03820808e3fcc9ed0b8116e5c",
+      "mediaType": "application/json"
+    },
+    {
+      "path": "sources/pr7-ci-result.json",
+      "source": "dynamic-island-pr7-ci-final-20261022/result.json",
+      "bytes": 1581,
+      "sha256": "752577ace9ba29ce6aca9bb2067c3240d3c7478f694a7c2ca65466428e340a55",
+      "mediaType": "application/json"
+    },
+    {
+      "path": "sources/pr7-postmerge-ci-result.json",
+      "source": "pr7-postmerge-ci-result.json",
+      "bytes": 2736,
+      "sha256": "3c46d12e3f8794557829777c13fae9d0ab6077d687d65acbcae5ece2d774096a",
+      "mediaType": "application/json"
+    },
+    {
+      "path": "sources/temporary-plugin-permissions.json",
+      "source": "temporary-plugin-permissions.json",
+      "bytes": 853,
+      "sha256": "17f827dcdde496191f43178bf9fbd1f68750e190817bb056a84a728983c78376",
+      "mediaType": "application/json"
+    },
+    {
+      "path": "sources/textedit-fixture-cleanup.json",
+      "source": "textedit-fixture-cleanup.json",
+      "bytes": 260,
+      "sha256": "35c7490327b364d79f0ac6ce66739779d5ff374ffabb9b9178865a4d2ab8276b",
+      "mediaType": "application/json"
+    },
+    {
+      "path": "sources/tray-followup-cleanup.json",
+      "source": "tray-followup-cleanup.json",
+      "bytes": 360,
+      "sha256": "1e5f4d1895a115612d888dc82bb9d95379485cc8433372f7c664de0b2612bd1d",
+      "mediaType": "application/json"
+    },
+    {
+      "path": "sources/tray-lock-hold.json",
+      "source": "tray-lock-hold.json",
+      "bytes": 475,
+      "sha256": "f4b7d32a0a95753aa68d04698784705dcbce3d7a1fd9af4904c559c8e0af663c",
+      "mediaType": "application/json"
+    },
+    {
+      "path": "sources/tray-second-import-check.json",
+      "source": "tray-second-import-check.json",
+      "bytes": 361,
+      "sha256": "6976825cfd605b4a8245ae44f6e02597016fabff410d9e3ecba44f41126525cb",
+      "mediaType": "application/json"
+    },
+    {
+      "path": "sources/user-followup-confirmations.json",
+      "source": "user-followup-confirmations.json",
+      "bytes": 750,
+      "sha256": "c928202d223b06e3dd91a7264185a1b6b62acb4af209a9dd5c439e8149f9184b",
+      "mediaType": "application/json"
+    }
+  ]
+}

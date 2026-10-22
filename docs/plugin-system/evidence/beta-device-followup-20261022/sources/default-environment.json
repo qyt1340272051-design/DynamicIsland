@@ -1,0 +1,162 @@
+{
+  "schemaVersion": 1,
+  "scope": "Evidence draft for the current device; supplied diagnostic and parent-reported System Settings observations only; no new UI inspection or repository modification by this agent.",
+  "scenarioID": "DI-B01",
+  "scenarioStatus": "pending",
+  "sources": {
+    "appDiagnostic": {
+      "kind": "supplied original App diagnostic",
+      "generatedUTC": "2026-10-22T05:05:43.724Z",
+      "generatedAsiaShanghai": "2026-10-22T13:05:43.724+08:00",
+      "agentIndependentlyRecopiedDiagnostic": false
+    },
+    "systemSettings": {
+      "kind": "parent-reported visual observation",
+      "defaultOptionRaw": "1470 × 956（默认）",
+      "defaultSelectionConfirmedVisually": true,
+      "originalMenuBarAutoHideRaw": "仅在全屏幕视图下",
+      "agentIndependentlyViewedSettings": false,
+      "settingsObservationTimestampNotProvided": true
+    },
+    "physicalPanelPixels": {
+      "kind": "parent-supplied native panel dimensions, distinct from App diagnostic estimated_pixels",
+      "width": 2560,
+      "height": 1664,
+      "derivedFromLogicalFrameOrBackingScale": false
+    }
+  },
+  "app": {
+    "version": "0.6.0",
+    "build": "4",
+    "originalPublishedBundleReported": true,
+    "newBinaryHashOrSignatureCheckPerformedByAgent": false
+  },
+  "system": {
+    "hardwareModel": "Mac16,12",
+    "processArchitecture": "arm64",
+    "macOSVersion": "26.6.2",
+    "macOSBuild": "25G83"
+  },
+  "environment": {
+    "simulationEnabled": false,
+    "screenCount": 1,
+    "activeDisplayID": 1,
+    "display": {
+      "displayID": 1,
+      "isBuiltIn": true,
+      "hasNotch": true,
+      "backingScaleFactor": 2,
+      "framePoints": {
+        "x": 0,
+        "y": 0,
+        "width": 1470,
+        "height": 956
+      },
+      "visibleFramePoints": {
+        "x": 0,
+        "y": 64,
+        "width": 1470,
+        "height": 859
+      },
+      "safeAreaPoints": {
+        "top": 32,
+        "left": 0,
+        "bottom": 0,
+        "right": 0
+      },
+      "auxiliaryTopLeftPoints": {
+        "x": 0,
+        "y": 924,
+        "width": 646,
+        "height": 32
+      },
+      "auxiliaryTopRightPoints": {
+        "x": 825,
+        "y": 924,
+        "width": 645,
+        "height": 32
+      },
+      "topReservedHeightPoints": 33,
+      "estimatedBackingPixels": {
+        "width": 2940,
+        "height": 1912,
+        "source": "App diagnostic estimated_pixels; logical frame multiplied by backing scale",
+        "isNativePanelPixelCount": false
+      }
+    },
+    "panelFramePoints": {
+      "x": 476,
+      "y": 716,
+      "width": 520,
+      "height": 240
+    },
+    "compactPanelSizePoints": {
+      "width": 179,
+      "height": 32
+    },
+    "panelVisible": true,
+    "presentationState": "compact",
+    "expandedSurface": "music",
+    "musicPlaying": false,
+    "timerSession": "none",
+    "trayItemCount": 0
+  },
+  "menuBarSettingsSequence": {
+    "original": {
+      "autoHideRaw": "仅在全屏幕视图下",
+      "meaning": "Auto-hide applies in full-screen context; ordinary-desktop visibility must be separately observed."
+    },
+    "temporaryObserved": {
+      "autoHideRaw": "永不",
+      "changeExplicitlyAuthorizedReported": true,
+      "changePerformedReportedByParent": true,
+      "timestampNotProvided": true
+    },
+    "nextNonDefaultScenario": {
+      "logicalSizePoints": {
+        "width": 1280,
+        "height": 832
+      },
+      "menuBarAutoHideRaw": "始终",
+      "status": "planned; execution and observations are not established by the supplied diagnostic"
+    },
+    "restoreTarget": {
+      "logicalSizePoints": {
+        "width": 1470,
+        "height": 956
+      },
+      "defaultSelectionRaw": "1470 × 956（默认）",
+      "menuBarAutoHideRaw": "仅在全屏幕视图下",
+      "status": "restore target; completion requires later evidence"
+    },
+    "menuBarAutoHideModeAtDiagnosticTimestamp": "not reported by the App diagnostic; do not infer from top_reserved_height or safe area"
+  },
+  "derivedConsistencyChecks": {
+    "visibleFrameMaxYPoints": 923,
+    "screenMaxYPoints": 956,
+    "computedTopReservedHeightPoints": 33,
+    "auxiliaryGapWidthPoints": 179,
+    "auxiliaryGapCenterXPoints": 735.5,
+    "panelMaxYPoints": 956,
+    "panelTopMatchesScreenTop": true,
+    "compactWidthMatchesAuxiliaryGap": true,
+    "logicalTimesScaleMatchesEstimatedBackingPixels": true,
+    "estimatedBackingPixelsDifferFromNativePanelPixels": true,
+    "defaultScalingConclusionSource": "System Settings default marker; not backingScaleFactor == 2"
+  },
+  "boundaries": [
+    "Default scaling is visually confirmed for the supplied current Settings observation; scale factor 2 alone does not identify the default scaled resolution.",
+    "AppKit point geometry, estimated backing pixels (2940x1912), and native panel pixels (2560x1664) are separate quantities.",
+    "The menuBarModes visible entry in DI-B01 does not itself prescribe changing the global setting to Never; preserve the actual raw option and observed desktop context.",
+    "Menu-bar automatic hiding and a physical notch safe area are separate; neither top_reserved_height nor safe_area alone proves the selected global menu-bar mode.",
+    "The supplied diagnostic does not establish completion of the later 1280x832 / always-auto-hide scenario or restoration of original Settings.",
+    "Current geometry, default selection and menu-bar observations do not complete DI-B01, DI-B02, the other hardware scenarios, clean-Mac installation, T39, or future U02 implementation.",
+    "A compact presentation state and App-window capture do not establish complete unobstructed rendering around the physical notch."
+  ],
+  "privacy": {
+    "usernamesIncluded": false,
+    "serialNumbersIncluded": false,
+    "privateFilePathsOrContentsIncluded": false,
+    "musicMetadataIncluded": false
+  }
+}

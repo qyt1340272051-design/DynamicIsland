@@ -1,0 +1,9 @@
+{
+  "observedUTC": "2026-10-22T05:10:25.249722+00:00",
+  "totalCount": 3,
+  "knownSyntheticCount": 1,
+  "oldOrUnknownCount": 2,
+  "syntheticHashMatchesSource": true,
+  "airDropPayloadScope": "Current trayItems URLs only; current AX list contains one verified synthetic item. Existing orphan temp files are not enumerated by AirDrop.",
+  "clearAllowed": false
+}

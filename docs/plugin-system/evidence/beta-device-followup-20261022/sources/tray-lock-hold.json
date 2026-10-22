@@ -1,0 +1,11 @@
+{
+  "startUTC": "2026-10-22T05:10:13.000Z",
+  "endUTC": "2026-10-22T05:10:55.371Z",
+  "elapsedMilliseconds": 42371,
+  "expandedAtStart": true,
+  "expandedAtEnd": true,
+  "lockedAtEnd": true,
+  "physicalPointerSource": "User was instructed to move to the lower middle of the screen after replying; independent global pointer coordinates are not available through the UI tool.",
+  "collapseObservedAfterUnlock": true,
+  "globalPointerCoordinatesIndependentlyMeasured": false
+}

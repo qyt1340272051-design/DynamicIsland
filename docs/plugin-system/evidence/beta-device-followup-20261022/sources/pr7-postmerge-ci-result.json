@@ -1,0 +1,76 @@
+{
+  "schemaVersion": 1,
+  "recordedAtUTC": "2026-10-22T06:07:58.551848+00:00",
+  "recordedAtLocal": "2026-10-22T14:07:58.551848+08:00",
+  "timeZone": "Asia/Shanghai",
+  "repo": "qyt1340272051-design/DynamicIsland",
+  "prURL": "https://github.com/qyt1340272051-design/DynamicIsland/pull/7",
+  "prState": "closed",
+  "merged": true,
+  "mergeCommit": "8b3a184a9d5e24134f5f10edd566c0e577f20597",
+  "mergedAtUTC": "2026-10-22T05:02:26Z",
+  "mergedAtLocal": "2026-10-22T13:02:26+08:00",
+  "mergedPRHeadSha": "ec84665eec6646490f0a3a07c2a87ef711f3237f",
+  "observedMainSha": "8b3a184a9d5e24134f5f10edd566c0e577f20597",
+  "snapshotCommit": "8b3a184a9d5e24134f5f10edd566c0e577f20597",
+  "actionsRunCount": 1,
+  "actionsRuns": [
+    {
+      "id": 39725742204,
+      "name": "CI",
+      "headSha": "8b3a184a9d5e24134f5f10edd566c0e577f20597",
+      "event": "push",
+      "status": "completed",
+      "conclusion": "success",
+      "attempt": 1,
+      "url": "https://github.com/qyt1340272051-design/DynamicIsland/actions/runs/39725742204"
+    }
+  ],
+  "checkRunCount": 1,
+  "checkRuns": [
+    {
+      "id": 119649091403,
+      "name": "Test and build",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/qyt1340272051-design/DynamicIsland/actions/runs/39725742204/job/119649091403"
+    }
+  ],
+  "checkSuiteCount": 1,
+  "checkSuites": [
+    {
+      "id": 107661208633,
+      "app": "github-actions",
+      "status": "completed",
+      "conclusion": "success"
+    }
+  ],
+  "scope": "One snapshot of existing post-merge checks for this exact commit; no workflow dispatched or rerun",
+  "workflowDispatched": false,
+  "workflowRerun": false,
+  "causeInferred": false,
+  "registrationStatus": "existing-registration-observed",
+  "finalCIResult": {
+    "run": 39725742204,
+    "url": "https://github.com/qyt1340272051-design/DynamicIsland/actions/runs/39725742204",
+    "event": "push",
+    "attempt": 1,
+    "headSha": "8b3a184a9d5e24134f5f10edd566c0e577f20597",
+    "conclusion": "success",
+    "tests": {
+      "total": 1092,
+      "passed": 1087,
+      "skipped": 5,
+      "failed": 0
+    },
+    "releaseBuildPassed": true,
+    "skipReasons": [
+      "Set DYNAMIC_ISLAND_GITHUB_LIVE=1 to verify the anonymous public GitHub API.",
+      "The animated quit path requires Reduce Motion to be off; the test does not change system settings.",
+      "The animated quit path requires Reduce Motion to be off; the test does not change system settings.",
+      "Public-network acceptance is opt-in: set DYNAMIC_ISLAND_LIVE_REGISTRY=1.",
+      "Run Scripts/generate-screen-matrix.sh to generate the screenshot matrix."
+    ],
+    "ciLogSHA256": "7fc5e78523b4e4877d975389a874b1ab1298bce0732071583622da7989ea968a"
+  }
+}

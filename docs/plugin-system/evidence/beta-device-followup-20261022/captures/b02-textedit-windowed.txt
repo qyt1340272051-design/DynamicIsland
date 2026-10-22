@@ -1,0 +1,59 @@
+Window: "未命名", App: 文本编辑.
+0 标准窗口 未命名, Secondary Actions: Raise
+	1 滚动区 Secondary Actions: Scroll Left, Scroll Right, Scroll Up, Scroll Down
+		2 文本输入区 (settable) ID: First Text View, Value: Dynamic Island DI-B02 display acceptance
+Synthetic temporary document. No private content.
+1280 x 832 / menu bar auto-hide.
+		3 滚动条 (disabled, settable, float) 0.1851851791143417
+		4 滚动条 (disabled, settable, float) 0.615384578704834
+		5 标尺
+			6 标尺标记 (settable, float) Value: 0, Secondary Actions: Delete
+			7 标尺标记 (settable, float) Value: 20.31746031746032, Secondary Actions: Delete
+			8 标尺标记 (settable, float) Value: 0, Secondary Actions: Delete
+			9 标尺标记 (settable, float) Value: 1.26984126984127, Secondary Actions: Delete
+			10 标尺标记 (settable, float) Value: 2.53968253968254, Secondary Actions: Delete
+			11 标尺标记 (settable, float) Value: 3.809523809523809, Secondary Actions: Delete
+			12 标尺标记 (settable, float) Value: 5.079365079365079, Secondary Actions: Delete
+			13 标尺标记 (settable, float) Value: 6.349206349206349, Secondary Actions: Delete
+			14 标尺标记 (settable, float) Value: 7.619047619047619, Secondary Actions: Delete
+			15 标尺标记 (settable, float) Value: 8.888888888888889, Secondary Actions: Delete
+			16 标尺标记 (settable, float) Value: 10.15873015873016, Secondary Actions: Delete
+			17 标尺标记 (settable, float) Value: 11.42857142857143, Secondary Actions: Delete
+			18 标尺标记 (settable, float) Value: 12.6984126984127, Secondary Actions: Delete
+			19 标尺标记 (settable, float) Value: 13.96825396825397, Secondary Actions: Delete
+			20 标尺标记 (settable, float) Value: 15.23809523809524, Secondary Actions: Delete
+	21 container
+		22 复选框 Description: 粗体, Help: 粗体文本, Value: 0
+		23 复选框 Description: 斜体, Help: 斜体文本, Value: 0
+		24 复选框 Description: 下划线, Help: 下划线文本, Value: 0
+		25 复选框 Description: 删除线, Help: 文本删除线, Value: 0
+	26 颜色池 Description: 文本颜色, Help: 点按以选取文本颜色, Value: rgb 1 1 1 1, Secondary Actions: 显示颜色面板
+	27 颜色池 Description: 文本背景颜色, Help: 点按以选取文本的背景颜色, Value: rgb 0.117647 0.117647 0.117647 1, Secondary Actions: 显示颜色面板
+	28 弹出式按钮 Description: 字样, Help: 选取字样, Value: Helvetica
+	29 弹出式按钮 Description: 样式, Help: 选取样式, Value: 常规体
+	30 组合框 (settable) Description: 字体大小, Help: 设置字体大小, Value: 12, Secondary Actions: Confirm
+		31 按钮 字体大小
+	32 container
+		33 复选框 Description: 左对齐, Help: 文本左对齐, Value: 1
+		34 复选框 Description: 居中对齐, Help: 文本居中, Value: 0
+		35 复选框 Description: 右对齐, Help: 文本右对齐, Value: 0
+		36 复选框 Description: 完全对齐, Help: 文本两端对齐, Value: 0
+	37 菜单按钮 Description: 列表样式, Help: 列表符号和编号
+	38 弹出式按钮 Description: 行距, Help: 行和段落的间距, Value: 1.0
+	39 关闭按钮
+	40 全屏幕按钮 Help: 此按钮也可以执行缩放窗口的操作, Secondary Actions: 缩放窗口
+	41 最小化按钮
+	42 菜单按钮 (disabled) 文稿操作
+	43 文本 未命名
+44 menu bar
+	45 文本编辑
+	46 文件
+	47 编辑
+	48 格式
+	49 显示
+	50 窗口
+	51 帮助
+
+The focused UI element is 2 文本输入区 (settable) ID: First Text View, Value: Dynamic Island DI-B02 display acceptance
+Synthetic temporary document. No private content.
+1280 x 832 / menu bar auto-hide.

@@ -1,0 +1,26 @@
+Window: "", App: Dynamic Island.
+0 system dialog Secondary Actions: Raise
+	1 container
+		2 button Description: 音乐, ID: island-surface-music, Secondary Actions: Increment, Decrement, Delete, Cancel
+		3 button Description: 拖盘, ID: island-surface-tray, Secondary Actions: Increment, Decrement, Delete, Cancel
+		4 button Description: 计时, Help: 计时与插件工具, ID: island-tool-selector
+			5 menu Secondary Actions: Cancel
+				6 内置计时, ID: island-tool-native
+				7 番茄钟, ID: island-tool-plugin:com.dynamicisland.pomodoro:session
+		8 button Description: 退出 Dynamic Island, ID: power, Secondary Actions: Increment, Decrement, Delete, Cancel
+		9 计时工具
+			10 radio button Description: 秒表, Value: 0
+			11 radio button Description: 倒计时, Value: 1
+		12 text Value: 按住加减按钮可快速调整 设置时长, Secondary Actions: Increment, Decrement, Delete, Cancel
+		13 button Description: 减少一分钟, Help: 按住可连续调整, ID: minus, Secondary Actions: Increment, Decrement, Delete, Cancel
+		14 text Value: 5 分钟, Secondary Actions: Increment, Decrement, Delete, Cancel
+		15 button Description: 增加一分钟, Help: 按住可连续调整, ID: plus, Secondary Actions: Increment, Decrement, Delete, Cancel
+		16 text Value: 05:00, Secondary Actions: Increment, Decrement, Delete, Cancel
+		17 button Description: 重置, ID: arrow.counterclockwise, Secondary Actions: Increment, Decrement, Delete, Cancel
+		18 button Description: 开始, ID: play.fill, Secondary Actions: Increment, Decrement, Delete, Cancel
+19 menu bar
+	20 Dynamic Island
+	21 Edit
+	22 View
+	23 Window
+	24 Help

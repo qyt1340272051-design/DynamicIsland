@@ -1,0 +1,165 @@
+{
+  "schemaVersion": 1,
+  "dateLocal": "2026-10-22",
+  "timeZone": "Asia/Shanghai",
+  "targetVersion": "v0.6.0-beta.2",
+  "appVersion": "0.6.0",
+  "build": "4",
+  "bundleIdentifier": "com.rong5.dynamic-island-mac",
+  "appSourceCommit": "eacec4d1d385bc90946e8d0df1731dbd22c23428",
+  "executableSHA256": "339773f56666bcc3a514500b70d9fa6cd21a8bbdc9c1d7682e83796a1584fb92",
+  "packageSHA256": "5168a80105a7e561154940d59fa8d3796443c22471d5ed45b1638bf2c194766b",
+  "distribution": {
+    "originalPublishedBundle": true,
+    "bundleModified": false,
+    "adHoc": true,
+    "notarized": false,
+    "cleanMac": false,
+    "browserQuarantineInstallTest": false
+  },
+  "scenarioID": "DI-B01",
+  "scenarioStatus": "pending",
+  "scope": "Follow-up partial real-device observations; read with the earlier evidence set, not a complete scenario pass.",
+  "device": {
+    "model": "Mac16,12",
+    "architecture": "arm64",
+    "macOSVersion": "26.6.2",
+    "macOSBuild": "25G83",
+    "singleBuiltInDisplay": true,
+    "physicalPixels": {
+      "width": 2560,
+      "height": 1664
+    },
+    "defaultScalingConfirmedInSettings": true,
+    "logicalFramePoints": {
+      "x": 0,
+      "y": 0,
+      "width": 1470,
+      "height": 956
+    },
+    "backingScale": 2,
+    "estimatedBackingPixels": {
+      "width": 2940,
+      "height": 1912
+    },
+    "physicalPixelsEqualEstimatedBackingPixels": false,
+    "compactPanelPoints": {
+      "width": 179,
+      "height": 32
+    },
+    "panelFramePoints": {
+      "x": 476,
+      "y": 716,
+      "width": 520,
+      "height": 240
+    },
+    "menuBarTemporaryNeverConfirmed": true,
+    "menuBarOriginalAndRestoredRaw": "仅在全屏幕视图下"
+  },
+  "observations": {
+    "files": {
+      "syntheticFilename": "DI-B01-test.txt",
+      "bytes": 91,
+      "sourceSHA256": "4a72d36d0890e0591256aefe9fc31a3c64766023162689243f9d84d85ab8daf0",
+      "uniqueImportedCopyMatched": true,
+      "lockedExpandedAtTwoObservationsMillisecondsApart": 42371,
+      "pointerExitRequestedFromUser": true,
+      "globalPointerCoordinatesIndependentlyMeasured": false,
+      "collapsedImmediatelyAfterUnlock": true,
+      "airDropNativePanelOpened": true,
+      "airDropCancelled": true,
+      "recipientSelected": false,
+      "fileSent": false,
+      "singleSyntheticCopyRemoved": true,
+      "sourceRetainedUnchanged": true,
+      "preExistingTemporaryEntriesRetained": 2,
+      "visibleItemsAfterCleanup": 0,
+      "clearExecuted": false
+    },
+    "officialPlugins": {
+      "downloadPreviewInstallFromDefaultRegistryInGUI": true,
+      "installedDisabled": true,
+      "enableDoesNotImplicitlyGrantPermissions": true,
+      "individualDenialsObserved": true,
+      "fourTemporaryGrantsIndividuallyConfirmed": true,
+      "pomodoroVersion": "0.2.1",
+      "githubVersion": "0.1.0",
+      "pomodoroPreset15MinutesSaved": true,
+      "pomodoroPauseResumeEndObserved": true,
+      "realPomodoroSeconds": 900,
+      "naturalCompletionStateObserved": true,
+      "completionObservationMillisecondsAfterLatestDeadline": 74133,
+      "continuouslyCapturedCompletionTransition": false,
+      "compactCompletionToastCaptured": false,
+      "compactSidesCompleteUserConfirmed": true,
+      "userReplyReceivedAfterTimerCompleted": true,
+      "githubRepositoriesObserved": [
+        "actions/checkout",
+        "cli/cli"
+      ],
+      "githubRefreshLoadingAndResultObserved": true,
+      "githubActualBrowserBuildURL": "https://github.com/actions/checkout/actions/runs/39262420394",
+      "githubActualBrowserPRURL": "https://github.com/cli/cli/pull/14783",
+      "githubLoginOrTokenUsed": false,
+      "newPublicBrowserTabsClosed": 2,
+      "networkRevocationFollowedByRefreshDenied": true,
+      "allFourPermissionsRevokedAfterTest": true,
+      "bothPluginsDisabledAfterTest": true,
+      "revocationsAndDisabledStatePersistedAfterRealRestart": true,
+      "selectionObservation": "One read after switching repositories showed the native timer; selecting GitHub again showed the loaded repository. No collapse event was captured; cause is undetermined."
+    },
+    "lifecycle": {
+      "expandedPowerButtonNormalQuitPID": 63049,
+      "powerQuitProcessGoneVerified": true,
+      "actualRestartPID": 68525,
+      "nativeApplicationMenuNormalQuitPID": 68525,
+      "menuQuitProcessGoneVerified": true,
+      "forceQuitUsed": false,
+      "finalRelaunchPID": 68587,
+      "showHideAndHoverUserConfirmed": true,
+      "hiddenStateScreenshotAvailable": false,
+      "lastCaptureShowsCompactIdle": true
+    },
+    "cleanup": {
+      "displayRestored": "1470 × 956（默认）",
+      "menuBarRestored": "仅在全屏幕视图下",
+      "volumeZeroAndMuted": true,
+      "nativeStopwatchReset": true,
+      "nativeCountdownPresetMinutes": 5,
+      "nativeCountdownRunning": false,
+      "pomodoroFinishedAndDisabled": true,
+      "fourPermissionsRevoked": true,
+      "twoOfficialPluginsInstalledDisabled": true,
+      "fileTrayUnlockedAndEmptyInUI": true,
+      "twoPreExistingTemporaryEntriesPreserved": true,
+      "settingsWindowsClosed": true,
+      "testTextEditDocumentMovedToLocalTempAndClosed": true,
+      "appLeftRunning": true
+    }
+  },
+  "remaining": [
+    "Physical slider drag and physical volume HUD visual completeness.",
+    "Actual Apple Music playback, controls and automatic metadata/artwork checks; user deferred playback.",
+    "Safe tray clear with an authorized empty/disposable baseline; two pre-existing files remain preserved.",
+    "Published-build long tool-menu selection/return regression remains unverified in this device run.",
+    "The short natural-completion compact toast was not captured in this run; the existing T35 acceptance remains separately scoped.",
+    "Other hardware, clean-Mac installation and T39 independent new-author gates remain unchanged."
+  ],
+  "sources": [
+    "../beta-device-20261022/di-b01.json",
+    "sources/diagnostic-default-visible-20261022.txt",
+    "sources/diagnostic-after-display-restore-20261022.txt",
+    "sources/tray-lock-hold.json",
+    "sources/airdrop-panel-observation.json",
+    "sources/tray-followup-cleanup.json",
+    "sources/temporary-plugin-permissions.json",
+    "sources/pomodoro-build4-natural-result.json",
+    "sources/github-browser-build-open.json",
+    "sources/github-browser-pr-open.json",
+    "sources/app-after-real-restart.json",
+    "sources/app-normal-quit-result.json",
+    "sources/app-menu-quit-result.json",
+    "sources/user-followup-confirmations.json",
+    "manifest.json"
+  ]
+}
