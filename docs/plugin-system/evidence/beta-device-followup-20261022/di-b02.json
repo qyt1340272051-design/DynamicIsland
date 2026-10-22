@@ -1,0 +1,61 @@
+{
+  "schemaVersion": 1,
+  "dateLocal": "2026-10-22",
+  "timeZone": "Asia/Shanghai",
+  "targetVersion": "v0.6.0-beta.2",
+  "appVersion": "0.6.0",
+  "build": "4",
+  "bundleIdentifier": "com.rong5.dynamic-island-mac",
+  "appSourceCommit": "eacec4d1d385bc90946e8d0df1731dbd22c23428",
+  "executableSHA256": "339773f56666bcc3a514500b70d9fa6cd21a8bbdc9c1d7682e83796a1584fb92",
+  "packageSHA256": "5168a80105a7e561154940d59fa8d3796443c22471d5ed45b1638bf2c194766b",
+  "distribution": {
+    "originalPublishedBundle": true,
+    "bundleModified": false,
+    "adHoc": true,
+    "notarized": false,
+    "cleanMac": false,
+    "browserQuarantineInstallTest": false
+  },
+  "scenarioID": "DI-B02",
+  "scenarioStatus": "pending",
+  "scope": "Settings changes and native full-screen fixture were observed; physical island visibility and actual Space coverage remain unverified.",
+  "observations": {
+    "selectedNonDefaultLogicalResolution": "1280 × 832",
+    "selectionConfirmedInSystemSettings": true,
+    "temporaryMenuBarAutoHideRaw": "始终",
+    "userApprovedTemporaryChangesAndRestoration": true,
+    "freshAppDiagnosticAtNonDefaultResolutionObtained": false,
+    "nativeTextEditFullscreenEntered": true,
+    "exitFullscreenMenuObserved": true,
+    "nativeTextEditFullscreenExited": true,
+    "appPanelAXReadableDuringFullscreen": true,
+    "physicalIslandForegroundVisibilityVerified": false,
+    "globalActiveSpaceIndependentlyMeasured": false,
+    "secondDesktopSwitchVerified": false,
+    "hoverAndCompactGeometryAcrossContextsVerified": false,
+    "defaultResolutionRestored": "1470 × 956（默认）",
+    "originalMenuBarModeRestored": "仅在全屏幕视图下",
+    "restorationVerifiedInSystemSettings": true,
+    "lateUserDiagnosticShows": "1470x956 restored default, not non-default evidence",
+    "syntheticTextEditFixtureMovedLocalAndClosed": true
+  },
+  "remaining": [
+    "Obtain a fresh App diagnostic while the non-default resolution is active.",
+    "Observe physical compact/expanded geometry, notch clearance and hover while menu bar auto-hides and reappears.",
+    "Verify actual island foreground visibility and pointer behavior in native full-screen and a second desktop Space.",
+    "Record physical screen-top evidence without private content; App-window AX is insufficient for these conclusions."
+  ],
+  "sources": [
+    "sources/menu-bar-temporary-always.json",
+    "sources/display-b02-1280x832-ax-excerpts.txt",
+    "sources/b02-textedit-observation.json",
+    "sources/b02-textedit-fullscreen-menu.txt",
+    "captures/b02-island-read-during-native-fullscreen.jpg",
+    "sources/display-restore-result.json",
+    "sources/display-restored-default-ax-excerpts.txt",
+    "sources/diagnostic-after-display-restore-20261022.txt",
+    "sources/textedit-fixture-cleanup.json",
+    "manifest.json"
+  ]
+}

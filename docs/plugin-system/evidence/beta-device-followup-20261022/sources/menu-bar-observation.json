@@ -1,0 +1,9 @@
+{
+  "observedUTC": "2026-10-22T05:01:12.127Z",
+  "source": "System Settings Menu Bar",
+  "settingAXExcerpt": "\t\t\t\t57 弹出式按钮 自动隐藏和显示菜单栏, Value: 仅在全屏幕视图下, ID: autohide-menubar",
+  "rawValue": "仅在全屏幕视图下",
+  "desktopMenuVisible": true,
+  "globallyNeverAutoHide": false,
+  "settingChangedByAgent": false
+}

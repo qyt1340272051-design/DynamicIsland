@@ -1,0 +1,45 @@
+{
+  "pr": "https://github.com/qyt1340272051-design/DynamicIsland/pull/7",
+  "headSha": "ec84665eec6646490f0a3a07c2a87ef711f3237f",
+  "state": "OPEN",
+  "mergeable": "MERGEABLE",
+  "mergeStateStatus": "CLEAN",
+  "run": 39636668619,
+  "runURL": "https://github.com/qyt1340272051-design/DynamicIsland/actions/runs/39636668619",
+  "event": "pull_request",
+  "attempt": 1,
+  "conclusion": "success",
+  "tests": {
+    "total": 1092,
+    "passed": 1087,
+    "skipped": 5,
+    "failed": 0
+  },
+  "releaseBuildPassed": true,
+  "skipReasons": [
+    "Set DYNAMIC_ISLAND_GITHUB_LIVE=1 to verify the anonymous public GitHub API.",
+    "The animated quit path requires Reduce Motion to be off; the test does not change system settings.",
+    "The animated quit path requires Reduce Motion to be off; the test does not change system settings.",
+    "Public-network acceptance is opt-in: set DYNAMIC_ISLAND_LIVE_REGISTRY=1.",
+    "Run Scripts/generate-screen-matrix.sh to generate the screenshot matrix."
+  ],
+  "diffScope": {
+    "fileCount": 37,
+    "allPathsUnderDocs": true,
+    "productSDKTestsScriptsWorkflowChanged": false,
+    "U02Status": "pending",
+    "U02TargetVersion": "TBD",
+    "allNineBetaScenariosStatus": "pending"
+  },
+  "protection": {
+    "strict": true,
+    "requiredContexts": [
+      "Test and build"
+    ],
+    "requiredApprovingReviews": 0,
+    "enforceAdmins": true
+  },
+  "ciLogSHA256": "b73cc0b7acdbd9e30b4a9131fce22e633124bf538a245571528147862d85cf73",
+  "ordinaryProtectedMergeEligible": true,
+  "headMustMatchOnMerge": "ec84665eec6646490f0a3a07c2a87ef711f3237f"
+}

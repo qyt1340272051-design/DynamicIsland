@@ -14,7 +14,7 @@
       "menuBarModes": ["visible"],
       "focus": ["launch", "compact-frame", "hover", "volume", "music", "files", "timers"],
       "status": "pending",
-      "evidence": ["plugin-system/evidence/beta-device-20261022/di-b01.json"]
+      "evidence": ["plugin-system/evidence/beta-device-20261022/di-b01.json", "plugin-system/evidence/beta-device-followup-20261022/di-b01.json"]
     },
     {
       "id": "DI-B02",
@@ -27,7 +27,7 @@
       "menuBarModes": ["auto-hide"],
       "focus": ["compact-frame", "hover", "full-screen", "spaces", "menu-bar-transition"],
       "status": "pending",
-      "evidence": []
+      "evidence": ["plugin-system/evidence/beta-device-followup-20261022/di-b02.json"]
     },
     {
       "id": "DI-B03",

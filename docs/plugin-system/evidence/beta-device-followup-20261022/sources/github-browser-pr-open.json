@@ -1,0 +1,11 @@
+{
+  "observedUTC": "2026-10-22T05:47:13.479Z",
+  "browser": "Safari",
+  "sourceAction": "Native published plugin Open PR button; no browser navigation injected by agent",
+  "url": "https://github.com/cli/cli/pull/14783",
+  "pageTitle": "Window: \"release download: add --verify to check immutability and build provenance before downloading by mrecachinas · Pull Request #14783 · cli/cli\", App: Safari浏览器.",
+  "publicPRHeadingObserved": true,
+  "loginPerformed": false,
+  "tokenUsed": false,
+  "otherTabsArchived": false
+}

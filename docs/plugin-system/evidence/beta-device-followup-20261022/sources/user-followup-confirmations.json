@@ -1,0 +1,18 @@
+{
+  "recordedUTC": "2026-10-22T06:14:05.942904+00:00",
+  "source": "Direct asynchronous user replies in this chat; no independent physical observation timestamp",
+  "pomodoroCompact": {
+    "userReply": "已移出，两侧显示完整",
+    "reportedCompleteSides": true,
+    "replyReceivedAfterTimerCompleted": true,
+    "compactToastNotProven": true
+  },
+  "showHide": {
+    "userReply": "隐藏后消失，显示后恢复且能展开",
+    "disappearedWhenHidden": true,
+    "restoredWhenShown": true,
+    "hoverExpandedReported": true,
+    "subsequentAppCapture": "captures/b01-build4-final-show-hide-restored.jpg",
+    "subsequentCaptureShows": "compact idle panel after reply; not a screenshot of the hidden state or expanded transition"
+  }
+}

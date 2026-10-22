@@ -1,0 +1,23 @@
+Window: "", App: Dynamic Island.
+0 system dialog Secondary Actions: Raise
+	1 container
+		2 button Description: 音乐, ID: island-surface-music
+		3 button Description: 拖盘, ID: island-surface-tray
+		4 button Description: 计时, ID: island-surface-tools
+		5 button Description: 退出 Dynamic Island, ID: power
+		6 计时工具
+			7 radio button Description: 秒表, Value: 0
+			8 radio button Description: 倒计时, Value: 1
+		9 text 按住加减按钮可快速调整 设置时长
+		10 button Description: 减少一分钟, Help: 按住可连续调整, ID: minus
+		11 text 5 分钟
+		12 button Description: 增加一分钟, Help: 按住可连续调整, ID: plus
+		13 text 05:00
+		14 button Description: 重置, ID: arrow.counterclockwise
+		15 button Description: 开始, ID: play.fill
+16 menu bar
+	17 Dynamic Island
+	18 Edit
+	19 View
+	20 Window
+	21 Help

@@ -1,0 +1,22 @@
+Window: "安装插件", App: Dynamic Island.
+0 standard window 安装插件, Secondary Actions: Raise
+	1 container
+		2 image puzzlepiece.extension
+		3 text 安装插件 检查插件信息与权限
+		4 scroll area
+			5 text GitHub 版本：0.1.0 原生，JavaScriptCore 开发者：DynamicIsland（插件自行声明，未验证） 插件 ID：com.dynamicisland.github 插件声明的权限 打开网页 安装后另行授权 在你点击插件按钮后，用默认浏览器打开主程序允许的 HTTPS 网页。当前仅允许 github.com；浏览器打开后的网站跳转由浏览器处理。 访问网络 安装后另行授权 允许访问受限制的 HTTPS 服务，读取在线数据。 保存插件数据 安装后另行授权 在本机保存此插件的数据和偏好设置，与其他插件分开存放。
+		6 text 安装不会授予权限或自动运行插件。
+		7 button Description: 取消, ID: plugin-installer-cancel
+		8 button Description: 安装插件, ID: plugin-installer-confirm
+	9 close button
+	10 zoom button
+	11 minimize button
+	12 text 安装插件
+13 menu bar
+	14 Dynamic Island
+	15 Edit
+	16 View
+	17 Window
+	18 Help
+
+The focused UI element is 0 standard window 安装插件, Secondary Actions: Raise

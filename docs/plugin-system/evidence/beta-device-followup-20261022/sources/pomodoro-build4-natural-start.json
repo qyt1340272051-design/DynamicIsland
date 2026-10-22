@@ -1,0 +1,11 @@
+{
+  "startBeforeUTC": "2026-10-22T05:40:16.914Z",
+  "startAfterUTC": "2026-10-22T05:40:16.971Z",
+  "startBeforeMilliseconds": 1792647616914,
+  "startAfterMilliseconds": 1792647616971,
+  "configuredSeconds": 900,
+  "earliestExpectedDeadlineUTC": "2026-10-22T05:55:16.914Z",
+  "latestExpectedDeadlineUTC": "2026-10-22T05:55:16.971Z",
+  "realPublishedPlugin": true,
+  "durationOverride": false
+}

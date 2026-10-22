@@ -2,7 +2,7 @@
 
 本轮目标版本为 `v0.6.0-beta.2`（App 0.6.0 / build 4）。目标是用真实 Mac 硬件找出模拟屏幕无法替代的定位、权限和稳定性问题。机器可读的任务状态保存在 [`beta-device-matrix.json`](beta-device-matrix.json)，提交前由 `Scripts/validate-beta-matrix.rb` 校验覆盖范围。当前九项真机场景均为 `pending`，不得把单元测试、模拟快照或本地 DMG 构建当作验收通过。
 
-2026-10-22 已开始公开 build4 的[当前设备部分观察](plugin-system/evidence/beta-device-20261022/README.md)，包括内置计时、悬停和音量同步。DI-B01 仍为 pending：显示配置及其余功能尚未完成；其他场景未因此通过。
+2026-10-22 已完成公开 build4 的[首批当前设备观察](plugin-system/evidence/beta-device-20261022/README.md)及[补充观察](plugin-system/evidence/beta-device-followup-20261022/README.md)：默认显示配置、内置计时、音量同步、托盘锁定与 AirDrop 打开／取消、两款官方插件操作及权限撤销、真实退出重启与菜单隐藏／显示。实际切换过非默认分辨率和自动隐藏并恢复原设置，但 B02 的物理全屏／Space 尚未验证。DI-B01／B02 仍为 pending；音乐、物理滑杆／HUD、托盘安全清空等保留缺口，其他场景未因此通过。
 
 ## 安装原则
 

@@ -1,0 +1,20 @@
+Window: "", App: Dynamic Island.
+0 Dynamic Island, Secondary Actions: Cancel, Pick
+	1 menu Secondary Actions: Cancel
+		2 About Dynamic Island, ID: orderFrontStandardAboutPanel:
+		3 Settings…, ID: menuAction:
+		4 Services
+			5 menu Secondary Actions: Cancel
+				6 Activity Monitor
+				7 Allocations & Leaks
+				8 File Activity
+				9 System Trace
+				10 Time Profile Active Application
+				11 Time Profile App Under Mouse
+				12 Time Profile Entire System
+				13 Toggle Instruments Recording
+				14 Services Settings…
+		15 (disabled) Hide Dynamic Island, ID: hide:
+		16 Hide Others, ID: hideOtherApplications:
+		17 (disabled) Show All, ID: unhideAllApplications:
+		18 Quit Dynamic Island, ID: terminate:

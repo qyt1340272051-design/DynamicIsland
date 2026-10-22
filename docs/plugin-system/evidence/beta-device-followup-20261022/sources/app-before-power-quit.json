@@ -1,0 +1,11 @@
+{
+  "observedUTC": "2026-10-22T05:59:39.263611+00:00",
+  "PID": 63049,
+  "appVersion": "0.6.0",
+  "build": "4",
+  "bundleIdentifier": "com.rong5.dynamic-island-mac",
+  "executableSHA256": "339773f56666bcc3a514500b70d9fa6cd21a8bbdc9c1d7682e83796a1584fb92",
+  "strictDeepCodeSignatureVerified": true,
+  "bundleModifiedByAgent": false,
+  "expectedNormalQuitTrigger": "Expanded island power button"
+}

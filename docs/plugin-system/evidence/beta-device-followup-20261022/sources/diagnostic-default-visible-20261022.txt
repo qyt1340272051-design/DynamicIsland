@@ -1,0 +1,36 @@
+Dynamic Island Diagnostic Report
+schema_version: 1
+generated_at: 2026-10-22T05:05:43.724Z
+app: Dynamic Island 0.6.0 (4)
+macos: Version 26.6.2 (Build 25G83)
+hardware_model: Mac16,12
+process_architecture: arm64
+screen_selection: built-in
+simulation: no
+screen_count: 1
+active_display_id: 1
+panel_visible: yes
+panel_frame_points: x=476.0 y=716.0 width=520.0 height=240.0
+compact_panel_size_points: width=179.0 height=32.0
+presentation_state: compact
+expanded_surface: music
+music_playing: no
+timer_session: none
+tray_item_count: 0
+
+screens:
+- display_1: active
+  name: Built-in Retina Display
+  id: 1
+  built_in: yes
+  notch: yes
+  scale_factor: 2.0
+  frame_points: x=0.0 y=0.0 width=1470.0 height=956.0
+  visible_frame_points: x=0.0 y=64.0 width=1470.0 height=859.0
+  estimated_pixels: width=2940.0 height=1912.0
+  safe_area_points: top=32.0 left=0.0 bottom=0.0 right=0.0
+  auxiliary_top_left_points: x=0.0 y=924.0 width=646.0 height=32.0
+  auxiliary_top_right_points: x=825.0 y=924.0 width=645.0 height=32.0
+  top_reserved_height_points: 33.0
+
+privacy: excludes usernames, serial numbers, file names, and track metadata

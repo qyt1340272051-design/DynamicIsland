@@ -1,0 +1,12 @@
+{
+  "observedUTC": "2026-10-22T05:44:22.920Z",
+  "browser": "Safari",
+  "sourceAction": "Native published plugin Open Build button; no browser navigation injected by agent",
+  "url": "https://github.com/actions/checkout/actions/runs/39262420394",
+  "pageTitle": "Window: \"github_actions in / for docker/login-action, docker/build-push-action - Update #1637065147 · actions/checkout@f548e57 · GitHub\", App: Safari浏览器.",
+  "successStatusObserved": true,
+  "signInLinkVisible": true,
+  "loginPerformed": false,
+  "tokenUsed": false,
+  "otherTabsArchived": false
+}

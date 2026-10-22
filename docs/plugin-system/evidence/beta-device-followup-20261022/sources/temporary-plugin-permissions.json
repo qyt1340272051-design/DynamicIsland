@@ -1,0 +1,34 @@
+{
+  "recordedUTC": "2026-10-22T05:33:56.650Z",
+  "userApprovedThisRound": true,
+  "plugins": {
+    "com.dynamicisland.pomodoro": {
+      "version": "0.2.1",
+      "granted": [
+        "storage.local"
+      ],
+      "revoked": [
+        "storage.local"
+      ],
+      "disabled": true
+    },
+    "com.dynamicisland.github": {
+      "version": "0.1.0",
+      "granted": [
+        "links.open",
+        "network",
+        "storage.local"
+      ],
+      "revoked": [
+        "links.open",
+        "network",
+        "storage.local"
+      ],
+      "disabled": true,
+      "refreshAfterNetworkRevoke": "UI displayed 网络未授权"
+    }
+  },
+  "cleanupRequired": false,
+  "cleanupTarget": "Revoke all four granted permissions and disable both official plugins after acceptance; no login or token usage.",
+  "cleanupVerifiedUTC": "2026-10-22T05:58:41.655Z"
+}
