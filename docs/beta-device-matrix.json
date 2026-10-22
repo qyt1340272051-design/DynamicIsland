@@ -14,7 +14,7 @@
       "menuBarModes": ["visible"],
       "focus": ["launch", "compact-frame", "hover", "volume", "music", "files", "timers"],
       "status": "pending",
-      "evidence": ["plugin-system/evidence/beta-device-20261022/di-b01.json", "plugin-system/evidence/beta-device-followup-20261022/di-b01.json"]
+      "evidence": ["plugin-system/evidence/beta-device-20261022/di-b01.json", "plugin-system/evidence/beta-device-followup-20261022/di-b01.json", "plugin-system/evidence/beta-controls-20261022/result.json"]
     },
     {
       "id": "DI-B02",

@@ -52,13 +52,19 @@
 
 main 精确提交 `3ce61ecb73d7b07ae6525180af4901ab656dc69f` 的[一次主动 CI 补验](evidence/main-ci-20261022/README.md)已完成：1092 total / 1087 passed / 5 skipped / 0 failures，Release 构建通过；事件为 `workflow_dispatch`，自动 push 缺失原因未确诊。新增 U02 全分辨率自适应仅列后续计划，目标版本待定；当前仍为 **39 verified / 1 in progress**。
 
-## 2026-10-22 当前设备补充观察与主分支收尾（当前）
+## 2026-10-22 当前设备补充观察与主分支收尾（第二批）
 
 [补充实机记录](evidence/beta-device-followup-20261022/README.md)确认默认 1470×956、实际切换 1280×832／菜单栏自动隐藏并恢复原设置；B02 的物理全屏／Space 仍未验证。文件托盘补齐锁定保持观察和合成单项 AirDrop 打开／取消，清空仍跳过以保留既有两项文件。公开 build4 完成两款官方插件真实 GUI 安装、逐项拒绝／临时授权／撤销；番茄钟 15 分钟预设、暂停／继续／结束及另一轮真实自然完成态，GitHub 仓库切换／刷新、系统浏览器网页打开及撤销后拒绝均有记录。用户确认番茄钟两侧完整与菜单隐藏／显示；岛内和原生菜单两种正常退出、真实重启及撤销／停用持久化通过。短暂 compact 完成提示本轮漏拍，未记录为调度延迟或新通过。
 
 两个插件最终停用、四项权限全部撤销，音量 0／静音，计时未运行，显示设置恢复默认及原菜单栏模式。DI-B01／B02 均保持 pending，九项硬件场景、干净 Mac 与 T39 门槛未关闭；仍为 **39 verified / 1 in progress**，U02 pending／目标版本待定，未修改 App 或冻结 SDK。
 
 首批证据 PR #7 已正常合并为 `8b3a184a9d5e24134f5f10edd566c0e577f20597`，其现成 [main push CI](https://github.com/qyt1340272051-design/DynamicIsland/actions/runs/39725742204)为 **1092 total / 1087 passed / 5 skipped / 0 failures**，Release 构建通过。本轮只读获取既有成功结果，未 dispatch／重跑；不据此推断旧提交缺失 push 记录的原因。
+
+## 2026-10-22 物理滑杆与发布包七项菜单补验（当前）
+
+[本轮记录](evidence/beta-controls-20261022/README.md)补齐真实鼠标滑杆：用户操作后实际捕获 0.09551376104354858／10%，恢复 0／静音。六款已有无额外权限样本通过正式流程临时安装并启用，用户确认七项菜单底部选择后停半秒再返回仍展开；助手另行捕获实际七项菜单、底部工具“已点击 0 次”和按钮更新至 1。用户回复后的首图为 compact，未把它当作物理返回的连续证明。样本已全部停用卸载，安装数恢复原两项且四项权限仍撤销；未播放音乐或更改显示设置／托盘文件。
+
+原样公开 build4 的物理 HUD、音乐、安全托盘清空、完整正常离开／重开序列，以及 B02／其他硬件／干净 Mac／T39 仍保留；**39 verified / 1 in progress**，九项硬件场景 pending，U02 pending／目标版本待定。上批 PR #8 合并提交 `a65390d69be73be5168c9be30d0848f8e2a328e7` 的现成 main push CI 39733641959 为 1092 total / 1087 passed / 5 skipped / 0 failures，Release 构建通过；本轮未 dispatch／重跑，不扩大为本批提交结果。
 
 ## Phase 0 — 准备阶段：项目审计、分支与基线
 

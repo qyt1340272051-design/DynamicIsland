@@ -1,0 +1,37 @@
+{
+  "removed": [
+    {
+      "id": "com.example.tool-demo",
+      "disabledBeforeUninstall": true,
+      "removedFromManagement": true
+    },
+    {
+      "id": "com.dynamicisland.acceptance.timer-presentations",
+      "disabledBeforeUninstall": true,
+      "removedFromManagement": true
+    },
+    {
+      "id": "com.dynamicisland.compat-counter",
+      "disabledBeforeUninstall": true,
+      "removedFromManagement": true
+    },
+    {
+      "id": "com.dynamicisland.compat-progress",
+      "disabledBeforeUninstall": true,
+      "removedFromManagement": true
+    },
+    {
+      "id": "com.dynamicisland.compat-status",
+      "disabledBeforeUninstall": true,
+      "removedFromManagement": true
+    },
+    {
+      "id": "com.example.hello-world",
+      "disabledBeforeUninstall": true,
+      "removedFromManagement": true
+    }
+  ],
+  "originalOfficialPluginsRetained": true,
+  "installedCount": 2,
+  "noExtraPermissionsGranted": true
+}

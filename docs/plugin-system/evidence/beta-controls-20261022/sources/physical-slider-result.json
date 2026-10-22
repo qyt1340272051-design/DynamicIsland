@@ -1,0 +1,23 @@
+{
+  "recordedUTC": "2026-10-22T12:32:27.606163+00:00",
+  "userPhysicallyDragged": true,
+  "userConfirmedSliderAndLabelChanged": true,
+  "firstAfterReplyCapture": {
+    "slider": 0,
+    "muted": true,
+    "numericChangeNotCaptured": true
+  },
+  "secondHoldCapture": {
+    "slider": 0.09551376104354858,
+    "label": "10%",
+    "muted": false
+  },
+  "restorationViaMinusButtons": [
+    0.03301377221941948,
+    0
+  ],
+  "finalMuted": true,
+  "musicPlaybackStarted": false,
+  "physicalHUDCompletenessVerified": false,
+  "scope": "Physical slider drag confirmed by user and intermediate value independently captured; no physical HUD visibility conclusion."
+}

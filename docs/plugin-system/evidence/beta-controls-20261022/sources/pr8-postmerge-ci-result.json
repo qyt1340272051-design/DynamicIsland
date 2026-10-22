@@ -1,0 +1,42 @@
+{
+  "schemaVersion": 1,
+  "recordedAtUTC": "2026-10-22T12:23:19.552123+00:00",
+  "recordedAtLocal": "2026-10-22T20:23:19.552123+08:00",
+  "timeZone": "Asia/Shanghai",
+  "repo": "qyt1340272051-design/DynamicIsland",
+  "prNumber": 8,
+  "prURL": "https://github.com/qyt1340272051-design/DynamicIsland/pull/8",
+  "prState": "closed",
+  "merged": true,
+  "mergeCommit": "a65390d69be73be5168c9be30d0848f8e2a328e7",
+  "mergedPRHeadSha": "13e45c11602505861de464dd42e86220b784ea21",
+  "mergedAtUTC": "2026-10-22T06:23:29Z",
+  "mergedAtLocal": "2026-10-22T14:23:29+08:00",
+  "observedMainSha": "a65390d69be73be5168c9be30d0848f8e2a328e7",
+  "run": 39733641959,
+  "runURL": "https://github.com/qyt1340272051-design/DynamicIsland/actions/runs/39733641959",
+  "headSha": "a65390d69be73be5168c9be30d0848f8e2a328e7",
+  "event": "push",
+  "attempt": 1,
+  "status": "completed",
+  "conclusion": "success",
+  "tests": {
+    "total": 1092,
+    "passed": 1087,
+    "skipped": 5,
+    "failed": 0
+  },
+  "releaseBuildPassed": true,
+  "skipReasons": [
+    "Set DYNAMIC_ISLAND_GITHUB_LIVE=1 to verify the anonymous public GitHub API.",
+    "The animated quit path requires Reduce Motion to be off; the test does not change system settings.",
+    "The animated quit path requires Reduce Motion to be off; the test does not change system settings.",
+    "Public-network acceptance is opt-in: set DYNAMIC_ISLAND_LIVE_REGISTRY=1.",
+    "Run Scripts/generate-screen-matrix.sh to generate the screenshot matrix."
+  ],
+  "ciLogSHA256": "6facb1c73f22f2d3d7c8909535e704c2cf1d49a1282cd27ec982d28ad270848e",
+  "scope": "One read-only verification of the existing successful post-merge push CI and PR8 merge identity",
+  "workflowDispatched": false,
+  "workflowRerun": false,
+  "repoEdited": false
+}

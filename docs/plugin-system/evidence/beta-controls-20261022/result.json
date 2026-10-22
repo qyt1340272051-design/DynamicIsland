@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 1,
+  "dateLocal": "2026-10-22",
+  "timeZone": "Asia/Shanghai",
+  "scenarioID": "DI-B01",
+  "scenarioStatus": "pending",
+  "targetVersion": "v0.6.0-beta.2",
+  "appVersion": "0.6.0",
+  "build": "4",
+  "appSourceCommit": "eacec4d1d385bc90946e8d0df1731dbd22c23428",
+  "executableSHA256": "339773f56666bcc3a514500b70d9fa6cd21a8bbdc9c1d7682e83796a1584fb92",
+  "originalPublishedBundle": true,
+  "modifiedBinary": false,
+  "deviceModel": "Mac16,12",
+  "architecture": "arm64",
+  "observations": {
+    "physicalSlider": {
+      "userDraggedAndConfirmed": true,
+      "independentlyCapturedValue": 0.09551376104354858,
+      "displayedLabel": "10%",
+      "restoredValue": 0,
+      "restoredMuted": true,
+      "physicalHUDCompletenessVerified": false
+    },
+    "longMenu": {
+      "temporaryNoExtraPermissionSamples": 6,
+      "actualNativeMenuEntries": 7,
+      "bottomTool": "工具选择示例",
+      "physicalHalfSecondReturnUserConfirmed": true,
+      "immediatePostReplyCaptureShowsCompactIdle": true,
+      "continuousPhysicalPointerRecording": false,
+      "subsequentStableToolCapture": "已点击 0 次",
+      "buttonAfterClick": "已点击 1 次",
+      "normalExitThenReenterSequenceIndependentlyCaptured": false
+    },
+    "cleanup": {
+      "sixTemporarySamplesDisabledAndUninstalled": true,
+      "twoOriginalOfficialPluginsRetainedDisabled": true,
+      "fourOriginalPermissionsStillRevoked": true,
+      "newPermissionsGranted": false,
+      "musicStarted": false,
+      "timersStarted": false,
+      "displaySettingsChanged": false,
+      "trayFilesMovedOrDeleted": false,
+      "settingsWindowsClosed": true,
+      "appLeftRunning": true
+    }
+  },
+  "scopeLimits": [
+    "User helped select the first package after native file-chooser automation could not confirm its path; this was not an independent author walkthrough.",
+    "The physical return interval is user-confirmed. Subsequent actual menu/tool/action captures are separate observations.",
+    "Volume HUD around the physical notch, actual music, safe tray clear and the complete normal leave/reenter sequence remain unverified in this round.",
+    "B02, other hardware, clean-Mac installation and T39 remain unchanged; U02 remains future work."
+  ],
+  "sources": [
+    "sources/session-start.json",
+    "sources/physical-slider-result.json",
+    "sources/long-menu-result.json",
+    "sources/menu-package-manifest.json",
+    "sources/menu-sample-cleanup.json",
+    "sources/final-cleanup.json",
+    "sources/pr8-postmerge-ci-result.json",
+    "manifest.json"
+  ]
+}

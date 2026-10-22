@@ -1,0 +1,22 @@
+Window: "安装插件", App: Dynamic Island.
+0 standard window 安装插件, Secondary Actions: Raise
+	1 container
+		2 image puzzlepiece.extension
+		3 text 安装插件 检查插件信息与权限
+		4 scroll area
+			5 text 工具选择示例 版本：1.0.0 原生，JavaScriptCore 开发者：未提供（插件自行声明，未验证） 插件 ID：com.example.tool-demo 插件声明的权限 此插件未申请权限。
+		6 text 安装不会授予权限或自动运行插件。
+		7 button Description: 取消, ID: plugin-installer-cancel
+		8 button Description: 安装插件, ID: plugin-installer-confirm
+	9 close button
+	10 zoom button
+	11 minimize button
+	12 text 安装插件
+13 menu bar
+	14 Dynamic Island
+	15 Edit
+	16 View
+	17 Window
+	18 Help
+
+The focused UI element is 0 standard window 安装插件, Secondary Actions: Raise

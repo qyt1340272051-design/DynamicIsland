@@ -1,0 +1,316 @@
+{
+  "schemaVersion": 1,
+  "evidenceSet": "beta-controls-20261022",
+  "generatedUTC": "2026-10-22T12:44:42.208451+00:00",
+  "scope": "Original image and source payloads listed below. The manifest excludes its own bytes and the separately maintained README and result record.",
+  "scenarioID": "DI-B01",
+  "scenarioStatus": "pending",
+  "preservation": {
+    "images": "Original JPEG bytes copied without transcoding, cropping, redrawing, or other image editing.",
+    "text": "Original UTF-8 source bytes copied without path or content rewriting.",
+    "packages": "The six generated plugin packages are not archived. Their relative source/package paths, identities, bytes and hashes remain in sources/menu-package-manifest.json."
+  },
+  "privacyReview": {
+    "allListedScreenshotsVisuallyReviewed": true,
+    "listedTextPrivatePathAndEmailMatches": 0,
+    "listedTextAbsoluteTemporaryPathMatches": 0,
+    "listedImageEmbeddedPrivatePathMatches": 0,
+    "sessionStartContainsNoPrivateSourcePath": true
+  },
+  "limitations": [
+    "DI-B01 remains pending; this archive does not close the other device scenarios, clean-Mac installation, T39, or future U02 gates.",
+    "Physical slider dragging is user-confirmed and an intermediate slider value and 10% label were independently captured. These App-window captures do not verify physical volume-HUD completeness.",
+    "The user confirmed that the bottom menu tool remained expanded after a half-second pause and return. The immediate post-reply capture is compact idle and does not independently prove that physical return interval.",
+    "Later native-menu and tool captures independently show seven menu entries, bottom-tool selection and an action changing 0 to 1; no continuous physical-pointer recording or normal exit/re-entry reset was captured in this run.",
+    "One initial Hello file-picker import required user assistance after automation text input failed. This run is not a T39 independent new-author walkthrough.",
+    "The six additional no-extra-permission samples were disabled and uninstalled after testing. The two original official plugins remain installed but disabled, and their four permissions remain revoked.",
+    "The original tray temporary entries were retained; no tray clear or file move/delete was performed. No Music playback or display-setting change was made."
+  ],
+  "exclusions": [],
+  "counts": {
+    "captures": 31,
+    "sources": 7,
+    "payloadFiles": 38,
+    "jpegImages": 11,
+    "utf8TextFiles": 27
+  },
+  "files": [
+    {
+      "path": "captures/b01-bottom-tool-incremented.jpg",
+      "source": "captures/b01-bottom-tool-incremented.jpg",
+      "bytes": 22723,
+      "sha256": "86cd55882c3b856afdf1b6e2f37bf15a2f98b729a15f6904ad03fefe38857997",
+      "mediaType": "image/jpeg",
+      "detectedFormat": "JPEG"
+    },
+    {
+      "path": "captures/b01-bottom-tool-incremented.txt",
+      "source": "captures/b01-bottom-tool-incremented.txt",
+      "bytes": 459,
+      "sha256": "65732ede6feebe6a0415d8340fa68eb107a0661e11d8e16bac741b70b5ece778",
+      "mediaType": "text/plain; charset=utf-8"
+    },
+    {
+      "path": "captures/b01-bottom-tool-selected.jpg",
+      "source": "captures/b01-bottom-tool-selected.jpg",
+      "bytes": 23789,
+      "sha256": "0d70783abc679eb9614d5700a332f19ba1c810012f76085d346c3517dd343c6e",
+      "mediaType": "image/jpeg",
+      "detectedFormat": "JPEG"
+    },
+    {
+      "path": "captures/b01-bottom-tool-selected.txt",
+      "source": "captures/b01-bottom-tool-selected.txt",
+      "bytes": 459,
+      "sha256": "0ec6a15dcd794e3a667b20804e00ef601a8865d0311345ea2b9d3d291d125ed2",
+      "mediaType": "text/plain; charset=utf-8"
+    },
+    {
+      "path": "captures/b01-menu-baseline-official-only.jpg",
+      "source": "captures/b01-menu-baseline-official-only.jpg",
+      "bytes": 169209,
+      "sha256": "1bb0365dadab7f8d8501401e6398bac779b459c9455a89831c3fcb67c51bde11",
+      "mediaType": "image/jpeg",
+      "detectedFormat": "JPEG"
+    },
+    {
+      "path": "captures/b01-menu-baseline-official-only.txt",
+      "source": "captures/b01-menu-baseline-official-only.txt",
+      "bytes": 2463,
+      "sha256": "57569137814dc28720900348c814ac756fce6bee6114191544d9889e7a27af8c",
+      "mediaType": "text/plain; charset=utf-8"
+    },
+    {
+      "path": "captures/b01-menu-compat-counter-enabled.txt",
+      "source": "captures/b01-menu-compat-counter-enabled.txt",
+      "bytes": 3607,
+      "sha256": "a4a075473e8af38ecf579f9fbbccbb2c2c25cda1de7699f2bda0e73b82812571",
+      "mediaType": "text/plain; charset=utf-8"
+    },
+    {
+      "path": "captures/b01-menu-six-installed-enabled.jpg",
+      "source": "captures/b01-menu-six-installed-enabled.jpg",
+      "bytes": 150337,
+      "sha256": "38645d869f075c1466c7efb0ce87f3cb3ee58097997cc2c1882cea610d8e5d4d",
+      "mediaType": "image/jpeg",
+      "detectedFormat": "JPEG"
+    },
+    {
+      "path": "captures/b01-menu-six-installed-enabled.txt",
+      "source": "captures/b01-menu-six-installed-enabled.txt",
+      "bytes": 2276,
+      "sha256": "e420e5e091440e41a94e49e23842ea27962aa355484bb37b28c966420d19d0f3",
+      "mediaType": "text/plain; charset=utf-8"
+    },
+    {
+      "path": "captures/b01-original-pomodoro-still-revoked.jpg",
+      "source": "captures/b01-original-pomodoro-still-revoked.jpg",
+      "bytes": 133221,
+      "sha256": "466f3bb399988426713edf0d8d87b8d25ba8f35b76793c57b7159f29099cae12",
+      "mediaType": "image/jpeg",
+      "detectedFormat": "JPEG"
+    },
+    {
+      "path": "captures/b01-original-pomodoro-still-revoked.txt",
+      "source": "captures/b01-original-pomodoro-still-revoked.txt",
+      "bytes": 1874,
+      "sha256": "c086e7bc9c0e1c84f755a0b85fa94b61736c935f7aaf3b5eb7fab766f5ffa435",
+      "mediaType": "text/plain; charset=utf-8"
+    },
+    {
+      "path": "captures/b01-physical-slider-after-drag.jpg",
+      "source": "captures/b01-physical-slider-after-drag.jpg",
+      "bytes": 37492,
+      "sha256": "c7b62a94822a1c7907feb41b26702267504a225c6f637bf1186a36ac3a70a035",
+      "mediaType": "image/jpeg",
+      "detectedFormat": "JPEG"
+    },
+    {
+      "path": "captures/b01-physical-slider-after-drag.txt",
+      "source": "captures/b01-physical-slider-after-drag.txt",
+      "bytes": 952,
+      "sha256": "eb3acca4d0d6e8ff6c87f8cea595bd2d51ad801ec045f25beb426269824215f5",
+      "mediaType": "text/plain; charset=utf-8"
+    },
+    {
+      "path": "captures/b01-physical-slider-held.jpg",
+      "source": "captures/b01-physical-slider-held.jpg",
+      "bytes": 37379,
+      "sha256": "2fa51e39f2de5c9abb4c602978146b0b9eeabf48a8a1cd2533b8401342c72a60",
+      "mediaType": "image/jpeg",
+      "detectedFormat": "JPEG"
+    },
+    {
+      "path": "captures/b01-physical-slider-held.txt",
+      "source": "captures/b01-physical-slider-held.txt",
+      "bytes": 980,
+      "sha256": "a121f1ba7698fe75d197bbec45d3af2ef75212bfa5a876f4f5d95e6adc91c6a7",
+      "mediaType": "text/plain; charset=utf-8"
+    },
+    {
+      "path": "captures/b01-physical-slider-restored.jpg",
+      "source": "captures/b01-physical-slider-restored.jpg",
+      "bytes": 38229,
+      "sha256": "1fef90fa698ba542102d2bfa0802d1807a56d0d0efea6f21ae85510834204fe4",
+      "mediaType": "image/jpeg",
+      "detectedFormat": "JPEG"
+    },
+    {
+      "path": "captures/b01-physical-slider-restored.txt",
+      "source": "captures/b01-physical-slider-restored.txt",
+      "bytes": 952,
+      "sha256": "eb3acca4d0d6e8ff6c87f8cea595bd2d51ad801ec045f25beb426269824215f5",
+      "mediaType": "text/plain; charset=utf-8"
+    },
+    {
+      "path": "captures/b01-samples-removed-original-two-retained.jpg",
+      "source": "captures/b01-samples-removed-original-two-retained.jpg",
+      "bytes": 169980,
+      "sha256": "49fbd3b18901d810d757efd7c53bb8ebaefa4e9d40be82d087d1292cb4a5ab55",
+      "mediaType": "image/jpeg",
+      "detectedFormat": "JPEG"
+    },
+    {
+      "path": "captures/b01-samples-removed-original-two-retained.txt",
+      "source": "captures/b01-samples-removed-original-two-retained.txt",
+      "bytes": 2463,
+      "sha256": "57569137814dc28720900348c814ac756fce6bee6114191544d9889e7a27af8c",
+      "mediaType": "text/plain; charset=utf-8"
+    },
+    {
+      "path": "captures/b01-seven-menu-actual-entries.jpg",
+      "source": "captures/b01-seven-menu-actual-entries.jpg",
+      "bytes": 53844,
+      "sha256": "77b6ad6d61c0864558a3156e2d4443af8183aa16c9465839abebe6d8ef0a846b",
+      "mediaType": "image/jpeg",
+      "detectedFormat": "JPEG"
+    },
+    {
+      "path": "captures/b01-seven-menu-actual-entries.txt",
+      "source": "captures/b01-seven-menu-actual-entries.txt",
+      "bytes": 1656,
+      "sha256": "cee81e0ff11e2c5d5e7004b45c2de31a0ea36d0d23c1034e13cba21da1c98286",
+      "mediaType": "text/plain; charset=utf-8"
+    },
+    {
+      "path": "captures/b01-seven-menu-physical-return.jpg",
+      "source": "captures/b01-seven-menu-physical-return.jpg",
+      "bytes": 13501,
+      "sha256": "ec3e5167f378fc34aca3d0df0762b280a74079a359216f015b6e20527290c3e1",
+      "mediaType": "image/jpeg",
+      "detectedFormat": "JPEG"
+    },
+    {
+      "path": "captures/b01-seven-menu-physical-return.txt",
+      "source": "captures/b01-seven-menu-physical-return.txt",
+      "bytes": 137,
+      "sha256": "537bd3c9ac5491b17d8ff3b9f5e2bc17125a0b235abaa9279bf14fdd0ca8e75d",
+      "mediaType": "text/plain; charset=utf-8"
+    },
+    {
+      "path": "captures/enabled-com.dynamicisland.acceptance.timer-presentations.txt",
+      "source": "captures/enabled-com.dynamicisland.acceptance.timer-presentations.txt",
+      "bytes": 2163,
+      "sha256": "a83b2117f6de28c0a7cb6e4093f492869fbe0009d7362b64978a014bd7ce121e",
+      "mediaType": "text/plain; charset=utf-8"
+    },
+    {
+      "path": "captures/enabled-com.dynamicisland.compat-progress.txt",
+      "source": "captures/enabled-com.dynamicisland.compat-progress.txt",
+      "bytes": 3732,
+      "sha256": "1c39900c95cc7924849f244aabad4baac98489e588e2064d8db1c611caa4294b",
+      "mediaType": "text/plain; charset=utf-8"
+    },
+    {
+      "path": "captures/enabled-com.dynamicisland.compat-status.txt",
+      "source": "captures/enabled-com.dynamicisland.compat-status.txt",
+      "bytes": 3855,
+      "sha256": "9ea8e1537cfbabcda1138efc008ea863d168decced2d753cbfecb65a611d37f0",
+      "mediaType": "text/plain; charset=utf-8"
+    },
+    {
+      "path": "captures/enabled-com.example.tool-demo.txt",
+      "source": "captures/enabled-com.example.tool-demo.txt",
+      "bytes": 2276,
+      "sha256": "e420e5e091440e41a94e49e23842ea27962aa355484bb37b28c966420d19d0f3",
+      "mediaType": "text/plain; charset=utf-8"
+    },
+    {
+      "path": "captures/preview-com.dynamicisland.acceptance.timer-presentations.txt",
+      "source": "captures/preview-com.dynamicisland.acceptance.timer-presentations.txt",
+      "bytes": 865,
+      "sha256": "22e3082f5dd04ab307477714450847183ea9afa1caffe168b145c685fd9860dc",
+      "mediaType": "text/plain; charset=utf-8"
+    },
+    {
+      "path": "captures/preview-com.dynamicisland.compat-progress.txt",
+      "source": "captures/preview-com.dynamicisland.compat-progress.txt",
+      "bytes": 1809,
+      "sha256": "fe4da67c21d335cf87e3abb8cabdacce4d250bbc060e7d46a2916de6c864ee40",
+      "mediaType": "text/plain; charset=utf-8"
+    },
+    {
+      "path": "captures/preview-com.dynamicisland.compat-status.txt",
+      "source": "captures/preview-com.dynamicisland.compat-status.txt",
+      "bytes": 1807,
+      "sha256": "a91e3e3da1646bfe173ea66bfaf16bac7ca52f34a9137f043564f35ca1b96c24",
+      "mediaType": "text/plain; charset=utf-8"
+    },
+    {
+      "path": "captures/preview-com.example.tool-demo.txt",
+      "source": "captures/preview-com.example.tool-demo.txt",
+      "bytes": 834,
+      "sha256": "cddc758720d089216703626aed936e320fc85fa984229ca699a5eb41335ab99f",
+      "mediaType": "text/plain; charset=utf-8"
+    },
+    {
+      "path": "sources/final-cleanup.json",
+      "source": "sources/final-cleanup.json",
+      "bytes": 590,
+      "sha256": "adc5a4fbe0be6fcdac11c465ebddd7396089a5223b445514fa8c5738ed942652",
+      "mediaType": "application/json"
+    },
+    {
+      "path": "sources/long-menu-result.json",
+      "source": "sources/long-menu-result.json",
+      "bytes": 1118,
+      "sha256": "5789fb64cc8ff51f20428fe0be1f6b2f4ce383db8e8a87434111bd584c315b82",
+      "mediaType": "application/json"
+    },
+    {
+      "path": "sources/menu-package-manifest.json",
+      "source": "sources/menu-package-manifest.json",
+      "bytes": 4196,
+      "sha256": "24c26156b205b7d07b3cd4b623f89b00826a25cd074dba8f8500b2fd5f0bbdcb",
+      "mediaType": "application/json"
+    },
+    {
+      "path": "sources/menu-sample-cleanup.json",
+      "source": "sources/menu-sample-cleanup.json",
+      "bytes": 936,
+      "sha256": "6f6711594c05e84dc27b88a580a4223da520d6a51988ba3d7fcdcf6d3e367de0",
+      "mediaType": "application/json"
+    },
+    {
+      "path": "sources/physical-slider-result.json",
+      "source": "sources/physical-slider-result.json",
+      "bytes": 655,
+      "sha256": "89d0a21ae55413d6842e27d83b751af26b474a0b7434e79e2323ebdd1533036d",
+      "mediaType": "application/json"
+    },
+    {
+      "path": "sources/pr8-postmerge-ci-result.json",
+      "source": "sources/pr8-postmerge-ci-result.json",
+      "bytes": 1763,
+      "sha256": "1e94cc6e0f02822dd1f2e3a7fb54eb23380201c2a6b2daf8c6ae081a99663cab",
+      "mediaType": "application/json"
+    },
+    {
+      "path": "sources/session-start.json",
+      "source": "sources/session-start.json",
+      "bytes": 477,
+      "sha256": "d7bbcd223bd0d34be474317dde5c4e0db2fdd12435d63fc62fdb7bde524a6db9",
+      "mediaType": "application/json"
+    }
+  ]
+}
