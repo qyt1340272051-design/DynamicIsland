@@ -14,7 +14,7 @@ public struct IslandView: View {
     @State private var isQuitImpacting = false
     @State private var isIslandFading = false
     @State private var quitAnimationTask: Task<Void, Never>?
-    private static let trayIconSize = CGSize(width: 74, height: 74)
+    private var trayIconSize: CGSize { CGSize(width: p(64), height: p(64)) }
 
     public init(viewModel: IslandViewModel, activityRuntime: IslandActivityRuntime? = nil) {
         self.init(viewModel: viewModel, activityRuntime: activityRuntime,
@@ -36,20 +36,17 @@ public struct IslandView: View {
             islandShell
                 .animation(expandedShellResizeAnimation, value: expandedShellSize)
             islandBody
-                .frame(width: contentSize.width, height: contentSize.height)
-                .clipShape(RoundedRectangle(cornerRadius: contentClipCornerRadius, style: .continuous))
+                .frame(width: viewModel.displayLayout.panelSize.width, height: contentSize.height, alignment: .top)
                 .mask(alignment: .top) {
                     shellShape
-                        .frame(width: IslandVisualStyle.expandedShellSize.width, height: IslandVisualStyle.expandedShellSize.height)
-                        .offset(y: shellVerticalOffset)
+                        .frame(width: maximumShellSize.width, height: maximumShellSize.height)
+                        .offset(x: shellHorizontalOffset)
                         .animation(expandedShellResizeAnimation, value: expandedShellSize)
                 }
         }
-        .compositingGroup()
-        .frame(width: IslandPanelGeometry.expandedSize.width, height: IslandPanelGeometry.expandedSize.height, alignment: .top)
-        .scaleEffect(viewModel.displayLayout.scale, anchor: .top)
         .frame(width: viewModel.displayLayout.panelSize.width, height: viewModel.displayLayout.panelSize.height, alignment: .top)
         .clipped()
+        .environment(\.islandLayoutScale, displayLayoutScale)
         .opacity(isIslandFading ? 0 : 1)
         .animation(reduceMotion ? nil : IslandQuitAnimation.islandFade, value: isIslandFading)
         .animation(IslandExpansionAnimation.shell, value: isExpanded)
@@ -80,18 +77,27 @@ public struct IslandView: View {
         return CGSize(
             width: min(
                 compactSize.width * IslandExpansionAnimation.pointerHoverScale,
-                IslandVisualStyle.expandedShellSize.width
+                IslandPanelHoverRegion.compactHoverMaximumWidth(
+                    panelWidth: viewModel.displayLayout.panelSize.width,
+                    expandedShellWidth: maximumShellSize.width,
+                    centerOffset: p(compactLayout.centerOffset))
             ),
             height: compactSize.height * IslandExpansionAnimation.pointerHoverScale
         )
     }
 
-    private var contentSize: CGSize {
-        IslandVisualStyle.expandedContentSize
-    }
+    private var displayLayoutScale: CGFloat { viewModel.displayLayout.scale }
 
-    private var expandedShellSize: CGSize {
-        activityRuntime.expandedShellSize
+    private func p(_ designPoints: CGFloat) -> CGFloat { designPoints * displayLayoutScale }
+
+    private var maximumShellSize: CGSize { viewModel.displayLayout.scaled(IslandVisualStyle.expandedShellSize) }
+
+    private var contentSize: CGSize { viewModel.displayLayout.scaled(IslandVisualStyle.expandedContentSize) }
+
+    private var expandedShellSize: CGSize { viewModel.displayLayout.scaled(activityRuntime.expandedShellSize) }
+
+    private var compactLayout: IslandCompactLayout {
+        activityRuntime.compactLayout(forBaseSize: viewModel.displayLayout.designCompactSize)
     }
 
     private var expandedShellResizeAnimation: Animation? {
@@ -101,13 +107,13 @@ public struct IslandView: View {
         }
 
         // Timer content fades out before a shorter shell closes; a taller shell opens first.
-        return expandedShellSize.height <= IslandVisualStyle.expandedCompactContentHeight
+        return expandedShellSize.height <= p(IslandVisualStyle.expandedCompactContentHeight)
             ? IslandTimerModeTransition.shellShrink
             : IslandTimerModeTransition.shellGrowth
     }
 
     private var compactPresentationSize: CGSize {
-        activityRuntime.compactShellSize(forBaseSize: viewModel.displayLayout.designCompactSize)
+        viewModel.displayLayout.scaled(compactLayout.size)
     }
 
     private var hasCompactContent: Bool {
@@ -118,20 +124,18 @@ public struct IslandView: View {
         activityRuntime.isCompactActivityVisible
     }
 
-    private var shellVerticalOffset: CGFloat {
-        -(IslandVisualStyle.expandedShellSize.height - shellSize.height) / 2
+    private var shellHorizontalOffset: CGFloat {
+        isExpanded ? 0 : p(compactLayout.centerOffset)
     }
 
     private var shellCornerRadii: (top: CGFloat, bottom: CGFloat) {
-        IslandVisualStyle.shellCornerRadii(isExpanded: isExpanded, shellHeight: shellSize.height)
+        isExpanded
+            ? (p(IslandVisualStyle.expandedShellCornerRadius), p(IslandVisualStyle.expandedShellCornerRadius))
+            : (0, shellSize.height / 2)
     }
 
     private var shellShape: IslandShellShape {
         IslandShellShape(size: shellSize, topCornerRadius: shellCornerRadii.top, bottomCornerRadius: shellCornerRadii.bottom)
-    }
-
-    private var contentClipCornerRadius: CGFloat {
-        isExpanded ? IslandVisualStyle.expandedShellCornerRadius : shellCornerRadii.bottom
     }
 
     private var isExpanded: Bool {
@@ -144,12 +148,12 @@ public struct IslandView: View {
 
     private var islandShell: some View {
         islandBackground
-            .frame(width: IslandVisualStyle.expandedShellSize.width, height: IslandVisualStyle.expandedShellSize.height)
-            .offset(y: shellVerticalOffset)
+            .frame(width: maximumShellSize.width, height: maximumShellSize.height)
+            .offset(x: shellHorizontalOffset)
             .shadow(
                 color: .black.opacity(IslandVisualStyle.shellShadowOpacity(isCompactHovering: isCompactHovering)),
-                radius: IslandVisualStyle.hoverShellShadowRadius,
-                y: IslandVisualStyle.hoverShellShadowYOffset
+                radius: p(IslandVisualStyle.hoverShellShadowRadius),
+                y: p(IslandVisualStyle.hoverShellShadowYOffset)
             )
     }
 
@@ -159,10 +163,10 @@ public struct IslandView: View {
             .overlay {
                 if viewModel.isDragging {
                     shellShape
-                        .stroke(Color.accentColor.opacity(IslandVisualStyle.draggingShellStrokeOpacity), lineWidth: 1)
+                        .stroke(Color.accentColor.opacity(IslandVisualStyle.draggingShellStrokeOpacity), lineWidth: p(1))
                 } else if isExpanded, IslandVisualStyle.expandedShellStrokeOpacity > 0 {
                     shellShape
-                        .stroke(Color.white.opacity(IslandVisualStyle.expandedShellStrokeOpacity), lineWidth: 1)
+                        .stroke(Color.white.opacity(IslandVisualStyle.expandedShellStrokeOpacity), lineWidth: p(1))
                 }
             }
     }
@@ -178,16 +182,12 @@ public struct IslandView: View {
                         hasCompactContent: hasCompactContent
                     )
                 )
-                .scaleEffect(isExpanded ? 0.96 : 1, anchor: .center)
+                .offset(x: p(compactLayout.centerOffset))
                 .allowsHitTesting(!isExpanded)
 
             expandedContent
-                .frame(width: contentSize.width, height: contentSize.height)
+                .frame(width: contentSize.width, height: expandedShellSize.height, alignment: .top)
                 .opacity(isExpanded ? 1 : 0)
-                .scaleEffect(
-                    isExpanded ? IslandExpansionAnimation.expandedContentScale : IslandExpansionAnimation.compactContentScale,
-                    anchor: .center
-                )
                 .allowsHitTesting(isExpanded)
         }
         .animation(isExpanded ? IslandExpansionAnimation.contentReveal : IslandExpansionAnimation.contentDismiss, value: isExpanded)
@@ -195,13 +195,21 @@ public struct IslandView: View {
 
     @ViewBuilder
     private var compactContent: some View {
-        if activityRuntime.prioritizesCurrentActivityOverLegacyContent,
+        if let fallback = compactLayout.fallbackMinimalNode {
+            let region = CGSize(width: p(compactLayout.trailingWidth), height: compactPresentationSize.height)
+            IslandRenderer(
+                presentation: ActivityPresentation(title: "Activity", minimal: fallback),
+                mode: .minimal, shellSize: region
+            )
+            .frame(width: region.width, height: region.height)
+            .frame(width: compactPresentationSize.width, height: compactPresentationSize.height, alignment: .trailing)
+        } else if activityRuntime.prioritizesCurrentActivityOverLegacyContent,
            let snapshot = activityManager.currentSnapshot,
            snapshot.activity.presentation.isCompactVisible {
             renderedCollapsedActivity(snapshot)
                 .transition(compactContentTransition)
         } else if viewModel.compactTimerMode != nil {
-            CompactTimerStatus(model: viewModel.timerTools)
+            CompactTimerStatus(textWidth: viewModel.compactTimerTextWidth, model: viewModel.timerTools)
                 .transition(compactContentTransition)
         } else if hasCompactActivity, let snapshot = activityManager.currentSnapshot {
             renderedCollapsedActivity(snapshot)
@@ -215,12 +223,11 @@ public struct IslandView: View {
     }
 
     private func renderedCollapsedActivity(_ snapshot: ActivitySnapshot) -> some View {
-        let mode = snapshot.activity.presentation.effectiveCollapsedMode
-        let region = IslandRenderer.collapsedRegionSize(
-            for: mode,
-            shellSize: compactPresentationSize,
-            reservedCenterWidth: viewModel.displayLayout.designCompactSize.width
-        )
+        let mode: ActivityPresentation.Mode = compactLayout.usesMinimalPresentation
+            ? .minimal : snapshot.activity.presentation.effectiveCollapsedMode
+        let region = mode == .minimal
+            ? CGSize(width: p(compactLayout.trailingWidth), height: compactPresentationSize.height)
+            : compactPresentationSize
         return renderedActivity(snapshot, mode: mode, shellSize: region)
             .frame(width: region.width, height: region.height)
             .frame(width: compactPresentationSize.width, height: compactPresentationSize.height,
@@ -230,9 +237,9 @@ public struct IslandView: View {
 
     @ViewBuilder
     private var expandedContent: some View {
-        VStack(spacing: IslandVisualStyle.expandedSurfaceSpacing) {
+        VStack(spacing: p(IslandVisualStyle.expandedSurfaceSpacing)) {
             surfaceSwitcher
-                .frame(height: IslandVisualStyle.expandedSurfaceSwitcherHeight)
+                .frame(height: p(IslandVisualStyle.expandedSurfaceSwitcherHeight))
 
             ZStack(alignment: .topLeading) {
                 expandedSurfaceContent
@@ -241,7 +248,7 @@ public struct IslandView: View {
             .clipped()
             .animation(IslandSurfaceTransition.animation, value: viewModel.expandedSurface)
         }
-        .padding(IslandVisualStyle.expandedContentPadding)
+        .padding(p(IslandVisualStyle.expandedContentPadding))
         .foregroundStyle(.white)
     }
 
@@ -286,7 +293,7 @@ public struct IslandView: View {
     }
 
     private var surfaceSwitcher: some View {
-        HStack(spacing: 8) {
+        HStack(spacing: p(8)) {
             surfaceButton(surface: .music, title: "音乐", systemName: "music.note")
                 .accessibilityIdentifier("island-surface-music")
             surfaceButton(surface: .fileTray, title: "拖盘", systemName: "tray.full")
@@ -324,7 +331,7 @@ public struct IslandView: View {
                 onTrackingCancelled: viewModel.cancelToolMenuInteraction,
                 onSessionIsCurrent: viewModel.isToolMenuInteractionCurrent
             )
-            .frame(width: 28, height: 28)
+            .frame(width: p(28), height: p(28))
         }
     }
 
@@ -356,14 +363,14 @@ public struct IslandView: View {
             }
         } label: {
             Image(systemName: "power")
-                .font(.system(size: 12, weight: .semibold))
+                .font(.system(size: p(12), weight: .semibold))
                 .foregroundStyle(isQuitImpacting ? Color.red : Color.white.opacity(0.68))
                 .scaleEffect(isQuitImpacting ? IslandQuitAnimation.pressedScale : 1)
-                .frame(width: 28, height: 28)
+                .frame(width: p(28), height: p(28))
                 .background(isQuitImpacting ? Color.red.opacity(0.28) : Color.white.opacity(0.08), in: Circle())
                 .overlay {
                     Circle()
-                        .stroke(Color.red.opacity(isQuitImpacting ? 0.9 : 0), lineWidth: 1.5)
+                        .stroke(Color.red.opacity(isQuitImpacting ? 0.9 : 0), lineWidth: p(1.5))
                 }
         }
         .buttonStyle(.plain)
@@ -396,7 +403,7 @@ public struct IslandView: View {
                 )
             } else {
                 Text("在 Apple Music 播放后显示曲目信息")
-                    .font(.caption)
+                    .font(IslandDesignTokens.font(for: .body, scale: displayLayoutScale))
                     .foregroundStyle(.white.opacity(0.6))
             }
         }
@@ -435,13 +442,13 @@ public struct IslandView: View {
     }
 
     private var fileTrayExpandedContent: some View {
-        VStack(spacing: 14) {
+        VStack(spacing: p(6)) {
             trayArea
             Spacer(minLength: 0)
 
             if let message = viewModel.lastErrorMessage {
                 Text(message)
-                    .font(.caption2)
+                    .font(IslandDesignTokens.font(for: .caption, scale: displayLayoutScale))
                     .foregroundStyle(.red.opacity(0.9))
                     .lineLimit(1)
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -450,23 +457,24 @@ public struct IslandView: View {
     }
 
     private var trayArea: some View {
-        VStack(spacing: 10) {
+        VStack(spacing: p(4)) {
             HStack {
                 Label(viewModel.isDragging ? "松开以加入文件托盘" : "文件托盘", systemImage: "tray.full")
-                    .font(.system(size: 13, weight: .semibold))
+                    .font(.system(size: p(13), weight: .semibold))
                 Spacer()
                 if !viewModel.trayItems.isEmpty {
                     Button(action: viewModel.shareTrayViaAirDrop) {
                         Label("AirDrop", systemImage: "square.and.arrow.up")
+                            .font(.system(size: p(11)))
                     }
                     .transition(.opacity)
                 }
                 TrayDeleteButton(hasItems: !viewModel.trayItems.isEmpty, action: viewModel.clearTray)
                 Button(action: viewModel.toggleFileTrayLock) {
                     Image(systemName: viewModel.isFileTrayLocked ? "lock.fill" : "lock.open")
-                        .font(.system(size: 12, weight: .semibold))
+                        .font(.system(size: p(12), weight: .semibold))
                         .contentTransition(.symbolEffect(.replace))
-                        .frame(width: 28, height: 28)
+                        .frame(width: p(24), height: p(24))
                         .background(Color.white.opacity(viewModel.isFileTrayLocked ? 0.18 : 0.08), in: Circle())
                 }
                 .buttonStyle(.plain)
@@ -477,26 +485,26 @@ public struct IslandView: View {
             }
 
             if viewModel.trayItems.isEmpty {
-                RoundedRectangle(cornerRadius: 10, style: .continuous)
+                RoundedRectangle(cornerRadius: p(10), style: .continuous)
                     .fill(Color.white.opacity(viewModel.isDragging ? 0.14 : 0.07))
-                    .frame(height: 48)
+                    .frame(height: p(48))
                     .overlay {
                         Text("拖入文件后可暂存并通过 AirDrop 分享")
-                            .font(.caption)
+                            .font(IslandDesignTokens.font(for: .body, scale: displayLayoutScale))
                             .foregroundStyle(.white.opacity(0.58))
                     }
                     .transition(.opacity)
             } else {
                 ScrollView(.horizontal, showsIndicators: false) {
-                    HStack(alignment: .top, spacing: 12) {
+                    HStack(alignment: .top, spacing: p(12)) {
                         ForEach(viewModel.trayItems) { item in
                             trayIcon(for: item)
                                 .transition(.opacity.combined(with: .scale(scale: 0.92)))
                         }
                     }
-                    .padding(.vertical, 2)
+                    .padding(.vertical, p(2))
                 }
-                .frame(height: Self.trayIconSize.height + 6)
+                .frame(height: trayIconSize.height + p(4))
                 .transition(.opacity)
             }
         }
@@ -504,30 +512,32 @@ public struct IslandView: View {
     }
 
     private func trayIcon(for item: TrayFileItem) -> some View {
-        VStack(spacing: 5) {
+        VStack(spacing: p(3)) {
             ZStack(alignment: .bottomTrailing) {
                 trayIconArtwork(for: item)
 
                 if !item.formattedSize.isEmpty {
                     Text(item.formattedSize)
-                        .font(.system(size: 8, weight: .medium, design: .rounded))
+                        .font(.system(size: p(8), weight: .medium, design: .rounded))
                         .foregroundStyle(.white.opacity(0.78))
-                        .padding(.horizontal, 4)
-                        .padding(.vertical, 2)
+                        .padding(.horizontal, p(4))
+                        .padding(.vertical, p(2))
                         .background(Color.black.opacity(0.62), in: Capsule())
-                        .offset(x: 7, y: 4)
+                        .offset(x: p(7), y: p(2))
                 }
             }
 
             Text(item.displayName)
-                .font(.system(size: 10, weight: .medium))
+                .font(.system(size: p(10), weight: .medium))
                 .foregroundStyle(.white.opacity(0.82))
                 .multilineTextAlignment(.center)
                 .lineLimit(2)
                 .truncationMode(.middle)
-                .frame(width: Self.trayIconSize.width, height: 25, alignment: .top)
+                .frame(width: trayIconSize.width)
+                .fixedSize(horizontal: false, vertical: true)
+                .frame(height: p(28), alignment: .top)
         }
-        .frame(width: Self.trayIconSize.width, height: Self.trayIconSize.height, alignment: .top)
+        .frame(width: trayIconSize.width, height: trayIconSize.height, alignment: .top)
         .contentShape(Rectangle())
         .help(item.displayName)
         .onDrag {
@@ -540,13 +550,13 @@ public struct IslandView: View {
                     hoveredTrayItemID = nil
                 } label: {
                     Image(systemName: "minus")
-                        .font(.system(size: 11, weight: .heavy))
+                        .font(.system(size: p(11), weight: .heavy))
                         .foregroundStyle(.red)
-                        .frame(width: 22, height: 22)
+                        .frame(width: p(22), height: p(22))
                         .background(Color.black.opacity(0.88), in: Circle())
                 }
                 .buttonStyle(.plain)
-                .padding(.leading, 9)
+                .padding(.leading, p(9))
                 .help("移除 \(item.displayName)")
                 .accessibilityLabel("移除 \(item.displayName)")
                 .transition(.opacity.combined(with: .scale(scale: 0.8)))
@@ -573,11 +583,11 @@ public struct IslandView: View {
                 Image(nsImage: image)
                     .resizable()
                     .scaledToFill()
-                    .frame(width: 48, height: 42)
-                    .clipShape(RoundedRectangle(cornerRadius: 6, style: .continuous))
+                    .frame(width: p(40), height: p(32))
+                    .clipShape(RoundedRectangle(cornerRadius: p(6), style: .continuous))
                     .overlay {
-                        RoundedRectangle(cornerRadius: 6, style: .continuous)
-                            .stroke(Color.white.opacity(0.16), lineWidth: 0.5)
+                        RoundedRectangle(cornerRadius: p(6), style: .continuous)
+                            .stroke(Color.white.opacity(0.16), lineWidth: p(0.5))
                     }
             } else {
                 finderIcon(for: item)
@@ -604,12 +614,12 @@ public struct IslandView: View {
     private func surfaceIcon(surface: IslandExpandedSurface, systemName: String) -> some View {
         let isSelected = viewModel.expandedSurface == surface
         return Image(systemName: systemName)
-            .font(.system(size: 12, weight: .semibold))
-            .frame(width: 28, height: 28)
+            .font(.system(size: p(12), weight: .semibold))
+            .frame(width: p(28), height: p(28))
             .background(Color.white.opacity(isSelected ? 0.18 : 0.08), in: Circle())
             .overlay {
                 Circle()
-                    .stroke(Color.white.opacity(isSelected ? 0.22 : 0.08), lineWidth: 0.5)
+                    .stroke(Color.white.opacity(isSelected ? 0.22 : 0.08), lineWidth: p(0.5))
             }
     }
 
@@ -617,11 +627,13 @@ public struct IslandView: View {
         Image(nsImage: NSWorkspace.shared.icon(forFile: item.url.path))
             .resizable()
             .scaledToFit()
-            .frame(width: 44, height: 42)
+            .frame(width: p(36), height: p(32))
     }
 }
 
 private struct TrayDeleteButton: View {
+    @Environment(\.islandLayoutScale) private var displayLayoutScale
+    private func p(_ value: CGFloat) -> CGFloat { value * displayLayoutScale }
     let hasItems: Bool
     let action: () -> Void
 
@@ -643,10 +655,10 @@ private struct TrayDeleteButton: View {
             }
         } label: {
             Image(systemName: "trash")
-                .font(.system(size: 12, weight: .semibold))
+                .font(.system(size: p(12), weight: .semibold))
                 .foregroundStyle(holdsImpact ? Color.red : Color.white.opacity(0.78))
                 .symbolEffect(.bounce, value: impactCount)
-                .frame(width: 28, height: 28)
+                .frame(width: p(24), height: p(24))
                 .background(Color.red.opacity(holdsImpact ? 0.22 : 0), in: Circle())
                 .animation(IslandFileTrayAnimation.impact, value: holdsImpact)
         }
@@ -669,27 +681,30 @@ private struct TrayDeleteImpactButtonStyle: ButtonStyle {
 }
 
 private struct CompactTimerStatus: View {
+    @Environment(\.islandLayoutScale) private var displayLayoutScale
+    private func p(_ value: CGFloat) -> CGFloat { value * displayLayoutScale }
+    let textWidth: CGFloat
     @ObservedObject var model: IslandTimerToolsModel
 
     var body: some View {
         if let mode = model.sessionMode {
-            HStack(spacing: 0) {
+            HStack(spacing: p(0)) {
                 Image(systemName: mode.systemImage)
-                    .font(.system(size: 11, weight: .semibold))
+                    .font(.system(size: p(11), weight: .semibold))
                     .foregroundStyle(tint(for: mode))
-                    .frame(width: 26, height: 26)
+                    .frame(width: p(26), height: p(26))
                     .background(tint(for: mode).opacity(0.14), in: Circle())
 
                 Spacer(minLength: 0)
 
                 Text(model.compactTimeText)
-                    .font(.system(size: 11, weight: .semibold, design: .monospaced))
+                    .font(.system(size: p(11), weight: .semibold, design: .monospaced))
                     .monospacedDigit()
                     .lineLimit(1)
                     .minimumScaleFactor(0.78)
-                    .frame(width: 58, alignment: .trailing)
+                    .frame(width: p(textWidth), alignment: .trailing)
             }
-            .padding(.horizontal, 8)
+            .padding(.horizontal, p(8))
             .accessibilityElement(children: .ignore)
             .accessibilityLabel("\(mode.title)，\(model.compactTimeText)")
         }
@@ -785,7 +800,7 @@ private enum DroppedFileURLResolver {
     }
 }
 
-private struct IslandShellShape: Shape {
+struct IslandShellShape: Shape {
     var size: CGSize
     var topCornerRadius: CGFloat
     var bottomCornerRadius: CGFloat
@@ -807,7 +822,7 @@ private struct IslandShellShape: Shape {
     func path(in rect: CGRect) -> Path {
         let shellRect = CGRect(
             x: rect.midX - size.width / 2,
-            y: rect.midY - size.height / 2,
+            y: rect.minY,
             width: size.width,
             height: size.height
         )

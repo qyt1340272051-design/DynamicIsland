@@ -5,7 +5,7 @@ import XCTest
 
 @MainActor
 final class IslandDisplayNativeControlTests: XCTestCase {
-    func testNativeToolButtonUsesDisplayTransformForBoundsAnchorAndHitRegion() async throws {
+    func testNativeToolButtonDrawsAtFinalPointSizeForBoundsAnchorAndHitRegion() async throws {
         let reference = try await inspectNativeControl(
             environment: environment(width: 1470, height: 956, notchWidth: 179, notchHeight: 32)
         )
@@ -19,6 +19,11 @@ final class IslandDisplayNativeControlTests: XCTestCase {
         // hardware or native menu-tracking acceptance at this display mode.
         _ = try await inspectNativeControl(
             environment: environment(width: 1710, height: 1112, notchWidth: 208, notchHeight: 37),
+            reference: reference
+        )
+
+        _ = try await inspectNativeControl(
+            environment: environment(width: 2560, height: 1664, notchWidth: 312, notchHeight: 56),
             reference: reference
         )
     }
@@ -67,7 +72,7 @@ final class IslandDisplayNativeControlTests: XCTestCase {
         window.isOpaque = false
         // NSWindow rounds fractional content sizes up to whole points. Keep
         // the hosting viewport at the exact display-layout size in a plain
-        // container so that this test measures the transform, not window fit.
+        // container so that this test measures final points, not window fit.
         let container = NSView(frame: hosting.frame)
         window.contentView = container
         hosting.autoresizingMask = []
@@ -81,24 +86,42 @@ final class IslandDisplayNativeControlTests: XCTestCase {
         XCTAssertFalse(button.isHiddenOrHasHiddenAncestor)
         XCTAssertNotNil(button.target)
         XCTAssertNotNil(button.action)
-        XCTAssertEqual(button.intrinsicContentSize.width, 28, accuracy: 0.001)
-        XCTAssertEqual(button.intrinsicContentSize.height, 28, accuracy: 0.001)
+        let buttonSide = 28 * layout.scale
+        XCTAssertEqual(button.layoutScale, layout.scale, accuracy: 0.000_001)
+        XCTAssertEqual(button.intrinsicContentSize.width, buttonSide, accuracy: 0.001)
+        XCTAssertEqual(button.intrinsicContentSize.height, buttonSide, accuracy: 0.001)
+        // AppKit may round the hosted frame to whole layout points. The
+        // requested intrinsic size above stays exact, and conversion below
+        // must still preserve the resulting native bounds without scaling.
+        XCTAssertEqual(button.bounds.width, buttonSide, accuracy: 1)
+        XCTAssertEqual(button.bounds.height, buttonSide, accuracy: 1)
+        XCTAssertEqual(button.frame.width, buttonSide, accuracy: 1)
+        XCTAssertEqual(button.frame.height, buttonSide, accuracy: 1)
+        XCTAssertEqual(try XCTUnwrap(button.layer).cornerRadius, 14 * layout.scale, accuracy: 0.001)
+        XCTAssertEqual(try XCTUnwrap(button.layer).borderWidth, 0.5 * layout.scale, accuracy: 0.001)
+        XCTAssertNotNil(button.image)
+        XCTAssertEqual(button.imageScaling, .scaleNone)
 
-        // The representable must be transformed in native coordinates too. A
-        // layer-only visual transform with an unscaled NSView would fail here.
+        // Native bounds already use final display points. A whole-island
+        // magnification would apply scale twice and fail this conversion check.
         let buttonRect = button.convert(button.bounds, to: hosting)
         let popupAnchor = button.convert(
-            NSPoint(x: button.bounds.minX, y: button.bounds.minY - 4), to: hosting
+            NSPoint(x: button.bounds.minX, y: button.bounds.minY - 4 * layout.scale), to: hosting
         )
         let alignmentRect = try XCTUnwrap(button.superview).convert(
             button.alignmentRect(forFrame: button.frame), to: hosting
         )
-        // AppKit expands an NSButton's bounds beyond its 28 pt alignment rect
-        // for native drawing. Both areas must use the same display transform.
-        XCTAssertEqual(buttonRect.width, button.bounds.width * layout.scale, accuracy: 0.05)
-        XCTAssertEqual(buttonRect.height, button.bounds.height * layout.scale, accuracy: 0.05)
-        XCTAssertEqual(alignmentRect.width, 28 * layout.scale, accuracy: 0.05)
-        XCTAssertEqual(alignmentRect.height, 28 * layout.scale, accuracy: 0.05)
+        XCTAssertEqual(buttonRect.width, button.bounds.width, accuracy: 0.05)
+        XCTAssertEqual(buttonRect.height, button.bounds.height, accuracy: 0.05)
+        XCTAssertEqual(alignmentRect.width, buttonRect.width, accuracy: 0.05)
+        XCTAssertEqual(alignmentRect.height, buttonRect.height, accuracy: 0.05)
+        XCTAssertEqual(alignmentRect.minX, buttonRect.minX, accuracy: 0.05)
+        XCTAssertEqual(alignmentRect.minY, buttonRect.minY, accuracy: 0.05)
+        XCTAssertEqual(popupAnchor.x, buttonRect.minX, accuracy: 0.05)
+        let expectedPopupY = button.isFlipped == hosting.isFlipped
+            ? buttonRect.minY - 4 * layout.scale
+            : buttonRect.maxY + 4 * layout.scale
+        XCTAssertEqual(popupAnchor.y, expectedPopupY, accuracy: 0.05)
         let attachment = XCTAttachment(string:
             "scale=\(layout.scale) hosting=\(hosting.bounds) native=\(buttonRect) alignment=\(alignmentRect) popupAnchor=\(popupAnchor)")
         attachment.name = "Native-tool-control-scale-\(layout.scale)"
@@ -129,21 +152,19 @@ final class IslandDisplayNativeControlTests: XCTestCase {
                 width: reference.alignmentRect.width * layout.scale,
                 height: reference.alignmentRect.height * layout.scale
             )
-            XCTAssertEqual(buttonRect.width, reference.buttonRect.width * layout.scale, accuracy: 0.05)
-            XCTAssertEqual(buttonRect.height, reference.buttonRect.height * layout.scale, accuracy: 0.05)
+            XCTAssertEqual(buttonRect.width, reference.buttonRect.width * layout.scale, accuracy: 1)
+            XCTAssertEqual(buttonRect.height, reference.buttonRect.height * layout.scale, accuracy: 1)
             XCTAssertEqual(buttonRect.minX, reference.buttonRect.minX * layout.scale, accuracy: positionAccuracy)
             XCTAssertEqual(buttonRect.minY, reference.buttonRect.minY * layout.scale, accuracy: positionAccuracy)
             XCTAssertEqual(alignmentRect.minX, expectedAlignmentRect.minX, accuracy: positionAccuracy)
             XCTAssertEqual(alignmentRect.minY, expectedAlignmentRect.minY, accuracy: positionAccuracy)
-            XCTAssertEqual(popupAnchor.x, reference.popupAnchor.x * layout.scale, accuracy: positionAccuracy)
-            XCTAssertEqual(popupAnchor.y, reference.popupAnchor.y * layout.scale, accuracy: positionAccuracy)
         } else {
             XCTAssertEqual(layout.scale, 1, accuracy: 0.000_001)
             expectedAlignmentRect = alignmentRect
         }
 
         // Derive points from the independent 1x baseline, rather than from the
-        // transformed button's own conversion, to detect a stale hit region.
+        // resized button's own conversion, to detect a stale hit region.
         // hitTest receives coordinates in its receiver's superview. No mouse
         // events or actions are sent, and NSMenu.popUp is deliberately not run.
         let parent = try XCTUnwrap(hosting.superview)

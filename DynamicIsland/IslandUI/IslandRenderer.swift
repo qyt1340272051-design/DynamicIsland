@@ -71,6 +71,7 @@ public struct IslandRenderer: View {
     @Environment(\.colorScheme) private var colorScheme
     @Environment(\.colorSchemeContrast) private var contrast
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @Environment(\.islandLayoutScale) private var layoutScale
     @State private var hoveredActionID: String?
     @State private var toggleValues: [String: Bool] = [:]
     @State private var sliderInteraction = IslandSliderInteractionState()
@@ -96,7 +97,7 @@ public struct IslandRenderer: View {
     }
 
     public var body: some View {
-        let size = Self.contentSize(for: mode, shellSize: shellSize)
+        let size = Self.contentSize(for: mode, shellSize: shellSize, layoutScale: layoutScale)
         let alignment: Alignment = mode == .expanded ? .topLeading : .center
         ViewThatFits(in: [.horizontal, .vertical]) {
             renderedNode(Self.resolvedNode(in: presentation, for: mode), depth: 1)
@@ -115,20 +116,24 @@ public struct IslandRenderer: View {
 
     /// The Host supplies the shell. Expanded content reserves the switcher and
     /// padding used by IslandView; plugin trees cannot grow the shell.
-    public static func contentSize(for mode: ActivityPresentation.Mode, shellSize: CGSize) -> CGSize {
+    public static func contentSize(for mode: ActivityPresentation.Mode, shellSize: CGSize,
+                                   layoutScale: CGFloat = 1) -> CGSize {
         guard shellSize.width.isFinite, shellSize.height.isFinite else { return .zero }
-        let width = max(0, shellSize.width)
-        let height = max(0, shellSize.height)
+        let scale = IslandDesignTokens.normalizedLayoutScale(layoutScale)
+        let width = max(0, shellSize.width / scale)
+        let height = max(0, shellSize.height / scale)
+        let designSize: CGSize
         switch mode {
         case .minimal, .compact:
-            return CGSize(width: max(0, width - 2 * IslandDesignTokens.spacing(.sm)), height: height)
+            designSize = CGSize(width: max(0, width - 2 * IslandDesignTokens.spacing(.sm)), height: height)
         case .expanded:
-            return CGSize(
+            designSize = CGSize(
                 width: min(IslandDesignTokens.expandedCanvasSize.width,
-                           max(0, width - 2 * IslandDesignTokens.spacing(.md))),
+                           max(0, width - 2 * IslandVisualStyle.expandedContentPadding)),
                 height: ActivityPresentation.HostPolicy.expandedContentHeight(forHostShellHeight: height)
             )
         }
+        return CGSize(width: designSize.width * scale, height: designSize.height * scale)
     }
 
     /// The center of a collapsed island may be a physical camera cutout.
@@ -155,7 +160,7 @@ public struct IslandRenderer: View {
 
     private var fallbackSummary: some View {
         Text(safeSummaryTitle)
-            .font(IslandDesignTokens.font(for: .caption))
+            .font(IslandDesignTokens.font(for: .caption, scale: layoutScale))
             .foregroundStyle(color(.primary))
             .lineLimit(1)
             .truncationMode(.tail)
@@ -179,17 +184,30 @@ public struct IslandRenderer: View {
     }
 
     private var nodeSpacing: CGFloat {
-        IslandDesignTokens.spacing(.xs)
+        IslandDesignTokens.spacing(.xs, scale: layoutScale)
     }
 
-    private var iconSide: CGFloat { mode == .expanded ? 20 : 16 }
+    private var iconSide: CGFloat { scaled(mode == .expanded ? 20 : 16) }
+
+    private func scaled(_ designPoints: CGFloat) -> CGFloat { designPoints * layoutScale }
+
+    /// Native controls have discrete AppKit sizes. Pick their native drawing
+    /// size rather than magnifying a composited control image.
+    private var nativeControlSize: ControlSize {
+        if layoutScale >= 1.5 { return .regular }
+        return layoutScale > 1.05 ? .small : .mini
+    }
+
+    private var nativeProgressControlSize: ControlSize {
+        layoutScale >= 1.5 ? .large : .regular
+    }
 
     private func renderedNode(_ node: IslandNode, depth: Int) -> AnyView {
         guard depth <= IslandNode.Limits.maxDepth else { return AnyView(fallbackSummary) }
         switch node {
         case .text(let value):
             return AnyView(Text(value.content)
-                .font(IslandDesignTokens.font(for: mode == .expanded ? .body : .caption))
+                .font(IslandDesignTokens.font(for: mode == .expanded ? .body : .caption, scale: layoutScale))
                 .foregroundStyle(color(value.color))
                 .lineLimit(1)
                 .minimumScaleFactor(0.8)
@@ -201,7 +219,7 @@ public struct IslandRenderer: View {
         case .icon(let value):
             let isCompactWaveform = mode == .compact && value.symbolName == "waveform"
             return AnyView(Image(systemName: value.symbolName)
-                .font(IslandDesignTokens.font(for: .headline))
+                .font(IslandDesignTokens.font(for: .headline, scale: layoutScale))
                 .foregroundStyle(isCompactWaveform ? color(.success) : color(.accent))
                 .frame(width: iconSide, height: iconSide)
                 .symbolEffect(.variableColor, options: .repeating,
@@ -236,6 +254,8 @@ public struct IslandRenderer: View {
             case .linear:
                 return AnyView(ProgressView(value: value.value)
                     .progressViewStyle(.linear)
+                    .controlSize(nativeProgressControlSize)
+                    .frame(height: scaled(20))
                     .tint(color(value.color))
                     .accessibilityLabel("Progress")
                     .accessibilityValue("\(Int((value.value * 100).rounded())) percent"))
@@ -252,19 +272,19 @@ public struct IslandRenderer: View {
             } label: {
                 if case .icon(let icon) = value.label {
                     Image(systemName: icon.symbolName)
-                        .font(.system(size: 12, weight: .semibold))
+                        .font(.system(size: scaled(12), weight: .semibold))
                         .foregroundStyle(color(.primary))
-                        .frame(width: 28, height: 28)
+                        .frame(width: scaled(28), height: scaled(28))
                         .background(Circle().fill(color(.primary).opacity(
                             hoveredActionID == value.actionID ? 0.18 : 0.08
                         )))
                         .contentShape(Circle())
                 } else {
                     renderedNode(value.label, depth: depth + 1)
-                        .frame(minWidth: 28, minHeight: 28)
-                        .padding(.horizontal, IslandDesignTokens.spacing(.xs))
+                        .frame(minWidth: scaled(28), minHeight: scaled(28))
+                        .padding(.horizontal, IslandDesignTokens.spacing(.xs, scale: layoutScale))
                         .background(
-                            RoundedRectangle(cornerRadius: IslandDesignTokens.cornerRadius(.sm))
+                            RoundedRectangle(cornerRadius: IslandDesignTokens.cornerRadius(.sm, scale: layoutScale))
                                 .fill(color(.primary).opacity(hoveredActionID == value.actionID ? 0.18 : 0.08))
                         )
                 }
@@ -283,20 +303,20 @@ public struct IslandRenderer: View {
                 }
             )) {
                 Text(value.title)
-                    .font(IslandDesignTokens.font(for: .body))
+                    .font(IslandDesignTokens.font(for: .body, scale: layoutScale))
                     .foregroundStyle(color(.primary))
                     .lineLimit(1)
             }
             .toggleStyle(.switch)
-            .controlSize(.mini)
+            .controlSize(nativeControlSize)
             .tint(color(.accent))
-            .frame(minHeight: 28)
+            .frame(minHeight: scaled(28))
             .accessibilityLabel(value.title))
         case .slider(let value):
-            return AnyView(VStack(alignment: .leading, spacing: IslandDesignTokens.spacing(.xs)) {
+            return AnyView(VStack(alignment: .leading, spacing: IslandDesignTokens.spacing(.xs, scale: layoutScale)) {
                 if value.showsTitle {
                     Text(value.title)
-                        .font(IslandDesignTokens.font(for: .caption))
+                        .font(IslandDesignTokens.font(for: .caption, scale: layoutScale))
                         .foregroundStyle(color(.primary))
                         .lineLimit(1)
                 }
@@ -316,7 +336,8 @@ public struct IslandRenderer: View {
                         onAction(.init(actionID: value.actionID, value: .sliderCommit(committed)))
                     }
                 })
-                .controlSize(.mini)
+                .controlSize(nativeControlSize)
+                .frame(height: scaled(12))
                 .tint(color(.accent))
                 .accessibilityLabel(value.title)
             })
@@ -325,11 +346,11 @@ public struct IslandRenderer: View {
 
     @ViewBuilder
     private func renderedImage(_ value: IslandNode.Image) -> some View {
-        let side = IslandDesignTokens.imageSide(value.size, mode: mode)
+        let side = IslandDesignTokens.imageSide(value.size, mode: mode, scale: layoutScale)
         let radius: CGFloat = switch value.size {
         case .icon: 0
-        case .thumbnail: 3
-        case .artwork: IslandDesignTokens.cornerRadius(.md)
+        case .thumbnail: scaled(3)
+        case .artwork: IslandDesignTokens.cornerRadius(.md, scale: layoutScale)
         }
         switch value.source {
         case .systemSymbol(let name):
@@ -343,6 +364,7 @@ public struct IslandRenderer: View {
             if let image = imageResolver(value.source) {
                 Image(nsImage: image)
                     .resizable()
+                    .interpolation(.high)
                     .aspectRatio(contentMode: value.size == .artwork ? .fill : .fit)
                     .frame(width: side, height: side)
                     .clipped()
@@ -353,14 +375,14 @@ public struct IslandRenderer: View {
                     RoundedRectangle(cornerRadius: radius, style: .continuous)
                         .fill(Color.white.opacity(0.09))
                     Image(systemName: "music.note")
-                        .font(.system(size: max(10, side * 0.25), weight: .semibold))
+                        .font(.system(size: max(scaled(10), side * 0.25), weight: .semibold))
                         .foregroundStyle(color(.secondary).opacity(0.65))
                 }
                 .frame(width: side, height: side)
                 .clipShape(RoundedRectangle(cornerRadius: radius, style: .continuous))
                 .overlay {
                     RoundedRectangle(cornerRadius: radius, style: .continuous)
-                        .stroke(Color.white.opacity(0.14), lineWidth: 0.5)
+                        .stroke(Color.white.opacity(0.14), lineWidth: scaled(0.5))
                 }
                 .accessibilityLabel("Image unavailable")
             } else {

@@ -49,6 +49,7 @@ public final class IslandViewModel: ObservableObject {
     @Published public private(set) var displayLayout = IslandDisplayLayout()
     public var compactPanelSize: CGSize { displayLayout.compactSize }
     @Published public private(set) var compactTimerMode: IslandTimerToolMode?
+    @Published public private(set) var compactTimerTextWidth: CGFloat = 0
     @Published private(set) var timerShellMode: IslandTimerToolMode = .stopwatch
     @Published public private(set) var isTimerCompletionPresented = false
     @Published public private(set) var volume: Float
@@ -88,6 +89,7 @@ public final class IslandViewModel: ObservableObject {
     private var timerSessionObservation: AnyCancellable?
     private var timerModeObservation: AnyCancellable?
     private var timerCompletionObservation: AnyCancellable?
+    private var timerTextWidthObservation: AnyCancellable?
     private var pendingVolumeEcho: PendingVolumeEcho?
     private var suppressesHoverExpansionUntilPointerExit = false
     private let nowPlayingPollIntervalNanoseconds: UInt64
@@ -159,6 +161,7 @@ public final class IslandViewModel: ObservableObject {
         timerSessionObservation?.cancel()
         timerModeObservation?.cancel()
         timerCompletionObservation?.cancel()
+        timerTextWidthObservation?.cancel()
         volumeObservation?.cancel()
     }
 
@@ -882,6 +885,26 @@ public final class IslandViewModel: ObservableObject {
     }
 
     private func startTimerToolsObservation() {
+        // @Published emits before the model's stored value changes. Format the
+        // delivered tuple rather than reading compactTimeText from the model.
+        // Monospaced digits keep all ticks in a format at the same natural
+        // width, so only a width transition invalidates the outer island.
+        timerTextWidthObservation = Publishers.CombineLatest3(
+            timerTools.$sessionMode, timerTools.$stopwatchElapsed, timerTools.$countdownRemaining
+        )
+            .map { mode, elapsed, remaining -> CGFloat in
+                guard let mode else { return 0 }
+                let text = IslandTimerToolsModel.formattedTime(
+                    mode == .stopwatch ? elapsed : remaining, showsTenths: mode == .stopwatch
+                )
+                return IslandCompactLayout.nativeTimerTextWidth(text)
+            }
+            .removeDuplicates()
+            .sink { [weak self] width in
+                guard let self, self.compactTimerTextWidth != width else { return }
+                self.compactTimerTextWidth = width
+            }
+
         timerModeObservation = timerTools.$selectedMode
             .removeDuplicates()
             .sink { [weak self] mode in

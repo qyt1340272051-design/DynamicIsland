@@ -41,6 +41,29 @@ final class IslandPanelHoverRegionTests: XCTestCase {
         XCTAssertFalse(IslandPanelHoverRegion.contains(CGPoint(x: frame.maxX + 12, y: frame.midY), in: hoverFrame))
     }
 
+    func testCompactPointerFeedbackCapsWidthAndKeepsScreenTop() {
+        let compact = CGRect(x: 100, y: 900, width: 438, height: 32)
+        let hover = IslandPanelHoverRegion.hoverFrame(for: compact, isPointerInside: true, maximumWidth: 440)
+        XCTAssertEqual(hover.width, 440)
+        XCTAssertEqual(hover.height, 32 * IslandExpansionAnimation.pointerHoverScale)
+        XCTAssertEqual(hover.midX, compact.midX)
+        XCTAssertEqual(hover.maxY, compact.maxY)
+    }
+
+    func testAsymmetricHoverStaysWithinTheFixedPanelAtEveryScale() {
+        for scale: CGFloat in [0.875, 1, 1.15625, 1.75] {
+            let panel = CGRect(x: 0, y: 0, width: 520 * scale, height: 240 * scale)
+            let compact = CGRect(x: 130 * scale, y: 208 * scale, width: 387 * scale, height: 32 * scale)
+            let hover = IslandPanelHoverRegion.hoverFrame(
+                panelFrame: panel, compactFrame: compact, presentationState: .compact,
+                isPointerInside: true, expandedShellSize: CGSize(width: 440 * scale, height: 184 * scale))
+            XCTAssertGreaterThanOrEqual(hover.minX, panel.minX - 0.000_001)
+            XCTAssertLessThanOrEqual(hover.maxX, panel.maxX + 0.000_001)
+            XCTAssertEqual(hover.maxY, panel.maxY)
+            XCTAssertEqual(hover.midX, compact.midX)
+        }
+    }
+
     func testExpandedHoverRegionUsesVisibleShellInsteadOfFullTransparentPanel() {
         let panelFrame = CGRect(x: 604, y: 877, width: 520, height: 240)
         let compactFrame = CGRect(x: 756, y: 1079, width: 216, height: 38)
@@ -57,7 +80,7 @@ final class IslandPanelHoverRegionTests: XCTestCase {
             expandedShellSize: shellSize
         )
 
-        XCTAssertEqual(hoverFrame, CGRect(x: 624, y: 953, width: 480, height: 164))
+        XCTAssertEqual(hoverFrame, CGRect(x: 644, y: 969, width: 440, height: 148))
         XCTAssertTrue(IslandPanelHoverRegion.contains(CGPoint(x: hoverFrame.midX, y: hoverFrame.midY), in: hoverFrame))
         XCTAssertFalse(IslandPanelHoverRegion.contains(CGPoint(x: panelFrame.minX + 4, y: panelFrame.midY), in: hoverFrame))
         XCTAssertFalse(IslandPanelHoverRegion.contains(CGPoint(x: hoverFrame.midX, y: 930), in: hoverFrame))

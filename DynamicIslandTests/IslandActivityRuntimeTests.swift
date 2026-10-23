@@ -333,18 +333,25 @@ final class IslandActivityRuntimeTests: XCTestCase {
         try runtime.manager.publish(activity)
         XCTAssertTrue(runtime.currentActivityUsesCountdownCompactLayout)
         let base = CGSize(width: 216, height: 38)
-        let shell = runtime.compactShellSize(forBaseSize: base)
-        // A 150 pt expansion keeps eight-character HH:MM:SS values clear
-        // of the camera, including the native timer's 58 pt time frame.
-        XCTAssertEqual(shell.width, base.width + 150)
-        XCTAssertEqual(shell.height, base.height)
+        let layout = runtime.compactLayout(forBaseSize: base)
+        XCTAssertEqual(layout.leadingWidth, 28, "16 pt timer glyph plus outer/camera margins.")
+        XCTAssertEqual(layout.trailingWidth, 70, "The changing plugin countdown reserves its full 58 pt frame.")
+        XCTAssertEqual(layout.centerOffset, 21)
+        XCTAssertEqual(layout.size.width, base.width + 98)
+        XCTAssertEqual(layout.size.height, base.height)
+        XCTAssertEqual(runtime.compactShellSize(forBaseSize: base), layout.size)
+        XCTAssertFalse(layout.usesMinimalPresentation)
 
         // A valid countdown in an expanded layout does not widen compact UI.
         activity.presentation.compact = .text(.init("Ordinary compact"))
         try runtime.manager.update(activity)
         XCTAssertFalse(runtime.currentActivityUsesCountdownCompactLayout)
-        XCTAssertEqual(runtime.compactShellSize(forBaseSize: base).width,
-                       base.width + IslandVisualStyle.activityCompactHorizontalExpansion)
+        let ordinary = runtime.compactLayout(forBaseSize: base)
+        XCTAssertTrue(ordinary.usesMinimalPresentation,
+                      "An unseparated compact row must not be centered behind the camera.")
+        XCTAssertEqual(ordinary.leadingWidth, 0)
+        XCTAssertGreaterThan(ordinary.trailingWidth, 20)
+        XCTAssertLessThanOrEqual(ordinary.size.width, IslandVisualStyle.expandedShellSize.width)
         // Nor does an oversized compact tree rejected by HostPolicy.
         let countdown = countdownTimeNode()
         activity.presentation.compact = .vStack(.init([countdown, countdown]))
@@ -355,6 +362,10 @@ final class IslandActivityRuntimeTests: XCTestCase {
         try runtime.manager.update(activity)
         XCTAssertTrue(runtime.currentActivityUsesCountdownCompactLayout,
                       "A compact layout legitimately falling back to minimal uses the same resolver.")
+        let minimal = runtime.compactLayout(forBaseSize: base)
+        XCTAssertTrue(minimal.usesMinimalPresentation)
+        XCTAssertEqual(minimal.leadingWidth, 0)
+        XCTAssertEqual(minimal.trailingWidth, 78, "Minimal keeps the countdown frame and both renderer insets.")
         activity.presentation.showsCompact = false
         try runtime.manager.update(activity)
         XCTAssertFalse(runtime.currentActivityUsesCountdownCompactLayout)
@@ -363,8 +374,39 @@ final class IslandActivityRuntimeTests: XCTestCase {
         try runtime.manager.end(id: activity.id, source: activity.source)
         model.timerTools.selectedMode = .countdown
         model.timerTools.startSelectedTimer(at: Date())
-        XCTAssertEqual(runtime.compactShellSize(forBaseSize: base).width, base.width + 150,
-                       "The same production resolver preserves native timer clearance.")
+        let native = runtime.compactLayout(forBaseSize: base)
+        XCTAssertEqual(native.leadingWidth, 38, "The native circular icon keeps its 26 pt footprint.")
+        XCTAssertEqual(native.trailingWidth, model.compactTimerTextWidth + 12)
+        XCTAssertLessThan(native.size.width, layout.size.width,
+                          "A five-character native countdown should not reserve the plugin's worst-case frame.")
+        XCTAssertFalse(native.usesMinimalPresentation)
+    }
+
+    func testVeryLongCompactPluginUsesBoundedHostFallbackWithoutChangingInstance() throws {
+        let model = IslandViewModel.preview()
+        let runtime = IslandActivityRuntime(viewModel: model)
+        defer { runtime.shutdownPlugins() }
+        var activity = automaticCompactTool()
+        activity.priority = .critical
+        activity.lifecycle = .init(policy: .critical)
+        activity.presentation.role = .status
+        activity.presentation.compactPolicy = nil
+        activity.presentation.title = String(repeating: "W", count: 40)
+        let tree: IslandNode = .hStack(.init([
+            .icon(.init("timer")), .spacer(.init()), .text(.init(String(repeating: "W", count: 96)))
+        ]))
+        XCTAssertTrue(ActivityPresentation.HostPolicy.accepts(tree, for: .compact))
+        activity.presentation.compact = tree
+        try runtime.manager.publish(activity)
+        let before = try XCTUnwrap(runtime.manager.currentSnapshot)
+        let layout = runtime.compactLayout(forBaseSize: CGSize(width: 216, height: 38))
+        XCTAssertLessThanOrEqual(layout.size.width, IslandVisualStyle.expandedShellSize.width)
+        XCTAssertTrue(layout.usesMinimalPresentation)
+        XCTAssertEqual(layout.leadingWidth, 0)
+        XCTAssertEqual(layout.fallbackMinimalNode, .icon(.init("ellipsis")))
+        XCTAssertEqual(runtime.manager.currentSnapshot?.instanceToken, before.instanceToken)
+        XCTAssertEqual(runtime.manager.currentSnapshot?.activity.presentation, activity.presentation,
+                       "The Host fallback must not rewrite the Activity or its action owner.")
     }
 
     func testPublicToolExampleRequiresHostSelectionAndRoutesOnlyVisibleInstance() async throws {
@@ -390,7 +432,7 @@ final class IslandActivityRuntimeTests: XCTestCase {
         XCTAssertTrue(runtime.selectTool(tool))
         XCTAssertEqual(model.expandedSurface, .tools)
         XCTAssertEqual(runtime.manager.currentSnapshot?.instanceToken, tool.instanceToken)
-        XCTAssertEqual(runtime.expandedShellSize, CGSize(width: 480, height: 200))
+        XCTAssertEqual(runtime.expandedShellSize, CGSize(width: 440, height: 184))
         XCTAssertEqual(runtime.router.dispatch(id: tool.activity.id, source: source, instanceToken: tool.instanceToken,
                                                action: .init(actionID: "increment", value: .none)), .handled)
         try await waitForTool {

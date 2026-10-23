@@ -11,6 +11,9 @@ final class ScreenSnapshotMatrixTests: XCTestCase {
             SimulatedScreenProfile.allCases.count * ScreenSnapshotScenario.allCases.count,
             96
         )
+        XCTAssertEqual(ResolutionSnapshotFixture.allCases.count, 4)
+        XCTAssertEqual((SimulatedScreenProfile.allCases.count + ResolutionSnapshotFixture.allCases.count)
+                       * ScreenSnapshotScenario.allCases.count, 144)
         XCTAssertTrue(ScreenSnapshotScenario.allCases.contains(.compactVolume))
         XCTAssertTrue(ScreenSnapshotScenario.allCases.contains(.expandedVolume))
         XCTAssertTrue(ScreenSnapshotScenario.allCases.contains(.compactBatteryCharging))
@@ -59,24 +62,37 @@ final class ScreenSnapshotMatrixTests: XCTestCase {
     }
 
     @MainActor
-    func testCameraGlyphProbeDetectsCenteredContentBeforeOverlayHidesIt() async throws {
+    func testCameraGlyphProbeDetectsCenteredContentBeforeOverlayHidesIt() throws {
         let environment = ResolutionSnapshotFixture.allCases[0].environment
-        let context = try await makeContext(for: .compact, environment: environment)
-        try context.activityRuntime.manager.publish(IslandActivity(
-            id: "snapshot.centered-control", source: ActivitySource(kind: .builtIn, identifier: "snapshot"),
-            priority: .critical, lifecycle: ActivityLifecycle(policy: .persistent),
-            presentation: ActivityPresentation(title: "CENTER", compact: .text(.init("CENTER"))),
-            createdAt: Date()
-        ))
         let backing = environment.backingScaleFactor
         let compact = IslandPanelGeometry.compactFrame(in: environment).size
         let center = ScreenSnapshotCanvas.size.width * backing / 2
         let xRange = Int(ceil(center - compact.width * backing / 2))..<Int(floor(center + compact.width * backing / 2))
         let yRange = 0..<Int(compact.height * backing)
-        let unmasked = try snapshot(context, environment: environment, overlaysNotch: false)
+
+        func probe(overlaysNotch: Bool) throws -> NSBitmapImageRep {
+            // Deliberately bypass Runtime's safe compact-to-minimal placement.
+            // This positive control must be able to draw an unsafe centered
+            // glyph, otherwise the camera-clearance pixel probe is untested.
+            let canvas = ZStack(alignment: .top) {
+                Color(red: 0.29, green: 0.29, blue: 0.31)
+                IslandRenderer(presentation: .init(title: "CENTER", compact: .text(.init("CENTER"))),
+                               mode: .compact, shellSize: compact)
+                if overlaysNotch {
+                    Rectangle().fill(Color.black).frame(width: compact.width, height: compact.height)
+                }
+            }
+            .frame(width: ScreenSnapshotCanvas.size.width, height: ScreenSnapshotCanvas.size.height)
+            .environment(\.colorScheme, .dark)
+            let renderer = ScreenSnapshotRenderer(size: ScreenSnapshotCanvas.size)
+            defer { renderer.close() }
+            return try XCTUnwrap(NSBitmapImageRep(data: renderer.render(canvas, scale: backing).data))
+        }
+
+        let unmasked = try probe(overlaysNotch: false)
         XCTAssertNotNil(glyphBounds(in: unmasked, xRange: xRange, yRange: yRange),
                         "Positive control must detect incorrectly centered content.")
-        let masked = try snapshot(context, environment: environment, overlaysNotch: true)
+        let masked = try probe(overlaysNotch: true)
         XCTAssertNil(glyphBounds(in: masked, xRange: xRange, yRange: yRange),
                      "The simulated cutout conceals the error; geometry probes must use unmasked output.")
     }
@@ -93,7 +109,8 @@ final class ScreenSnapshotMatrixTests: XCTestCase {
                 let environment = fixture.environment
                 let context = try await makeContext(for: scenario, environment: environment,
                                                    usesWideContent: true)
-                let bitmap = try snapshot(context, environment: environment, overlaysNotch: false)
+                let rendered = try renderedSnapshot(context, environment: environment, overlaysNotch: false)
+                let bitmap = try XCTUnwrap(NSBitmapImageRep(data: rendered.data))
                 let glyphs = try XCTUnwrap(glyphBounds(in: bitmap), "\(fixture.id)/\(scenario.rawValue)")
                 let layoutScale = context.viewModel.displayLayout.scale
                 let pixelsPerDesignPoint = environment.backingScaleFactor * layoutScale
@@ -104,13 +121,25 @@ final class ScreenSnapshotMatrixTests: XCTestCase {
                     width: glyphs.width / pixelsPerDesignPoint,
                     height: glyphs.height / pixelsPerDesignPoint
                 )
+                let imageAttachment = XCTAttachment(data: rendered.data, uniformTypeIdentifier: "public.png")
+                imageAttachment.name = "Expanded-native-\(scenario.rawValue)-\(fixture.id)"
+                imageAttachment.lifetime = .keepAlways
+                add(imageAttachment)
+                let metrics = XCTAttachment(string:
+                    "fixture=\(fixture.id) scenario=\(scenario.rawValue) backing=\(environment.backingScaleFactor) layout=\(layoutScale) glyphs=\(glyphs) normalized=\(normalized) designShell=\(context.activityRuntime.expandedShellSize) chrome=\(ActivityPresentation.HostPolicy.expandedChromeHeight)")
+                metrics.name = "Expanded-native-metrics-\(scenario.rawValue)-\(fixture.id)"
+                metrics.lifetime = .keepAlways
+                add(metrics)
                 // A visible switcher alone is not sufficient: each actual page
                 // must paint its body below the chrome, inside the scaled shell.
                 XCTAssertGreaterThan(normalized.maxY, 75, scenario.rawValue)
                 XCTAssertGreaterThan(normalized.width, 100, scenario.rawValue)
-                XCTAssertGreaterThanOrEqual(normalized.minX, -240, scenario.rawValue)
-                XCTAssertLessThanOrEqual(normalized.maxX, 240, scenario.rawValue)
-                XCTAssertLessThanOrEqual(normalized.maxY, 201, scenario.rawValue)
+                XCTAssertGreaterThanOrEqual(normalized.minX, -IslandVisualStyle.expandedShellSize.width / 2,
+                                            scenario.rawValue)
+                XCTAssertLessThanOrEqual(normalized.maxX, IslandVisualStyle.expandedShellSize.width / 2,
+                                         scenario.rawValue)
+                XCTAssertLessThanOrEqual(normalized.maxY, IslandVisualStyle.expandedShellSize.height + 1,
+                                         scenario.rawValue)
                 if let reference {
                     XCTAssertEqual(normalized.minX, reference.minX, accuracy: 3, scenario.rawValue)
                     XCTAssertEqual(normalized.minY, reference.minY, accuracy: 3, scenario.rawValue)
@@ -144,6 +173,21 @@ final class ScreenSnapshotMatrixTests: XCTestCase {
                 XCTAssertEqual(points.height, reference.height, accuracy: 3)
             } else { reference = points }
         }
+    }
+
+    @MainActor
+    func testHighLogicalResolutionFixtureUsesBackingOneWithoutChangingItsLayoutScale() {
+        let fixture = ResolutionSnapshotFixture.allCases.last!
+        XCTAssertEqual(fixture.id, "resolution-2560-backing1-synthetic")
+        let environment = fixture.environment
+        XCTAssertEqual(environment.frame.size, CGSize(width: 2560, height: 1664))
+        XCTAssertEqual(environment.backingScaleFactor, 1)
+        XCTAssertEqual(environment.auxiliaryTopLeftArea.height, 56)
+        XCTAssertTrue(fixture.source.hasPrefix("SYNTHETIC:"))
+        let layout = IslandDisplayLayout(environment: environment)
+        XCTAssertEqual(layout.scale, 1.75, accuracy: 0.000_001)
+        XCTAssertEqual(layout.compactSize, CGSize(width: 312, height: 56))
+        XCTAssertEqual(layout.panelSize, CGSize(width: 910, height: 420))
     }
 
     func testGenerateSnapshotMatrix() async throws {
@@ -191,7 +235,9 @@ final class ScreenSnapshotMatrixTests: XCTestCase {
             let directory = outputDirectory.appendingPathComponent(item.id, isDirectory: true)
             try fileManager.createDirectory(at: directory, withIntermediateDirectories: true)
             let canvasSize = item.isResolutionComparison
-                ? CGSize(width: environment.frame.width, height: ScreenSnapshotCanvas.size.height)
+                ? CGSize(width: environment.frame.width,
+                         height: max(ScreenSnapshotCanvas.size.height,
+                                     IslandDisplayLayout(environment: environment).panelSize.height))
                 : ScreenSnapshotCanvas.size
             for scenario in ScreenSnapshotScenario.allCases {
                 let context = try await makeContext(for: scenario, environment: environment,
@@ -216,7 +262,7 @@ final class ScreenSnapshotMatrixTests: XCTestCase {
                 ))
             }
         }
-        XCTAssertEqual(records.count, 132)
+        XCTAssertEqual(records.count, 144)
         try writeManifest(records: records, to: outputDirectory)
         try writeIndex(records: records, to: outputDirectory)
     }
@@ -230,7 +276,10 @@ final class ScreenSnapshotMatrixTests: XCTestCase {
     @MainActor
     private func renderedSnapshot(_ context: ScreenSnapshotContext, environment: ScreenEnvironment,
                                   overlaysNotch: Bool,
-                                  size: CGSize = ScreenSnapshotCanvas.size) throws -> ScreenSnapshotRenderer.RenderedImage {
+                                  size requestedSize: CGSize? = nil) throws -> ScreenSnapshotRenderer.RenderedImage {
+        let size = requestedSize ?? CGSize(width: ScreenSnapshotCanvas.size.width,
+                                          height: max(ScreenSnapshotCanvas.size.height,
+                                                      context.viewModel.displayLayout.panelSize.height))
         let canvas = ScreenSnapshotCanvas(environment: environment, viewModel: context.viewModel,
                                           activityRuntime: context.activityRuntime,
                                           overlaysNotch: overlaysNotch, canvasSize: size)
@@ -423,9 +472,9 @@ final class ScreenSnapshotMatrixTests: XCTestCase {
         .crop { width:800px; overflow:hidden; } img { display:block; max-width:none; height:auto; }
         .full { overflow:auto; } figcaption,summary { padding:8px 10px; }
         </style></head><body><h1>Dynamic Island Screen Matrix</h1>
-        <p>\(records.count) PNGs: 8 synthetic device profiles + 3 resolution fixtures, 12 states each.
+        <p>\(records.count) PNGs: 8 synthetic device profiles + 4 resolution fixtures, 12 states each.
         Every preview uses the same 800-point crop at 1 CSS px per logical point; browser zoom must be 100%.
-        Full-width images preserve screen-relative proportions. Synthetic 1710 geometry is not a measured device result.</p>
+        Full-width images preserve screen-relative proportions. Synthetic 1710 and 2560 geometries are not measured device results.</p>
         \(sections)</body></html>
         """
         try Data(html.utf8).write(to: outputDirectory.appendingPathComponent("index.html"), options: .atomic)
@@ -555,7 +604,7 @@ private struct ScreenSnapshotCase {
 }
 
 /// Only the first two geometries were observed on the same physical Mac.
-/// The third is an explicit synthetic extrapolation for scale regression.
+/// The larger two are explicit synthetic extrapolations for scale regression.
 private struct ResolutionSnapshotFixture {
     let id: String
     let name: String
@@ -563,6 +612,18 @@ private struct ResolutionSnapshotFixture {
     let size: CGSize
     let notchWidth: CGFloat
     let notchHeight: CGFloat
+    let backingScaleFactor: CGFloat
+
+    init(id: String, name: String, source: String, size: CGSize,
+         notchWidth: CGFloat, notchHeight: CGFloat, backingScaleFactor: CGFloat = 2) {
+        self.id = id
+        self.name = name
+        self.source = source
+        self.size = size
+        self.notchWidth = notchWidth
+        self.notchHeight = notchHeight
+        self.backingScaleFactor = backingScaleFactor
+    }
 
     static let allCases: [Self] = [
         .init(id: "resolution-1470-measured", name: "同机 1470 · 已知几何",
@@ -573,10 +634,14 @@ private struct ResolutionSnapshotFixture {
               size: CGSize(width: 1280, height: 832), notchWidth: 156, notchHeight: 28),
         .init(id: "resolution-1710-synthetic", name: "1710 · 合成几何（非实测）",
               source: "SYNTHETIC: 1710×1112, auxiliary gap 207×37 pt; not physical-device evidence",
-              size: CGSize(width: 1710, height: 1112), notchWidth: 207, notchHeight: 37)
+              size: CGSize(width: 1710, height: 1112), notchWidth: 207, notchHeight: 37),
+        .init(id: "resolution-2560-backing1-synthetic", name: "2560 · backing 1 · 合成几何（非实测）",
+              source: "SYNTHETIC: 2560×1664, auxiliary gap 312×56 pt, backing 1; not physical-device evidence",
+              size: CGSize(width: 2560, height: 1664), notchWidth: 312, notchHeight: 56,
+              backingScaleFactor: 1)
     ]
 
-    var environment: ScreenEnvironment { makeEnvironment(backingScale: 2) }
+    var environment: ScreenEnvironment { makeEnvironment(backingScale: backingScaleFactor) }
 
     func makeEnvironment(backingScale: CGFloat) -> ScreenEnvironment {
         let frame = CGRect(origin: .zero, size: size)

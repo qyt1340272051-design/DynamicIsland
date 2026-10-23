@@ -7,15 +7,15 @@ public enum IslandVisualStyle {
         case battery
     }
 
-    public static let expandedShellSize = CGSize(width: 480, height: 200)
-    public static let expandedMusicHeight: CGFloat = 200
-    public static let expandedTimerHeight: CGFloat = 190
-    public static let expandedFileTrayHeight: CGFloat = 164
-    public static let expandedCompactContentHeight: CGFloat = 152
-    public static let expandedContentSize = CGSize(width: 468, height: 200)
-    public static let expandedContentPadding: CGFloat = 12
+    public static let expandedShellSize = CGSize(width: 440, height: 184)
+    public static let expandedMusicHeight: CGFloat = 184
+    public static let expandedTimerHeight: CGFloat = 174
+    public static let expandedFileTrayHeight: CGFloat = 148
+    public static let expandedCompactContentHeight: CGFloat = 136
+    public static let expandedContentSize = CGSize(width: 428, height: 184)
+    public static let expandedContentPadding: CGFloat = 8
     public static let expandedSurfaceSwitcherHeight: CGFloat = 28
-    public static let expandedSurfaceSpacing: CGFloat = 8
+    public static let expandedSurfaceSpacing: CGFloat = 6
     public static let expandedShellCornerRadius: CGFloat = 26
     public static let activityCompactHorizontalExpansion: CGFloat = 72
     /// Leaves enough room in both display wings for the volume glyph and the

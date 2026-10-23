@@ -202,7 +202,7 @@ final class IslandCountdownRendererTests: XCTestCase {
         let driver = CountdownRendererDriver(presentation: presentation, visibility: visibility,
                                              clock: clock, resolver: resolver)
         let hostingView = NSHostingView(rootView: driver.environment(\.colorScheme, .dark))
-        hostingView.frame = CGRect(x: 0, y: 0, width: 456, height: 140)
+        hostingView.frame = CGRect(x: 0, y: 0, width: 412, height: 134)
         let window = NSWindow(contentRect: hostingView.frame, styleMask: .borderless,
                               backing: .buffered, defer: false)
         window.isReleasedWhenClosed = false
@@ -260,7 +260,7 @@ private struct CountdownRendererDriver: View {
 
     var body: some View {
         IslandRenderer(presentation: presentation, mode: .expanded,
-                       shellSize: CGSize(width: 480, height: 200),
+                       shellSize: CGSize(width: 428, height: 184),
                        countdownResolver: resolver, isVisible: visibility.isVisible,
                        displayClock: clock)
     }

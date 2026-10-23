@@ -1,0 +1,869 @@
+{
+  "snapshotCount": 144,
+  "files": [
+    {
+      "file": "macbook-air-13/compact.png",
+      "sha256": "9e7595cdc1c7fc7197972beb3b2fe79148252e9a66b445dadbfe23539a7170c3",
+      "width": 1600,
+      "height": 640
+    },
+    {
+      "file": "macbook-air-13/compact-playing.png",
+      "sha256": "46e5223eafd7796552b06be171ca98107f8c0559b21156429620308e2b382830",
+      "width": 1600,
+      "height": 640
+    },
+    {
+      "file": "macbook-air-13/compact-volume.png",
+      "sha256": "ce8bec8fadfa3b5ba2fb00f64024f6c746958d5444baea28ee09ff8079ec2e2c",
+      "width": 1600,
+      "height": 640
+    },
+    {
+      "file": "macbook-air-13/expanded-volume.png",
+      "sha256": "1568731e32ebe1b43d6f85efca60a949b3adb55d9199e91c934d357833cae288",
+      "width": 1600,
+      "height": 640
+    },
+    {
+      "file": "macbook-air-13/compact-battery-charging.png",
+      "sha256": "6dd3bdb51a74bf785534d3e397600fa9ae990a248804c457dc984688a66de0a9",
+      "width": 1600,
+      "height": 640
+    },
+    {
+      "file": "macbook-air-13/expanded-battery-low.png",
+      "sha256": "d83bc0eabb43c8f3d42e266f5b82bbc5d0ef500ceb1b3d0f0939745b7c6db5c4",
+      "width": 1600,
+      "height": 640
+    },
+    {
+      "file": "macbook-air-13/expanded-battery-critical.png",
+      "sha256": "da017cd05468f025b5fb5ea9c0845f89ee65061652375a43f2542f39b596f588",
+      "width": 1600,
+      "height": 640
+    },
+    {
+      "file": "macbook-air-13/expanded-music.png",
+      "sha256": "82ade92f6161cda4b43ed7d0aaafcd2e8670ef9f7cfcb7fd3c558aae22e4e90e",
+      "width": 1600,
+      "height": 640
+    },
+    {
+      "file": "macbook-air-13/expanded-file-tray.png",
+      "sha256": "f6d98b1afaa51fcf5cadaf07bf72a931c1d57ea1fc4cc781b4ba904822b6cdca",
+      "width": 1600,
+      "height": 640
+    },
+    {
+      "file": "macbook-air-13/dragging-file.png",
+      "sha256": "f83c367d06db6cfdf95427e97a231643e24454041d3448f83bc0a06077aa7774",
+      "width": 1600,
+      "height": 640
+    },
+    {
+      "file": "macbook-air-13/expanded-tools-stopwatch.png",
+      "sha256": "c10cbbc1f6201fec3b4a2371361a26674b8ca4e3dadf8c415af5485fe2921d6e",
+      "width": 1600,
+      "height": 640
+    },
+    {
+      "file": "macbook-air-13/expanded-tools-countdown.png",
+      "sha256": "9077003e018cd1918fbbe269b778f0e963b411e38cd875a06c2a04a79a451071",
+      "width": 1600,
+      "height": 640
+    },
+    {
+      "file": "macbook-air-15/compact.png",
+      "sha256": "9e7595cdc1c7fc7197972beb3b2fe79148252e9a66b445dadbfe23539a7170c3",
+      "width": 1600,
+      "height": 640
+    },
+    {
+      "file": "macbook-air-15/compact-playing.png",
+      "sha256": "46e5223eafd7796552b06be171ca98107f8c0559b21156429620308e2b382830",
+      "width": 1600,
+      "height": 640
+    },
+    {
+      "file": "macbook-air-15/compact-volume.png",
+      "sha256": "ce8bec8fadfa3b5ba2fb00f64024f6c746958d5444baea28ee09ff8079ec2e2c",
+      "width": 1600,
+      "height": 640
+    },
+    {
+      "file": "macbook-air-15/expanded-volume.png",
+      "sha256": "1568731e32ebe1b43d6f85efca60a949b3adb55d9199e91c934d357833cae288",
+      "width": 1600,
+      "height": 640
+    },
+    {
+      "file": "macbook-air-15/compact-battery-charging.png",
+      "sha256": "6dd3bdb51a74bf785534d3e397600fa9ae990a248804c457dc984688a66de0a9",
+      "width": 1600,
+      "height": 640
+    },
+    {
+      "file": "macbook-air-15/expanded-battery-low.png",
+      "sha256": "d83bc0eabb43c8f3d42e266f5b82bbc5d0ef500ceb1b3d0f0939745b7c6db5c4",
+      "width": 1600,
+      "height": 640
+    },
+    {
+      "file": "macbook-air-15/expanded-battery-critical.png",
+      "sha256": "da017cd05468f025b5fb5ea9c0845f89ee65061652375a43f2542f39b596f588",
+      "width": 1600,
+      "height": 640
+    },
+    {
+      "file": "macbook-air-15/expanded-music.png",
+      "sha256": "82ade92f6161cda4b43ed7d0aaafcd2e8670ef9f7cfcb7fd3c558aae22e4e90e",
+      "width": 1600,
+      "height": 640
+    },
+    {
+      "file": "macbook-air-15/expanded-file-tray.png",
+      "sha256": "f6d98b1afaa51fcf5cadaf07bf72a931c1d57ea1fc4cc781b4ba904822b6cdca",
+      "width": 1600,
+      "height": 640
+    },
+    {
+      "file": "macbook-air-15/dragging-file.png",
+      "sha256": "f83c367d06db6cfdf95427e97a231643e24454041d3448f83bc0a06077aa7774",
+      "width": 1600,
+      "height": 640
+    },
+    {
+      "file": "macbook-air-15/expanded-tools-stopwatch.png",
+      "sha256": "c10cbbc1f6201fec3b4a2371361a26674b8ca4e3dadf8c415af5485fe2921d6e",
+      "width": 1600,
+      "height": 640
+    },
+    {
+      "file": "macbook-air-15/expanded-tools-countdown.png",
+      "sha256": "9077003e018cd1918fbbe269b778f0e963b411e38cd875a06c2a04a79a451071",
+      "width": 1600,
+      "height": 640
+    },
+    {
+      "file": "macbook-pro-14/compact.png",
+      "sha256": "fea41a08902ee01be612569ee45880693cade148fa42229cd70e707f05592f47",
+      "width": 1600,
+      "height": 640
+    },
+    {
+      "file": "macbook-pro-14/compact-playing.png",
+      "sha256": "655bc06b08b65165dd4f352714ddd631865450d3062a7c4d104aad2be2415c40",
+      "width": 1600,
+      "height": 640
+    },
+    {
+      "file": "macbook-pro-14/compact-volume.png",
+      "sha256": "846444890c5e96ff1a80c442964049177f54c5e4559749c79a00642916ccff5c",
+      "width": 1600,
+      "height": 640
+    },
+    {
+      "file": "macbook-pro-14/expanded-volume.png",
+      "sha256": "fec1e4e93de65f2537674ed7f52d59478ad4b20da2ef6ced269044c679f05dad",
+      "width": 1600,
+      "height": 640
+    },
+    {
+      "file": "macbook-pro-14/compact-battery-charging.png",
+      "sha256": "cbd9a0494230db01806b2603969578f47eec7b47db11307724d7e7c364a942f6",
+      "width": 1600,
+      "height": 640
+    },
+    {
+      "file": "macbook-pro-14/expanded-battery-low.png",
+      "sha256": "6f09a069f81b375c095795c9ce06d03ed41c9971cbc91c650b276c09cf079590",
+      "width": 1600,
+      "height": 640
+    },
+    {
+      "file": "macbook-pro-14/expanded-battery-critical.png",
+      "sha256": "2cebd134fee4376374cf1ea4d342e8a4301870a6c03254a20fb842ba08839b5e",
+      "width": 1600,
+      "height": 640
+    },
+    {
+      "file": "macbook-pro-14/expanded-music.png",
+      "sha256": "50986747d231a3beb88525b4148f960427cea918879cafbce17cee5c0ae81b43",
+      "width": 1600,
+      "height": 640
+    },
+    {
+      "file": "macbook-pro-14/expanded-file-tray.png",
+      "sha256": "c47e3e8b0cc2afc12ecea9f8c04571b29609e9c9b34726a31d68af978f5e9346",
+      "width": 1600,
+      "height": 640
+    },
+    {
+      "file": "macbook-pro-14/dragging-file.png",
+      "sha256": "42df8bc04d6d76560d62ee7d42b1f0d598032eee528df5e087a7d8aa36102053",
+      "width": 1600,
+      "height": 640
+    },
+    {
+      "file": "macbook-pro-14/expanded-tools-stopwatch.png",
+      "sha256": "9c196affdbf760b55fd0a89bc1c38c630b06fc9aa51be945f096879a20b73c7e",
+      "width": 1600,
+      "height": 640
+    },
+    {
+      "file": "macbook-pro-14/expanded-tools-countdown.png",
+      "sha256": "ff8dbfa064836a156dbb6b3ea65f57a6bd24505b83394d399c65de33b9ca95a9",
+      "width": 1600,
+      "height": 640
+    },
+    {
+      "file": "macbook-pro-16/compact.png",
+      "sha256": "fea41a08902ee01be612569ee45880693cade148fa42229cd70e707f05592f47",
+      "width": 1600,
+      "height": 640
+    },
+    {
+      "file": "macbook-pro-16/compact-playing.png",
+      "sha256": "655bc06b08b65165dd4f352714ddd631865450d3062a7c4d104aad2be2415c40",
+      "width": 1600,
+      "height": 640
+    },
+    {
+      "file": "macbook-pro-16/compact-volume.png",
+      "sha256": "846444890c5e96ff1a80c442964049177f54c5e4559749c79a00642916ccff5c",
+      "width": 1600,
+      "height": 640
+    },
+    {
+      "file": "macbook-pro-16/expanded-volume.png",
+      "sha256": "fec1e4e93de65f2537674ed7f52d59478ad4b20da2ef6ced269044c679f05dad",
+      "width": 1600,
+      "height": 640
+    },
+    {
+      "file": "macbook-pro-16/compact-battery-charging.png",
+      "sha256": "cbd9a0494230db01806b2603969578f47eec7b47db11307724d7e7c364a942f6",
+      "width": 1600,
+      "height": 640
+    },
+    {
+      "file": "macbook-pro-16/expanded-battery-low.png",
+      "sha256": "6f09a069f81b375c095795c9ce06d03ed41c9971cbc91c650b276c09cf079590",
+      "width": 1600,
+      "height": 640
+    },
+    {
+      "file": "macbook-pro-16/expanded-battery-critical.png",
+      "sha256": "2cebd134fee4376374cf1ea4d342e8a4301870a6c03254a20fb842ba08839b5e",
+      "width": 1600,
+      "height": 640
+    },
+    {
+      "file": "macbook-pro-16/expanded-music.png",
+      "sha256": "50986747d231a3beb88525b4148f960427cea918879cafbce17cee5c0ae81b43",
+      "width": 1600,
+      "height": 640
+    },
+    {
+      "file": "macbook-pro-16/expanded-file-tray.png",
+      "sha256": "c47e3e8b0cc2afc12ecea9f8c04571b29609e9c9b34726a31d68af978f5e9346",
+      "width": 1600,
+      "height": 640
+    },
+    {
+      "file": "macbook-pro-16/dragging-file.png",
+      "sha256": "42df8bc04d6d76560d62ee7d42b1f0d598032eee528df5e087a7d8aa36102053",
+      "width": 1600,
+      "height": 640
+    },
+    {
+      "file": "macbook-pro-16/expanded-tools-stopwatch.png",
+      "sha256": "9c196affdbf760b55fd0a89bc1c38c630b06fc9aa51be945f096879a20b73c7e",
+      "width": 1600,
+      "height": 640
+    },
+    {
+      "file": "macbook-pro-16/expanded-tools-countdown.png",
+      "sha256": "ff8dbfa064836a156dbb6b3ea65f57a6bd24505b83394d399c65de33b9ca95a9",
+      "width": 1600,
+      "height": 640
+    },
+    {
+      "file": "external-1080p/compact.png",
+      "sha256": "38db8c78edc78ef54c5931af0e55fcf5babb3adad707d994f638a7a637255d78",
+      "width": 800,
+      "height": 320
+    },
+    {
+      "file": "external-1080p/compact-playing.png",
+      "sha256": "80882d45e73bf09a6d0edd6fb147adfa7971de9eccadceecf5aa79577156c288",
+      "width": 800,
+      "height": 320
+    },
+    {
+      "file": "external-1080p/compact-volume.png",
+      "sha256": "a7ab4d588a35d995df917eb62c89eb5819e1c25030a8d231721bbf2b49ceee1c",
+      "width": 800,
+      "height": 320
+    },
+    {
+      "file": "external-1080p/expanded-volume.png",
+      "sha256": "cc5977bfbd024ab3413ea9eb0a44bcaad2e70c2a3e0b7ac4dcf690734f11ed5d",
+      "width": 800,
+      "height": 320
+    },
+    {
+      "file": "external-1080p/compact-battery-charging.png",
+      "sha256": "bba3c1a43ae4f9f00fba9f4e9323608293233ca656ce9f00077e729418af86c4",
+      "width": 800,
+      "height": 320
+    },
+    {
+      "file": "external-1080p/expanded-battery-low.png",
+      "sha256": "5c475c1226b3099453b1df50ab4f097dd018894993931202ec40ffd553db03b7",
+      "width": 800,
+      "height": 320
+    },
+    {
+      "file": "external-1080p/expanded-battery-critical.png",
+      "sha256": "3b6b3d333bb1a86801aeddb9a1e585b4e58f661e4c825c9065cf45270ca37633",
+      "width": 800,
+      "height": 320
+    },
+    {
+      "file": "external-1080p/expanded-music.png",
+      "sha256": "10bacc8fffbf1a4d4bc9a929c189dedb02c08886ec6759ca8d469b6d0821aa5f",
+      "width": 800,
+      "height": 320
+    },
+    {
+      "file": "external-1080p/expanded-file-tray.png",
+      "sha256": "616f981c508cdcb62986d014c678039987f9b80e331e98435c8f2298f0fbe414",
+      "width": 800,
+      "height": 320
+    },
+    {
+      "file": "external-1080p/dragging-file.png",
+      "sha256": "3b287a3613e9cf60024b97f8c4e8ff9142da5846de3cadc2395f3849ce643807",
+      "width": 800,
+      "height": 320
+    },
+    {
+      "file": "external-1080p/expanded-tools-stopwatch.png",
+      "sha256": "ea2c6c218d128244687a2615b458a9d242b05e4e4aae626791c5e28077ed9077",
+      "width": 800,
+      "height": 320
+    },
+    {
+      "file": "external-1080p/expanded-tools-countdown.png",
+      "sha256": "de5288eb419e738d4a107166547e78133bb7eb604b255e75e6b6aa164977524e",
+      "width": 800,
+      "height": 320
+    },
+    {
+      "file": "external-1440p/compact.png",
+      "sha256": "38db8c78edc78ef54c5931af0e55fcf5babb3adad707d994f638a7a637255d78",
+      "width": 800,
+      "height": 320
+    },
+    {
+      "file": "external-1440p/compact-playing.png",
+      "sha256": "80882d45e73bf09a6d0edd6fb147adfa7971de9eccadceecf5aa79577156c288",
+      "width": 800,
+      "height": 320
+    },
+    {
+      "file": "external-1440p/compact-volume.png",
+      "sha256": "a7ab4d588a35d995df917eb62c89eb5819e1c25030a8d231721bbf2b49ceee1c",
+      "width": 800,
+      "height": 320
+    },
+    {
+      "file": "external-1440p/expanded-volume.png",
+      "sha256": "cc5977bfbd024ab3413ea9eb0a44bcaad2e70c2a3e0b7ac4dcf690734f11ed5d",
+      "width": 800,
+      "height": 320
+    },
+    {
+      "file": "external-1440p/compact-battery-charging.png",
+      "sha256": "bba3c1a43ae4f9f00fba9f4e9323608293233ca656ce9f00077e729418af86c4",
+      "width": 800,
+      "height": 320
+    },
+    {
+      "file": "external-1440p/expanded-battery-low.png",
+      "sha256": "5c475c1226b3099453b1df50ab4f097dd018894993931202ec40ffd553db03b7",
+      "width": 800,
+      "height": 320
+    },
+    {
+      "file": "external-1440p/expanded-battery-critical.png",
+      "sha256": "3b6b3d333bb1a86801aeddb9a1e585b4e58f661e4c825c9065cf45270ca37633",
+      "width": 800,
+      "height": 320
+    },
+    {
+      "file": "external-1440p/expanded-music.png",
+      "sha256": "10bacc8fffbf1a4d4bc9a929c189dedb02c08886ec6759ca8d469b6d0821aa5f",
+      "width": 800,
+      "height": 320
+    },
+    {
+      "file": "external-1440p/expanded-file-tray.png",
+      "sha256": "616f981c508cdcb62986d014c678039987f9b80e331e98435c8f2298f0fbe414",
+      "width": 800,
+      "height": 320
+    },
+    {
+      "file": "external-1440p/dragging-file.png",
+      "sha256": "3b287a3613e9cf60024b97f8c4e8ff9142da5846de3cadc2395f3849ce643807",
+      "width": 800,
+      "height": 320
+    },
+    {
+      "file": "external-1440p/expanded-tools-stopwatch.png",
+      "sha256": "ea2c6c218d128244687a2615b458a9d242b05e4e4aae626791c5e28077ed9077",
+      "width": 800,
+      "height": 320
+    },
+    {
+      "file": "external-1440p/expanded-tools-countdown.png",
+      "sha256": "de5288eb419e738d4a107166547e78133bb7eb604b255e75e6b6aa164977524e",
+      "width": 800,
+      "height": 320
+    },
+    {
+      "file": "external-4k/compact.png",
+      "sha256": "7cacb6b7fceada4d6d9b21470affd623d1653f11a78b6f9e4ef274f10dc50efa",
+      "width": 1600,
+      "height": 640
+    },
+    {
+      "file": "external-4k/compact-playing.png",
+      "sha256": "03eaeddf1222f460d7a04b2998fb479e8c643d00a626de1cf44331173892f6f4",
+      "width": 1600,
+      "height": 640
+    },
+    {
+      "file": "external-4k/compact-volume.png",
+      "sha256": "37ea7859494f290cb41280c8221dd2935d999a83610c8cd34d0a26b17db22fb9",
+      "width": 1600,
+      "height": 640
+    },
+    {
+      "file": "external-4k/expanded-volume.png",
+      "sha256": "06ef61d0e31a0a19c1e7e176372418699fab3d561698efda673f47bb0c3c9014",
+      "width": 1600,
+      "height": 640
+    },
+    {
+      "file": "external-4k/compact-battery-charging.png",
+      "sha256": "3ac09fbfc605d3c127d779a25e6022a2482fc724a2b8d010ae1faec9ed8df769",
+      "width": 1600,
+      "height": 640
+    },
+    {
+      "file": "external-4k/expanded-battery-low.png",
+      "sha256": "2e5c09b97f2c49b54f188ba5333a832849f212d4241fe832cde19d2862d5ca11",
+      "width": 1600,
+      "height": 640
+    },
+    {
+      "file": "external-4k/expanded-battery-critical.png",
+      "sha256": "2b50f2135ed5a68d19b873ee3183d19a227a9bdb9666ac2ca9e4ce3624169bb8",
+      "width": 1600,
+      "height": 640
+    },
+    {
+      "file": "external-4k/expanded-music.png",
+      "sha256": "bec1d82175733b9b235b6385cf482fa542a9fd50bc4139a3489c0965425ce0bc",
+      "width": 1600,
+      "height": 640
+    },
+    {
+      "file": "external-4k/expanded-file-tray.png",
+      "sha256": "76f7689395b577f5b87fb9ce30376da925114b5e53bcc18c155133b5d8bd5881",
+      "width": 1600,
+      "height": 640
+    },
+    {
+      "file": "external-4k/dragging-file.png",
+      "sha256": "edd002aa2cce5326ce0ffe577c978f3ea2c6871451f4cdfa9589c291f59c024f",
+      "width": 1600,
+      "height": 640
+    },
+    {
+      "file": "external-4k/expanded-tools-stopwatch.png",
+      "sha256": "6199d9449e15849a2282698d978f19b65de58b597a6c561853a2ae0df65399bf",
+      "width": 1600,
+      "height": 640
+    },
+    {
+      "file": "external-4k/expanded-tools-countdown.png",
+      "sha256": "a811256b34990712be3d467aa10be849eb2e2a212a2158dc1bac743d08415bb1",
+      "width": 1600,
+      "height": 640
+    },
+    {
+      "file": "external-5k/compact.png",
+      "sha256": "7cacb6b7fceada4d6d9b21470affd623d1653f11a78b6f9e4ef274f10dc50efa",
+      "width": 1600,
+      "height": 640
+    },
+    {
+      "file": "external-5k/compact-playing.png",
+      "sha256": "03eaeddf1222f460d7a04b2998fb479e8c643d00a626de1cf44331173892f6f4",
+      "width": 1600,
+      "height": 640
+    },
+    {
+      "file": "external-5k/compact-volume.png",
+      "sha256": "37ea7859494f290cb41280c8221dd2935d999a83610c8cd34d0a26b17db22fb9",
+      "width": 1600,
+      "height": 640
+    },
+    {
+      "file": "external-5k/expanded-volume.png",
+      "sha256": "06ef61d0e31a0a19c1e7e176372418699fab3d561698efda673f47bb0c3c9014",
+      "width": 1600,
+      "height": 640
+    },
+    {
+      "file": "external-5k/compact-battery-charging.png",
+      "sha256": "3ac09fbfc605d3c127d779a25e6022a2482fc724a2b8d010ae1faec9ed8df769",
+      "width": 1600,
+      "height": 640
+    },
+    {
+      "file": "external-5k/expanded-battery-low.png",
+      "sha256": "2e5c09b97f2c49b54f188ba5333a832849f212d4241fe832cde19d2862d5ca11",
+      "width": 1600,
+      "height": 640
+    },
+    {
+      "file": "external-5k/expanded-battery-critical.png",
+      "sha256": "2b50f2135ed5a68d19b873ee3183d19a227a9bdb9666ac2ca9e4ce3624169bb8",
+      "width": 1600,
+      "height": 640
+    },
+    {
+      "file": "external-5k/expanded-music.png",
+      "sha256": "bec1d82175733b9b235b6385cf482fa542a9fd50bc4139a3489c0965425ce0bc",
+      "width": 1600,
+      "height": 640
+    },
+    {
+      "file": "external-5k/expanded-file-tray.png",
+      "sha256": "76f7689395b577f5b87fb9ce30376da925114b5e53bcc18c155133b5d8bd5881",
+      "width": 1600,
+      "height": 640
+    },
+    {
+      "file": "external-5k/dragging-file.png",
+      "sha256": "edd002aa2cce5326ce0ffe577c978f3ea2c6871451f4cdfa9589c291f59c024f",
+      "width": 1600,
+      "height": 640
+    },
+    {
+      "file": "external-5k/expanded-tools-stopwatch.png",
+      "sha256": "6199d9449e15849a2282698d978f19b65de58b597a6c561853a2ae0df65399bf",
+      "width": 1600,
+      "height": 640
+    },
+    {
+      "file": "external-5k/expanded-tools-countdown.png",
+      "sha256": "a811256b34990712be3d467aa10be849eb2e2a212a2158dc1bac743d08415bb1",
+      "width": 1600,
+      "height": 640
+    },
+    {
+      "file": "resolution-1470-measured/compact.png",
+      "sha256": "392e329c444555bf872ab3daf09563d310945f4e3bc7a928ac4318689e1db06d",
+      "width": 2940,
+      "height": 640
+    },
+    {
+      "file": "resolution-1470-measured/compact-playing.png",
+      "sha256": "7064f3ea7d716cc8f357cb360fc323dfbd3fefcb6f1b119feff42e47c3731074",
+      "width": 2940,
+      "height": 640
+    },
+    {
+      "file": "resolution-1470-measured/compact-volume.png",
+      "sha256": "ce06650ff8c75ff76e62e47dcea7d4a71a168f40c3baa516be4f16bf42a3aca5",
+      "width": 2940,
+      "height": 640
+    },
+    {
+      "file": "resolution-1470-measured/expanded-volume.png",
+      "sha256": "ce81070ff3c2b847f2f5aea2fd8db3b16eb194b0b6ac879422566f30461fc672",
+      "width": 2940,
+      "height": 640
+    },
+    {
+      "file": "resolution-1470-measured/compact-battery-charging.png",
+      "sha256": "beeedb1af2ff31347a1a1ebd80f4e5591d6e8b0f68462c5ac5ba7f3cf6d6a5d7",
+      "width": 2940,
+      "height": 640
+    },
+    {
+      "file": "resolution-1470-measured/expanded-battery-low.png",
+      "sha256": "975acd8222baf395a24debcbc8a53417dff26d397498b612ccd9223d235325d6",
+      "width": 2940,
+      "height": 640
+    },
+    {
+      "file": "resolution-1470-measured/expanded-battery-critical.png",
+      "sha256": "3cb4731cd4e982ca08a5bb6660aa8d5e704527f0c6995224c50f67c5b9e7689e",
+      "width": 2940,
+      "height": 640
+    },
+    {
+      "file": "resolution-1470-measured/expanded-music.png",
+      "sha256": "53093e8ab5fdd03fc2614b6d17266e89bf0b51f693fd2b1f512a3b350646b550",
+      "width": 2940,
+      "height": 640
+    },
+    {
+      "file": "resolution-1470-measured/expanded-file-tray.png",
+      "sha256": "12786cd9c6e4586bc4e1432c0e90c2b7ba74c0ea7622b67947f228cccb6b8e21",
+      "width": 2940,
+      "height": 640
+    },
+    {
+      "file": "resolution-1470-measured/dragging-file.png",
+      "sha256": "8014d29844900b51b8212e6d03b7e497920de04518070cf0678f97b04c1b04dd",
+      "width": 2940,
+      "height": 640
+    },
+    {
+      "file": "resolution-1470-measured/expanded-tools-stopwatch.png",
+      "sha256": "15fd193ebd18d060bbc1f9e85ea67f3c50ba9caa5cce9b132d366201fc7f72bb",
+      "width": 2940,
+      "height": 640
+    },
+    {
+      "file": "resolution-1470-measured/expanded-tools-countdown.png",
+      "sha256": "0cc54175576340405cbf68f9bc131301a8845af42d1522de5d93fb3509283e53",
+      "width": 2940,
+      "height": 640
+    },
+    {
+      "file": "resolution-1280-measured/compact.png",
+      "sha256": "53e29d17ffbfdbce6643d00af5a94a160351804ce4328ec1fa277459a7a11761",
+      "width": 2560,
+      "height": 640
+    },
+    {
+      "file": "resolution-1280-measured/compact-playing.png",
+      "sha256": "94ffd8927f3647a1f12d8f78a797a21630079a14d2c353a64f802104e82dfc17",
+      "width": 2560,
+      "height": 640
+    },
+    {
+      "file": "resolution-1280-measured/compact-volume.png",
+      "sha256": "c153d2fa5f7139d8af34d45bf1e13d4dbf77514bd79078c575e216b8cdd61caa",
+      "width": 2560,
+      "height": 640
+    },
+    {
+      "file": "resolution-1280-measured/expanded-volume.png",
+      "sha256": "3baf67e31f867de8ff823cced39045e48aed90486e4d52088a5d461cff600b59",
+      "width": 2560,
+      "height": 640
+    },
+    {
+      "file": "resolution-1280-measured/compact-battery-charging.png",
+      "sha256": "57bdd7654589532daa41953928c3a5b8c10fdb1e380f18ace3a2b1e2a326d2a7",
+      "width": 2560,
+      "height": 640
+    },
+    {
+      "file": "resolution-1280-measured/expanded-battery-low.png",
+      "sha256": "a87e15be16516cc821736fe38e5b200258abb290141aab078dd7bfab07ccab3b",
+      "width": 2560,
+      "height": 640
+    },
+    {
+      "file": "resolution-1280-measured/expanded-battery-critical.png",
+      "sha256": "9f6f75bfebcb1b51c4441cc82d8b143e9b061f23f4bee97d45733be57fa3f47f",
+      "width": 2560,
+      "height": 640
+    },
+    {
+      "file": "resolution-1280-measured/expanded-music.png",
+      "sha256": "bb3b6cd8092a5ce083f0f1610342bbdeef967b76b5ab0ae4fd31a8b2109533cd",
+      "width": 2560,
+      "height": 640
+    },
+    {
+      "file": "resolution-1280-measured/expanded-file-tray.png",
+      "sha256": "b6aa20f3e072c2c34b92c148955db709279ea143aff9f2bd17bb568fbbb82716",
+      "width": 2560,
+      "height": 640
+    },
+    {
+      "file": "resolution-1280-measured/dragging-file.png",
+      "sha256": "78d20014938aaeb24e78e433c3d595dca9c5ac0ced3d3185ef2cdf280cf539b9",
+      "width": 2560,
+      "height": 640
+    },
+    {
+      "file": "resolution-1280-measured/expanded-tools-stopwatch.png",
+      "sha256": "31992ba9338e68115450e427cbf4d59a5c542911cb9a55cbc3f4302ae8f59d46",
+      "width": 2560,
+      "height": 640
+    },
+    {
+      "file": "resolution-1280-measured/expanded-tools-countdown.png",
+      "sha256": "135ca3b7cabbccfc760313b046a13ceda83460d1ad2076c269dce28da7ddfebb",
+      "width": 2560,
+      "height": 640
+    },
+    {
+      "file": "resolution-1710-synthetic/compact.png",
+      "sha256": "6668b94b4f4e03db87593e59fe4ef386bdf6d16c68d4cb9021163768ca528f85",
+      "width": 3420,
+      "height": 640
+    },
+    {
+      "file": "resolution-1710-synthetic/compact-playing.png",
+      "sha256": "62efa97aaa7c2f5c65e492dc7339e1223666b20476ba4e3c89122288def6bd5f",
+      "width": 3420,
+      "height": 640
+    },
+    {
+      "file": "resolution-1710-synthetic/compact-volume.png",
+      "sha256": "31ef7719bbd8a42bb735381d31677a44020bee5c1bef8494db27520e6232d955",
+      "width": 3420,
+      "height": 640
+    },
+    {
+      "file": "resolution-1710-synthetic/expanded-volume.png",
+      "sha256": "73bf10341ddd13f576f591a93431a8779a9c09be680074d9d439daca719a7d6d",
+      "width": 3420,
+      "height": 640
+    },
+    {
+      "file": "resolution-1710-synthetic/compact-battery-charging.png",
+      "sha256": "e6eb55c96228130fccbaef21df3538b2e9612aeb5083c2b7ec097e4e4bbeb57a",
+      "width": 3420,
+      "height": 640
+    },
+    {
+      "file": "resolution-1710-synthetic/expanded-battery-low.png",
+      "sha256": "08d11149e115b00faae82943ddf7d2ae36e7ae9dafbb14c6e74e07f3f81f9593",
+      "width": 3420,
+      "height": 640
+    },
+    {
+      "file": "resolution-1710-synthetic/expanded-battery-critical.png",
+      "sha256": "693122adecb5dcc39c833c9c2e9d4bbac4a4bd8820a6f8cef87966418cf0ba7c",
+      "width": 3420,
+      "height": 640
+    },
+    {
+      "file": "resolution-1710-synthetic/expanded-music.png",
+      "sha256": "73ef4067b119104d41c01bc28ce22e8458094683b66831089fb37a6e220ac6df",
+      "width": 3420,
+      "height": 640
+    },
+    {
+      "file": "resolution-1710-synthetic/expanded-file-tray.png",
+      "sha256": "a9ddbe6a53fb9460aac24c7c52348e47c94f9e6041bb990c3c405f47c7710512",
+      "width": 3420,
+      "height": 640
+    },
+    {
+      "file": "resolution-1710-synthetic/dragging-file.png",
+      "sha256": "d6b36793fd3553bdfba36893d0851cbb68a714106220d2fe8a14b445266dccb2",
+      "width": 3420,
+      "height": 640
+    },
+    {
+      "file": "resolution-1710-synthetic/expanded-tools-stopwatch.png",
+      "sha256": "c3f1df88de1f42bc100c2a7a20eca993d7f17fd37b83f7f8b4780bb5c07ffc9e",
+      "width": 3420,
+      "height": 640
+    },
+    {
+      "file": "resolution-1710-synthetic/expanded-tools-countdown.png",
+      "sha256": "9308dd5edde31896dfd338177e7f927ba84b6cb1747c1fd276635cb4aeaa6445",
+      "width": 3420,
+      "height": 640
+    },
+    {
+      "file": "resolution-2560-backing1-synthetic/compact.png",
+      "sha256": "570a235c63b0ffdcc997e0f9ca424e9ae99465d23595d34d523b7c81d3b9cd5e",
+      "width": 2560,
+      "height": 420
+    },
+    {
+      "file": "resolution-2560-backing1-synthetic/compact-playing.png",
+      "sha256": "eeea51a72fc9e90baf24030072e57317c8c615b48574c9ab91079a9dea4a48cd",
+      "width": 2560,
+      "height": 420
+    },
+    {
+      "file": "resolution-2560-backing1-synthetic/compact-volume.png",
+      "sha256": "f47c1fc89361a3db553236330413f1418e171c69f5e879eb2841a33de439ccaf",
+      "width": 2560,
+      "height": 420
+    },
+    {
+      "file": "resolution-2560-backing1-synthetic/expanded-volume.png",
+      "sha256": "074e0503411d7f2618984a31915c3e56eee6302ac0339c9861a157ed9144173d",
+      "width": 2560,
+      "height": 420
+    },
+    {
+      "file": "resolution-2560-backing1-synthetic/compact-battery-charging.png",
+      "sha256": "8c2d0ac1f2f3f7fbfbf2bd2dbe2ba19bc14605e736aa8a8dfc27c59119994010",
+      "width": 2560,
+      "height": 420
+    },
+    {
+      "file": "resolution-2560-backing1-synthetic/expanded-battery-low.png",
+      "sha256": "638c15fb3ad6413d61d9ee2bf739b492752fdee7361604c1e818d6fde0902da7",
+      "width": 2560,
+      "height": 420
+    },
+    {
+      "file": "resolution-2560-backing1-synthetic/expanded-battery-critical.png",
+      "sha256": "e66cd6125bf6a94ea783fd4808653ee247f468b5420ff050b02c9e28fc94a91e",
+      "width": 2560,
+      "height": 420
+    },
+    {
+      "file": "resolution-2560-backing1-synthetic/expanded-music.png",
+      "sha256": "81d5cf8aaf690c8f070328143ecb4bc65dacd4cb1e7c53ec5ef4ddc5dc6ef92e",
+      "width": 2560,
+      "height": 420
+    },
+    {
+      "file": "resolution-2560-backing1-synthetic/expanded-file-tray.png",
+      "sha256": "f49299b666cb857c5459713693ce68ba27152d227f21abca3996c5f0de39ea25",
+      "width": 2560,
+      "height": 420
+    },
+    {
+      "file": "resolution-2560-backing1-synthetic/dragging-file.png",
+      "sha256": "022ef55cd06ca4750141e17cbd158e7d3fbfeedcdf74b47e24bddc2004e3585e",
+      "width": 2560,
+      "height": 420
+    },
+    {
+      "file": "resolution-2560-backing1-synthetic/expanded-tools-stopwatch.png",
+      "sha256": "7299a8f287a028f5fcb5a5d1c218b1f71e858a4be6d3c9344dac68580624e475",
+      "width": 2560,
+      "height": 420
+    },
+    {
+      "file": "resolution-2560-backing1-synthetic/expanded-tools-countdown.png",
+      "sha256": "97f8509682d1f9e47711e6c645b8ce4aff3b8ce54690942016f806a28f562ab7",
+      "width": 2560,
+      "height": 420
+    }
+  ]
+}

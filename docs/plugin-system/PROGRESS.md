@@ -88,6 +88,10 @@ DI-B02 标为 **passed**，设备矩阵现为 **1 passed / 8 pending**。分辨�
 
 用户已确认不同分辨率下显示大小统一，同时报告四项待修：收起两翼过宽、展开整体偏大、高分辨率内容模糊和膨胀动画顶部缝隙。[U02-07至U02-10](u02-followup-todo-20261023.md)均为pending；按用户要求本轮停止继续实现，保留代码、测试和[开发检查点](evidence/u02-resolution-20261023/README.md)。U02保持in progress，原39/40与已发布build4设备结果不变。最终显示设置和暂停计时状态下轮继续前重新确认，不记为已恢复或已完成清理。
 
+## 2026-10-23 U02 四项反馈继续修正（build6，当前）
+
+用户恢复工作后继续[U02-07 至 U02-10](u02-followup-todo-20261023.md)，不再沿用上轮停止指令。实现改为最终 point 原生渲染、上边缘固定的壳体路径、按实际内容分别测量两翼，并缩小展开设计宽高。详细变更、自动与实机结果集中于[build6 修正记录](u02-refinement-20261023.md)。U02保持 `in progress`，原 T01–T40、公开 build4 设备矩阵、SDK 1.0.0 和历史 build5 结果分别保留。
+
 ## Phase 0 — 准备阶段：项目审计、分支与基线
 
 | ID | 任务 | 前置依赖 | 状态 | 验收证据 |
@@ -195,4 +199,4 @@ DI-B02 标为 **passed**，设备矩阵现为 **1 passed / 8 pending**。分辨�
 | ID | 任务 | 状态 | 安排与验收 |
 | --- | --- | --- | --- |
 | U01 | 工具菜单越界与展开保持 | `verified` | [实现与验收记录](u01-tool-menu-20261020.md)：第三版固定 2 秒返回宽限、原 30Hz `.common` 采样及到期物理位置复核。96 项定向、普通 Release / 签名通过；用户确认底部工具返回保持与正常离开重开清理，日志佐证到期 inside=true。本轮实测 End / Return 访问最底部、按钮更新、Esc / 点外取消及音乐 / 拖盘 / 内置计时切换通过，副本正常退出、Staging 为空。范围为当前设备实际七项菜单；两次自动滚轮未观察内容变化，不单独记滚轮通过，前两轮失败和唯一根因未确诊的记录保留。 |
-| U02 | 全分辨率自适应 | `in progress` | [计划与实施状态](u02-resolution-adaptation-plan-20261022.md)：2026-10-23 用户授权 App 0.6.0 / 开发 build5，已实现 Host 统一布局变换、相机间隔反归一、Controller 命中同步及 layout_scale 诊断。定向 v2 57 total / 1 skipped / 0 failures；首轮全量旧计时预算预期已修，全量第二轮1115 total / 3 skipped / 0 failures及Release通过，132图生成/14图抽查与原生控件专项通过，本轮真机对照进行中，详见[实施记录](u02-resolution-adaptation-20261023.md)。公开 build4 / B02 来源、原 T01–T40 与独立人工门槛保留；当前不标 verified。 |
+| U02 | 全分辨率自适应 | `in progress` | [计划与实施状态](u02-resolution-adaptation-plan-20261022.md)：当前为未发布的 App 0.6.0 / 开发 build6，继续修正 U02-07–10 的两翼宽度、展开大小、清晰度与贴顶动画，详见[修正记录](u02-refinement-20261023.md)。build5 的大小统一反馈、自动结果和停止点保留于[原实施记录](u02-resolution-adaptation-20261023.md)；本轮最终v4为1144 total / 1135 passed / 9 skipped / 0 failures，Release成功；144图生成、20图抽查与源码审查完成。6项锁定会话输入和真实屏幕确认按用户要求保留在[人工清单 M-U02-A–C](MANUAL_ACCEPTANCE.md)。公开 build4 / B02 来源、原 T01–T40 与独立人工门槛保留；当前未发布、未验收，不标 verified。 |

@@ -1,0 +1,174 @@
+{
+  "files": [
+    {
+      "file": "README.md",
+      "sha256": "a1e2ca37c80cd8b7a615e5cad858d65c60c1e1feab5ded41d506cbde20c56930",
+      "bytes": 1389
+    },
+    {
+      "file": "probes/High-logical-1x-countdown-actual.png",
+      "sha256": "ead3f7950b03d27e946c307283ea1dd59d17ff42fed04bb4291945b8305a7440",
+      "bytes": 2054
+    },
+    {
+      "file": "probes/High-logical-1x-countdown-enlarged-control.png",
+      "sha256": "b7454b03a90da733945188586e0c6b5dadcb2d168e6b786adba4492d16d1e1ba",
+      "bytes": 2680
+    },
+    {
+      "file": "probes/High-logical-1x-countdown-native-reference.png",
+      "sha256": "5831afb142192cbdb65eddaff5e989ba620c0df62a56b07b6952fdc96c733724",
+      "bytes": 1536
+    },
+    {
+      "file": "probes/High-logical-1x-text-actual.png",
+      "sha256": "6e825c9058f645edb830a61355f7cbb5acb657deec1c1d4cf63a78bb2802f6a3",
+      "bytes": 1617
+    },
+    {
+      "file": "probes/High-logical-1x-text-enlarged-control.png",
+      "sha256": "caf2a8205d2857930eb00361f60dccee110be8153ae5a9466c3ba136b942e16f",
+      "bytes": 2440
+    },
+    {
+      "file": "probes/High-logical-1x-text-native-reference.png",
+      "sha256": "6e825c9058f645edb830a61355f7cbb5acb657deec1c1d4cf63a78bb2802f6a3",
+      "bytes": 1617
+    },
+    {
+      "file": "selected/README.md",
+      "sha256": "20781d076d9198d4d13e454a1c43811c6e0cdd7a58d6f22fc2ee5c6db284ecab",
+      "bytes": 2412
+    },
+    {
+      "file": "selected/external-1080p--expanded-music.png",
+      "sha256": "10bacc8fffbf1a4d4bc9a929c189dedb02c08886ec6759ca8d469b6d0821aa5f",
+      "bytes": 20290
+    },
+    {
+      "file": "selected/external-1080p--expanded-tools-countdown.png",
+      "sha256": "de5288eb419e738d4a107166547e78133bb7eb604b255e75e6b6aa164977524e",
+      "bytes": 20924
+    },
+    {
+      "file": "selected/resolution-1280-measured--compact-battery-charging.png",
+      "sha256": "57bdd7654589532daa41953928c3a5b8c10fdb1e380f18ace3a2b1e2a326d2a7",
+      "bytes": 37895
+    },
+    {
+      "file": "selected/resolution-1280-measured--expanded-file-tray.png",
+      "sha256": "b6aa20f3e072c2c34b92c148955db709279ea143aff9f2bd17bb568fbbb82716",
+      "bytes": 68094
+    },
+    {
+      "file": "selected/resolution-1280-measured--expanded-music.png",
+      "sha256": "bb3b6cd8092a5ce083f0f1610342bbdeef967b76b5ab0ae4fd31a8b2109533cd",
+      "bytes": 65078
+    },
+    {
+      "file": "selected/resolution-1280-measured--expanded-tools-countdown.png",
+      "sha256": "135ca3b7cabbccfc760313b046a13ceda83460d1ad2076c269dce28da7ddfebb",
+      "bytes": 67285
+    },
+    {
+      "file": "selected/resolution-1470-measured--compact-battery-charging.png",
+      "sha256": "beeedb1af2ff31347a1a1ebd80f4e5591d6e8b0f68462c5ac5ba7f3cf6d6a5d7",
+      "bytes": 43677
+    },
+    {
+      "file": "selected/resolution-1470-measured--expanded-file-tray.png",
+      "sha256": "12786cd9c6e4586bc4e1432c0e90c2b7ba74c0ea7622b67947f228cccb6b8e21",
+      "bytes": 78346
+    },
+    {
+      "file": "selected/resolution-1470-measured--expanded-music.png",
+      "sha256": "53093e8ab5fdd03fc2614b6d17266e89bf0b51f693fd2b1f512a3b350646b550",
+      "bytes": 75103
+    },
+    {
+      "file": "selected/resolution-1470-measured--expanded-tools-countdown.png",
+      "sha256": "0cc54175576340405cbf68f9bc131301a8845af42d1522de5d93fb3509283e53",
+      "bytes": 77161
+    },
+    {
+      "file": "selected/resolution-1710-synthetic--compact-battery-charging.png",
+      "sha256": "e6eb55c96228130fccbaef21df3538b2e9612aeb5083c2b7ec097e4e4bbeb57a",
+      "bytes": 50893
+    },
+    {
+      "file": "selected/resolution-1710-synthetic--expanded-file-tray.png",
+      "sha256": "a9ddbe6a53fb9460aac24c7c52348e47c94f9e6041bb990c3c405f47c7710512",
+      "bytes": 92891
+    },
+    {
+      "file": "selected/resolution-1710-synthetic--expanded-music.png",
+      "sha256": "73ef4067b119104d41c01bc28ce22e8458094683b66831089fb37a6e220ac6df",
+      "bytes": 88705
+    },
+    {
+      "file": "selected/resolution-1710-synthetic--expanded-tools-countdown.png",
+      "sha256": "9308dd5edde31896dfd338177e7f927ba84b6cb1747c1fd276635cb4aeaa6445",
+      "bytes": 94185
+    },
+    {
+      "file": "selected/resolution-2560-backing1-synthetic--compact-battery-charging.png",
+      "sha256": "8c2d0ac1f2f3f7fbfbf2bd2dbe2ba19bc14605e736aa8a8dfc27c59119994010",
+      "bytes": 25638
+    },
+    {
+      "file": "selected/resolution-2560-backing1-synthetic--compact-volume.png",
+      "sha256": "f47c1fc89361a3db553236330413f1418e171c69f5e879eb2841a33de439ccaf",
+      "bytes": 23759
+    },
+    {
+      "file": "selected/resolution-2560-backing1-synthetic--expanded-battery-low.png",
+      "sha256": "638c15fb3ad6413d61d9ee2bf739b492752fdee7361604c1e818d6fde0902da7",
+      "bytes": 34042
+    },
+    {
+      "file": "selected/resolution-2560-backing1-synthetic--expanded-file-tray.png",
+      "sha256": "f49299b666cb857c5459713693ce68ba27152d227f21abca3996c5f0de39ea25",
+      "bytes": 50881
+    },
+    {
+      "file": "selected/resolution-2560-backing1-synthetic--expanded-music.png",
+      "sha256": "81d5cf8aaf690c8f070328143ecb4bc65dacd4cb1e7c53ec5ef4ddc5dc6ef92e",
+      "bytes": 49131
+    },
+    {
+      "file": "selected/resolution-2560-backing1-synthetic--expanded-tools-countdown.png",
+      "sha256": "97f8509682d1f9e47711e6c645b8ce4aff3b8ce54690942016f806a28f562ab7",
+      "bytes": 51360
+    },
+    {
+      "file": "sources/acceptance-bundle.json",
+      "sha256": "6f7436b960cef87d36d6c49a713cac00bdefa273ad2d54431d59a05521f707bb",
+      "bytes": 923
+    },
+    {
+      "file": "sources/automated-results.json",
+      "sha256": "edda9978a1b9740cce2aa7342d2df41f75b4b3d852b6ab6b563aa11554e8b1f2",
+      "bytes": 6695
+    },
+    {
+      "file": "sources/build-inputs.json",
+      "sha256": "934025ba9c49034c6bd15686efdd53e047d213ca4c33f8cdaba902901f4aed2f",
+      "bytes": 19977
+    },
+    {
+      "file": "sources/matrix-files.json",
+      "sha256": "54e1f1003352cf30164629dc872e8d15210cf19e40bea397ef5c42513d3a0003",
+      "bytes": 28316
+    },
+    {
+      "file": "sources/matrix-manifest.json",
+      "sha256": "eeda9a5ac37c83c6d33291a82498ef8cb0aba272b89805bdf582a981efb2bc5d",
+      "bytes": 99236
+    },
+    {
+      "file": "sources/visual-review.json",
+      "sha256": "8377569a4db0001c5e1737c31a2b55c436464bcdf670ba7d95d28dee990fe762",
+      "bytes": 10652
+    }
+  ]
+}

@@ -19,14 +19,14 @@ final class IslandVisualStyleTests: XCTestCase {
         let requiredMusicSurfaceHeight: CGFloat = 33 + 32 + 28 + 28 + 3 * 4
 
         XCTAssertEqual(shell.height, content.height)
+        XCTAssertEqual(shell, CGSize(width: 440, height: 184))
         XCTAssertEqual(shell.height, IslandVisualStyle.expandedMusicHeight)
         XCTAssertGreaterThanOrEqual(
             availableMusicSurfaceHeight,
             requiredMusicSurfaceHeight,
             "Music controls must fit above the bottom content clip without flattening the volume buttons."
         )
-        XCTAssertGreaterThanOrEqual(horizontalInset, 16)
-        XCTAssertLessThanOrEqual(horizontalInset, 24)
+        XCTAssertEqual(horizontalInset, 14)
         XCTAssertLessThan(shell.height, IslandPanelGeometry.expandedSize.height)
     }
 
@@ -52,6 +52,10 @@ final class IslandVisualStyleTests: XCTestCase {
         XCTAssertEqual(filledTray.height, IslandVisualStyle.expandedFileTrayHeight)
         XCTAssertEqual(stopwatch.height, IslandVisualStyle.expandedCompactContentHeight)
         XCTAssertEqual(countdown.height, IslandVisualStyle.expandedTimerHeight)
+        XCTAssertEqual(emptyTray, CGSize(width: 440, height: 136))
+        XCTAssertEqual(filledTray, CGSize(width: 440, height: 148))
+        XCTAssertEqual(stopwatch, CGSize(width: 440, height: 136))
+        XCTAssertEqual(countdown, CGSize(width: 440, height: 174))
     }
 
     func testMessagesAndTimerCompletionKeepEnoughHeight() {
@@ -68,17 +72,17 @@ final class IslandVisualStyleTests: XCTestCase {
         XCTAssertEqual(completedStopwatch.height, IslandVisualStyle.expandedTimerHeight)
     }
 
-    func testPresentedToolHasFullHostShellAnd140PointContentRegardlessOfLegacyTab() {
+    func testPresentedToolHasFullHostShellAnd134PointContentRegardlessOfLegacyTab() {
         for surface in [IslandExpandedSurface.music, .fileTray, .tools] {
             for mode in IslandTimerToolMode.allCases {
                 let shell = IslandVisualStyle.expandedShellSize(
                     for: surface, timerMode: mode, hasTrayItems: true,
                     hasError: true, hasTimerCompletion: true, hasPresentedTool: true
                 )
-                XCTAssertEqual(shell, CGSize(width: 480, height: 200))
+                XCTAssertEqual(shell, CGSize(width: 440, height: 184))
                 XCTAssertEqual(
                     ActivityPresentation.HostPolicy.expandedContentHeight(forHostShellHeight: Double(shell.height)),
-                    140
+                    134
                 )
                 XCTAssertLessThan(shell.height, IslandPanelGeometry.expandedSize.height)
             }
@@ -173,13 +177,15 @@ final class IslandVisualStyleTests: XCTestCase {
 
         XCTAssertEqual(
             batterySize.width,
-            baseSize.width + IslandVisualStyle.batteryCompactHorizontalExpansion
+            min(baseSize.width + IslandVisualStyle.batteryCompactHorizontalExpansion,
+                IslandVisualStyle.expandedShellSize.width)
         )
         XCTAssertEqual(batterySize.height, baseSize.height)
         XCTAssertGreaterThan(batterySize.width, standardSize.width)
         XCTAssertLessThanOrEqual(batterySize.width, IslandVisualStyle.expandedShellSize.width)
         XCTAssertLessThanOrEqual(
-            batterySize.width * IslandExpansionAnimation.pointerHoverScale,
+            min(batterySize.width * IslandExpansionAnimation.pointerHoverScale,
+                IslandVisualStyle.expandedShellSize.width),
             IslandVisualStyle.expandedShellSize.width
         )
         XCTAssertLessThanOrEqual(batterySize.width, IslandPanelGeometry.expandedSize.width)
