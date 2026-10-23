@@ -1,0 +1,1 @@
+				57 弹出式按钮 自动隐藏和显示菜单栏, Value: 仅在全屏幕视图下, ID: autohide-menubar
