@@ -334,7 +334,9 @@ final class IslandActivityRuntimeTests: XCTestCase {
         XCTAssertTrue(runtime.currentActivityUsesCountdownCompactLayout)
         let base = CGSize(width: 216, height: 38)
         let shell = runtime.compactShellSize(forBaseSize: base)
-        XCTAssertEqual(shell.width, base.width + 126)
+        // A 150 pt expansion keeps eight-character HH:MM:SS values clear
+        // of the camera, including the native timer's 58 pt time frame.
+        XCTAssertEqual(shell.width, base.width + 150)
         XCTAssertEqual(shell.height, base.height)
 
         // A valid countdown in an expanded layout does not widen compact UI.
@@ -361,7 +363,7 @@ final class IslandActivityRuntimeTests: XCTestCase {
         try runtime.manager.end(id: activity.id, source: activity.source)
         model.timerTools.selectedMode = .countdown
         model.timerTools.startSelectedTimer(at: Date())
-        XCTAssertEqual(runtime.compactShellSize(forBaseSize: base).width, base.width + 126,
+        XCTAssertEqual(runtime.compactShellSize(forBaseSize: base).width, base.width + 150,
                        "The same production resolver preserves native timer clearance.")
     }
 

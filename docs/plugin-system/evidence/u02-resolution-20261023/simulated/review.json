@@ -1,0 +1,228 @@
+{
+  "schemaVersion": 1,
+  "reviewedAtUTC": "2026-10-23T03:40:32.888833+00:00",
+  "reviewMethod": "Read original PNG files with view_image(detail=original); no image editing or resampling was performed.",
+  "generation": {
+    "generatedAtUTC": "2026-10-23T03:34:36Z",
+    "originalSnapshotCount": 132,
+    "selectedSnapshotCount": 14,
+    "unarchivedSnapshotCount": 118,
+    "fullOutputRetainedAt": "/tmp/dynamic-island-u02-matrix-20261023",
+    "originalManifestCopiedVerbatimAs": "full-generation-manifest.json",
+    "fullHTMLIndexArchived": false
+  },
+  "scope": "Selected static-render visual review only; not physical-device or interactive acceptance.",
+  "overallObservation": "No visible shell clipping, obscured wing metrics, control overlap or mismatched content-to-shell scaling was observed in the 14 selected images.",
+  "fixtures": [
+    {
+      "profile": "resolution-1470-measured",
+      "profileName": "同机 1470 · 已知几何",
+      "source": "Measured geometry: 1470×956, auxiliary gap 179×32 pt; simulated rendering",
+      "logicalScreenWidth": 1470,
+      "logicalScreenHeight": 956,
+      "scaleFactor": 2,
+      "layoutScale": 1,
+      "panelWidth": 520,
+      "panelHeight": 240,
+      "simulatedNotchPresent": true,
+      "notchWidth": 179,
+      "notchHeight": 32,
+      "expandedShellWidthPoints": 480,
+      "expandedShellWidthPercentOfLogicalScreen": 32.6530612244898
+    },
+    {
+      "profile": "resolution-1280-measured",
+      "profileName": "同机 1280 · 已知几何",
+      "source": "Measured geometry: 1280×832, auxiliary gap 156×28 pt; simulated rendering",
+      "logicalScreenWidth": 1280,
+      "logicalScreenHeight": 832,
+      "scaleFactor": 2,
+      "layoutScale": 0.875,
+      "panelWidth": 455,
+      "panelHeight": 210,
+      "simulatedNotchPresent": true,
+      "notchWidth": 156,
+      "notchHeight": 28,
+      "expandedShellWidthPoints": 420.0,
+      "expandedShellWidthPercentOfLogicalScreen": 32.8125
+    },
+    {
+      "profile": "resolution-1710-synthetic",
+      "profileName": "1710 · 合成几何（非实测）",
+      "source": "SYNTHETIC: 1710×1112, auxiliary gap 207×37 pt; not physical-device evidence",
+      "logicalScreenWidth": 1710,
+      "logicalScreenHeight": 1112,
+      "scaleFactor": 2,
+      "layoutScale": 1.15625,
+      "panelWidth": 601.25,
+      "panelHeight": 277.5,
+      "simulatedNotchPresent": true,
+      "notchWidth": 207,
+      "notchHeight": 37,
+      "expandedShellWidthPoints": 555.0,
+      "expandedShellWidthPercentOfLogicalScreen": 32.45614035087719
+    },
+    {
+      "profile": "external-1080p",
+      "profileName": "External 1080p",
+      "source": "Synthetic device profile; not physical-device evidence",
+      "logicalScreenWidth": 1920,
+      "logicalScreenHeight": 1080,
+      "scaleFactor": 1,
+      "layoutScale": 1,
+      "panelWidth": 520,
+      "panelHeight": 240,
+      "simulatedNotchPresent": false,
+      "note": "No-notch fallback; backing scale 1, layout scale 1. PNG uses an 800 pt top crop rather than the full logical screen width."
+    }
+  ],
+  "images": [
+    {
+      "file": "resolution-1470-measured/compact-volume.png",
+      "scenario": "compact-volume",
+      "imageWidth": 2940,
+      "imageHeight": 640,
+      "canvasWidthPoints": 1470,
+      "canvasHeightPoints": 320,
+      "observation": "音量图标完整位于左侧，100% 完整位于右侧；未见裁切。",
+      "visibleIssueObserved": false
+    },
+    {
+      "file": "resolution-1470-measured/compact-battery-charging.png",
+      "scenario": "compact-battery-charging",
+      "imageWidth": 2940,
+      "imageHeight": 640,
+      "canvasWidthPoints": 1470,
+      "canvasHeightPoints": 320,
+      "observation": "正在充电标题完整位于左翼；100% 与填满的电池图标完整位于右翼，边缘留白可见。",
+      "visibleIssueObserved": false
+    },
+    {
+      "file": "resolution-1470-measured/expanded-music.png",
+      "scenario": "expanded-music",
+      "imageWidth": 2940,
+      "imageHeight": 640,
+      "canvasWidthPoints": 1470,
+      "canvasHeightPoints": 320,
+      "observation": "封面占位、曲名 / 副标题、进度与两端时间、播放控制及音量行均可见；未见壳体裁切或控件重叠。",
+      "visibleIssueObserved": false
+    },
+    {
+      "file": "resolution-1470-measured/expanded-tools-countdown.png",
+      "scenario": "expanded-tools-countdown",
+      "imageWidth": 2940,
+      "imageHeight": 640,
+      "canvasWidthPoints": 1470,
+      "canvasHeightPoints": 320,
+      "observation": "05:00、模式选择、分钟加减、重置 / 开始按钮及底部进度完整位于壳内；未见明显比例偏差。",
+      "visibleIssueObserved": false
+    },
+    {
+      "file": "resolution-1280-measured/compact-volume.png",
+      "scenario": "compact-volume",
+      "imageWidth": 2560,
+      "imageHeight": 640,
+      "canvasWidthPoints": 1280,
+      "canvasHeightPoints": 320,
+      "observation": "音量图标完整位于左侧，100% 完整位于右侧；未见裁切。",
+      "visibleIssueObserved": false
+    },
+    {
+      "file": "resolution-1280-measured/compact-battery-charging.png",
+      "scenario": "compact-battery-charging",
+      "imageWidth": 2560,
+      "imageHeight": 640,
+      "canvasWidthPoints": 1280,
+      "canvasHeightPoints": 320,
+      "observation": "正在充电标题完整位于左翼；100% 与填满的电池图标完整位于右翼，边缘留白可见。",
+      "visibleIssueObserved": false
+    },
+    {
+      "file": "resolution-1280-measured/expanded-music.png",
+      "scenario": "expanded-music",
+      "imageWidth": 2560,
+      "imageHeight": 640,
+      "canvasWidthPoints": 1280,
+      "canvasHeightPoints": 320,
+      "observation": "封面占位、曲名 / 副标题、进度与两端时间、播放控制及音量行均可见；未见壳体裁切或控件重叠。",
+      "visibleIssueObserved": false
+    },
+    {
+      "file": "resolution-1280-measured/expanded-tools-countdown.png",
+      "scenario": "expanded-tools-countdown",
+      "imageWidth": 2560,
+      "imageHeight": 640,
+      "canvasWidthPoints": 1280,
+      "canvasHeightPoints": 320,
+      "observation": "05:00、模式选择、分钟加减、重置 / 开始按钮及底部进度完整位于壳内；未见明显比例偏差。",
+      "visibleIssueObserved": false
+    },
+    {
+      "file": "resolution-1710-synthetic/compact-volume.png",
+      "scenario": "compact-volume",
+      "imageWidth": 3420,
+      "imageHeight": 640,
+      "canvasWidthPoints": 1710,
+      "canvasHeightPoints": 320,
+      "observation": "音量图标完整位于左侧，100% 完整位于右侧；未见裁切。",
+      "visibleIssueObserved": false
+    },
+    {
+      "file": "resolution-1710-synthetic/compact-battery-charging.png",
+      "scenario": "compact-battery-charging",
+      "imageWidth": 3420,
+      "imageHeight": 640,
+      "canvasWidthPoints": 1710,
+      "canvasHeightPoints": 320,
+      "observation": "正在充电标题完整位于左翼；100% 与填满的电池图标完整位于右翼，边缘留白可见。",
+      "visibleIssueObserved": false
+    },
+    {
+      "file": "resolution-1710-synthetic/expanded-music.png",
+      "scenario": "expanded-music",
+      "imageWidth": 3420,
+      "imageHeight": 640,
+      "canvasWidthPoints": 1710,
+      "canvasHeightPoints": 320,
+      "observation": "封面占位、曲名 / 副标题、进度与两端时间、播放控制及音量行均可见；未见壳体裁切或控件重叠。",
+      "visibleIssueObserved": false
+    },
+    {
+      "file": "resolution-1710-synthetic/expanded-tools-countdown.png",
+      "scenario": "expanded-tools-countdown",
+      "imageWidth": 3420,
+      "imageHeight": 640,
+      "canvasWidthPoints": 1710,
+      "canvasHeightPoints": 320,
+      "observation": "05:00、模式选择、分钟加减、重置 / 开始按钮及底部进度完整位于壳内；未见明显比例偏差。",
+      "visibleIssueObserved": false
+    },
+    {
+      "file": "external-1080p/compact-volume.png",
+      "scenario": "compact-volume",
+      "imageWidth": 800,
+      "imageHeight": 320,
+      "canvasWidthPoints": 800,
+      "canvasHeightPoints": 320,
+      "observation": "音量图标完整位于左侧，100% 完整位于右侧；未见裁切。",
+      "visibleIssueObserved": false
+    },
+    {
+      "file": "external-1080p/expanded-music.png",
+      "scenario": "expanded-music",
+      "imageWidth": 800,
+      "imageHeight": 320,
+      "canvasWidthPoints": 800,
+      "canvasHeightPoints": 320,
+      "observation": "封面占位、曲名 / 副标题、进度与两端时间、播放控制及音量行均可见；未见壳体裁切或控件重叠。",
+      "visibleIssueObserved": false
+    }
+  ],
+  "limitations": [
+    "1470 and 1280 use previously known measured geometry, but the archived PNGs are simulated renders, not new physical screenshots.",
+    "1710×1112 / 207×37 pt is explicitly synthetic; actual 1710 display diagnostics and user observations remain outstanding.",
+    "The black cutout is a simulated overlay. Masked PNGs alone cannot prove the absence of hidden glyphs; unmasked pixel regressions are separate evidence.",
+    "This review does not validate physical camera occlusion, on-device text sharpness, pointer hit testing, native menus/sliders, Space/full-screen transitions, or unreviewed states.",
+    "Only 14 of the 132 generated PNGs are archived. The full original manifest retains entries for 118 unarchived images and is an inventory, not an assertion that every entry is stored here."
+  ]
+}

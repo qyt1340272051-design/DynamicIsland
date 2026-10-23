@@ -24,7 +24,9 @@ public enum IslandVisualStyle {
     /// Adds a 100 pt display wing on each side of the physical notch. After
     /// renderer insets, the right wing still fits `100%` and the battery gauge.
     public static let batteryCompactHorizontalExpansion: CGFloat = 200
-    public static let timerCompactHorizontalExpansion: CGFloat = 126
+    /// Each wing accommodates the native eight-character `02:00:00` label,
+    /// its padding and camera clearance at every display layout scale.
+    public static let timerCompactHorizontalExpansion: CGFloat = 150
     public static let hoverShellShadowOpacity: Double = 0.28
     public static let hoverShellShadowRadius: CGFloat = 18
     public static let hoverShellShadowYOffset: CGFloat = 8

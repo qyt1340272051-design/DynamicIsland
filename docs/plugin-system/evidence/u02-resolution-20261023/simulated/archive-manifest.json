@@ -1,0 +1,113 @@
+{
+  "schemaVersion": 1,
+  "archiveCreatedAtUTC": "2026-10-23T03:40:32.891190+00:00",
+  "selectedPNGCount": 14,
+  "payloadCount": 17,
+  "hashAlgorithm": "SHA-256",
+  "manifestSelfExcluded": true,
+  "note": "This manifest excludes its own bytes/hash to avoid a recursive hash; all 17 evidence payloads are listed.",
+  "payloads": [
+    {
+      "file": "external-1080p/compact-volume.png",
+      "bytes": 7215,
+      "sha256": "4efa12e68e703344f03a5025a5f38a300bd17aa4099fe895bf8edfa4fd99c00a",
+      "mediaType": "image/png"
+    },
+    {
+      "file": "external-1080p/expanded-music.png",
+      "bytes": 21504,
+      "sha256": "54634ead45654009644c71f89ae84066ecda9dbd47c4fdafc140869479f75426",
+      "mediaType": "image/png"
+    },
+    {
+      "file": "full-generation-manifest.json",
+      "bytes": 92606,
+      "sha256": "c3f795beeab59e16bfa667a032db90fec88b17dec6339fca7680deaf5d1e3290",
+      "mediaType": "application/json"
+    },
+    {
+      "file": "resolution-1280-measured/compact-battery-charging.png",
+      "bytes": 38333,
+      "sha256": "bd43e4900739f68b54d499eb06a5fe25b2f27910e03ff8941b0851206d6bad83",
+      "mediaType": "image/png"
+    },
+    {
+      "file": "resolution-1280-measured/compact-volume.png",
+      "bytes": 35154,
+      "sha256": "317cc2062d54521dcf5f4071cb5e4a9f374cbea7977b7904923c75b91fb1e736",
+      "mediaType": "image/png"
+    },
+    {
+      "file": "resolution-1280-measured/expanded-music.png",
+      "bytes": 65600,
+      "sha256": "bd9afa28a0eece0afbb2a7f1a793f78e6a12753f99a4a4730e2f9207d71e289e",
+      "mediaType": "image/png"
+    },
+    {
+      "file": "resolution-1280-measured/expanded-tools-countdown.png",
+      "bytes": 70373,
+      "sha256": "3f9c9869fcab8d0d5fe2191a933c719e1cc3c82fe080fad257074f17c75921a8",
+      "mediaType": "image/png"
+    },
+    {
+      "file": "resolution-1470-measured/compact-battery-charging.png",
+      "bytes": 41603,
+      "sha256": "a4e2707239f253fe8f77989c612e08c530380c59870072bb7fc39d0ba93430f8",
+      "mediaType": "image/png"
+    },
+    {
+      "file": "resolution-1470-measured/compact-volume.png",
+      "bytes": 39334,
+      "sha256": "0131f3762bf6ff88fe0a538bf64530e7eef44d8682c01816a10372f169dbf3c7",
+      "mediaType": "image/png"
+    },
+    {
+      "file": "resolution-1470-measured/expanded-music.png",
+      "bytes": 70184,
+      "sha256": "740f47b257b8ddbb108caaf55098c8b3605876913374b79a6a9f4a5ff006dc84",
+      "mediaType": "image/png"
+    },
+    {
+      "file": "resolution-1470-measured/expanded-tools-countdown.png",
+      "bytes": 71697,
+      "sha256": "969e5830b0ea1430b19bfa082742485f92cece038e612b3186d7f6ea30d2902d",
+      "mediaType": "image/png"
+    },
+    {
+      "file": "resolution-1710-synthetic/compact-battery-charging.png",
+      "bytes": 50247,
+      "sha256": "dfb19b49b465b3647284f215a17b27f99e48ba8104dff7a0f1432cac38ce6502",
+      "mediaType": "image/png"
+    },
+    {
+      "file": "resolution-1710-synthetic/compact-volume.png",
+      "bytes": 46154,
+      "sha256": "b44dedee68e817e6ed673c528caf096a2d5448f1cd930f25e3bf06b7eb8fbb41",
+      "mediaType": "image/png"
+    },
+    {
+      "file": "resolution-1710-synthetic/expanded-music.png",
+      "bytes": 88939,
+      "sha256": "d469c34f35f4b80673ce1a2723d30cc94758d70f91976e28e283d067242230b4",
+      "mediaType": "image/png"
+    },
+    {
+      "file": "resolution-1710-synthetic/expanded-tools-countdown.png",
+      "bytes": 94857,
+      "sha256": "89396af338060c6dbe93d264c7263835434d02b5a6f973f63a5cf757ebc1cede",
+      "mediaType": "image/png"
+    },
+    {
+      "file": "review.json",
+      "bytes": 9589,
+      "sha256": "b12cf1e96f369a982eaed326c777a979c55e5ca7234c7b8af42ae8b2600af798",
+      "mediaType": "application/json"
+    },
+    {
+      "file": "selected-index.md",
+      "bytes": 4925,
+      "sha256": "5069314155288402e40dd708c56a0cfbc29697690cc03e9af06f18e03ca21f5f",
+      "mediaType": "text/markdown; charset=utf-8"
+    }
+  ]
+}

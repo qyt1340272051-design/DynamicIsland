@@ -95,8 +95,7 @@ final class IslandPanelController {
             return
         }
 
-        let compactFrame = currentCompactFrame(in: screen)
-        viewModel.setCompactPanelSize(compactFrame.size)
+        viewModel.setScreenEnvironment(screen)
         panel.setFrame(currentStablePanelFrame(in: screen), display: true, animate: false)
     }
 
@@ -106,7 +105,8 @@ final class IslandPanelController {
 
     private func currentCompactPresentationFrame(in screen: ScreenEnvironment) -> CGRect {
         let baseFrame = currentCompactFrame(in: screen)
-        let presentationSize = activityRuntime.compactShellSize(forBaseSize: baseFrame.size)
+        let layout = IslandDisplayLayout(environment: screen)
+        let presentationSize = layout.scaled(activityRuntime.compactShellSize(forBaseSize: layout.designCompactSize))
 
         return CGRect(
             x: baseFrame.midX - presentationSize.width / 2,
@@ -197,7 +197,7 @@ final class IslandPanelController {
             compactFrame: currentCompactPresentationFrame(in: screen),
             presentationState: viewModel.presentationState,
             isPointerInside: isPointerInsidePanel,
-            expandedShellSize: activityRuntime.expandedShellSize
+            expandedShellSize: viewModel.displayLayout.scaled(activityRuntime.expandedShellSize)
         )
     }
 }

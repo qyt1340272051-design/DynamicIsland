@@ -46,7 +46,8 @@ public final class IslandViewModel: ObservableObject {
     @Published public private(set) var trayItems: [TrayFileItem] = []
     @Published public private(set) var isFileTrayLocked = false
     @Published public private(set) var expandedSurface: IslandExpandedSurface = .music
-    @Published public private(set) var compactPanelSize = IslandPanelGeometry.compactSize
+    @Published public private(set) var displayLayout = IslandDisplayLayout()
+    public var compactPanelSize: CGSize { displayLayout.compactSize }
     @Published public private(set) var compactTimerMode: IslandTimerToolMode?
     @Published private(set) var timerShellMode: IslandTimerToolMode = .stopwatch
     @Published public private(set) var isTimerCompletionPresented = false
@@ -438,11 +439,15 @@ public final class IslandViewModel: ObservableObject {
     }
 
     public func setCompactPanelSize(_ size: CGSize) {
-        guard compactPanelSize != size else {
-            return
-        }
+        let layout = IslandDisplayLayout(compactSize: size)
+        guard displayLayout != layout else { return }
+        displayLayout = layout
+    }
 
-        compactPanelSize = size
+    public func setScreenEnvironment(_ environment: ScreenEnvironment) {
+        let layout = IslandDisplayLayout(environment: environment)
+        guard displayLayout != layout else { return }
+        displayLayout = layout
     }
 
     public func refreshVolume(publishesActivityEvent: Bool = false) {

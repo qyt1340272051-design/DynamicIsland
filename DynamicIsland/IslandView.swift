@@ -47,6 +47,8 @@ public struct IslandView: View {
         }
         .compositingGroup()
         .frame(width: IslandPanelGeometry.expandedSize.width, height: IslandPanelGeometry.expandedSize.height, alignment: .top)
+        .scaleEffect(viewModel.displayLayout.scale, anchor: .top)
+        .frame(width: viewModel.displayLayout.panelSize.width, height: viewModel.displayLayout.panelSize.height, alignment: .top)
         .clipped()
         .opacity(isIslandFading ? 0 : 1)
         .animation(reduceMotion ? nil : IslandQuitAnimation.islandFade, value: isIslandFading)
@@ -105,7 +107,7 @@ public struct IslandView: View {
     }
 
     private var compactPresentationSize: CGSize {
-        activityRuntime.compactShellSize(forBaseSize: viewModel.compactPanelSize)
+        activityRuntime.compactShellSize(forBaseSize: viewModel.displayLayout.designCompactSize)
     }
 
     private var hasCompactContent: Bool {
@@ -217,7 +219,7 @@ public struct IslandView: View {
         let region = IslandRenderer.collapsedRegionSize(
             for: mode,
             shellSize: compactPresentationSize,
-            reservedCenterWidth: viewModel.compactPanelSize.width
+            reservedCenterWidth: viewModel.displayLayout.designCompactSize.width
         )
         return renderedActivity(snapshot, mode: mode, shellSize: region)
             .frame(width: region.width, height: region.height)

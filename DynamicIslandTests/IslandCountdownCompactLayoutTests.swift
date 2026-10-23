@@ -10,9 +10,11 @@ final class IslandCountdownCompactLayoutTests: XCTestCase {
         let shellSize = IslandVisualStyle.compactShellSize(
             baseSize: baseSize, hasCompactActivity: true, hasActiveTimer: true
         )
-        XCTAssertEqual(shellSize, CGSize(width: 336, height: 32))
+        // The shared 150 pt timer expansion leaves camera clearance for
+        // eight-character values after the renderer's horizontal padding.
+        XCTAssertEqual(shellSize, CGSize(width: 360, height: 32))
         XCTAssertEqual(IslandRenderer.contentSize(for: .compact, shellSize: shellSize),
-                       CGSize(width: 320, height: 32))
+                       CGSize(width: 344, height: 32))
         let clock = IslandCountdownDisplayClock()
         defer { clock.shutdown() }
         let countdown = IslandNode.Countdown(
@@ -51,7 +53,7 @@ final class IslandCountdownCompactLayoutTests: XCTestCase {
             let bitmap = try capture(hostingView, size: shellSize)
             let png = try XCTUnwrap(bitmap.representation(using: .png, properties: [:]))
             let attachment = XCTAttachment(data: png, uniformTypeIdentifier: "public.png")
-            attachment.name = "Compact countdown \(text) original 336x32"
+            attachment.name = "Compact countdown \(text) original 360x32"
             attachment.lifetime = .keepAlways
             add(attachment)
 
