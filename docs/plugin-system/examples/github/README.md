@@ -27,7 +27,7 @@ SDK 的 `response.json()` 保留 64 KiB 响应、4096 个 JSON 节点和现有�
 
 ## Activity 与 Open
 
-工具 Activity 的本地 ID 为 `dashboard`，使用 persistent / tool / automatic 策略并隐藏 compact。展开树固定五行，适配 Host 140 pt 内容区：仓库和保存提示、CI 状态、PR、两个仓库按钮、刷新与两个 Open 按钮。
+工具 Activity 的本地 ID 为 `dashboard`，使用 persistent / tool / automatic 策略并隐藏 compact。展开树固定五行，适配 Host 有限内容区（原 build4 为140设计 pt，U02 build6为134设计 pt）：仓库和保存提示、CI 状态、PR、两个仓库按钮、刷新与两个 Open 按钮。
 
 构建 Activity 使用 `build.checkout.<runID>.<attempt>` 或 `build.cli.<runID>.<attempt>`。排队时发布 progress Activity，进入运行时更新同一 Activity；没有编造百分比或把 API 状态当作进度数值。首次观察到该运行完成时结束 progress 实例，再用同一本地 ID 发布 transient 结果。重复刷新同一完成结果不会再次通知；Storage 保存每个仓库最近的结果 key，重启后继续去重。工具页仍显示最新状态。切换仓库、出现新运行或构建列表变空会结束旧构建 Activity。
 

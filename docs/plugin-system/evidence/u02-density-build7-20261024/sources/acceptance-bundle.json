@@ -1,0 +1,27 @@
+{
+  "createdAt": "2026-10-24T07:47:28.786967+00:00",
+  "appVersion": "0.6.0",
+  "buildNumber": "7",
+  "candidateName": "Dynamic Island U02 Small.app",
+  "bundleIdentifier": "com.rong5.dynamic-island-mac.u02-refinement",
+  "architectures": [
+    "arm64"
+  ],
+  "signature": "ad hoc; hardened runtime; strict/deep verification passed",
+  "notarized": false,
+  "sourceState": "working tree build7; identified by production input digest",
+  "productionInputsSha256": "b84b51bdf809b8747029a16b0d21c78bd79124cb3cd673b1d490402f60dcad49",
+  "originalReleaseExecutableSha256": "188fa616175e345b35658dfbbc0be58b54e6e6049ba9d9b9fde7cb3ea54a2fb2",
+  "candidateExecutableSha256": "88f7ebe0d7e9be9a5a8aea800c08667bfed270bcd4fd1a5dfd7e5ca8ef6405f1",
+  "expandedDensity": 0.88,
+  "canonicalHostSize": {
+    "width": 440,
+    "height": 184
+  },
+  "effectiveReferenceSize": {
+    "width": 387.2,
+    "height": 161.92
+  },
+  "launchStatus": "launched; four real 2560x1664 pages captured; user size/clarity feedback pending",
+  "validationRun": "density-build7-v2-20261024"
+}

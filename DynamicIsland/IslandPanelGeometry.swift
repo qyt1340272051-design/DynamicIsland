@@ -66,20 +66,34 @@ public enum IslandPanelGeometry {
             auxiliaryTopRightArea: auxiliaryTopRightArea
         )
         let topPadding: CGFloat = 0
+        let environment = ScreenEnvironment(
+            displayID: 0,
+            name: "",
+            frame: screenFrame,
+            visibleFrame: screenFrame,
+            safeAreaInsets: ScreenEdgeInsets(top: safeAreaInsetsTop),
+            auxiliaryTopLeftArea: auxiliaryTopLeftArea,
+            auxiliaryTopRightArea: auxiliaryTopRightArea,
+            isBuiltIn: false
+        )
         return topAlignedFrame(
             centeredAtX: notchCenterX,
-            requestedSize: expandedSize,
+            requestedSize: IslandDisplayLayout(environment: environment).panelSize,
             screenFrame: screenFrame,
             topPadding: topPadding
         )
     }
 
     public static func expandedFrame(in environment: ScreenEnvironment) -> CGRect {
-        expandedFrame(
+        topAlignedFrame(
+            centeredAtX: notchCenter(
+                screenFrame: environment.frame,
+                auxiliaryTopLeftArea: environment.auxiliaryTopLeftArea,
+                auxiliaryTopRightArea: environment.auxiliaryTopRightArea
+            ),
+            requestedSize: IslandDisplayLayout(environment: environment).panelSize,
             screenFrame: environment.frame,
-            auxiliaryTopLeftArea: environment.auxiliaryTopLeftArea,
-            auxiliaryTopRightArea: environment.auxiliaryTopRightArea,
-            safeAreaInsetsTop: environment.safeAreaInsets.top
+            topPadding: 0
         )
     }
 
@@ -93,17 +107,17 @@ public enum IslandPanelGeometry {
             screenFrame: screenFrame,
             auxiliaryTopLeftArea: auxiliaryTopLeftArea,
             auxiliaryTopRightArea: auxiliaryTopRightArea,
-            safeAreaInsetsTop: topReservedHeight(screenFrame: screenFrame, visibleFrame: visibleFrame)
+            safeAreaInsetsTop: compactHeight(
+                screenFrame: screenFrame,
+                visibleFrame: visibleFrame,
+                auxiliaryTopLeftArea: auxiliaryTopLeftArea,
+                auxiliaryTopRightArea: auxiliaryTopRightArea
+            )
         )
     }
 
     public static func stableFrame(in environment: ScreenEnvironment) -> CGRect {
-        stableFrame(
-            screenFrame: environment.frame,
-            visibleFrame: environment.visibleFrame,
-            auxiliaryTopLeftArea: environment.auxiliaryTopLeftArea,
-            auxiliaryTopRightArea: environment.auxiliaryTopRightArea
-        )
+        expandedFrame(in: environment)
     }
 
     private static func notchCenter(
@@ -175,8 +189,8 @@ public enum IslandPanelGeometry {
         let originY = screenFrame.maxY - height - topPadding
 
         return CGRect(
-            x: originX.rounded(.toNearestOrAwayFromZero),
-            y: originY.rounded(.toNearestOrAwayFromZero),
+            x: originX,
+            y: originY,
             width: width,
             height: height
         )

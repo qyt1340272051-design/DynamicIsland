@@ -14,17 +14,26 @@ enum IslandPanelHoverRegion {
             return expandedShellFrame(in: panelFrame, size: expandedShellSize)
         }
 
-        return hoverFrame(for: compactFrame, isPointerInside: isPointerInside)
+        return hoverFrame(for: compactFrame, isPointerInside: isPointerInside,
+                          maximumWidth: compactHoverMaximumWidth(
+                            panelWidth: panelFrame.width,
+                            expandedShellWidth: max(compactFrame.width, expandedShellSize.width),
+                            centerOffset: compactFrame.midX - panelFrame.midX))
     }
 
-    static func hoverFrame(for compactFrame: CGRect, isPointerInside: Bool) -> CGRect {
-        guard isPointerInside else {
-            return compactFrame
-        }
+    /// Asymmetric wings must keep their hover feedback inside the fixed panel.
+    static func compactHoverMaximumWidth(panelWidth: CGFloat, expandedShellWidth: CGFloat,
+                                         centerOffset: CGFloat) -> CGFloat {
+        max(0, min(expandedShellWidth, panelWidth - 2 * abs(centerOffset)))
+    }
 
-        let extraWidth = compactFrame.width * (IslandExpansionAnimation.pointerHoverScale - 1)
-        let extraHeight = compactFrame.height * (IslandExpansionAnimation.pointerHoverScale - 1)
-        return compactFrame.insetBy(dx: -extraWidth / 2, dy: -extraHeight / 2)
+    static func hoverFrame(for compactFrame: CGRect, isPointerInside: Bool,
+                           maximumWidth: CGFloat = .infinity) -> CGRect {
+        guard isPointerInside else { return compactFrame }
+        let width = min(compactFrame.width * IslandExpansionAnimation.pointerHoverScale, maximumWidth)
+        let height = compactFrame.height * IslandExpansionAnimation.pointerHoverScale
+        return CGRect(x: compactFrame.midX - width / 2, y: compactFrame.maxY - height,
+                      width: width, height: height)
     }
 
     static func expandedShellFrame(in panelFrame: CGRect, size: CGSize) -> CGRect {

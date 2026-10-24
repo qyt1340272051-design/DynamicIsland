@@ -14,6 +14,7 @@ final class DiagnosticReportTests: XCTestCase {
         XCTAssertTrue(report.renderedText.contains("built_in: yes"))
         XCTAssertTrue(report.renderedText.contains("notch: yes"))
         XCTAssertTrue(report.renderedText.contains("scale_factor: 2.0"))
+        XCTAssertTrue(report.renderedText.contains("layout_scale: 0.8750"))
         XCTAssertTrue(report.renderedText.contains("estimated_pixels: width=3024.0 height=1964.0"))
         XCTAssertTrue(report.renderedText.contains("presentation_state: compact"))
         XCTAssertTrue(report.renderedText.contains("privacy: excludes usernames, serial numbers, file names, and track metadata"))
@@ -81,7 +82,8 @@ final class DiagnosticReportTests: XCTestCase {
                 isPanelVisible: true,
                 isMusicPlaying: false,
                 timerSession: "none",
-                trayItemCount: 0
+                trayItemCount: 0,
+                displayLayoutScale: 0.875
             )
         )
     }

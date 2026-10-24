@@ -7,15 +7,19 @@ public enum IslandVisualStyle {
         case battery
     }
 
-    public static let expandedShellSize = CGSize(width: 480, height: 200)
-    public static let expandedMusicHeight: CGFloat = 200
-    public static let expandedTimerHeight: CGFloat = 190
-    public static let expandedFileTrayHeight: CGFloat = 164
-    public static let expandedCompactContentHeight: CGFloat = 152
-    public static let expandedContentSize = CGSize(width: 468, height: 200)
-    public static let expandedContentPadding: CGFloat = 12
+    /// Keep the validated Host canvas while presenting expanded surfaces at a
+    /// smaller native drawing size. Compact camera geometry uses its own scale.
+    public static let expandedDensity: CGFloat = 0.88
+
+    public static let expandedShellSize = CGSize(width: 440, height: 184)
+    public static let expandedMusicHeight: CGFloat = 184
+    public static let expandedTimerHeight: CGFloat = 174
+    public static let expandedFileTrayHeight: CGFloat = 148
+    public static let expandedCompactContentHeight: CGFloat = 136
+    public static let expandedContentSize = CGSize(width: 428, height: 184)
+    public static let expandedContentPadding: CGFloat = 8
     public static let expandedSurfaceSwitcherHeight: CGFloat = 28
-    public static let expandedSurfaceSpacing: CGFloat = 8
+    public static let expandedSurfaceSpacing: CGFloat = 6
     public static let expandedShellCornerRadius: CGFloat = 26
     public static let activityCompactHorizontalExpansion: CGFloat = 72
     /// Leaves enough room in both display wings for the volume glyph and the
@@ -24,7 +28,9 @@ public enum IslandVisualStyle {
     /// Adds a 100 pt display wing on each side of the physical notch. After
     /// renderer insets, the right wing still fits `100%` and the battery gauge.
     public static let batteryCompactHorizontalExpansion: CGFloat = 200
-    public static let timerCompactHorizontalExpansion: CGFloat = 126
+    /// Each wing accommodates the native eight-character `02:00:00` label,
+    /// its padding and camera clearance at every display layout scale.
+    public static let timerCompactHorizontalExpansion: CGFloat = 150
     public static let hoverShellShadowOpacity: Double = 0.28
     public static let hoverShellShadowRadius: CGFloat = 18
     public static let hoverShellShadowYOffset: CGFloat = 8

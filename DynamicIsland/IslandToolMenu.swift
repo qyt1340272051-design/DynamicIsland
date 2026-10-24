@@ -58,15 +58,13 @@ struct IslandToolMenu: NSViewRepresentable {
     func makeCoordinator() -> Coordinator { Coordinator() }
 
     func makeNSView(context: Context) -> ToolButton {
-        let button = ToolButton(frame: NSRect(x: 0, y: 0, width: 28, height: 28))
+        let size = 28 * context.environment.islandLayoutScale
+        let button = ToolButton(frame: NSRect(x: 0, y: 0, width: size, height: size))
         button.title = ""
         button.isBordered = false
         button.setButtonType(.momentaryPushIn)
         button.imagePosition = .imageOnly
         button.imageScaling = .scaleNone
-        button.image = NSImage(systemSymbolName: "alarm.fill", accessibilityDescription: nil)?
-            .withSymbolConfiguration(.init(pointSize: 12, weight: .semibold))
-        button.image?.isTemplate = true
         button.toolTip = "计时与插件工具"
         button.setAccessibilityLabel("计时")
         button.setAccessibilityHelp("计时与插件工具")
@@ -80,13 +78,15 @@ struct IslandToolMenu: NSViewRepresentable {
             coordinator?.cancelActiveMenu(reason: .windowDetached)
         }
         context.coordinator.update(self, button: button,
-                                   enabled: isEnabled && context.environment.isEnabled)
+                                   enabled: isEnabled && context.environment.isEnabled,
+                                   layoutScale: context.environment.islandLayoutScale)
         return button
     }
 
     func updateNSView(_ button: ToolButton, context: Context) {
         context.coordinator.update(self, button: button,
-                                   enabled: isEnabled && context.environment.isEnabled)
+                                   enabled: isEnabled && context.environment.isEnabled,
+                                   layoutScale: context.environment.islandLayoutScale)
     }
 
     static func dismantleNSView(_ button: ToolButton, coordinator: Coordinator) {
@@ -99,8 +99,31 @@ struct IslandToolMenu: NSViewRepresentable {
     @MainActor
     final class ToolButton: NSButton {
         var onWindowDetached: (@MainActor () -> Void)?
+        private(set) var layoutScale: CGFloat = 1
 
-        override var intrinsicContentSize: NSSize { NSSize(width: 28, height: 28) }
+        override var intrinsicContentSize: NSSize {
+            NSSize(width: 28 * layoutScale, height: 28 * layoutScale)
+        }
+
+        // A borderless NSButton still has AppKit alignment insets. The root's
+        // explicit frame and this native hit region must use the same bounds.
+        override var alignmentRectInsets: NSEdgeInsets {
+            NSEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+        }
+
+        func applyLayoutScale(_ scale: CGFloat) {
+            let resolvedScale = scale.isFinite && scale > 0 ? scale : 1
+            guard layoutScale != resolvedScale || image == nil else { return }
+            layoutScale = resolvedScale
+            invalidateIntrinsicContentSize()
+            setFrameSize(intrinsicContentSize)
+            // Request the symbol at its final point size so AppKit draws it at
+            // the window's backing scale instead of enlarging a cached bitmap.
+            image = NSImage(systemSymbolName: "alarm.fill", accessibilityDescription: nil)?
+                .withSymbolConfiguration(.init(pointSize: 12 * layoutScale, weight: .semibold))
+            image?.isTemplate = true
+            needsDisplay = true
+        }
 
         override func viewDidMoveToWindow() {
             super.viewDidMoveToWindow()
@@ -110,10 +133,10 @@ struct IslandToolMenu: NSViewRepresentable {
         func applySelectionStyle(_ selected: Bool) {
             contentTintColor = .white.withAlphaComponent(selected ? 1 : 0.68)
             wantsLayer = true
-            layer?.cornerRadius = 14
+            layer?.cornerRadius = 14 * layoutScale
             layer?.backgroundColor = NSColor.white.withAlphaComponent(selected ? 0.18 : 0.08).cgColor
             layer?.borderColor = NSColor.white.withAlphaComponent(selected ? 0.22 : 0.08).cgColor
-            layer?.borderWidth = 0.5
+            layer?.borderWidth = 0.5 * layoutScale
         }
     }
 
@@ -150,12 +173,14 @@ struct IslandToolMenu: NSViewRepresentable {
         private var enabled = false
         private var isInvalidated = false
 
-        func update(_ configuration: IslandToolMenu, button: ToolButton, enabled: Bool) {
+        func update(_ configuration: IslandToolMenu, button: ToolButton, enabled: Bool,
+                    layoutScale: CGFloat) {
             guard !isInvalidated else { return }
             self.configuration = configuration
             self.button = button
             self.enabled = enabled
             button.isEnabled = enabled
+            button.applyLayoutScale(layoutScale)
             button.applySelectionStyle(configuration.isSelected)
             // Updating selection styling or the next menu's snapshots must not
             // mutate the menu currently being tracked by AppKit.
@@ -185,7 +210,8 @@ struct IslandToolMenu: NSViewRepresentable {
             // NSMenu confines itself to the screen and supplies native scrolling,
             // keyboard navigation, Escape, and outside-click cancellation.
             let selected = menu.popUp(positioning: nil,
-                                      at: NSPoint(x: button.bounds.minX, y: button.bounds.minY - 4),
+                                      at: NSPoint(x: button.bounds.minX,
+                                                  y: button.bounds.minY - 4 * button.layoutScale),
                                       in: button)
             IslandToolMenuTrace.record(event: selected ? "native.popUpReturn.selected" : "native.popUpReturn.cancelled",
                                       session: token)

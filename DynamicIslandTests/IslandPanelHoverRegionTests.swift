@@ -41,6 +41,114 @@ final class IslandPanelHoverRegionTests: XCTestCase {
         XCTAssertFalse(IslandPanelHoverRegion.contains(CGPoint(x: frame.maxX + 12, y: frame.midY), in: hoverFrame))
     }
 
+    func testCompactPointerFeedbackCapsWidthAndKeepsScreenTop() {
+        let compact = CGRect(x: 100, y: 900, width: 438, height: 32)
+        let hover = IslandPanelHoverRegion.hoverFrame(for: compact, isPointerInside: true, maximumWidth: 440)
+        XCTAssertEqual(hover.width, 440)
+        XCTAssertEqual(hover.height, 32 * IslandExpansionAnimation.pointerHoverScale)
+        XCTAssertEqual(hover.midX, compact.midX)
+        XCTAssertEqual(hover.maxY, compact.maxY)
+    }
+
+    func testAsymmetricHoverStaysWithinTheFixedPanelAtEveryScale() {
+        for scale: CGFloat in [0.875, 1, 1.15625, 1.75] {
+            let panel = CGRect(x: 0, y: 0, width: 520 * scale, height: 240 * scale)
+            let compact = CGRect(x: 130 * scale, y: 208 * scale, width: 387 * scale, height: 32 * scale)
+            let hover = IslandPanelHoverRegion.hoverFrame(
+                panelFrame: panel, compactFrame: compact, presentationState: .compact,
+                isPointerInside: true,
+                expandedShellSize: CGSize(width: 387.2 * scale, height: 161.92 * scale))
+            XCTAssertGreaterThanOrEqual(hover.minX, panel.minX - 0.000_001)
+            XCTAssertLessThanOrEqual(hover.maxX, panel.maxX + 0.000_001)
+            XCTAssertEqual(hover.maxY, panel.maxY)
+            XCTAssertEqual(hover.midX, compact.midX)
+        }
+    }
+
+    func testWideCompactHoverDoesNotShrinkWhenExpandedShellIsDenser() {
+        for scale: CGFloat in [0.875, 1, 1.15625, 1.75] {
+            let panel = CGRect(x: 0, y: 0, width: 520 * scale, height: 240 * scale)
+            for compact in [
+                CGRect(x: 60 * scale, y: 208 * scale, width: 400 * scale, height: 32 * scale),
+                CGRect(x: 80 * scale, y: 208 * scale, width: 440 * scale, height: 32 * scale)
+            ] {
+                let hover = IslandPanelHoverRegion.hoverFrame(
+                    panelFrame: panel, compactFrame: compact, presentationState: .compact,
+                    isPointerInside: true,
+                    expandedShellSize: CGSize(width: 387.2 * scale, height: 161.92 * scale)
+                )
+
+                XCTAssertEqual(hover.width, compact.width, accuracy: 0.000_001)
+                XCTAssertEqual(hover.midX, compact.midX, accuracy: 0.000_001)
+                XCTAssertEqual(hover.maxY, compact.maxY, accuracy: 0.000_001)
+                XCTAssertGreaterThan(hover.height, compact.height)
+                XCTAssertGreaterThanOrEqual(hover.minX, panel.minX - 0.000_001)
+                XCTAssertLessThanOrEqual(hover.maxX, panel.maxX + 0.000_001)
+                XCTAssertTrue(IslandPanelHoverRegion.contains(
+                    CGPoint(x: compact.minX + scale, y: compact.midY), in: hover
+                ))
+                XCTAssertTrue(IslandPanelHoverRegion.contains(
+                    CGPoint(x: compact.maxX - scale, y: compact.midY), in: hover
+                ))
+            }
+        }
+    }
+
+    func testAsymmetricCompactHoverStillClampsToPanelWithReducedExpandedBudget() {
+        for scale: CGFloat in [0.875, 1, 1.15625, 1.75] {
+            let panel = CGRect(x: 0, y: 0, width: 520 * scale, height: 240 * scale)
+            let compact = CGRect(x: 167 * scale, y: 208 * scale, width: 350 * scale, height: 32 * scale)
+            let hover = IslandPanelHoverRegion.hoverFrame(
+                panelFrame: panel, compactFrame: compact, presentationState: .compact,
+                isPointerInside: true,
+                expandedShellSize: CGSize(width: 387.2 * scale, height: 161.92 * scale)
+            )
+
+            XCTAssertEqual(hover.width, 356 * scale, accuracy: 0.000_001)
+            XCTAssertEqual(hover.midX, compact.midX, accuracy: 0.000_001)
+            XCTAssertEqual(hover.maxX, panel.maxX, accuracy: 0.000_001)
+            XCTAssertGreaterThanOrEqual(hover.minX, panel.minX - 0.000_001)
+        }
+    }
+
+    func testExpandedHoverTracksReducedShellEdgesAtEveryScale() {
+        for scale: CGFloat in [0.875, 1, 1.15625, 1.75] {
+            let layout = makeDisplayLayout(scale: scale)
+            let panel = CGRect(origin: CGPoint(x: -234 * scale, y: 900 * scale), size: layout.panelSize)
+            let compact = CGRect(x: panel.midX - layout.compactSize.width / 2,
+                                 y: panel.maxY - layout.compactSize.height,
+                                 width: layout.compactSize.width, height: layout.compactSize.height)
+            let shellSize = layout.scaledExpanded(IslandVisualStyle.expandedShellSize)
+            let previousShell = IslandPanelHoverRegion.expandedShellFrame(
+                in: panel, size: layout.scaled(IslandVisualStyle.expandedShellSize)
+            )
+
+            for state: IslandPresentationState in [.expanded, .dragging] {
+                let hover = IslandPanelHoverRegion.hoverFrame(
+                    panelFrame: panel, compactFrame: compact, presentationState: state,
+                    isPointerInside: true, expandedShellSize: shellSize
+                )
+
+                XCTAssertEqual(hover.width, 387.2 * scale, accuracy: 0.000_001)
+                XCTAssertEqual(hover.height, 161.92 * scale, accuracy: 0.000_001)
+                XCTAssertEqual(hover.midX, panel.midX, accuracy: 0.000_001)
+                XCTAssertEqual(hover.maxY, panel.maxY, accuracy: 0.000_001)
+                XCTAssertTrue(IslandPanelHoverRegion.contains(
+                    CGPoint(x: hover.minX + scale, y: hover.midY), in: hover
+                ))
+                XCTAssertTrue(IslandPanelHoverRegion.contains(
+                    CGPoint(x: hover.midX, y: hover.minY + scale), in: hover
+                ))
+                XCTAssertFalse(IslandPanelHoverRegion.contains(
+                    CGPoint(x: previousShell.minX + 4, y: hover.midY), in: hover
+                ))
+                XCTAssertFalse(IslandPanelHoverRegion.contains(
+                    CGPoint(x: hover.midX, y: previousShell.minY + 4), in: hover
+                ))
+            }
+        }
+    }
+
     func testExpandedHoverRegionUsesVisibleShellInsteadOfFullTransparentPanel() {
         let panelFrame = CGRect(x: 604, y: 877, width: 520, height: 240)
         let compactFrame = CGRect(x: 756, y: 1079, width: 216, height: 38)
@@ -57,9 +165,28 @@ final class IslandPanelHoverRegionTests: XCTestCase {
             expandedShellSize: shellSize
         )
 
-        XCTAssertEqual(hoverFrame, CGRect(x: 624, y: 953, width: 480, height: 164))
+        XCTAssertEqual(hoverFrame, CGRect(x: 644, y: 969, width: 440, height: 148))
         XCTAssertTrue(IslandPanelHoverRegion.contains(CGPoint(x: hoverFrame.midX, y: hoverFrame.midY), in: hoverFrame))
         XCTAssertFalse(IslandPanelHoverRegion.contains(CGPoint(x: panelFrame.minX + 4, y: panelFrame.midY), in: hoverFrame))
         XCTAssertFalse(IslandPanelHoverRegion.contains(CGPoint(x: hoverFrame.midX, y: 930), in: hoverFrame))
+    }
+
+    private func makeDisplayLayout(scale: CGFloat) -> IslandDisplayLayout {
+        let frame = CGRect(x: 0, y: 0, width: 2560, height: 1600)
+        let notchWidth: CGFloat = 179 * scale
+        let notchHeight: CGFloat = 32 * scale
+        return IslandDisplayLayout(environment: ScreenEnvironment(
+            displayID: 1,
+            name: "Controlled Notched Display",
+            frame: frame,
+            visibleFrame: CGRect(x: 0, y: 0, width: frame.width, height: frame.height - notchHeight),
+            safeAreaInsets: ScreenEdgeInsets(top: notchHeight),
+            auxiliaryTopLeftArea: CGRect(x: 0, y: frame.maxY - notchHeight,
+                                         width: frame.midX - notchWidth / 2, height: notchHeight),
+            auxiliaryTopRightArea: CGRect(x: frame.midX + notchWidth / 2, y: frame.maxY - notchHeight,
+                                          width: frame.midX - notchWidth / 2, height: notchHeight),
+            backingScaleFactor: 2,
+            isBuiltIn: true
+        ))
     }
 }

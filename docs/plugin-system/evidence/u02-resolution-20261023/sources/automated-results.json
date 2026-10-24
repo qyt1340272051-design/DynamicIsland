@@ -1,0 +1,330 @@
+{
+  "schemaVersion": 1,
+  "observedAt": "2026-10-23T03:44:23.416701Z",
+  "purpose": "Read-only collection of existing local automated outputs; this collection did not execute tests, builds or UI.",
+  "workspacePlaceholder": "repository root",
+  "scopeBoundary": "Uncommitted U02 implementation under local test. These are not the unchanged published beta2 build4, fresh-author acceptance, native menu-tracking acceptance, or physical-device matrix results.",
+  "currentSummary": {
+    "targetedV2": {
+      "total": 57,
+      "skipped": 1,
+      "failures": 0
+    },
+    "nativeControlFinal": {
+      "total": 1,
+      "skipped": 0,
+      "failures": 0
+    },
+    "generatedSyntheticSnapshots": 132,
+    "fullV2": {
+      "total": 1115,
+      "skipped": 3,
+      "failures": 0,
+      "releaseBuild": "passed",
+      "ciScriptComplete": true
+    },
+    "historicalFullV1": {
+      "total": 1114,
+      "skipped": 3,
+      "failures": 4,
+      "failedTestCases": 2,
+      "status": "retained-failure"
+    }
+  },
+  "runs": [
+    {
+      "id": "targeted-v2",
+      "sourceScope": "Local modified U02 source: layout, panel geometry, hover region, tool-menu interaction, diagnostics and ScreenSnapshotMatrixTests; native-control test was added later.",
+      "commands": [
+        "/Applications/Xcode.app/Contents/Developer/usr/bin/xcodebuild test -project DynamicIsland.xcodeproj -scheme \"Dynamic Island\" -destination platform=macOS,arch=arm64 -derivedDataPath /tmp/dynamic-island-u02-20261023-derived -resultBundlePath /tmp/dynamic-island-u02-targeted-v2-20261023.xcresult -parallel-testing-enabled NO \"-only-testing:DynamicIslandTests/IslandDisplayLayoutTests\" \"-only-testing:DynamicIslandTests/IslandPanelGeometryTests\" \"-only-testing:DynamicIslandTests/IslandPanelHoverRegionTests\" \"-only-testing:DynamicIslandTests/IslandToolMenuInteractionTests\" \"-only-testing:DynamicIslandTests/DiagnosticReportTests\" \"-only-testing:DynamicIslandTests/ScreenSnapshotMatrixTests\""
+      ],
+      "commandsProvenance": "xcodebuild invocation lines captured in this local log; workspace prefix normalized",
+      "privateLogPath": "/tmp/dynamic-island-u02-targeted-v2-20261023.log",
+      "logFile": "dynamic-island-u02-targeted-v2-20261023.log",
+      "logBytes": 178028,
+      "logSHA256": "97fa3f7cff7f6dba01168ad10c68f36757392dc43a72f4612cd15077884fdf36",
+      "testStatus": "passed",
+      "counts": {
+        "total": 57,
+        "skipped": 1,
+        "failures": 0,
+        "failuresMeaning": "XCTest reported assertion/failure count, not necessarily failed test-case count",
+        "failedTestCases": 0
+      },
+      "summaryFromLog": "Executed 57 tests, with 1 test skipped and 0 failures (0 unexpected) in 29.612 (29.634) seconds",
+      "skips": [
+        {
+          "test": "ScreenSnapshotMatrixTests.testGenerateSnapshotMatrix",
+          "reason": "Run Scripts/generate-screen-matrix.sh to generate the screenshot matrix.",
+          "source": "DynamicIslandTests/ScreenSnapshotMatrixTests.swift",
+          "line": 151
+        }
+      ],
+      "failedTestCases": [],
+      "failureMessages": [],
+      "xcresults": [
+        {
+          "privatePath": "/tmp/dynamic-island-u02-targeted-v2-20261023.xcresult",
+          "exists": true
+        }
+      ],
+      "releaseBuildStatus": "not-requested-or-not-finished",
+      "ciScriptComplete": false,
+      "logSnapshotIsFinal": true
+    },
+    {
+      "id": "native-control-final",
+      "sourceScope": "Local modified U02 source: real IslandView + preview VM + role.tool in unshown controlled NSWindow; native NSView bounds/alignment rect/popup input anchor and 15 hitTest points across reference 1470/32, recorded 1280/28 and synthetic 1710/37. No NSMenu tracking or physical GUI acceptance.",
+      "commands": [
+        "/Applications/Xcode.app/Contents/Developer/usr/bin/xcodebuild test -project DynamicIsland.xcodeproj -scheme \"Dynamic Island\" -destination platform=macOS,arch=arm64 -derivedDataPath /tmp/dynamic-island-u02-20261023-derived -resultBundlePath /tmp/dynamic-island-u02-native-control-final-20261023.xcresult -parallel-testing-enabled NO \"-only-testing:DynamicIslandTests/IslandDisplayNativeControlTests\""
+      ],
+      "commandsProvenance": "xcodebuild invocation lines captured in this local log; workspace prefix normalized",
+      "privateLogPath": "/tmp/dynamic-island-u02-native-control-final-20261023.log",
+      "logFile": "dynamic-island-u02-native-control-final-20261023.log",
+      "logBytes": 43284,
+      "logSHA256": "8a860074af06061871e3144451c932b6ba0ed73fc8f7482e270f783def28103a",
+      "testStatus": "passed",
+      "counts": {
+        "total": 1,
+        "skipped": 0,
+        "failures": 0,
+        "failuresMeaning": "XCTest reported assertion/failure count, not necessarily failed test-case count",
+        "failedTestCases": 0
+      },
+      "summaryFromLog": "Executed 1 test, with 0 failures (0 unexpected) in 0.708 (0.710) seconds",
+      "skips": [],
+      "failedTestCases": [],
+      "failureMessages": [],
+      "xcresults": [
+        {
+          "privatePath": "/tmp/dynamic-island-u02-native-control-final-20261023.xcresult",
+          "exists": true
+        }
+      ],
+      "releaseBuildStatus": "not-requested-or-not-finished",
+      "ciScriptComplete": false,
+      "logSnapshotIsFinal": true
+    },
+    {
+      "id": "matrix",
+      "sourceScope": "Opt-in synthetic screenshot generation through Screen Matrix scheme; local authoring/render output, not physical-device or supported-device certification.",
+      "commands": [
+        "/Applications/Xcode.app/Contents/Developer/usr/bin/xcodebuild test -project $WORKSPACE/DynamicIsland.xcodeproj -scheme \"Screen Matrix\" -destination platform=macOS -derivedDataPath /tmp/dynamic-island-u02-20261023-derived -parallel-testing-enabled NO \"-only-testing:DynamicIslandTests/ScreenSnapshotMatrixTests/testGenerateSnapshotMatrix\" ENABLE_APP_SANDBOX=NO CODE_SIGN_ENTITLEMENTS="
+      ],
+      "commandsProvenance": "xcodebuild invocation lines captured in this local log; workspace prefix normalized",
+      "privateLogPath": "/tmp/dynamic-island-u02-matrix-20261023.log",
+      "logFile": "dynamic-island-u02-matrix-20261023.log",
+      "logBytes": 100037,
+      "logSHA256": "210048e1e769febb454b394113d11de5eb5511edce30996197532d18fa4843b7",
+      "testStatus": "passed",
+      "counts": {
+        "total": 1,
+        "skipped": 0,
+        "failures": 0,
+        "failuresMeaning": "XCTest reported assertion/failure count, not necessarily failed test-case count",
+        "failedTestCases": 0
+      },
+      "summaryFromLog": "Executed 1 test, with 0 failures (0 unexpected) in 4.515 (4.516) seconds",
+      "skips": [],
+      "failedTestCases": [],
+      "failureMessages": [],
+      "xcresults": [
+        {
+          "privatePath": "/tmp/dynamic-island-u02-20261023-derived/Logs/Test/Test-Screen Matrix-2026.10.23_11-34-27-+0800.xcresult",
+          "exists": true
+        }
+      ],
+      "releaseBuildStatus": "not-requested-or-not-finished",
+      "ciScriptComplete": false,
+      "logSnapshotIsFinal": true,
+      "matrixOutput": {
+        "privateDirectory": "/tmp/dynamic-island-u02-matrix-20261023",
+        "manifestFile": "manifest.json",
+        "manifestBytes": 92606,
+        "manifestSHA256": "c3f795beeab59e16bfa667a032db90fec88b17dec6339fca7680deaf5d1e3290",
+        "snapshotCount": 132,
+        "profileCount": 8,
+        "resolutionFixtureCount": 3,
+        "scenarioCount": 12,
+        "generatedAt": "2026-10-23T03:34:36Z",
+        "generationSucceeded": true,
+        "basis": "Log ends Generated 132 snapshots. after TEST SUCCEEDED; manifest lists 132 records. No physical acceptance or image-by-image visual approval is inferred."
+      }
+    },
+    {
+      "id": "full",
+      "sourceScope": "Historical first local ci.sh run before stale timer compact-budget assertions and the native-control test were finalized; retained failed result.",
+      "commands": [
+        "/Applications/Xcode.app/Contents/Developer/usr/bin/xcodebuild test -project $WORKSPACE/DynamicIsland.xcodeproj -scheme \"Dynamic Island\" -destination platform=macOS -derivedDataPath /tmp/dynamic-island-u02-20261023-derived -resultBundlePath /tmp/dynamic-island-u02-full-20261023.xcresult -parallel-testing-enabled NO"
+      ],
+      "commandsProvenance": "xcodebuild invocation lines captured in this local log; workspace prefix normalized",
+      "privateLogPath": "/tmp/dynamic-island-u02-full-20261023.log",
+      "logFile": "dynamic-island-u02-full-20261023.log",
+      "logBytes": 1647244,
+      "logSHA256": "ceb8b0d60e29224bbbfcd24f20784d456a22b96180f7eb1212550bb50bbd0127",
+      "testStatus": "failed",
+      "counts": {
+        "total": 1114,
+        "skipped": 3,
+        "failures": 4,
+        "failuresMeaning": "XCTest reported assertion/failure count, not necessarily failed test-case count",
+        "failedTestCases": 2
+      },
+      "summaryFromLog": "Executed 1114 tests, with 3 tests skipped and 4 failures (0 unexpected) in 143.614 (144.161) seconds",
+      "skips": [
+        {
+          "test": "GitHubPluginTests.testLivePublicGitHubAPIThroughOfficialPluginWhenExplicitlyEnabled",
+          "reason": "Set DYNAMIC_ISLAND_GITHUB_LIVE=1 to verify the anonymous public GitHub API.",
+          "source": "DynamicIslandTests/GitHubPluginTests.swift",
+          "line": 279
+        },
+        {
+          "test": "PluginRegistryLiveTests.testPublishedOfficialCatalogDownloadsInstallsAndRestoresExplicitPermissionsAndExecutions",
+          "reason": "Public-network acceptance is opt-in: set DYNAMIC_ISLAND_LIVE_REGISTRY=1.",
+          "source": "DynamicIslandTests/PluginRegistryLiveTests.swift",
+          "line": 17
+        },
+        {
+          "test": "ScreenSnapshotMatrixTests.testGenerateSnapshotMatrix",
+          "reason": "Run Scripts/generate-screen-matrix.sh to generate the screenshot matrix.",
+          "source": "DynamicIslandTests/ScreenSnapshotMatrixTests.swift",
+          "line": 151
+        }
+      ],
+      "failedTestCases": [
+        "IslandActivityRuntimeTests.testCountdownCompactGeometryUsesOnlyCurrentResolvedCompactTree",
+        "IslandCountdownCompactLayoutTests.testCompactCountdownGlyphsRemainOutsidePhysicalNotchAtEveryTimeWidth"
+      ],
+      "failureMessages": [
+        "$WORKSPACE/DynamicIslandTests/IslandActivityRuntimeTests.swift:337: error: -[DynamicIslandTests.IslandActivityRuntimeTests testCountdownCompactGeometryUsesOnlyCurrentResolvedCompactTree] : XCTAssertEqual failed: (\"366.0\") is not equal to (\"342.0\")",
+        "$WORKSPACE/DynamicIslandTests/IslandActivityRuntimeTests.swift:364: error: -[DynamicIslandTests.IslandActivityRuntimeTests testCountdownCompactGeometryUsesOnlyCurrentResolvedCompactTree] : XCTAssertEqual failed: (\"366.0\") is not equal to (\"342.0\") - The same production resolver preserves native timer clearance.",
+        "$WORKSPACE/DynamicIslandTests/IslandCountdownCompactLayoutTests.swift:13: error: -[DynamicIslandTests.IslandCountdownCompactLayoutTests testCompactCountdownGlyphsRemainOutsidePhysicalNotchAtEveryTimeWidth] : XCTAssertEqual failed: (\"(360.0, 32.0)\") is not equal to (\"(336.0, 32.0)\")",
+        "$WORKSPACE/DynamicIslandTests/IslandCountdownCompactLayoutTests.swift:14: error: -[DynamicIslandTests.IslandCountdownCompactLayoutTests testCompactCountdownGlyphsRemainOutsidePhysicalNotchAtEveryTimeWidth] : XCTAssertEqual failed: (\"(344.0, 32.0)\") is not equal to (\"(320.0, 32.0)\")"
+      ],
+      "xcresults": [
+        {
+          "privatePath": "/tmp/dynamic-island-u02-full-20261023.xcresult",
+          "exists": true
+        }
+      ],
+      "releaseBuildStatus": "not-requested-or-not-finished",
+      "ciScriptComplete": false,
+      "logSnapshotIsFinal": true,
+      "historicalFailureContext": {
+        "oldTimerCompactHorizontalExpansion": 126,
+        "currentTimerCompactHorizontalExpansion": 150,
+        "explanation": "Four assertion failures in two test cases retained old 126-point timer-wing expectations after the native countdown clearance increased to 150 points. Failure logs are preserved; the later full-v2 run reports zero failures.",
+        "oldAndObservedValuesFromLog": [
+          {
+            "expected": 342,
+            "observed": 366,
+            "assertions": 2
+          },
+          {
+            "expected": [
+              336,
+              32
+            ],
+            "observed": [
+              360,
+              32
+            ],
+            "assertions": 1
+          },
+          {
+            "expected": [
+              320,
+              32
+            ],
+            "observed": [
+              344,
+              32
+            ],
+            "assertions": 1
+          }
+        ],
+        "source": "DynamicIsland/IslandVisualStyle.swift:29 and the historical full-run assertion messages"
+      },
+      "ciPreflight": {
+        "releaseConfiguration": true,
+        "betaMatrix": "Beta matrix valid: 9 scenarios, 1 verified, 8 pending.",
+        "sdkAuthoringTests": 40,
+        "sdkAuthoringPackagingTypesPassed": true
+      },
+      "wrapperCommand": {
+        "command": "CI_DERIVED_DATA_PATH=/tmp/dynamic-island-u02-20261023-derived CI_RESULT_BUNDLE_PATH=/tmp/dynamic-island-u02-full-20261023.xcresult Scripts/ci.sh",
+        "provenance": "Reconstructed from Scripts/ci.sh and recorded invocation/output; the wrapper shell invocation itself is not echoed in the log."
+      }
+    },
+    {
+      "id": "full-v2",
+      "sourceScope": "Latest full local ci.sh run: release config, beta matrix and SDK authoring preflight, all local XCTest cases, then Release build. Public-network tests remain opt-in skips; no new-author or physical acceptance is inferred.",
+      "commands": [
+        "/Applications/Xcode.app/Contents/Developer/usr/bin/xcodebuild test -project $WORKSPACE/DynamicIsland.xcodeproj -scheme \"Dynamic Island\" -destination platform=macOS -derivedDataPath /tmp/dynamic-island-u02-20261023-derived -resultBundlePath /tmp/dynamic-island-u02-full-v2-20261023.xcresult -parallel-testing-enabled NO",
+        "/Applications/Xcode.app/Contents/Developer/usr/bin/xcodebuild build -project $WORKSPACE/DynamicIsland.xcodeproj -scheme \"Dynamic Island\" -configuration Release -destination platform=macOS -derivedDataPath /tmp/dynamic-island-u02-20261023-derived"
+      ],
+      "commandsProvenance": "xcodebuild invocation lines captured in this local log; workspace prefix normalized",
+      "privateLogPath": "/tmp/dynamic-island-u02-full-v2-20261023.log",
+      "logFile": "dynamic-island-u02-full-v2-20261023.log",
+      "logBytes": 1642054,
+      "logSHA256": "bd6d86123dbfe4ddab120d583c8806749271d6361f9d3b827a6acc9bc65572df",
+      "testStatus": "passed",
+      "counts": {
+        "total": 1115,
+        "skipped": 3,
+        "failures": 0,
+        "failuresMeaning": "XCTest reported assertion/failure count, not necessarily failed test-case count",
+        "failedTestCases": 0
+      },
+      "summaryFromLog": "Executed 1115 tests, with 3 tests skipped and 0 failures (0 unexpected) in 143.449 (143.888) seconds",
+      "skips": [
+        {
+          "test": "GitHubPluginTests.testLivePublicGitHubAPIThroughOfficialPluginWhenExplicitlyEnabled",
+          "reason": "Set DYNAMIC_ISLAND_GITHUB_LIVE=1 to verify the anonymous public GitHub API.",
+          "source": "DynamicIslandTests/GitHubPluginTests.swift",
+          "line": 279
+        },
+        {
+          "test": "PluginRegistryLiveTests.testPublishedOfficialCatalogDownloadsInstallsAndRestoresExplicitPermissionsAndExecutions",
+          "reason": "Public-network acceptance is opt-in: set DYNAMIC_ISLAND_LIVE_REGISTRY=1.",
+          "source": "DynamicIslandTests/PluginRegistryLiveTests.swift",
+          "line": 17
+        },
+        {
+          "test": "ScreenSnapshotMatrixTests.testGenerateSnapshotMatrix",
+          "reason": "Run Scripts/generate-screen-matrix.sh to generate the screenshot matrix.",
+          "source": "DynamicIslandTests/ScreenSnapshotMatrixTests.swift",
+          "line": 151
+        }
+      ],
+      "failedTestCases": [],
+      "failureMessages": [],
+      "xcresults": [
+        {
+          "privatePath": "/tmp/dynamic-island-u02-full-v2-20261023.xcresult",
+          "exists": true
+        }
+      ],
+      "releaseBuildStatus": "passed",
+      "ciScriptComplete": true,
+      "logSnapshotIsFinal": true,
+      "ciPreflight": {
+        "releaseConfiguration": true,
+        "betaMatrix": "Beta matrix valid: 9 scenarios, 1 verified, 8 pending.",
+        "sdkAuthoringTests": 40,
+        "sdkAuthoringPackagingTypesPassed": true
+      },
+      "wrapperCommand": {
+        "command": "CI_DERIVED_DATA_PATH=/tmp/dynamic-island-u02-20261023-derived CI_RESULT_BUNDLE_PATH=/tmp/dynamic-island-u02-full-v2-20261023.xcresult Scripts/ci.sh",
+        "provenance": "Reconstructed from Scripts/ci.sh and recorded invocation/output; the wrapper shell invocation itself is not echoed in the log."
+      }
+    }
+  ],
+  "limitations": [
+    "XCTest skip reasons are copied from each existing log; skips are not counted as passes.",
+    "GitHub live API and public Registry tests were not enabled by these full runs.",
+    "The screenshot-generation test is intentionally skipped in normal suites and was separately enabled for the 132-image matrix.",
+    "Controlled native bounds and hitTest coverage does not exercise actual NSMenu.popUp tracking/return.",
+    "No automatic result changes T39, U02 device acceptance, or other original manual gates."
+  ]
+}

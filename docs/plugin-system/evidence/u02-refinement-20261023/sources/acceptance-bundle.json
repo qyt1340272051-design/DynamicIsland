@@ -1,0 +1,20 @@
+{
+  "appVersion": "0.6.0",
+  "buildNumber": "6",
+  "candidateName": "Dynamic Island U02.app",
+  "bundleIdentifier": "com.rong5.dynamic-island-mac.u02-refinement",
+  "architectures": [
+    "arm64"
+  ],
+  "signature": "ad hoc; hardened runtime; strict/deep verification passed",
+  "notarized": false,
+  "sourceBaseline": "0858c2a2f698af60cb6836f8e88b5f9ca4369517",
+  "sourceState": "working tree build6; identified by production input digest",
+  "productionInputsSha256": "94df028d8953b45fbbfa7edbb1762de030f997776f134ff66bebfa21ef30267a",
+  "originalReleaseExecutableSha256": "092098db41d452b950d8ad2fefa0d9827dd0af7e1f9e358cc2a168055ad2743f",
+  "candidateExecutableSha256": "cecc56968395886f3f864c58d485fff2b232cff33e56beddb067dfa46939eaa9",
+  "launchStatus": "not launched; human acceptance deferred",
+  "manualGate": "M-U02-A / M-U02-B / M-U02-C",
+  "publicAssetsModified": false,
+  "validationRun": "full-v4-20261024"
+}
