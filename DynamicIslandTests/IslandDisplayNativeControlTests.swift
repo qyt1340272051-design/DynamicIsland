@@ -86,8 +86,8 @@ final class IslandDisplayNativeControlTests: XCTestCase {
         XCTAssertFalse(button.isHiddenOrHasHiddenAncestor)
         XCTAssertNotNil(button.target)
         XCTAssertNotNil(button.action)
-        let buttonSide = 28 * layout.scale
-        XCTAssertEqual(button.layoutScale, layout.scale, accuracy: 0.000_001)
+        let buttonSide = 28 * layout.expandedScale
+        XCTAssertEqual(button.layoutScale, layout.expandedScale, accuracy: 0.000_001)
         XCTAssertEqual(button.intrinsicContentSize.width, buttonSide, accuracy: 0.001)
         XCTAssertEqual(button.intrinsicContentSize.height, buttonSide, accuracy: 0.001)
         // AppKit may round the hosted frame to whole layout points. The
@@ -97,16 +97,20 @@ final class IslandDisplayNativeControlTests: XCTestCase {
         XCTAssertEqual(button.bounds.height, buttonSide, accuracy: 1)
         XCTAssertEqual(button.frame.width, buttonSide, accuracy: 1)
         XCTAssertEqual(button.frame.height, buttonSide, accuracy: 1)
-        XCTAssertEqual(try XCTUnwrap(button.layer).cornerRadius, 14 * layout.scale, accuracy: 0.001)
-        XCTAssertEqual(try XCTUnwrap(button.layer).borderWidth, 0.5 * layout.scale, accuracy: 0.001)
-        XCTAssertNotNil(button.image)
+        XCTAssertEqual(try XCTUnwrap(button.layer).cornerRadius, 14 * layout.expandedScale, accuracy: 0.001)
+        XCTAssertEqual(try XCTUnwrap(button.layer).borderWidth, 0.5 * layout.expandedScale, accuracy: 0.001)
+        let symbol = try XCTUnwrap(button.image)
+        let expectedSymbol = try XCTUnwrap(NSImage(systemSymbolName: "alarm.fill", accessibilityDescription: nil)?
+            .withSymbolConfiguration(.init(pointSize: 12 * layout.expandedScale, weight: .semibold)))
+        XCTAssertEqual(symbol.size.width, expectedSymbol.size.width, accuracy: 0.001)
+        XCTAssertEqual(symbol.size.height, expectedSymbol.size.height, accuracy: 0.001)
         XCTAssertEqual(button.imageScaling, .scaleNone)
 
         // Native bounds already use final display points. A whole-island
         // magnification would apply scale twice and fail this conversion check.
         let buttonRect = button.convert(button.bounds, to: hosting)
         let popupAnchor = button.convert(
-            NSPoint(x: button.bounds.minX, y: button.bounds.minY - 4 * layout.scale), to: hosting
+            NSPoint(x: button.bounds.minX, y: button.bounds.minY - 4 * layout.expandedScale), to: hosting
         )
         let alignmentRect = try XCTUnwrap(button.superview).convert(
             button.alignmentRect(forFrame: button.frame), to: hosting
@@ -119,16 +123,16 @@ final class IslandDisplayNativeControlTests: XCTestCase {
         XCTAssertEqual(alignmentRect.minY, buttonRect.minY, accuracy: 0.05)
         XCTAssertEqual(popupAnchor.x, buttonRect.minX, accuracy: 0.05)
         let expectedPopupY = button.isFlipped == hosting.isFlipped
-            ? buttonRect.minY - 4 * layout.scale
-            : buttonRect.maxY + 4 * layout.scale
+            ? buttonRect.minY - 4 * layout.expandedScale
+            : buttonRect.maxY + 4 * layout.expandedScale
         XCTAssertEqual(popupAnchor.y, expectedPopupY, accuracy: 0.05)
         let attachment = XCTAttachment(string:
-            "scale=\(layout.scale) hosting=\(hosting.bounds) native=\(buttonRect) alignment=\(alignmentRect) popupAnchor=\(popupAnchor)")
+            "scale=\(layout.scale) expandedScale=\(layout.expandedScale) hosting=\(hosting.bounds) native=\(buttonRect) alignment=\(alignmentRect) popupAnchor=\(popupAnchor)")
         attachment.name = "Native-tool-control-scale-\(layout.scale)"
         attachment.lifetime = .keepAlways
         add(attachment)
 
-        let shellSize = layout.scaled(IslandVisualStyle.expandedShellSize)
+        let shellSize = layout.scaledExpanded(IslandVisualStyle.expandedShellSize)
         let shellRect = CGRect(
             x: (hosting.bounds.width - shellSize.width) / 2,
             y: hosting.isFlipped ? hosting.bounds.minY : hosting.bounds.maxY - shellSize.height,
@@ -145,6 +149,8 @@ final class IslandDisplayNativeControlTests: XCTestCase {
             // Native representables may align their origin to the controlled
             // window's pixel grid. This is only an assertion tolerance; the
             // screen environment's backing scale never sets layout scale.
+            // The reference already includes expanded density; the stable
+            // panel and cross-screen coordinates still use the base scale.
             let positionAccuracy = max(0.05, 0.5 / window.backingScaleFactor)
             expectedAlignmentRect = CGRect(
                 x: reference.alignmentRect.minX * layout.scale,
@@ -168,7 +174,7 @@ final class IslandDisplayNativeControlTests: XCTestCase {
         // hitTest receives coordinates in its receiver's superview. No mouse
         // events or actions are sent, and NSMenu.popUp is deliberately not run.
         let parent = try XCTUnwrap(hosting.superview)
-        let inset: CGFloat = 4 * layout.scale
+        let inset: CGFloat = 4 * layout.expandedScale
         let points = [
             CGPoint(x: expectedAlignmentRect.midX, y: expectedAlignmentRect.midY),
             CGPoint(x: expectedAlignmentRect.minX + inset, y: expectedAlignmentRect.midY),

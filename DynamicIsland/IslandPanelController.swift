@@ -198,7 +198,7 @@ final class IslandPanelController {
             compactFrame: currentCompactPresentationFrame(in: screen),
             presentationState: viewModel.presentationState,
             isPointerInside: isPointerInsidePanel,
-            expandedShellSize: viewModel.displayLayout.scaled(activityRuntime.expandedShellSize)
+            expandedShellSize: viewModel.displayLayout.scaledExpanded(activityRuntime.expandedShellSize)
         )
     }
 }

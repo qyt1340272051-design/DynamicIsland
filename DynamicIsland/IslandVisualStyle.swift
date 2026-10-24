@@ -7,6 +7,10 @@ public enum IslandVisualStyle {
         case battery
     }
 
+    /// Keep the validated Host canvas while presenting expanded surfaces at a
+    /// smaller native drawing size. Compact camera geometry uses its own scale.
+    public static let expandedDensity: CGFloat = 0.88
+
     public static let expandedShellSize = CGSize(width: 440, height: 184)
     public static let expandedMusicHeight: CGFloat = 184
     public static let expandedTimerHeight: CGFloat = 174

@@ -112,7 +112,7 @@ final class ScreenSnapshotMatrixTests: XCTestCase {
                 let rendered = try renderedSnapshot(context, environment: environment, overlaysNotch: false)
                 let bitmap = try XCTUnwrap(NSBitmapImageRep(data: rendered.data))
                 let glyphs = try XCTUnwrap(glyphBounds(in: bitmap), "\(fixture.id)/\(scenario.rawValue)")
-                let layoutScale = context.viewModel.displayLayout.scale
+                let layoutScale = context.viewModel.displayLayout.expandedScale
                 let pixelsPerDesignPoint = environment.backingScaleFactor * layoutScale
                 let normalized = CGRect(
                     x: (glyphs.minX / environment.backingScaleFactor - ScreenSnapshotCanvas.size.width / 2)
@@ -121,6 +121,17 @@ final class ScreenSnapshotMatrixTests: XCTestCase {
                     width: glyphs.width / pixelsPerDesignPoint,
                     height: glyphs.height / pixelsPerDesignPoint
                 )
+                let compact = IslandPanelGeometry.compactFrame(in: environment).size
+                let center = ScreenSnapshotCanvas.size.width * environment.backingScaleFactor / 2
+                let cameraMinimum = Int(ceil(center - compact.width * environment.backingScaleFactor / 2))
+                let cameraMaximum = Int(floor(center + compact.width * environment.backingScaleFactor / 2))
+                let cameraGlyphs = glyphBounds(
+                    in: bitmap,
+                    xRange: cameraMinimum..<cameraMaximum,
+                    yRange: 0..<Int((compact.height * environment.backingScaleFactor).rounded())
+                )
+                XCTAssertNil(cameraGlyphs,
+                             "\(fixture.id)/\(scenario.rawValue) must keep expanded controls outside the physical camera.")
                 let imageAttachment = XCTAttachment(data: rendered.data, uniformTypeIdentifier: "public.png")
                 imageAttachment.name = "Expanded-native-\(scenario.rawValue)-\(fixture.id)"
                 imageAttachment.lifetime = .keepAlways
@@ -186,6 +197,7 @@ final class ScreenSnapshotMatrixTests: XCTestCase {
         XCTAssertTrue(fixture.source.hasPrefix("SYNTHETIC:"))
         let layout = IslandDisplayLayout(environment: environment)
         XCTAssertEqual(layout.scale, 1.75, accuracy: 0.000_001)
+        XCTAssertEqual(layout.expandedScale, 1.54, accuracy: 0.000_001)
         XCTAssertEqual(layout.compactSize, CGSize(width: 312, height: 56))
         XCTAssertEqual(layout.panelSize, CGSize(width: 910, height: 420))
     }
@@ -255,6 +267,7 @@ final class ScreenSnapshotMatrixTests: XCTestCase {
                     logicalScreenWidth: Int(environment.frame.width.rounded()),
                     logicalScreenHeight: Int(environment.frame.height.rounded()),
                     scaleFactor: environment.backingScaleFactor, layoutScale: layout.scale,
+                    expandedLayoutScale: layout.expandedScale,
                     notchWidth: compact.width, notchHeight: environment.hasNotch ? compact.height : 0,
                     canvasWidth: canvasSize.width, canvasHeight: canvasSize.height,
                     panelWidth: layout.panelSize.width, panelHeight: layout.panelSize.height,
@@ -456,7 +469,7 @@ final class ScreenSnapshotMatrixTests: XCTestCase {
             }.joined(separator: "\n")
             return """
             <section><h2>\(first.profileName)</h2>
-              <p>\(first.logicalScreenWidth)×\(first.logicalScreenHeight) pt · backing \(first.scaleFactor)x · layout \(first.layoutScale)x<br>\(first.source)</p>
+              <p>\(first.logicalScreenWidth)×\(first.logicalScreenHeight) pt · backing \(first.scaleFactor)x · compact layout \(first.layoutScale)x · expanded layout \(first.expandedLayoutScale)x<br>\(first.source)</p>
               <div class="grid">\(figures)</div>
             </section>
             """
@@ -801,6 +814,7 @@ private struct ScreenSnapshotRecord: Encodable {
     let logicalScreenHeight: Int
     let scaleFactor: CGFloat
     let layoutScale: CGFloat
+    let expandedLayoutScale: CGFloat
     let notchWidth: CGFloat
     let notchHeight: CGFloat
     let canvasWidth: CGFloat

@@ -6,7 +6,10 @@ import XCTest
 @MainActor
 final class IslandTimerModePickerTests: XCTestCase {
     func testNativeFontBoundsAndTargetActionBindingAcrossDisplayScales() async throws {
-        let scales: [CGFloat] = [0.875, 1, 1.15625, 1.75]
+        let displayScales: [CGFloat] = [0.875, 1, 1.15625, 1.75]
+        // Expanded density crosses AppKit's mini/small/regular thresholds;
+        // retain the independent base scales and exercise the Host's real sizes.
+        let scales = displayScales + displayScales.map { $0 * IslandVisualStyle.expandedDensity }
         for scale in scales {
             try await inspectNativePicker(scale: scale)
         }

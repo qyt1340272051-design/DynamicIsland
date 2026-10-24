@@ -16,7 +16,8 @@ enum IslandPanelHoverRegion {
 
         return hoverFrame(for: compactFrame, isPointerInside: isPointerInside,
                           maximumWidth: compactHoverMaximumWidth(
-                            panelWidth: panelFrame.width, expandedShellWidth: expandedShellSize.width,
+                            panelWidth: panelFrame.width,
+                            expandedShellWidth: max(compactFrame.width, expandedShellSize.width),
                             centerOffset: compactFrame.midX - panelFrame.midX))
     }
 

@@ -74,7 +74,7 @@ DI-B02 标为 **passed**，设备矩阵现为 **1 passed / 8 pending**。分辨�
 
 上批 PR #9 合并提交 `e4ee3308739b9fef20781cbc6ba0ecb7ef1b1dc5` 的现成 [main push CI 39782298192](https://github.com/qyt1340272051-design/DynamicIsland/actions/runs/39782298192)已只读确认成功；未dispatch／重跑，不将该结果记作本批提交检查。
 
-## 2026-10-23 U02 分辨率适配开始实施（当前）
+## 2026-10-23 U02 分辨率适配开始实施（build5 历史）
 
 用户授权开始 [U02](u02-resolution-adaptation-plan-20261022.md)，目标为 **App 0.6.0 / 未发布开发 build5**，状态为 **in progress**。新增 `IslandDisplayLayout`：以有效 auxiliary 刘海高度 / 32 为参考，按屏幕预算等比限制；Host 设计画布、内容、文字 / 图标和裁切统一变换，实际 compact 相机间隔反归一至设计坐标，Controller 悬停预算同步使用相同参数。`backingScaleFactor` 不作布局倍率。两小时八字符 `02:00:00` 的计时两翼扩展由 126 调整至 150 设计 pt，保留相机间距检查；诊断新增 `layout_scale`。
 
@@ -88,9 +88,13 @@ DI-B02 标为 **passed**，设备矩阵现为 **1 passed / 8 pending**。分辨�
 
 用户已确认不同分辨率下显示大小统一，同时报告四项待修：收起两翼过宽、展开整体偏大、高分辨率内容模糊和膨胀动画顶部缝隙。[U02-07至U02-10](u02-followup-todo-20261023.md)均为pending；按用户要求本轮停止继续实现，保留代码、测试和[开发检查点](evidence/u02-resolution-20261023/README.md)。U02保持in progress，原39/40与已发布build4设备结果不变。最终显示设置和暂停计时状态下轮继续前重新确认，不记为已恢复或已完成清理。
 
-## 2026-10-23 U02 四项反馈继续修正（build6，当前）
+## 2026-10-23 U02 四项反馈继续修正（build6 历史）
 
 用户恢复工作后继续[U02-07 至 U02-10](u02-followup-todo-20261023.md)，不再沿用上轮停止指令。实现改为最终 point 原生渲染、上边缘固定的壳体路径、按实际内容分别测量两翼，并缩小展开设计宽高。详细变更、自动与实机结果集中于[build6 修正记录](u02-refinement-20261023.md)。U02保持 `in progress`，原 T01–T40、公开 build4 设备矩阵、SDK 1.0.0 和历史 build5 结果分别保留。
+
+## 2026-10-24 U02 实机反馈与展开尺寸继续修正（build7，当前）
+
+[本轮实机记录](u02-manual-20261024.md)保存 build6 在真实 2560×1664 下的观察：用户确认“清晰，但整体仍偏大”，因此仅该档位清晰度获主观确认，尺寸不通过，M-U02-A / B / C 均不能关闭；build6 已正常退出。当前继续未发布的 **App 0.6.0 / 开发 build7**，以 `expandedDensity = 0.88` 将展开最终宽高各比 build6 减少12%，保留 canonical Host 预算、compact 相机 scale 及最终 point 原生绘制。build7最终全量1148项：1145通过、3跳过、0失败，普通Release成功；6项原生输入均通过。144张模拟图已生成并校验，抽查6张；新实机尺寸/清晰度反馈及其余成组验收仍待确认；不沿用 build6 的通过数字或此前延期指令作为当前状态。U02 与 U02-07–10 仍为 `in progress`，公开 build4 设备矩阵及原里程碑保持原范围。
 
 ## Phase 0 — 准备阶段：项目审计、分支与基线
 
@@ -199,4 +203,4 @@ DI-B02 标为 **passed**，设备矩阵现为 **1 passed / 8 pending**。分辨�
 | ID | 任务 | 状态 | 安排与验收 |
 | --- | --- | --- | --- |
 | U01 | 工具菜单越界与展开保持 | `verified` | [实现与验收记录](u01-tool-menu-20261020.md)：第三版固定 2 秒返回宽限、原 30Hz `.common` 采样及到期物理位置复核。96 项定向、普通 Release / 签名通过；用户确认底部工具返回保持与正常离开重开清理，日志佐证到期 inside=true。本轮实测 End / Return 访问最底部、按钮更新、Esc / 点外取消及音乐 / 拖盘 / 内置计时切换通过，副本正常退出、Staging 为空。范围为当前设备实际七项菜单；两次自动滚轮未观察内容变化，不单独记滚轮通过，前两轮失败和唯一根因未确诊的记录保留。 |
-| U02 | 全分辨率自适应 | `in progress` | [计划与实施状态](u02-resolution-adaptation-plan-20261022.md)：当前为未发布的 App 0.6.0 / 开发 build6，继续修正 U02-07–10 的两翼宽度、展开大小、清晰度与贴顶动画，详见[修正记录](u02-refinement-20261023.md)。build5 的大小统一反馈、自动结果和停止点保留于[原实施记录](u02-resolution-adaptation-20261023.md)；本轮最终v4为1144 total / 1135 passed / 9 skipped / 0 failures，Release成功；144图生成、20图抽查与源码审查完成。6项锁定会话输入和真实屏幕确认按用户要求保留在[人工清单 M-U02-A–C](MANUAL_ACCEPTANCE.md)。公开 build4 / B02 来源、原 T01–T40 与独立人工门槛保留；当前未发布、未验收，不标 verified。 |
+| U02 | 全分辨率自适应 | `in progress` | [计划与实施状态](u02-resolution-adaptation-plan-20261022.md)：当前为未发布的 App 0.6.0 / 开发 build7；build6 在真实2560×1664获用户确认清晰，但整体尺寸不通过，详见[本轮实机与继续记录](u02-manual-20261024.md)。build7 采用 expandedDensity 0.88 继续缩小展开最终宽高；build7最终全量1148项：1145通过、3跳过、0失败，普通Release成功；6项原生输入均通过。144张模拟图已生成并校验，抽查6张；新实机尺寸/清晰度反馈及其余成组验收仍待确认，M-U02-A–C 未关闭。build5 的大小统一反馈及停止点、build6 的历史自动数字分别保留于[原实施记录](u02-resolution-adaptation-20261023.md)与[build6修正记录](u02-refinement-20261023.md)。公开 build4 / B02 来源、原 T01–T40、SDK 1.0.0 与独立人工门槛保留；当前未发布、未验收，不标 verified。 |

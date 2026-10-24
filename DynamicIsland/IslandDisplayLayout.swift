@@ -1,6 +1,6 @@
 import CoreGraphics
 
-/// One transform from the Host's design points to the active display's points.
+/// Resolves native drawing points for the compact and denser expanded surfaces.
 /// The physical camera area changes its logical height when macOS scaling changes;
 /// the backing scale only controls raster density and is not a layout multiplier.
 public struct IslandDisplayLayout: Equatable, Sendable {
@@ -8,6 +8,8 @@ public struct IslandDisplayLayout: Equatable, Sendable {
 
     public let scale: CGFloat
     public let compactSize: CGSize
+
+    public var expandedScale: CGFloat { scale * IslandVisualStyle.expandedDensity }
 
     public var designCompactSize: CGSize { unscaled(compactSize) }
     public var panelSize: CGSize { scaled(IslandPanelGeometry.expandedSize) }
@@ -42,6 +44,12 @@ public struct IslandDisplayLayout: Equatable, Sendable {
 
     public func scaled(_ size: CGSize) -> CGSize {
         CGSize(width: size.width * scale, height: size.height * scale)
+    }
+
+    /// Lay out expanded glyphs and controls directly at their final point size;
+    /// this does not introduce a bitmap or a second view transform.
+    public func scaledExpanded(_ size: CGSize) -> CGSize {
+        CGSize(width: size.width * expandedScale, height: size.height * expandedScale)
     }
 
     public func unscaled(_ size: CGSize) -> CGSize {

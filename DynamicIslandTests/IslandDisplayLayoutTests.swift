@@ -48,8 +48,35 @@ final class IslandDisplayLayoutTests: XCTestCase {
 
         for layout in layouts {
             XCTAssertEqual(layout.scale, 0.875, accuracy: 0.000_001)
+            XCTAssertEqual(layout.expandedScale, 0.77, accuracy: 0.000_001)
             assertSize(layout.compactSize, equals: CGSize(width: 156, height: 28))
             assertSize(layout.panelSize, equals: CGSize(width: 455, height: 210))
+            assertSize(layout.scaledExpanded(IslandVisualStyle.expandedShellSize),
+                       equals: CGSize(width: 338.8, height: 141.68))
+        }
+    }
+
+    func testExpandedDensityShrinksBothDimensionsWithoutChangingCameraOrPanelAtEveryScale() {
+        XCTAssertEqual(IslandVisualStyle.expandedDensity, 0.88, accuracy: 0.000_001)
+
+        for scale: CGFloat in [0.875, 1, 1.15625, 1.75] {
+            let environment = makeNotchedEnvironment(
+                frame: CGRect(x: 0, y: 0, width: 2560, height: 1600),
+                notchWidth: 179 * scale,
+                notchHeight: 32 * scale
+            )
+            let layout = IslandDisplayLayout(environment: environment)
+
+            XCTAssertEqual(layout.scale, scale, accuracy: 0.000_001)
+            XCTAssertEqual(layout.expandedScale, scale * 0.88, accuracy: 0.000_001)
+            assertSize(layout.scaledExpanded(IslandVisualStyle.expandedShellSize),
+                       equals: CGSize(width: 387.2 * scale, height: 161.92 * scale))
+            assertSize(layout.scaled(IslandVisualStyle.expandedShellSize),
+                       equals: CGSize(width: 440 * scale, height: 184 * scale))
+            assertSize(layout.compactSize, equals: CGSize(width: 179 * scale, height: 32 * scale))
+            assertSize(layout.designCompactSize, equals: CGSize(width: 179, height: 32))
+            assertSize(layout.scaled(layout.designCompactSize), equals: layout.compactSize)
+            assertSize(layout.panelSize, equals: CGSize(width: 520 * scale, height: 240 * scale))
         }
     }
 

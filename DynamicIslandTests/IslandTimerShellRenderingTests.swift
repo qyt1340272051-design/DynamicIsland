@@ -125,7 +125,7 @@ final class IslandTimerShellRenderingTests: XCTestCase {
 
             let height = try renderedOpaqueShellHeight(in: hostingView, canvasSize: size)
             XCTAssertLessThanOrEqual(
-                abs(height - Int(expectedHeight)),
+                abs(height - Int(expectedHeight * model.displayLayout.expandedScale)),
                 3,
                 "The outer shell did not follow the \(mode.title) picker selection."
             )
@@ -135,7 +135,8 @@ final class IslandTimerShellRenderingTests: XCTestCase {
     func testTimerControlsFitTheirHostContentBudgetWithoutClipping() async throws {
         // Compare with an unconstrained-height rendering of the same content.
         // A shell-only height assertion would miss clipped time digits/buttons.
-        for scale: CGFloat in [1, 1.75] {
+        for baseScale: CGFloat in [0.875, 1, 1.15625, 1.75] {
+            let scale = baseScale * IslandVisualStyle.expandedDensity
             for (mode, budget) in [(IslandTimerToolMode.stopwatch, CGFloat(86)), (.countdown, CGFloat(124))] {
                 let fitted = try await captureTimerControls(mode: mode, contentHeight: budget, scale: scale)
                 let generous = try await captureTimerControls(mode: mode, contentHeight: 200, scale: scale)
@@ -186,12 +187,19 @@ final class IslandTimerShellRenderingTests: XCTestCase {
     ) async throws -> NSBitmapImageRep {
         let model = IslandTimerToolsModel()
         model.selectedMode = mode
-        let size = CGSize(width: 412 * scale, height: contentHeight * scale)
+        let exactSize = CGSize(width: 412 * scale, height: contentHeight * scale)
+        // Keep the Host's fractional budget, then capture on a fixed 1 px/pt
+        // grid. Flooring 190.96 pt to 190 px would resample only the fitted
+        // image, while the generous 308 pt reference remains at native density.
+        let size = CGSize(width: ceil(exactSize.width), height: ceil(exactSize.height))
         let hosting = NSHostingView(rootView:
             IslandTimerToolsView(model: model, onAcknowledgeCompletion: {})
                 .environment(\.islandLayoutScale, scale)
                 .environment(\.colorScheme, .dark)
                 .transaction { $0.disablesAnimations = true }
+                .frame(width: exactSize.width, height: exactSize.height, alignment: .topLeading)
+                .clipped()
+                .frame(width: size.width, height: size.height, alignment: .topLeading)
         )
         hosting.frame = CGRect(origin: .zero, size: size)
         let window = NSWindow(contentRect: hosting.frame, styleMask: .borderless,
