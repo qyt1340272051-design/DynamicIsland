@@ -12,9 +12,11 @@ final class PluginRegistryTests: XCTestCase {
         let data = try Data(contentsOf: repository.appendingPathComponent("Registry/registry.json"))
         let entries = try PluginRegistryCatalog.decode(data).entries
         let expected = [
-            (id: "com.dynamicisland.pomodoro", name: "番茄钟", version: "0.2.1", archive: "pomodoro-0.2.1.dip",
-             hash: "444647bb7a2f40dc0c66418b62e94210c76f2b890f3df2681c2fd179ce5e25b2"),
+            (id: "com.dynamicisland.pomodoro", name: "番茄钟", version: "0.3.0", archive: "pomodoro-0.3.0.dip",
+             tag: "plugins-pomodoro-0.3.0", minimumHost: "0.6.1",
+             hash: "f18c2fca287926f0e043f776fb574ea88144b8fdda916ae41c286782da7a3e4b"),
             (id: "com.dynamicisland.github", name: "GitHub", version: "0.1.0", archive: "github-0.1.0.dip",
+             tag: "plugins-0.6.0", minimumHost: "0.6.0",
              hash: "5a090cbc251b48d34ffed3bd82d8fd5ff42214e7c6386b769e1ba70477bae0fa")
         ]
         XCTAssertEqual(entries.count, expected.count)
@@ -25,8 +27,8 @@ final class PluginRegistryTests: XCTestCase {
             XCTAssertEqual(entry.name, specification.name)
             XCTAssertEqual(entry.version.description, specification.version)
             XCTAssertEqual(entry.source.absoluteString, source)
-            XCTAssertEqual(entry.download.absoluteString, source + "/releases/download/plugins-0.6.0/" + specification.archive)
-            XCTAssertEqual(entry.minHostVersion.description, "0.6.0")
+            XCTAssertEqual(entry.download.absoluteString, source + "/releases/download/" + specification.tag + "/" + specification.archive)
+            XCTAssertEqual(entry.minHostVersion.description, specification.minimumHost)
             XCTAssertEqual(entry.hash, specification.hash)
         }
     }

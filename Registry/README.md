@@ -6,10 +6,10 @@
 
 | 插件 | 版本 | 最低 Host | 声明权限 |
 | --- | --- | --- | --- |
-| 番茄钟 | 0.2.1 | 0.6.0 | `storage.local` |
+| 番茄钟 | 0.3.0 | 0.6.1 | `storage.local` |
 | GitHub | 0.1.0 | 0.6.0 | `network`、`storage.local`、`links.open` |
 
-包、完整性清单、许可和行为范围见 [plugins-0.6.0 预发布](https://github.com/qyt1340272051-design/DynamicIsland/releases/tag/plugins-0.6.0)。每款 `.dip` 精确包含 Manifest、JavaScript、README 和完整 MIT LICENSE。SHA-256 对应当前公开归档字节，不能沿用较早候选包的授权身份。
+番茄钟新版见 [pomodoro 0.3.0 预发布](https://github.com/qyt1340272051-design/DynamicIsland/releases/tag/plugins-pomodoro-0.3.0)，采用内置计时样式，需要 Host 0.6.1（开发构建 build15 或更新）。刷新目录后应显示 0.3.0，旧版 0.6.0 Host 会显示不兼容。GitHub 包、完整性清单、许可和行为范围见 [plugins-0.6.0 预发布](https://github.com/qyt1340272051-design/DynamicIsland/releases/tag/plugins-0.6.0)。每款 `.dip` 精确包含 Manifest、JavaScript、README 和完整 MIT LICENSE。SHA-256 对应当前公开归档字节，不能沿用较早候选包的授权身份。
 
 在兼容 Host 的「插件管理 → 发现」中点击「刷新目录」，再选择「下载并查看」。下载会核对摘要、归档安全与实际 Manifest；仍须核对预览并确认安装。安装后保持停用，启用不自动批准任何权限。未知权限默认拒绝，包身份改变后需要重新确认。目录本身不是开发者身份或许可证明。
 
