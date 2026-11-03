@@ -4,11 +4,11 @@
     {
       "id": "com.dynamicisland.pomodoro",
       "name": "番茄钟",
-      "version": "0.3.0",
-      "download": "https://github.com/qyt1340272051-design/DynamicIsland/releases/download/plugins-pomodoro-0.3.0/pomodoro-0.3.0.dip",
+      "version": "0.3.1",
+      "download": "https://github.com/qyt1340272051-design/DynamicIsland/releases/download/plugins-pomodoro-0.3.1/pomodoro-0.3.1.dip",
       "source": "https://github.com/qyt1340272051-design/DynamicIsland",
       "minHostVersion": "0.6.1",
-      "hash": "f18c2fca287926f0e043f776fb574ea88144b8fdda916ae41c286782da7a3e4b"
+      "hash": "125f4c58b6439cd2721aaed4b0487ec3de0b2f09d07f83f223008cc354db42b0"
     },
     {
       "id": "com.dynamicisland.github",
