@@ -12,9 +12,9 @@ final class PluginRegistryTests: XCTestCase {
         let data = try Data(contentsOf: repository.appendingPathComponent("Registry/registry.json"))
         let entries = try PluginRegistryCatalog.decode(data).entries
         let expected = [
-            (id: "com.dynamicisland.pomodoro", name: "番茄钟", version: "0.3.0", archive: "pomodoro-0.3.0.dip",
-             tag: "plugins-pomodoro-0.3.0", minimumHost: "0.6.1",
-             hash: "f18c2fca287926f0e043f776fb574ea88144b8fdda916ae41c286782da7a3e4b"),
+            (id: "com.dynamicisland.pomodoro", name: "番茄钟", version: "0.3.1", archive: "pomodoro-0.3.1.dip",
+             tag: "plugins-pomodoro-0.3.1", minimumHost: "0.6.1",
+             hash: "125f4c58b6439cd2721aaed4b0487ec3de0b2f09d07f83f223008cc354db42b0"),
             (id: "com.dynamicisland.github", name: "GitHub", version: "0.1.0", archive: "github-0.1.0.dip",
              tag: "plugins-0.6.0", minimumHost: "0.6.0",
              hash: "5a090cbc251b48d34ffed3bd82d8fd5ff42214e7c6386b769e1ba70477bae0fa")
