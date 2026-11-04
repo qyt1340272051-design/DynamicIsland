@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "id": "com.dynamicisland.spotify",
+  "name": "Spotify",
+  "developer": "DynamicIsland",
+  "version": "0.1.0",
+  "engine": "javascriptcore",
+  "entry": "index.js",
+  "minimumHostVersion": "0.6.1",
+  "permissions": [
+    "media.read",
+    "media.control"
+  ],
+  "capabilities": [
+    "music.provider"
+  ],
+  "mediaProvider": {
+    "targetBundleIdentifier": "com.spotify.client",
+    "displayName": "Spotify",
+    "helperPath": "media-helper.js",
+    "helperSHA256": "d2288f6e59608d8681c3d3b7a6de3f4725e8e3a87fc995c6c31de45c3022141b"
+  }
+}
