@@ -17,7 +17,13 @@ final class PluginRegistryTests: XCTestCase {
              hash: "125f4c58b6439cd2721aaed4b0487ec3de0b2f09d07f83f223008cc354db42b0"),
             (id: "com.dynamicisland.github", name: "GitHub", version: "0.1.0", archive: "github-0.1.0.dip",
              tag: "plugins-0.6.0", minimumHost: "0.6.0",
-             hash: "5a090cbc251b48d34ffed3bd82d8fd5ff42214e7c6386b769e1ba70477bae0fa")
+             hash: "5a090cbc251b48d34ffed3bd82d8fd5ff42214e7c6386b769e1ba70477bae0fa"),
+            (id: "com.dynamicisland.qq-music", name: "QQ 音乐", version: "0.1.0", archive: "qq-music-0.1.0.dip",
+             tag: "plugins-music-0.1.0", minimumHost: "0.6.1",
+             hash: "4d5abeea4ec84a32447742130fdb7b596b2e1b47492da45da7c10d3a302b4aa4"),
+            (id: "com.dynamicisland.spotify", name: "Spotify", version: "0.1.0", archive: "spotify-0.1.0.dip",
+             tag: "plugins-music-0.1.0", minimumHost: "0.6.1",
+             hash: "23788519eb3d7a203e18e90c8a4ce024cc355206f92489ab138912f5bc5c36d3")
         ]
         XCTAssertEqual(entries.count, expected.count)
         XCTAssertEqual(Set(entries.map(\.id)), Set(expected.map { $0.id }))
