@@ -8,8 +8,12 @@
 | --- | --- | --- | --- |
 | 番茄钟 | 0.3.1 | 0.6.1 | `storage.local` |
 | GitHub | 0.1.0 | 0.6.0 | `network`、`storage.local`、`links.open` |
+| QQ 音乐 | 0.1.0 | 0.6.1（build21+） | `media.read`、`media.control` |
+| Spotify | 0.1.0 | 0.6.1（build21+） | `media.read`、`media.control` |
 
-番茄钟新版见 [pomodoro 0.3.1 预发布](https://github.com/qyt1340272051-design/DynamicIsland/releases/tag/plugins-pomodoro-0.3.1)，采用番茄红计时主题，移除预设提示并将高度对齐内置倒计时，需要 Host 0.6.1（开发构建 build20 或更新）。刷新目录后应显示 0.3.1，旧版 0.6.0 Host 会显示不兼容。GitHub 包、完整性清单、许可和行为范围见 [plugins-0.6.0 预发布](https://github.com/qyt1340272051-design/DynamicIsland/releases/tag/plugins-0.6.0)。每款 `.dip` 精确包含 Manifest、JavaScript、README 和完整 MIT LICENSE。SHA-256 对应当前公开归档字节，不能沿用较早候选包的授权身份。
+番茄钟新版见 [pomodoro 0.3.1 预发布](https://github.com/qyt1340272051-design/DynamicIsland/releases/tag/plugins-pomodoro-0.3.1)，采用番茄红计时主题，移除预设提示并将高度对齐内置倒计时，需要 Host 0.6.1（开发构建 build20 或更新）。刷新目录后应显示 0.3.1，旧版 0.6.0 Host 会显示不兼容。GitHub 包、完整性清单、许可和行为范围见 [plugins-0.6.0 预发布](https://github.com/qyt1340272051-design/DynamicIsland/releases/tag/plugins-0.6.0)。每款 `.dip` 包含 Manifest、JavaScript、README 和完整 MIT LICENSE；媒体包另含固定目标的 `media-helper.js`。SHA-256 对应当前公开归档字节，不能沿用较早候选包的授权身份。
+
+QQ 音乐与 Spotify 的安装包见 [plugins-music-0.1.0 预发布](https://github.com/qyt1340272051-design/DynamicIsland/releases/tag/plugins-music-0.1.0)，源码与范围见 [QQ 音乐](../docs/plugin-system/examples/qq-music/README.md)和 [Spotify](../docs/plugin-system/examples/spotify/README.md)。需要含对应 helper 可信摘要的开发 Host 0.6.1/build21 或更新版本；当前公开的 0.6.0 App 不支持，旧 0.6.1 build 也可能无法启用。清单最低版本字段不支持 build 号。两项媒体权限独立授权，控制需对应客户端持有当前活动媒体会话；私有系统接口兼容性和真实客户端播放控制仍待验收。本次只发布插件，不发布或升级主程序。
 
 在兼容 Host 的「插件管理 → 发现」中点击「刷新目录」，再选择「下载并查看」。下载会核对摘要、归档安全与实际 Manifest；仍须核对预览并确认安装。安装后保持停用，启用不自动批准任何权限。未知权限默认拒绝，包身份改变后需要重新确认。目录本身不是开发者身份或许可证明。
 

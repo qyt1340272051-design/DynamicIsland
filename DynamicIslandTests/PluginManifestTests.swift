@@ -372,18 +372,38 @@ final class PluginManifestTests: XCTestCase {
         let schemaData = try Data(contentsOf: root.appendingPathComponent("docs/plugin-system/schema/plugin-manifest-v1.schema.json"))
         let schema = try XCTUnwrap(JSONSerialization.jsonObject(with: schemaData) as? [String: Any])
         let properties = try XCTUnwrap(schema["properties"] as? [String: Any])
+        let supportsMediaProvider = properties["mediaProvider"] != nil
         let examples = root.appendingPathComponent("docs/plugin-system/examples")
         let directories = try FileManager.default.contentsOfDirectory(at: examples, includingPropertiesForKeys: nil)
         var checked = 0
         for directory in directories {
             let url = directory.appendingPathComponent("manifest.json")
             guard FileManager.default.fileExists(atPath: url.path) else { continue }
-            let manifest = try PluginManifest.decodeJSON(Data(contentsOf: url))
-            for (field, values) in ["permissions": manifest.permissions.map(\.rawValue),
-                                    "capabilities": manifest.capabilities.map(\.rawValue)] {
+            let data = try Data(contentsOf: url)
+            let object = try XCTUnwrap(JSONSerialization.jsonObject(with: data) as? [String: Any])
+            let permissions = try XCTUnwrap(object["permissions"] as? [String])
+            let capabilities = try XCTUnwrap(object["capabilities"] as? [String])
+            for (field, values) in ["permissions": permissions, "capabilities": capabilities] {
                 let property = try XCTUnwrap(properties[field] as? [String: Any])
                 XCTAssertLessThanOrEqual(values.count, try XCTUnwrap(property["maxItems"] as? Int),
                                          "\(directory.lastPathComponent): \(field)")
+            }
+            if object["mediaProvider"] != nil && !supportsMediaProvider {
+                // New examples may be published beside an older Host. Keep
+                // checking their array budgets and require fail-closed parsing.
+                XCTAssertEqual(object["minimumHostVersion"] as? String, "0.6.1")
+                XCTAssertEqual(object["engine"] as? String, "javascriptcore")
+                XCTAssertNotNil(object["mediaProvider"] as? [String: Any])
+                XCTAssertEqual(permissions.count, 2)
+                XCTAssertEqual(Set(permissions), ["media.read", "media.control"])
+                XCTAssertEqual(capabilities, ["music.provider"])
+                XCTAssertThrowsError(try PluginManifest.decodeJSON(data)) { error in
+                    XCTAssertEqual(error as? PluginManifestError, .unknownField("mediaProvider"))
+                }
+            } else {
+                let manifest = try PluginManifest.decodeJSON(data)
+                XCTAssertEqual(manifest.permissions.map(\.rawValue), permissions)
+                XCTAssertEqual(manifest.capabilities.map(\.rawValue), capabilities)
             }
             checked += 1
         }
