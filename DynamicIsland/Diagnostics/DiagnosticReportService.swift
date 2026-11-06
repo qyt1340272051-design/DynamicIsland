@@ -58,7 +58,8 @@ final class DiagnosticReportService {
                 isPanelVisible: isPanelVisible,
                 isMusicPlaying: viewModel.isPlaying,
                 timerSession: viewModel.compactTimerMode?.rawValue ?? "none",
-                trayItemCount: viewModel.trayItems.count
+                trayItemCount: viewModel.trayItems.count,
+                displayLayoutScale: viewModel.displayLayout.scale
             )
         )
     }

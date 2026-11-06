@@ -1,0 +1,40 @@
+{
+  "build": 7,
+  "productionInputsSha256": "b84b51bdf809b8747029a16b0d21c78bd79124cb3cd673b1d490402f60dcad49",
+  "firstFull": {
+    "total": 1148,
+    "skipped": 3,
+    "failed": 1,
+    "reason": "Fitted timer screenshot used fractional points with floored pixels; native sampling differed from reference"
+  },
+  "timerAfterCaptureFix": {
+    "total": 3,
+    "passed": 3,
+    "skipped": 0,
+    "failed": 0,
+    "clippingThresholdUnchanged": true
+  },
+  "finalFull": {
+    "total": 1148,
+    "passed": 1145,
+    "skipped": 3,
+    "failed": 0,
+    "releaseBuild": "success",
+    "nativeInputChecks": "all six passed",
+    "skipReasons": [
+      "two opt-in live-network tests",
+      "snapshot matrix generated explicitly"
+    ]
+  },
+  "matrix": {
+    "generated": 144,
+    "selectedReviewed": 6
+  },
+  "physical": {
+    "build6HighResolutionUserFeedback": "清晰，但整体仍偏大",
+    "build7HighResolutionUserFeedback": "pending",
+    "A": "in progress",
+    "B": "in progress",
+    "C": "pending continuous evidence"
+  }
+}

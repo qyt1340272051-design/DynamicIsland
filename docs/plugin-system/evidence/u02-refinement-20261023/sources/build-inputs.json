@@ -1,0 +1,494 @@
+{
+  "sha256": "94df028d8953b45fbbfa7edbb1762de030f997776f134ff66bebfa21ef30267a",
+  "scope": "DynamicIsland files plus project.pbxproj; file-list source fingerprint",
+  "files": [
+    {
+      "path": "DynamicIsland/Assets.xcassets/AccentColor.colorset/Contents.json",
+      "sha256": "9af65086fa30b49252fae1a1225731691de794f7775af74d71befeb507d12b7c"
+    },
+    {
+      "path": "DynamicIsland/Assets.xcassets/AppIcon.appiconset/AppIcon-128.png",
+      "sha256": "feda6a0972a421e74f7341b0f2b53d47b245c26d87d1bc44b4d6d907d056aed8"
+    },
+    {
+      "path": "DynamicIsland/Assets.xcassets/AppIcon.appiconset/AppIcon-128@2x.png",
+      "sha256": "8c09162b9d214553e2883e215b381a7cf1601ba15c550413867d1105b1acc619"
+    },
+    {
+      "path": "DynamicIsland/Assets.xcassets/AppIcon.appiconset/AppIcon-16.png",
+      "sha256": "4f203954c3a7fbb68eb033f839d94b9bd5a80234c54a3fcd85c9011928e2035b"
+    },
+    {
+      "path": "DynamicIsland/Assets.xcassets/AppIcon.appiconset/AppIcon-16@2x.png",
+      "sha256": "69be13d41728d060740237673447b1a5a5903127911e4b26121395723a15a7d6"
+    },
+    {
+      "path": "DynamicIsland/Assets.xcassets/AppIcon.appiconset/AppIcon-256.png",
+      "sha256": "8c09162b9d214553e2883e215b381a7cf1601ba15c550413867d1105b1acc619"
+    },
+    {
+      "path": "DynamicIsland/Assets.xcassets/AppIcon.appiconset/AppIcon-256@2x.png",
+      "sha256": "c25e7ae7ec0c2a5c8ef88e99e1bd6e3e32897ec0299bfc7c8c540142d5a0d5bf"
+    },
+    {
+      "path": "DynamicIsland/Assets.xcassets/AppIcon.appiconset/AppIcon-32.png",
+      "sha256": "69be13d41728d060740237673447b1a5a5903127911e4b26121395723a15a7d6"
+    },
+    {
+      "path": "DynamicIsland/Assets.xcassets/AppIcon.appiconset/AppIcon-32@2x.png",
+      "sha256": "de2aaa29aebf83fcf76ac79f55c21f315da8813cca9667c1b8450ad21291863f"
+    },
+    {
+      "path": "DynamicIsland/Assets.xcassets/AppIcon.appiconset/AppIcon-512.png",
+      "sha256": "c25e7ae7ec0c2a5c8ef88e99e1bd6e3e32897ec0299bfc7c8c540142d5a0d5bf"
+    },
+    {
+      "path": "DynamicIsland/Assets.xcassets/AppIcon.appiconset/AppIcon-512@2x.png",
+      "sha256": "c9c1b9c42c581620674675b10772db9618f90938778c28b8eaf02638e250d485"
+    },
+    {
+      "path": "DynamicIsland/Assets.xcassets/AppIcon.appiconset/Contents.json",
+      "sha256": "ad82ac1bd28aa32ea2488349bfb0e8493fea8439aad7cb151bd6be57d2d2eda5"
+    },
+    {
+      "path": "DynamicIsland/Assets.xcassets/Contents.json",
+      "sha256": "0fd49ba3c3585c709678e0046a821c3c60685ec7063720d30d3a3448be3a208b"
+    },
+    {
+      "path": "DynamicIsland/Compatibility/SuperIslandAdapter/SuperIslandModuleBootstrap.swift",
+      "sha256": "395f417225592359cc310207a825609ba1d1e8ce5ef22d5dd0b5ef9bae04ec35"
+    },
+    {
+      "path": "DynamicIsland/Compatibility/SuperIslandAdapter/SuperIslandModuleConverter.swift",
+      "sha256": "b67f833511776cafbf02a161326c912c6ae60c19cff1cea8491fa113685ae5f1"
+    },
+    {
+      "path": "DynamicIsland/Compatibility/SuperIslandAdapter/SuperIslandViewConverter.swift",
+      "sha256": "38137c11cadf9b0544ec31aeb7ec6f5f6c2aa965626fca4416a9cf0cd9f8d387"
+    },
+    {
+      "path": "DynamicIsland/ContentView.swift",
+      "sha256": "a18b6097cdfa0e6bb6750fae0bd9bccdb8ec777f87aebe0544794ca6a077eaa1"
+    },
+    {
+      "path": "DynamicIsland/Core/Activity/ActivityDebugPanel.swift",
+      "sha256": "a87fd759523aeda945bed93b7f17875d0968b84bbd6a04572cb2c853841fb0fd"
+    },
+    {
+      "path": "DynamicIsland/Core/Activity/ActivityLifecycle.swift",
+      "sha256": "3e8f1edacf2c1b97b9b1ab1c40b8f908cba236505121bf1a340a84a6b3c46f07"
+    },
+    {
+      "path": "DynamicIsland/Core/Activity/ActivityManager.swift",
+      "sha256": "48af3c3997b4ab467a236e77d97e9b2301c22881fba7043219ce2c893bf81687"
+    },
+    {
+      "path": "DynamicIsland/Core/Activity/ActivityPriority.swift",
+      "sha256": "ae057a822b3196ff2156f2b52bbf073586d3faf98c1afb47d286d73403c7c76f"
+    },
+    {
+      "path": "DynamicIsland/Core/Activity/ActivityQueue.swift",
+      "sha256": "dafe89483db291f8e04bf21cd46c488675c4f3bb2e8055c1be63cc7beb1e32de"
+    },
+    {
+      "path": "DynamicIsland/Core/Activity/ActivityScheduler.swift",
+      "sha256": "9b4f5c748df7512c1f8c2f668b85ad73fe4d149b20d51c68be8f5ba4e2c22250"
+    },
+    {
+      "path": "DynamicIsland/Core/Activity/BatteryActivityProvider.swift",
+      "sha256": "a281bb0494baa707da9f66890b345c82813e75df866d7ec295306666cf0b2d2e"
+    },
+    {
+      "path": "DynamicIsland/Core/Activity/IslandActivity.swift",
+      "sha256": "8256cc0dbb3ea9d7bfcb9f8fe14bd8954712be7e5afb10f322b99ad83a9e231f"
+    },
+    {
+      "path": "DynamicIsland/Core/Activity/IslandActivityRuntime.swift",
+      "sha256": "87860ff9e46df65e589cbb3fcaa3561a2007010b359037995169ea9c5d67bc42"
+    },
+    {
+      "path": "DynamicIsland/Core/Activity/MusicActivityProvider.swift",
+      "sha256": "6e880bae737cedebdecddfde7da75fb90a409536616d3dc73ca1ac22d1601e99"
+    },
+    {
+      "path": "DynamicIsland/Core/Activity/PresentationRequest.swift",
+      "sha256": "8e59c46061d071ae134acd69a61648d8829360adcb2d008eeb3e1366f7130d46"
+    },
+    {
+      "path": "DynamicIsland/Core/Activity/VolumeActivityProvider.swift",
+      "sha256": "8bb2a8c930370cf7fef4474c4c30dca2c9e9e24d2f457602ba7f615ebfee26a1"
+    },
+    {
+      "path": "DynamicIsland/Diagnostics/DiagnosticReport.swift",
+      "sha256": "5b8699b753fc58087c7fc33482dc6352db4c51bb91ccee8ed106a02230839b8a"
+    },
+    {
+      "path": "DynamicIsland/Diagnostics/DiagnosticReportService.swift",
+      "sha256": "a5012894e7799ddcfa144d307888eab68fd82ae1946b48258c71a434f38077fa"
+    },
+    {
+      "path": "DynamicIsland/DynamicIsland.entitlements",
+      "sha256": "054d0c7bae7db148b23877e71b1fc743d77f62c856e8f08322ebd93ad843b39b"
+    },
+    {
+      "path": "DynamicIsland/DynamicIslandApp.swift",
+      "sha256": "9c9e183cab31ff76ae5fe2478cc90d262c26b2d9cd91d7395a98e0288ed529ba"
+    },
+    {
+      "path": "DynamicIsland/Info.plist",
+      "sha256": "c72acb4221dda1626d53d1af61a0b9385dcf08f64be3b2f06cb1fd11766a4b8c"
+    },
+    {
+      "path": "DynamicIsland/IslandCompactLayout.swift",
+      "sha256": "ecc007cf9a1a8fac9622a0f4be69c1a3d39c0d60fb63b85e1fbf6d18d159eda3"
+    },
+    {
+      "path": "DynamicIsland/IslandCompactPlaybackAnimation.swift",
+      "sha256": "cb1541f33055357413819142de3a974c83a5524c596b31c56bf48bf56f1013d9"
+    },
+    {
+      "path": "DynamicIsland/IslandCountdownDurationAnimation.swift",
+      "sha256": "33d014e784a6ba8048fcb8789d6b01a06c41336be307fd698b26db4379771965"
+    },
+    {
+      "path": "DynamicIsland/IslandDisplayLayout.swift",
+      "sha256": "3c1e2262c162ad18e4680ab4556cd083b107afb5d9d19b4b6158675f60ab5c08"
+    },
+    {
+      "path": "DynamicIsland/IslandExpansionAnimation.swift",
+      "sha256": "d9be6abcbca93cef4e6176500fcf0ae50855e81de0104786fb9f2b05421fbb38"
+    },
+    {
+      "path": "DynamicIsland/IslandFileTrayAnimation.swift",
+      "sha256": "da191ce9d9662f82bf48946166ed55dde548394ae9475574a44ea3282374bfd2"
+    },
+    {
+      "path": "DynamicIsland/IslandPanelController.swift",
+      "sha256": "baa3dc9d42691df7285d52909bce2ff124071f3620a347690cc2fb79d3088a26"
+    },
+    {
+      "path": "DynamicIsland/IslandPanelFrameUpdatePolicy.swift",
+      "sha256": "71fadcd8ca51cbf7d5cb7bd1857d25b25805736ae0c25c70139fd47109665905"
+    },
+    {
+      "path": "DynamicIsland/IslandPanelGeometry.swift",
+      "sha256": "612b29d0b07ba031878b84942d68d85abb62d5502fb6bba1115252a57fbbb296"
+    },
+    {
+      "path": "DynamicIsland/IslandPanelHoverRegion.swift",
+      "sha256": "631b5d4f0911f8adb1dbbf7029ced3ac514f8f471cedbc07e612c11ced00e51d"
+    },
+    {
+      "path": "DynamicIsland/IslandPanelStabilityMonitor.swift",
+      "sha256": "c8714bf10e58d910f5cf9f97bfc0d8c948611296ac058cea1dcd33cbf38d67d1"
+    },
+    {
+      "path": "DynamicIsland/IslandPanelWindowPolicy.swift",
+      "sha256": "e3f095b5c3895eedcd37a6d1c7689ada771e937d38ab7166b123a9bb3898a66a"
+    },
+    {
+      "path": "DynamicIsland/IslandPlaybackProgressAppearance.swift",
+      "sha256": "e5e7f1c230880c694729faf5534e00b5cd017ce0102c0f26d2a13c9681347504"
+    },
+    {
+      "path": "DynamicIsland/IslandQuitAnimation.swift",
+      "sha256": "7a38aedc1c35108da586e74efc9552d3a1f4b6429abcd8c4cfc0f65146dc5ec7"
+    },
+    {
+      "path": "DynamicIsland/IslandSurfaceTransition.swift",
+      "sha256": "9dbd3df36e26da3905e9abc13b987ca1a9926c2a11ad3ddb9c3c100f7f44f44a"
+    },
+    {
+      "path": "DynamicIsland/IslandTimerModePicker.swift",
+      "sha256": "5baac776838eb2405135117fe9a1c9de4edb4fffe9d39a7eedce8d9ce8258a2f"
+    },
+    {
+      "path": "DynamicIsland/IslandTimerModeTransition.swift",
+      "sha256": "44e7abac997d7b887403390afe6f46bea6099d9c366c03ab5a9970dac768b2a5"
+    },
+    {
+      "path": "DynamicIsland/IslandTimerToolsModel.swift",
+      "sha256": "2f83e4eee2f3124df9c8dc4d56d20ef7325c5ba7d80b332b4b14d0dd6ac33df7"
+    },
+    {
+      "path": "DynamicIsland/IslandTimerToolsView.swift",
+      "sha256": "6e599a4ad949d80d59cd4f3917345e073e4ab40c5e0f88de4ef706018fe0f68f"
+    },
+    {
+      "path": "DynamicIsland/IslandToolMenu.swift",
+      "sha256": "2d16723f1ef7bc1d8ae507c3af21d324b19b81c1c6025233353b1783cbefd3fc"
+    },
+    {
+      "path": "DynamicIsland/IslandTrackSkipAnimation.swift",
+      "sha256": "c79d4a14ff2c148b8aa32d8c86619c677b7a20066d329bff6de13dac72cd16bb"
+    },
+    {
+      "path": "DynamicIsland/IslandUI/ActionRouter.swift",
+      "sha256": "118974c57a8438af0c586db2c4cff5063c285d900b0c9821196767673ba88e50"
+    },
+    {
+      "path": "DynamicIsland/IslandUI/ActivityPresentationPolicy.swift",
+      "sha256": "2de3dad239b8e8eb436998003c2d3ff4058884fddb2142d4935341b117283f6d"
+    },
+    {
+      "path": "DynamicIsland/IslandUI/BatteryProgressView.swift",
+      "sha256": "8080b0cb1bce66aa0fefe217d00e3dda4a52b85660b5bc11570b9d5c5580c952"
+    },
+    {
+      "path": "DynamicIsland/IslandUI/DesignTokens.swift",
+      "sha256": "4e068f3ede344bd0866decee0e04213352b49c26c210f4b5ffef0a15507eea98"
+    },
+    {
+      "path": "DynamicIsland/IslandUI/IslandCountdownDisplayClock.swift",
+      "sha256": "ecd3e22dc24c73eee80b3d86432ece1a6fadd892e82982c176c0b404617e9a6b"
+    },
+    {
+      "path": "DynamicIsland/IslandUI/IslandCountdownNodeView.swift",
+      "sha256": "91b02f9897e2d3b143b09d67a8181105fdf33537fd27778666115a0e830903ba"
+    },
+    {
+      "path": "DynamicIsland/IslandUI/IslandLayoutEnvironment.swift",
+      "sha256": "292c67ff151fd70c63d2ef61283f54f80ad7f474dadd028e880a36b0384d76eb"
+    },
+    {
+      "path": "DynamicIsland/IslandUI/IslandRenderer.swift",
+      "sha256": "885dc63f70672aea3cfe924f01310102ddff4bef3d903c32d7139e75a0fa9a4e"
+    },
+    {
+      "path": "DynamicIsland/IslandUI/Schema/IslandNode.swift",
+      "sha256": "ba9bda9dce9a85699b6bb1711ebbb7bf9cf150d4498d2c0add3177a51dfae2f4"
+    },
+    {
+      "path": "DynamicIsland/IslandView.swift",
+      "sha256": "972fa07ee6f85faa9613f1ea9f0eec3c571ccf52908f5a4fc678619f121c91e3"
+    },
+    {
+      "path": "DynamicIsland/IslandViewModel.swift",
+      "sha256": "d34a02944ae009c465d5271cefd69a5c9eab518c32cf7981797c1ed0c704ee64"
+    },
+    {
+      "path": "DynamicIsland/IslandVisualStyle.swift",
+      "sha256": "5023df046e85aef9dfde94f5ed848e50cf744bc90857fe359b25e5e78fed2687"
+    },
+    {
+      "path": "DynamicIsland/IslandVolumeAnimation.swift",
+      "sha256": "f7a984053262bd352fa04bea67d3d3de0868e9f6799ff9a4b4aaac61d5dd8b4e"
+    },
+    {
+      "path": "DynamicIsland/Plugins/PluginActionSession.swift",
+      "sha256": "176375af1a09b141e3390dbf7b39e9f9edde93f7e104a9ae234c32325c314b36"
+    },
+    {
+      "path": "DynamicIsland/Plugins/PluginActivityConverter.swift",
+      "sha256": "06df058d004e39435c8c230320a3d147207a98ab8bdae76688f6adc17a46fdab"
+    },
+    {
+      "path": "DynamicIsland/Plugins/PluginActivityRateLimiter.swift",
+      "sha256": "16e4ce20161f1c03ccfbd9a4d476595a446874ffe0b1d22e9ac7f6a4c83044fb"
+    },
+    {
+      "path": "DynamicIsland/Plugins/PluginBridgeJSON.swift",
+      "sha256": "eee68f9cc8c57f55950cfcc11c0b6168a5160d987388c76658266903da89b78c"
+    },
+    {
+      "path": "DynamicIsland/Plugins/PluginBridgeTransport.swift",
+      "sha256": "a35992279f4bc54cb74e1bfcd466183889cb027dd0529211ec3ac292bd6a0a82"
+    },
+    {
+      "path": "DynamicIsland/Plugins/PluginClipboardBroker.swift",
+      "sha256": "8ae3ec88aa9784705f7f456d9ee1e373bda4acf422d678fcc1373c3f31a55b7a"
+    },
+    {
+      "path": "DynamicIsland/Plugins/PluginCompatibilitySnapshot.swift",
+      "sha256": "157271d0017eae6f7e4db64cdd5bc6004d4029806502433c029e0d8f4556487e"
+    },
+    {
+      "path": "DynamicIsland/Plugins/PluginCountdownBroker.swift",
+      "sha256": "053e76bf6535b7122999d4a5d5b5f1df1fc189f08719835add64e44f542c9df5"
+    },
+    {
+      "path": "DynamicIsland/Plugins/PluginCountdownDisplay.swift",
+      "sha256": "e275bafa6bed29c172971fa81d6ca8c634647a74729f583036d2b49a7d0ea74c"
+    },
+    {
+      "path": "DynamicIsland/Plugins/PluginCountdownSession.swift",
+      "sha256": "eb90d7af9991ec8115817bc765d2937778e57ac242bcc8bc990f2fdaa7d22dfa"
+    },
+    {
+      "path": "DynamicIsland/Plugins/PluginCountdownWire.swift",
+      "sha256": "bee4027a6d89a82fc14b76cfab9f5291fff1b8d1f4a7f5847a2c3f48b309da65"
+    },
+    {
+      "path": "DynamicIsland/Plugins/PluginCrashWatchdog.swift",
+      "sha256": "a09b171cafe5c683ea6e585ff2c5bff089951bad97b55aea87bd98b956d7a849"
+    },
+    {
+      "path": "DynamicIsland/Plugins/PluginDiagnostics.swift",
+      "sha256": "59860a2af47b57eed6618ecdca49ed481681613ab6350a5f76f4fb606a8d4b59"
+    },
+    {
+      "path": "DynamicIsland/Plugins/PluginDiagnosticsUI.swift",
+      "sha256": "ddd4b7bd30807b28c7a5cdc71cae253274e43e5fc9de65fe2165752320bafeac"
+    },
+    {
+      "path": "DynamicIsland/Plugins/PluginExtensionsModel.swift",
+      "sha256": "bbb3f4b1a2df19ba6cc98ab1305dc4687bef90f3a60edb320645be9fdaf8ec79"
+    },
+    {
+      "path": "DynamicIsland/Plugins/PluginExtensionsUI.swift",
+      "sha256": "4301c28627b2184d1dc06b5595f6b80d1ba7ba8d9063f41ca1173f4f65bce527"
+    },
+    {
+      "path": "DynamicIsland/Plugins/PluginFileBroker.swift",
+      "sha256": "c684e65dd56c719fe7fce6a389a2e6d1056f9a394a227abdc59fc150a3a43f49"
+    },
+    {
+      "path": "DynamicIsland/Plugins/PluginInstaller.swift",
+      "sha256": "5e366497870c4db298afa4287707aba285b84de11e72ae80b4e679b0378349a2"
+    },
+    {
+      "path": "DynamicIsland/Plugins/PluginInstallerUI.swift",
+      "sha256": "74df2a48b0445dd6e047be3255ec5032f434743612a8c23cb531899e13d52fa6"
+    },
+    {
+      "path": "DynamicIsland/Plugins/PluginIslandNodeConverter.swift",
+      "sha256": "d4e3ff39fc4518cb3a52d20cba0bf7d5cd6d5c1c4451d58342cd9175a4cea9cd"
+    },
+    {
+      "path": "DynamicIsland/Plugins/PluginJSBridge.swift",
+      "sha256": "3488c484834927b427c3c59867f9a8ed33c9c7aae5e11b449a943adbab9cd381"
+    },
+    {
+      "path": "DynamicIsland/Plugins/PluginJSBridgeBootstrap.swift",
+      "sha256": "adc7644efeed5f233de967ea095922411fabb1446ec2ccaafc1938f5e13c3f59"
+    },
+    {
+      "path": "DynamicIsland/Plugins/PluginLifecycle.swift",
+      "sha256": "9980dd2925b4ada51e4e779127e141c6aa1bb8ed6a5b3cb0f479dcac42b807b4"
+    },
+    {
+      "path": "DynamicIsland/Plugins/PluginLifecycleBridge.swift",
+      "sha256": "464493dfe11dcfe95fb17c139152b134e7935fdd5391f82e88ce444118671a04"
+    },
+    {
+      "path": "DynamicIsland/Plugins/PluginLifecycleEnvironment.swift",
+      "sha256": "dbf8459770d74f59330ce0acc124cb716e9abcb580c202efd1fbfe0e20b1f5b9"
+    },
+    {
+      "path": "DynamicIsland/Plugins/PluginLinkBroker.swift",
+      "sha256": "b68b692f7944d282c0b7b203580c1eef1e620298184bdb7ba10e08e8ee899340"
+    },
+    {
+      "path": "DynamicIsland/Plugins/PluginManager.swift",
+      "sha256": "f66aa8f94cb61da6fc84ac4829f1d8aa4cf561f6529d85c844947a0e07af2443"
+    },
+    {
+      "path": "DynamicIsland/Plugins/PluginManifest.swift",
+      "sha256": "ae1e0d5fb39ea91de180e501297a396575332a4feba046f5cce3a9487b285c74"
+    },
+    {
+      "path": "DynamicIsland/Plugins/PluginNetworkBroker.swift",
+      "sha256": "46657de5f3f49e5244ecd2f62e77d6ab02a9e562648fc5151a3bc4c8fc659075"
+    },
+    {
+      "path": "DynamicIsland/Plugins/PluginPackageArchive.swift",
+      "sha256": "d57e2b6c3ccdd1b56fb1248d7913534e2f4c52b68395bc388c2809808c6da72a"
+    },
+    {
+      "path": "DynamicIsland/Plugins/PluginPermissionDecisionStore.swift",
+      "sha256": "406627f383c5afc2ca4191eeb40c5ff64f2691d210af97abee642b462cfcaaff"
+    },
+    {
+      "path": "DynamicIsland/Plugins/PluginPermissionManager.swift",
+      "sha256": "e5850930af9dd9f46b64116c26c52414e42df59f90a91b0684fbaa033277dd61"
+    },
+    {
+      "path": "DynamicIsland/Plugins/PluginRegistry.swift",
+      "sha256": "f3813c2de66b0fd540fb2f158fc120edfc4ddc9cbacf9f4fdb4a9547c92415cc"
+    },
+    {
+      "path": "DynamicIsland/Plugins/PluginRegistryClient.swift",
+      "sha256": "c289b3a304ec439047f82e3c7b86d09ceff192e5a9a6912fe83dc67c7a81ce71"
+    },
+    {
+      "path": "DynamicIsland/Plugins/PluginRegistryUI.swift",
+      "sha256": "bdfee10581dfa5a7d7ae37c5ff6b1536c0da2c2017fccf65ee93d934ff21420c"
+    },
+    {
+      "path": "DynamicIsland/Plugins/PluginRuntime.swift",
+      "sha256": "31febca64dd6dca32dd7b4860655404830c54d92d0d0c1060b04837aac6534f4"
+    },
+    {
+      "path": "DynamicIsland/Plugins/PluginScheduler.swift",
+      "sha256": "16275ea01feaa8b56d0d6bf8ac1dd4b12d4cdaf7f27f3f6c0258ca7d81728d7c"
+    },
+    {
+      "path": "DynamicIsland/Plugins/PluginSchedulerEnvironment.swift",
+      "sha256": "6efb969f09d19416e9641e1b79b1759151991b8309417ea0bb446c81dc232d33"
+    },
+    {
+      "path": "DynamicIsland/Plugins/PluginStorage.swift",
+      "sha256": "e881f9e96df61f10457f5cb6552a9fd74137f833d2fa710db49a2da4410602d5"
+    },
+    {
+      "path": "DynamicIsland/Plugins/PluginValidator.swift",
+      "sha256": "641cb282d932b8ebe99f2a8d1840b4ac9ebeee4b605bba8684187ca0137452b7"
+    },
+    {
+      "path": "DynamicIsland/Plugins/SemanticVersion.swift",
+      "sha256": "6d24fdc9129f98ce8d09047c884c3be40619e8febe4297cc61ea391e71b47b36"
+    },
+    {
+      "path": "DynamicIsland/ScreenEnvironment.swift",
+      "sha256": "4e0fe70a8ff6d5a6101935cabb586fb7e2e7d12a02610c95bf854d85c1ebf491"
+    },
+    {
+      "path": "DynamicIsland/ScreenManager.swift",
+      "sha256": "64c6cadcbb3b1add9b3c01ddb126a0a2d964e0d374cf5ff53f0e6467929ab50e"
+    },
+    {
+      "path": "DynamicIsland/ScreenSelectionPolicy.swift",
+      "sha256": "776515556b59025c2dfb723919a107c57be993ffe192cd154e0085b1a6961ce4"
+    },
+    {
+      "path": "DynamicIsland/ScreenSimulator.swift",
+      "sha256": "8e86d3e3d710acee2cf05d552c1b15519ec388777619464060d252d26879c948"
+    },
+    {
+      "path": "DynamicIsland/Services/AirDropSharingService.swift",
+      "sha256": "89974b3a3cd10edfdf221a78f4f7440e7708ad62d076534c56c125f7918a0b3f"
+    },
+    {
+      "path": "DynamicIsland/Services/AppleMusicControlService.swift",
+      "sha256": "d4d324711bcf136132618dbabfe3c74bc537bc1695552df377c0b623fe9e2ce1"
+    },
+    {
+      "path": "DynamicIsland/Services/BatteryService.swift",
+      "sha256": "6da02c06dba2cfae6e69283bfecb9a23afd24c785c2ed037f7d1505efb5e9e79"
+    },
+    {
+      "path": "DynamicIsland/Services/FileTrayService.swift",
+      "sha256": "62317013b4e10b3bac074ebd243c02a5cdd61a9225bb05e45468e4b116a4e47e"
+    },
+    {
+      "path": "DynamicIsland/Services/HapticFeedbackService.swift",
+      "sha256": "300d238c67aeca064ea8d96d0a20947cb83c112ff352be06a07d2469ae2acfaf"
+    },
+    {
+      "path": "DynamicIsland/Services/MusicControlService.swift",
+      "sha256": "93e99d96f75dacd1f081f2e15d2cb67e0b13bf5673bf094ddb4a7d6ff6ad88c9"
+    },
+    {
+      "path": "DynamicIsland/Services/VolumeService.swift",
+      "sha256": "2db5deb7418c2ff4060b2bbf58ff0a0853053932325b622654d5aab163c97097"
+    },
+    {
+      "path": "DynamicIsland/SimulatedScreenProfile.swift",
+      "sha256": "4278583d09cb9f8833045c002b952caf819c151b41bf03c07438787d6ded2940"
+    },
+    {
+      "path": "DynamicIsland.xcodeproj/project.pbxproj",
+      "sha256": "2c1a0ef59cced70c0cf5727a061330d16807b9c362c3dba3c9bfd559f451dced"
+    }
+  ]
+}

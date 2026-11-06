@@ -1,0 +1,88 @@
+{
+  "schemaVersion": 1,
+  "dateLocal": "2026-10-23",
+  "status": "in progress; follow-up work deferred at user request",
+  "scope": "Original source receipts and 1470 App-window captures only. Simulated payloads have their own archive manifest. User desktop attachment retained privately.",
+  "files": [
+    {
+      "path": "sources/1470-diagnostic-user-report.txt",
+      "bytes": 1144,
+      "sha256": "905a2bc4a1c1b1f449ab81bf3c5c4dcefaecf14260051d7ed5140e06586af613"
+    },
+    {
+      "path": "sources/1470-selected.txt",
+      "bytes": 123,
+      "sha256": "38de2a4c35b296c8f530eeae03161dd16c6722618fc3e8c12a6a83dbadeede75"
+    },
+    {
+      "path": "sources/acceptance-bundle.json",
+      "bytes": 474,
+      "sha256": "b9e392d3d356b7770371e83ebcc931f04788977ee7edb4c6a3e3439bbf9ef0de"
+    },
+    {
+      "path": "sources/automated-results.json",
+      "bytes": 17513,
+      "sha256": "ef32602da3528696dc7c69f716d306ef85e9a5a22e87977cf9ba29bcaae5f96d"
+    },
+    {
+      "path": "sources/original-resolution.txt",
+      "bytes": 159,
+      "sha256": "d5d2215c55e5d3ac946a6a9d21f1c4385f3662cc77be37037acb469283b6f717"
+    },
+    {
+      "path": "sources/session.json",
+      "bytes": 1047,
+      "sha256": "84549d5e33ea49f7fef609b6c3f848c9ba57a02103f5ad425efe3200564be4c2"
+    },
+    {
+      "path": "sources/ui-blocker.json",
+      "bytes": 260,
+      "sha256": "32f324ad6c936aa269f9273ceae375b93b94e5547e45821defd53de17c7a1a80"
+    },
+    {
+      "path": "sources/user-feedback-20261023.json",
+      "bytes": 1195,
+      "sha256": "e174c1b0aadf9882e2227326ecd24c0f155d0d59f40074368bb674899a8c68d2"
+    },
+    {
+      "path": "captures/1470-expanded-countdown.jpg",
+      "bytes": 42192,
+      "sha256": "4a1c3b73b41846b787dd3f2a32b7206a5161a9ecc139b39ad07322799ecb544b"
+    },
+    {
+      "path": "captures/1470-expanded-countdown.txt",
+      "bytes": 866,
+      "sha256": "b186cc98700a7eab9dae1f27b3224f8093ac18476237d2223706f85ee73ff786"
+    },
+    {
+      "path": "captures/1470-expanded-music.jpg",
+      "bytes": 37492,
+      "sha256": "c7b62a94822a1c7907feb41b26702267504a225c6f637bf1186a36ac3a70a035"
+    },
+    {
+      "path": "captures/1470-expanded-music.txt",
+      "bytes": 960,
+      "sha256": "2cd60bae10cf6256001dd25c6cc55002f6fccb3034edb08789ca51167283ce7e"
+    },
+    {
+      "path": "captures/1470-expanded-stopwatch.jpg",
+      "bytes": 34543,
+      "sha256": "420da651b74978ea87bfc71562295ec9c2ac3cb43e8df99760398e01f5b0d329"
+    },
+    {
+      "path": "captures/1470-expanded-stopwatch.txt",
+      "bytes": 644,
+      "sha256": "2ecf5f2f161239b0eabf452edd496161382b167e1ff76c3cd868f518c228ea44"
+    },
+    {
+      "path": "captures/1470-expanded-tray.jpg",
+      "bytes": 30669,
+      "sha256": "7c617c2d0a0488acacbf96691939e693e2b2b4472ef10d75eb3904e668c1258c"
+    },
+    {
+      "path": "captures/1470-expanded-tray.txt",
+      "bytes": 528,
+      "sha256": "e7e580e5b13abb65017f0c84c75adac9352c6332b7a7dfcd3f323c78a5f434b4"
+    }
+  ]
+}

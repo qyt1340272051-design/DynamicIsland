@@ -1,0 +1,37 @@
+{
+  "dateLocal": "2026-10-23",
+  "resolutionSizeConsistencyUserConfirmed": true,
+  "physicalModesIndividuallyDocumented": false,
+  "reportedExampleResolution": "2560x1664",
+  "reportedIssues": [
+    {
+      "id": "U02-07",
+      "status": "pending",
+      "title": "收起两翼过宽，需紧贴刘海"
+    },
+    {
+      "id": "U02-08",
+      "status": "pending",
+      "title": "展开岛体偏大，适度降低宽高"
+    },
+    {
+      "id": "U02-09",
+      "status": "pending",
+      "title": "高分辨率文字与图标模糊，渲染清晰度需随显示环境适配"
+    },
+    {
+      "id": "U02-10",
+      "status": "pending",
+      "title": "高分辨率展开膨胀动画与屏幕顶部出现缝隙"
+    }
+  ],
+  "userRequestedStopAndDeferImplementation": true,
+  "u02Accepted": false,
+  "image": {
+    "originalFilename": "截屏2026-10-23 上午11.42.54.png",
+    "published": false,
+    "bytes": 334118,
+    "sha256": "d9fd815bea0d49044536e496fd9402cddeea37379e16b4896d9bd8dab8fadea0"
+  },
+  "imageBoundary": "User screenshot is retained privately with desktop content; no original image is published. Gap is user reported, not independently measured from animation frames."
+}

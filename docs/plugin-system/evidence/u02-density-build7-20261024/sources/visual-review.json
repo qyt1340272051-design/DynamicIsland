@@ -1,0 +1,17 @@
+{
+  "selectedReviewed": [
+    "resolution-1470-measured/expanded-music.png",
+    "resolution-1280-measured/expanded-tools-countdown.png",
+    "resolution-1710-synthetic/expanded-file-tray.png",
+    "resolution-2560-backing1-synthetic/expanded-music.png",
+    "resolution-2560-backing1-synthetic/expanded-tools-countdown.png",
+    "resolution-2560-backing1-synthetic/expanded-file-tray.png"
+  ],
+  "count": 6,
+  "observations": [
+    "No visible page-content cropping in reviewed images",
+    "Selected expanded shells remain at the static top edge",
+    "Full matrix is simulated evidence; does not replace physical display acceptance"
+  ],
+  "expandedDensity": 0.88
+}

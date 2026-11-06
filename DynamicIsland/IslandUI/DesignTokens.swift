@@ -1,3 +1,4 @@
+import AppKit
 import CoreGraphics
 import SwiftUI
 
@@ -37,7 +38,21 @@ public enum IslandDesignTokens {
     /// Semantic text styles allow the system to respond to larger text settings.
     /// The renderer remains responsible for truncation and accessibility labels
     /// within the island's fixed physical bounds.
-    public static func font(for token: IslandTypographyToken) -> Font {
+    public static func font(for token: IslandTypographyToken, scale: CGFloat = 1) -> Font {
+        let scale = normalizedLayoutScale(scale)
+        guard scale == 1 else {
+            let typography: (style: NSFont.TextStyle, weight: Font.Weight, design: Font.Design)
+            switch token {
+            case .caption: typography = (.caption2, .medium, .default)
+            case .body: typography = (.caption1, .regular, .default)
+            case .headline: typography = (.subheadline, .semibold, .default)
+            case .title: typography = (.headline, .semibold, .default)
+            case .metric: typography = (.title1, .semibold, .monospaced)
+            }
+            let preferredSize = NSFont.preferredFont(forTextStyle: typography.style, options: [:]).pointSize
+            return .system(size: preferredSize * scale, weight: typography.weight, design: typography.design)
+        }
+        // Retain the existing semantic styles at the reference scale.
         switch token {
         case .caption: return .system(.caption2, weight: .medium)
         case .body: return .system(.caption, weight: .regular)
@@ -47,30 +62,41 @@ public enum IslandDesignTokens {
         }
     }
 
-    public static func spacing(_ token: IslandSpacingToken) -> CGFloat {
+    public static func spacing(_ token: IslandSpacingToken, scale: CGFloat = 1) -> CGFloat {
+        let value: CGFloat
         switch token {
-        case .xs: return 4
-        case .sm: return 8
-        case .md: return 12
-        case .lg: return 16
+        case .xs: value = 4
+        case .sm: value = 8
+        case .md: value = 12
+        case .lg: value = 16
         }
+        return value * normalizedLayoutScale(scale)
     }
 
-    public static func cornerRadius(_ token: IslandCornerRadiusToken) -> CGFloat {
+    public static func cornerRadius(_ token: IslandCornerRadiusToken, scale: CGFloat = 1) -> CGFloat {
+        let value: CGFloat
         switch token {
-        case .sm: return 6
-        case .md: return 10
+        case .sm: value = 6
+        case .md: value = 10
         }
+        return value * normalizedLayoutScale(scale)
     }
 
-    /// Album art keeps the existing 124 pt Host surface size. The smaller
-    /// icon role follows the current presentation mode.
-    public static func imageSide(_ token: IslandImageSizeToken, mode: ActivityPresentation.Mode) -> CGFloat {
+    /// The smaller expanded Host uses 112 design points for album art. The
+    /// native image is resolved directly at the final display-point size.
+    public static func imageSide(_ token: IslandImageSizeToken, mode: ActivityPresentation.Mode,
+                                 scale: CGFloat = 1) -> CGFloat {
+        let value: CGFloat
         switch token {
-        case .icon: return mode == .expanded ? 20 : 16
-        case .thumbnail: return 26
-        case .artwork: return 124
+        case .icon: value = mode == .expanded ? 20 : 16
+        case .thumbnail: value = 26
+        case .artwork: value = 112
         }
+        return value * normalizedLayoutScale(scale)
+    }
+
+    static func normalizedLayoutScale(_ scale: CGFloat) -> CGFloat {
+        scale.isFinite && scale > 0 ? scale : 1
     }
 
     /// The app's island shell is black in both system appearances. Resolve text

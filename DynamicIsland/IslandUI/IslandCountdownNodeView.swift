@@ -22,6 +22,7 @@ struct IslandCountdownNodeView: View {
     let isVisible: Bool
     let resolve: (IslandNode.Countdown) -> IslandCountdownDisplayValue?
     @ObservedObject var clock: IslandCountdownDisplayClock
+    @Environment(\.islandLayoutScale) private var layoutScale
     @State private var consumer = UUID()
 
     var body: some View {
@@ -31,7 +32,7 @@ struct IslandCountdownNodeView: View {
             switch reference.style {
             case .time:
                 Text(value?.text ?? "--:--")
-                    .font(IslandDesignTokens.font(for: mode == .expanded ? .metric : .caption))
+                    .font(IslandDesignTokens.font(for: mode == .expanded ? .metric : .caption, scale: layoutScale))
                     .monospacedDigit()
                     .foregroundStyle(tint)
                     .lineLimit(1)
@@ -41,6 +42,7 @@ struct IslandCountdownNodeView: View {
             case .progress:
                 ProgressView(value: value?.progress ?? 0)
                     .progressViewStyle(.linear)
+                    .controlSize(layoutScale >= 1.5 ? .large : .regular)
                     .tint(tint)
                     .accessibilityLabel("Countdown progress")
                     .accessibilityValue(value.map { "\(Int(($0.progress * 100).rounded())) percent" } ?? "Unavailable")

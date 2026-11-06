@@ -1,3 +1,4 @@
+import AppKit
 import CoreGraphics
 import SwiftUI
 import XCTest
@@ -24,10 +25,8 @@ final class IslandDesignTokensTests: XCTestCase {
     }
 
     func testSpacingAndCornerRadiiUseFiniteHostValues() {
-        XCTAssertEqual(IslandSpacingToken.allCases.map(IslandDesignTokens.spacing), [4, 8, 12, 16])
-        XCTAssertEqual(IslandCornerRadiusToken.allCases.map(IslandDesignTokens.cornerRadius), [6, 10])
-        XCTAssertEqual(IslandDesignTokens.spacing(.md), IslandVisualStyle.expandedContentPadding)
-        XCTAssertEqual(IslandDesignTokens.spacing(.sm), IslandVisualStyle.expandedSurfaceSpacing)
+        XCTAssertEqual(IslandSpacingToken.allCases.map { IslandDesignTokens.spacing($0) }, [4, 8, 12, 16])
+        XCTAssertEqual(IslandCornerRadiusToken.allCases.map { IslandDesignTokens.cornerRadius($0) }, [6, 10])
     }
 
     func testCompactAndExpandedBoundsFollowExistingHostGeometry() {
@@ -35,7 +34,7 @@ final class IslandDesignTokensTests: XCTestCase {
         XCTAssertEqual(IslandDesignTokens.imageSide(.icon, mode: .compact), 16)
         XCTAssertEqual(IslandDesignTokens.imageSide(.icon, mode: .expanded), 20)
         XCTAssertEqual(IslandDesignTokens.imageSide(.thumbnail, mode: .compact), 26)
-        XCTAssertEqual(IslandDesignTokens.imageSide(.artwork, mode: .expanded), 124)
+        XCTAssertEqual(IslandDesignTokens.imageSide(.artwork, mode: .expanded), 112)
         let compactBase = CGSize(width: 270, height: 32)
         XCTAssertEqual(
             IslandDesignTokens.compactShellSize(baseSize: compactBase, hasCompactActivity: false, hasActiveTimer: false),
@@ -100,6 +99,45 @@ final class IslandDesignTokensTests: XCTestCase {
             IslandDesignTokens.resolvedColor(for: .accent, colorScheme: .dark, contrast: .standard),
             IslandDesignTokens.resolvedColor(for: .accent, colorScheme: .light, contrast: .standard)
         )
+    }
+
+    @MainActor
+    func testReferenceTypographyPreservesSemanticStylesAndScaledFontsUseFinalPoints() {
+        let mappings: [(IslandTypographyToken, Font, NSFont.TextStyle, Font.Weight, Font.Design)] = [
+            (.caption, .system(.caption2, weight: .medium), .caption2, .medium, .default),
+            (.body, .system(.caption, weight: .regular), .caption1, .regular, .default),
+            (.headline, .system(.subheadline, weight: .semibold), .subheadline, .semibold, .default),
+            (.title, .system(.headline, weight: .semibold), .headline, .semibold, .default),
+            (.metric, .system(.title, design: .monospaced, weight: .semibold), .title1, .semibold, .monospaced)
+        ]
+        for (token, semantic, style, weight, design) in mappings {
+            XCTAssertEqual(IslandDesignTokens.font(for: token), semantic)
+            for scale in [CGFloat(0.875), 1.75] {
+                let finalPointSize = NSFont.preferredFont(forTextStyle: style, options: [:]).pointSize * scale
+                XCTAssertEqual(IslandDesignTokens.font(for: token, scale: scale),
+                               .system(size: finalPointSize, weight: weight, design: design), token.rawValue)
+            }
+        }
+    }
+
+    func testLayoutEnvironmentDefaultsAndRejectsInvalidMultipliers() {
+        var environment = EnvironmentValues()
+        XCTAssertEqual(environment.islandLayoutScale, 1)
+        environment.islandLayoutScale = 1.75
+        XCTAssertEqual(environment.islandLayoutScale, 1.75)
+        for invalid in [CGFloat.nan, .infinity, 0, -1] {
+            environment.islandLayoutScale = invalid
+            XCTAssertEqual(environment.islandLayoutScale, 1)
+        }
+    }
+
+    func testHostTokenDimensionsResolveDirectlyToFinalPoints() {
+        for scale in [CGFloat(0.875), 1, 1.75] {
+            XCTAssertEqual(IslandDesignTokens.spacing(.sm, scale: scale), 8 * scale)
+            XCTAssertEqual(IslandDesignTokens.cornerRadius(.md, scale: scale), 10 * scale)
+            XCTAssertEqual(IslandDesignTokens.imageSide(.artwork, mode: .expanded, scale: scale), 112 * scale)
+            XCTAssertEqual(IslandDesignTokens.imageSide(.icon, mode: .compact, scale: scale), 16 * scale)
+        }
     }
 
     private func assertFiniteCodable<Token: Codable & CaseIterable & RawRepresentable & Equatable>(

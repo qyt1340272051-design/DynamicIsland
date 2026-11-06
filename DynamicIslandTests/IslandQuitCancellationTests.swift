@@ -64,25 +64,28 @@ final class IslandQuitCancellationTests: XCTestCase {
             + IslandQuitAnimation.fadeWaitNanoseconds))
     }
 
-    // The production 468 pt content canvas is centered in the 520 pt panel;
-    // its switcher has 12 pt padding, 28 pt controls and 8 pt HStack spacing.
+    // The smaller expanded canvas is centered in the unchanged panel. Native
+    // input must target final drawing points, not the canonical Host canvas.
+    private var expandedScale: CGFloat { IslandDisplayLayout().expandedScale }
+
     private var contentLeading: CGFloat {
-        (IslandPanelGeometry.expandedSize.width - IslandVisualStyle.expandedContentSize.width) / 2
-            + IslandVisualStyle.expandedContentPadding
+        (IslandPanelGeometry.expandedSize.width
+            - IslandVisualStyle.expandedContentSize.width * expandedScale) / 2
+            + IslandVisualStyle.expandedContentPadding * expandedScale
     }
 
     private var quitButtonCenter: CGPoint {
         CGPoint(x: IslandPanelGeometry.expandedSize.width - contentLeading
-                    - IslandVisualStyle.expandedSurfaceSwitcherHeight / 2,
-                y: IslandVisualStyle.expandedContentPadding
-                    + IslandVisualStyle.expandedSurfaceSwitcherHeight / 2)
+                    - IslandVisualStyle.expandedSurfaceSwitcherHeight * expandedScale / 2,
+                y: (IslandVisualStyle.expandedContentPadding
+                    + IslandVisualStyle.expandedSurfaceSwitcherHeight / 2) * expandedScale)
     }
 
     private func surfaceButtonCenter(index: Int) -> CGPoint {
-        CGPoint(x: contentLeading + IslandVisualStyle.expandedSurfaceSwitcherHeight / 2
-                    + CGFloat(index) * (IslandVisualStyle.expandedSurfaceSwitcherHeight + 8),
-                y: IslandVisualStyle.expandedContentPadding
-                    + IslandVisualStyle.expandedSurfaceSwitcherHeight / 2)
+        CGPoint(x: contentLeading + IslandVisualStyle.expandedSurfaceSwitcherHeight * expandedScale / 2
+                    + CGFloat(index) * (IslandVisualStyle.expandedSurfaceSwitcherHeight + 8) * expandedScale,
+                y: (IslandVisualStyle.expandedContentPadding
+                    + IslandVisualStyle.expandedSurfaceSwitcherHeight / 2) * expandedScale)
     }
 
     private func makeFixture() async throws -> QuitCancellationFixture {

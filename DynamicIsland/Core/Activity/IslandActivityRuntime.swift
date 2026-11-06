@@ -148,22 +148,25 @@ public final class IslandActivityRuntime {
         return !IslandRenderer.resolvedNode(in: presentation, for: .compact).countdownReferences.isEmpty
     }
 
-    /// The compact shell and pointer region share timer clearance and the
-    /// native Battery/Volume wing layouts selected by the current Activity.
-    public func compactShellSize(forBaseSize baseSize: CGSize) -> CGSize {
-        let layout: IslandVisualStyle.CompactActivityLayout
-        if currentActivityUsesBatteryCompactLayout { layout = .battery }
-        else if currentActivityUsesVolumeCompactLayout { layout = .volume }
-        else { layout = .standard }
+    /// One content budget drives both rendering and the physical pointer region.
+    /// Only the outer shell moves; the camera gap remains anchored to the screen.
+    public func compactLayout(forBaseSize baseSize: CGSize) -> IslandCompactLayout {
         let hasCompactActivity = isCompactActivityVisible
         let hasNativeTimer = viewModel?.compactTimerMode != nil
             && !(prioritizesCurrentActivityOverLegacyContent && hasCompactActivity)
-        return IslandVisualStyle.compactShellSize(
-            baseSize: baseSize,
-            hasCompactActivity: hasCompactActivity,
-            hasActiveTimer: currentActivityUsesCountdownCompactLayout || hasNativeTimer,
-            activityLayout: layout
-        )
+        if hasNativeTimer, let viewModel {
+            return .nativeTimer(baseSize: baseSize, textWidth: viewModel.compactTimerTextWidth)
+        }
+        guard let presentation = manager.currentSnapshot?.activity.presentation,
+              presentation.isCompactVisible else { return IslandCompactLayout(baseSize: baseSize) }
+        return .activity(baseSize: baseSize, presentation: presentation,
+                         reservesPercentageWidth: currentActivityUsesBatteryCompactLayout
+                            || currentActivityUsesVolumeCompactLayout)
+    }
+
+    /// Compatibility entry point for callers that only need the visible size.
+    public func compactShellSize(forBaseSize baseSize: CGSize) -> CGSize {
+        compactLayout(forBaseSize: baseSize).size
     }
 
     /// The rendered shell and the panel's pointer region share all inputs.
