@@ -580,7 +580,9 @@ final class IslandRendererTests: XCTestCase {
     }
 
     private func render<Content: View>(_ content: Content, size: CGSize) throws -> NSBitmapImageRep {
-        let hostingView = NSHostingView(rootView: content.environment(\.colorScheme, .dark))
+        // Pixel assertions read a 1x bitmap, so match it on any display scale.
+        let hostingView = NSHostingView(rootView: content.environment(\.colorScheme, .dark)
+            .environment(\.displayScale, 1))
         hostingView.frame = CGRect(origin: .zero, size: size)
         let window = makeWindow(hostingView)
         defer { window.close() }

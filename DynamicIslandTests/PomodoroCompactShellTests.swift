@@ -27,6 +27,8 @@ final class PomodoroCompactShellTests: XCTestCase {
             let hosting = NSHostingView(rootView: IslandView(viewModel: fixture.model, activityRuntime: fixture.runtime)
                 .defaultAppStorage(defaults)
                 .environment(\.colorScheme, .dark)
+                // Pixel assertions read a 1x bitmap, so match it on any display scale.
+                .environment(\.displayScale, 1)
                 .transaction { $0.disablesAnimations = true }
                 .background(Color(red: 0.18, green: 0.22, blue: 0.24)))
             hosting.frame = CGRect(origin: .zero, size: size)
@@ -318,8 +320,9 @@ private final class CompactShellFixture {
             let index = try XCTUnwrap(presets.firstIndex(of: current))
             let next = presets[index + (current < preset ? 1 : -1)]
             // Use the actual adjacent +/- controls the official layout exposes.
-            try await act("preset.\(next)")
-            try await wait("preset \(next)") { self.runtime.manager.current?.presentation.subtitle == "\(next) 分钟 · 准备专注" }
+            try await retry("preset.\(next)", label: "preset \(next)") {
+                self.runtime.manager.current?.presentation.subtitle == "\(next) 分钟 · 准备专注"
+            }
         }
         try await act("start")
         try await wait("started \(preset)") { self.runtime.manager.current?.presentation.subtitle == "\(preset) 分钟 · 专注中" }
@@ -349,6 +352,17 @@ private final class CompactShellFixture {
         // The official plugin ignores overlapping user actions while its
         // previous command is in flight; allow the VM acknowledgement to settle.
         try await Task.sleep(for: .milliseconds(50))
+    }
+
+    /// The plugin can drop a preset action while a startup command is in
+    /// flight, so repeat this idempotent action until its state appears.
+    private func retry(_ actionID: String, label: String, until condition: @MainActor () -> Bool) async throws {
+        for _ in 0..<8 {
+            try await act(actionID)
+            for _ in 0..<50 where !condition() { try await Task.sleep(for: .milliseconds(10)) }
+            if condition() { return }
+        }
+        try await wait(label, condition)
     }
 
     private func wait(_ label: String = "ready", _ condition: @MainActor () -> Bool) async throws {
