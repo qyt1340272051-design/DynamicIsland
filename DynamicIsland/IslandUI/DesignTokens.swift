@@ -10,6 +10,7 @@ public nonisolated enum IslandTypographyToken: String, Codable, CaseIterable, Se
     case headline
     case title
     case metric
+    case timer
 }
 
 public nonisolated enum IslandSpacingToken: String, Codable, CaseIterable, Sendable {
@@ -40,6 +41,9 @@ public enum IslandDesignTokens {
     /// within the island's fixed physical bounds.
     public static func font(for token: IslandTypographyToken, scale: CGFloat = 1) -> Font {
         let scale = normalizedLayoutScale(scale)
+        if token == .timer {
+            return .system(size: IslandTimerStyle.timeFontSize * scale, weight: .semibold, design: .monospaced)
+        }
         guard scale == 1 else {
             let typography: (style: NSFont.TextStyle, weight: Font.Weight, design: Font.Design)
             switch token {
@@ -48,6 +52,7 @@ public enum IslandDesignTokens {
             case .headline: typography = (.subheadline, .semibold, .default)
             case .title: typography = (.headline, .semibold, .default)
             case .metric: typography = (.title1, .semibold, .monospaced)
+            case .timer: typography = (.title1, .semibold, .monospaced)
             }
             let preferredSize = NSFont.preferredFont(forTextStyle: typography.style, options: [:]).pointSize
             return .system(size: preferredSize * scale, weight: typography.weight, design: typography.design)
@@ -59,6 +64,7 @@ public enum IslandDesignTokens {
         case .headline: return .system(.subheadline, weight: .semibold)
         case .title: return .system(.headline, weight: .semibold)
         case .metric: return .system(.title, design: .monospaced, weight: .semibold)
+        case .timer: return .system(size: IslandTimerStyle.timeFontSize, weight: .semibold, design: .monospaced)
         }
     }
 
@@ -99,8 +105,8 @@ public enum IslandDesignTokens {
         scale.isFinite && scale > 0 ? scale : 1
     }
 
-    /// The app's island shell is black in both system appearances. Resolve text
-    /// and state colors against that actual surface, and strengthen secondary
+    /// The island uses a dark surface in both system appearances, including
+    /// dark glass. Resolve colors against that surface, and strengthen secondary
     /// text when Increase Contrast is enabled.
     public static func color(
         for token: IslandSemanticColorToken,

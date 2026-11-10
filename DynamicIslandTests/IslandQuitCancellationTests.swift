@@ -7,6 +7,19 @@ import XCTest
 
 @MainActor
 final class IslandQuitCancellationTests: XCTestCase {
+    func testSettingsButtonBesideQuitOpensSettingsWithoutTerminatingOrSwitchingSurface() async throws {
+        let fixture = try await makeFixture(requiresAnimation: false)
+        defer { fixture.cleanup() }
+        let settingsCenter = CGPoint(x: quitButtonCenter.x - (28 + 8) * expandedScale,
+                                     y: quitButtonCenter.y)
+        try await click(fixture, at: settingsCenter)
+        try await waitUntil { fixture.termination.settingsRequests == 1 }
+        XCTAssertEqual(fixture.termination.requests, 0)
+        XCTAssertEqual(fixture.model.expandedSurface, .music)
+        try await click(fixture, at: surfaceButtonCenter(index: 1))
+        try await waitUntil { fixture.model.expandedSurface == .fileTray }
+    }
+
     func testCancelledTerminationRestoresRenderedIslandHitTestingAndAllowsAnotherQuit() async throws {
         let fixture = try await makeFixture()
         defer { fixture.cleanup() }
@@ -88,12 +101,12 @@ final class IslandQuitCancellationTests: XCTestCase {
                     + IslandVisualStyle.expandedSurfaceSwitcherHeight / 2) * expandedScale)
     }
 
-    private func makeFixture() async throws -> QuitCancellationFixture {
+    private func makeFixture(requiresAnimation: Bool = true) async throws -> QuitCancellationFixture {
         if let session = CGSessionCopyCurrentDictionary() as? [String: Any],
            session["CGSSessionScreenIsLocked"] as? Bool == true {
             throw XCTSkip("Real AppKit mouse input requires an unlocked macOS session.")
         }
-        guard !NSWorkspace.shared.accessibilityDisplayShouldReduceMotion else {
+        guard !requiresAnimation || !NSWorkspace.shared.accessibilityDisplayShouldReduceMotion else {
             throw XCTSkip("The animated quit path requires Reduce Motion to be off; the test does not change system settings.")
         }
         let model = IslandViewModel.preview()
@@ -101,7 +114,8 @@ final class IslandQuitCancellationTests: XCTestCase {
         let runtime = IslandActivityRuntime(viewModel: model)
         let termination = QuitCancellationTerminationWitness()
         let view = NSHostingView(rootView: IslandView(viewModel: model, activityRuntime: runtime,
-            requestTermination: { termination.requests += 1 })
+            requestTermination: { termination.requests += 1 },
+            onOpenSettings: { termination.settingsRequests += 1 })
             .environment(\.colorScheme, .dark))
         view.frame = CGRect(origin: .zero, size: IslandPanelGeometry.expandedSize)
         let window = NSPanel(contentRect: view.frame,
@@ -216,6 +230,7 @@ private struct QuitCancellationFixture {
 @MainActor
 private final class QuitCancellationTerminationWitness {
     var requests = 0
+    var settingsRequests = 0
 }
 
 private enum QuitCancellationTestError: Error {

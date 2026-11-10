@@ -3,6 +3,35 @@ import XCTest
 @testable import DynamicIsland
 
 final class IslandNodeTests: XCTestCase {
+    func testIconColorKeepsLegacyEncodingAndRejectsMalformedOptionalFields() throws {
+        let legacy = Data(#"{"symbolName":"timer","type":"icon"}"#.utf8)
+        let directLegacy = Data(#"{"symbolName":"timer"}"#.utf8)
+        let encoder = JSONEncoder()
+        encoder.outputFormatting = .sortedKeys
+        XCTAssertEqual(try IslandNode.decodeJSON(legacy), .icon(.init("timer")))
+        XCTAssertEqual(try JSONDecoder().decode(IslandNode.Icon.self, from: directLegacy).color, .accent)
+        XCTAssertEqual(try encoder.encode(IslandNode.icon(.init("timer"))), legacy)
+        XCTAssertEqual(try encoder.encode(IslandNode.Icon("timer")), directLegacy)
+        XCTAssertEqual(try encoder.encode(IslandNode.icon(.init("timer", color: .accent))), legacy)
+
+        for color in IslandSemanticColorToken.allCases {
+            let icon = IslandNode.Icon("timer", color: color)
+            let tagged = IslandNode.icon(icon)
+            XCTAssertEqual(try IslandNode.decodeJSON(tagged.encodeJSON()), tagged)
+            XCTAssertEqual(try JSONDecoder().decode(IslandNode.Icon.self, from: encoder.encode(icon)), icon)
+        }
+        for invalid in [NSNull(), "#ff6347", "tomato", 7, false, [:], []] as [Any] {
+            let tagged: [String: Any] = ["type": "icon", "symbolName": "timer", "color": invalid]
+            let direct: [String: Any] = ["symbolName": "timer", "color": invalid]
+            XCTAssertThrowsError(try IslandNode.decodeJSON(JSONSerialization.data(withJSONObject: tagged)))
+            XCTAssertThrowsError(try JSONDecoder().decode(IslandNode.Icon.self,
+                from: JSONSerialization.data(withJSONObject: direct)))
+        }
+        XCTAssertThrowsError(try IslandNode.decodeJSON(Data(#"{"type":"icon","symbolName":"timer","width":16}"#.utf8)))
+        XCTAssertThrowsError(try JSONDecoder().decode(IslandNode.Icon.self,
+            from: Data(#"{"symbolName":"timer","width":16}"#.utf8)))
+    }
+
     func testTimerBuildAndMusicSummariesRoundTrip() throws {
         let timer: IslandNode = .vStack(.init([
             .hStack(.init([
@@ -136,11 +165,88 @@ final class IslandNodeTests: XCTestCase {
         XCTAssertTrue(encodedBattery.contains(#""color":"success""#))
     }
 
+    func testTypographyAndButtonDefaultsPreserveLegacyEncoding() throws {
+        let legacyText = Data(#"{"type":"text","content":"Ready"}"#.utf8)
+        let legacyButton = Data(#"{"type":"button","actionID":"start","label":{"type":"text","content":"Ready"}}"#.utf8)
+        for data in [legacyText, legacyButton] {
+            let decoded = try IslandNode.decodeJSON(data)
+            let expected = try XCTUnwrap(JSONSerialization.jsonObject(with: data) as? NSDictionary)
+            XCTAssertEqual(try JSONSerialization.jsonObject(with: decoded.encodeJSON()) as? NSDictionary, expected)
+        }
+        let directText = try JSONDecoder().decode(IslandNode.Text.self, from: Data(#"{"content":"Ready"}"#.utf8))
+        XCTAssertEqual(directText.font, .body)
+        XCTAssertEqual(try JSONSerialization.jsonObject(with: JSONEncoder().encode(directText)) as? NSDictionary,
+                       ["content": "Ready"] as NSDictionary)
+        let directButton = try JSONDecoder().decode(IslandNode.Button.self, from: Data(
+            #"{"actionID":"start","label":{"type":"text","content":"Ready"}}"#.utf8))
+        XCTAssertEqual(directButton.style, .standard)
+        XCTAssertEqual(directButton.color, .accent)
+        XCTAssertTrue(directButton.isEnabled)
+        let fields = try XCTUnwrap(JSONSerialization.jsonObject(with: JSONEncoder().encode(directButton)) as? [String: Any])
+        XCTAssertEqual(Set(fields.keys), ["actionID", "label"])
+        let explicitDefaults = Data(#"{"type":"button","actionID":"start","label":{"type":"text","content":"Ready","font":"body"},"style":"standard","color":"accent","isEnabled":true}"#.utf8)
+        let canonical = try IslandNode.decodeJSON(explicitDefaults).encodeJSON()
+        XCTAssertEqual(try JSONSerialization.jsonObject(with: canonical) as? NSDictionary,
+                       try JSONSerialization.jsonObject(with: legacyButton) as? NSDictionary)
+    }
+
+    func testFiniteTypographyAndButtonAppearanceRoundTripInTaggedAndDirectCodable() throws {
+        for font in IslandTypographyToken.allCases {
+            let text = IslandNode.Text("25:00", color: .secondary, font: font)
+            let node = IslandNode.text(text)
+            XCTAssertEqual(try IslandNode.decodeJSON(node.encodeJSON()), node)
+            XCTAssertEqual(try JSONDecoder().decode(IslandNode.Text.self, from: JSONEncoder().encode(text)), text)
+        }
+        for style in IslandButtonStyleToken.allCases {
+            for color in IslandSemanticColorToken.allCases {
+                for isEnabled in [true, false] {
+                    let button = IslandNode.Button(actionID: "start", label: .text(.init("Start", font: .headline)),
+                                                   accessibilityLabel: "Start focus", style: style,
+                                                   color: color, isEnabled: isEnabled)
+                    let node = IslandNode.button(button)
+                    XCTAssertEqual(try IslandNode.decodeJSON(node.encodeJSON()), node)
+                    XCTAssertEqual(try JSONDecoder().decode(IslandNode.Button.self, from: JSONEncoder().encode(button)), button)
+                }
+            }
+        }
+        let track = IslandNode.progress(.init(0.5, style: .track))
+        XCTAssertEqual(try IslandNode.decodeJSON(track.encodeJSON()), track)
+    }
+
+    func testTypographyAndButtonFieldsRejectUnknownTokensNullsAndBooleanCoercion() throws {
+        let text: [String: Any] = ["type": "text", "content": "25:00"]
+        let button: [String: Any] = ["type": "button", "actionID": "start", "label": text]
+        for (base, key, invalidValues) in [
+            (text, "font", [NSNull(), "26pt", "system", "", 26, true, [:]] as [Any]),
+            (button, "style", [NSNull(), "filled", "", 32, true, [:]] as [Any]),
+            (button, "color", [NSNull(), "#ffffff", "", 1, false, [:]] as [Any]),
+            (button, "isEnabled", [NSNull(), "false", 0, 1, [:], []] as [Any])
+        ] {
+            for invalid in invalidValues {
+                var fields = base
+                fields[key] = invalid
+                let data = try JSONSerialization.data(withJSONObject: fields)
+                XCTAssertThrowsError(try IslandNode.decodeJSON(data), "\(key): \(invalid)")
+                fields.removeValue(forKey: "type")
+                let directData = try JSONSerialization.data(withJSONObject: fields)
+                if key == "font" {
+                    XCTAssertThrowsError(try JSONDecoder().decode(IslandNode.Text.self, from: directData))
+                } else {
+                    XCTAssertThrowsError(try JSONDecoder().decode(IslandNode.Button.self, from: directData))
+                }
+            }
+        }
+    }
+
     func testRejectsUnknownTextAndProgressAppearanceTokens() {
         for json in [
             #"{"type":"text","content":"73%","color":"neon"}"#,
             #"{"type":"progress","value":0.73,"style":"gauge"}"#,
-            #"{"type":"progress","value":0.73,"color":"green"}"#
+            #"{"type":"progress","value":0.73,"color":"green"}"#,
+            #"{"type":"text","content":"73%","color":null}"#,
+            #"{"type":"progress","value":0.73,"style":null}"#,
+            #"{"type":"progress","value":0.73,"color":null}"#,
+            #"{"type":"image","source":{"type":"pluginAsset","id":"cover"},"size":null}"#
         ] {
             XCTAssertThrowsError(try IslandNode.decodeJSON(Data(json.utf8)), json)
         }

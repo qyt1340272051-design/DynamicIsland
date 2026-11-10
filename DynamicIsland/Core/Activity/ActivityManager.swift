@@ -80,6 +80,7 @@ public final class ActivityManager: ObservableObject {
     private var selectedTool: ToolSelection?
     private var requestedPresentation: RequestedPresentation?
     private var presentationRequestsAllowed = false
+    private var presentationRequestSourceEligibility: ((ActivitySource) -> Bool)?
     private var presentationRequestBudgetUsed = false
     private var isReconciling = false
     private var needsReconcile = false
@@ -115,10 +116,15 @@ public final class ActivityManager: ObservableObject {
 
     /// The Host derives this permission from its actual surface, dragging,
     /// locking and completion state. Only a new false-to-true context grants
-    /// another request opportunity; repeated true values never reset it.
-    public func setPresentationRequestsAllowed(_ allowed: Bool) {
+    /// another request opportunity; repeated true values never reset it. The
+    /// optional source predicate confines requests to the visible tool region.
+    public func setPresentationRequestsAllowed(
+        _ allowed: Bool,
+        forSource sourceEligibility: ((ActivitySource) -> Bool)? = nil
+    ) {
         if allowed && !presentationRequestsAllowed { presentationRequestBudgetUsed = false }
         presentationRequestsAllowed = allowed
+        presentationRequestSourceEligibility = sourceEligibility
         if !allowed { requestedPresentation = nil }
         reconcile()
     }
@@ -137,7 +143,8 @@ public final class ActivityManager: ObservableObject {
               toolSnapshots.contains(where: { ToolSelection($0) == selection }) else {
             return .init(status: .rejected, reason: .invalidActivity)
         }
-        guard presentationContext == .expanded, presentationRequestsAllowed else {
+        guard presentationContext == .expanded, presentationRequestsAllowed,
+              presentationRequestSourceEligibility?(activity.source) != false else {
             return .init(status: .rejected, reason: .hostUnavailable)
         }
         guard selectedTool == nil else { return .init(status: .rejected, reason: .userSelection) }
@@ -169,7 +176,8 @@ public final class ActivityManager: ObservableObject {
               toolSnapshots.contains(where: { ToolSelection($0) == selection }) else {
             return .init(status: .rejected, reason: .invalidActivity)
         }
-        guard presentationContext == .expanded, presentationRequestsAllowed else {
+        guard presentationContext == .expanded, presentationRequestsAllowed,
+              presentationRequestSourceEligibility?(currentActivity.source) != false else {
             return .init(status: .rejected, reason: .hostUnavailable)
         }
         guard selectedTool == nil else { return .init(status: .rejected, reason: .userSelection) }
@@ -502,6 +510,7 @@ public final class ActivityManager: ObservableObject {
         }
         if let request = requestedPresentation,
            presentationContext != .expanded || !presentationRequestsAllowed || selectedTool != nil
+            || presentationRequestSourceEligibility?(request.selection.source) == false
             || request.expiresAt <= now
             || !toolSnapshots.contains(where: { ToolSelection($0) == request.selection })
             || hasPresentationBlockingStatus(at: now) {

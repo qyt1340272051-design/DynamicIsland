@@ -108,7 +108,7 @@ public extension ActivityPresentation {
                     && !metrics.hasExpandedOnlyControl
             case .expanded:
                 return metrics.artworkCount <= 1
-                    && metrics.nodeCount <= 32 && metrics.depth <= 5
+                    && metrics.nodeCount <= 32 && metrics.depth <= 6
                     && metrics.maxChildren <= 8 && metrics.verticalRows <= 7
                     && metrics.textBytes <= 512 && metrics.actionCount <= 8
             }
@@ -137,7 +137,8 @@ public extension ActivityPresentation {
                     hasVisibleContent = true
                     // The Host's widest time string is 24:00:00. Neither the
                     // local ID nor generation is displayed as plugin text.
-                    textBytes = value.style == .time ? 8 : 0
+                    textBytes = value.style == .time || value.style == .timer ? 8 : 0
+                    hasExpandedOnlyControl = value.style == .timer || value.style == .track
                 case .image(let value):
                     hasVisibleContent = true
                     artworkCount = value.size == .artwork ? 1 : 0

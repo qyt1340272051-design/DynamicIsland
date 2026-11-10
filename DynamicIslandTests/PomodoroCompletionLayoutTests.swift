@@ -7,9 +7,9 @@ import XCTest
 final class PomodoroCompletionLayoutTests: XCTestCase {
     func testCompletionCompactGlyphsStayInBothWingsOutsidePhysicalNotch() throws {
         let compact: IslandNode = .hStack(.init([
-            .icon(.init("checkmark.circle.fill")),
+            .icon(.init("checkmark.circle.fill", color: .danger)),
             .spacer(.init()),
-            .text(.init("完成"))
+            .text(.init("完成", color: .danger))
         ]))
         let presentation = ActivityPresentation(
             title: "专注完成", subtitle: "本轮专注已结束", symbolName: "checkmark.circle.fill",
@@ -31,6 +31,9 @@ final class PomodoroCompletionLayoutTests: XCTestCase {
             let pixels = glyphPixels(in: bitmap, shellSize: shellSize, notchWidth: baseSize.width)
             XCTAssertGreaterThan(pixels.left, 8, "The completion symbol must remain visible.")
             XCTAssertGreaterThan(pixels.right, 8, "The completion text must remain visible.")
+            let themed = glyphPixels(in: bitmap, shellSize: shellSize, notchWidth: baseSize.width, tomatoOnly: true)
+            XCTAssertGreaterThan(themed.left, 8, "The completion icon must use the tomato-red theme.")
+            XCTAssertGreaterThan(themed.right, 8, "The completion text must use the tomato-red theme.")
             XCTAssertEqual(pixels.center, 0,
                            "Completion paints \(pixels.center) glyph pixels behind the \(Int(baseSize.width))pt camera notch.")
         }
@@ -101,7 +104,7 @@ final class PomodoroCompletionLayoutTests: XCTestCase {
     }
 
     private func glyphPixels(in bitmap: NSBitmapImageRep, shellSize: CGSize,
-                             notchWidth: CGFloat) -> (left: Int, center: Int, right: Int) {
+                             notchWidth: CGFloat, tomatoOnly: Bool = false) -> (left: Int, center: Int, right: Int) {
         let notchStart = Int((shellSize.width - notchWidth) / 2)
         let notchEnd = notchStart + Int(notchWidth)
         var left = 0, center = 0, right = 0
@@ -111,6 +114,9 @@ final class PomodoroCompletionLayoutTests: XCTestCase {
                       color.alphaComponent > 0.1,
                       max(color.redComponent, max(color.greenComponent, color.blueComponent)) > 0.01
                 else { continue }
+                if tomatoOnly && !(color.redComponent > 0.6 && color.greenComponent < 0.55
+                    && color.blueComponent < 0.55 && color.redComponent > color.greenComponent + 0.2
+                    && color.redComponent > color.blueComponent + 0.2) { continue }
                 if x < notchStart { left += 1 }
                 else if x < notchEnd { center += 1 }
                 else { right += 1 }

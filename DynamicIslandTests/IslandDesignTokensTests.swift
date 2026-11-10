@@ -7,7 +7,7 @@ import XCTest
 final class IslandDesignTokensTests: XCTestCase {
     func testTokenVocabulariesRoundTripAndRejectArbitraryValues() throws {
         try assertFiniteCodable(IslandTypographyToken.allCases, expected: [
-            "caption", "body", "headline", "title", "metric"
+            "caption", "body", "headline", "title", "metric", "timer"
         ])
         try assertFiniteCodable(IslandSpacingToken.allCases, expected: [
             "xs", "sm", "md", "lg"

@@ -244,6 +244,7 @@ public final class PluginLifecycleBridge: PluginManagerLifecycleHandling {
     private let actionRouter: ActionRouter
     private let runtimeFactory: RuntimeFactory?
     private let permissions: PermissionManager?
+    private let musicProviders: OptionalMusicProviderRegistry?
     private let watchdog: PluginCrashWatchdog
     private let diagnostics: PluginDiagnosticsStore?
     private var onAutomaticDisable: (@MainActor (ValidatedPluginPackage, PluginCrashIncident) -> Void)?
@@ -257,6 +258,7 @@ public final class PluginLifecycleBridge: PluginManagerLifecycleHandling {
         activityManager: ActivityManager,
         actionRouter: ActionRouter,
         permissions: PermissionManager? = nil,
+        musicProviders: OptionalMusicProviderRegistry? = nil,
         watchdog: PluginCrashWatchdog? = nil,
         diagnostics: PluginDiagnosticsStore? = nil,
         onAutomaticDisable: (@MainActor (ValidatedPluginPackage, PluginCrashIncident) -> Void)? = nil,
@@ -267,6 +269,7 @@ public final class PluginLifecycleBridge: PluginManagerLifecycleHandling {
         self.actionRouter = actionRouter
         self.runtimeFactory = runtimeFactory
         self.permissions = permissions
+        self.musicProviders = musicProviders
         self.watchdog = watchdog ?? PluginCrashWatchdog()
         self.diagnostics = diagnostics
         self.onAutomaticDisable = onAutomaticDisable
@@ -282,6 +285,7 @@ public final class PluginLifecycleBridge: PluginManagerLifecycleHandling {
         self.actionRouter = actionRouter
         self.runtimeFactory = runtimeFactory
         permissions = nil
+        musicProviders = nil
         watchdog = PluginCrashWatchdog()
         diagnostics = nil
         onAutomaticDisable = nil
@@ -324,6 +328,7 @@ public final class PluginLifecycleBridge: PluginManagerLifecycleHandling {
         guard let entry = entries[package.manifest.id], !entry.isEnabled else { return false }
         return watchdog.isCurrent(incident: incident, package: package)
             && entry.package.manifest == package.manifest && entry.package.entrySource == package.entrySource
+            && entry.package.mediaHelperSource == package.mediaHelperSource
     }
 
     public func allowsExecution(id: String) -> Bool {
@@ -464,6 +469,7 @@ public final class PluginLifecycleBridge: PluginManagerLifecycleHandling {
             }
         }
         countdownBroker.shutdown()
+        musicProviders?.shutdown()
     }
 
     /// Rendering may inspect only the current Activity instance and the
@@ -653,10 +659,15 @@ public final class PluginLifecycleBridge: PluginManagerLifecycleHandling {
         activityManager.setPluginSourceEnabled(true, for: entry.source)
         actionRouter.setEnabled(true, for: entry.source)
         do {
-            try runtime.onStart(context: .init(id: entry.package.manifest.id, token: token,
+            let context = PluginExecutionContext(id: entry.package.manifest.id, token: token,
                                              storageAdmission: storageAdmission, networkAdmission: networkAdmission,
                                              resourceAdmission: resourceAdmission, bridge: self,
-                                             countdownOwner: entry.countdownOwner))
+                                             countdownOwner: entry.countdownOwner)
+            try runtime.onStart(context: context)
+            if entry.package.manifest.mediaProvider != nil, let musicProviders, let permissions {
+                try context.perform {}
+                try musicProviders.activate(package: entry.package, context: context, permissions: permissions)
+            }
         } catch {
             guard entry.token == token else { return }
             recordStartFailure(entry)
@@ -693,6 +704,7 @@ public final class PluginLifecycleBridge: PluginManagerLifecycleHandling {
     }
 
     private func endExecution(_ entry: Entry, event: PluginLifecycleEvent, reason: PluginStopReason) {
+        musicProviders?.deactivate(pluginID: entry.package.manifest.id)
         defer { notifyChangeObservers() }
         if let owner = entry.countdownOwner {
             switch reason {

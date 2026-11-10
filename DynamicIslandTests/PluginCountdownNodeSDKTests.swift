@@ -11,7 +11,7 @@ final class PluginCountdownNodeSDKTests: XCTestCase {
             const g='\(CountdownNodeSDKFixture.generation)';
             const layouts=['minimal','compact','expanded'];
             const methods=['publish','update'];
-            const styles=[undefined,'time','progress'];
+            const styles=[undefined,'time','progress','timer','track'];
             for (const layout of layouts) for (const method of methods) for (const style of styles) {
                 const node={type:'countdown',id:'focus-1._',generation:g};
                 if (style!==undefined) node.style=style;
@@ -25,19 +25,19 @@ final class PluginCountdownNodeSDKTests: XCTestCase {
             }
             """)
         let requests = try fixture.requests()
-        XCTAssertEqual(requests.count, 24)
-        for (index, request) in requests.prefix(18).enumerated() {
+        XCTAssertEqual(requests.count, 36)
+        for (index, request) in requests.prefix(30).enumerated() {
             guard case .object(let envelope) = request,
                   case .object(let params) = envelope["params"],
                   case .object(let presentation) = params["presentation"],
-                  case .object(let node) = presentation[["minimal", "compact", "expanded"][index / 6]] else {
+                  case .object(let node) = presentation[["minimal", "compact", "expanded"][index / 10]] else {
                 return XCTFail("Countdown layout must remain a data-only request.")
             }
-            XCTAssertEqual(envelope["method"], .string(index % 6 < 3 ? "activity.publish" : "activity.update"))
+            XCTAssertEqual(envelope["method"], .string(index % 10 < 5 ? "activity.publish" : "activity.update"))
             XCTAssertEqual(node["id"], .string("focus-1._"))
             XCTAssertEqual(node["generation"], .string(CountdownNodeSDKFixture.generation))
-            XCTAssertEqual(node["style"], [nil, .string("time"), .string("progress")][index % 3])
-            XCTAssertEqual(Set(node.keys), index % 3 == 0
+            XCTAssertEqual(node["style"], [nil, .string("time"), .string("progress"), .string("timer"), .string("track")][index % 5])
+            XCTAssertEqual(Set(node.keys), index % 5 == 0
                 ? Set(["type", "id", "generation"]) : Set(["type", "id", "generation", "style"]))
         }
         for (request, color) in zip(requests.suffix(6), IslandSemanticColorToken.allCases) {

@@ -12,10 +12,18 @@ final class PluginRegistryTests: XCTestCase {
         let data = try Data(contentsOf: repository.appendingPathComponent("Registry/registry.json"))
         let entries = try PluginRegistryCatalog.decode(data).entries
         let expected = [
-            (id: "com.dynamicisland.pomodoro", name: "番茄钟", version: "0.2.1", archive: "pomodoro-0.2.1.dip",
-             hash: "444647bb7a2f40dc0c66418b62e94210c76f2b890f3df2681c2fd179ce5e25b2"),
+            (id: "com.dynamicisland.pomodoro", name: "番茄钟", version: "0.3.1", archive: "pomodoro-0.3.1.dip",
+             tag: "plugins-pomodoro-0.3.1", minimumHost: "0.6.1",
+             hash: "125f4c58b6439cd2721aaed4b0487ec3de0b2f09d07f83f223008cc354db42b0"),
             (id: "com.dynamicisland.github", name: "GitHub", version: "0.1.0", archive: "github-0.1.0.dip",
-             hash: "5a090cbc251b48d34ffed3bd82d8fd5ff42214e7c6386b769e1ba70477bae0fa")
+             tag: "plugins-0.6.0", minimumHost: "0.6.0",
+             hash: "5a090cbc251b48d34ffed3bd82d8fd5ff42214e7c6386b769e1ba70477bae0fa"),
+            (id: "com.dynamicisland.qq-music", name: "QQ 音乐", version: "0.1.0", archive: "qq-music-0.1.0.dip",
+             tag: "plugins-music-0.1.0", minimumHost: "0.6.1",
+             hash: "4d5abeea4ec84a32447742130fdb7b596b2e1b47492da45da7c10d3a302b4aa4"),
+            (id: "com.dynamicisland.spotify", name: "Spotify", version: "0.1.0", archive: "spotify-0.1.0.dip",
+             tag: "plugins-music-0.1.0", minimumHost: "0.6.1",
+             hash: "23788519eb3d7a203e18e90c8a4ce024cc355206f92489ab138912f5bc5c36d3")
         ]
         XCTAssertEqual(entries.count, expected.count)
         XCTAssertEqual(Set(entries.map(\.id)), Set(expected.map { $0.id }))
@@ -25,8 +33,8 @@ final class PluginRegistryTests: XCTestCase {
             XCTAssertEqual(entry.name, specification.name)
             XCTAssertEqual(entry.version.description, specification.version)
             XCTAssertEqual(entry.source.absoluteString, source)
-            XCTAssertEqual(entry.download.absoluteString, source + "/releases/download/plugins-0.6.0/" + specification.archive)
-            XCTAssertEqual(entry.minHostVersion.description, "0.6.0")
+            XCTAssertEqual(entry.download.absoluteString, source + "/releases/download/" + specification.tag + "/" + specification.archive)
+            XCTAssertEqual(entry.minHostVersion.description, specification.minimumHost)
             XCTAssertEqual(entry.hash, specification.hash)
         }
     }

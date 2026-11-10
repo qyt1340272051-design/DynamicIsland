@@ -114,6 +114,8 @@ final class DiagnosticReportService {
             return "file-tray"
         case .tools:
             return "tools"
+        case .utilities:
+            return "utilities"
         }
     }
 }

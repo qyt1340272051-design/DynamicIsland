@@ -18,6 +18,8 @@ public nonisolated enum PluginPermission: String, Codable, CaseIterable, Sendabl
     case writeClipboard = "clipboard.write"
     case readCalendar = "calendar.read"
     case userSelectedFiles = "files.userSelected"
+    case readMedia = "media.read"
+    case controlMedia = "media.control"
 }
 
 /// Host APIs a plugin expects to use. These declarations support compatibility
@@ -33,6 +35,66 @@ public nonisolated enum PluginCapability: String, Codable, CaseIterable, Sendabl
     case countdown
     case openLinks = "links.open"
     case requestPresentation = "presentation.request"
+    case musicProvider = "music.provider"
+}
+
+/// Optional, immutable media adapter declaration. The Host separately verifies
+/// its trusted helper digest before permitting any system-process execution.
+public nonisolated struct PluginMediaProviderDescriptor: Codable, Equatable, Sendable {
+    public let targetBundleIdentifier: String
+    public let displayName: String
+    public let helperPath: String
+    public let helperSHA256: String
+
+    public init(targetBundleIdentifier: String, displayName: String,
+                helperPath: String, helperSHA256: String) {
+        self.targetBundleIdentifier = targetBundleIdentifier
+        self.displayName = displayName
+        self.helperPath = helperPath
+        self.helperSHA256 = helperSHA256
+    }
+
+    private enum CodingKeys: String, CodingKey, CaseIterable {
+        case targetBundleIdentifier, displayName, helperPath, helperSHA256
+    }
+    private struct AnyKey: CodingKey {
+        let stringValue: String
+        let intValue: Int? = nil
+        init?(stringValue: String) { self.stringValue = stringValue }
+        init?(intValue: Int) { return nil }
+    }
+    public init(from decoder: Decoder) throws {
+        let all = try decoder.container(keyedBy: AnyKey.self)
+        let expected = Set(CodingKeys.allCases.map(\.rawValue))
+        guard Set(all.allKeys.map(\.stringValue)) == expected else {
+            throw PluginManifestError.invalidMediaProvider(field: "fields")
+        }
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        targetBundleIdentifier = try container.decode(String.self, forKey: .targetBundleIdentifier)
+        displayName = try container.decode(String.self, forKey: .displayName)
+        helperPath = try container.decode(String.self, forKey: .helperPath)
+        helperSHA256 = try container.decode(String.self, forKey: .helperSHA256)
+    }
+
+    public func validate() throws {
+        let segments = targetBundleIdentifier.split(separator: ".", omittingEmptySubsequences: false)
+        guard targetBundleIdentifier.utf8.count <= 255, segments.count >= 2,
+              segments.allSatisfy({ segment in
+                  !segment.isEmpty && segment.utf8.count <= 63 && segment.utf8.allSatisfy {
+                      (48...57).contains($0) || (65...90).contains($0) || (97...122).contains($0) || $0 == 45
+                  }
+              }) else { throw PluginManifestError.invalidMediaProvider(field: "targetBundleIdentifier") }
+        guard PluginManifest.isValidName(displayName) else {
+            throw PluginManifestError.invalidMediaProvider(field: "displayName")
+        }
+        guard PluginManifest.isValidEntry(helperPath) else {
+            throw PluginManifestError.invalidMediaProvider(field: "helperPath")
+        }
+        guard helperSHA256.utf8.count == 64,
+              helperSHA256.utf8.allSatisfy({ (48...57).contains($0) || (97...102).contains($0) }) else {
+            throw PluginManifestError.invalidMediaProvider(field: "helperSHA256")
+        }
+    }
 }
 
 public nonisolated enum PluginManifestError: Error, Equatable, LocalizedError, Sendable {
@@ -53,9 +115,11 @@ public nonisolated enum PluginManifestError: Error, Equatable, LocalizedError, S
     case duplicatePermission(value: String, index: Int)
     case unknownCapability(value: String, index: Int)
     case duplicateCapability(value: String, index: Int)
+    case invalidMediaProvider(field: String)
 
     public var code: String {
         switch self {
+        case .invalidMediaProvider: "invalidMediaProvider"
         case .jsonTooLarge: "jsonTooLarge"
         case .malformedJSON: "malformedJSON"
         case .missingField: "missingField"
@@ -78,6 +142,7 @@ public nonisolated enum PluginManifestError: Error, Equatable, LocalizedError, S
 
     public var path: String {
         switch self {
+        case .invalidMediaProvider(let field): "$.mediaProvider.\(field)"
         case .jsonTooLarge, .malformedJSON: "$"
         case .missingField(let field), .unknownField(let field), .duplicateField(let field): "$.\(field)"
         case .invalidType(let field, _): "$.\(field)"
@@ -97,6 +162,8 @@ public nonisolated enum PluginManifestError: Error, Equatable, LocalizedError, S
 
     public var errorDescription: String? {
         switch self {
+        case .invalidMediaProvider(let field):
+            "Plugin media provider has an invalid or unsupported \(field)."
         case .jsonTooLarge(let maximumBytes):
             "Plugin manifest exceeds the \(maximumBytes)-byte limit."
         case .malformedJSON:
@@ -159,6 +226,7 @@ public nonisolated struct PluginManifest: Codable, Equatable, Sendable {
     public let capabilities: [PluginCapability]
     /// Self-reported display metadata; this is not publisher verification.
     public let developer: String?
+    public let mediaProvider: PluginMediaProviderDescriptor?
 
     public init(
         schemaVersion: Int = Self.currentSchemaVersion,
@@ -170,7 +238,8 @@ public nonisolated struct PluginManifest: Codable, Equatable, Sendable {
         minimumHostVersion: SemanticVersion,
         permissions: [PluginPermission],
         capabilities: [PluginCapability],
-        developer: String? = nil
+        developer: String? = nil,
+        mediaProvider: PluginMediaProviderDescriptor? = nil
     ) throws {
         self.schemaVersion = schemaVersion
         self.id = id
@@ -182,6 +251,7 @@ public nonisolated struct PluginManifest: Codable, Equatable, Sendable {
         self.permissions = permissions
         self.capabilities = capabilities
         self.developer = developer
+        self.mediaProvider = mediaProvider
         try validate()
     }
 
@@ -228,6 +298,18 @@ public nonisolated struct PluginManifest: Codable, Equatable, Sendable {
         guard Self.isValidEntry(entry) else { throw PluginManifestError.invalidEntry(entry) }
         try Self.rejectDuplicatePermissions(permissions)
         try Self.rejectDuplicateCapabilities(capabilities)
+        if let mediaProvider {
+            try mediaProvider.validate()
+            guard engine == .javaScriptCore,
+                  capabilities.contains(.musicProvider),
+                  permissions.contains(.readMedia), permissions.contains(.controlMedia),
+                  minimumHostVersion.isAtLeast(try SemanticVersion("0.6.1")),
+                  mediaProvider.helperPath != entry else {
+                throw PluginManifestError.invalidMediaProvider(field: "requirements")
+            }
+        } else if capabilities.contains(.musicProvider) || permissions.contains(.readMedia) || permissions.contains(.controlMedia) {
+            throw PluginManifestError.invalidMediaProvider(field: "required")
+        }
     }
 
     public static func isValidPluginID(_ value: String) -> Bool {
@@ -264,7 +346,7 @@ public nonisolated struct PluginManifest: Codable, Equatable, Sendable {
         }
     }
 
-    private static func isValidName(_ value: String) -> Bool {
+    fileprivate static func isValidName(_ value: String) -> Bool {
         guard !value.isEmpty,
               value.unicodeScalars.count <= Limits.maxNameCharacters,
               let first = value.unicodeScalars.first,
@@ -358,8 +440,17 @@ public nonisolated struct PluginManifest: Codable, Equatable, Sendable {
 
                 skipWhitespace()
                 guard consume(58) else { return .invalid } // :
+                let valueStart = index
                 guard scanValue() else { return .invalid }
                 if isDuplicate, firstDuplicate == nil { firstDuplicate = key }
+                // Media metadata governs executable helper trust. Reject its
+                // duplicate keys before JSONDecoder can choose one value.
+                if key == "mediaProvider" {
+                    var nested = TopLevelJSONKeyScanner(bytes: Array(bytes[valueStart..<index]))
+                    if case .duplicate(let field) = nested.scan(), firstDuplicate == nil {
+                        firstDuplicate = "mediaProvider.\(field)"
+                    }
+                }
 
                 skipWhitespace()
                 if consume(44) { continue } // ,
@@ -447,7 +538,7 @@ public nonisolated struct PluginManifest: Codable, Equatable, Sendable {
 
     private enum CodingKeys: String, CaseIterable {
         case schemaVersion, id, name, version, engine, entry, minimumHostVersion
-        case permissions, capabilities, developer
+        case permissions, capabilities, developer, mediaProvider
     }
 
     private struct DynamicCodingKey: CodingKey {
@@ -486,7 +577,7 @@ public nonisolated struct PluginManifest: Codable, Equatable, Sendable {
         if let unknown = received.subtracting(expected).sorted().first {
             throw PluginManifestError.unknownField(unknown)
         }
-        if let missing = expected.subtracting([CodingKeys.developer.rawValue]).subtracting(received).sorted().first {
+        if let missing = expected.subtracting([CodingKeys.developer.rawValue, CodingKeys.mediaProvider.rawValue]).subtracting(received).sorted().first {
             throw PluginManifestError.missingField(missing)
         }
 
@@ -559,7 +650,9 @@ public nonisolated struct PluginManifest: Codable, Equatable, Sendable {
             minimumHostVersion: minimumHostVersion,
             permissions: permissions,
             capabilities: capabilities,
-            developer: developer
+            developer: developer,
+            mediaProvider: received.contains(CodingKeys.mediaProvider.rawValue)
+                ? try decode(PluginMediaProviderDescriptor.self, .mediaProvider, expected: "a media provider object") : nil
         )
     }
 
@@ -579,5 +672,6 @@ public nonisolated struct PluginManifest: Codable, Equatable, Sendable {
         try container.encode(permissions.map(\.rawValue), forKey: key(.permissions))
         try container.encode(capabilities.map(\.rawValue), forKey: key(.capabilities))
         try container.encodeIfPresent(developer, forKey: key(.developer))
+        try container.encodeIfPresent(mediaProvider, forKey: key(.mediaProvider))
     }
 }

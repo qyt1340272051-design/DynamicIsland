@@ -5,7 +5,7 @@ import XCTest
 
 @MainActor
 final class IslandDisplayNativeControlTests: XCTestCase {
-    func testNativeToolButtonDrawsAtFinalPointSizeForBoundsAnchorAndHitRegion() async throws {
+    func testRegionButtonDrawsAtFinalPointSizeForBoundsAndHitRegion() async throws {
         let reference = try await inspectNativeControl(
             environment: environment(width: 1470, height: 956, notchWidth: 179, notchHeight: 32)
         )
@@ -16,7 +16,7 @@ final class IslandDisplayNativeControlTests: XCTestCase {
         )
 
         // This third mode is a synthetic geometry regression, not a claim of
-        // hardware or native menu-tracking acceptance at this display mode.
+        // hardware or real-device input acceptance at this display mode.
         _ = try await inspectNativeControl(
             environment: environment(width: 1710, height: 1112, notchWidth: 208, notchHeight: 37),
             reference: reference
@@ -109,9 +109,7 @@ final class IslandDisplayNativeControlTests: XCTestCase {
         // Native bounds already use final display points. A whole-island
         // magnification would apply scale twice and fail this conversion check.
         let buttonRect = button.convert(button.bounds, to: hosting)
-        let popupAnchor = button.convert(
-            NSPoint(x: button.bounds.minX, y: button.bounds.minY - 4 * layout.expandedScale), to: hosting
-        )
+        let activationPoint = button.convert(NSPoint(x: button.bounds.midX, y: button.bounds.midY), to: hosting)
         let alignmentRect = try XCTUnwrap(button.superview).convert(
             button.alignmentRect(forFrame: button.frame), to: hosting
         )
@@ -121,13 +119,8 @@ final class IslandDisplayNativeControlTests: XCTestCase {
         XCTAssertEqual(alignmentRect.height, buttonRect.height, accuracy: 0.05)
         XCTAssertEqual(alignmentRect.minX, buttonRect.minX, accuracy: 0.05)
         XCTAssertEqual(alignmentRect.minY, buttonRect.minY, accuracy: 0.05)
-        XCTAssertEqual(popupAnchor.x, buttonRect.minX, accuracy: 0.05)
-        let expectedPopupY = button.isFlipped == hosting.isFlipped
-            ? buttonRect.minY - 4 * layout.expandedScale
-            : buttonRect.maxY + 4 * layout.expandedScale
-        XCTAssertEqual(popupAnchor.y, expectedPopupY, accuracy: 0.05)
         let attachment = XCTAttachment(string:
-            "scale=\(layout.scale) expandedScale=\(layout.expandedScale) hosting=\(hosting.bounds) native=\(buttonRect) alignment=\(alignmentRect) popupAnchor=\(popupAnchor)")
+            "scale=\(layout.scale) expandedScale=\(layout.expandedScale) hosting=\(hosting.bounds) native=\(buttonRect) alignment=\(alignmentRect) activationPoint=\(activationPoint)")
         attachment.name = "Native-tool-control-scale-\(layout.scale)"
         attachment.lifetime = .keepAlways
         add(attachment)
@@ -141,8 +134,8 @@ final class IslandDisplayNativeControlTests: XCTestCase {
         )
         XCTAssertTrue(shellRect.contains(buttonRect),
                       "Native button \(buttonRect) must remain inside the expanded shell \(shellRect).")
-        XCTAssertTrue(shellRect.contains(popupAnchor),
-                      "The native popup anchor must remain inside the scaled expanded shell.")
+        XCTAssertTrue(shellRect.contains(activationPoint),
+                      "The native activation point must remain inside the scaled expanded shell.")
 
         let expectedAlignmentRect: CGRect
         if let reference {
@@ -151,7 +144,11 @@ final class IslandDisplayNativeControlTests: XCTestCase {
             // screen environment's backing scale never sets layout scale.
             // The reference already includes expanded density; the stable
             // panel and cross-screen coordinates still use the base scale.
-            let positionAccuracy = max(0.05, 0.5 / window.backingScaleFactor)
+            // Both measured origins are pixel-aligned. Scaling the rounded
+            // reference also scales its half-pixel error; account for both
+            // grids when comparing independently hosted native controls.
+            let positionAccuracy = max(0.05, 0.5 / window.backingScaleFactor
+                + 0.5 / reference.backingScaleFactor * layout.scale)
             expectedAlignmentRect = CGRect(
                 x: reference.alignmentRect.minX * layout.scale,
                 y: reference.alignmentRect.minY * layout.scale,
@@ -172,7 +169,7 @@ final class IslandDisplayNativeControlTests: XCTestCase {
         // Derive points from the independent 1x baseline, rather than from the
         // resized button's own conversion, to detect a stale hit region.
         // hitTest receives coordinates in its receiver's superview. No mouse
-        // events or actions are sent, and NSMenu.popUp is deliberately not run.
+        // events or actions are sent; region navigation never installs a menu.
         let parent = try XCTUnwrap(hosting.superview)
         let inset: CGFloat = 4 * layout.expandedScale
         let points = [
@@ -188,15 +185,15 @@ final class IslandDisplayNativeControlTests: XCTestCase {
                           "Expected native button hit at \(point), got \(String(describing: hit)).")
         }
 
-        // This verifies the native control's bounds, popup input anchor and
-        // direct hit testing. AppKit menu tracking/return remains a GUI check.
+        // This verifies the native control's bounds, activation point and
+        // direct hit testing. Inline tool tab selection is covered by real input tests.
         return NativeControlMeasurement(buttonRect: buttonRect, alignmentRect: alignmentRect,
-                                        popupAnchor: popupAnchor)
+                                        activationPoint: activationPoint, backingScaleFactor: window.backingScaleFactor)
     }
 
     private func settledNativeButton<Content: View>(
         in hosting: NSHostingView<Content>
-    ) async throws -> IslandToolMenu.ToolButton {
+    ) async throws -> IslandRegionButton.NativeButton {
         let deadline = ContinuousClock.now.advanced(by: .seconds(3))
         var previousRect: CGRect?
         var stableSamples = 0
@@ -215,12 +212,12 @@ final class IslandDisplayNativeControlTests: XCTestCase {
             }
             try await Task.sleep(for: .milliseconds(10))
         } while ContinuousClock.now < deadline
-        XCTFail("The real IslandToolMenu native button did not settle in the controlled window.")
+        XCTFail("The real island region button did not settle in the controlled window.")
         throw NativeControlTestError.layoutDidNotSettle
     }
 
-    private func nativeButton(in view: NSView) -> IslandToolMenu.ToolButton? {
-        if let button = view as? IslandToolMenu.ToolButton { return button }
+    private func nativeButton(in view: NSView) -> IslandRegionButton.NativeButton? {
+        if let button = view as? IslandRegionButton.NativeButton { return button }
         return view.subviews.lazy.compactMap { self.nativeButton(in: $0) }.first
     }
 
@@ -246,7 +243,8 @@ final class IslandDisplayNativeControlTests: XCTestCase {
 private struct NativeControlMeasurement {
     let buttonRect: CGRect
     let alignmentRect: CGRect
-    let popupAnchor: CGPoint
+    let activationPoint: CGPoint
+    let backingScaleFactor: CGFloat
 }
 
 private enum NativeControlTestError: Error {

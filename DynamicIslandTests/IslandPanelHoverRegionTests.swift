@@ -3,6 +3,31 @@ import XCTest
 @testable import DynamicIsland
 
 final class IslandPanelHoverRegionTests: XCTestCase {
+    func testAdmittedCompactWingRemainsInsideAfterExpansionAtEveryScale() {
+        for scale: CGFloat in [0.875, 1, 1.15625, 1.75] {
+            let panel = CGRect(x: 0, y: 0, width: 520 * scale, height: 240 * scale)
+            let expanded = IslandPanelHoverRegion.expandedShellFrame(
+                in: panel, size: CGSize(width: 387.2 * scale, height: 151.36 * scale))
+            for entry in [
+                CGRect(x: 60 * scale, y: 208 * scale, width: 400 * scale, height: 32 * scale),
+                CGRect(x: 80 * scale, y: 208 * scale, width: 440 * scale, height: 32 * scale)
+            ] {
+                for x in [entry.minX + scale, entry.maxX - scale] {
+                    let point = CGPoint(x: x, y: entry.midY)
+                    XCTAssertTrue(IslandPanelHoverRegion.contains(point, in: entry))
+                    XCTAssertTrue(IslandPanelHoverRegion.contains(point, in: expanded, retainedEntryFrame: entry))
+                }
+                // Retaining the thin entry strip must not make the transparent
+                // corners below its outer wings keep the whole panel open.
+                let outerX = entry.maxX > expanded.maxX ? entry.maxX - scale : entry.minX + scale
+                let belowWing = CGPoint(x: outerX, y: expanded.midY)
+                XCTAssertFalse(IslandPanelHoverRegion.contains(belowWing, in: expanded, retainedEntryFrame: entry))
+                XCTAssertFalse(IslandPanelHoverRegion.contains(
+                    CGPoint(x: entry.maxX + 4, y: entry.midY), in: expanded, retainedEntryFrame: entry))
+            }
+        }
+    }
+
     func testExpandedFrameStillContainsPointerFromCompactFrame() {
         let screenFrame = CGRect(x: 0, y: 0, width: 1728, height: 1117)
         let visibleFrame = CGRect(x: 0, y: 0, width: 1728, height: 1071)

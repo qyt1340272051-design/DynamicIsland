@@ -22,6 +22,87 @@ final class PluginExtensionsModelTests: XCTestCase {
         XCTAssertTrue(fixture.runtimes.values.isEmpty)
     }
 
+    func testDisabledPluginPlacementPersistsWithoutStartingOrGrantingAndRunningChangeDoesNotRestart() async throws {
+        let fixture = try await makeFixture(durableToolPlacements: true)
+        defer { fixture.cleanup() }
+        let review = try XCTUnwrap(fixture.model.managementReview(id: fixture.id))
+        let permissionSnapshot = fixture.model.selectedPermissionSnapshot
+        XCTAssertEqual(fixture.model.toolPlacements.area(forPluginID: fixture.id), .tools)
+
+        await fixture.model.setToolArea(.timer, review: review)
+
+        XCTAssertNil(fixture.model.error)
+        XCTAssertEqual(fixture.model.toolPlacements.area(forPluginID: fixture.id), .timer)
+        XCTAssertEqual(fixture.model.selectedSnapshot?.state, .disabled)
+        XCTAssertFalse(fixture.model.selectedPlugin?.isEnabled == true)
+        XCTAssertEqual(fixture.model.selectedPermissionSnapshot, permissionSnapshot)
+        XCTAssertTrue(fixture.runtimes.values.isEmpty)
+        let restored = PluginToolPlacementStore(configuration: .init(rootDirectoryURL: fixture.configuration.rootDirectoryURL))
+        XCTAssertEqual(restored.area(forPluginID: fixture.id), .timer)
+
+        await fixture.model.setEnabled(id: fixture.id, isEnabled: true)
+        let runtime = try XCTUnwrap(fixture.runtimes.values.last)
+        try await marker(runtime, "published")
+        let token = fixture.activities.currentSnapshot?.instanceToken
+        await fixture.model.setToolArea(.tools, review: review)
+
+        XCTAssertNil(fixture.model.error)
+        XCTAssertEqual(fixture.model.toolPlacements.area(forPluginID: fixture.id), .tools)
+        XCTAssertEqual(fixture.model.selectedPermissionSnapshot, permissionSnapshot)
+        XCTAssertEqual(fixture.model.selectedSnapshot?.state, .running)
+        XCTAssertEqual(fixture.runtimes.values.count, 1)
+        XCTAssertEqual(fixture.activities.currentSnapshot?.instanceToken, token)
+        let alive = try await runtime.evaluateForTesting("1 + 1")
+        XCTAssertEqual(alive, .number(2))
+    }
+
+    func testPlacementWriteFailureKeepsCommittedChoiceAndReportsFixedError() async throws {
+        let fixture = try await makeFixture(toolPlacementReplacer: ExtensionsPlacementFailingReplacer())
+        defer { fixture.cleanup() }
+        let review = try XCTUnwrap(fixture.model.managementReview(id: fixture.id))
+        let permissionSnapshot = fixture.model.selectedPermissionSnapshot
+
+        await fixture.model.setToolArea(.timer, review: review)
+
+        XCTAssertEqual(fixture.model.error, PluginExtensionsModel.toolPlacementFailedMessage)
+        XCTAssertEqual(fixture.model.toolPlacements.lastError, .writeFailed)
+        XCTAssertEqual(fixture.model.toolPlacements.area(forPluginID: fixture.id), .tools)
+        XCTAssertEqual(fixture.model.selectedSnapshot?.state, .disabled)
+        XCTAssertEqual(fixture.model.selectedPermissionSnapshot, permissionSnapshot)
+        XCTAssertTrue(fixture.runtimes.values.isEmpty)
+        XCTAssertFalse(fixture.model.error?.contains("SECRET") == true)
+    }
+
+    func testOldPlacementReviewCannotChangeReplacementCodePreference() async throws {
+        let fixture = try await makeFixture()
+        defer { fixture.cleanup() }
+        let review = try XCTUnwrap(fixture.model.managementReview(id: fixture.id))
+        try Data((Self.source + "\nconst placementReplacement = true;").utf8).write(to: fixture.entryURL)
+        _ = try await fixture.manager.reload(id: fixture.id)
+
+        await fixture.model.setToolArea(.timer, review: review)
+
+        XCTAssertEqual(fixture.model.error, PluginExtensionsModel.staleReviewMessage)
+        XCTAssertEqual(fixture.model.toolPlacements.area(forPluginID: fixture.id), .tools)
+        XCTAssertEqual(fixture.model.selectedSnapshot?.state, .disabled)
+        XCTAssertEqual(fixture.model.selectedPermissionSnapshot?.states[.localStorage], .requested)
+        XCTAssertTrue(fixture.runtimes.values.isEmpty)
+    }
+
+    func testPlacementAppliesToFunctionalToolsAndMixedProvidersButNotPureMediaAdapters() throws {
+        func manifest(media: Bool, tools: Bool) throws -> PluginManifest {
+            try PluginManifest(id: "com.example.placement", name: "Placement", version: SemanticVersion("1.0.0"),
+                engine: .javaScriptCore, entry: "main.js", minimumHostVersion: SemanticVersion("0.6.1"),
+                permissions: media ? [.readMedia, .controlMedia] : [],
+                capabilities: (media ? [.musicProvider] : []) + (tools ? [.publishActivity] : []),
+                mediaProvider: media ? .init(targetBundleIdentifier: "com.example.player", displayName: "Player",
+                    helperPath: "helper.js", helperSHA256: String(repeating: "a", count: 64)) : nil)
+        }
+        XCTAssertTrue(PluginExtensionsModel.supportsToolPlacement(try manifest(media: false, tools: true)))
+        XCTAssertTrue(PluginExtensionsModel.supportsToolPlacement(try manifest(media: true, tools: true)))
+        XCTAssertFalse(PluginExtensionsModel.supportsToolPlacement(try manifest(media: true, tools: false)))
+    }
+
     func testCompatibleLayoutObservationsRefreshWithoutRestartAndResetOnDisable() async throws {
         let fixture = try await makeFixture(engine: .superIsland, source: Self.compatibleSource)
         defer { fixture.cleanup() }
@@ -363,7 +444,9 @@ final class PluginExtensionsModelTests: XCTestCase {
                              stateStore: ExtensionsModelStateStore? = nil,
                              durablePermissions: Bool = false,
                              engine: PluginEngine = .javaScriptCore,
-                             source: String? = nil) async throws -> ExtensionsModelFixture {
+                             source: String? = nil,
+                             durableToolPlacements: Bool = false,
+                             toolPlacementReplacer: (any PluginToolPlacementFileReplacing)? = nil) async throws -> ExtensionsModelFixture {
         let root = FileManager.default.temporaryDirectory.appendingPathComponent("Extensions-SECRET-\(UUID().uuidString)")
         let configuration = PluginManagerConfiguration(rootDirectoryURL: root, hostVersion: try SemanticVersion("0.6.0"))
         let decisionStore = durablePermissions
@@ -396,8 +479,15 @@ final class PluginExtensionsModelTests: XCTestCase {
                                          engine: engine, source: source)
         _ = try await manager.load(at: packageURL)
         let diagnosticsModel = PluginDiagnosticsModel(manager: manager, lifecycle: lifecycle, diagnostics: diagnostics)
+        let toolPlacements: PluginToolPlacementStore?
+        if let toolPlacementReplacer {
+            toolPlacements = PluginToolPlacementStore(configuration: .init(rootDirectoryURL: root), replacer: toolPlacementReplacer)
+        } else {
+            toolPlacements = durableToolPlacements ? PluginToolPlacementStore(configuration: .init(rootDirectoryURL: root)) : nil
+        }
         let model = PluginExtensionsModel(manager: manager, lifecycle: lifecycle, permissions: permissionManager,
-                                          diagnostics: diagnostics, diagnosticsModel: diagnosticsModel)
+                                          diagnostics: diagnostics, diagnosticsModel: diagnosticsModel,
+                                          toolPlacements: toolPlacements)
         await model.refresh()
         return .init(id: id, configuration: configuration, entryURL: packageURL.appendingPathComponent("main.js"),
                      manager: manager, lifecycle: lifecycle, permissions: permissionManager, storage: storage,
@@ -526,3 +616,9 @@ private nonisolated final class ExtensionsModelStateStore: PluginManagerStatePer
 }
 
 private nonisolated enum ExtensionsModelTestError: Error { case timedOut }
+
+private nonisolated struct ExtensionsPlacementFailingReplacer: PluginToolPlacementFileReplacing {
+    func replace(preparedFile: URL, destination: URL, directoryDescriptor: Int32) throws {
+        throw CocoaError(.fileWriteNoPermission, userInfo: [NSFilePathErrorKey: "SECRET-PATH"])
+    }
+}

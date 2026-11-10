@@ -15,6 +15,8 @@ nonisolated enum PluginPermissionPresentation {
         case .userSelectedFiles: "读取你选择的文件"
         case .publishNotifications: "发送通知"
         case .readCalendar: "读取日历"
+        case .readMedia: "读取当前歌曲"
+        case .controlMedia: "控制音乐播放"
         }
     }
 
@@ -28,6 +30,8 @@ nonisolated enum PluginPermissionPresentation {
         case .userSelectedFiles: "通过系统对话框读取你明确选择的文件；每次选择都需要你确认。"
         case .publishNotifications: "允许插件发送系统通知。此版本尚未支持。"
         case .readCalendar: "允许插件读取日历中的事件。此版本尚未支持。"
+        case .readMedia: "读取此插件对应播放器的曲名、歌手、专辑、封面和播放进度。不会读取账号、Cookie 或完整音乐库。"
+        case .controlMedia: "允许通过 Dynamic Island 播放或暂停此插件对应播放器、切换歌曲和调整播放进度。使用时还需单独允许读取当前歌曲，以核对操作目标。"
         }
     }
 
@@ -114,6 +118,57 @@ struct PluginCompatibilityDetails: View {
         Text("\(title)：\(description)")
             .font(.caption).foregroundStyle(.secondary)
             .fixedSize(horizontal: false, vertical: true)
+    }
+}
+
+@MainActor
+struct PluginToolPlacementSection: View {
+    @Bindable private var model: PluginExtensionsModel
+    @ObservedObject private var placements: PluginToolPlacementStore
+    private let review: PluginManagementReview
+
+    init(model: PluginExtensionsModel, review: PluginManagementReview) {
+        self.model = model
+        self.placements = model.toolPlacements
+        self.review = review
+    }
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            HStack(spacing: 16) {
+                Text("显示区域").font(.headline)
+                Spacer(minLength: 8)
+                Picker("显示区域", selection: Binding(
+                    get: { placements.area(forPluginID: review.id) },
+                    set: { area in
+                        Task { await model.setToolArea(area, review: review) }
+                    })) {
+                    Text(PluginToolArea.timer.title).tag(PluginToolArea.timer)
+                    Text(PluginToolArea.tools.title).tag(PluginToolArea.tools)
+                }
+                .labelsHidden()
+                .pickerStyle(.segmented)
+                .frame(width: 200)
+                .disabled(model.isBusy)
+                .accessibilityLabel("显示区域")
+                .accessibilityIdentifier("plugin-tool-placement-picker")
+                .islandPagingExcluded()
+            }
+            Text("用于此插件提供的工具；启用后显示在所选区域")
+                .font(.caption).foregroundStyle(.secondary)
+                .fixedSize(horizontal: false, vertical: true)
+            if placements.lastError != nil, model.error != PluginExtensionsModel.toolPlacementFailedMessage {
+                Label(PluginExtensionsModel.toolPlacementUnavailableMessage, systemImage: "exclamationmark.triangle")
+                    .font(.caption).foregroundStyle(.orange)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .accessibilityIdentifier("plugin-tool-placement-persistence-error")
+            }
+        }
+        .padding(12)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(Color(nsColor: .controlBackgroundColor), in: RoundedRectangle(cornerRadius: 8))
+        .accessibilityElement(children: .contain)
+        .accessibilityIdentifier("plugin-tool-placement-section")
     }
 }
 
@@ -352,6 +407,11 @@ public struct PluginExtensionsView: View {
                 }
                 .padding(.horizontal, 12)
                 .background(Color(nsColor: .controlBackgroundColor), in: RoundedRectangle(cornerRadius: 8))
+            }
+
+            if PluginExtensionsModel.supportsToolPlacement(plugin.manifest),
+               let review = model.managementReview(id: plugin.id) {
+                PluginToolPlacementSection(model: model, review: review)
             }
         }
     }

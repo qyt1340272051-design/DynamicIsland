@@ -45,7 +45,9 @@ enum IslandPanelHoverRegion {
         )
     }
 
-    static func contains(_ point: CGPoint, in panelFrame: CGRect) -> Bool {
+    static func contains(_ point: CGPoint, in panelFrame: CGRect,
+                         retainedEntryFrame: CGRect? = nil) -> Bool {
         panelFrame.insetBy(dx: -exitTolerance, dy: -exitTolerance).contains(point)
+            || retainedEntryFrame?.insetBy(dx: -exitTolerance, dy: -exitTolerance).contains(point) == true
     }
 }

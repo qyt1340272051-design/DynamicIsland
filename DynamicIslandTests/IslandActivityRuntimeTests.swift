@@ -4,6 +4,217 @@ import XCTest
 
 @MainActor
 final class IslandActivityRuntimeTests: XCTestCase {
+    func testToolRegionsFilterByPluginSourceAndSelectionRoutesToItsAssignedRegion() throws {
+        let model = IslandViewModel.preview()
+        let placements = PluginToolPlacementStore()
+        try placements.setArea(.timer, forPluginID: "com.example.timer")
+        let runtime = IslandActivityRuntime(viewModel: model, toolPlacements: placements)
+        defer { runtime.shutdownPlugins() }
+        try publishRegionTools(in: runtime)
+        let timer = try XCTUnwrap(runtime.toolSnapshots(in: .timer).first)
+        let utilities = runtime.toolSnapshots(in: .tools)
+        XCTAssertEqual(runtime.toolSnapshots(in: .timer).map(\.activity.id), ["region-timer"])
+        XCTAssertEqual(Set(utilities.map(\.activity.id)), ["region-utility", "host-test-tool"])
+
+        model.setHovering(true)
+        XCTAssertTrue(runtime.selectTool(timer))
+        XCTAssertEqual(model.expandedSurface, .tools)
+        XCTAssertEqual(runtime.manager.selectedToolSnapshot?.instanceToken, timer.instanceToken)
+        let utility = try XCTUnwrap(utilities.first { $0.activity.id == "region-utility" })
+        XCTAssertTrue(runtime.selectTool(utility))
+        XCTAssertEqual(model.expandedSurface, .utilities)
+        XCTAssertEqual(runtime.manager.currentSnapshot?.instanceToken, utility.instanceToken)
+        model.selectExpandedSurface(.tools)
+        XCTAssertNil(runtime.manager.selectedToolSnapshot)
+        XCTAssertNotEqual(runtime.manager.currentSnapshot?.instanceToken, utility.instanceToken)
+        runtime.selectLegacySurface(.tools)
+        XCTAssertEqual(model.expandedSurface, .tools)
+        XCTAssertNil(runtime.manager.selectedToolSnapshot)
+    }
+
+    func testPlacementChangeClearsMovedSelectionAndRetainedActionsWithoutExecutingOrEndingTool() throws {
+        let model = IslandViewModel.preview()
+        let placements = PluginToolPlacementStore()
+        let runtime = IslandActivityRuntime(viewModel: model, toolPlacements: placements)
+        defer { runtime.shutdownPlugins() }
+        try publishRegionTools(in: runtime)
+        let utility = try XCTUnwrap(runtime.toolSnapshots(in: .tools).first { $0.activity.id == "region-utility" })
+        var actionCount = 0
+        runtime.router.register(source: utility.activity.source) { _ in actionCount += 1 }
+        model.setHovering(true)
+        XCTAssertTrue(runtime.selectTool(utility))
+        XCTAssertEqual(dispatchTool(utility, in: runtime), .handled)
+        XCTAssertEqual(actionCount, 1)
+
+        try placements.setArea(.timer, forPluginID: utility.activity.source.identifier)
+        XCTAssertEqual(model.expandedSurface, .utilities)
+        XCTAssertNil(runtime.manager.selectedToolSnapshot)
+        XCTAssertNotEqual(runtime.manager.currentSnapshot?.instanceToken, utility.instanceToken)
+        XCTAssertEqual(dispatchTool(utility, in: runtime), .inactiveActivity)
+        XCTAssertEqual(actionCount, 1)
+        XCTAssertNotNil(runtime.manager.activity(id: utility.activity.id))
+        XCTAssertEqual(runtime.toolSnapshots(in: .timer).first?.instanceToken, utility.instanceToken)
+        XCTAssertFalse(runtime.toolSnapshots(in: .tools).contains { $0.instanceToken == utility.instanceToken })
+        XCTAssertTrue(runtime.selectTool(utility))
+        XCTAssertEqual(model.expandedSurface, .tools)
+        XCTAssertEqual(dispatchTool(utility, in: runtime), .handled)
+        XCTAssertEqual(actionCount, 2)
+    }
+
+    func testPresentationRequestsNeverCrossTheVisibleToolRegionAndPlacementRevokesTheLease() throws {
+        let model = IslandViewModel.preview()
+        let placements = PluginToolPlacementStore()
+        try placements.setArea(.timer, forPluginID: "com.example.timer")
+        let runtime = IslandActivityRuntime(viewModel: model, toolPlacements: placements)
+        defer { runtime.shutdownPlugins() }
+        try publishRegionTools(in: runtime)
+        let timer = try XCTUnwrap(runtime.toolSnapshots(in: .timer).first)
+        let utility = try XCTUnwrap(runtime.toolSnapshots(in: .tools).first { $0.activity.id == "region-utility" })
+        model.setHovering(true)
+        model.selectExpandedSurface(.tools)
+        XCTAssertEqual(runtime.manager.requestPresentation(utility).reason, .hostUnavailable)
+        XCTAssertEqual(runtime.manager.requestPresentation(timer).status, .accepted)
+        model.selectExpandedSurface(.utilities)
+        XCTAssertEqual(runtime.manager.withdrawPresentation(timer).reason, .noRequest)
+        XCTAssertEqual(runtime.manager.requestPresentation(timer).reason, .hostUnavailable)
+        XCTAssertEqual(runtime.manager.requestPresentation(utility).status, .accepted)
+        try placements.setArea(.timer, forPluginID: utility.activity.source.identifier)
+        XCTAssertEqual(runtime.manager.withdrawPresentation(utility).reason, .noRequest)
+        XCTAssertEqual(runtime.manager.requestPresentation(utility).reason, .hostUnavailable)
+        XCTAssertNotEqual(runtime.manager.currentSnapshot?.instanceToken, utility.instanceToken)
+        XCTAssertNil(runtime.manager.selectedToolSnapshot)
+        XCTAssertEqual(model.expandedSurface, .utilities)
+        model.selectExpandedSurface(.tools)
+        XCTAssertEqual(runtime.manager.requestPresentation(utility).status, .accepted)
+    }
+
+    func testUnrelatedPlacementChangesPreserveRequestDeadlineAndContextBudgetWhileMovedRequestIsRevoked() throws {
+        let model = IslandViewModel.preview()
+        let placements = PluginToolPlacementStore()
+        let runtime = IslandActivityRuntime(viewModel: model, toolPlacements: placements)
+        defer { runtime.shutdownPlugins() }
+        try publishRegionTools(in: runtime)
+        let utility = try XCTUnwrap(runtime.toolSnapshots(in: .tools).first { $0.activity.id == "region-utility" })
+        model.setHovering(true)
+        model.selectExpandedSurface(.utilities)
+        let granted = runtime.manager.requestPresentation(utility)
+        XCTAssertEqual(granted.status, .accepted)
+        let deadline = try XCTUnwrap(granted.expiresAt)
+
+        try placements.setArea(.timer, forPluginID: "com.example.timer")
+
+        let unchanged = runtime.manager.requestPresentation(utility)
+        XCTAssertEqual(unchanged.reason, .alreadyGranted)
+        XCTAssertEqual(unchanged.expiresAt, deadline, "Moving another plugin must preserve the exact existing lease.")
+        XCTAssertEqual(runtime.manager.withdrawPresentation(utility).reason, .withdrawn)
+        try placements.setArea(.tools, forPluginID: "com.example.timer")
+        XCTAssertEqual(runtime.manager.requestPresentation(utility).reason, .contextBudgetUsed,
+                       "An unrelated placement edit must not grant another request opportunity.")
+
+        // A real region transition opens a new context; moving this requested
+        // source out of it still revokes the lease synchronously.
+        model.selectExpandedSurface(.music)
+        model.selectExpandedSurface(.utilities)
+        XCTAssertEqual(runtime.manager.requestPresentation(utility).status, .accepted)
+        try placements.setArea(.timer, forPluginID: utility.activity.source.identifier)
+        XCTAssertEqual(runtime.manager.withdrawPresentation(utility).reason, .noRequest)
+        XCTAssertEqual(runtime.manager.requestPresentation(utility).reason, .hostUnavailable)
+        XCTAssertNotEqual(runtime.manager.currentSnapshot?.instanceToken, utility.instanceToken)
+        XCTAssertNil(runtime.manager.selectedToolSnapshot)
+        XCTAssertEqual(model.expandedSurface, .utilities)
+    }
+
+    func testBothRegionsClearOnHideTrayLockAndFoldWhileCriticalInterruptionRestoresTheSameSelection() throws {
+        for area in PluginToolArea.allCases {
+            let model = IslandViewModel.preview()
+            let placements = PluginToolPlacementStore()
+            try placements.setArea(area, forPluginID: "com.example.utility")
+            let runtime = IslandActivityRuntime(viewModel: model, toolPlacements: placements)
+            defer { runtime.shutdownPlugins() }
+            try publishRegionTools(in: runtime)
+            let tool = try XCTUnwrap(runtime.manager.toolSnapshots.first { $0.activity.id == "region-utility" })
+            var actionCount = 0
+            runtime.router.register(source: tool.activity.source) { _ in actionCount += 1 }
+            model.setHovering(true)
+            XCTAssertTrue(runtime.selectTool(tool))
+            model.setIslandPanelVisible(false)
+            XCTAssertNil(runtime.manager.selectedToolSnapshot)
+            XCTAssertFalse(runtime.selectTool(tool))
+            model.setIslandPanelVisible(true)
+            XCTAssertTrue(runtime.selectTool(tool))
+            model.toggleFileTrayLock()
+            XCTAssertNil(runtime.manager.selectedToolSnapshot)
+            XCTAssertFalse(runtime.selectTool(tool))
+            model.toggleFileTrayLock()
+            XCTAssertTrue(runtime.selectTool(tool))
+            XCTAssertEqual(dispatchTool(tool, in: runtime), .handled)
+            XCTAssertEqual(actionCount, 1)
+            let critical = IslandActivity(id: "region-critical", source: .init(kind: .builtIn, identifier: "critical"),
+                priority: .critical, lifecycle: .init(policy: .critical),
+                presentation: .init(title: "Critical"), createdAt: Date())
+            try runtime.manager.publish(critical)
+            XCTAssertEqual(runtime.manager.current?.id, critical.id)
+            XCTAssertEqual(runtime.manager.selectedToolSnapshot?.instanceToken, tool.instanceToken)
+            XCTAssertFalse(runtime.currentActivityUsesToolLayout)
+            XCTAssertFalse(runtime.selectTool(tool))
+            XCTAssertEqual(dispatchTool(tool, in: runtime), .inactiveActivity)
+            XCTAssertEqual(actionCount, 1)
+            try runtime.manager.end(id: critical.id, source: critical.source)
+            XCTAssertEqual(runtime.manager.currentSnapshot?.instanceToken, tool.instanceToken)
+            XCTAssertEqual(runtime.manager.selectedToolSnapshot?.instanceToken, tool.instanceToken)
+            XCTAssertEqual(dispatchTool(tool, in: runtime), .handled)
+            XCTAssertEqual(actionCount, 2)
+            model.endHovering()
+            XCTAssertNil(runtime.manager.selectedToolSnapshot)
+            XCTAssertFalse(runtime.selectTool(tool))
+            XCTAssertEqual(dispatchTool(tool, in: runtime), .inactiveActivity)
+            XCTAssertEqual(actionCount, 2)
+        }
+    }
+
+    func testUserExpansionRestoresTheVisibleCompactToolInEitherAssignedRegion() async throws {
+        for area in PluginToolArea.allCases {
+            let model = IslandViewModel.preview()
+            let placements = PluginToolPlacementStore()
+            let source = ActivitySource(kind: .plugin, identifier: "com.example.focus")
+            try placements.setArea(area, forPluginID: source.identifier)
+            let runtime = IslandActivityRuntime(viewModel: model, toolPlacements: placements)
+            defer { runtime.shutdownPlugins() }
+            runtime.manager.setPluginSourceEnabled(true, for: source)
+            let template = automaticCompactTool()
+            try runtime.manager.publish(.init(id: template.id, source: source,
+                priority: .normal, lifecycle: .init(policy: .persistent),
+                presentation: template.presentation, createdAt: Date(), actions: template.actions))
+            try await waitForTool { runtime.manager.current?.source == source }
+            let compact = try XCTUnwrap(runtime.manager.currentSnapshot)
+            XCTAssertEqual(compact.activity.source, source)
+            model.setHovering(true)
+            XCTAssertEqual(model.expandedSurface, area == .timer ? .tools : .utilities)
+            XCTAssertEqual(runtime.manager.selectedToolSnapshot?.instanceToken, compact.instanceToken)
+            XCTAssertEqual(runtime.manager.currentSnapshot?.activity.source, source)
+            // Explicit navigation remains possible for this expansion.
+            runtime.selectLegacySurface(.music)
+            XCTAssertNil(runtime.manager.selectedToolSnapshot)
+            XCTAssertEqual(model.expandedSurface, .music)
+            model.endHovering()
+            XCTAssertNil(runtime.manager.selectedToolSnapshot)
+            try await waitForTool { runtime.manager.current?.source == source }
+            model.beginHoveringAfterDelay()
+            try await waitForTool { runtime.manager.selectedToolSnapshot?.instanceToken == compact.instanceToken }
+        }
+    }
+
+    private func publishRegionTools(in runtime: IslandActivityRuntime) throws {
+        for (id, pluginID) in [("region-timer", "com.example.timer"), ("region-utility", "com.example.utility")] {
+            let source = ActivitySource(kind: .plugin, identifier: pluginID)
+            runtime.manager.setPluginSourceEnabled(true, for: source)
+            try runtime.manager.publish(IslandActivity(id: id, source: source, priority: .background,
+                lifecycle: .init(policy: .persistent), presentation: .init(title: id, role: .tool),
+                createdAt: Date(), actions: [.init(id: "pause", title: "Pause")]))
+        }
+        try runtime.manager.publish(hostTool())
+    }
+
     func testPresentationRequestRequiresVisibleExpandedToolsWithoutChangingHostState() throws {
         let model = IslandViewModel.preview()
         let runtime = IslandActivityRuntime(viewModel: model)
@@ -18,7 +229,7 @@ final class IslandActivityRuntimeTests: XCTestCase {
         XCTAssertEqual(runtime.manager.requestPresentation(tool).reason, .hostUnavailable)
         model.selectExpandedSurface(.fileTray)
         XCTAssertEqual(runtime.manager.requestPresentation(tool).status, .rejected)
-        model.selectExpandedSurface(.tools)
+        model.selectExpandedSurface(.utilities)
 
         let decision = runtime.manager.requestPresentation(tool, autoDismiss: true)
         XCTAssertEqual(decision.status, .accepted)
@@ -29,13 +240,13 @@ final class IslandActivityRuntimeTests: XCTestCase {
         XCTAssertTrue(model.isIslandPanelVisible)
         XCTAssertTrue(model.isHovering)
         XCTAssertEqual(model.presentationState, .expanded)
-        XCTAssertEqual(model.expandedSurface, .tools)
+        XCTAssertEqual(model.expandedSurface, .utilities)
     }
 
     func testPresentationRequestInitialContextAndPanelVisibilityRevokeSynchronously() async throws {
         let model = IslandViewModel.preview()
         model.setHovering(true)
-        model.selectExpandedSurface(.tools)
+        model.selectExpandedSurface(.utilities)
         let runtime = IslandActivityRuntime(viewModel: model)
         defer { runtime.shutdownPlugins() }
         try runtime.manager.publish(hostTool())
@@ -51,7 +262,7 @@ final class IslandActivityRuntimeTests: XCTestCase {
         XCTAssertEqual(runtime.manager.withdrawPresentation(tool).reason, .noRequest)
         XCTAssertEqual(model.presentationState, .expanded,
                        "Visibility policy must not alter the Host's expansion state.")
-        XCTAssertEqual(model.expandedSurface, .tools)
+        XCTAssertEqual(model.expandedSurface, .utilities)
 
         model.setIslandPanelVisible(true)
         XCTAssertEqual(runtime.manager.requestPresentation(tool).status, .accepted,
@@ -61,7 +272,7 @@ final class IslandActivityRuntimeTests: XCTestCase {
     func testPresentationRequestFoldRevokesAndDoesNotResumeOnExpansion() async throws {
         let model = IslandViewModel.preview()
         model.setHovering(true)
-        model.selectExpandedSurface(.tools)
+        model.selectExpandedSurface(.utilities)
         let runtime = IslandActivityRuntime(viewModel: model)
         defer { runtime.shutdownPlugins() }
         try runtime.manager.publish(hostTool())
@@ -75,7 +286,7 @@ final class IslandActivityRuntimeTests: XCTestCase {
         XCTAssertEqual(runtime.manager.requestPresentation(tool).reason, .hostUnavailable)
         XCTAssertEqual(runtime.manager.withdrawPresentation(tool).reason, .noRequest)
         model.setHovering(true)
-        model.selectExpandedSurface(.tools)
+        model.selectExpandedSurface(.utilities)
         XCTAssertNotEqual(runtime.manager.currentSnapshot?.instanceToken, tool.instanceToken,
                           "Reopening must not revive the previous request.")
         XCTAssertEqual(runtime.manager.requestPresentation(tool).status, .accepted)
@@ -86,7 +297,7 @@ final class IslandActivityRuntimeTests: XCTestCase {
         for blocker in Blocker.allCases {
             let model = IslandViewModel.preview()
             model.setHovering(true)
-            model.selectExpandedSurface(.tools)
+            model.selectExpandedSurface(.utilities)
             let runtime = IslandActivityRuntime(viewModel: model)
             defer { runtime.shutdownPlugins() }
             try runtime.manager.publish(hostTool())
@@ -124,7 +335,7 @@ final class IslandActivityRuntimeTests: XCTestCase {
                 model.endHovering()
                 model.setHovering(true)
             }
-            model.selectExpandedSurface(.tools)
+            model.selectExpandedSurface(.utilities)
             XCTAssertNotEqual(runtime.manager.currentSnapshot?.instanceToken, tool.instanceToken)
             XCTAssertEqual(runtime.manager.requestPresentation(tool).status, .accepted,
                            "Restoring an eligible Host context must allow a new request for \(blocker).")
@@ -134,7 +345,7 @@ final class IslandActivityRuntimeTests: XCTestCase {
     func testHostToolAndLegacyChoicesWithdrawRequestsWithoutGrantingAnotherLease() throws {
         let model = IslandViewModel.preview()
         model.setHovering(true)
-        model.selectExpandedSurface(.tools)
+        model.selectExpandedSurface(.utilities)
         let runtime = IslandActivityRuntime(viewModel: model)
         defer { runtime.shutdownPlugins() }
         try runtime.manager.publish(hostTool())
@@ -143,7 +354,7 @@ final class IslandActivityRuntimeTests: XCTestCase {
 
         // This same-surface choice produces no ViewModel publication. The
         // Runtime must still withdraw the request through clearToolSelection.
-        runtime.selectLegacySurface(.tools)
+        runtime.selectLegacySurface(.utilities)
         XCTAssertEqual(runtime.manager.withdrawPresentation(tool).reason, .noRequest)
         XCTAssertEqual(runtime.manager.requestPresentation(tool).reason, .contextBudgetUsed)
         XCTAssertNil(runtime.manager.selectedToolSnapshot)
@@ -152,14 +363,14 @@ final class IslandActivityRuntimeTests: XCTestCase {
         runtime.selectLegacySurface(.music)
         XCTAssertNil(runtime.manager.selectedToolSnapshot)
         XCTAssertEqual(runtime.manager.requestPresentation(tool).reason, .hostUnavailable)
-        runtime.selectLegacySurface(.tools)
+        runtime.selectLegacySurface(.utilities)
         XCTAssertEqual(runtime.manager.requestPresentation(tool).status, .accepted)
     }
 
     func testShutdownRevokesPresentationRequestsAndStopsContextFromReopeningThem() throws {
         let model = IslandViewModel.preview()
         model.setHovering(true)
-        model.selectExpandedSurface(.tools)
+        model.selectExpandedSurface(.utilities)
         let runtime = IslandActivityRuntime(viewModel: model)
         try runtime.manager.publish(hostTool())
         let tool = try XCTUnwrap(runtime.manager.toolSnapshots.first)
@@ -171,7 +382,7 @@ final class IslandActivityRuntimeTests: XCTestCase {
         model.setIslandPanelVisible(false)
         model.setIslandPanelVisible(true)
         model.selectExpandedSurface(.music)
-        model.selectExpandedSurface(.tools)
+        model.selectExpandedSurface(.utilities)
         XCTAssertEqual(runtime.manager.requestPresentation(tool).reason, .hostUnavailable,
                        "A shutdown Runtime must not reopen admission after later publisher changes.")
     }
@@ -226,15 +437,17 @@ final class IslandActivityRuntimeTests: XCTestCase {
         // @Published emits before isHovering is stored: this must still switch
         // eligibility synchronously using the delivered expansion state.
         model.setHovering(true)
-        XCTAssertEqual(runtime.manager.currentSnapshot?.instanceToken, music.instanceToken)
-        XCTAssertFalse(runtime.currentActivityUsesCountdownCompactLayout)
-        XCTAssertEqual(dispatchTool(compact, in: runtime), .inactiveActivity)
+        XCTAssertEqual(runtime.manager.currentSnapshot?.instanceToken, compact.instanceToken)
+        XCTAssertEqual(runtime.manager.selectedToolSnapshot?.instanceToken, compact.instanceToken)
+        XCTAssertEqual(model.expandedSurface, .utilities)
+        XCTAssertTrue(runtime.currentActivityUsesCountdownCompactLayout)
+        XCTAssertEqual(dispatchTool(compact, in: runtime), .handled)
         let inventory = try XCTUnwrap(runtime.manager.toolSnapshots.first)
         XCTAssertTrue(runtime.selectTool(inventory))
         XCTAssertEqual(runtime.manager.currentSnapshot?.instanceToken, compact.instanceToken)
         XCTAssertEqual(dispatchTool(compact, in: runtime), .handled)
 
-        for surface in [IslandExpandedSurface.music, .fileTray, .tools] {
+        for surface in [IslandExpandedSurface.music, .fileTray, .tools, .utilities] {
             XCTAssertTrue(runtime.selectTool(inventory))
             runtime.selectLegacySurface(surface)
             XCTAssertEqual(model.expandedSurface, surface)
@@ -335,9 +548,10 @@ final class IslandActivityRuntimeTests: XCTestCase {
         let base = CGSize(width: 216, height: 38)
         let layout = runtime.compactLayout(forBaseSize: base)
         XCTAssertEqual(layout.leadingWidth, 28, "16 pt timer glyph plus outer/camera margins.")
-        XCTAssertEqual(layout.trailingWidth, 70, "The changing plugin countdown reserves its full 58 pt frame.")
-        XCTAssertEqual(layout.centerOffset, 21)
-        XCTAssertEqual(layout.size.width, base.width + 98)
+        let placeholderWidth = IslandCompactLayout.countdownTextWidth("--:--")
+        XCTAssertEqual(layout.trailingWidth, placeholderWidth + 12, "Unresolved references match their visible placeholder.")
+        XCTAssertEqual(layout.centerOffset, (layout.trailingWidth - layout.leadingWidth) / 2)
+        XCTAssertEqual(layout.size.width, base.width + layout.leadingWidth + layout.trailingWidth)
         XCTAssertEqual(layout.size.height, base.height)
         XCTAssertEqual(runtime.compactShellSize(forBaseSize: base), layout.size)
         XCTAssertFalse(layout.usesMinimalPresentation)
@@ -365,7 +579,7 @@ final class IslandActivityRuntimeTests: XCTestCase {
         let minimal = runtime.compactLayout(forBaseSize: base)
         XCTAssertTrue(minimal.usesMinimalPresentation)
         XCTAssertEqual(minimal.leadingWidth, 0)
-        XCTAssertEqual(minimal.trailingWidth, 78, "Minimal keeps the countdown frame and both renderer insets.")
+        XCTAssertEqual(minimal.trailingWidth, placeholderWidth + 20, "Minimal measures its current leaf and keeps both renderer insets.")
         activity.presentation.showsCompact = false
         try runtime.manager.update(activity)
         XCTAssertFalse(runtime.currentActivityUsesCountdownCompactLayout)
@@ -377,8 +591,6 @@ final class IslandActivityRuntimeTests: XCTestCase {
         let native = runtime.compactLayout(forBaseSize: base)
         XCTAssertEqual(native.leadingWidth, 38, "The native circular icon keeps its 26 pt footprint.")
         XCTAssertEqual(native.trailingWidth, model.compactTimerTextWidth + 12)
-        XCTAssertLessThan(native.size.width, layout.size.width,
-                          "A five-character native countdown should not reserve the plugin's worst-case frame.")
         XCTAssertFalse(native.usesMinimalPresentation)
     }
 
@@ -430,9 +642,9 @@ final class IslandActivityRuntimeTests: XCTestCase {
 
         model.setHovering(true)
         XCTAssertTrue(runtime.selectTool(tool))
-        XCTAssertEqual(model.expandedSurface, .tools)
+        XCTAssertEqual(model.expandedSurface, .utilities)
         XCTAssertEqual(runtime.manager.currentSnapshot?.instanceToken, tool.instanceToken)
-        XCTAssertEqual(runtime.expandedShellSize, CGSize(width: 440, height: 184))
+        XCTAssertEqual(runtime.expandedShellSize, CGSize(width: 440, height: 212))
         XCTAssertEqual(runtime.router.dispatch(id: tool.activity.id, source: source, instanceToken: tool.instanceToken,
                                                action: .init(actionID: "increment", value: .none)), .handled)
         try await waitForTool {
@@ -651,6 +863,11 @@ final class IslandActivityRuntimeTests: XCTestCase {
         XCTAssertEqual(snapshot.activity.source, MusicActivityProvider.source)
         XCTAssertEqual(snapshot.activity.lifecycle.policy, .persistent)
         XCTAssertFalse(runtime.isCompactActivityVisible)
+        let selectorHeight = viewModel.homeSettings.showsLayerButtons ? IslandVisualStyle.homeLayerSelectorHeight : 0
+        XCTAssertEqual(runtime.expandedShellSize, CGSize(width: 440, height: 172 + selectorHeight))
+        XCTAssertEqual(ActivityPresentation.HostPolicy.expandedContentHeight(
+            forHostShellHeight: Double(runtime.expandedShellSize.height - selectorHeight)
+        ), 122)
 
         let result = runtime.router.dispatch(
             id: snapshot.activity.id,

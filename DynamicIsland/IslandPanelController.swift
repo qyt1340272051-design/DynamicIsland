@@ -7,12 +7,15 @@ final class IslandPanelController {
     private let viewModel: IslandViewModel
     private let activityRuntime: IslandActivityRuntime
     private let screenManager: ScreenManager
+    private let pointerLocation: () -> CGPoint
+    private let onOpenSettings: @MainActor () -> Void
     private let workspaceNotificationCenter: NotificationCenter
     private let applicationNotificationCenter: NotificationCenter
     private var panel: NSPanel?
     private var hoverTimer: Timer?
     private var screenObservation: AnyCancellable?
     private var isPointerInsidePanel = false
+    private var retainedHoverEntryFrame: CGRect?
     private lazy var stabilityMonitor = IslandPanelStabilityMonitor(
         workspaceNotificationCenter: workspaceNotificationCenter,
         applicationNotificationCenter: applicationNotificationCenter
@@ -35,11 +38,15 @@ final class IslandPanelController {
     init(
         viewModel: IslandViewModel,
         screenManager: ScreenManager,
-        activityRuntime: IslandActivityRuntime? = nil
+        activityRuntime: IslandActivityRuntime? = nil,
+        pointerLocation: @escaping () -> CGPoint = { NSEvent.mouseLocation },
+        onOpenSettings: @escaping @MainActor () -> Void = {}
     ) {
         self.viewModel = viewModel
         self.activityRuntime = activityRuntime ?? IslandActivityRuntime(viewModel: viewModel)
         self.screenManager = screenManager
+        self.pointerLocation = pointerLocation
+        self.onOpenSettings = onOpenSettings
         self.workspaceNotificationCenter = NSWorkspace.shared.notificationCenter
         self.applicationNotificationCenter = .default
         viewModel.refreshPointerContainmentBeforeToolMenuReturn = { [weak self] in
@@ -82,7 +89,8 @@ final class IslandPanelController {
         panel.titlebarAppearsTransparent = true
         IslandPanelWindowPolicy.apply(to: panel)
 
-        let rootView = IslandView(viewModel: viewModel, activityRuntime: activityRuntime)
+        let rootView = IslandView(viewModel: viewModel, activityRuntime: activityRuntime,
+                                  onOpenSettings: onOpenSettings)
         panel.contentViewController = NSHostingController(rootView: rootView)
         return panel
     }
@@ -95,8 +103,12 @@ final class IslandPanelController {
             return
         }
 
+        let frame = currentStablePanelFrame(in: screen)
+        if panel.frame != frame || viewModel.displayLayout != IslandDisplayLayout(environment: screen) {
+            retainedHoverEntryFrame = nil
+        }
         viewModel.setScreenEnvironment(screen)
-        panel.setFrame(currentStablePanelFrame(in: screen), display: true, animate: false)
+        panel.setFrame(frame, display: true, animate: false)
     }
 
     private func currentCompactFrame(in screen: ScreenEnvironment) -> CGRect {
@@ -153,8 +165,10 @@ final class IslandPanelController {
         }
 
         updatePointerContainment()
-        let timer = Timer(timeInterval: 1.0 / 30.0, repeats: true) { _ in
-            Task { @MainActor [weak self] in
+        let timer = Timer(timeInterval: 1.0 / 30.0, repeats: true) { [weak self] _ in
+            // The main run loop also fires this in AppKit tracking modes.
+            // Do not enqueue a Task behind the job that is tracking input.
+            MainActor.assumeIsolated {
                 self?.updatePointerContainment()
             }
         }
@@ -166,6 +180,7 @@ final class IslandPanelController {
         hoverTimer?.invalidate()
         hoverTimer = nil
         isPointerInsidePanel = false
+        retainedHoverEntryFrame = nil
         viewModel.endHovering()
     }
 
@@ -175,12 +190,24 @@ final class IslandPanelController {
         }
 
         let hoverFrame = currentHoverFrame(for: panel)
-        let containsPointer = IslandPanelHoverRegion.contains(NSEvent.mouseLocation, in: hoverFrame)
-        guard force || containsPointer != isPointerInsidePanel else {
+        let containsPointer = IslandPanelHoverRegion.contains(
+            pointerLocation(), in: hoverFrame, retainedEntryFrame: retainedHoverEntryFrame)
+        let didChange = containsPointer != isPointerInsidePanel
+        isPointerInsidePanel = containsPointer
+        if !containsPointer {
+            retainedHoverEntryFrame = nil
+        } else if didChange, viewModel.presentationState == .compact {
+            // Keep only the admitted top strip, not an invisible rectangle
+            // spanning the entire width and height of both shell sizes.
+            // Include the slight pointer feedback so moving within that
+            // visible strip during the delay cannot cancel the expansion.
+            retainedHoverEntryFrame = currentHoverFrame(for: panel)
+        }
+        guard force || didChange || containsPointer != viewModel.isPointerInside
+                || (containsPointer && !viewModel.isHovering) else {
             return
         }
 
-        isPointerInsidePanel = containsPointer
         if containsPointer {
             viewModel.beginHoveringAfterDelay()
         } else {

@@ -6,6 +6,12 @@ import XCTest
 @MainActor
 final class IslandCompactClippingTests: XCTestCase {
     func testAcceptedAsymmetricMinimalTextKeepsItsCompleteNativeGlyphs() async throws {
+        // Geometry probes require a black shell; user-selected glass must not
+        // be counted as foreground glyphs by the bitmap comparison.
+        let suite = "CompactGeometry.\(UUID().uuidString)"
+        let defaults = try XCTUnwrap(UserDefaults(suiteName: suite))
+        defer { defaults.removePersistentDomain(forName: suite) }
+        defaults.set(IslandAppearance.classic.rawValue, forKey: IslandAppearance.defaultsKey)
         let model = IslandViewModel.preview()
         let baseSize = CGSize(width: 260, height: 32)
         model.setCompactPanelSize(baseSize)
@@ -40,6 +46,7 @@ final class IslandCompactClippingTests: XCTestCase {
         XCTAssertEqual(runtime.manager.currentSnapshot?.activity.id, activity.id)
 
         let island = NSHostingView(rootView: IslandView(viewModel: model, activityRuntime: runtime)
+            .defaultAppStorage(defaults)
             .environment(\.colorScheme, .dark)
             .transaction { $0.disablesAnimations = true })
         island.frame = CGRect(origin: .zero, size: canvasSize)

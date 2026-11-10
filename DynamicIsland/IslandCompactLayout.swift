@@ -1,4 +1,5 @@
 import AppKit
+import Combine
 
 /// Host-owned design-point budgets beside the physical camera gap. The gap
 /// stays at its original screen position when the two wings have different widths.
@@ -50,13 +51,14 @@ public struct IslandCompactLayout: Equatable, Sendable {
 
     @MainActor
     public static func activity(baseSize: CGSize, presentation: ActivityPresentation,
-                                reservesPercentageWidth: Bool = false) -> Self {
+                                reservesPercentageWidth: Bool = false,
+                                countdownResolver: IslandRenderer.CountdownResolver = { _ in nil }) -> Self {
         if presentation.effectiveCollapsedMode == .minimal {
-            return minimal(baseSize: baseSize, presentation: presentation)
+            return minimal(baseSize: baseSize, presentation: presentation, countdownResolver: countdownResolver)
         }
         let node = IslandRenderer.resolvedNode(in: presentation, for: .compact)
         guard case .hStack(let stack) = node else {
-            return minimal(baseSize: baseSize, presentation: presentation)
+            return minimal(baseSize: baseSize, presentation: presentation, countdownResolver: countdownResolver)
         }
         let spacers = stack.children.indices.filter {
             if case .spacer = stack.children[$0] { return true }
@@ -64,18 +66,26 @@ public struct IslandCompactLayout: Equatable, Sendable {
         }
         guard spacers.count == 1, let split = spacers.first,
               let leading = measure(Array(stack.children[..<split]),
-                                    reservesPercentageWidth: reservesPercentageWidth),
+                                    reservesPercentageWidth: reservesPercentageWidth, countdownResolver: countdownResolver),
               let trailing = measure(Array(stack.children[(split + 1)...]),
-                                     reservesPercentageWidth: reservesPercentageWidth) else {
-            return minimal(baseSize: baseSize, presentation: presentation)
+                                     reservesPercentageWidth: reservesPercentageWidth, countdownResolver: countdownResolver) else {
+            return minimal(baseSize: baseSize, presentation: presentation, countdownResolver: countdownResolver)
         }
         let leadingWidth = leading.width > 0 ? leading.width + wingPadding : 0
         let trailingWidth = trailing.width > 0 ? trailing.width + wingPadding : 0
         guard fits(leading: leadingWidth, trailing: trailingWidth, baseSize: baseSize) else {
-            return minimal(baseSize: baseSize, presentation: presentation)
+            return minimal(baseSize: baseSize, presentation: presentation, countdownResolver: countdownResolver)
         }
         return Self(baseSize: baseSize, leadingWidth: leadingWidth, trailingWidth: trailingWidth,
                     minimumHeight: contentHeightWithInsets(max(leading.height, trailing.height)))
+    }
+
+    /// Matches the caption's monospaced digits without reserving unused hours.
+    /// Width only changes when the Host's formatted time changes digit count.
+    @MainActor
+    public static func countdownTextWidth(_ text: String) -> CGFloat {
+        let font = NSFont.monospacedDigitSystemFont(ofSize: captionFont.pointSize, weight: .medium)
+        return textWidth(text, font: font)
     }
 
     private static let wingPadding: CGFloat = 12 // 8 pt outer edge + 4 pt camera clearance.
@@ -83,11 +93,12 @@ public struct IslandCompactLayout: Equatable, Sendable {
     private static let nodeSpacing: CGFloat = 4
 
     @MainActor
-    private static func minimal(baseSize: CGSize, presentation: ActivityPresentation) -> Self {
+    private static func minimal(baseSize: CGSize, presentation: ActivityPresentation,
+                                countdownResolver: IslandRenderer.CountdownResolver) -> Self {
         let leaf = IslandRenderer.resolvedNode(in: presentation, for: .minimal)
         // HostPolicy resolves malformed payloads to a bounded text leaf. A
         // conservative caption budget is retained if an unknown leaf appears.
-        let content = measure(leaf, reservesPercentageWidth: false)
+        let content = measure(leaf, reservesPercentageWidth: false, countdownResolver: countdownResolver)
             ?? CGSize(width: max(58, textWidth("Activity", font: captionFont)), height: 16)
         guard fits(leading: 0, trailing: content.width + minimalPadding, baseSize: baseSize) else {
             return ellipsis(baseSize: baseSize)
@@ -126,10 +137,11 @@ public struct IslandCompactLayout: Equatable, Sendable {
     }
 
     @MainActor
-    private static func measure(_ nodes: [IslandNode], reservesPercentageWidth: Bool) -> CGSize? {
+    private static func measure(_ nodes: [IslandNode], reservesPercentageWidth: Bool,
+                                countdownResolver: IslandRenderer.CountdownResolver) -> CGSize? {
         var sizes: [CGSize] = []
         for node in nodes {
-            guard let size = measure(node, reservesPercentageWidth: reservesPercentageWidth) else { return nil }
+            guard let size = measure(node, reservesPercentageWidth: reservesPercentageWidth, countdownResolver: countdownResolver) else { return nil }
             sizes.append(size)
         }
         return CGSize(width: sizes.reduce(0) { $0 + $1.width }
@@ -138,7 +150,8 @@ public struct IslandCompactLayout: Equatable, Sendable {
     }
 
     @MainActor
-    private static func measure(_ node: IslandNode, reservesPercentageWidth: Bool) -> CGSize? {
+    private static func measure(_ node: IslandNode, reservesPercentageWidth: Bool,
+                                countdownResolver: IslandRenderer.CountdownResolver) -> CGSize? {
         switch node {
         case .text(let value):
             let text = reservesPercentageWidth && isPercentage(value.content) ? "100%" : value.content
@@ -150,14 +163,13 @@ public struct IslandCompactLayout: Equatable, Sendable {
             return CGSize(width: side, height: side)
         case .countdown(let value):
             guard value.style == .time else { return nil }
-            // A changing Host countdown does not rebuild the outer island on
-            // each tick. Its longest supported HH:MM:SS frame is reserved.
-            return CGSize(width: 58, height: captionHeight)
+            return CGSize(width: countdownTextWidth(countdownResolver(value)?.text ?? "--:--"),
+                          height: captionHeight)
         case .progress(let value):
             guard value.style == .battery else { return nil }
             return CGSize(width: 42 + 2 + 3, height: 20)
         case .hStack(let stack):
-            return measure(stack.children, reservesPercentageWidth: reservesPercentageWidth)
+            return measure(stack.children, reservesPercentageWidth: reservesPercentageWidth, countdownResolver: countdownResolver)
         case .vStack, .zStack, .spacer, .divider, .button, .toggle, .slider:
             return nil
         }
@@ -190,5 +202,17 @@ public struct IslandCompactLayout: Equatable, Sendable {
 
     private static func contentHeightWithInsets(_ height: CGFloat) -> CGFloat {
         height > 24 ? height + 6 : height + 8
+    }
+}
+
+/// Parent layout invalidates only when a countdown's measured width changes;
+/// ordinary second ticks remain confined to the countdown leaf.
+@MainActor
+final class IslandCompactCountdownLayout: ObservableObject {
+    @Published private(set) var widths: [CGFloat] = []
+
+    func update(_ widths: [CGFloat]) {
+        guard self.widths != widths else { return }
+        self.widths = widths
     }
 }

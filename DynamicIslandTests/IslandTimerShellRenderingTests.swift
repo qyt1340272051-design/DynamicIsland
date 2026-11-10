@@ -6,6 +6,12 @@ import XCTest
 @MainActor
 final class IslandTimerShellRenderingTests: XCTestCase {
     func testMinimalLeafStaysOutsideCameraAndSameActivityCanGrowAndExpand() async throws {
+        // Geometry probes require a black shell; user-selected glass must not
+        // be counted as foreground glyphs by the bitmap comparison.
+        let suite = "CompactGeometry.\(UUID().uuidString)"
+        let defaults = try XCTUnwrap(UserDefaults(suiteName: suite))
+        defer { defaults.removePersistentDomain(forName: suite) }
+        defaults.set(IslandAppearance.classic.rawValue, forKey: IslandAppearance.defaultsKey)
         let model = IslandViewModel.preview()
         model.setCompactPanelSize(CGSize(width: 270, height: 32))
         let runtime = IslandActivityRuntime(viewModel: model)
@@ -33,6 +39,7 @@ final class IslandTimerShellRenderingTests: XCTestCase {
         XCTAssertEqual(snapshot.activity.presentation.effectiveCollapsedMode, .minimal)
         let size = IslandPanelGeometry.expandedSize
         let hostingView = NSHostingView(rootView: IslandView(viewModel: model, activityRuntime: runtime)
+            .defaultAppStorage(defaults)
             .environment(\.colorScheme, .dark))
         hostingView.frame = CGRect(origin: .zero, size: size)
         let window = NSWindow(contentRect: hostingView.frame, styleMask: .borderless,

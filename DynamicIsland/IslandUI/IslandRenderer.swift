@@ -75,6 +75,7 @@ public struct IslandRenderer: View {
     @State private var hoveredActionID: String?
     @State private var toggleValues: [String: Bool] = [:]
     @State private var sliderInteraction = IslandSliderInteractionState()
+    private let reportsArtworkBounds: Bool
 
     public init(
         presentation: ActivityPresentation,
@@ -82,6 +83,7 @@ public struct IslandRenderer: View {
         shellSize: CGSize,
         imageResolver: @escaping ImageResolver = { _ in nil },
         countdownResolver: @escaping CountdownResolver = { _ in nil },
+        reportsArtworkBounds: Bool = false,
         isVisible: Bool = true,
         displayClock: IslandCountdownDisplayClock? = nil,
         onAction: @escaping (IslandRenderAction) -> Void = { _ in }
@@ -91,6 +93,7 @@ public struct IslandRenderer: View {
         self.shellSize = shellSize
         self.imageResolver = imageResolver
         self.countdownResolver = countdownResolver
+        self.reportsArtworkBounds = reportsArtworkBounds
         self.isVisible = isVisible
         self.displayClock = displayClock ?? .shared
         self.onAction = onAction
@@ -101,6 +104,10 @@ public struct IslandRenderer: View {
         let alignment: Alignment = mode == .expanded ? .topLeading : .center
         ViewThatFits(in: [.horizontal, .vertical]) {
             renderedNode(Self.resolvedNode(in: presentation, for: mode), depth: 1)
+                // Measure expanded text against its real viewport. Its
+                // unconstrained ideal width must not replace all controls
+                // with a summary when metadata is long.
+                .frame(width: mode == .expanded ? size.width : nil, alignment: alignment)
             fallbackSummary
         }
         .frame(width: size.width, height: size.height, alignment: alignment)
@@ -206,6 +213,26 @@ public struct IslandRenderer: View {
         guard depth <= IslandNode.Limits.maxDepth else { return AnyView(fallbackSummary) }
         switch node {
         case .text(let value):
+            if mode == .expanded, value.font == .timer || value.font == .metric {
+                let text = Text(value.content)
+                    .font(IslandDesignTokens.font(for: value.font, scale: layoutScale))
+                    .monospacedDigit().foregroundStyle(color(value.color))
+                    .lineLimit(1).minimumScaleFactor(0.72)
+                    .accessibilityLabel(value.content)
+                if value.font == .timer {
+                    return AnyView(text
+                        .fixedSize(horizontal: false, vertical: true)
+                        .contentTransition(reduceMotion ? .identity : .numericText())
+                        .animation(isVisible && !reduceMotion ? IslandCountdownDurationAnimation.animation : nil,
+                                   value: value.content))
+                }
+                return AnyView(text)
+            }
+            if mode == .expanded {
+                return AnyView(IslandMarqueeText(content: value.content,
+                    font: IslandDesignTokens.font(for: value.font, scale: layoutScale),
+                    tint: color(value.color), isVisible: isVisible))
+            }
             return AnyView(Text(value.content)
                 .font(IslandDesignTokens.font(for: mode == .expanded ? .body : .caption, scale: layoutScale))
                 .foregroundStyle(color(value.color))
@@ -217,13 +244,20 @@ public struct IslandRenderer: View {
                                                   tint: color(value.color), isVisible: isVisible,
                                                   resolve: countdownResolver, clock: displayClock))
         case .icon(let value):
-            let isCompactWaveform = mode == .compact && value.symbolName == "waveform"
-            return AnyView(Image(systemName: value.symbolName)
+            let symbol = Image(systemName: value.symbolName)
+            if mode == .compact && value.symbolName == "waveform" {
+                return AnyView(symbol
+                    .font(IslandDesignTokens.font(for: .headline, scale: layoutScale))
+                    .foregroundStyle(color(value.color == .accent ? .success : value.color))
+                    .frame(width: iconSide, height: iconSide)
+                    .symbolEffect(.variableColor, options: .repeating,
+                                  isActive: isVisible && !reduceMotion)
+                    .accessibilityLabel(accessibleIdentifier(value.symbolName)))
+            }
+            return AnyView(symbol
                 .font(IslandDesignTokens.font(for: .headline, scale: layoutScale))
-                .foregroundStyle(isCompactWaveform ? color(.success) : color(.accent))
+                .foregroundStyle(color(value.color))
                 .frame(width: iconSide, height: iconSide)
-                .symbolEffect(.variableColor, options: .repeating,
-                              isActive: isCompactWaveform && !reduceMotion)
                 .accessibilityLabel(accessibleIdentifier(value.symbolName)))
         case .image(let value):
             return AnyView(renderedImage(value))
@@ -265,6 +299,8 @@ public struct IslandRenderer: View {
                     colorToken: value.color,
                     mode: mode
                 ))
+            case .track:
+                return AnyView(IslandTimerProgressTrack(progress: value.value, tint: color(value.color)))
             }
         case .button(let value):
             return AnyView(SwiftUI.Button {
@@ -272,24 +308,32 @@ public struct IslandRenderer: View {
             } label: {
                 if case .icon(let icon) = value.label {
                     Image(systemName: icon.symbolName)
-                        .font(.system(size: scaled(12), weight: .semibold))
+                        .font(.system(size: scaled(12), weight: value.style == .standard ? .semibold : .bold))
                         .foregroundStyle(color(.primary))
-                        .frame(width: scaled(28), height: scaled(28))
-                        .background(Circle().fill(color(.primary).opacity(
-                            hoveredActionID == value.actionID ? 0.18 : 0.08
-                        )))
+                        .frame(width: scaled(value.style == .standard ? 28 : IslandTimerStyle.controlSide),
+                               height: scaled(value.style == .standard ? 28 : IslandTimerStyle.controlSide))
+                        .background(Circle().fill(value.style == .primary
+                            ? color(value.color).opacity(hoveredActionID == value.actionID ? 0.94 : 0.82)
+                            : color(.primary).opacity(hoveredActionID == value.actionID ? 0.18
+                                : (value.style == .secondary ? 0.11 : 0.08))))
                         .contentShape(Circle())
                 } else {
                     renderedNode(value.label, depth: depth + 1)
-                        .frame(minWidth: scaled(28), minHeight: scaled(28))
+                        .frame(minWidth: scaled(value.style == .standard ? 28 : IslandTimerStyle.controlSide),
+                               minHeight: scaled(value.style == .standard ? 28 : IslandTimerStyle.controlSide))
                         .padding(.horizontal, IslandDesignTokens.spacing(.xs, scale: layoutScale))
                         .background(
                             RoundedRectangle(cornerRadius: IslandDesignTokens.cornerRadius(.sm, scale: layoutScale))
-                                .fill(color(.primary).opacity(hoveredActionID == value.actionID ? 0.18 : 0.08))
+                                .fill(value.style == .primary
+                                    ? color(value.color).opacity(hoveredActionID == value.actionID ? 0.94 : 0.82)
+                                    : color(.primary).opacity(hoveredActionID == value.actionID ? 0.18
+                                        : (value.style == .secondary ? 0.11 : 0.08)))
                         )
                 }
             }
             .buttonStyle(.plain)
+            .disabled(!value.isEnabled)
+            .opacity(value.isEnabled ? 1 : 0.35)
             .contentShape(Rectangle())
             .onHover { hoveredActionID = $0 ? value.actionID : nil }
             .animation(reduceMotion ? nil : .easeInOut(duration: 0.12), value: hoveredActionID)
@@ -338,6 +382,7 @@ public struct IslandRenderer: View {
                 })
                 .controlSize(nativeControlSize)
                 .frame(height: scaled(12))
+                .anchorPreference(key: IslandHomePagingExclusionPreferenceKey.self, value: .bounds) { [$0] }
                 .tint(color(.accent))
                 .accessibilityLabel(value.title)
             })
@@ -369,6 +414,9 @@ public struct IslandRenderer: View {
                     .frame(width: side, height: side)
                     .clipped()
                     .clipShape(RoundedRectangle(cornerRadius: radius, style: .continuous))
+                    .anchorPreference(key: IslandArtworkBoundsPreferenceKey.self, value: .bounds) {
+                        reportsArtworkBounds ? $0 : nil
+                    }
                     .accessibilityLabel("Image")
             } else if value.size != .icon {
                 ZStack {

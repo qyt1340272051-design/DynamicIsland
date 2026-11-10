@@ -3,6 +3,7 @@ import SwiftUI
 struct IslandTimerToolsView: View {
     @Environment(\.islandLayoutScale) private var layoutScale
     @ObservedObject var model: IslandTimerToolsModel
+    var showsModePicker = true
     let onAcknowledgeCompletion: () -> Void
 
     private func p(_ value: CGFloat) -> CGFloat { value * layoutScale }
@@ -17,12 +18,21 @@ struct IslandTimerToolsView: View {
         }
         .animation(.easeInOut(duration: 0.2), value: model.completedMode)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .islandPaging(enabled: showsModePicker && model.completedMode == nil) { offset in
+            guard showsModePicker, model.completedMode == nil,
+                  let index = IslandTimerToolMode.allCases.firstIndex(of: model.selectedMode) else { return }
+            let modes = IslandTimerToolMode.allCases
+            model.selectedMode = modes[min(max(index + offset.signum(), 0), modes.count - 1)]
+        }
     }
 
     private var timerControls: some View {
         VStack(spacing: p(4)) {
-            IslandTimerModePicker(selection: $model.selectedMode)
-                .frame(width: p(120), height: p(24))
+            if showsModePicker {
+                IslandTimerModePicker(selection: $model.selectedMode)
+                    .frame(width: p(120), height: p(24))
+                    .islandPagingExcluded()
+            }
 
             ZStack(alignment: .topLeading) {
                 selectedTimerContent
@@ -43,7 +53,7 @@ struct IslandTimerToolsView: View {
                         .foregroundStyle(modeTint.opacity(0.88))
 
                     Text(model.formattedDisplayedTime)
-                        .font(.system(size: p(26), weight: .semibold, design: .monospaced))
+                        .font(.system(size: p(IslandTimerStyle.timeFontSize), weight: .semibold, design: .monospaced))
                         .monospacedDigit()
                         .lineLimit(1)
                         .minimumScaleFactor(0.72)
@@ -154,16 +164,7 @@ struct IslandTimerToolsView: View {
     @ViewBuilder
     private var timerProgress: some View {
         if let progress = model.selectedProgress {
-            GeometryReader { proxy in
-                ZStack(alignment: .leading) {
-                    Capsule()
-                        .fill(Color.white.opacity(0.12))
-                    Capsule()
-                        .fill(modeTint)
-                        .frame(width: proxy.size.width * CGFloat(progress))
-                }
-            }
-            .frame(height: p(4))
+            IslandTimerProgressTrack(progress: progress, tint: modeTint)
             .animation(.linear(duration: 0.1), value: progress)
         } else {
             Color.clear.frame(height: p(4))
@@ -193,7 +194,7 @@ struct IslandTimerToolsView: View {
             Image(systemName: systemName)
                 .font(.system(size: p(12), weight: .bold))
                 .foregroundStyle(.white)
-                .frame(width: p(32), height: p(32))
+                .frame(width: p(IslandTimerStyle.controlSide), height: p(IslandTimerStyle.controlSide))
                 .background(
                     emphasized ? modeTint.opacity(0.82) : Color.white.opacity(0.11),
                     in: Circle()
