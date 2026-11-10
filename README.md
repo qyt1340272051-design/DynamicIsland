@@ -153,7 +153,7 @@ RELEASE_TAG=v0.6.0-beta.2 ./Scripts/release.sh --local
 
 ## 已知限制
 
-- 内置音乐集成支持 macOS 自带的 Apple Music。0.6.1 开发版支持按需安装[网易云音乐](docs/plugin-system/examples/netease-music/README.md)、[QQ 音乐](docs/plugin-system/examples/qq-music/README.md)和 [Spotify](docs/plugin-system/examples/spotify/README.md) 插件，分别批准读取与控制权限后，build23 起自动跟随系统当前活动音源，无需手动选择 App。QQ 音乐和 Spotify 已提供[固定版本安装包](https://github.com/qyt1340272051-design/DynamicIsland/releases/tag/plugins-music-0.1.0)，需要含对应 helper 的开发 Host build21 或更新版本；真实客户端的播放控制与收起态刷新仍待验收。插件依赖系统媒体会话，控制时需对应客户端为当前活动会话。
+- 内置音乐集成支持 macOS 自带的 Apple Music。0.6.1 开发版支持按需安装[网易云音乐](docs/plugin-system/examples/netease-music/README.md)、[QQ 音乐](docs/plugin-system/examples/qq-music/README.md)和 [Spotify](docs/plugin-system/examples/spotify/README.md) 插件，分别批准读取与控制权限后，build23 起自动跟随系统当前活动音源，无需手动选择 App。QQ 音乐和 Spotify 已提供[固定版本安装包](https://github.com/qyt1340272051-design/DynamicIsland/releases/tag/plugins-music-0.1.0)，需要含对应 helper 的开发 Host build21 或更新版本；Spotify 已在当前设备获用户确认（见 [U19 记录](docs/plugin-system/u19-device-acceptance-20261110.md)），QQ 音乐真实客户端的播放控制与收起态刷新仍待验收。插件依赖系统媒体会话，控制时需对应客户端为当前活动会话。
 - 秒表和倒计时、官方番茄钟的业务计时不跨应用重启恢复；番茄钟可在获准后保存预设，但不会自动开始新一轮。
 - SuperIsland 兼容仅覆盖已实现的简单子集，不保证任意上游插件可运行。
 - 插件异常有隔离、日志与停用处理，但当前不能强制抢占无限循环 JavaScript；不要运行未知来源的插件。
