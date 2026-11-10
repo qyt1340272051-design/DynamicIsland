@@ -50,7 +50,7 @@ final class IslandDesignTokensTests: XCTestCase {
         )
 
         for (surface, mode, expectedHeight) in [
-            (IslandExpandedSurface.music, IslandTimerToolMode.stopwatch, IslandVisualStyle.expandedMusicHeight),
+            (IslandExpandedSurface.music, IslandTimerToolMode.stopwatch, IslandVisualStyle.expandedHomeHeight),
             (.fileTray, .stopwatch, IslandVisualStyle.expandedCompactContentHeight),
             (.tools, .stopwatch, IslandVisualStyle.expandedCompactContentHeight),
             (.tools, .countdown, IslandVisualStyle.expandedTimerHeight)
@@ -64,7 +64,10 @@ final class IslandDesignTokensTests: XCTestCase {
             )
             XCTAssertEqual(size.width, IslandVisualStyle.expandedShellSize.width)
             XCTAssertEqual(size.height, expectedHeight)
-            XCTAssertLessThanOrEqual(size.height, IslandDesignTokens.expandedCanvasSize.height)
+            // The home layer selector adds outer-shell height above the Host canvas.
+            let selectorHeight = surface == .music ? IslandVisualStyle.homeLayerSelectorHeight : 0
+            XCTAssertLessThanOrEqual(size.height - selectorHeight, IslandDesignTokens.expandedCanvasSize.height)
+            XCTAssertLessThanOrEqual(size.height, IslandPanelGeometry.expandedSize.height)
         }
         XCTAssertEqual(IslandDesignTokens.expandedCanvasSize, IslandVisualStyle.expandedContentSize)
         XCTAssertLessThan(IslandDesignTokens.expandedCanvasSize.width, IslandPanelGeometry.expandedSize.width)

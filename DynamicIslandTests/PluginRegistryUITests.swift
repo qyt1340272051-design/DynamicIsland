@@ -186,8 +186,12 @@ final class PluginRegistryUITests: XCTestCase {
     private func click(_ label: String, in window: NSWindow) async throws {
         window.makeKeyAndOrderFront(nil)
         try await settle(window)
-        do { try await InstallerUIFixture.wait { window.isKeyWindow } }
-        catch {
+        do {
+            try await InstallerUIFixture.wait {
+                if !window.isKeyWindow, window.attachedSheet == nil { window.makeKey() }
+                return window.isKeyWindow
+            }
+        } catch {
             NativeWindowTestingDiagnostics.keyTimeout(window)
             throw error
         }

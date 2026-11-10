@@ -195,7 +195,7 @@ struct AppSettingsView: View {
     }
 
     private var generalPage: some View {
-        SettingsDetailPage(title: "通用", subtitle: "控制灵动岛的显示与日常使用。") {
+        SettingsDetailPage(title: "通用", subtitle: "控制 Dynamic Island 的显示与日常使用。") {
             if let musicProviders = model.musicProviders {
                 MusicSourceSettingsView(providers: musicProviders)
             }
@@ -204,14 +204,14 @@ struct AppSettingsView: View {
             }
             GroupBox {
                 VStack(alignment: .leading, spacing: 16) {
-                    Label("灵动岛", systemImage: "rectangle.topthird.inset.filled")
+                    Label("Dynamic Island", systemImage: "rectangle.topthird.inset.filled")
                         .font(.headline)
                     Text("在屏幕顶部查看音乐、计时器和插件活动。")
                         .foregroundStyle(.secondary)
                     HStack(spacing: 10) {
-                        Button("显示灵动岛", action: onShowIsland)
+                        Button("显示 Dynamic Island", action: onShowIsland)
                             .accessibilityIdentifier("settings-show-island")
-                        Button("隐藏灵动岛", action: onHideIsland)
+                        Button("隐藏 Dynamic Island", action: onHideIsland)
                             .accessibilityIdentifier("settings-hide-island")
                     }
                 }
@@ -233,7 +233,7 @@ struct AppSettingsView: View {
     }
 
     private var appearancePage: some View {
-        SettingsDetailPage(title: "外观", subtitle: "选择灵动岛的背景风格，切换后立即生效。") {
+        SettingsDetailPage(title: "外观", subtitle: "选择 Dynamic Island 的背景风格，切换后立即生效。") {
             GroupBox {
                 VStack(alignment: .leading, spacing: 16) {
                     Label("背景风格", systemImage: "paintpalette").font(.headline)
@@ -254,7 +254,7 @@ struct AppSettingsView: View {
                     Text("封面流光与封面光晕用于音乐背景；透明毛玻璃适用于所有页面。")
                         .font(.callout)
                         .foregroundStyle(.secondary)
-                    Button("查看灵动岛", action: onShowIsland)
+                    Button("查看 Dynamic Island", action: onShowIsland)
                         .accessibilityIdentifier("settings-preview-island")
                 }
                 .padding(12)

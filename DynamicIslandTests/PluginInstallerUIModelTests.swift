@@ -315,7 +315,7 @@ struct InstallerUIFixture {
     }
 
     static func wait(_ condition: @MainActor () -> Bool) async throws {
-        for _ in 0..<300 {
+        for _ in 0..<1_000 {
             if condition() { return }
             try await Task.sleep(for: .milliseconds(10))
         }

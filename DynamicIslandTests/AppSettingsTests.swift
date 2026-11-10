@@ -182,11 +182,11 @@ final class AppSettingsTests: XCTestCase {
 
         let general = try renderedText(window, evidenceName: "general-minimum")
         try assertSidebarAlignment(in: window)
-        for label in ["通用", "外观", "日历与提醒", "插件", "关于", "音乐播放器", "自动识别音源", "Apple Music", "显示灵动岛", "隐藏灵动岛"] {
+        for label in ["通用", "外观", "日历与提醒", "插件", "关于", "音乐播放器", "自动识别音源", "Apple Music", "显示 Dynamic Island", "隐藏 Dynamic Island"] {
             XCTAssertTrue(general.contains(label), "Missing minimum-size settings control \(label): \(general)")
         }
-        try await click("显示灵动岛", in: window)
-        try await click("隐藏灵动岛", in: window)
+        try await click("显示 Dynamic Island", in: window)
+        try await click("隐藏 Dynamic Island", in: window)
         XCTAssertEqual(shows, 1)
         XCTAssertEqual(hides, 1)
 
@@ -195,8 +195,8 @@ final class AppSettingsTests: XCTestCase {
         try await settle(window)
         let appearance = try renderedText(window, evidenceName: "appearance-minimum")
         XCTAssertTrue(appearance.contains("默认外观"), appearance)
-        XCTAssertTrue(appearance.contains("查看灵动岛"), appearance)
-        try await click("查看灵动岛", in: window)
+        XCTAssertTrue(appearance.contains("查看 Dynamic Island"), appearance)
+        try await click("查看 Dynamic Island", in: window)
         XCTAssertEqual(shows, 2)
 
         try await click("插件", in: window, preferTopmost: true)
@@ -458,7 +458,10 @@ final class AppSettingsTests: XCTestCase {
     private func clickHomeDefaultLayer(_ layer: IslandHomeLayer, in window: NSWindow) async throws {
         window.makeKeyAndOrderFront(nil)
         try await settle(window)
-        try await InstallerUIFixture.wait { window.isKeyWindow }
+        try await InstallerUIFixture.wait {
+            if !window.isKeyWindow, window.attachedSheet == nil { window.makeKey() }
+            return window.isKeyWindow
+        }
         let view = try XCTUnwrap(window.contentView)
         func descendants(_ root: NSView) -> [NSView] { [root] + root.subviews.flatMap(descendants) }
         let expectedLabels = IslandHomeLayer.allCases.map(\.title)
