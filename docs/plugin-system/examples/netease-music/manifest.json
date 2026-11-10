@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "id": "com.dynamicisland.netease-music",
+  "name": "网易云音乐",
+  "developer": "DynamicIsland",
+  "version": "0.1.0",
+  "engine": "javascriptcore",
+  "entry": "index.js",
+  "minimumHostVersion": "0.6.1",
+  "permissions": [
+    "media.read",
+    "media.control"
+  ],
+  "capabilities": [
+    "music.provider"
+  ],
+  "mediaProvider": {
+    "targetBundleIdentifier": "com.netease.163music",
+    "displayName": "网易云音乐",
+    "helperPath": "media-helper.js",
+    "helperSHA256": "37c306a675aa34419a34bc03a412a934953f2b5243c96ee3f9855d5b537a9d32"
+  }
+}

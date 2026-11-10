@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "id": "com.dynamicisland.qq-music",
+  "name": "QQ 音乐",
+  "developer": "DynamicIsland",
+  "version": "0.1.0",
+  "engine": "javascriptcore",
+  "entry": "index.js",
+  "minimumHostVersion": "0.6.1",
+  "permissions": [
+    "media.read",
+    "media.control"
+  ],
+  "capabilities": [
+    "music.provider"
+  ],
+  "mediaProvider": {
+    "targetBundleIdentifier": "com.tencent.QQMusicMac",
+    "displayName": "QQ 音乐",
+    "helperPath": "media-helper.js",
+    "helperSHA256": "422c5eb11cf94e523c7427b953e83d0e6f1b94850897ffbb529a9abd9d44b9ec"
+  }
+}

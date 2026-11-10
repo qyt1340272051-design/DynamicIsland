@@ -95,42 +95,70 @@ function queueSettings() {
     saveSettings();
 }
 
-function button(actionID, title, selected) {
+function iconButton(actionID, title, symbolName, style, color, isEnabled) {
     return {
         type: 'button', actionID,
-        label: {type: 'text', content: title, color: selected ? 'accent' : 'primary'},
-        accessibilityLabel: title + (selected ? '，当前预设' : '')
+        label: {type: 'icon', symbolName}, accessibilityLabel: title,
+        style, color, isEnabled
     };
 }
 
-function countdownNode(style) {
-    return {type: 'countdown', id: timer.id, generation: timer.generation, style, color: 'accent'};
+function countdownNode(style, color) {
+    return {type: 'countdown', id: timer.id, generation: timer.generation, style, color: color || 'danger'};
+}
+
+function expandedLayout(status, idleTime) {
+    const running = timer !== null && timer.state === 'running';
+    const paused = timer !== null && timer.state === 'paused';
+    const presetIndex = presets.indexOf(selectedMinutes);
+    const previousMinutes = presets[Math.max(0, presetIndex - 1)];
+    const nextMinutes = presets[Math.min(presets.length - 1, presetIndex + 1)];
+    const primary = running ? iconButton('pause', '暂停', 'pause.fill', 'primary', 'danger', true) :
+        paused ? iconButton('resume', '继续', 'play.fill', 'primary', 'danger', true) :
+            iconButton('start', '开始', 'play.fill', 'primary', 'danger', true);
+    const children = [
+        {type: 'hStack', children: [
+            {type: 'vStack', children: [
+                {type: 'text', content: status, font: 'caption', color: 'danger'},
+                timer ? countdownNode('timer', 'primary') :
+                    {type: 'text', content: idleTime, font: 'timer', color: 'primary'}
+            ]},
+            {type: 'spacer'},
+            {type: 'vStack', children: [
+                {type: 'hStack', children: [
+                    {type: 'spacer'},
+                    iconButton('preset.' + String(previousMinutes), '减少专注时长', 'minus',
+                        'standard', 'primary', !running && presetIndex > 0),
+                    {type: 'text', content: String(selectedMinutes) + ' 分钟', font: 'caption'},
+                    iconButton('preset.' + String(nextMinutes), '增加专注时长', 'plus',
+                        'standard', 'primary', !running && presetIndex < presets.length - 1)
+                ]},
+                {type: 'hStack', children: [
+                    {type: 'spacer'},
+                    iconButton('stop', '结束', 'arrow.counterclockwise', 'secondary', 'primary', true),
+                    primary
+                ]}
+            ]}
+        ]},
+        timer ? countdownNode('track', 'danger') : {type: 'progress', value: 0, style: 'track', color: 'danger'}
+    ];
+    return {type: 'vStack', children};
 }
 
 function presentation() {
     const status = timer === null ? '准备专注' : timer.state === 'running' ? '专注中' :
         timer.state === 'paused' ? '已暂停' : '本轮已完成';
-    const primary = timer && timer.state === 'running' ? button('pause', '暂停', false) :
-        timer && timer.state === 'paused' ? button('resume', '继续', false) : button('start', '开始', false);
     const idleTime = selectedMinutes === 60 ? '1:00:00' : String(selectedMinutes).padStart(2, '0') + ':00';
     return {
         role: 'tool', compactPolicy: 'automatic', title: '番茄钟',
         subtitle: String(selectedMinutes) + ' 分钟 · ' + status, symbolName: 'timer',
         showsCompact: timer !== null && (timer.state === 'running' || timer.state === 'paused'),
-        minimal: timer ? countdownNode('time') : {type: 'icon', symbolName: 'timer'},
+        minimal: timer ? countdownNode('time') : {type: 'icon', symbolName: 'timer', color: 'danger'},
         compact: {type: 'hStack', children: [
-            {type: 'icon', symbolName: 'timer'}, {type: 'spacer'},
-            timer ? countdownNode('time') : {type: 'text', content: idleTime}
+            {type: 'icon', symbolName: 'timer', color: 'danger'}, {type: 'spacer'},
+            timer ? countdownNode('time') : {type: 'text', content: idleTime, color: 'danger'}
         ]},
-        expanded: {type: 'vStack', children: [
-            {type: 'text', content: String(selectedMinutes) + ' 分钟 · ' + status +
-                (settingsNotSaved ? ' · 设置未保存' : '')},
-            timer ? countdownNode('time') : {type: 'text', content: idleTime},
-            timer ? countdownNode('progress') : {type: 'progress', value: 0},
-            {type: 'hStack', children: presets.map(minutes =>
-                button('preset.' + String(minutes), String(minutes) + ' 分钟', minutes === selectedMinutes))},
-            {type: 'hStack', children: [primary, button('stop', '结束', false)]}
-        ]}
+        expanded: expandedLayout(status, idleTime)
     };
 }
 
@@ -208,13 +236,13 @@ function complete(value) {
                 presentation: {
                     title: '专注完成', subtitle: '本轮专注已结束', symbolName: 'checkmark.circle.fill',
                     compact: {type: 'hStack', children: [
-                        {type: 'icon', symbolName: 'checkmark.circle.fill'},
-                        {type: 'spacer'}, {type: 'text', content: '完成'}
+                        {type: 'icon', symbolName: 'checkmark.circle.fill', color: 'danger'},
+                        {type: 'spacer'}, {type: 'text', content: '完成', color: 'danger'}
                     ]},
                     expanded: {type: 'vStack', children: [
                         {type: 'hStack', children: [
-                            {type: 'icon', symbolName: 'checkmark.circle.fill'},
-                            {type: 'text', content: '专注完成'}
+                            {type: 'icon', symbolName: 'checkmark.circle.fill', color: 'danger'},
+                            {type: 'text', content: '专注完成', color: 'danger'}
                         ]},
                         {type: 'text', content: '本轮专注已结束'}
                     ]}
