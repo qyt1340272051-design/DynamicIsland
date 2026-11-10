@@ -43,7 +43,8 @@ struct IslandToolTabs: View {
                     .background(Color.white.opacity(0.06), in: RoundedRectangle(cornerRadius: 5 * layoutScale))
                     .frame(minWidth: geometry.size.width, alignment: .center)
                 }
-                .scrollIndicators(.hidden)
+                // `.hidden` still shows a scroller, and adds its height, when a mouse is connected.
+                .scrollIndicators(.never)
                 .scrollBounceBehavior(.basedOnSize)
                 .onAppear { if let selectedID { scroll.scrollTo(selectedID, anchor: .center) } }
                 .onChange(of: selectedID) { _, id in

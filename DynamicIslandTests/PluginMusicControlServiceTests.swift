@@ -436,9 +436,11 @@ final class PluginMusicControlServiceTests: XCTestCase {
         let metadataMarker = "if (!state.infoDone || !state.playingDone) reject('queryTimedOut');"
         XCTAssertEqual(diagnostic.components(separatedBy: metadataMarker).count, 2)
         diagnostic = diagnostic.replacingOccurrences(of: metadataMarker, with: """
+            var activePath = Request.localNowPlayingPlayerPath;
             return {diagnostic: true, infoDone: state.infoDone, playingDone: state.playingDone,
                     artDone: state.artDone, artCallback: !!state.artCallback,
-                    queryError: state.error, artError: !!state.artError};
+                    queryError: state.error, artError: !!state.artError,
+                    hasSession: present(activePath) && present(activePath.client)};
             """)
         let admission = PluginMusicHelperAdmission(lifecycle: PluginResourceAdmission(), read: nil, control: nil)
         let data = try await SystemMusicHelperRunner(timeout: 3).run(source: diagnostic,
@@ -449,8 +451,12 @@ final class PluginMusicControlServiceTests: XCTestCase {
         XCTAssertEqual(flags["playingDone"], true)
         XCTAssertEqual(flags["artDone"], true)
         XCTAssertEqual(flags["artCallback"], true)
-        XCTAssertEqual(flags["queryError"], false)
-        XCTAssertEqual(flags["artError"], false)
+        // Callbacks must still complete without a media session, as on a
+        // headless runner, but MediaRemote may then report an error.
+        if flags["hasSession"] == true {
+            XCTAssertEqual(flags["queryError"], false)
+            XCTAssertEqual(flags["artError"], false)
+        }
     }
 
     private func assertCalls(_ fixture: MusicProviderFixture, _ expected: Int, file: StaticString = #filePath, line: UInt = #line) async {

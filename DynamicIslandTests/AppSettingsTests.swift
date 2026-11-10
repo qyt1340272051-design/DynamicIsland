@@ -134,28 +134,28 @@ final class AppSettingsTests: XCTestCase {
         window.makeKeyAndOrderFront(nil)
         window.setContentSize(AppSettingsView.minimumContentSize)
         try await settle(window)
-        try await click("封面流光", in: window)
+        try await clickAppearance(.coverGlass, in: window)
         try await settle(window)
         XCTAssertEqual(defaults.string(forKey: IslandAppearance.defaultsKey), IslandAppearance.coverGlass.rawValue)
         installSettings()
         try await settle(window)
         let restored = try renderedText(window, evidenceName: "cover-glass-restored")
         XCTAssertTrue(restored.contains("磨砂玻璃"), restored)
-        try await click("透明毛玻璃", in: window)
+        try await clickAppearance(.frostedGlass, in: window)
         try await settle(window)
         XCTAssertEqual(defaults.string(forKey: IslandAppearance.defaultsKey), IslandAppearance.frostedGlass.rawValue)
         installSettings()
         try await settle(window)
         let frosted = try renderedText(window, evidenceName: "frosted-glass-restored")
         XCTAssertTrue(frosted.contains("后方窗口"), frosted)
-        try await click("封面光晕", in: window)
+        try await clickAppearance(.coverGlow, in: window)
         try await settle(window)
         XCTAssertEqual(defaults.string(forKey: IslandAppearance.defaultsKey), IslandAppearance.coverGlow.rawValue)
         installSettings()
         try await settle(window)
         let glow = try renderedText(window, evidenceName: "cover-glow-restored")
         XCTAssertTrue(glow.contains("渐变融入默认黑色"), glow)
-        try await click("默认外观", in: window)
+        try await clickAppearance(.classic, in: window)
         try await settle(window)
         XCTAssertEqual(defaults.string(forKey: IslandAppearance.defaultsKey), IslandAppearance.classic.rawValue)
     }
@@ -456,6 +456,14 @@ final class AppSettingsTests: XCTestCase {
     }
 
     private func clickHomeDefaultLayer(_ layer: IslandHomeLayer, in window: NSWindow) async throws {
+        try await clickSegment(layer.title, among: IslandHomeLayer.allCases.map(\.title), in: window)
+    }
+
+    private func clickAppearance(_ appearance: IslandAppearance, in window: NSWindow) async throws {
+        try await clickSegment(appearance.title, among: IslandAppearance.allCases.map(\.title), in: window)
+    }
+
+    private func clickSegment(_ label: String, among expectedLabels: [String], in window: NSWindow) async throws {
         window.makeKeyAndOrderFront(nil)
         try await settle(window)
         try await InstallerUIFixture.wait {
@@ -464,17 +472,16 @@ final class AppSettingsTests: XCTestCase {
         }
         let view = try XCTUnwrap(window.contentView)
         func descendants(_ root: NSView) -> [NSView] { [root] + root.subviews.flatMap(descendants) }
-        let expectedLabels = IslandHomeLayer.allCases.map(\.title)
         let picker = try XCTUnwrap(descendants(view).compactMap { $0 as? NSSegmentedControl }.first { control in
             control.segmentCount == expectedLabels.count
                 && (0..<control.segmentCount).map { control.label(forSegment: $0) ?? "" } == expectedLabels
-        }, "Missing native default-home-page picker")
+        }, "Missing native segmented picker for \(expectedLabels)")
         XCTAssertTrue(picker.isEnabled)
         XCTAssertFalse(picker.isHiddenOrHasHiddenAncestor)
-        let index = try XCTUnwrap(expectedLabels.firstIndex(of: layer.title))
-        // All four labels use the same two-glyph width, so the native control
-        // assigns equal automatic segment widths. Click the rendered segment
-        // rather than requiring Vision to split adjacent labels into words.
+        let index = try XCTUnwrap(expectedLabels.firstIndex(of: label))
+        // Segment labels are close enough in length for the center of an equal
+        // share to fall inside the rendered segment. Click it directly because
+        // Vision can merge adjacent labels and the selection separator.
         let point = CGPoint(x: picker.bounds.minX + picker.bounds.width * (CGFloat(index) + 0.5)
                                 / CGFloat(picker.segmentCount),
                             y: picker.bounds.midY)
@@ -522,19 +529,13 @@ final class AppSettingsTests: XCTestCase {
         var point = CGPoint(x: bounds.midX * view.bounds.width,
                             y: (view.isFlipped ? 1 - bounds.midY : bounds.midY) * view.bounds.height)
         if trailingSwitch {
-            // macOS switch labels are passive. Locate the painted switch/knob
-            // beside the recognized label instead of clicking the label text.
-            let scale = CGFloat(bitmap.pixelsWide) / view.bounds.width
-            let start = min(bitmap.pixelsWide - 1, Int(bounds.maxX * CGFloat(bitmap.pixelsWide) + 4 * scale))
-            let end = min(bitmap.pixelsWide, start + Int(80 * scale))
-            let row = min(bitmap.pixelsHigh - 1, max(0, Int((1 - bounds.midY) * CGFloat(bitmap.pixelsHigh))))
-            let bright = (start..<end).filter { x in
-                guard let color = bitmap.colorAt(x: x, y: row)?.usingColorSpace(.deviceRGB) else { return false }
-                return color.alphaComponent > 0.5 && max(color.redComponent, color.greenComponent, color.blueComponent) > 0.65
-            }
-            let first = try XCTUnwrap(bright.first, "Missing visible switch beside \(label)")
-            let last = try XCTUnwrap(bright.last)
-            point.x = CGFloat(first + last) / 2 / scale
+            // macOS switch labels are passive. Click the native switch on the
+            // recognized label's row, which works in any system appearance.
+            func descendants(_ root: NSView) -> [NSView] { [root] + root.subviews.flatMap(descendants) }
+            let frames = descendants(view).compactMap { $0 as? NSSwitch }.map { view.convert($0.bounds, from: $0) }
+            let frame = try XCTUnwrap(frames.min { abs($0.midY - point.y) < abs($1.midY - point.y) },
+                                      "Missing native switch beside \(label)")
+            point = CGPoint(x: frame.midX, y: frame.midY)
         }
         let location = view.convert(point, to: nil)
         try sendClick(at: location, in: window)
