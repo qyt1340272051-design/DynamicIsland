@@ -178,10 +178,13 @@ final class ActivityPresentationTests: XCTestCase {
                             + IslandVisualStyle.expandedSurfaceSpacing)
         XCTAssertEqual(ActivityPresentation.HostPolicy.expandedChromeHeight, chrome)
         XCTAssertEqual(ActivityPresentation.HostPolicy.maximumExpandedShellHeight,
-                       Double(IslandVisualStyle.expandedMusicHeight))
-        XCTAssertEqual(ActivityPresentation.HostPolicy.expandedContentHeight(forHostShellHeight: 200), 140)
-        XCTAssertEqual(ActivityPresentation.HostPolicy.expandedContentHeight(forHostShellHeight: 190), 130)
-        XCTAssertEqual(ActivityPresentation.HostPolicy.expandedContentHeight(forHostShellHeight: 500), 140)
+                       Double(IslandVisualStyle.expandedShellSize.height))
+        XCTAssertEqual(ActivityPresentation.HostPolicy.expandedContentHeight(
+            forHostShellHeight: Double(IslandVisualStyle.expandedMusicHeight)
+        ), 122)
+        XCTAssertEqual(ActivityPresentation.HostPolicy.expandedContentHeight(forHostShellHeight: 184), 134)
+        XCTAssertEqual(ActivityPresentation.HostPolicy.expandedContentHeight(forHostShellHeight: 174), 124)
+        XCTAssertEqual(ActivityPresentation.HostPolicy.expandedContentHeight(forHostShellHeight: 500), 134)
         XCTAssertEqual(ActivityPresentation.HostPolicy.expandedContentHeight(forHostShellHeight: 20), 0)
         XCTAssertEqual(ActivityPresentation.HostPolicy.expandedContentHeight(forHostShellHeight: .nan), 0)
     }

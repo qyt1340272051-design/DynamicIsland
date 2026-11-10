@@ -1,0 +1,13 @@
+{
+  "appVersion": "0.6.0",
+  "build": "5",
+  "bundleIdentifier": "com.rong5.dynamic-island-mac.u02-acceptance",
+  "displayName": "Dynamic Island U02",
+  "executableSHA256": "e6b3eb118a8bfcb1207183e7d382b7e9d8feda700ba3b2792e0227c8df6fbe2e",
+  "sourceBaseline": "0858c2a2f698af60cb6836f8e88b5f9ca4369517",
+  "sourceState": "working tree U02 implementation, before commit",
+  "adHocSigned": true,
+  "notarized": false,
+  "isolatedSandboxContainer": true,
+  "launched": true
+}

@@ -230,7 +230,7 @@ nonisolated enum PluginJSBridgeBootstrap {
                     const fields = fieldsWithShape(value, ['type', 'id', 'generation'], ['style', 'color']);
                     if (!validActionID(fields.id) || fields.id.length > 80 ||
                         !validCountdownGeneration(fields.generation)) throw null;
-                    if (descriptor(fields, 'style') && fields.style !== 'time' && fields.style !== 'progress') throw null;
+                    if (descriptor(fields, 'style') && fields.style !== 'time' && fields.style !== 'progress' && fields.style !== 'timer' && fields.style !== 'track') throw null;
                     if (descriptor(fields, 'color') && fields.color !== 'primary' && fields.color !== 'secondary' &&
                         fields.color !== 'accent' && fields.color !== 'success' && fields.color !== 'warning' &&
                         fields.color !== 'danger') throw null;

@@ -22,6 +22,8 @@ struct IslandCountdownNodeView: View {
     let isVisible: Bool
     let resolve: (IslandNode.Countdown) -> IslandCountdownDisplayValue?
     @ObservedObject var clock: IslandCountdownDisplayClock
+    @Environment(\.islandLayoutScale) private var layoutScale
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @State private var consumer = UUID()
 
     var body: some View {
@@ -29,21 +31,29 @@ struct IslandCountdownNodeView: View {
         let needsTicks = isVisible && value?.requiresTick == true
         Group {
             switch reference.style {
-            case .time:
+            case .time, .timer:
                 Text(value?.text ?? "--:--")
-                    .font(IslandDesignTokens.font(for: mode == .expanded ? .metric : .caption))
+                    .font(IslandDesignTokens.font(for: mode == .expanded
+                        ? (reference.style == .timer ? .timer : .metric) : .caption, scale: layoutScale))
                     .monospacedDigit()
                     .foregroundStyle(tint)
                     .lineLimit(1)
                     .minimumScaleFactor(0.8)
+                    .fixedSize(horizontal: false, vertical: mode == .expanded && reference.style == .timer)
+                    .contentTransition(reduceMotion ? .identity : .numericText(countsDown: true))
+                    .animation(isVisible && !reduceMotion ? IslandCountdownDurationAnimation.animation : nil,
+                               value: value?.text)
                     .accessibilityLabel("Countdown")
                     .accessibilityValue(value?.text ?? "Unavailable")
             case .progress:
                 ProgressView(value: value?.progress ?? 0)
                     .progressViewStyle(.linear)
+                    .controlSize(layoutScale >= 1.5 ? .large : .regular)
                     .tint(tint)
                     .accessibilityLabel("Countdown progress")
                     .accessibilityValue(value.map { "\(Int(($0.progress * 100).rounded())) percent" } ?? "Unavailable")
+            case .track:
+                IslandTimerProgressTrack(progress: value?.progress ?? 0, tint: tint)
             }
         }
         .onAppear { clock.setNeedsTicks(needsTicks, for: consumer) }

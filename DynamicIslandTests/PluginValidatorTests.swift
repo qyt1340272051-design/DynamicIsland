@@ -1,3 +1,4 @@
+import CryptoKit
 import Darwin
 import Foundation
 import XCTest
@@ -493,6 +494,50 @@ final class PluginValidatorTests: XCTestCase {
 
         func remove() {
             try? FileManager.default.removeItem(at: container)
+        }
+    }
+
+    func testMediaHelperIsDigestCheckedAndRetainedAsImmutableSnapshot() throws {
+        let fixture = try makePackage(minimumHostVersion: "0.6.1")
+        defer { fixture.remove() }
+        let helper = Data("function run(argv) { return '{}'; }".utf8)
+        let url = fixture.package.appendingPathComponent("media-helper.js")
+        try helper.write(to: url)
+        let digest = SHA256.hash(data: helper).map { String(format: "%02x", $0) }.joined()
+        let data = try manifestData {
+            $0["minimumHostVersion"] = "0.6.1"
+            $0["permissions"] = ["media.read", "media.control"]
+            $0["capabilities"] = ["music.provider"]
+            $0["mediaProvider"] = ["targetBundleIdentifier": "com.netease.163music", "displayName": "网易云音乐",
+                "helperPath": "media-helper.js", "helperSHA256": digest]
+        }
+        try data.write(to: fixture.manifestURL)
+        let result = try validate(fixture, hostVersion: "0.6.1")
+        XCTAssertEqual(result.mediaHelperSource, helper)
+        try Data("changed".utf8).write(to: url)
+        XCTAssertEqual(result.mediaHelperSource, helper)
+        assertValidationError(try validate(fixture, hostVersion: "0.6.1"),
+                              code: "invalidMediaHelper", path: "media-helper.js")
+        try FileManager.default.removeItem(at: url)
+        assertValidationError(try validate(fixture, hostVersion: "0.6.1"),
+                              code: "invalidMediaHelper", path: "media-helper.js")
+    }
+
+    func testMediaHelperRejectsMatchingDigestNonUTF8AndOversizeBytes() throws {
+        for helper in [Data([0xFF]), Data([0xEF, 0xBB, 0xBF, 0x61]), Data([0]),
+                       Data(repeating: 65, count: 128 * 1024 + 1)] {
+            let fixture = try makePackage(minimumHostVersion: "0.6.1")
+            defer { fixture.remove() }
+            try helper.write(to: fixture.package.appendingPathComponent("media-helper.js"))
+            let digest = SHA256.hash(data: helper).map { String(format: "%02x", $0) }.joined()
+            try manifestData {
+                $0["minimumHostVersion"] = "0.6.1"
+                $0["permissions"] = ["media.read", "media.control"]
+                $0["capabilities"] = ["music.provider"]
+                $0["mediaProvider"] = ["targetBundleIdentifier": "com.netease.163music", "displayName": "网易云音乐",
+                    "helperPath": "media-helper.js", "helperSHA256": digest]
+            }.write(to: fixture.manifestURL)
+            XCTAssertThrowsError(try validate(fixture, hostVersion: "0.6.1"))
         }
     }
 

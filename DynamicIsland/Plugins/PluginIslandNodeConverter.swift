@@ -47,14 +47,18 @@ nonisolated struct PluginIslandNodeConverter: Sendable {
         }
         switch kind {
         case "text":
-            try checkFields(fields, required: ["type", "content"], optional: ["color"])
+            try checkFields(fields, required: ["type", "content"], optional: ["color", "font"])
             return .text(.init(
                 try text(fields["content"]),
-                color: try fields["color"].map { try token($0, as: IslandSemanticColorToken.self) } ?? .primary
+                color: try fields["color"].map { try token($0, as: IslandSemanticColorToken.self) } ?? .primary,
+                font: try fields["font"].map { try token($0, as: IslandTypographyToken.self) } ?? .body
             ))
         case "icon":
-            try checkFields(fields, required: ["type", "symbolName"])
-            return .icon(.init(try identifier(fields["symbolName"], allowsColon: true)))
+            try checkFields(fields, required: ["type", "symbolName"], optional: ["color"])
+            return .icon(.init(
+                try identifier(fields["symbolName"], allowsColon: true),
+                color: try fields["color"].map { try token($0, as: IslandSemanticColorToken.self) } ?? .accent
+            ))
         case "image":
             try checkFields(fields, required: ["type", "source"], optional: ["size"])
             guard let source = fields["source"] else { throw PluginBridgeErrorCode.invalidArguments }
@@ -103,12 +107,15 @@ nonisolated struct PluginIslandNodeConverter: Sendable {
                 color: try fields["color"].map { try token($0, as: IslandSemanticColorToken.self) } ?? .accent
             ))
         case "button":
-            try checkFields(fields, required: ["type", "actionID", "label"], optional: ["accessibilityLabel"])
+            try checkFields(fields, required: ["type", "actionID", "label"], optional: ["accessibilityLabel", "style", "color", "isEnabled"])
             guard let label = fields["label"] else { throw PluginBridgeErrorCode.invalidArguments }
             return .button(.init(
                 actionID: try actionID(fields["actionID"]),
                 label: try parse(label, depth: depth + 1, nodeCount: &nodeCount),
-                accessibilityLabel: try fields["accessibilityLabel"].map { try text($0) }
+                accessibilityLabel: try fields["accessibilityLabel"].map { try text($0) },
+                style: try fields["style"].map { try token($0, as: IslandButtonStyleToken.self) } ?? .standard,
+                color: try fields["color"].map { try token($0, as: IslandSemanticColorToken.self) } ?? .accent,
+                isEnabled: try fields["isEnabled"].map { try boolean($0) } ?? true
             ))
         case "toggle":
             try checkFields(fields, required: ["type", "title", "isOn", "actionID"])

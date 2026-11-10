@@ -1,0 +1,48 @@
+{
+  "date": "2026-10-27",
+  "appVersion": "0.6.1",
+  "build": "12",
+  "tests": {
+    "result": "Passed",
+    "totalTestCount": 1208,
+    "passedTests": 1205,
+    "failedTests": 0,
+    "skippedTests": 3
+  },
+  "resultBundle": "/tmp/dynamic-island-u06-final.xcresult",
+  "log": "/tmp/dynamic-island-u06-final.log",
+  "releaseBuild": "passed",
+  "signatureVerification": "passed",
+  "runtime": {
+    "path": "/Users/rong5/Dynamiclsland/build/u06/Dynamic Island.app",
+    "launched": true,
+    "settingsVersion": "0.6.1 12",
+    "source": "网易云音乐",
+    "mediaRead": "已允许",
+    "mediaControl": "已允许",
+    "permissionOrSourceChanges": false,
+    "playbackCommandsSent": false,
+    "physicalPointerHover": "passed: user confirmed normal expansion with the physical mouse",
+    "currentScreen": "1710x1112, safe top 38pt; earlier read-only sample was 2560x1664, safe top 56pt",
+    "physicalPointerHoverConfirmation": {
+      "date": "2026-10-27",
+      "answer": "现在可以正常展开",
+      "scope": "build12, current device, repeated physical-pointer hover check"
+    }
+  },
+  "reproduction": {
+    "nestedAppKitTracking": "failed on old Task delay, passed on common-mode Timer",
+    "wideCompactLoop": "covered with actual music provider at 340pt base notch; current ordinary music width does not have reversal",
+    "originalIntermittentFreezeUniqueCause": "not established from a frozen live process"
+  },
+  "sourceSHA256": {
+    "DynamicIsland/IslandPanelController.swift": "3c30309d8462c0dad30b571228be601486d6bf9c973573ec895ff9c28eb854f7",
+    "DynamicIsland/IslandPanelHoverRegion.swift": "d4180cdd36bcdb8ef66ec1bc2af3fd960871c315044482d0ebcb8510d2194b43",
+    "DynamicIsland/IslandViewModel.swift": "3af61bc6e9aeee0367ea343cc9d9ded30b8ecdf37d4bd1693a21934ae916b953",
+    "DynamicIsland/IslandUI/IslandRenderer.swift": "9bf162e121cecf7e37eabedf6745581371bb4ec9db18192adb60529661a8a2ba",
+    "DynamicIslandTests/IslandHoverTrackingTests.swift": "bfad8fe1b5f673402c8522227d197ede2bd18280e9ecbe64ebf39c217ade8470",
+    "DynamicIslandTests/IslandPanelHoverRegionTests.swift": "6361e12778762a01d31be75bf7e8c03a77df073b53b7569c347e7dcf268bdb9b",
+    "DynamicIslandTests/IslandDisplayNativeControlTests.swift": "b3ee148d44324c5dbe5a3df0017266213446572344f10b9e5666efa2f496cac3",
+    "DynamicIslandTests/IslandRendererTests.swift": "7c20acee25b1e532510036c7a1ea60c97b617513998db763a33c876ef3284774"
+  }
+}

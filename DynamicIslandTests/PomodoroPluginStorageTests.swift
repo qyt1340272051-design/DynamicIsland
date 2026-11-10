@@ -80,12 +80,9 @@ final class PomodoroPluginStorageTests: XCTestCase {
         try f.act("stop")
         try await f.waitForState("准备专注", minutes: 15)
         try await waitForSettings(f, equals: settings(15, "idle"))
-        // The Storage actor exposes the new value before the JavaScript
-        // Promise completion queues and publishes its cleared save hint.
-        // Observe that separate public UI commit instead of racing it.
-        try await f.waitUntil {
-            f.tool?.presentation.subtitle == "15 分钟 · 准备专注" && !f.hasUnsavedSettingsHint
-        }
+        // The durable value is the save-completion observable; storage status
+        // no longer publishes a visible caption to wait for.
+        try await f.flushWorker()
         XCTAssertNil(try f.record())
         XCTAssertFalse(f.hasUnsavedSettingsHint)
         f.assertNoFailures()
@@ -123,7 +120,7 @@ final class PomodoroPluginStorageTests: XCTestCase {
             try await f.storage.set(pluginID: f.id, key: "settings", value: value)
             try f.grantStorage()
             try await f.load()
-            try await f.waitUntil { f.hasUnsavedSettingsHint }
+            XCTAssertFalse(f.hasUnsavedSettingsHint)
             XCTAssertNil(try f.record())
             XCTAssertTrue(f.references.isEmpty)
             let stored = try await f.storage.get(pluginID: f.id, key: "settings")
@@ -148,7 +145,7 @@ final class PomodoroPluginStorageTests: XCTestCase {
             let baseline = io.count
             if let decision { try f.decideStorage(decision) }
             try await f.load()
-            try await f.waitUntil { f.hasUnsavedSettingsHint }
+            XCTAssertFalse(f.hasUnsavedSettingsHint)
             XCTAssertEqual(try f.permissions.state(permission: .localStorage, package: f.package), state)
             try f.act("preset.15")
             try await f.waitForState("准备专注", minutes: 15)
@@ -163,7 +160,7 @@ final class PomodoroPluginStorageTests: XCTestCase {
             try await f.waitForState("准备专注", minutes: 15)
             try await f.flushWorker()
             XCTAssertNil(try f.record())
-            XCTAssertTrue(f.hasUnsavedSettingsHint)
+            XCTAssertFalse(f.hasUnsavedSettingsHint)
             XCTAssertEqual(io.count, baseline, "An ungranted plugin must not reach the Storage I/O actor.")
             let stored = try await storage.get(pluginID: f.id, key: "settings")
             XCTAssertEqual(stored, untouched)
@@ -187,7 +184,8 @@ final class PomodoroPluginStorageTests: XCTestCase {
         XCTAssertThrowsError(try oldLease.perform {})
         try f.act("pause")
         try await f.waitForState("已暂停", minutes: 45)
-        try await f.waitUntil { f.hasUnsavedSettingsHint }
+        try await f.flushWorker()
+        XCTAssertFalse(f.hasUnsavedSettingsHint)
         try f.act("preset.60")
         try await f.waitForState("准备专注", minutes: 60)
         XCTAssertNil(try f.record())
@@ -198,7 +196,8 @@ final class PomodoroPluginStorageTests: XCTestCase {
         try f.act("start")
         try await f.waitForState("专注中", minutes: 60)
         try await waitForSettings(f, equals: settings(60, "running"))
-        try await f.waitUntil { !f.hasUnsavedSettingsHint }
+        try await f.flushWorker()
+        XCTAssertFalse(f.hasUnsavedSettingsHint)
         XCTAssertEqual(try f.record()?.durationMilliseconds, 60 * 60_000)
         XCTAssertThrowsError(try oldLease.perform {})
         f.assertNoFailures()

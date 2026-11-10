@@ -4,6 +4,44 @@ import XCTest
 
 @MainActor
 final class IslandToolMenuInteractionTests: XCTestCase {
+    func testResolutionChangesDuringMenuReturnPreserveSelectedToolAndActions() throws {
+        let fixture = try ToolMenuInteractionFixture()
+        defer { fixture.shutdown() }
+        let tool = try fixture.tool("alpha")
+        XCTAssertTrue(fixture.runtime.selectTool(tool))
+        let menu = try XCTUnwrap(fixture.model.beginToolMenuInteraction())
+        fixture.model.endHovering()
+        fixture.model.endToolMenuInteraction(menu)
+
+        // The third geometry is a synthetic larger logical scale, not a claim
+        // that this display mode has been physically accepted on the device.
+        for (width, height, gap, top) in [
+            (1470.0, 956.0, 179.0, 32.0),
+            (1280.0, 832.0, 156.0, 28.0),
+            (1710.0, 1112.0, 208.0, 37.0),
+            (1470.0, 956.0, 179.0, 32.0)
+        ] {
+            let side = (width - gap) / 2
+            fixture.model.setScreenEnvironment(ScreenEnvironment(
+                displayID: 1, name: "Resolution fixture",
+                frame: CGRect(x: 0, y: 0, width: width, height: height),
+                visibleFrame: CGRect(x: 0, y: 0, width: width, height: height - top),
+                safeAreaInsets: ScreenEdgeInsets(top: top),
+                auxiliaryTopLeftArea: CGRect(x: 0, y: height - top, width: side, height: top),
+                auxiliaryTopRightArea: CGRect(x: side + gap, y: height - top, width: side, height: top),
+                backingScaleFactor: 2, isBuiltIn: true
+            ))
+            XCTAssertEqual(fixture.model.displayLayout.scale, top / 32)
+            XCTAssertTrue(fixture.model.isToolMenuInteractionCurrent(menu))
+            XCTAssertEqual(fixture.model.presentationState, .expanded)
+            XCTAssertEqual(fixture.runtime.manager.selectedToolSnapshot?.instanceToken, tool.instanceToken)
+            XCTAssertEqual(fixture.dispatch(tool), .handled)
+        }
+        fixture.model.beginHoveringAfterDelay()
+        XCTAssertEqual(fixture.model.expandedSurface, .utilities)
+        XCTAssertEqual(fixture.runtime.manager.selectedToolSnapshot?.instanceToken, tool.instanceToken)
+    }
+
     func testMenuAdmissionRequiresVisibleExpandedHostWithoutDragOrCompletion() throws {
         let fixture = try ToolMenuInteractionFixture(expand: false)
         defer { fixture.shutdown() }
@@ -71,12 +109,12 @@ final class IslandToolMenuInteractionTests: XCTestCase {
         fixture.model.beginHoveringAfterDelay()
         XCTAssertTrue(fixture.model.isPointerInside)
         XCTAssertTrue(fixture.model.isHovering)
-        XCTAssertEqual(fixture.model.expandedSurface, .tools)
+        XCTAssertEqual(fixture.model.expandedSurface, .utilities)
         XCTAssertEqual(fixture.runtime.manager.selectedToolSnapshot?.instanceToken, tool.instanceToken)
         XCTAssertEqual(fixture.haptics.expansionCount, feedbackCount)
         try await remainsTrue(for: .milliseconds(90)) {
             fixture.model.presentationState == .expanded
-                && fixture.model.expandedSurface == .tools
+                && fixture.model.expandedSurface == .utilities
                 && fixture.runtime.manager.selectedToolSnapshot?.instanceToken == tool.instanceToken
                 && fixture.haptics.expansionCount == feedbackCount
         }
@@ -125,7 +163,7 @@ final class IslandToolMenuInteractionTests: XCTestCase {
         XCTAssertTrue(fixture.model.isToolMenuInteractionCurrent(menu))
         XCTAssertTrue(fixture.model.isHovering)
         XCTAssertEqual(fixture.model.presentationState, .expanded)
-        XCTAssertEqual(fixture.model.expandedSurface, .tools)
+        XCTAssertEqual(fixture.model.expandedSurface, .utilities)
         XCTAssertEqual(fixture.runtime.manager.selectedToolSnapshot?.instanceToken, tool.instanceToken)
         XCTAssertEqual(fixture.dispatch(tool), .handled)
 
@@ -204,7 +242,7 @@ final class IslandToolMenuInteractionTests: XCTestCase {
         XCTAssertTrue(model.isPointerInside)
         XCTAssertTrue(model.isHovering)
         XCTAssertEqual(model.presentationState, .expanded)
-        XCTAssertEqual(model.expandedSurface, .tools)
+        XCTAssertEqual(model.expandedSurface, .utilities)
         XCTAssertEqual(fixture.runtime.manager.selectedToolSnapshot?.instanceToken, tool.instanceToken)
         XCTAssertEqual(fixture.dispatch(tool), .handled)
 
@@ -369,7 +407,7 @@ final class IslandToolMenuInteractionTests: XCTestCase {
         XCTAssertTrue(enteredGraceBeforeSelection)
         XCTAssertFalse(oldControlIsAttached)
         XCTAssertTrue(fixture.model.isToolMenuInteractionCurrent(menu))
-        XCTAssertEqual(fixture.model.expandedSurface, .tools)
+        XCTAssertEqual(fixture.model.expandedSurface, .utilities)
         XCTAssertEqual(fixture.dispatch(first), .inactiveActivity)
         XCTAssertEqual(fixture.handledActions[second.activity.id], 1)
 
@@ -614,6 +652,8 @@ private final class ToolMenuInteractionFixture {
         }
         if expand {
             model.setHovering(true)
+            // Begin on the native timing surface; selecting a fixture tool
+            // must route to its default functional-tools region.
             model.selectExpandedSurface(.tools)
         }
     }

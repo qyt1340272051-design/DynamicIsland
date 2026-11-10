@@ -1,0 +1,46 @@
+{
+  "date": "2026-10-27",
+  "version": "0.6.1",
+  "build": "10",
+  "fullTests": {
+    "total": 1190,
+    "passed": 1187,
+    "skipped": 3,
+    "failures": 0,
+    "result": "/tmp/dynamic-island-u04-build10-full.xcresult"
+  },
+  "serviceTests": 23,
+  "sdkPythonTests": 42,
+  "releaseBuild": "passed",
+  "codeSignatureVerification": "passed",
+  "bundledOptionalResources": [],
+  "pluginPackage": "docs/plugin-system/evidence/u04-netease-helper-20261026/netease-music-0.1.0.dip",
+  "pluginBytes": 6999,
+  "pluginSHA256": "7036d528df2666eb6eb576f5ad65d508d4f4c6a90c389365af7cdc46e8046332",
+  "currentState": {
+    "readPermission": "revoked",
+    "controlPermission": "revoked",
+    "selectedSource": "Apple Music",
+    "pluginInstalled": true,
+    "pluginEnabled": true,
+    "optionalHelperProcessCount": 0,
+    "nativeUIConfirmed": true
+  },
+  "realPlaybackAcceptance": "passed for current device core playback workflow",
+  "previousVerification": {
+    "build": "9",
+    "fullTests": {
+      "total": 1183,
+      "skipped": 3,
+      "failures": 0,
+      "result": "/tmp/dynamic-island-u04-full.xcresult"
+    },
+    "sandboxMediaQuerySupplement": {
+      "total": 1,
+      "failures": 0,
+      "result": "/tmp/dynamic-island-u04-sandbox.xcresult"
+    }
+  },
+  "sourceLimitation": "A track whose artwork has never been received may display a placeholder until the system republishes it.",
+  "pluginExecutableContentsUnchanged": true
+}

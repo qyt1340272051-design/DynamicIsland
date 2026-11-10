@@ -50,6 +50,46 @@ class ValidatorTests(unittest.TestCase):
         (source / 'index.js').write_text('throw new Error("DO_NOT_PRINT_OR_EXECUTE_ENTRY");\n')
         return source
 
+    def media_manifest(self):
+        value = copy.deepcopy(self.manifest)
+        value.update(minimumHostVersion='0.6.1', permissions=['media.read', 'media.control'],
+                     capabilities=['music.provider'], mediaProvider={
+                         'targetBundleIdentifier': 'com.netease.163music', 'displayName': '网易云音乐',
+                         'helperPath': 'media-helper.js', 'helperSHA256': 'a' * 64})
+        return value
+
+    def test_media_manifest_rejects_helper_traversal_digest_and_old_host(self):
+        value = self.media_manifest()
+        tool.validate_manifest(value)
+        for field, invalid in [('helperPath', '../helper.js'), ('helperPath', '/helper.js'),
+                               ('helperPath', 'index.js'), ('helperSHA256', 'A' * 64),
+                               ('helperSHA256', 'abc'), ('targetBundleIdentifier', 'com..app'),
+                               ('unexpected', 'value')]:
+            bad = copy.deepcopy(value)
+            bad['mediaProvider'][field] = invalid
+            self.rejected(tool.validate_manifest, bad)
+        for change in [dict(minimumHostVersion='0.6.0'), dict(minimumHostVersion='0.6.1-beta.1'),
+                       dict(engine='superisland'), dict(capabilities=[]),
+                       dict(permissions=['media.read']), dict(mediaProvider=None)]:
+            self.rejected(tool.validate_manifest, dict(value, **change))
+
+    def test_media_directory_snapshots_digest_utf8_and_capacity(self):
+        import hashlib
+        self.manifest = self.media_manifest()
+        data = b'function run(argv) { return "{}"; }'
+        self.manifest['mediaProvider']['helperSHA256'] = hashlib.sha256(data).hexdigest()
+        source = self.source()
+        helper = source / 'media-helper.js'
+        helper.write_bytes(data)
+        tool.validate_directory(source)
+        helper.write_bytes(b'changed')
+        self.rejected(tool.validate_directory, source)
+        for data in [b'\xff', b'\x00', b'\xef\xbb\xbfX', b'X' * (128 * 1024 + 1)]:
+            self.manifest['mediaProvider']['helperSHA256'] = hashlib.sha256(data).hexdigest()
+            (source / 'manifest.json').write_text(json.dumps(self.manifest))
+            helper.write_bytes(data)
+            self.rejected(tool.validate_directory, source)
+
     def test_valid_fixtures_and_all_eight_node_kinds(self):
         tool.validate_manifest(tool.read_json(FIXTURES / 'valid-manifest.json'))
         summary = tool.validate_node(tool.read_json(FIXTURES / 'valid-node.json'))
@@ -87,8 +127,8 @@ class ValidatorTests(unittest.TestCase):
             self.assertEqual(schema, json.loads(canonical.read_text()))
         self.assertEqual(set(schema['$defs']['permission']['enum']), set(tool.PERMISSIONS))
         self.assertEqual(set(schema['$defs']['capability']['enum']), set(tool.CAPABILITIES))
-        self.assertEqual(schema['properties']['permissions']['maxItems'], 8)
-        self.assertEqual(schema['properties']['capabilities']['maxItems'], 10)
+        self.assertEqual(schema['properties']['permissions']['maxItems'], 10)
+        self.assertEqual(schema['properties']['capabilities']['maxItems'], 11)
 
     def test_manifest_required_unknown_proto_and_null_fields(self):
         for missing in self.manifest:
@@ -109,8 +149,9 @@ class ValidatorTests(unittest.TestCase):
                        {'capabilities': [None]}, {'permissions': 'network'}):
             self.rejected(tool.validate_manifest, dict(self.manifest, **change))
         tool.validate_manifest(dict(self.manifest, schemaVersion=1.0))
-        tool.validate_manifest(dict(self.manifest, permissions=sorted(tool.PERMISSIONS),
-                                    capabilities=sorted(tool.CAPABILITIES)))
+        all_fields = self.media_manifest()
+        all_fields.update(permissions=sorted(tool.PERMISSIONS), capabilities=sorted(tool.CAPABILITIES))
+        tool.validate_manifest(all_fields)
 
     def test_manifest_ids_entry_paths_and_byte_limits(self):
         for value in ('com.example', 'Com.example.demo', 'com.1example.demo',
@@ -178,6 +219,56 @@ class ValidatorTests(unittest.TestCase):
             self.rejected(tool.validate_node, value)
         for color in tool.COLORS:
             tool.validate_node({'type': 'progress', 'value': 1, 'style': 'battery', 'color': color})
+
+    def test_icon_color_is_optional_finite_and_strict(self):
+        icon = {'type': 'icon', 'symbolName': 'timer'}
+        tool.validate_node(icon)
+        for color in tool.COLORS:
+            tool.validate_node(dict(icon, color=color))
+        for color in (None, '', '#ff6347', 'tomato', 1, False, {}, []):
+            self.rejected(tool.validate_node, dict(icon, color=color), 'invalidNode')
+        self.rejected(tool.validate_node, dict(icon, color='danger', width=16), 'invalidNode')
+
+    def test_finite_typography_button_and_timer_appearances(self):
+        text = {'type': 'text', 'content': '25:00'}
+        button = {'type': 'button', 'actionID': 'start', 'label': text}
+        for font in tool.TYPOGRAPHY:
+            tool.validate_node(dict(text, font=font))
+        for style in tool.BUTTON_STYLES:
+            for color in tool.COLORS:
+                for enabled in (True, False):
+                    tool.validate_node(dict(button, style=style, color=color, isEnabled=enabled))
+        for style in tool.PROGRESS_STYLES:
+            tool.validate_node({'type': 'progress', 'value': 0.5, 'style': style})
+        for style in tool.COUNTDOWN_STYLES:
+            tool.validate_node({'type': 'countdown', 'id': 'focus',
+                                'generation': '12345678-1234-1234-1234-123456789abc', 'style': style})
+        for base, key, invalid in (
+                (text, 'font', (None, '', '26pt', 'system', 26, True, {})),
+                (button, 'style', (None, '', 'filled', 32, True, {})),
+                (button, 'color', (None, '', '#fff', 1, False, {})),
+                (button, 'isEnabled', (None, 'false', 0, 1, {}, []))):
+            for value in invalid:
+                with self.subTest(key=key, value=value):
+                    self.rejected(tool.validate_node, dict(base, **{key: value}), 'invalidNode')
+        for key in ('fontSize', 'fontFamily', 'width', 'height'):
+            self.rejected(tool.validate_node, dict(text, **{key: 26}), 'invalidNode')
+            self.rejected(tool.validate_node, dict(button, **{key: 32}), 'invalidNode')
+
+    def test_node_schema_finite_appearance_tokens_and_defaults_match_cli(self):
+        definitions = json.loads((SDK / 'schema' / 'island-node-v1.schema.json').read_text())['$defs']
+        for kind, key, allowed in (('icon', 'color', tool.COLORS),
+                                    ('text', 'font', tool.TYPOGRAPHY),
+                                    ('button', 'style', tool.BUTTON_STYLES),
+                                    ('button', 'color', tool.COLORS),
+                                    ('progress', 'style', tool.PROGRESS_STYLES),
+                                    ('countdown', 'style', tool.COUNTDOWN_STYLES)):
+            self.assertEqual(set(definitions[kind]['properties'][key]['enum']), set(allowed))
+        self.assertEqual(definitions['icon']['properties']['color']['default'], 'accent')
+        self.assertEqual(definitions['text']['properties']['font']['default'], 'body')
+        self.assertEqual(definitions['button']['properties']['style']['default'], 'standard')
+        self.assertEqual(definitions['button']['properties']['color']['default'], 'accent')
+        self.assertEqual(definitions['button']['properties']['isEnabled'], {'type': 'boolean', 'default': True})
 
     def test_countdown_requires_lowercase_canonical_uuid_and_no_state_fields(self):
         value = {'type': 'countdown', 'id': 'focus',

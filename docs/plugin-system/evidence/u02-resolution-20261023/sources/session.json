@@ -1,0 +1,34 @@
+{
+  "dateLocal": "2026-10-23",
+  "phase": "development-validation",
+  "appVersion": "0.6.0",
+  "build": "5",
+  "originalResolutionObservedInSystemSettings": "2560 × 1664",
+  "showAllResolutionsOriginallyEnabled": true,
+  "temporarySwitchApproved": true,
+  "restoreRequired": true,
+  "plannedTestModes": [
+    "1470 × 956（默认）",
+    "1280 × 832",
+    "1710 × 1112"
+  ],
+  "sourceBaseline": "0858c2a2f698af60cb6836f8e88b5f9ca4369517",
+  "updatedUTC": "2026-10-23T03:58:11.753969+00:00",
+  "currentResolution": "not independently confirmed after user tested other modes",
+  "userSwitchedDefault": true,
+  "oldAppQuitByUser": true,
+  "newAcceptanceAppStarted": true,
+  "menuBarChanged": false,
+  "status": "user-requested-stop-followup-backlog-recorded",
+  "userConfirmedCrossResolutionSizeConsistency": true,
+  "u02Verified": false,
+  "remaining": [
+    "U02-07",
+    "U02-08",
+    "U02-09",
+    "U02-10"
+  ],
+  "resolutionRestorationVerified": false,
+  "lastObservedTimer": "paused countdown 04:40",
+  "allBuildProcessesFinished": true
+}

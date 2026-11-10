@@ -25,6 +25,10 @@ public final class MusicActivityProvider {
     private var observations: [AnyCancellable] = []
     private var cachedArtworkData: Data?
     private var cachedArtworkImage: NSImage?
+    private var artworkResourceRevision: UInt64 = 0
+    private var versionedArtworkResourceID: String {
+        "\(Self.artworkResourceID).v\(artworkResourceRevision)"
+    }
     private var lastPublishedInfo: NowPlayingInfo?
     private var lastPublishedVolume: Float?
     private var lastPublishedMuted: Bool?
@@ -85,7 +89,8 @@ public final class MusicActivityProvider {
 
     /// Resolve only this Host-owned resource, never a plugin URL or path.
     public func resolveImage(_ source: IslandNode.ImageSource) -> NSImage? {
-        guard source == .brokerResource(id: Self.artworkResourceID) else { return nil }
+        guard source == .brokerResource(id: versionedArtworkResourceID)
+                || source == .brokerResource(id: Self.artworkResourceID) else { return nil }
         return cachedArtworkImage
     }
 
@@ -170,10 +175,15 @@ public final class MusicActivityProvider {
     }
 
     private func refreshArtworkIfNeeded(_ data: Data?) {
-        guard data != cachedArtworkData else { return }
-        cachedArtworkData = (data?.count ?? 0) <= Self.maximumArtworkBytes ? data : nil
+        let normalized = (data?.count ?? 0) <= Self.maximumArtworkBytes ? data : nil
+        guard normalized != cachedArtworkData else { return }
+        cachedArtworkData = normalized
         cachedArtworkImage = nil
-        guard let data, data.count <= Self.maximumArtworkBytes,
+        // Resource bytes are outside the pure-data Activity. Changing their
+        // bounded reference invalidates Manager-only renderers even when title,
+        // progress and controls are identical. Retain no old image versions.
+        artworkResourceRevision &+= 1
+        guard let data = normalized,
               let imageSource = CGImageSourceCreateWithData(data as CFData, nil),
               let properties = CGImageSourceCopyPropertiesAtIndex(imageSource, 0, nil) as? [CFString: Any],
               let width = properties[kCGImagePropertyPixelWidth] as? Int,
@@ -190,11 +200,12 @@ public final class MusicActivityProvider {
         let defaultSubtitle = info.title.isEmpty ? "在 Apple Music 播放后显示曲目信息"
             : (album.isEmpty ? artist : "\(artist) — \(album)")
         let subtitle = errorMessage.map { bounded($0, bytes: 128) } ?? defaultSubtitle
+        let artworkSource = IslandNode.ImageSource.brokerResource(id: versionedArtworkResourceID)
         let minimalArtwork: IslandNode = cachedArtworkImage == nil
             ? .icon(.init(info.isPlaying ? "waveform" : "music.note"))
-            : .image(.init(source: .brokerResource(id: Self.artworkResourceID)))
+            : .image(.init(source: artworkSource))
         let compactArtwork: IslandNode = .image(.init(
-            source: .brokerResource(id: Self.artworkResourceID), size: .thumbnail
+            source: artworkSource, size: .thumbnail
         ))
         let playSymbol = info.isPlaying ? "pause.fill" : "play.fill"
         let controls: [IslandNode] = [
@@ -211,18 +222,20 @@ public final class MusicActivityProvider {
             .text(.init(title)),
             .text(.init(subtitle))
         ]
+        // Keep time labels beside the seek track so the music page can use a
+        // shorter shell without shrinking artwork, text, or control targets.
+        var timeline: [IslandNode] = [.text(.init(Self.formattedPlaybackTime(info.position)))]
         if info.duration > 0, !info.trackIdentifier.isEmpty {
-            detailRows.append(.slider(.init(title: "播放进度", value: info.progress,
-                                            actionID: Self.seekActionID, showsTitle: false)))
+            timeline.append(.slider(.init(title: "播放进度", value: info.progress,
+                                         actionID: Self.seekActionID, showsTitle: false)))
             actions.append(ActivityAction(id: Self.seekActionID, title: "调整进度"))
         } else if info.duration > 0 {
-            detailRows.append(.progress(.init(info.progress)))
+            timeline.append(.progress(.init(info.progress)))
+        } else {
+            timeline.append(.spacer(.init()))
         }
-        detailRows.append(.hStack(.init([
-            .text(.init(Self.formattedPlaybackTime(info.position))),
-            .spacer(.init()),
-            .text(.init(info.duration > 0 ? Self.formattedPlaybackTime(info.duration) : "--:--"))
-        ])))
+        timeline.append(.text(.init(info.duration > 0 ? Self.formattedPlaybackTime(info.duration) : "--:--")))
+        detailRows.append(.hStack(.init(timeline)))
         detailRows.append(.hStack(.init([
             .spacer(.init())
         ] + controls + [
@@ -261,7 +274,7 @@ public final class MusicActivityProvider {
             minimal: minimalArtwork,
             compact: compact,
             expanded: .hStack(.init([
-                .image(.init(source: .brokerResource(id: Self.artworkResourceID), size: .artwork)),
+                .image(.init(source: artworkSource, size: .artwork)),
                 .vStack(.init(detailRows))
             ])),
             showsCompact: info.isPlaying

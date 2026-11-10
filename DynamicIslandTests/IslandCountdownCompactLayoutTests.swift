@@ -7,12 +7,6 @@ import XCTest
 final class IslandCountdownCompactLayoutTests: XCTestCase {
     func testCompactCountdownGlyphsRemainOutsidePhysicalNotchAtEveryTimeWidth() throws {
         let baseSize = CGSize(width: 210, height: 32)
-        let shellSize = IslandVisualStyle.compactShellSize(
-            baseSize: baseSize, hasCompactActivity: true, hasActiveTimer: true
-        )
-        XCTAssertEqual(shellSize, CGSize(width: 336, height: 32))
-        XCTAssertEqual(IslandRenderer.contentSize(for: .compact, shellSize: shellSize),
-                       CGSize(width: 320, height: 32))
         let clock = IslandCountdownDisplayClock()
         defer { clock.shutdown() }
         let countdown = IslandNode.Countdown(
@@ -22,12 +16,19 @@ final class IslandCountdownCompactLayoutTests: XCTestCase {
             .icon(.init("timer")), .spacer(.init()), .countdown(countdown)
         ]))
         XCTAssertTrue(ActivityPresentation.HostPolicy.accepts(tree, for: .compact))
-        let notchStart = Int((shellSize.width - baseSize.width) / 2)
-        let notchEnd = notchStart + Int(baseSize.width)
-
+        let presentation = ActivityPresentation(title: "Countdown", compact: tree)
         for text in ["00:15", "59:59", "1:00:00", "24:00:00"] {
+            let layout = IslandCompactLayout.activity(baseSize: baseSize, presentation: presentation,
+                countdownResolver: { _ in .init(text: text, progress: 0.5, requiresTick: false) })
+            let shellSize = layout.size
+            XCTAssertEqual(layout.leadingWidth, 28)
+            XCTAssertEqual(layout.trailingWidth, IslandCompactLayout.countdownTextWidth(text) + 12)
+            XCTAssertEqual(layout.size.width - layout.leadingWidth - layout.trailingWidth, baseSize.width)
+            // Asymmetric resizing keeps both physical camera edges fixed.
+            let notchStart = Int(layout.leadingWidth)
+            let notchEnd = notchStart + Int(baseSize.width)
             let renderer = IslandRenderer(
-                presentation: .init(title: "Countdown", compact: tree),
+                presentation: presentation,
                 mode: .compact, shellSize: shellSize,
                 countdownResolver: { reference in
                     XCTAssertEqual(reference, countdown)
@@ -51,7 +52,7 @@ final class IslandCountdownCompactLayoutTests: XCTestCase {
             let bitmap = try capture(hostingView, size: shellSize)
             let png = try XCTUnwrap(bitmap.representation(using: .png, properties: [:]))
             let attachment = XCTAttachment(data: png, uniformTypeIdentifier: "public.png")
-            attachment.name = "Compact countdown \(text) original 336x32"
+            attachment.name = "Compact countdown \(text) actual \(Int(shellSize.width))x32"
             attachment.lifetime = .keepAlways
             add(attachment)
 

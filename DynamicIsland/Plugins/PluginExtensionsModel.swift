@@ -41,6 +41,12 @@ public final class PluginExtensionsModel {
     public nonisolated static let uninstallFailedMessage = "插件卸载未完成，请刷新状态后重试。"
     public nonisolated static let uninstallCleanupFailedMessage = "插件已卸载，本次授权已撤销，但授权记录移除失败。"
     public nonisolated static let quarantineMessage = "插件已被隔离，请在诊断界面确认后重启。"
+    public nonisolated static let toolPlacementFailedMessage = "显示区域设置未能保存，请稍后重试。"
+    public nonisolated static let toolPlacementUnavailableMessage = "显示区域设置无法读取或保存，请稍后重试。"
+
+    /// Shared with the activity runtime; the placement control observes this
+    /// store directly so external Host changes appear without a model refresh.
+    public let toolPlacements: PluginToolPlacementStore
 
     public private(set) var plugins: [PluginRecord] = []
     public private(set) var snapshots: [String: PluginLifecycleSnapshot] = [:]
@@ -67,12 +73,14 @@ public final class PluginExtensionsModel {
 
     public init(manager: PluginManager, lifecycle: PluginLifecycleBridge,
                 permissions: PermissionManager, diagnostics: PluginDiagnosticsStore,
-                diagnosticsModel: PluginDiagnosticsModel? = nil) {
+                diagnosticsModel: PluginDiagnosticsModel? = nil,
+                toolPlacements: PluginToolPlacementStore? = nil) {
         self.manager = manager
         self.lifecycle = lifecycle
         self.permissions = permissions
         self.diagnostics = diagnostics
         self.diagnosticsModel = diagnosticsModel
+        self.toolPlacements = toolPlacements ?? PluginToolPlacementStore()
         lifecycleObservationID = lifecycle.observeChanges { [weak self] in
             self?.requestSnapshotRefresh()
         }
@@ -106,7 +114,8 @@ public final class PluginExtensionsModel {
     /// granted. Denial and revocation remain available for every declaration.
     public nonisolated static func supports(_ permission: PluginPermission) -> Bool {
         switch permission {
-        case .network, .localStorage, .openLinks, .readClipboard, .writeClipboard, .userSelectedFiles: true
+        case .network, .localStorage, .openLinks, .readClipboard, .writeClipboard, .userSelectedFiles,
+             .readMedia, .controlMedia: true
         case .publishNotifications, .readCalendar: false
         }
     }
@@ -117,6 +126,12 @@ public final class PluginExtensionsModel {
 
     public func managementReview(id: String) -> PluginManagementReview? {
         packages[id].map(PluginManagementReview.init(package:))
+    }
+
+    /// A pure media adapter contributes to the music area, not the Host's
+    /// functional tool lists. A mixed provider may also publish tools.
+    public nonisolated static func supportsToolPlacement(_ manifest: PluginManifest) -> Bool {
+        manifest.mediaProvider == nil || manifest.capabilities.contains(.publishActivity)
     }
 
     public func setDiscoveryReport(_ report: PluginDiscoveryReport) {
@@ -189,6 +204,24 @@ public final class PluginExtensionsModel {
             try await permissions.applyPersistentHostDecision(decision: decision, review: review, permission: permission)
         } catch {
             self.error = managementMessage(error, fallback: Self.permissionFailedMessage)
+        }
+        await readSnapshot()
+    }
+
+    /// The picker captures the package the user saw before creating its Task.
+    /// Saving a display preference neither starts execution nor changes grants.
+    public func setToolArea(_ area: PluginToolArea, review: PluginManagementReview) async {
+        await waitUntilIdle()
+        beginBusyOperation()
+        defer { finishBusyOperation() }
+        error = nil
+        do {
+            guard await manager.validatedPackage(id: review.id) == review.package else {
+                throw ManagementFailure.staleReview
+            }
+            try toolPlacements.setArea(area, forPluginID: review.id)
+        } catch {
+            self.error = managementMessage(error, fallback: Self.toolPlacementFailedMessage)
         }
         await readSnapshot()
     }

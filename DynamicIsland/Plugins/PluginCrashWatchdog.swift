@@ -145,7 +145,7 @@ public final class PluginCrashWatchdog {
         do {
             try package.manifest.validate()
             let manifest = package.manifest
-            let metadata: [String: Any] = [
+            var metadata: [String: Any] = [
                 "schemaVersion": manifest.schemaVersion,
                 "id": manifest.id,
                 "name": manifest.name,
@@ -157,12 +157,24 @@ public final class PluginCrashWatchdog {
                 "permissions": manifest.permissions.map(\.rawValue).sorted(),
                 "capabilities": manifest.capabilities.map(\.rawValue).sorted()
             ]
+            if let provider = manifest.mediaProvider {
+                metadata["mediaProvider"] = [
+                    "targetBundleIdentifier": provider.targetBundleIdentifier,
+                    "displayName": provider.displayName,
+                    "helperPath": provider.helperPath,
+                    "helperSHA256": provider.helperSHA256
+                ]
+            }
             let bytes = try JSONSerialization.data(withJSONObject: metadata, options: [.sortedKeys])
             var hash = SHA256()
             hash.update(data: Data("DynamicIsland.PluginCrashWatchdog.v1\0".utf8))
             hash.update(data: bytes)
             hash.update(data: Data([0]))
             hash.update(data: Data(SHA256.hash(data: package.entrySource)))
+            if manifest.mediaProvider != nil {
+                hash.update(data: Data([0]))
+                hash.update(data: Data(SHA256.hash(data: package.mediaHelperSource ?? Data())))
+            }
             return hash.finalize().map { String(format: "%02x", $0) }.joined()
         } catch {
             throw PluginCrashWatchdogError.invalidPackage

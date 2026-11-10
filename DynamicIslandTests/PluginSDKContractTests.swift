@@ -12,11 +12,14 @@ final class PluginSDKContractTests: XCTestCase {
         let host = try json(at: "docs/plugin-system/schema/plugin-manifest-v1.schema.json")
         let sdk = try json(at: "SDK/schema/plugin-manifest-v1.schema.json")
         XCTAssertEqual(sdk, host, "The offline authoring copy must not drift from the Host schema.")
-        for relative in ["SDK/examples/hello-world/manifest.json", "docs/plugin-system/examples/pomodoro/manifest.json",
-                         "docs/plugin-system/examples/github/manifest.json"] {
+        for (relative, minimumHost) in [
+            ("SDK/examples/hello-world/manifest.json", "0.6.0"),
+            ("docs/plugin-system/examples/pomodoro/manifest.json", "0.6.1"),
+            ("docs/plugin-system/examples/github/manifest.json", "0.6.0")
+        ] {
             let manifest = try PluginManifest.decodeJSON(Data(contentsOf: repository.appendingPathComponent(relative)))
             XCTAssertEqual(manifest.engine, .javaScriptCore)
-            XCTAssertEqual(manifest.minimumHostVersion, try SemanticVersion("0.6.0"))
+            XCTAssertEqual(manifest.minimumHostVersion, try SemanticVersion(minimumHost))
         }
     }
 

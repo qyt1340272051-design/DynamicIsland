@@ -1,8 +1,12 @@
 {
   "name": "dynamic-island-sdk",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "private": true,
-  "description": "SDK 1.0.0 limited stable authoring tools and types. Plugin runtime has no npm dependency.",
-  "scripts": { "check:types": "tsc -p tsconfig.json" },
-  "devDependencies": { "typescript": "4.5.5" }
+  "description": "SDK 1.1.0 development authoring tools and types, including optional media-provider metadata. Plugin runtime has no npm dependency.",
+  "scripts": {
+    "check:types": "tsc -p tsconfig.json"
+  },
+  "devDependencies": {
+    "typescript": "4.5.5"
+  }
 }

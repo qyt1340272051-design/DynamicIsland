@@ -112,3 +112,25 @@ const hooks: DynamicIsland.LifecycleContract = {
     onStop: () => undefined
 };
 void hooks;
+
+// Finite Host appearances preserve dimensions and behavior under Host control.
+const timerTypography: readonly DynamicIsland.Typography[] = ['caption', 'body', 'headline', 'title', 'metric', 'timer'];
+const styledControls: readonly DynamicIsland.Node[] = [
+    {type: 'text', content: '25:00', font: 'timer'},
+    {type: 'button', actionID: 'reset', label: {type: 'text', content: 'Reset'}, style: 'secondary', color: 'secondary', isEnabled: false},
+    {type: 'button', actionID: 'start', label: {type: 'text', content: 'Start'}, style: 'primary', color: 'success', isEnabled: true},
+    {type: 'button', actionID: 'legacy', label: {type: 'text', content: 'Legacy'}, style: 'standard'},
+    {type: 'progress', value: 0.5, style: 'track'}
+];
+void [timerTypography, styledControls];
+void island.countdown.get('session').then(timer => {
+    if (timer === null) return;
+    const styledTimer: DynamicIsland.CountdownNode = {type: 'countdown', id: timer.id, generation: timer.generation, style: 'timer'};
+    const track: DynamicIsland.CountdownNode = {...styledTimer, style: 'track'};
+    void [styledTimer, track];
+});
+
+// Host build20 optional icon appearance remains a finite semantic choice.
+const tomatoTimerIcon: DynamicIsland.IconNode = {type: 'icon', symbolName: 'timer', color: 'danger'};
+const legacyTimerIcon: DynamicIsland.IconNode = {type: 'icon', symbolName: 'timer'};
+void [tomatoTimerIcon, legacyTimerIcon];

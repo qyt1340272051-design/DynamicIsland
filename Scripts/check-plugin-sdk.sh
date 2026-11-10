@@ -8,6 +8,11 @@ python3 -m unittest discover -s SDK/tests -p 'test_*.py'
 python3 SDK/tools/di_plugin.py validate SDK/examples/hello-world
 python3 SDK/tools/di_plugin.py validate docs/plugin-system/examples/pomodoro
 python3 SDK/tools/di_plugin.py validate docs/plugin-system/examples/github
+for player in netease-music qq-music spotify; do
+  python3 SDK/tools/di_plugin.py validate "docs/plugin-system/examples/$player"
+  node --check "docs/plugin-system/examples/$player/index.js"
+  node --check "docs/plugin-system/examples/$player/media-helper.js"
+done
 python3 SDK/tools/di_plugin.py validate-node SDK/tests/fixtures/valid-node.json
 node --check SDK/examples/hello-world/index.js
 

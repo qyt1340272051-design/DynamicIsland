@@ -1,0 +1,107 @@
+{
+  "date": "2026-10-27",
+  "authorization": {
+    "explicitTemporaryReadApproved": true,
+    "explicitTemporaryControlApproved": true,
+    "restoreAppleMusicAfterTest": true,
+    "revokeBothAfterTest": true
+  },
+  "preInterruptionAPIChecks": {
+    "seekCommand": {
+      "ok": true
+    },
+    "seekObserved": true,
+    "seekPosition": 60.17594623565674,
+    "nextCommand": {
+      "ok": true
+    },
+    "nextObserved": true,
+    "coverPresentAfterNext": true,
+    "previousCommand": {
+      "ok": true
+    },
+    "previousObserved": true,
+    "oldTrackSeekRejected": {
+      "ok": false
+    },
+    "restorePositionCommand": {
+      "ok": true
+    },
+    "restorePauseCommand": {
+      "ok": true
+    },
+    "restored": {
+      "sameSong": true,
+      "paused": true,
+      "position": 0
+    }
+  },
+  "productionUI": {
+    "compactArtworkObserved": true,
+    "expandedTitleArtistDurationObserved": true,
+    "playButtonChangedToPause": true,
+    "pauseButtonChangedToPlay": true,
+    "nativeSliderIncrementInvoked": true,
+    "physicalDragUserConfirmed": true,
+    "physicalDragObservedSeconds": 61.94704903169014,
+    "physicalDragObservedPaused": true
+  },
+  "build10LiveCacheRetest": {
+    "resumeObserved": true,
+    "pauseObserved": true,
+    "progressAdvancedDuringResume": true,
+    "sameSongThroughPause": true,
+    "helperHasArtworkAfterPause": true,
+    "nextCommand": {
+      "ok": true
+    },
+    "nextObserved": true,
+    "previousCommand": {
+      "ok": true
+    },
+    "previousObserved": true,
+    "pausedAfterReturning": true,
+    "helperHasArtworkAfterReturning": false,
+    "sameSongAsCachedFreshTrack": false,
+    "finalNativeHasArtworkWhilePlaying": false,
+    "finalPlaying": true,
+    "compactCoverRetainedWhileNativeMissing": true
+  },
+  "restorationAfterContinuation": {
+    "pauseBeforeRestore": {
+      "ok": true
+    },
+    "previous1": {
+      "ok": true
+    },
+    "sameSongRestored": true,
+    "positionCommand": {
+      "ok": true
+    },
+    "targetPosition": 13.312,
+    "restoredPosition": 13.446407997131347,
+    "positionRestored": true,
+    "restorePlayStateCommand": {
+      "ok": true
+    },
+    "playStateRestored": true,
+    "finalPaused": true
+  },
+  "restorationScope": "Restored the song, pause state and position observed at continuation; the user changed playback during interruption. Did not force the older test track.",
+  "cleanup": {
+    "readPermission": "revoked",
+    "controlPermission": "revoked",
+    "selectedSource": "Apple Music",
+    "pluginInstalled": true,
+    "pluginEnabled": true,
+    "optionalHelperProcessCount": 0,
+    "nativeUIConfirmed": true
+  },
+  "artworkPolicy": {
+    "memoryOnly": true,
+    "maximumEntries": 8,
+    "maximumBytes": 8388608,
+    "clearedWhenReadRevoked": true,
+    "retainedWhenOnlyControlRevoked": true
+  }
+}

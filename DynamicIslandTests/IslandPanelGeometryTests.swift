@@ -73,13 +73,13 @@ final class IslandPanelGeometryTests: XCTestCase {
             safeAreaInsetsTop: 38
         )
 
-        XCTAssertEqual(frame.width, 520)
-        XCTAssertEqual(frame.height, 240)
+        XCTAssertEqual(frame.width, 617.5)
+        XCTAssertEqual(frame.height, 285)
         XCTAssertEqual(frame.midX, 864, accuracy: 0.5)
         XCTAssertEqual(frame.maxY, 1117, accuracy: 0.5)
     }
 
-    func testStableFrameUsesExpandedSizeAndMatchesCompactCenter() {
+    func testStableFrameScalesWithNotchAndMatchesCompactCenter() {
         let screenFrame = CGRect(x: 0, y: 0, width: 1728, height: 1117)
         let visibleFrame = CGRect(x: 0, y: 0, width: 1728, height: 1071)
         let left = CGRect(x: 0, y: 1079, width: 756, height: 38)
@@ -98,7 +98,7 @@ final class IslandPanelGeometryTests: XCTestCase {
             auxiliaryTopRightArea: right
         )
 
-        XCTAssertEqual(stable.size, IslandPanelGeometry.expandedSize)
+        XCTAssertEqual(stable.size, CGSize(width: 617.5, height: 285))
         XCTAssertEqual(stable.midX, compact.midX, accuracy: 0.5)
         XCTAssertEqual(stable.maxY, compact.maxY, accuracy: 0.5)
     }
@@ -147,6 +147,79 @@ final class IslandPanelGeometryTests: XCTestCase {
             XCTAssertLessThanOrEqual(frame.maxY, environment.frame.maxY)
         }
         XCTAssertEqual(stable.width, environment.frame.width)
+        XCTAssertEqual(stable.height, 221.53846153846155, accuracy: 0.000_001)
+        XCTAssertEqual(stable.width / stable.height, 520.0 / 240.0, accuracy: 0.000_001)
         XCTAssertEqual(stable.maxY, environment.frame.maxY, accuracy: 0.5)
+    }
+
+    func testHeightLimitedScreenFitsExpandedFrameWithoutChangingItsAspectRatio() {
+        let environment = ScreenEnvironment(
+            displayID: 3,
+            name: "Synthetic Height-Limited Display",
+            frame: CGRect(x: -400, y: -120, width: 400, height: 120),
+            visibleFrame: CGRect(x: -400, y: -120, width: 400, height: 96),
+            backingScaleFactor: 1,
+            isBuiltIn: false
+        )
+
+        let stable = IslandPanelGeometry.stableFrame(in: environment)
+
+        XCTAssertEqual(stable.size, CGSize(width: 260, height: 120))
+        XCTAssertEqual(stable.midX, environment.frame.midX, accuracy: 0.5)
+        XCTAssertEqual(stable.maxY, environment.frame.maxY, accuracy: 0.5)
+        XCTAssertTrue(environment.frame.contains(stable))
+    }
+
+    func testNotchedFramesRemainAlignedOnScreenAboveAndLeftOfMainDisplay() {
+        let screenFrame = CGRect(x: -1728, y: -120, width: 1728, height: 1117)
+        let environment = ScreenEnvironment(
+            displayID: 4,
+            name: "Synthetic Offset Notched Display",
+            frame: screenFrame,
+            visibleFrame: CGRect(x: -1728, y: -120, width: 1728, height: 1071),
+            safeAreaInsets: ScreenEdgeInsets(top: 38),
+            auxiliaryTopLeftArea: CGRect(x: -1728, y: 959, width: 756, height: 38),
+            auxiliaryTopRightArea: CGRect(x: -756, y: 959, width: 756, height: 38),
+            backingScaleFactor: 2,
+            isBuiltIn: true
+        )
+
+        let compact = IslandPanelGeometry.compactFrame(in: environment)
+        let stable = IslandPanelGeometry.stableFrame(in: environment)
+
+        XCTAssertEqual(compact.size, CGSize(width: 216, height: 38))
+        XCTAssertEqual(stable.size, CGSize(width: 617.5, height: 285))
+        XCTAssertEqual(stable.midX, compact.midX, accuracy: 0.5)
+        XCTAssertEqual(stable.maxY, screenFrame.maxY, accuracy: 0.5)
+        XCTAssertGreaterThanOrEqual(stable.minX, screenFrame.minX)
+        XCTAssertLessThanOrEqual(stable.maxX, screenFrame.maxX)
+        XCTAssertGreaterThanOrEqual(stable.minY, screenFrame.minY)
+    }
+
+    func testSynthetic1710FractionalPanelPreservesExactTopEdgeAndNotchCenter() {
+        // Synthetic 37 pt notch geometry, not an additional measured device.
+        let environment = ScreenEnvironment(
+            displayID: 5,
+            name: "Synthetic 1710 Display",
+            frame: CGRect(x: 0, y: 0, width: 1710, height: 1112),
+            visibleFrame: CGRect(x: 0, y: 0, width: 1710, height: 1075),
+            safeAreaInsets: ScreenEdgeInsets(top: 37),
+            auxiliaryTopLeftArea: CGRect(x: 0, y: 1075, width: 751, height: 37),
+            auxiliaryTopRightArea: CGRect(x: 959, y: 1075, width: 751, height: 37),
+            backingScaleFactor: 2,
+            isBuiltIn: true
+        )
+
+        let frames = [
+            IslandPanelGeometry.expandedFrame(in: environment),
+            IslandPanelGeometry.stableFrame(in: environment)
+        ]
+
+        for frame in frames {
+            XCTAssertEqual(frame.size, CGSize(width: 601.25, height: 277.5))
+            XCTAssertEqual(frame.maxY, environment.frame.maxY, accuracy: 0.000_001)
+            XCTAssertEqual(frame.midX, 855, accuracy: 0.000_001)
+            XCTAssertTrue(environment.frame.contains(frame))
+        }
     }
 }

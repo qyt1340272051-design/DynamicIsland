@@ -273,6 +273,8 @@ final class PluginManifestTests: XCTestCase {
         let manifest = try PluginManifest.decodeJSON(try fixtureData {
             $0["permissions"] = allPermissions
             $0["capabilities"] = allCapabilities
+            $0["minimumHostVersion"] = "0.6.1"
+            $0["mediaProvider"] = self.mediaProviderObject()
         })
         XCTAssertEqual(manifest.permissions.map(\.rawValue), allPermissions)
         XCTAssertEqual(manifest.capabilities.map(\.rawValue), allCapabilities)
@@ -314,7 +316,7 @@ final class PluginManifestTests: XCTestCase {
         XCTAssertEqual(schema["$schema"] as? String, "https://json-schema.org/draft/2020-12/schema")
         XCTAssertEqual(schema["additionalProperties"] as? Bool, false)
         XCTAssertEqual(Set(try XCTUnwrap(schema["required"] as? [String])), requiredFields)
-        XCTAssertEqual(Set(properties.keys), requiredFields.union(["developer"]))
+        XCTAssertEqual(Set(properties.keys), requiredFields.union(["developer", "mediaProvider"]))
         XCTAssertEqual((properties["developer"] as? [String: Any])?["$ref"] as? String, "#/properties/name")
 
         let schemaVersion = try XCTUnwrap(properties["schemaVersion"] as? [String: Any])
@@ -424,6 +426,62 @@ final class PluginManifestTests: XCTestCase {
         ]
         update?(&object)
         return try JSONSerialization.data(withJSONObject: object, options: [.sortedKeys])
+    }
+
+    func testMediaProviderRoundTripsWithExplicitHostRequirements() throws {
+        let manifest = try PluginManifest.decodeJSON(try mediaFixtureData())
+        XCTAssertEqual(manifest.mediaProvider?.targetBundleIdentifier, "com.netease.163music")
+        XCTAssertEqual(try PluginManifest.decodeJSON(manifest.encodeJSON()), manifest)
+        let updates: [(inout [String: Any]) -> Void] = [
+            { $0["minimumHostVersion"] = "0.6.0" },
+            { $0["minimumHostVersion"] = "0.6.1-beta.1" },
+            { $0["engine"] = "superisland" },
+            { $0["permissions"] = ["media.read"] },
+            { $0["capabilities"] = [] },
+            { $0.removeValue(forKey: "mediaProvider") }
+        ]
+        for update in updates {
+            XCTAssertThrowsError(try PluginManifest.decodeJSON(mediaFixtureData(update)))
+        }
+    }
+
+    func testMediaProviderRejectsDuplicateTrustMetadataBeforeDecoderLosesIt() throws {
+        let data = try mediaFixtureData()
+        let raw = try XCTUnwrap(String(data: data, encoding: .utf8))
+        let duplicate = raw.replacingOccurrences(of: "\"helperPath\":", with: "\"helperPath\":\"other.js\",\"helperPath\":")
+        assertManifestError(Data(duplicate.utf8), code: "duplicateField", path: "$.mediaProvider.helperPath")
+    }
+
+    func testMediaProviderRejectsUnknownFieldsUnsafePathsAndUntrustedShapes() throws {
+        let cases: [(String, Any)] = [
+            ("helperPath", "../helper.js"), ("helperPath", "/helper.js"),
+            ("helperPath", "src/index.js"), ("helperSHA256", String(repeating: "A", count: 64)),
+            ("helperSHA256", "abc"), ("targetBundleIdentifier", "com..app"),
+            ("targetBundleIdentifier", "com.app/evil"), ("displayName", " leading"),
+            ("arbitraryCommand", "launch")
+        ]
+        for (key, value) in cases {
+            let data = try mediaFixtureData {
+                var provider = self.mediaProviderObject(); provider[key] = value
+                $0["mediaProvider"] = provider
+            }
+            XCTAssertThrowsError(try PluginManifest.decodeJSON(data), key)
+        }
+    }
+
+    private func mediaProviderObject() -> [String: Any] {
+        ["targetBundleIdentifier": "com.netease.163music", "displayName": "网易云音乐",
+         "helperPath": "media-helper.js", "helperSHA256": String(repeating: "a", count: 64)]
+    }
+
+    private func mediaFixtureData(_ update: ((inout [String: Any]) -> Void)? = nil) throws -> Data {
+        try fixtureData {
+            $0["minimumHostVersion"] = "0.6.1"
+            $0["permissions"] = ["media.read", "media.control"]
+            $0["capabilities"] = ["music.provider"]
+            $0["mediaProvider"] = self.mediaProviderObject()
+            update?(&$0)
+        }
     }
 
     private func assertManifestError(

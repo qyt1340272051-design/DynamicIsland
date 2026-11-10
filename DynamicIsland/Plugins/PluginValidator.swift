@@ -1,3 +1,4 @@
+import CryptoKit
 import Darwin
 import Foundation
 
@@ -61,6 +62,20 @@ public nonisolated struct ValidatedPluginPackage: Equatable, Sendable {
     public let entrySource: Data
     public let regularFileCount: Int
     public let totalFileBytes: UInt64
+    /// Optional script snapshot; execution never reopens an installed path.
+    public let mediaHelperSource: Data?
+
+    public init(manifest: PluginManifest, canonicalRootURL: URL, entryRelativePath: String,
+                entrySource: Data, regularFileCount: Int, totalFileBytes: UInt64,
+                mediaHelperSource: Data? = nil) {
+        self.manifest = manifest
+        self.canonicalRootURL = canonicalRootURL
+        self.entryRelativePath = entryRelativePath
+        self.entrySource = entrySource
+        self.regularFileCount = regularFileCount
+        self.totalFileBytes = totalFileBytes
+        self.mediaHelperSource = mediaHelperSource
+    }
 }
 
 public nonisolated enum PluginValidationError: Error, Equatable, LocalizedError, Sendable {
@@ -92,9 +107,11 @@ public nonisolated enum PluginValidationError: Error, Equatable, LocalizedError,
     case packageTooLarge(actual: UInt64, maximum: UInt64)
     case changedDuringValidation(path: String)
     case readFailed(path: String)
+    case invalidMediaHelper(path: String)
 
     public var code: String {
         switch self {
+        case .invalidMediaHelper: "invalidMediaHelper"
         case .invalidPackageURL: "invalidPackageURL"
         case .invalidAllowedContainer: "invalidAllowedContainer"
         case .packageOutsideAllowedContainer: "packageOutsideAllowedContainer"
@@ -135,7 +152,7 @@ public nonisolated enum PluginValidationError: Error, Equatable, LocalizedError,
              .entryNotRegularFile(let path), .pathEscapesPackage(let path),
              .pathTooLong(let path, _), .directoryTooDeep(let path, _),
              .fileTooLarge(let path, _, _), .changedDuringValidation(let path),
-             .readFailed(let path):
+             .readFailed(let path), .invalidMediaHelper(let path):
             path
         case .manifestMissing, .manifestNotRegularFile:
             PluginValidator.manifestFilename
@@ -150,6 +167,8 @@ public nonisolated enum PluginValidationError: Error, Equatable, LocalizedError,
 
     public var errorDescription: String? {
         switch self {
+        case .invalidMediaHelper(let path):
+            "Media helper must be bounded UTF-8 JavaScript with its declared SHA-256 digest: \(path)."
         case .invalidPackageURL:
             "Plugin package must be a local file URL."
         case .invalidAllowedContainer:
@@ -341,6 +360,21 @@ public nonisolated struct PluginValidator: Sendable {
             maximumBytes: context.limits.maxSingleFileBytes
         )
 
+        var mediaHelperSource: Data?
+        if let provider = manifest.mediaProvider {
+            guard let item = inventory.items[provider.helperPath], item.info.kind == .regularFile else {
+                throw PluginValidationError.invalidMediaHelper(path: provider.helperPath)
+            }
+            let helper = try readRegularFile(provider.helperPath, from: rootDescriptor,
+                expected: item.info, maximumBytes: min(context.limits.maxSingleFileBytes, 128 * 1024))
+            let digest = SHA256.hash(data: helper).map { String(format: "%02x", $0) }.joined()
+            guard !helper.isEmpty, !helper.contains(0), String(data: helper, encoding: .utf8) != nil,
+                  !helper.starts(with: [0xEF, 0xBB, 0xBF]), digest == provider.helperSHA256 else {
+                throw PluginValidationError.invalidMediaHelper(path: provider.helperPath)
+            }
+            mediaHelperSource = helper
+        }
+
         let endingRootInfo = try descriptorInfo(rootDescriptor, path: ".")
         guard endingRootInfo.sameObjectAndContents(as: openedRootInfo) else {
             throw PluginValidationError.changedDuringValidation(path: ".")
@@ -352,7 +386,8 @@ public nonisolated struct PluginValidator: Sendable {
             entryRelativePath: manifest.entry,
             entrySource: entrySource,
             regularFileCount: inventory.regularFileCount,
-            totalFileBytes: inventory.totalFileBytes
+            totalFileBytes: inventory.totalFileBytes,
+            mediaHelperSource: mediaHelperSource
         )
     }
 

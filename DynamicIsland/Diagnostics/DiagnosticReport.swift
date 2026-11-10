@@ -71,6 +71,7 @@ nonisolated struct DiagnosticIslandState: Equatable, Sendable {
     let isMusicPlaying: Bool
     let timerSession: String
     let trayItemCount: Int
+    var displayLayoutScale: CGFloat = 1
 }
 
 nonisolated struct DynamicIslandDiagnosticReport: Equatable, Sendable {
@@ -100,6 +101,7 @@ nonisolated struct DynamicIslandDiagnosticReport: Equatable, Sendable {
             "panel_visible: \(yesNo(island.isPanelVisible))",
             "panel_frame_points: \(island.panelFrame.map(rectDescription) ?? "none")",
             "compact_panel_size_points: \(sizeDescription(island.compactPanelSize))",
+            "layout_scale: \(island.displayLayoutScale.isFinite ? String(format: "%.4f", Double(island.displayLayoutScale)) : "nonfinite")",
             "presentation_state: \(singleLine(island.presentationState))",
             "expanded_surface: \(singleLine(island.expandedSurface))",
             "music_playing: \(yesNo(island.isMusicPlaying))",

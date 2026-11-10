@@ -10,6 +10,39 @@ final class ActivityPresentationRequestTests: XCTestCase {
     private let otherSource = ActivitySource(kind: .plugin, identifier: "other.module")
     private let musicSource = ActivitySource(kind: .builtIn, identifier: "music")
 
+    func testHostSourceEligibilityRejectsWrongRegionAndRevokesExistingLeaseSynchronously() throws {
+        let manager = ActivityManager(clock: TestActivityClock(start), configuration: .immediate)
+        let first = try publishTool("first", manager: manager)
+        let other = try publishTool("other", source: otherSource, manager: manager)
+        manager.setPresentationRequestsAllowed(true, forSource: { $0 == self.source })
+        XCTAssertEqual(manager.requestPresentation(other).reason, .hostUnavailable)
+        XCTAssertEqual(manager.requestPresentation(first).status, .accepted)
+        XCTAssertEqual(manager.currentSnapshot?.instanceToken, first.instanceToken)
+        manager.setPresentationRequestsAllowed(true, forSource: { $0 == self.otherSource })
+        XCTAssertNil(manager.currentSnapshot)
+        XCTAssertEqual(manager.withdrawPresentation(first).reason, .noRequest)
+        XCTAssertEqual(manager.requestPresentation(first).reason, .hostUnavailable)
+        XCTAssertEqual(manager.requestPresentation(other).reason, .contextBudgetUsed,
+                       "Changing a source filter alone must not reset the request budget.")
+        manager.setPresentationRequestsAllowed(false)
+        manager.setPresentationRequestsAllowed(true, forSource: { $0 == self.otherSource })
+        XCTAssertEqual(manager.requestPresentation(other).status, .accepted)
+    }
+
+    func testSourceEligibilityChangedDuringPublicationRejectsTheOriginalGrant() throws {
+        let manager = ActivityManager(clock: TestActivityClock(start), configuration: .immediate)
+        let tool = try publishTool("module", manager: manager)
+        manager.setPresentationRequestsAllowed(true)
+        let observation = manager.$currentSnapshot.dropFirst().sink { snapshot in
+            guard snapshot?.instanceToken == tool.instanceToken else { return }
+            manager.setPresentationRequestsAllowed(true, forSource: { _ in false })
+        }
+        XCTAssertEqual(manager.requestPresentation(tool).reason, .hostUnavailable)
+        XCTAssertNil(manager.currentSnapshot)
+        XCTAssertEqual(manager.withdrawPresentation(tool).reason, .noRequest)
+        withExtendedLifetime(observation) {}
+    }
+
     func testHostMustExplicitlyAllowRequestsInAnExpandedContext() throws {
         let manager = ActivityManager(clock: TestActivityClock(start), configuration: .immediate)
         let snapshot = try publishTool("module", manager: manager)

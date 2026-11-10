@@ -7,15 +7,23 @@ public enum IslandVisualStyle {
         case battery
     }
 
-    public static let expandedShellSize = CGSize(width: 480, height: 200)
-    public static let expandedMusicHeight: CGFloat = 200
-    public static let expandedTimerHeight: CGFloat = 190
-    public static let expandedFileTrayHeight: CGFloat = 164
-    public static let expandedCompactContentHeight: CGFloat = 152
-    public static let expandedContentSize = CGSize(width: 468, height: 200)
-    public static let expandedContentPadding: CGFloat = 12
+    /// Keep the validated Host canvas while presenting expanded surfaces at a
+    /// smaller native drawing size. Compact camera geometry uses its own scale.
+    public static let expandedDensity: CGFloat = 0.88
+
+    public static let expandedShellSize = CGSize(width: 440, height: 184)
+    public static let expandedMusicHeight: CGFloat = 172
+    public static let homeLayerSelectorHeight: CGFloat = 24
+    public static let expandedHomeHeight = expandedMusicHeight + homeLayerSelectorHeight
+    public static let expandedTimerHeight: CGFloat = 174
+    public static let expandedFileTrayHeight: CGFloat = 148
+    public static let expandedCompactContentHeight: CGFloat = 136
+    public static let expandedContentSize = CGSize(width: 428, height: 184)
+    public static let expandedContentPadding: CGFloat = 8
     public static let expandedSurfaceSwitcherHeight: CGFloat = 28
-    public static let expandedSurfaceSpacing: CGFloat = 8
+    public static let expandedSurfaceSpacing: CGFloat = 6
+    public static let expandedToolSelectorHeight: CGFloat = 24
+    public static let expandedToolSelectorSpacing: CGFloat = 4
     public static let expandedShellCornerRadius: CGFloat = 26
     public static let activityCompactHorizontalExpansion: CGFloat = 72
     /// Leaves enough room in both display wings for the volume glyph and the
@@ -24,7 +32,9 @@ public enum IslandVisualStyle {
     /// Adds a 100 pt display wing on each side of the physical notch. After
     /// renderer insets, the right wing still fits `100%` and the battery gauge.
     public static let batteryCompactHorizontalExpansion: CGFloat = 200
-    public static let timerCompactHorizontalExpansion: CGFloat = 126
+    /// Each wing accommodates the native eight-character `02:00:00` label,
+    /// its padding and camera clearance at every display layout scale.
+    public static let timerCompactHorizontalExpansion: CGFloat = 150
     public static let hoverShellShadowOpacity: Double = 0.28
     public static let hoverShellShadowRadius: CGFloat = 18
     public static let hoverShellShadowYOffset: CGFloat = 8
@@ -37,22 +47,29 @@ public enum IslandVisualStyle {
         hasTrayItems: Bool,
         hasError: Bool,
         hasTimerCompletion: Bool,
-        hasPresentedTool: Bool = false
+        hasPresentedTool: Bool = false,
+        showsHomeLayerButtons: Bool = true
     ) -> CGSize {
-        // The currently presented tool owns the full Host canvas. Hidden
-        // legacy tab state must not shorten its validated content budget.
-        if hasPresentedTool { return expandedShellSize }
+        // The presented tool keeps the full canonical Host canvas. Region tabs
+        // occupy additional outer-shell height without changing renderer policy.
+        if hasPresentedTool {
+            let selectorHeight = surface == .tools || surface == .utilities
+                ? expandedToolSelectorHeight + expandedToolSelectorSpacing : 0
+            return CGSize(width: expandedShellSize.width, height: expandedShellSize.height + selectorHeight)
+        }
         let height: CGFloat
         if hasTimerCompletion || (surface == .fileTray && hasError) {
             height = expandedTimerHeight
         } else {
             switch surface {
             case .music:
-                height = expandedMusicHeight
+                height = expandedMusicHeight + (showsHomeLayerButtons ? homeLayerSelectorHeight : 0)
             case .fileTray:
                 height = hasTrayItems ? expandedFileTrayHeight : expandedCompactContentHeight
             case .tools:
                 height = timerMode == .stopwatch ? expandedCompactContentHeight : expandedTimerHeight
+            case .utilities:
+                height = expandedCompactContentHeight
             }
         }
 

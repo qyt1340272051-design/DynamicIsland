@@ -1,6 +1,6 @@
 # Spotify 可选播放控制插件 0.1.0
 
-插件 ID：`com.dynamicisland.spotify`。适配 macOS Spotify 桌面客户端 `com.spotify.client`。主程序不预装本插件；按需导入 `.dip`、启用，再在音乐设置中选择 Spotify。需要包含本插件 helper 信任摘要的 **Host 0.6.1/build21 或以上版本**；旧 build 的 0.6.1 不支持此 helper。
+插件 ID：`com.dynamicisland.spotify`。适配 macOS Spotify 桌面客户端 `com.spotify.client`。主程序不预装本插件；按需导入 `.dip` 并启用。Host 0.6.1/build23 起自动识别音源，无需手动选择 App；旧 build21/22 仍在音乐设置中选择 Spotify。需要包含本插件 helper 信任摘要的 **Host 0.6.1/build21 或以上版本**；旧 build 的 0.6.1 不支持此 helper。
 
 ## 功能与使用
 
@@ -35,7 +35,7 @@ d2288f6e59608d8681c3d3b7a6de3f4725e8e3a87fc995c6c31de45c3022141b
 python3 SDK/tools/package_plugin.py docs/plugin-system/examples/spotify /tmp/spotify-0.1.0.dip
 ```
 
-可在「设置 → 插件 → 发现」刷新目录，选择 Spotify 的「下载并查看」，核对预览后安装；也可从 [plugins-music-0.1.0 Release](https://github.com/qyt1340272051-design/DynamicIsland/releases/tag/plugins-music-0.1.0) 下载 `.dip` 后导入。安装后仍需单独授权、启用和选择播放来源。
+可在「设置 → 插件 → 发现」刷新目录，选择 Spotify 的「下载并查看」，核对预览后安装；也可从 [plugins-music-0.1.0 Release](https://github.com/qyt1340272051-design/DynamicIsland/releases/tag/plugins-music-0.1.0) 下载 `.dip` 后导入。安装后仍需单独授权和启用；build23 起自动识别，旧 Host 需选择播放来源。
 
 ## 验证状态
 

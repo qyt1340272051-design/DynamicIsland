@@ -1,0 +1,181 @@
+{
+  "scope": "local independent iterations, final targeted and full CI; no physical-device acceptance",
+  "runs": [
+    {
+      "name": "targeted",
+      "result": "Failed",
+      "total": 111,
+      "passed": 104,
+      "failed": 6,
+      "skipped": 1,
+      "testFailures": [
+        {
+          "test": "ScreenSnapshotMatrixTests/testCameraGlyphProbeDetectsCenteredContentBeforeOverlayHidesIt()",
+          "message": "XCTAssertNotNil failed - Positive control must detect incorrectly centered content."
+        },
+        {
+          "test": "ScreenSnapshotMatrixTests/testExpandedPagesScaleTheirRenderedContentAcrossResolutionFixtures()",
+          "message": "XCTAssertEqualWithAccuracy failed: (\"138.85714285714286\") is not equal to (\"144.5\") +/- (\"4.0\") - expanded-music"
+        },
+        {
+          "test": "IslandShellShapeTests/testExpansionAndSurfaceResizeKeepEveryAnimationFrameAttachedToTop()",
+          "message": "XCTAssertEqualWithAccuracy failed: (\"227.50000762939453\") is not equal to (\"227.5\") +/- (\"1e-06\")"
+        },
+        {
+          "test": "IslandDisplayNativeControlTests/testNativeToolButtonDrawsAtFinalPointSizeForBoundsAnchorAndHitRegion()",
+          "message": "XCTAssertEqualWithAccuracy failed: (\"25.0\") is not equal to (\"24.5\") +/- (\"0.05\")"
+        },
+        {
+          "test": "IslandActivityRuntimeTests/testPublicToolExampleRequiresHostSelectionAndRoutesOnlyVisibleInstance()",
+          "message": "XCTAssertEqual failed: (\"(440.0, 184.0)\") is not equal to (\"(480.0, 200.0)\")"
+        },
+        {
+          "test": "IslandTimerShellRenderingTests/testTimerControlsFitTheirHostContentBudgetWithoutClipping()",
+          "message": "XCTAssertEqualWithAccuracy failed: (\"2715.0\") is not equal to (\"2862.0\") +/- (\"28.62\") - 秒表 at scale 1.0 loses painted content inside its 86.0 pt Host budget."
+        }
+      ]
+    },
+    {
+      "name": "probes",
+      "result": "Failed",
+      "total": 7,
+      "passed": 5,
+      "failed": 2,
+      "skipped": 0,
+      "testFailures": [
+        {
+          "test": "ScreenSnapshotMatrixTests/testExpandedPagesScaleTheirRenderedContentAcrossResolutionFixtures()",
+          "message": "XCTAssertEqualWithAccuracy failed: (\"138.85714285714286\") is not equal to (\"144.5\") +/- (\"4.0\") - expanded-music"
+        },
+        {
+          "test": "IslandTimerShellRenderingTests/testTimerControlsFitTheirHostContentBudgetWithoutClipping()",
+          "message": "XCTAssertEqualWithAccuracy failed: (\"2715.0\") is not equal to (\"2862.0\") +/- (\"28.62\") - 秒表 at scale 1.0 loses painted content inside its 86.0 pt Host budget."
+        }
+      ]
+    },
+    {
+      "name": "font-timer",
+      "result": "Passed",
+      "total": 2,
+      "passed": 2,
+      "failed": 0,
+      "skipped": 0,
+      "testFailures": []
+    },
+    {
+      "name": "top-alignment",
+      "result": "Failed",
+      "total": 9,
+      "passed": 7,
+      "failed": 1,
+      "skipped": 1,
+      "testFailures": [
+        {
+          "test": "ScreenSnapshotMatrixTests/testExpandedPagesScaleTheirRenderedContentAcrossResolutionFixtures()",
+          "message": "XCTAssertEqualWithAccuracy failed: (\"138.85714285714286\") is not equal to (\"144.5\") +/- (\"4.0\") - expanded-music"
+        }
+      ]
+    },
+    {
+      "name": "intrinsic",
+      "result": "Failed",
+      "total": 2,
+      "passed": 1,
+      "failed": 1,
+      "skipped": 0,
+      "testFailures": [
+        {
+          "test": "IslandRendererTests/testNativeProgressAndSliderIntrinsicSizesUseDiscreteControlMetrics()",
+          "message": "XCTAssertEqualWithAccuracy failed: (\"232.0\") is not equal to (\"231.25\") +/- (\"0.01\")"
+        }
+      ]
+    },
+    {
+      "name": "final-targeted-20261024",
+      "result": "Passed",
+      "total": 28,
+      "passed": 27,
+      "failed": 0,
+      "skipped": 1,
+      "testFailures": [],
+      "scope": "Renderer/Matrix/Timer before final asymmetric clipping review fixes; those fixes are covered by full-v2"
+    },
+    {
+      "name": "full-v2-20261024",
+      "result": "Passed",
+      "total": 1143,
+      "passed": 1140,
+      "failed": 0,
+      "skipped": 3,
+      "testFailures": [],
+      "releaseBuild": "passed",
+      "sdkAuthoringPythonTests": 40,
+      "sdkPackagingAndTypes": "passed",
+      "betaMatrix": "1 passed / 8 pending",
+      "skippedCases": [
+        "GitHub live API (opt-in)",
+        "Published Registry live network (opt-in)",
+        "Screen Matrix generator (separate explicit run)"
+      ],
+      "scope": "before native Picker size refinement; later visual review found its intrinsic sizing did not scale"
+    },
+    {
+      "name": "full-v3-20261024",
+      "result": "Failed",
+      "total": 1144,
+      "passed": 1134,
+      "failed": 1,
+      "skipped": 9,
+      "testFailures": [
+        {
+          "test": "IslandTimerModePickerTests/testNativeFontBoundsAndTargetActionBindingAcrossDisplayScales()",
+          "message": "failed - The native timer mode control did not receive its Host layout/update."
+        }
+      ],
+      "resolution": "new test changed model back in same UI transaction; now waits for observed intermediate mode before reverse update, without increasing timeout"
+    },
+    {
+      "name": "picker-targeted-20261024",
+      "result": "Passed",
+      "total": 1,
+      "passed": 1,
+      "failed": 0,
+      "skipped": 0,
+      "testFailures": []
+    },
+    {
+      "name": "full-v4-20261024",
+      "result": "Passed",
+      "total": 1144,
+      "passed": 1135,
+      "failed": 0,
+      "skipped": 9,
+      "testFailures": [],
+      "releaseBuild": "passed",
+      "sdkAuthoringPythonTests": 40,
+      "sdkPackagingAndTypes": "passed",
+      "betaMatrix": "1 passed / 8 pending",
+      "skippedCases": {
+        "optIn": [
+          "GitHub live API",
+          "Published Registry live network",
+          "Screen Matrix generator (separate explicit run)"
+        ],
+        "lockedSession": [
+          "Quit cancellation animation",
+          "Quit cancellation rendered controls",
+          "ActionMock native Button/Toggle/Slider/commit",
+          "Extensions native consent/uninstall",
+          "Installer native preview buttons",
+          "Registry native download/install"
+        ]
+      },
+      "scope": "final production code including native Picker and review fixes; input skips deferred"
+    }
+  ],
+  "buildFailure20261024": {
+    "phase": "first full CI test compilation",
+    "reason": "new regression tried to write read-only accessibilityReduceMotion environment; removed the unsupported override, retained disabled transaction animation and pixel assertions",
+    "subsequentFullRun": "full-v2-20261024"
+  }
+}

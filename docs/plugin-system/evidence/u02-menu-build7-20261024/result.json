@@ -1,0 +1,100 @@
+{
+  "recordedAtUTC": "2026-10-24T08:35:03Z",
+  "updatedAtUTC": "2026-10-24T08:44:20Z",
+  "status": "menu return and normal exit/reopen passed within current-device scope; cleanup pending",
+  "appVersion": "0.6.0",
+  "build": 7,
+  "sourceCommit": "926a0290f83142d77ac4355226b1a49964884747",
+  "resolution": "2560x1664; actual current device mode",
+  "candidate": "isolated build7 acceptance copy",
+  "fixture": {
+    "id": "com.example.u02-menu-return-fixture",
+    "version": "0.1.0",
+    "origin": "self-authored acceptance fixture",
+    "additionalPermissions": [],
+    "installation": "imported and installed through the isolated app",
+    "enabled": true,
+    "toolCount": 10,
+    "totalMenuEntriesIncludingBuiltInTimer": 11,
+    "selectedBottomTool": "菜单返回验收",
+    "actualMenuTallerThanExpandedIsland": true
+  },
+  "physicalMenuReturn": {
+    "status": "passed within the observed current-device scope",
+    "instructedUserSequence": [
+      "Hover over bottom tool 菜单返回验收 for three seconds",
+      "Select the tool",
+      "Pause for half a second",
+      "Return the pointer to the island and keep it there"
+    ],
+    "userPerformedSequence": true,
+    "observation": {
+      "secondsAfterUserReplyAnnouncingActionStart": 8,
+      "exactPointerReturnLatencyMeasured": false,
+      "expanded": true,
+      "selectedTool": "菜单返回验收",
+      "displayedState": "当前状态：专注中",
+      "displayedClickCount": 0,
+      "privateScreenshotSaved": true
+    },
+    "actualButtonVerification": {
+      "button": "增加一次",
+      "resultingDisplayedClickCount": 1,
+      "laterObservationExpanded": true,
+      "laterObservationSelectedTool": "菜单返回验收"
+    }
+  },
+  "normalExitAndReopen": {
+    "status": "passed",
+    "requestedSequence": "Move the pointer out for three seconds, then return to reopen",
+    "collapsedStateObserved": true,
+    "userConfirmedTopHoverExpands": true,
+    "reopenedStateObserved": true,
+    "reopenedToolStateVerified": true,
+    "observationSources": [
+      "actual AX read",
+      "actual screenshot"
+    ],
+    "reopenedPage": "计时工具",
+    "reopenedMode": "秒表",
+    "reopenedDisplay": "准备计时 00:00.0",
+    "fixtureToolNoLongerDisplayed": true,
+    "privateScreenshot": "2560-normal-reopen-native-stopwatch.png"
+  },
+  "acceptanceScope": [
+    "Actual current-device menu with eleven entries, taller than the expanded island",
+    "Physical bottom-tool selection and return retained the expanded fixture tool",
+    "The fixture button updated the displayed count from zero to one, with the same tool still expanded later",
+    "After normal exit and collapse, actual AX and screenshot showed reopening at the built-in stopwatch in its ready state, without the fixture tool"
+  ],
+  "notClosed": [
+    "M-U02-C as a whole",
+    "Page-height transition animation",
+    "Menu-bar visibility change animation",
+    "Resolution-change animation",
+    "M-U02-A and M-U02-B"
+  ],
+  "currentState": {
+    "timerRunning": false,
+    "volumePercent": 25,
+    "volumeChanged": false,
+    "fixtureStillEnabled": true
+  },
+  "evidenceRetention": {
+    "screenshots": "retained privately; raw screenshots are not copied into the repository",
+    "repositoryContains": [
+      "README.md",
+      "result.json"
+    ]
+  },
+  "cleanup": {
+    "status": "pending",
+    "requiredAfterAcceptance": [
+      "Disable the fixture",
+      "Uninstall the fixture"
+    ],
+    "fixtureDisabled": false,
+    "fixtureUninstalled": false
+  },
+  "testsRunForThisRecord": false
+}

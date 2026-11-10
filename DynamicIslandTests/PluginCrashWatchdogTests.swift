@@ -203,6 +203,52 @@ final class PluginCrashWatchdogTests: XCTestCase {
         XCTAssertEqual(watchdog.registrationCount, 0)
     }
 
+    func testMediaHelperMetadataAndSnapshotReplacementInvalidateCrashIncident() throws {
+        let original = try mediaPackage()
+        for replacement in [
+            try mediaPackage(target: "com.example.other-player"),
+            try mediaPackage(name: "Different player"),
+            try mediaPackage(path: "next-helper.js"),
+            try mediaPackage(digest: String(repeating: "b", count: 64)),
+            try mediaPackage(helper: Data("helper B".utf8))
+        ] {
+            let watchdog = PluginCrashWatchdog(clock: { 100 })
+            let incident = try quarantine(original, with: watchdog)
+            XCTAssertFalse(watchdog.isCurrent(incident: incident, package: replacement))
+            let snapshot = try watchdog.register(package: replacement)
+            XCTAssertNil(snapshot.quarantine)
+            XCTAssertEqual(snapshot.recentFailureCount, 0)
+            XCTAssertFalse(watchdog.isCurrent(incident: incident, package: original))
+            XCTAssertNil(watchdog.recordFailure(kind: .runtimeStart, package: original))
+        }
+    }
+
+    func testUnchangedMediaHelperPreservesCrashBindingAcrossRelocationAndDeclarationOrder() throws {
+        let watchdog = PluginCrashWatchdog(clock: { 100 })
+        let original = try mediaPackage()
+        let relocated = try mediaPackage(root: "/relocated-media", reversedPermissions: true)
+        let incident = try quarantine(original, with: watchdog)
+        XCTAssertEqual(try watchdog.register(package: relocated).quarantine, incident)
+        XCTAssertTrue(watchdog.isCurrent(incident: incident, package: relocated))
+    }
+
+    private func mediaPackage(target: String = "com.netease.163music", name: String = "网易云音乐",
+                              path: String = "media-helper.js", digest: String = String(repeating: "a", count: 64),
+                              helper: Data = Data("helper A".utf8), root: String = "/media-watchdog",
+                              reversedPermissions: Bool = false) throws -> ValidatedPluginPackage {
+        let descriptor = PluginMediaProviderDescriptor(targetBundleIdentifier: target,
+            displayName: name, helperPath: path, helperSHA256: digest)
+        let manifest = try PluginManifest(id: "com.example.media-watchdog", name: "Media Watchdog",
+            version: SemanticVersion("1.0.0"), engine: .javaScriptCore, entry: "index.js",
+            minimumHostVersion: SemanticVersion("0.6.1"),
+            permissions: reversedPermissions ? [.controlMedia, .readMedia] : [.readMedia, .controlMedia],
+            capabilities: [.musicProvider], mediaProvider: descriptor)
+        return ValidatedPluginPackage(manifest: manifest,
+            canonicalRootURL: URL(fileURLWithPath: root, isDirectory: true), entryRelativePath: "index.js",
+            entrySource: Data("function onStart() {}".utf8), regularFileCount: 3,
+            totalFileBytes: UInt64(helper.count), mediaHelperSource: helper)
+    }
+
     private func quarantine(_ package: ValidatedPluginPackage,
                             with watchdog: PluginCrashWatchdog) throws -> PluginCrashIncident {
         try watchdog.register(package: package)

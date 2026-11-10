@@ -58,7 +58,8 @@ final class DiagnosticReportService {
                 isPanelVisible: isPanelVisible,
                 isMusicPlaying: viewModel.isPlaying,
                 timerSession: viewModel.compactTimerMode?.rawValue ?? "none",
-                trayItemCount: viewModel.trayItems.count
+                trayItemCount: viewModel.trayItems.count,
+                displayLayoutScale: viewModel.displayLayout.scale
             )
         )
     }
@@ -113,6 +114,8 @@ final class DiagnosticReportService {
             return "file-tray"
         case .tools:
             return "tools"
+        case .utilities:
+            return "utilities"
         }
     }
 }

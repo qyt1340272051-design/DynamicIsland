@@ -5,11 +5,118 @@ import XCTest
 
 @MainActor
 final class PomodoroPluginTests: XCTestCase {
+    func testExpandedLayoutUsesHostTimerTokensWithinToolBudgetAndTomatoTheme() async throws {
+        let f = try PomodoroPluginFixture()
+        defer { f.shutdown() }
+        try await f.load()
+        let presentation = try XCTUnwrap(f.tool).presentation
+        let expanded = try XCTUnwrap(presentation.expanded)
+        XCTAssertTrue(ActivityPresentation.HostPolicy.accepts(expanded, for: .expanded))
+        let nodes = allNodes(in: expanded)
+        XCTAssertLessThanOrEqual(nodes.count, 32)
+        XCTAssertTrue(nodes.contains(.text(.init("准备专注", color: .danger, font: .caption))))
+        XCTAssertTrue(nodes.contains(.text(.init("25:00", font: .timer))))
+        XCTAssertFalse(nodes.contains(.text(.init("点击加减切换预设", color: .secondary, font: .caption))))
+        XCTAssertTrue(nodes.contains(.progress(.init(0, style: .track, color: .danger))))
+        XCTAssertFalse(nodes.contains(.text(.init("设置未保存", color: .warning, font: .caption))))
+        XCTAssertEqual(presentation.minimal, .icon(.init("timer", color: .danger)))
+        XCTAssertEqual(presentation.compact, .hStack(.init([
+            .icon(.init("timer", color: .danger)), .spacer(.init()), .text(.init("25:00", color: .danger))
+        ])))
+        let controls = buttons(in: expanded)
+        XCTAssertEqual(controls.map(\.style), [.standard, .standard, .secondary, .primary])
+        XCTAssertEqual(controls.map(\.accessibilityLabel), ["减少专注时长", "增加专注时长", "结束", "开始"])
+        XCTAssertEqual(controls.map(\.label), [
+            .icon(.init("minus")), .icon(.init("plus")),
+            .icon(.init("arrow.counterclockwise")), .icon(.init("play.fill"))
+        ])
+        XCTAssertEqual(controls.last?.color, .danger)
+        guard case .vStack(let outer) = expanded, let first = outer.children.first,
+              case .hStack(let main) = first, let last = main.children.last,
+              case .vStack(let right) = last else {
+            return XCTFail("The native timer's two-column layout must remain intact")
+        }
+        XCTAssertEqual(right.children.count, 2, "Only preset and action rows remain; no instruction row")
+        f.assertNoFailures()
+    }
+
+    func testVisiblePresetControlsUseExistingActionsAndDisableAtBoundsAndWhileRunning() async throws {
+        let f = try PomodoroPluginFixture()
+        defer { f.shutdown() }
+        try await f.load()
+        var controls = try expandedButtons(f)
+        XCTAssertEqual(controls.map(\.actionID), ["preset.15", "preset.45", "stop", "start"])
+        try f.act(controls[0].actionID)
+        try await f.waitForState("准备专注", minutes: 15)
+        controls = try expandedButtons(f)
+        XCTAssertFalse(controls[0].isEnabled)
+        XCTAssertTrue(controls[1].isEnabled)
+        XCTAssertEqual(controls[1].actionID, "preset.25")
+        for minutes in [25, 45, 60] {
+            try f.act(try expandedButtons(f)[1].actionID)
+            try await f.waitForState("准备专注", minutes: minutes)
+        }
+        controls = try expandedButtons(f)
+        XCTAssertTrue(controls[0].isEnabled)
+        XCTAssertFalse(controls[1].isEnabled)
+        XCTAssertEqual(controls[0].actionID, "preset.45")
+        try f.act(controls[3].actionID)
+        try await f.waitForState("专注中", minutes: 60)
+        controls = try expandedButtons(f)
+        XCTAssertFalse(controls[0].isEnabled)
+        XCTAssertFalse(controls[1].isEnabled)
+        XCTAssertEqual(controls[3].actionID, "pause")
+        XCTAssertEqual(controls[3].label, .icon(.init("pause.fill")))
+        let running = try XCTUnwrap(try f.record())
+        let references = try XCTUnwrap(f.tool?.presentation.expanded).countdownReferences
+        XCTAssertEqual(references.map(\.style), [.timer, .track])
+        XCTAssertEqual(references.map(\.color), [.primary, .danger])
+        XCTAssertTrue(references.allSatisfy { $0.generation == running.generation.rawValue })
+        XCTAssertEqual(f.tool?.presentation.compact?.countdownReferences.map(\.color), [.danger])
+        XCTAssertEqual(f.tool?.presentation.minimal?.countdownReferences.map(\.color), [.danger])
+        XCTAssertEqual(controls[3].color, .danger)
+        try f.act(controls[3].actionID)
+        try await f.waitForState("已暂停", minutes: 60)
+        controls = try expandedButtons(f)
+        XCTAssertTrue(controls[0].isEnabled)
+        XCTAssertFalse(controls[1].isEnabled)
+        XCTAssertEqual(controls[3].actionID, "resume")
+        XCTAssertEqual(controls[3].accessibilityLabel, "继续")
+        try f.act(controls[0].actionID)
+        try await f.waitForState("准备专注", minutes: 45)
+        XCTAssertNil(try f.record())
+        controls = try expandedButtons(f)
+        XCTAssertEqual(controls.map(\.actionID), ["preset.25", "preset.60", "stop", "start"])
+        XCTAssertTrue(controls.allSatisfy(\.isEnabled))
+        f.assertNoFailures()
+    }
+
+    private func allNodes(in node: IslandNode) -> [IslandNode] {
+        switch node {
+        case .hStack(let stack), .vStack(let stack), .zStack(let stack):
+            [node] + stack.children.flatMap { allNodes(in: $0) }
+        case .button(let button): [node] + allNodes(in: button.label)
+        default: [node]
+        }
+    }
+
+    private func buttons(in node: IslandNode) -> [IslandNode.Button] {
+        allNodes(in: node).compactMap { child in
+            if case .button(let button) = child { return button }
+            return nil
+        }
+    }
+
+    private func expandedButtons(_ fixture: PomodoroPluginFixture) throws -> [IslandNode.Button] {
+        buttons(in: try XCTUnwrap(fixture.tool?.presentation.expanded))
+    }
+
     func testValidatedOfficialPackageStartsEveryPresetThroughRealRouterActions() async throws {
         let f = try PomodoroPluginFixture()
         defer { f.shutdown() }
         XCTAssertEqual(f.package.manifest.id, "com.dynamicisland.pomodoro")
-        XCTAssertEqual(f.package.manifest.version, try SemanticVersion("0.2.1"))
+        XCTAssertEqual(f.package.manifest.version, try SemanticVersion("0.3.1"))
+        XCTAssertEqual(f.package.manifest.minimumHostVersion, try SemanticVersion("0.6.1"))
         XCTAssertEqual(f.package.manifest.permissions, [.localStorage])
         XCTAssertEqual(Set(f.package.manifest.capabilities), Set([
             .publishActivity, .updateActivity, .endActivity, .islandNodeUI, .handleActions, .countdown,
@@ -36,7 +143,7 @@ final class PomodoroPluginTests: XCTestCase {
             XCTAssertTrue(try XCTUnwrap(f.tool).presentation.isCompactVisible)
             XCTAssertEqual(f.tool?.presentation.compactPolicy, .automatic)
             XCTAssertEqual(f.tool?.priority, .background)
-            XCTAssertEqual(Set(f.references.map(\.style)), Set([.time, .progress]))
+            XCTAssertEqual(Set(f.references.map(\.style)), Set([.time, .timer, .track]))
             XCTAssertTrue(f.references.allSatisfy { $0.id == "session" && $0.generation == running.generation.rawValue })
             try f.act("stop")
             try await f.waitForState("准备专注", minutes: minutes)
@@ -131,10 +238,10 @@ final class PomodoroPluginTests: XCTestCase {
         XCTAssertEqual(completion.activity.presentation.title, "专注完成")
         XCTAssertEqual(completion.activity.presentation.subtitle, "本轮专注已结束")
         let compact: IslandNode = .hStack(.init([
-            .icon(.init("checkmark.circle.fill")), .spacer(.init()), .text(.init("完成"))
+            .icon(.init("checkmark.circle.fill", color: .danger)), .spacer(.init()), .text(.init("完成", color: .danger))
         ]))
         let expanded: IslandNode = .vStack(.init([
-            .hStack(.init([.icon(.init("checkmark.circle.fill")), .text(.init("专注完成"))])),
+            .hStack(.init([.icon(.init("checkmark.circle.fill", color: .danger)), .text(.init("专注完成", color: .danger))])),
             .text(.init("本轮专注已结束"))
         ]))
         XCTAssertEqual(completion.activity.presentation.compact, compact)
@@ -298,7 +405,7 @@ final class PomodoroPluginFixture {
         let root = URL(fileURLWithPath: #filePath).deletingLastPathComponent().deletingLastPathComponent()
             .appendingPathComponent("docs/plugin-system/examples/pomodoro", isDirectory: true)
         package = try PluginValidator().validateExpandedPackage(at: root,
-            context: .init(hostVersion: SemanticVersion("0.6.0"), occupiedPluginIDs: [],
+            context: .init(hostVersion: SemanticVersion("0.6.1"), occupiedPluginIDs: [],
                            allowedContainerURL: root.deletingLastPathComponent()))
         self.permissions.request(package: package)
     }
@@ -312,17 +419,22 @@ final class PomodoroPluginFixture {
     }
 
     var hasUnsavedSettingsHint: Bool {
-        guard let expanded = tool?.presentation.expanded, case .vStack(let stack) = expanded,
-              let first = stack.children.first, case .text(let heading) = first else { return false }
-        return heading.content.contains("设置未保存")
+        tool?.presentation.expanded.map { containsUnsavedSettingsHint(in: $0) } ?? false
+    }
+
+    private func containsUnsavedSettingsHint(in node: IslandNode) -> Bool {
+        switch node {
+        case .text(let text): text.content.contains("设置未保存")
+        case .hStack(let stack), .vStack(let stack), .zStack(let stack):
+            stack.children.contains { containsUnsavedSettingsHint(in: $0) }
+        case .button(let button): containsUnsavedSettingsHint(in: button.label)
+        default: false
+        }
     }
 
     func load(minutes: Int = 25) async throws {
         lifecycle.pluginDidLoad(package, isEnabled: true)
         try await waitForState("准备专注", minutes: minutes)
-        if try permissions.state(permission: .localStorage, package: package) != .granted {
-            try await waitUntil { self.hasUnsavedSettingsHint }
-        }
     }
 
     /// A test's explicit Host decision always captures this validated package's

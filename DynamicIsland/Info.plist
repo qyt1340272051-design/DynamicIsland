@@ -2,6 +2,10 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>NSCalendarsFullAccessUsageDescription</key>
+	<string>读取你选择的 Apple 和 Google 日历，在主页显示日程、课程与会议并按设置提醒。</string>
+	<key>NSCalendarsUsageDescription</key>
+	<string>读取你选择的日历，用于日程、课程和会议提醒。</string>
 	<key>CFBundleDocumentTypes</key>
 	<array>
 		<dict>

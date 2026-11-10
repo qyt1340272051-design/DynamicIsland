@@ -1,0 +1,43 @@
+{
+  "date": "2026-11-04",
+  "hostVersion": "0.6.1",
+  "hostBuild": "21",
+  "status": "local-development-not-published",
+  "packages": [
+    {
+      "file": "qq-music-0.1.0.dip",
+      "sha256": "c7e888219621a0976336d4a22de74bf4252b06b90790731a078b0100f7a82528",
+      "pluginID": "com.dynamicisland.qq-music",
+      "targetBundleIdentifier": "com.tencent.QQMusicMac",
+      "helperSHA256": "422c5eb11cf94e523c7427b953e83d0e6f1b94850897ffbb529a9abd9d44b9ec",
+      "files": [
+        "LICENSE",
+        "README.md",
+        "index.js",
+        "manifest.json",
+        "media-helper.js"
+      ]
+    },
+    {
+      "file": "spotify-0.1.0.dip",
+      "sha256": "f60c96ee644d0f8b04a64b3d81769e29d239bfa103076ea469039396c74f3a95",
+      "pluginID": "com.dynamicisland.spotify",
+      "targetBundleIdentifier": "com.spotify.client",
+      "helperSHA256": "d2288f6e59608d8681c3d3b7a6de3f4725e8e3a87fc995c6c31de45c3022141b",
+      "files": [
+        "LICENSE",
+        "README.md",
+        "index.js",
+        "manifest.json",
+        "media-helper.js"
+      ]
+    }
+  ],
+  "validation": {
+    "xctestPassed": 69,
+    "xctestFailed": 0,
+    "sdkPythonTestsPassed": 45,
+    "realClientPlaybackVerified": false,
+    "continuouslyCompactRealClientVerified": false
+  }
+}

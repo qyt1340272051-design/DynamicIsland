@@ -1,0 +1,57 @@
+/tmp/dynamic-island-home-default-loop.log
+	 Executed 9 tests, with 1 failure (0 unexpected) in 20.738 (20.740) seconds
+	 Executed 6 tests, with 0 failures (0 unexpected) in 0.132 (0.133) seconds
+	 Executed 6 tests, with 0 failures (0 unexpected) in 14.988 (14.990) seconds
+	 Executed 10 tests, with 0 failures (0 unexpected) in 0.006 (0.008) seconds
+	 Executed 6 tests, with 0 failures (0 unexpected) in 3.927 (3.929) seconds
+	 Executed 5 tests, with 0 failures (0 unexpected) in 22.693 (22.696) seconds
+	 Executed 3 tests, with 0 failures (0 unexpected) in 3.332 (3.334) seconds
+	 Executed 5 tests, with 0 failures (0 unexpected) in 9.704 (9.706) seconds
+	 Executed 3 tests, with 0 failures (0 unexpected) in 2.496 (2.498) seconds
+	 Executed 53 tests, with 1 failure (0 unexpected) in 78.016 (78.036) seconds
+	 Executed 53 tests, with 1 failure (0 unexpected) in 78.016 (78.037) seconds
+** TEST FAILED **
+/tmp/dynamic-island-market-settings.log
+	 Executed 9 tests, with 0 failures (0 unexpected) in 21.743 (21.746) seconds
+	 Executed 7 tests, with 0 failures (0 unexpected) in 0.197 (0.198) seconds
+	 Executed 13 tests, with 0 failures (0 unexpected) in 0.263 (0.265) seconds
+	 Executed 1 test, with 1 test skipped and 0 failures (0 unexpected) in 0.106 (0.106) seconds
+	 Executed 30 tests, with 1 test skipped and 0 failures (0 unexpected) in 22.308 (22.317) seconds
+	 Executed 30 tests, with 1 test skipped and 0 failures (0 unexpected) in 22.308 (22.317) seconds
+** TEST SUCCEEDED **
+/tmp/dynamic-island-market-live-routing.log
+	 Executed 31 tests, with 0 failures (0 unexpected) in 9.623 (9.636) seconds
+	 Executed 51 tests, with 0 failures (0 unexpected) in 1.030 (1.055) seconds
+LIVE_MUSIC_REGISTRY catalog=https://raw.githubusercontent.com/qyt1340272051-design/DynamicIsland/1f1f1329f97c89640b719ed51c3e611129109159/Registry/registry.json defaultSource=false
+LIVE_MUSIC_REGISTRY package=com.dynamicisland.qq-music sha256=4d5abeea4ec84a32447742130fdb7b596b2e1b47492da45da7c10d3a302b4aa4
+LIVE_MUSIC_REGISTRY package=com.dynamicisland.spotify sha256=23788519eb3d7a203e18e90c8a4ce024cc355206f92489ab138912f5bc5c36d3
+LIVE_MUSIC_REGISTRY verified=2 installedDisabled=true separateGrants=true fixedTargets=true realPlayback=false
+	 Executed 1 test, with 0 failures (0 unexpected) in 9.712 (9.712) seconds
+	 Executed 83 tests, with 0 failures (0 unexpected) in 20.365 (20.404) seconds
+	 Executed 83 tests, with 0 failures (0 unexpected) in 20.365 (20.404) seconds
+** TEST SUCCEEDED **
+Unique passing test methods: 156
+Failures not followed by a passing rerun: []
+
+/tmp/dynamic-island-media-manifest-compat.log
+	 Executed 21 tests, with 0 failures (0 unexpected) in 0.022 (0.035) seconds
+	 Executed 21 tests, with 0 failures (0 unexpected) in 0.022 (0.035) seconds
+	 Executed 21 tests, with 0 failures (0 unexpected) in 0.022 (0.036) seconds
+** TEST SUCCEEDED **
+Updated unique passing methods: 177
+
+/tmp/dynamic-island-general-home-combined.log
+	 Executed 1 test, with 0 failures (0 unexpected) in 3.626 (3.627) seconds
+	 Executed 1 test, with 0 failures (0 unexpected) in 3.626 (3.627) seconds
+	 Executed 1 test, with 0 failures (0 unexpected) in 3.626 (3.627) seconds
+** TEST SUCCEEDED **
+
+/tmp/dynamic-island-market-default-live.log
+LIVE_MUSIC_REGISTRY catalog=https://raw.githubusercontent.com/qyt1340272051-design/DynamicIsland/main/Registry/registry.json defaultSource=true
+LIVE_MUSIC_REGISTRY package=com.dynamicisland.qq-music sha256=4d5abeea4ec84a32447742130fdb7b596b2e1b47492da45da7c10d3a302b4aa4
+LIVE_MUSIC_REGISTRY package=com.dynamicisland.spotify sha256=23788519eb3d7a203e18e90c8a4ce024cc355206f92489ab138912f5bc5c36d3
+LIVE_MUSIC_REGISTRY verified=2 installedDisabled=true separateGrants=true fixedTargets=true realPlayback=false
+	 Executed 1 test, with 0 failures (0 unexpected) in 16.952 (16.953) seconds
+	 Executed 1 test, with 0 failures (0 unexpected) in 16.952 (16.953) seconds
+	 Executed 1 test, with 0 failures (0 unexpected) in 16.952 (16.954) seconds
+** TEST SUCCEEDED **

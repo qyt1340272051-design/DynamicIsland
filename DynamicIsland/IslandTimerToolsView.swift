@@ -1,8 +1,12 @@
 import SwiftUI
 
 struct IslandTimerToolsView: View {
+    @Environment(\.islandLayoutScale) private var layoutScale
     @ObservedObject var model: IslandTimerToolsModel
+    var showsModePicker = true
     let onAcknowledgeCompletion: () -> Void
+
+    private func p(_ value: CGFloat) -> CGFloat { value * layoutScale }
 
     var body: some View {
         Group {
@@ -14,18 +18,21 @@ struct IslandTimerToolsView: View {
         }
         .animation(.easeInOut(duration: 0.2), value: model.completedMode)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .islandPaging(enabled: showsModePicker && model.completedMode == nil) { offset in
+            guard showsModePicker, model.completedMode == nil,
+                  let index = IslandTimerToolMode.allCases.firstIndex(of: model.selectedMode) else { return }
+            let modes = IslandTimerToolMode.allCases
+            model.selectedMode = modes[min(max(index + offset.signum(), 0), modes.count - 1)]
+        }
     }
 
     private var timerControls: some View {
-        VStack(spacing: 8) {
-            Picker("计时工具", selection: $model.selectedMode) {
-                ForEach(IslandTimerToolMode.allCases) { mode in
-                    Text(mode.title).tag(mode)
-                }
+        VStack(spacing: p(4)) {
+            if showsModePicker {
+                IslandTimerModePicker(selection: $model.selectedMode)
+                    .frame(width: p(120), height: p(24))
+                    .islandPagingExcluded()
             }
-            .labelsHidden()
-            .pickerStyle(.segmented)
-            .frame(height: 26)
 
             ZStack(alignment: .topLeading) {
                 selectedTimerContent
@@ -38,15 +45,15 @@ struct IslandTimerToolsView: View {
     }
 
     private var selectedTimerContent: some View {
-        VStack(spacing: 8) {
-            HStack(alignment: .center, spacing: 14) {
-                VStack(alignment: .leading, spacing: 3) {
+        VStack(spacing: p(4)) {
+            HStack(alignment: .center, spacing: p(14)) {
+                VStack(alignment: .leading, spacing: p(3)) {
                     Label(model.statusText, systemImage: model.selectedMode.systemImage)
-                        .font(.system(size: 10, weight: .semibold))
+                        .font(.system(size: p(10), weight: .semibold))
                         .foregroundStyle(modeTint.opacity(0.88))
 
                     Text(model.formattedDisplayedTime)
-                        .font(.system(size: 30, weight: .semibold, design: .monospaced))
+                        .font(.system(size: p(IslandTimerStyle.timeFontSize), weight: .semibold, design: .monospaced))
                         .monospacedDigit()
                         .lineLimit(1)
                         .minimumScaleFactor(0.72)
@@ -55,12 +62,12 @@ struct IslandTimerToolsView: View {
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
 
-                VStack(alignment: .trailing, spacing: 8) {
+                VStack(alignment: .trailing, spacing: p(8)) {
                     if model.selectedMode == .countdown {
                         countdownDurationControl
                     }
 
-                    HStack(spacing: 8) {
+                    HStack(spacing: p(8)) {
                         timerButton(
                             systemName: "arrow.counterclockwise",
                             help: "重置",
@@ -79,25 +86,28 @@ struct IslandTimerToolsView: View {
 
             timerProgress
         }
+        // Keep the time's native font height when the shorter stopwatch Host
+        // proposes its content budget. Only horizontal overflow may scale text.
+        .fixedSize(horizontal: false, vertical: true)
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
         .id(model.selectedMode)
         .transition(IslandTimerModeTransition.content)
     }
 
     private func completionContent(for mode: IslandTimerToolMode) -> some View {
-        VStack(spacing: 8) {
+        VStack(spacing: p(8)) {
             Text("\(mode.title)已完成")
-                .font(.system(size: 13, weight: .semibold))
+                .font(.system(size: p(13), weight: .semibold))
 
             Button(action: onAcknowledgeCompletion) {
                 Image(systemName: "checkmark")
-                    .font(.system(size: 20, weight: .bold))
+                    .font(.system(size: p(20), weight: .bold))
                     .foregroundStyle(.white)
-                    .frame(width: 46, height: 46)
+                    .frame(width: p(46), height: p(46))
                     .background(tint(for: mode), in: Circle())
                     .overlay {
                         Circle()
-                            .stroke(Color.white.opacity(0.24), lineWidth: 0.5)
+                            .stroke(Color.white.opacity(0.24), lineWidth: p(0.5))
                     }
             }
             .buttonStyle(.plain)
@@ -105,7 +115,7 @@ struct IslandTimerToolsView: View {
             .accessibilityLabel("确认并收起")
 
             Text("点击确认并收起")
-                .font(.system(size: 10, weight: .medium))
+                .font(.system(size: p(10), weight: .medium))
                 .foregroundStyle(.white.opacity(0.55))
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
@@ -113,12 +123,12 @@ struct IslandTimerToolsView: View {
     }
 
     private var countdownDurationControl: some View {
-        VStack(alignment: .trailing, spacing: 4) {
+        VStack(alignment: .trailing, spacing: p(4)) {
             Text("按住加减按钮可快速调整")
-                .font(.system(size: 9, weight: .medium))
+                .font(.system(size: p(9), weight: .medium))
                 .foregroundStyle(.white.opacity(0.42))
 
-            HStack(spacing: 6) {
+            HStack(spacing: p(6)) {
                 adjustmentButton(
                     systemName: "minus",
                     help: "减少一分钟",
@@ -128,9 +138,9 @@ struct IslandTimerToolsView: View {
                 }
 
                 Text("\(model.countdownMinutes) 分钟")
-                    .font(.system(size: 10, weight: .medium))
+                    .font(.system(size: p(10), weight: .medium))
                     .monospacedDigit()
-                    .frame(width: 48)
+                    .frame(width: p(48))
                     .contentTransition(.numericText())
                     .animation(IslandCountdownDurationAnimation.animation, value: model.countdownMinutes)
 
@@ -154,19 +164,10 @@ struct IslandTimerToolsView: View {
     @ViewBuilder
     private var timerProgress: some View {
         if let progress = model.selectedProgress {
-            GeometryReader { proxy in
-                ZStack(alignment: .leading) {
-                    Capsule()
-                        .fill(Color.white.opacity(0.12))
-                    Capsule()
-                        .fill(modeTint)
-                        .frame(width: proxy.size.width * CGFloat(progress))
-                }
-            }
-            .frame(height: 4)
+            IslandTimerProgressTrack(progress: progress, tint: modeTint)
             .animation(.linear(duration: 0.1), value: progress)
         } else {
-            Color.clear.frame(height: 4)
+            Color.clear.frame(height: p(4))
         }
     }
 
@@ -191,9 +192,9 @@ struct IslandTimerToolsView: View {
     ) -> some View {
         Button(action: action) {
             Image(systemName: systemName)
-                .font(.system(size: 12, weight: .bold))
+                .font(.system(size: p(12), weight: .bold))
                 .foregroundStyle(.white)
-                .frame(width: 32, height: 32)
+                .frame(width: p(IslandTimerStyle.controlSide), height: p(IslandTimerStyle.controlSide))
                 .background(
                     emphasized ? modeTint.opacity(0.82) : Color.white.opacity(0.11),
                     in: Circle()
@@ -212,8 +213,8 @@ struct IslandTimerToolsView: View {
     ) -> some View {
         Button(action: action) {
             Image(systemName: systemName)
-                .font(.system(size: 9, weight: .bold))
-                .frame(width: 22, height: 22)
+                .font(.system(size: p(9), weight: .bold))
+                .frame(width: p(22), height: p(22))
                 .background(Color.white.opacity(0.1), in: Circle())
         }
         .buttonStyle(.plain)

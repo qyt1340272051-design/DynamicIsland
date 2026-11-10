@@ -8,6 +8,70 @@ import XCTest
 
 @MainActor
 final class PluginExtensionsUITests: XCTestCase {
+    func testPlacementSectionChangesDisabledPluginChoiceAndObservesSharedStore() async throws {
+        let fixture = try await makeFixture()
+        defer { fixture.cleanup() }
+        let review = try XCTUnwrap(fixture.model.managementReview(id: fixture.id))
+        let permissionSnapshot = fixture.model.selectedPermissionSnapshot
+        let window = NSWindow(contentRect: CGRect(x: 0, y: 0, width: 540, height: 140),
+                              styleMask: [.titled], backing: .buffered, defer: false)
+        window.isReleasedWhenClosed = false
+        let view = NSHostingView(rootView: PluginToolPlacementSection(model: fixture.model, review: review)
+            .padding(18).frame(width: 540, alignment: .leading))
+        window.contentView = view
+        window.orderFrontRegardless()
+        defer { window.close() }
+        try await settle(window)
+        let control = try nativeSegmentedControl(in: view)
+        XCTAssertTrue(control.isEnabled, "Downloaded and disabled plugins must be configurable before enablement.")
+        XCTAssertEqual(control.segmentCount, 2)
+        XCTAssertEqual(control.selectedSegment, 1)
+
+        control.selectedSegment = 0
+        control.sendAction(control.action, to: control.target)
+        try await waitUntil { fixture.model.toolPlacements.area(forPluginID: fixture.id) == .timer && !fixture.model.isBusy }
+        try await settle(window)
+        XCTAssertNil(fixture.model.error)
+        XCTAssertEqual(fixture.model.selectedSnapshot?.state, .disabled)
+        XCTAssertFalse(fixture.model.selectedPlugin?.isEnabled == true)
+        XCTAssertEqual(fixture.model.selectedPermissionSnapshot, permissionSnapshot)
+        XCTAssertNil(fixture.activities.current)
+        let labels = try renderedText(in: view)
+        for label in ["显示区域", "计时区", "工具区", "用于此插件提供的工具", "启用后显示在所选区域"] {
+            XCTAssertTrue(labels.contains(label), "Placement control copy was cropped: \(label); \(labels)")
+        }
+        try writeScreenshot(window, filename: "dynamic-island-plugin-tool-placement.png")
+
+        // Runtime and Settings share the same Combine store. A Host edit must
+        // update the existing picker without rebuilding or refreshing the model.
+        try fixture.model.toolPlacements.setArea(.tools, forPluginID: fixture.id)
+        try await settle(window)
+        XCTAssertEqual(control.selectedSegment, 1)
+    }
+
+    func testPlacementSectionShowsStoreFailureWithoutPretendingChoiceChanged() async throws {
+        let fixture = try await makeFixture()
+        defer { fixture.cleanup() }
+        let review = try XCTUnwrap(fixture.model.managementReview(id: fixture.id))
+        XCTAssertThrowsError(try fixture.model.toolPlacements.setArea(.timer, forPluginID: "INVALID-SECRET"))
+        let window = NSWindow(contentRect: CGRect(x: 0, y: 0, width: 540, height: 160),
+                              styleMask: [.titled], backing: .buffered, defer: false)
+        window.isReleasedWhenClosed = false
+        let view = NSHostingView(rootView: PluginToolPlacementSection(model: fixture.model, review: review)
+            .padding(18).frame(width: 540, alignment: .leading))
+        window.contentView = view
+        window.orderFrontRegardless()
+        defer { window.close() }
+        try await settle(window)
+
+        XCTAssertEqual(try nativeSegmentedControl(in: view).selectedSegment, 1)
+        let labels = try renderedText(in: view)
+        // Vision can confuse 读/该 at caption size; assert the rendered error
+        // meaning while the native control check above verifies rollback.
+        XCTAssertTrue(labels.contains("显示区域设置无法") && labels.contains("或保存"), labels)
+        XCTAssertFalse(labels.contains("SECRET"))
+    }
+
     func testCompatibilityDetailsRenderHostProfileObservationAndRecentLayoutAtReadableWidth() async throws {
         let baseline = PluginCompatibilitySnapshot.profile(for: .superIsland)
         let window = NSWindow(contentRect: CGRect(x: 0, y: 0, width: 820, height: 700),
@@ -68,7 +132,9 @@ final class PluginExtensionsUITests: XCTestCase {
     }
 
     func testNativeManagementWindowRendersMetadataPermissionsAndMinimumSizeToPNG() async throws {
-        let fixture = try await makeFixture(permissions: PluginPermission.allCases)
+        let fixture = try await makeFixture(permissions: PluginPermission.allCases.filter {
+            $0 != .readMedia && $0 != .controlMedia
+        })
         defer { fixture.cleanup() }
         let controller = PluginExtensionsWindowController(model: fixture.model)
         let window = try XCTUnwrap(controller.window)
@@ -311,6 +377,13 @@ final class PluginExtensionsUITests: XCTestCase {
         }
         let view = try XCTUnwrap(window.contentView)
         return try XCTUnwrap(visit(view).first { $0.title == title }, "Missing native confirmation button \(title)")
+    }
+
+    private func nativeSegmentedControl(in view: NSView) throws -> NSSegmentedControl {
+        func visit(_ view: NSView) -> [NSSegmentedControl] {
+            (view as? NSSegmentedControl).map { [$0] } ?? view.subviews.flatMap(visit)
+        }
+        return try XCTUnwrap(visit(view).first, "Missing native display-area picker")
     }
 
     private func writeScreenshot(_ window: NSWindow, filename: String) throws {

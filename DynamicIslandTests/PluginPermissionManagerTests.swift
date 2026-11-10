@@ -469,6 +469,34 @@ final class PluginPermissionManagerTests: XCTestCase {
         XCTAssertTrue(gate.hasEntered)
     }
 
+    func testMediaHelperReplacementInvalidatesReviewAndPersistentFingerprint() throws {
+        func mediaPackage(_ helper: Data) throws -> ValidatedPluginPackage {
+            let descriptor = PluginMediaProviderDescriptor(targetBundleIdentifier: "com.netease.163music",
+                displayName: "网易云音乐", helperPath: "media-helper.js", helperSHA256: String(repeating: "a", count: 64))
+            let manifest = try PluginManifest(id: alpha, name: "Media", version: SemanticVersion("1.0.0"),
+                engine: .javaScriptCore, entry: "index.js", minimumHostVersion: SemanticVersion("0.6.1"),
+                permissions: [.readMedia, .controlMedia], capabilities: [.musicProvider], mediaProvider: descriptor)
+            return ValidatedPluginPackage(manifest: manifest, canonicalRootURL: URL(fileURLWithPath: "/media"),
+                entryRelativePath: "index.js", entrySource: Data(), regularFileCount: 3,
+                totalFileBytes: UInt64(helper.count), mediaHelperSource: helper)
+        }
+        let permissions = PermissionManager()
+        let original = try mediaPackage(Data("helper A".utf8))
+        let replacement = try mediaPackage(Data("helper B".utf8))
+        let review = permissions.request(package: original)
+        try permissions.applyHostDecision(decision: .granted, review: review, permission: .readMedia)
+        let lease = try permissions.require(permission: .readMedia, package: original)
+        XCTAssertNotEqual(try PermissionManager.persistenceFingerprint(package: original),
+                          try PermissionManager.persistenceFingerprint(package: replacement))
+        let nextReview = permissions.request(package: replacement)
+        XCTAssertNotEqual(review.scope, nextReview.scope)
+        assertPermissionFailure(.revoked) { try lease.perform {} }
+        XCTAssertEqual(try permissions.state(permission: .readMedia, package: replacement), .requested)
+        assertPermissionFailure(.staleReview) {
+            try permissions.applyHostDecision(decision: .granted, review: review, permission: .controlMedia)
+        }
+    }
+
     private func package(
         id: String = "com.example.permissions.alpha", name: String = "Permission Test",
         version: String = "1.0.0", entry: String = "index.js", minimumHostVersion: String = "0.6.0",

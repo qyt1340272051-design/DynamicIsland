@@ -131,6 +131,7 @@ public final class PermissionManager {
         let fingerprint: PluginPermissionFingerprint
         let manifest: PluginManifest
         let entrySource: Data
+        let mediaHelperSource: Data?
         let review: PluginPermissionReview
         let gates: [PluginPermission: PluginPermissionGate]
         let mayRestore: Bool
@@ -141,6 +142,7 @@ public final class PermissionManager {
             self.mayRestore = mayRestore
             manifest = package.manifest
             entrySource = package.entrySource
+            mediaHelperSource = package.mediaHelperSource
             review = PluginPermissionReview(manifest: package.manifest, scope: UUID())
             gates = Dictionary(uniqueKeysWithValues: package.manifest.permissions.map {
                 ($0, PluginPermissionGate())
@@ -155,7 +157,7 @@ public final class PermissionManager {
             // Runtime copies share these immutable bytes. Data equality can
             // accept that shared storage without hashing on the Broker path.
             (manifest == package.manifest || fingerprint.matches(manifest: package.manifest))
-                && entrySource == package.entrySource
+                && entrySource == package.entrySource && mediaHelperSource == package.mediaHelperSource
         }
     }
 
@@ -258,7 +260,7 @@ public final class PermissionManager {
         }
         guard preparedScopes[review.id] == review.scope else { throw PluginPermissionError.persistenceFailed }
         do {
-            let fingerprint = try Self.persistenceFingerprint(manifest: entry.manifest, entrySource: entry.entrySource)
+            let fingerprint = try Self.persistenceFingerprint(manifest: entry.manifest, entrySource: entry.entrySource, mediaHelperSource: entry.mediaHelperSource)
             try await decisionStore.setDecision(pluginID: review.id, fingerprint: fingerprint,
                                                  permission: permission, state: decision.state)
             guard entries[review.id] === entry else { throw PluginPermissionError.staleReview }
@@ -298,19 +300,24 @@ public final class PermissionManager {
     }
 
     public nonisolated static func persistenceFingerprint(package: ValidatedPluginPackage) throws -> String {
-        try persistenceFingerprint(manifest: package.manifest, entrySource: package.entrySource)
+        try persistenceFingerprint(manifest: package.manifest, entrySource: package.entrySource, mediaHelperSource: package.mediaHelperSource)
     }
 
-    private nonisolated static func persistenceFingerprint(manifest m: PluginManifest, entrySource: Data) throws -> String {
+    private nonisolated static func persistenceFingerprint(manifest m: PluginManifest, entrySource: Data, mediaHelperSource: Data?) throws -> String {
         let canonical = try PluginManifest(schemaVersion: m.schemaVersion, id: m.id, name: m.name,
             version: m.version, engine: m.engine, entry: m.entry, minimumHostVersion: m.minimumHostVersion,
             permissions: m.permissions.sorted { $0.rawValue < $1.rawValue },
-            capabilities: m.capabilities.sorted { $0.rawValue < $1.rawValue }, developer: m.developer)
+            capabilities: m.capabilities.sorted { $0.rawValue < $1.rawValue }, developer: m.developer, mediaProvider: m.mediaProvider)
         var hash = SHA256()
         hash.update(data: Data("DynamicIsland.PluginPermissionDecision.v1\0".utf8))
         hash.update(data: try canonical.encodeJSON())
         hash.update(data: Data([0]))
         hash.update(data: Data(SHA256.hash(data: entrySource)))
+        if m.mediaProvider != nil {
+            hash.update(data: Data([0]))
+            hash.update(data: Data("media-helper-v1\0".utf8))
+            hash.update(data: Data(SHA256.hash(data: mediaHelperSource ?? Data())))
+        }
         return hash.finalize().map { String(format: "%02x", $0) }.joined()
     }
 
@@ -426,6 +433,8 @@ private nonisolated struct PluginPermissionFingerprint: Equatable {
     let permissions: [String]
     let capabilities: [String]
     let entrySourceSHA256: Data
+    let mediaProvider: PluginMediaProviderDescriptor?
+    let mediaHelperSourceSHA256: Data?
 
     init(package: ValidatedPluginPackage) {
         let manifest = package.manifest
@@ -440,6 +449,8 @@ private nonisolated struct PluginPermissionFingerprint: Equatable {
         permissions = manifest.permissions.map(\.rawValue).sorted()
         capabilities = manifest.capabilities.map(\.rawValue).sorted()
         entrySourceSHA256 = Data(SHA256.hash(data: package.entrySource))
+        mediaProvider = manifest.mediaProvider
+        mediaHelperSourceSHA256 = package.mediaHelperSource.map { Data(SHA256.hash(data: $0)) }
     }
 
     func matches(manifest: PluginManifest) -> Bool {
@@ -448,6 +459,7 @@ private nonisolated struct PluginPermissionFingerprint: Equatable {
             && minimumHostVersion == manifest.minimumHostVersion
             && permissions == manifest.permissions.map(\.rawValue).sorted()
             && capabilities == manifest.capabilities.map(\.rawValue).sorted()
+            && mediaProvider == manifest.mediaProvider
     }
 }
 

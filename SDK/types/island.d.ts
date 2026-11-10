@@ -1,5 +1,5 @@
 /**
- * DynamicIsland Native SDK 1.0.0 limited stable authoring contract.
+ * DynamicIsland Native SDK 1.1.0 development authoring contract.
  *
  * This file describes a deliberately small javascriptcore surface exercised by
  * the official Pomodoro and GitHub examples. It is not a declaration of
@@ -22,10 +22,20 @@ declare global {
             readonly onStop: LifecycleHook;
         }
 
+        /** Host 0.6.1+: optional package metadata, not a JS process-launch API. */
+        interface MediaProviderDescriptor {
+            readonly targetBundleIdentifier: string;
+            readonly displayName: string;
+            readonly helperPath: string;
+            readonly helperSHA256: string;
+        }
+
         type LogLevel = 'debug' | 'info' | 'warning' | 'error';
         type SemanticColor = 'primary' | 'secondary' | 'accent' | 'success' | 'warning' | 'danger';
-        type ProgressStyle = 'linear' | 'battery';
-        type CountdownStyle = 'time' | 'progress';
+        type Typography = 'caption' | 'body' | 'headline' | 'title' | 'metric' | 'timer';
+        type ButtonStyle = 'standard' | 'secondary' | 'primary';
+        type ProgressStyle = 'linear' | 'battery' | 'track';
+        type CountdownStyle = 'time' | 'progress' | 'timer' | 'track';
         type Priority = 'background' | 'normal';
         type LifecyclePolicy = 'transient' | 'persistent' | 'progress';
 
@@ -72,11 +82,15 @@ declare global {
             /** At most 256 UTF-8 bytes. */
             readonly content: string;
             readonly color?: SemanticColor;
+            /** Host typography token; defaults to body. No point sizes or font names. */
+            readonly font?: Typography;
         }
         interface IconNode {
             readonly type: 'icon';
             /** SF Symbol identifier, not an image path or URL. */
             readonly symbolName: string;
+            /** Finite Host semantic color; defaults to accent. */
+            readonly color?: SemanticColor;
         }
         interface StackNode {
             readonly type: 'hStack' | 'vStack';
@@ -103,6 +117,11 @@ declare global {
             readonly actionID: string;
             readonly label: Node;
             readonly accessibilityLabel?: string;
+            /** standard preserves the existing Host button; primary/secondary use Host control styling. */
+            readonly style?: ButtonStyle;
+            readonly color?: SemanticColor;
+            /** Defaults to true. Disabled controls do not dispatch actions. */
+            readonly isEnabled?: boolean;
         }
 
         interface PresentationFields {

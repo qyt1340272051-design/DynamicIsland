@@ -1,0 +1,35 @@
+{
+  "status": "release-source-snapshot; publication verified separately",
+  "tag": "plugins-music-0.1.0",
+  "hostRequirement": "0.6.1/build21 or newer development Host containing these exact helper pins; current public 0.6.0 releases cannot enable",
+  "sources": {
+    "qq-music-0.1.0.dip": {
+      "source": "docs/plugin-system/examples/qq-music",
+      "filesSHA256": {
+        "LICENSE": "72ab5fec769e2affe1fc9bdc33fc6b52b8bb35ff27907db3e4bb7d4ef43e8610",
+        "README.md": "10274802395c2a6ec4c7d35f30bdd0c5c02620a2bcbf8a09fde22840ba3ec45a",
+        "index.js": "7fcc048db33986d265f1a6c6c7bb99192f6282cb4f644d89c9d5d1d39845281a",
+        "manifest.json": "9ad389386cdcf560176c310aac268d02786ed6f906d507bbb3c36b3090bfb7de",
+        "media-helper.js": "422c5eb11cf94e523c7427b953e83d0e6f1b94850897ffbb529a9abd9d44b9ec"
+      },
+      "archiveBytes": 7241,
+      "helperSHA256": "422c5eb11cf94e523c7427b953e83d0e6f1b94850897ffbb529a9abd9d44b9ec",
+      "targetBundleIdentifier": "com.tencent.QQMusicMac"
+    },
+    "spotify-0.1.0.dip": {
+      "source": "docs/plugin-system/examples/spotify",
+      "filesSHA256": {
+        "LICENSE": "72ab5fec769e2affe1fc9bdc33fc6b52b8bb35ff27907db3e4bb7d4ef43e8610",
+        "README.md": "a2cfa85cb8c9c667c9703ec04953d0da65b19cf021a49d88a5e9ebdfef1c7eef",
+        "index.js": "7fcc048db33986d265f1a6c6c7bb99192f6282cb4f644d89c9d5d1d39845281a",
+        "manifest.json": "ca015fd4b286f9ea3712a4cb06ca3dd3b7929c4295da6b35066d4da70ab4c95d",
+        "media-helper.js": "d2288f6e59608d8681c3d3b7a6de3f4725e8e3a87fc995c6c31de45c3022141b"
+      },
+      "archiveBytes": 7126,
+      "helperSHA256": "d2288f6e59608d8681c3d3b7a6de3f4725e8e3a87fc995c6c31de45c3022141b",
+      "targetBundleIdentifier": "com.spotify.client"
+    }
+  },
+  "realClientPlaybackVerified": false,
+  "sourceCommit": "34ebb64c706600821390584a92c6c6ab84cca74e"
+}

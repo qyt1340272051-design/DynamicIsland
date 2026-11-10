@@ -113,3 +113,31 @@ island.storage.remove('settings');
 island.storage.clear();
 // @ts-expect-error Metadata is immutable and cannot select plugin identity.
 island.plugin.id = 'com.example.someone-else';
+
+// @ts-expect-error Typography is a finite semantic token, not a point size.
+const arbitraryFont: DynamicIsland.TextNode = {type: 'text', content: '25:00', font: '26pt'};
+// @ts-expect-error Numeric font sizes are outside the node contract.
+const numericFont: DynamicIsland.TextNode = {type: 'text', content: '25:00', font: 26};
+// @ts-expect-error Null is not an omitted font.
+const nullFont: DynamicIsland.TextNode = {type: 'text', content: '25:00', font: null};
+// @ts-expect-error Button style is a finite Host token.
+const arbitraryButtonStyle: DynamicIsland.ButtonNode = {type: 'button', actionID: 'go', label: {type: 'spacer'}, style: 'filled'};
+// @ts-expect-error Button color remains semantic, not CSS.
+const arbitraryButtonColor: DynamicIsland.ButtonNode = {type: 'button', actionID: 'go', label: {type: 'spacer'}, color: '#fff'};
+// @ts-expect-error isEnabled is strictly boolean.
+const numericEnabled: DynamicIsland.ButtonNode = {type: 'button', actionID: 'go', label: {type: 'spacer'}, isEnabled: 1};
+// @ts-expect-error Strings cannot coerce into enabled state.
+const stringEnabled: DynamicIsland.ButtonNode = {type: 'button', actionID: 'go', label: {type: 'spacer'}, isEnabled: 'false'};
+// @ts-expect-error Null is not an omitted enabled state.
+const nullEnabled: DynamicIsland.ButtonNode = {type: 'button', actionID: 'go', label: {type: 'spacer'}, isEnabled: null};
+// @ts-expect-error Progress supports only finite Host styles.
+const arbitraryProgress: DynamicIsland.ProgressNode = {type: 'progress', value: 0.5, style: 'ring'};
+// @ts-expect-error Countdown supports only finite Host styles.
+const arbitraryCountdownStyle: DynamicIsland.CountdownStyle = 'ring';
+void [arbitraryFont, numericFont, nullFont, arbitraryButtonStyle, arbitraryButtonColor, numericEnabled, stringEnabled, nullEnabled, arbitraryProgress, arbitraryCountdownStyle];
+
+// @ts-expect-error Icon color is a semantic Host token, not CSS.
+const cssIconColor: DynamicIsland.IconNode = {type: 'icon', symbolName: 'timer', color: '#ff6347'};
+// @ts-expect-error Explicit null is not an omitted icon color.
+const nullIconColor: DynamicIsland.IconNode = {type: 'icon', symbolName: 'timer', color: null};
+void [cssIconColor, nullIconColor];

@@ -13,13 +13,23 @@ public nonisolated enum IslandImageSizeToken: String, Codable, CaseIterable, Sen
 public nonisolated enum IslandProgressStyleToken: String, Codable, CaseIterable, Sendable {
     case linear
     case battery
+    case track
 }
 
 /// Countdown values reference a Host record; no deadline or elapsed state is
-/// embedded in the node. The Host owns the appearance of both finite styles.
+/// embedded in the node. The Host owns the appearance of each finite style.
 public nonisolated enum IslandCountdownStyleToken: String, Codable, CaseIterable, Sendable {
     case time
     case progress
+    case timer
+    case track
+}
+
+/// Finite button appearances; dimensions and tint mapping remain Host-owned.
+public nonisolated enum IslandButtonStyleToken: String, Codable, CaseIterable, Sendable {
+    case standard
+    case secondary
+    case primary
 }
 
 /// Data-only UI description. The Host owns rendering and action dispatch.
@@ -41,30 +51,69 @@ public nonisolated indirect enum IslandNode: Codable, Equatable, Sendable {
     public nonisolated struct Text: Codable, Equatable, Sendable {
         public var content: String
         public var color: IslandSemanticColorToken
+        public var font: IslandTypographyToken
 
-        private enum CodingKeys: String, CodingKey { case content, color }
+        private enum CodingKeys: String, CodingKey { case content, color, font }
 
-        public init(_ content: String, color: IslandSemanticColorToken = .primary) {
+        public init(_ content: String, color: IslandSemanticColorToken = .primary,
+                    font: IslandTypographyToken = .body) {
             self.content = content
             self.color = color
+            self.font = font
         }
 
         public init(from decoder: Decoder) throws {
             let container = try decoder.container(keyedBy: CodingKeys.self)
             content = try container.decode(String.self, forKey: .content)
-            color = try container.decodeIfPresent(IslandSemanticColorToken.self, forKey: .color) ?? .primary
+            color = container.contains(.color) ? try container.decode(IslandSemanticColorToken.self, forKey: .color) : .primary
+            font = container.contains(.font) ? try container.decode(IslandTypographyToken.self, forKey: .font) : .body
         }
 
         public func encode(to encoder: Encoder) throws {
             var container = encoder.container(keyedBy: CodingKeys.self)
             try container.encode(content, forKey: .content)
             if color != .primary { try container.encode(color, forKey: .color) }
+            if font != .body { try container.encode(font, forKey: .font) }
         }
     }
 
     public nonisolated struct Icon: Codable, Equatable, Sendable {
         public var symbolName: String
-        public init(_ symbolName: String) { self.symbolName = symbolName }
+        public var color: IslandSemanticColorToken
+
+        private enum CodingKeys: String, CodingKey { case symbolName, color }
+        private struct FieldKey: CodingKey {
+            let stringValue: String
+            var intValue: Int? { nil }
+            init?(stringValue: String) { self.stringValue = stringValue }
+            init?(intValue: Int) { return nil }
+        }
+
+        public init(_ symbolName: String, color: IslandSemanticColorToken = .accent) {
+            self.symbolName = symbolName
+            self.color = color
+        }
+
+        fileprivate static func checkFields(_ decoder: Decoder, allowed: Set<String>) throws {
+            let container = try decoder.container(keyedBy: FieldKey.self)
+            guard Set(container.allKeys.map(\.stringValue)).isSubset(of: allowed) else {
+                throw DecodingError.dataCorrupted(.init(codingPath: decoder.codingPath,
+                                                        debugDescription: "Unknown icon field"))
+            }
+        }
+
+        public init(from decoder: Decoder) throws {
+            try Self.checkFields(decoder, allowed: ["symbolName", "color"])
+            let container = try decoder.container(keyedBy: CodingKeys.self)
+            symbolName = try container.decode(String.self, forKey: .symbolName)
+            color = container.contains(.color) ? try container.decode(IslandSemanticColorToken.self, forKey: .color) : .accent
+        }
+
+        public func encode(to encoder: Encoder) throws {
+            var container = encoder.container(keyedBy: CodingKeys.self)
+            try container.encode(symbolName, forKey: .symbolName)
+            if color != .accent { try container.encode(color, forKey: .color) }
+        }
     }
 
     public nonisolated struct Image: Codable, Equatable, Sendable {
@@ -81,7 +130,7 @@ public nonisolated indirect enum IslandNode: Codable, Equatable, Sendable {
         public init(from decoder: Decoder) throws {
             let container = try decoder.container(keyedBy: CodingKeys.self)
             source = try container.decode(ImageSource.self, forKey: .source)
-            size = try container.decodeIfPresent(IslandImageSizeToken.self, forKey: .size) ?? .icon
+            size = container.contains(.size) ? try container.decode(IslandImageSizeToken.self, forKey: .size) : .icon
         }
 
         public func encode(to encoder: Encoder) throws {
@@ -125,8 +174,8 @@ public nonisolated indirect enum IslandNode: Codable, Equatable, Sendable {
         public init(from decoder: Decoder) throws {
             let container = try decoder.container(keyedBy: CodingKeys.self)
             value = try container.decode(Double.self, forKey: .value)
-            style = try container.decodeIfPresent(IslandProgressStyleToken.self, forKey: .style) ?? .linear
-            color = try container.decodeIfPresent(IslandSemanticColorToken.self, forKey: .color) ?? .accent
+            style = container.contains(.style) ? try container.decode(IslandProgressStyleToken.self, forKey: .style) : .linear
+            color = container.contains(.color) ? try container.decode(IslandSemanticColorToken.self, forKey: .color) : .accent
         }
 
         public func encode(to encoder: Encoder) throws {
@@ -188,11 +237,43 @@ public nonisolated indirect enum IslandNode: Codable, Equatable, Sendable {
         public var actionID: String
         public var label: IslandNode
         public var accessibilityLabel: String?
+        public var style: IslandButtonStyleToken
+        public var color: IslandSemanticColorToken
+        public var isEnabled: Bool
 
-        public init(actionID: String, label: IslandNode, accessibilityLabel: String? = nil) {
+        private enum CodingKeys: String, CodingKey {
+            case actionID, label, accessibilityLabel, style, color, isEnabled
+        }
+
+        public init(actionID: String, label: IslandNode, accessibilityLabel: String? = nil,
+                    style: IslandButtonStyleToken = .standard,
+                    color: IslandSemanticColorToken = .accent, isEnabled: Bool = true) {
             self.actionID = actionID
             self.label = label
             self.accessibilityLabel = accessibilityLabel
+            self.style = style
+            self.color = color
+            self.isEnabled = isEnabled
+        }
+
+        public init(from decoder: Decoder) throws {
+            let container = try decoder.container(keyedBy: CodingKeys.self)
+            actionID = try container.decode(String.self, forKey: .actionID)
+            label = try container.decode(IslandNode.self, forKey: .label)
+            accessibilityLabel = try container.decodeIfPresent(String.self, forKey: .accessibilityLabel)
+            style = container.contains(.style) ? try container.decode(IslandButtonStyleToken.self, forKey: .style) : .standard
+            color = container.contains(.color) ? try container.decode(IslandSemanticColorToken.self, forKey: .color) : .accent
+            isEnabled = container.contains(.isEnabled) ? try container.decode(Bool.self, forKey: .isEnabled) : true
+        }
+
+        public func encode(to encoder: Encoder) throws {
+            var container = encoder.container(keyedBy: CodingKeys.self)
+            try container.encode(actionID, forKey: .actionID)
+            try container.encode(label, forKey: .label)
+            try container.encodeIfPresent(accessibilityLabel, forKey: .accessibilityLabel)
+            if style != .standard { try container.encode(style, forKey: .style) }
+            if color != .accent { try container.encode(color, forKey: .color) }
+            if !isEnabled { try container.encode(false, forKey: .isEnabled) }
         }
     }
 
@@ -407,7 +488,7 @@ public nonisolated indirect enum IslandNode: Codable, Equatable, Sendable {
 
     private enum CodingKeys: String, CodingKey {
         case type, content, symbolName, source, size, children, value, actionID, label
-        case accessibilityLabel, title, isOn, showsTitle, style, color, id, generation
+        case accessibilityLabel, title, isOn, showsTitle, style, color, id, generation, font, isEnabled
     }
     private enum Kind: String, Codable {
         case text, icon, image, hStack, vStack, zStack, spacer, divider, progress, countdown, button, toggle, slider
@@ -424,12 +505,18 @@ public nonisolated indirect enum IslandNode: Codable, Equatable, Sendable {
         switch kind {
         case .text: self = .text(.init(
             try container.decode(String.self, forKey: .content),
-            color: try container.decodeIfPresent(IslandSemanticColorToken.self, forKey: .color) ?? .primary
+            color: container.contains(.color) ? try container.decode(IslandSemanticColorToken.self, forKey: .color) : .primary,
+            font: container.contains(.font) ? try container.decode(IslandTypographyToken.self, forKey: .font) : .body
         ))
-        case .icon: self = .icon(.init(try container.decode(String.self, forKey: .symbolName)))
+        case .icon:
+            try Icon.checkFields(decoder, allowed: ["type", "symbolName", "color"])
+            self = .icon(.init(
+                try container.decode(String.self, forKey: .symbolName),
+                color: container.contains(.color) ? try container.decode(IslandSemanticColorToken.self, forKey: .color) : .accent
+            ))
         case .image: self = .image(.init(
             source: try container.decode(ImageSource.self, forKey: .source),
-            size: try container.decodeIfPresent(IslandImageSizeToken.self, forKey: .size) ?? .icon
+            size: container.contains(.size) ? try container.decode(IslandImageSizeToken.self, forKey: .size) : .icon
         ))
         case .hStack, .vStack, .zStack:
             var nested = try container.nestedUnkeyedContainer(forKey: .children)
@@ -455,8 +542,8 @@ public nonisolated indirect enum IslandNode: Codable, Equatable, Sendable {
         case .divider: self = .divider(.init())
         case .progress: self = .progress(.init(
             try container.decode(Double.self, forKey: .value),
-            style: try container.decodeIfPresent(IslandProgressStyleToken.self, forKey: .style) ?? .linear,
-            color: try container.decodeIfPresent(IslandSemanticColorToken.self, forKey: .color) ?? .accent
+            style: container.contains(.style) ? try container.decode(IslandProgressStyleToken.self, forKey: .style) : .linear,
+            color: container.contains(.color) ? try container.decode(IslandSemanticColorToken.self, forKey: .color) : .accent
         ))
         case .countdown:
             try Self.checkCountdownFields(decoder, allowed: ["type", "id", "generation", "style", "color"])
@@ -469,7 +556,10 @@ public nonisolated indirect enum IslandNode: Codable, Equatable, Sendable {
         case .button: self = .button(.init(
             actionID: try container.decode(String.self, forKey: .actionID),
             label: try container.decode(IslandNode.self, forKey: .label),
-            accessibilityLabel: try container.decodeIfPresent(String.self, forKey: .accessibilityLabel)
+            accessibilityLabel: try container.decodeIfPresent(String.self, forKey: .accessibilityLabel),
+            style: container.contains(.style) ? try container.decode(IslandButtonStyleToken.self, forKey: .style) : .standard,
+            color: container.contains(.color) ? try container.decode(IslandSemanticColorToken.self, forKey: .color) : .accent,
+            isEnabled: container.contains(.isEnabled) ? try container.decode(Bool.self, forKey: .isEnabled) : true
         ))
         case .toggle: self = .toggle(.init(
             title: try container.decode(String.self, forKey: .title),
@@ -497,9 +587,11 @@ public nonisolated indirect enum IslandNode: Codable, Equatable, Sendable {
             try container.encode(Kind.text, forKey: .type)
             try container.encode(node.content, forKey: .content)
             if node.color != .primary { try container.encode(node.color, forKey: .color) }
+            if node.font != .body { try container.encode(node.font, forKey: .font) }
         case .icon(let node):
             try container.encode(Kind.icon, forKey: .type)
             try container.encode(node.symbolName, forKey: .symbolName)
+            if node.color != .accent { try container.encode(node.color, forKey: .color) }
         case .image(let node):
             try container.encode(Kind.image, forKey: .type)
             try container.encode(node.source, forKey: .source)
@@ -533,6 +625,9 @@ public nonisolated indirect enum IslandNode: Codable, Equatable, Sendable {
             try container.encode(node.actionID, forKey: .actionID)
             try container.encode(node.label, forKey: .label)
             try container.encodeIfPresent(node.accessibilityLabel, forKey: .accessibilityLabel)
+            if node.style != .standard { try container.encode(node.style, forKey: .style) }
+            if node.color != .accent { try container.encode(node.color, forKey: .color) }
+            if !node.isEnabled { try container.encode(false, forKey: .isEnabled) }
         case .toggle(let node):
             try container.encode(Kind.toggle, forKey: .type)
             try container.encode(node.title, forKey: .title)

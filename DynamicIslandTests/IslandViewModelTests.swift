@@ -37,8 +37,26 @@ final class IslandViewModelTests: XCTestCase {
             model.selectExpandedSurface(.tools)
             XCTAssertEqual(model.expandedSurface, .tools)
 
+            model.selectExpandedSurface(.utilities)
+            XCTAssertEqual(model.expandedSurface, .utilities)
+
             model.selectExpandedSurface(.music)
             XCTAssertEqual(model.expandedSurface, .music)
+        }
+    }
+
+    func testUtilityRegionReturnsOnHoverUntilAnActiveNativeTimerTakesPrecedence() async {
+        await MainActor.run {
+            let model = IslandViewModel.preview()
+            model.setHovering(true)
+            model.selectExpandedSurface(.utilities)
+            model.endHovering()
+            model.setHovering(true)
+            XCTAssertEqual(model.expandedSurface, .utilities)
+            model.timerTools.startSelectedTimer(at: Date())
+            model.endHovering()
+            model.setHovering(true)
+            XCTAssertEqual(model.expandedSurface, .tools)
         }
     }
 

@@ -6,6 +6,18 @@ import XCTest
 
 @MainActor
 final class PluginIslandNodeBridgeTests: XCTestCase {
+    func testIconColorUsesFiniteHostTokensWithoutChangingDefault() throws {
+        XCTAssertEqual(try parse(["type": "icon", "symbolName": "timer"]), .icon(.init("timer")))
+        for color in IslandSemanticColorToken.allCases {
+            XCTAssertEqual(try parse(["type": "icon", "symbolName": "timer", "color": color.rawValue]),
+                           .icon(.init("timer", color: color)))
+        }
+        for invalid in [NSNull(), "#ff6347", "tomato", 1, false, [:], []] as [Any] {
+            assertInvalid(try json(["type": "icon", "symbolName": "timer", "color": invalid]))
+        }
+        assertInvalid(try json(["type": "icon", "symbolName": "timer", "color": "danger", "width": 16]))
+    }
+
     func testAllTwelveKindsConvertWithDocumentedDefaults() throws {
         let samples: [([String: Any], IslandNode)] = [
             (["type": "text", "content": "Hello"], .text(.init("Hello"))),
@@ -69,7 +81,7 @@ final class PluginIslandNodeBridgeTests: XCTestCase {
             ["type": "text", "content": "Text", "swiftClass": "NSView"],
             ["type": "text", "content": "Text", "selector": "performSelector:"],
             ["type": "text", "content": "Text", "frame": ["width": 100]],
-            ["type": "icon", "symbolName": "star", "color": "accent"],
+            ["type": "icon", "symbolName": "star", "color": "#ff6347"],
             ["type": "text", "content": true], ["type": "text"],
             ["type": "hStack", "children": NSNull()], ["type": "vStack", "children": [:]],
             ["type": "zStack", "children": [NSNull()]],
@@ -84,6 +96,46 @@ final class PluginIslandNodeBridgeTests: XCTestCase {
         for number in [-0.01, 1.01, Double.nan, Double.infinity, -Double.infinity] {
             assertInvalid(.object(["type": .string("progress"), "value": .number(number)]))
             assertInvalid(.object(["type": .string("slider"), "title": .string("Seek"), "actionID": .string("seek"), "value": .number(number)]))
+        }
+    }
+
+    func testTypographyAndButtonStylesAreFiniteAndBooleanValuesAreStrict() throws {
+        for font in IslandTypographyToken.allCases {
+            XCTAssertEqual(try parse(["type": "text", "content": "25:00", "font": font.rawValue]),
+                           .text(.init("25:00", font: font)))
+        }
+        for style in IslandButtonStyleToken.allCases {
+            for color in IslandSemanticColorToken.allCases {
+                for enabled in [true, false] {
+                    let fields: [String: Any] = ["type": "button", "actionID": "start",
+                        "label": ["type": "text", "content": "Start"], "style": style.rawValue,
+                        "color": color.rawValue, "isEnabled": enabled]
+                    let button = try parse(fields)
+                    XCTAssertEqual(button, .button(.init(actionID: "start", label: .text(.init("Start")),
+                                                       style: style, color: color, isEnabled: enabled)))
+                    XCTAssertEqual(PluginIslandNodeConverter.actionIDs(in: button), ["start"],
+                                   "Disabled presentation keeps the declared action inventory.")
+                }
+            }
+        }
+        for (base, key, invalidValues) in [
+            (["type": "text", "content": "25:00"] as [String: Any], "font", [NSNull(), "26pt", 26, true] as [Any]),
+            (["type": "button", "actionID": "start", "label": ["type": "spacer"]] as [String: Any],
+             "style", [NSNull(), "filled", 32, true] as [Any]),
+            (["type": "button", "actionID": "start", "label": ["type": "spacer"]] as [String: Any],
+             "color", [NSNull(), "#ffffff", 1, false] as [Any]),
+            (["type": "button", "actionID": "start", "label": ["type": "spacer"]] as [String: Any],
+             "isEnabled", [NSNull(), "false", 0, 1, [:], []] as [Any])
+        ] {
+            for invalid in invalidValues {
+                var fields = base
+                fields[key] = invalid
+                assertInvalid(try json(fields))
+            }
+        }
+        for key in ["fontSize", "fontFamily", "width", "height"] {
+            assertInvalid(try json(["type": "text", "content": "25:00", key: 26]))
+            assertInvalid(try json(["type": "button", "actionID": "start", "label": ["type": "spacer"], key: 32]))
         }
     }
 

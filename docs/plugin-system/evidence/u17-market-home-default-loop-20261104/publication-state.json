@@ -1,0 +1,13 @@
+{
+  "parent": "c2b710cd692875ec429988e93f7c2fa20c7dd5d7",
+  "sourceCommit": "34ebb64c706600821390584a92c6c6ab84cca74e",
+  "sourceTree": "0791f08e96dc2e33c3ff3b08c1d6c9e083ae098a",
+  "branch": "refs/heads/codex/music-plugins-market",
+  "catalogCommit": "697f80d7e7f3e41b6019ac8dd549a9a269c9cf9b",
+  "catalogTree": "ad4d28e9639976c4cb76ce80b981e8822ea132de",
+  "pr": 14,
+  "mergedCommit": "9acce8f6d77dca55de655d7121bde5d04cb1fb27",
+  "mergedAt": "2026-11-04T05:37:27Z",
+  "requiredCIRun": 41779715406,
+  "defaultCatalogVerified": true
+}

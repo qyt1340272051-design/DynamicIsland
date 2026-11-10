@@ -1,0 +1,31 @@
+/tmp/dynamic-island-auto-source-initial.log
+	 Executed 10 tests, with 0 failures (0 unexpected) in 27.738 (27.741) seconds
+	 Executed 6 tests, with 0 failures (0 unexpected) in 0.089 (0.091) seconds
+	 Executed 25 tests, with 0 failures (0 unexpected) in 7.779 (7.787) seconds
+	 Executed 3 tests, with 0 failures (0 unexpected) in 2.452 (2.454) seconds
+	 Executed 44 tests, with 0 failures (0 unexpected) in 38.058 (38.074) seconds
+	 Executed 44 tests, with 0 failures (0 unexpected) in 38.058 (38.075) seconds
+** TEST SUCCEEDED **
+/tmp/dynamic-island-auto-source-routing.log
+	 Executed 17 tests, with 0 failures (0 unexpected) in 0.048 (0.051) seconds
+	 Executed 3 tests, with 0 failures (0 unexpected) in 6.108 (6.108) seconds
+	 Executed 51 tests, with 0 failures (0 unexpected) in 1.288 (1.308) seconds
+	 Executed 6 tests, with 0 failures (0 unexpected) in 1.045 (1.048) seconds
+	 Executed 7 tests, with 0 failures (0 unexpected) in 0.221 (0.223) seconds
+	 Executed 84 tests, with 0 failures (0 unexpected) in 8.709 (8.739) seconds
+	 Executed 84 tests, with 0 failures (0 unexpected) in 8.709 (8.740) seconds
+** TEST SUCCEEDED **
+/tmp/dynamic-island-auto-source-final.log
+	 Executed 19 tests, with 0 failures (0 unexpected) in 1.632 (1.635) seconds
+	 Executed 7 tests, with 0 failures (0 unexpected) in 0.893 (0.895) seconds
+	 Executed 21 tests, with 0 failures (0 unexpected) in 0.120 (0.123) seconds
+	 Executed 47 tests, with 0 failures (0 unexpected) in 2.645 (2.654) seconds
+	 Executed 47 tests, with 0 failures (0 unexpected) in 2.645 (2.654) seconds
+** TEST SUCCEEDED **
+/tmp/dynamic-island-auto-source-sequencing.log
+	 Executed 21 tests, with 0 failures (0 unexpected) in 1.643 (1.647) seconds
+	 Executed 6 tests, with 0 failures (0 unexpected) in 0.220 (0.223) seconds
+	 Executed 27 tests, with 0 failures (0 unexpected) in 1.863 (1.871) seconds
+	 Executed 27 tests, with 0 failures (0 unexpected) in 1.863 (1.871) seconds
+** TEST SUCCEEDED **
+Unique passing methods: 160

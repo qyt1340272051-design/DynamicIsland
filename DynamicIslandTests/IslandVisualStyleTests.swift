@@ -14,19 +14,20 @@ final class IslandVisualStyleTests: XCTestCase {
             - 2 * padding
             - IslandVisualStyle.expandedSurfaceSwitcherHeight
             - IslandVisualStyle.expandedSurfaceSpacing
-        // Two metadata lines, progress track and labels, playback controls,
-        // volume controls, and the three 4pt gaps in the right-hand VStack.
-        let requiredMusicSurfaceHeight: CGFloat = 33 + 32 + 28 + 28 + 3 * 4
+            - IslandVisualStyle.homeLayerSelectorHeight
+        // Two native metadata lines, one shared timeline row (including the
+        // taller read-only progress fallback), two 28pt control rows, and gaps.
+        let requiredMusicSurfaceHeight: CGFloat = 15 + 15 + 20 + 28 + 28 + 4 * 4
 
-        XCTAssertEqual(shell.height, content.height)
-        XCTAssertEqual(shell.height, IslandVisualStyle.expandedMusicHeight)
+        XCTAssertEqual(shell, CGSize(width: 440, height: 196))
+        XCTAssertEqual(content, CGSize(width: 428, height: 184))
+        XCTAssertEqual(shell.height, IslandVisualStyle.expandedHomeHeight)
         XCTAssertGreaterThanOrEqual(
             availableMusicSurfaceHeight,
             requiredMusicSurfaceHeight,
             "Music controls must fit above the bottom content clip without flattening the volume buttons."
         )
-        XCTAssertGreaterThanOrEqual(horizontalInset, 16)
-        XCTAssertLessThanOrEqual(horizontalInset, 24)
+        XCTAssertEqual(horizontalInset, 14)
         XCTAssertLessThan(shell.height, IslandPanelGeometry.expandedSize.height)
     }
 
@@ -52,6 +53,10 @@ final class IslandVisualStyleTests: XCTestCase {
         XCTAssertEqual(filledTray.height, IslandVisualStyle.expandedFileTrayHeight)
         XCTAssertEqual(stopwatch.height, IslandVisualStyle.expandedCompactContentHeight)
         XCTAssertEqual(countdown.height, IslandVisualStyle.expandedTimerHeight)
+        XCTAssertEqual(emptyTray, CGSize(width: 440, height: 136))
+        XCTAssertEqual(filledTray, CGSize(width: 440, height: 148))
+        XCTAssertEqual(stopwatch, CGSize(width: 440, height: 136))
+        XCTAssertEqual(countdown, CGSize(width: 440, height: 174))
     }
 
     func testMessagesAndTimerCompletionKeepEnoughHeight() {
@@ -68,25 +73,27 @@ final class IslandVisualStyleTests: XCTestCase {
         XCTAssertEqual(completedStopwatch.height, IslandVisualStyle.expandedTimerHeight)
     }
 
-    func testPresentedToolHasFullHostShellAnd140PointContentRegardlessOfLegacyTab() {
-        for surface in [IslandExpandedSurface.music, .fileTray, .tools] {
+    func testPresentedToolSelectorKeepsCanonical134PointBodyWithinItsOuterShell() {
+        for surface in [IslandExpandedSurface.music, .fileTray, .tools, .utilities] {
             for mode in IslandTimerToolMode.allCases {
                 let shell = IslandVisualStyle.expandedShellSize(
                     for: surface, timerMode: mode, hasTrayItems: true,
                     hasError: true, hasTimerCompletion: true, hasPresentedTool: true
                 )
-                XCTAssertEqual(shell, CGSize(width: 480, height: 200))
+                let selectorHeight: CGFloat = surface == .tools || surface == .utilities
+                    ? IslandVisualStyle.expandedToolSelectorHeight + IslandVisualStyle.expandedToolSelectorSpacing : 0
+                XCTAssertEqual(shell, CGSize(width: 440, height: 184 + selectorHeight))
                 XCTAssertEqual(
-                    ActivityPresentation.HostPolicy.expandedContentHeight(forHostShellHeight: Double(shell.height)),
-                    140
+                    ActivityPresentation.HostPolicy.expandedContentHeight(forHostShellHeight: Double(shell.height - selectorHeight)),
+                    134
                 )
-                XCTAssertLessThan(shell.height, IslandPanelGeometry.expandedSize.height)
+                XCTAssertEqual(IslandVisualStyle.expandedShellSize, CGSize(width: 440, height: 184))
             }
         }
     }
 
     func testExpandedCanvasContainsEverySurfaceShell() {
-        let sizes = [IslandExpandedSurface.music, .fileTray, .tools].flatMap { surface in
+        let sizes = [IslandExpandedSurface.music, .fileTray, .tools, .utilities].flatMap { surface in
             IslandTimerToolMode.allCases.map { mode in
                 IslandVisualStyle.expandedShellSize(
                     for: surface,
@@ -98,7 +105,10 @@ final class IslandVisualStyleTests: XCTestCase {
             }
         }
 
-        XCTAssertEqual(sizes.map(\.height).max(), IslandVisualStyle.expandedShellSize.height)
+        XCTAssertTrue(sizes.allSatisfy { $0.height <= max(IslandVisualStyle.expandedShellSize.height,
+                                                       IslandVisualStyle.expandedHomeHeight) })
+        XCTAssertTrue(sizes.allSatisfy { $0.height < IslandPanelGeometry.expandedSize.height })
+        XCTAssertEqual(IslandVisualStyle.expandedShellSize, CGSize(width: 440, height: 184))
         XCTAssertEqual(IslandVisualStyle.expandedContentSize.height, IslandVisualStyle.expandedShellSize.height)
         XCTAssertTrue(sizes.allSatisfy { $0.width <= IslandVisualStyle.expandedContentSize.width + 12 })
     }
@@ -173,13 +183,15 @@ final class IslandVisualStyleTests: XCTestCase {
 
         XCTAssertEqual(
             batterySize.width,
-            baseSize.width + IslandVisualStyle.batteryCompactHorizontalExpansion
+            min(baseSize.width + IslandVisualStyle.batteryCompactHorizontalExpansion,
+                IslandVisualStyle.expandedShellSize.width)
         )
         XCTAssertEqual(batterySize.height, baseSize.height)
         XCTAssertGreaterThan(batterySize.width, standardSize.width)
         XCTAssertLessThanOrEqual(batterySize.width, IslandVisualStyle.expandedShellSize.width)
         XCTAssertLessThanOrEqual(
-            batterySize.width * IslandExpansionAnimation.pointerHoverScale,
+            min(batterySize.width * IslandExpansionAnimation.pointerHoverScale,
+                IslandVisualStyle.expandedShellSize.width),
             IslandVisualStyle.expandedShellSize.width
         )
         XCTAssertLessThanOrEqual(batterySize.width, IslandPanelGeometry.expandedSize.width)

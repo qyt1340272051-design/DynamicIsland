@@ -1,0 +1,214 @@
+{
+  "scope": "controlled NSHosting snapshots, not physical device acceptance",
+  "generated": 144,
+  "selectedAndReviewed": 20,
+  "recheckedAfterNativePickerFix": 5,
+  "identicalToPreviouslyReviewed": 15,
+  "findings": "selected final images show complete controls/files and static top attachment; native segmented font/width now scale",
+  "limitations": [
+    "animation frame timing and physical appearance remain manual",
+    "1710 and2560 notch geometry synthetic"
+  ],
+  "images": [
+    {
+      "file": "external-1080p/expanded-music.png",
+      "sha256": "10bacc8fffbf1a4d4bc9a929c189dedb02c08886ec6759ca8d469b6d0821aa5f",
+      "width": 800,
+      "height": 320,
+      "archive": "selected/external-1080p--expanded-music.png",
+      "source": "Synthetic device profile; not physical-device evidence",
+      "review": "no content clipping, camera overlap or static top gap found",
+      "sameBytesAsPreviouslyViewed": true
+    },
+    {
+      "file": "external-1080p/expanded-tools-countdown.png",
+      "sha256": "de5288eb419e738d4a107166547e78133bb7eb604b255e75e6b6aa164977524e",
+      "width": 800,
+      "height": 320,
+      "archive": "selected/external-1080p--expanded-tools-countdown.png",
+      "source": "Synthetic device profile; not physical-device evidence",
+      "review": "no content clipping, camera overlap or static top gap found",
+      "sameBytesAsPreviouslyViewed": false
+    },
+    {
+      "file": "resolution-1470-measured/compact-battery-charging.png",
+      "sha256": "beeedb1af2ff31347a1a1ebd80f4e5591d6e8b0f68462c5ac5ba7f3cf6d6a5d7",
+      "width": 2940,
+      "height": 640,
+      "archive": "selected/resolution-1470-measured--compact-battery-charging.png",
+      "source": "Measured geometry: 1470×956, auxiliary gap 179×32 pt; simulated rendering",
+      "review": "no content clipping, camera overlap or static top gap found",
+      "sameBytesAsPreviouslyViewed": true
+    },
+    {
+      "file": "resolution-1470-measured/expanded-music.png",
+      "sha256": "53093e8ab5fdd03fc2614b6d17266e89bf0b51f693fd2b1f512a3b350646b550",
+      "width": 2940,
+      "height": 640,
+      "archive": "selected/resolution-1470-measured--expanded-music.png",
+      "source": "Measured geometry: 1470×956, auxiliary gap 179×32 pt; simulated rendering",
+      "review": "no content clipping, camera overlap or static top gap found",
+      "sameBytesAsPreviouslyViewed": true
+    },
+    {
+      "file": "resolution-1470-measured/expanded-file-tray.png",
+      "sha256": "12786cd9c6e4586bc4e1432c0e90c2b7ba74c0ea7622b67947f228cccb6b8e21",
+      "width": 2940,
+      "height": 640,
+      "archive": "selected/resolution-1470-measured--expanded-file-tray.png",
+      "source": "Measured geometry: 1470×956, auxiliary gap 179×32 pt; simulated rendering",
+      "review": "no content clipping, camera overlap or static top gap found",
+      "sameBytesAsPreviouslyViewed": true
+    },
+    {
+      "file": "resolution-1470-measured/expanded-tools-countdown.png",
+      "sha256": "0cc54175576340405cbf68f9bc131301a8845af42d1522de5d93fb3509283e53",
+      "width": 2940,
+      "height": 640,
+      "archive": "selected/resolution-1470-measured--expanded-tools-countdown.png",
+      "source": "Measured geometry: 1470×956, auxiliary gap 179×32 pt; simulated rendering",
+      "review": "no content clipping, camera overlap or static top gap found",
+      "sameBytesAsPreviouslyViewed": false
+    },
+    {
+      "file": "resolution-1280-measured/compact-battery-charging.png",
+      "sha256": "57bdd7654589532daa41953928c3a5b8c10fdb1e380f18ace3a2b1e2a326d2a7",
+      "width": 2560,
+      "height": 640,
+      "archive": "selected/resolution-1280-measured--compact-battery-charging.png",
+      "source": "Measured geometry: 1280×832, auxiliary gap 156×28 pt; simulated rendering",
+      "review": "no content clipping, camera overlap or static top gap found",
+      "sameBytesAsPreviouslyViewed": true
+    },
+    {
+      "file": "resolution-1280-measured/expanded-music.png",
+      "sha256": "bb3b6cd8092a5ce083f0f1610342bbdeef967b76b5ab0ae4fd31a8b2109533cd",
+      "width": 2560,
+      "height": 640,
+      "archive": "selected/resolution-1280-measured--expanded-music.png",
+      "source": "Measured geometry: 1280×832, auxiliary gap 156×28 pt; simulated rendering",
+      "review": "no content clipping, camera overlap or static top gap found",
+      "sameBytesAsPreviouslyViewed": true
+    },
+    {
+      "file": "resolution-1280-measured/expanded-file-tray.png",
+      "sha256": "b6aa20f3e072c2c34b92c148955db709279ea143aff9f2bd17bb568fbbb82716",
+      "width": 2560,
+      "height": 640,
+      "archive": "selected/resolution-1280-measured--expanded-file-tray.png",
+      "source": "Measured geometry: 1280×832, auxiliary gap 156×28 pt; simulated rendering",
+      "review": "no content clipping, camera overlap or static top gap found",
+      "sameBytesAsPreviouslyViewed": true
+    },
+    {
+      "file": "resolution-1280-measured/expanded-tools-countdown.png",
+      "sha256": "135ca3b7cabbccfc760313b046a13ceda83460d1ad2076c269dce28da7ddfebb",
+      "width": 2560,
+      "height": 640,
+      "archive": "selected/resolution-1280-measured--expanded-tools-countdown.png",
+      "source": "Measured geometry: 1280×832, auxiliary gap 156×28 pt; simulated rendering",
+      "review": "no content clipping, camera overlap or static top gap found",
+      "sameBytesAsPreviouslyViewed": false
+    },
+    {
+      "file": "resolution-1710-synthetic/compact-battery-charging.png",
+      "sha256": "e6eb55c96228130fccbaef21df3538b2e9612aeb5083c2b7ec097e4e4bbeb57a",
+      "width": 3420,
+      "height": 640,
+      "archive": "selected/resolution-1710-synthetic--compact-battery-charging.png",
+      "source": "SYNTHETIC: 1710×1112, auxiliary gap 207×37 pt; not physical-device evidence",
+      "review": "no content clipping, camera overlap or static top gap found",
+      "sameBytesAsPreviouslyViewed": true
+    },
+    {
+      "file": "resolution-1710-synthetic/expanded-music.png",
+      "sha256": "73ef4067b119104d41c01bc28ce22e8458094683b66831089fb37a6e220ac6df",
+      "width": 3420,
+      "height": 640,
+      "archive": "selected/resolution-1710-synthetic--expanded-music.png",
+      "source": "SYNTHETIC: 1710×1112, auxiliary gap 207×37 pt; not physical-device evidence",
+      "review": "no content clipping, camera overlap or static top gap found",
+      "sameBytesAsPreviouslyViewed": true
+    },
+    {
+      "file": "resolution-1710-synthetic/expanded-file-tray.png",
+      "sha256": "a9ddbe6a53fb9460aac24c7c52348e47c94f9e6041bb990c3c405f47c7710512",
+      "width": 3420,
+      "height": 640,
+      "archive": "selected/resolution-1710-synthetic--expanded-file-tray.png",
+      "source": "SYNTHETIC: 1710×1112, auxiliary gap 207×37 pt; not physical-device evidence",
+      "review": "no content clipping, camera overlap or static top gap found",
+      "sameBytesAsPreviouslyViewed": true
+    },
+    {
+      "file": "resolution-1710-synthetic/expanded-tools-countdown.png",
+      "sha256": "9308dd5edde31896dfd338177e7f927ba84b6cb1747c1fd276635cb4aeaa6445",
+      "width": 3420,
+      "height": 640,
+      "archive": "selected/resolution-1710-synthetic--expanded-tools-countdown.png",
+      "source": "SYNTHETIC: 1710×1112, auxiliary gap 207×37 pt; not physical-device evidence",
+      "review": "no content clipping, camera overlap or static top gap found",
+      "sameBytesAsPreviouslyViewed": false
+    },
+    {
+      "file": "resolution-2560-backing1-synthetic/compact-volume.png",
+      "sha256": "f47c1fc89361a3db553236330413f1418e171c69f5e879eb2841a33de439ccaf",
+      "width": 2560,
+      "height": 420,
+      "archive": "selected/resolution-2560-backing1-synthetic--compact-volume.png",
+      "source": "SYNTHETIC: 2560×1664, auxiliary gap 312×56 pt, backing 1; not physical-device evidence",
+      "review": "no content clipping, camera overlap or static top gap found",
+      "sameBytesAsPreviouslyViewed": true
+    },
+    {
+      "file": "resolution-2560-backing1-synthetic/compact-battery-charging.png",
+      "sha256": "8c2d0ac1f2f3f7fbfbf2bd2dbe2ba19bc14605e736aa8a8dfc27c59119994010",
+      "width": 2560,
+      "height": 420,
+      "archive": "selected/resolution-2560-backing1-synthetic--compact-battery-charging.png",
+      "source": "SYNTHETIC: 2560×1664, auxiliary gap 312×56 pt, backing 1; not physical-device evidence",
+      "review": "no content clipping, camera overlap or static top gap found",
+      "sameBytesAsPreviouslyViewed": true
+    },
+    {
+      "file": "resolution-2560-backing1-synthetic/expanded-battery-low.png",
+      "sha256": "638c15fb3ad6413d61d9ee2bf739b492752fdee7361604c1e818d6fde0902da7",
+      "width": 2560,
+      "height": 420,
+      "archive": "selected/resolution-2560-backing1-synthetic--expanded-battery-low.png",
+      "source": "SYNTHETIC: 2560×1664, auxiliary gap 312×56 pt, backing 1; not physical-device evidence",
+      "review": "no content clipping, camera overlap or static top gap found",
+      "sameBytesAsPreviouslyViewed": true
+    },
+    {
+      "file": "resolution-2560-backing1-synthetic/expanded-music.png",
+      "sha256": "81d5cf8aaf690c8f070328143ecb4bc65dacd4cb1e7c53ec5ef4ddc5dc6ef92e",
+      "width": 2560,
+      "height": 420,
+      "archive": "selected/resolution-2560-backing1-synthetic--expanded-music.png",
+      "source": "SYNTHETIC: 2560×1664, auxiliary gap 312×56 pt, backing 1; not physical-device evidence",
+      "review": "no content clipping, camera overlap or static top gap found",
+      "sameBytesAsPreviouslyViewed": true
+    },
+    {
+      "file": "resolution-2560-backing1-synthetic/expanded-file-tray.png",
+      "sha256": "f49299b666cb857c5459713693ce68ba27152d227f21abca3996c5f0de39ea25",
+      "width": 2560,
+      "height": 420,
+      "archive": "selected/resolution-2560-backing1-synthetic--expanded-file-tray.png",
+      "source": "SYNTHETIC: 2560×1664, auxiliary gap 312×56 pt, backing 1; not physical-device evidence",
+      "review": "no content clipping, camera overlap or static top gap found",
+      "sameBytesAsPreviouslyViewed": true
+    },
+    {
+      "file": "resolution-2560-backing1-synthetic/expanded-tools-countdown.png",
+      "sha256": "97f8509682d1f9e47711e6c645b8ce4aff3b8ce54690942016f806a28f562ab7",
+      "width": 2560,
+      "height": 420,
+      "archive": "selected/resolution-2560-backing1-synthetic--expanded-tools-countdown.png",
+      "source": "SYNTHETIC: 2560×1664, auxiliary gap 312×56 pt, backing 1; not physical-device evidence",
+      "review": "no content clipping, camera overlap or static top gap found",
+      "sameBytesAsPreviouslyViewed": false
+    }
+  ]
+}

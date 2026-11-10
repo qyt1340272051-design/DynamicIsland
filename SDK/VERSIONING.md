@@ -1,3 +1,7 @@
+# SDK 1.1.0 开发版本
+
+当前源码版本为 1.1.0，新增向后兼容的可选媒体包声明，最低 Host 0.6.1；wire API 与 Manifest schemaVersion 分别保持 1.0.0 和 1。新声明仅由新 Host 接受，发布与实机验收另行记录。以下 SDK 1.0.0 公开记录为历史基线，不代表本次新能力已发布。
+
 # SDK 1.0.0 版本和兼容策略
 
 状态：SDK `1.0.0` 稳定的有限作者接口。构件及公开状态见 [sdk-v1.0.0 Release](https://github.com/qyt1340272051-design/DynamicIsland/releases/tag/sdk-v1.0.0)；Host wire 协议沿用现有版本。

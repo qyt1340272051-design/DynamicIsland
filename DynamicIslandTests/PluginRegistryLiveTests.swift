@@ -39,18 +39,18 @@ final class PluginRegistryLiveTests: XCTestCase {
             XCTAssertNil(first.registry.errorCode)
 
             let specifications: [LiveRegistrySpecification] = [
-                .init(id: "com.dynamicisland.pomodoro", name: "番茄钟", version: "0.2.1",
-                      archive: "pomodoro-0.2.1.dip", example: "pomodoro", permissions: [.localStorage]),
+                .init(id: "com.dynamicisland.pomodoro", name: "番茄钟", version: "0.3.1",
+                      archive: "pomodoro-0.3.1.dip", tag: "plugins-pomodoro-0.3.1", minimumHost: "0.6.1", example: "pomodoro", permissions: [.localStorage]),
                 .init(id: "com.dynamicisland.github", name: "GitHub", version: "0.1.0",
-                      archive: "github-0.1.0.dip", example: "github", permissions: [.network, .localStorage, .openLinks])
+                      archive: "github-0.1.0.dip", tag: "plugins-0.6.0", minimumHost: "0.6.0", example: "github", permissions: [.network, .localStorage, .openLinks])
             ]
             for specification in specifications {
                 let entry = try XCTUnwrap(first.registry.entries.first { $0.id == specification.id }, "Missing published official entry")
                 XCTAssertEqual(entry.name, specification.name)
                 XCTAssertEqual(entry.version.description, specification.version)
-                XCTAssertEqual(entry.minHostVersion.description, "0.6.0")
+                XCTAssertEqual(entry.minHostVersion.description, specification.minimumHost)
                 XCTAssertEqual(entry.source.absoluteString, officialRepository)
-                XCTAssertEqual(entry.download.absoluteString, officialRepository + "/releases/download/plugins-0.6.0/" + specification.archive)
+                XCTAssertEqual(entry.download.absoluteString, officialRepository + "/releases/download/" + specification.tag + "/" + specification.archive)
                 print("LIVE_REGISTRY package=\(entry.id) version=\(entry.version) sha256=\(entry.hash)")
 
                 let before = await first.manager.plugins()
@@ -251,6 +251,8 @@ private struct LiveRegistrySpecification {
     let name: String
     let version: String
     let archive: String
+    let tag: String
+    let minimumHost: String
     let example: String
     let permissions: [PluginPermission]
 }
@@ -270,7 +272,7 @@ private final class LiveRegistryHost {
     private var stopped = false
 
     init(root: URL, source: URL) throws {
-        let configuration = PluginManagerConfiguration(rootDirectoryURL: root, hostVersion: try SemanticVersion("0.6.0"))
+        let configuration = PluginManagerConfiguration(rootDirectoryURL: root, hostVersion: try SemanticVersion("0.6.1"))
         let permissions = PermissionManager(decisionStore: PluginPermissionDecisionStore(configuration: .init(rootDirectoryURL: root)))
         let storage = PluginStorage(configuration: .init(rootDirectoryURL: root))
         let diagnostics = PluginDiagnosticsStore()

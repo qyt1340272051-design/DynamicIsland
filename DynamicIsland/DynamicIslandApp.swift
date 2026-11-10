@@ -1,41 +1,51 @@
 import AppKit
-import Combine
 import OSLog
 import SwiftUI
 import UniformTypeIdentifiers
 
 @main
-struct DynamicIslandApp: App {
-    @NSApplicationDelegateAdaptor(AppDelegate.self) private var appDelegate
+enum DynamicIslandApp {
+    @MainActor static func main() {
+        let application = NSApplication.shared
+        let delegate = AppDelegate()
+        application.delegate = delegate
+        withExtendedLifetime(delegate) {
+            application.run()
+        }
+    }
+}
+
+@MainActor
+private struct AppSettingsScene: Scene {
+    let appDelegate: AppDelegate
 
     var body: some Scene {
         Settings {
-            PluginSettingsContent(appDelegate: appDelegate)
-        }
-    }
-}
-
-/// Observe startup from a View. The Settings scene builder itself does not
-/// subscribe to the delegate's later publication of the initialized model.
-@MainActor
-private struct PluginSettingsContent: View {
-    @ObservedObject var appDelegate: AppDelegate
-
-    var body: some View {
-        if let model = appDelegate.pluginExtensionsModel {
-            PluginExtensionsView(model: model, onShowDiagnostics: { appDelegate.showPluginDiagnostics() },
-                                 onImport: { appDelegate.importPlugin() }, onDiscover: { appDelegate.showPluginRegistry() })
-        } else {
-            ContentUnavailableView("插件管理暂不可用", systemImage: "puzzlepiece.extension",
-                                   description: Text("请等待插件初始化完成。"))
-                .frame(width: 800, height: 600)
+            AppSettingsView(model: appDelegate.settingsModel,
+                onImport: { appDelegate.importPlugin() },
+                onDownload: { appDelegate.downloadPlugin($0) },
+                onCancelInstall: { appDelegate.cancelPluginInstall() },
+                onShowIsland: { appDelegate.showIsland() },
+                onHideIsland: { appDelegate.hideIsland() },
+                onCopyDiagnosticInfo: { appDelegate.copyDiagnosticInfo() })
+                .background(AppSettingsWindowReader { appDelegate.settingsWindowCoordinator.attach(to: $0) })
         }
     }
 }
 
 @MainActor
-final class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
-    @Published fileprivate var pluginExtensionsModel: PluginExtensionsModel?
+final class AppDelegate: NSObject, NSApplicationDelegate {
+    fileprivate let settingsModel = AppSettingsModel()
+    private let toolPlacements = PluginToolPlacementStore.applicationSupport()
+    private var settingsScene: NSHostingSceneRepresentation<AppSettingsScene>?
+    fileprivate lazy var settingsWindowCoordinator = AppSettingsWindowCoordinator(
+        installer: { [weak self] in self?.pluginInstallerModel },
+        onShowInstaller: { [weak self] in self?.showPluginInstaller() },
+        onClose: { [weak self] in self?.pluginRegistryModel?.cancelRefresh() })
+    private var pluginExtensionsModel: PluginExtensionsModel? {
+        get { settingsModel.pluginExtensionsModel }
+        set { settingsModel.pluginExtensionsModel = newValue }
+    }
     private var statusItem: NSStatusItem?
     private var panelController: IslandPanelController?
     private var screenManager: ScreenManager?
@@ -47,13 +57,18 @@ final class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
     private var pluginStartupTask: Task<Void, Never>?
     private var pluginLifecycle: PluginLifecycleBridge?
     private var activityRuntime: IslandActivityRuntime?
-    private var pluginDiagnosticsModel: PluginDiagnosticsModel?
-    private var pluginDiagnosticsWindowController: PluginDiagnosticsWindowController?
-    private var pluginExtensionsWindowController: PluginExtensionsWindowController?
-    private var pluginInstallerModel: PluginInstallerModel?
-    private var pluginInstallerWindowController: PluginInstallerWindowController?
-    private var pluginRegistryModel: PluginRegistryModel?
-    private var pluginRegistryWindowController: PluginRegistryWindowController?
+    private var pluginDiagnosticsModel: PluginDiagnosticsModel? {
+        get { settingsModel.pluginDiagnosticsModel }
+        set { settingsModel.pluginDiagnosticsModel = newValue }
+    }
+    private var pluginInstallerModel: PluginInstallerModel? {
+        get { settingsModel.pluginInstallerModel }
+        set { settingsModel.pluginInstallerModel = newValue }
+    }
+    private var pluginRegistryModel: PluginRegistryModel? {
+        get { settingsModel.pluginRegistryModel }
+        set { settingsModel.pluginRegistryModel = newValue }
+    }
     private lazy var pluginImportCoordinator = PluginImportCoordinator { [weak self] in
         self?.showPluginInstaller()
     }
@@ -71,18 +86,37 @@ final class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
         }
 
         NSApp.setActivationPolicy(.accessory)
+        configureApplicationMenu()
+        // Register one native Settings scene. Its public opener also works
+        // from the island's standalone AppKit hosting controller.
+        let settingsScene = NSHostingSceneRepresentation { AppSettingsScene(appDelegate: self) }
+        NSApp.addSceneRepresentation(settingsScene)
+        self.settingsScene = settingsScene
 
-        let viewModel = IslandViewModel()
+        let musicProviders = OptionalMusicProviderRegistry(defaults: .standard)
+        settingsModel.musicProviders = musicProviders
+        let viewModel = IslandViewModel(musicProviders: musicProviders)
+        settingsModel.calendarAgenda = viewModel.calendarAgenda
+        settingsModel.homeSettings = viewModel.homeSettings
+        viewModel.calendarAgenda.start()
         let screenManager = ScreenManager()
         let batteryService = IOKitBatteryService()
         let activityRuntime = IslandActivityRuntime(
             viewModel: viewModel,
-            batteryService: batteryService
+            musicProviders: musicProviders,
+            batteryService: batteryService,
+            toolPlacements: toolPlacements
         )
         let panelController = IslandPanelController(
             viewModel: viewModel,
             screenManager: screenManager,
-            activityRuntime: activityRuntime
+            activityRuntime: activityRuntime,
+            onOpenSettings: { [weak self] in
+                if viewModel.expandedSurface == .music, viewModel.homeLayer != .music {
+                    self?.settingsModel.selectedTab = .calendar
+                }
+                self?.showSettings()
+            }
         )
         self.viewModel = viewModel
         self.screenManager = screenManager
@@ -124,13 +158,11 @@ final class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
     }
 
     func applicationWillTerminate(_ notification: Notification) {
+        viewModel?.calendarAgenda.stop()
         statusFeedbackTask?.cancel()
         pluginStartupTask?.cancel()
         pluginEnvironment?.stop()
-        pluginDiagnosticsWindowController?.close()
-        pluginExtensionsWindowController?.close()
-        pluginInstallerWindowController?.finishClose()
-        pluginRegistryWindowController?.close()
+        pluginRegistryModel?.cancelRefresh()
         activityRuntime?.shutdownPlugins()
         panelController?.hide()
     }
@@ -143,10 +175,9 @@ final class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
             lifecycle?.setEnvironment(isSleeping: state.isSleeping, isLowBattery: state.isLowBattery)
         }
         do {
-            // Plugin Host compatibility is the 0.6.0 development contract.
-            // Distribution metadata is updated by the release task separately.
+            // Optional music providers require the 0.6.1 Host contract.
             let configuration = try PluginManagerConfiguration.applicationSupport(
-                hostVersion: SemanticVersion("0.6.0")
+                hostVersion: SemanticVersion("0.6.1")
             )
             let manager = PluginManager(configuration: configuration, lifecycleHandler: lifecycle)
             pluginManager = manager
@@ -163,7 +194,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
                 })
             pluginDiagnosticsModel = model
             let extensionsModel = PluginExtensionsModel(manager: manager, lifecycle: lifecycle,
-                permissions: permissions, diagnostics: diagnostics, diagnosticsModel: model)
+                permissions: permissions, diagnostics: diagnostics, diagnosticsModel: model,
+                toolPlacements: toolPlacements)
             pluginExtensionsModel = extensionsModel
             let installer = PluginInstaller(manager: manager, configuration: configuration)
             let registryClient = PluginRegistryClient()
@@ -173,7 +205,6 @@ final class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
                 guard self?.pluginTerminationTask == nil else { return }
                 await extensionsModel?.refresh()
                 extensionsModel?.selectedID = record.id
-                self?.pluginInstallerWindowController?.finishClose()
                 self?.showPluginExtensions()
             }, onInstallFailure: { [weak self, weak extensionsModel] review, code in
                 guard self?.pluginTerminationTask == nil else { return }
@@ -222,6 +253,56 @@ final class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
         }
     }
 
+    private func configureApplicationMenu() {
+        let mainMenu = NSMenu()
+        let applicationItem = NSMenuItem()
+        let applicationMenu = NSMenu(title: "Dynamic Island")
+        let settingsItem = NSMenuItem(title: "设置…", action: #selector(showSettings), keyEquivalent: ",")
+        settingsItem.target = self
+        applicationMenu.addItem(settingsItem)
+        applicationMenu.addItem(.separator())
+        let servicesItem = NSMenuItem(title: "服务", action: nil, keyEquivalent: "")
+        let servicesMenu = NSMenu(title: "服务")
+        servicesItem.submenu = servicesMenu
+        applicationMenu.addItem(servicesItem)
+        NSApp.servicesMenu = servicesMenu
+        applicationMenu.addItem(.separator())
+        applicationMenu.addItem(NSMenuItem(title: "隐藏 Dynamic Island", action: #selector(NSApplication.hide(_:)), keyEquivalent: "h"))
+        let hideOthers = NSMenuItem(title: "隐藏其他", action: #selector(NSApplication.hideOtherApplications(_:)), keyEquivalent: "h")
+        hideOthers.keyEquivalentModifierMask = [.command, .option]
+        applicationMenu.addItem(hideOthers)
+        applicationMenu.addItem(NSMenuItem(title: "全部显示", action: #selector(NSApplication.unhideAllApplications(_:)), keyEquivalent: ""))
+        applicationMenu.addItem(.separator())
+        let quitItem = NSMenuItem(title: "退出 Dynamic Island", action: #selector(quit), keyEquivalent: "q")
+        quitItem.target = self
+        applicationMenu.addItem(quitItem)
+        applicationItem.submenu = applicationMenu
+        mainMenu.addItem(applicationItem)
+
+        let editItem = NSMenuItem()
+        let editMenu = NSMenu(title: "编辑")
+        for (title, action, key) in [
+            ("撤销", Selector(("undo:")), "z"),
+            ("重做", Selector(("redo:")), "Z"),
+            ("剪切", #selector(NSText.cut(_:)), "x"),
+            ("拷贝", #selector(NSText.copy(_:)), "c"),
+            ("粘贴", #selector(NSText.paste(_:)), "v"),
+            ("全选", #selector(NSText.selectAll(_:)), "a")
+        ] {
+            editMenu.addItem(NSMenuItem(title: title, action: action, keyEquivalent: key))
+        }
+        editItem.submenu = editMenu
+        mainMenu.addItem(editItem)
+        let windowItem = NSMenuItem()
+        let windowMenu = NSMenu(title: "窗口")
+        windowMenu.addItem(NSMenuItem(title: "关闭窗口", action: #selector(NSWindow.performClose(_:)), keyEquivalent: "w"))
+        windowMenu.addItem(NSMenuItem(title: "最小化", action: #selector(NSWindow.performMiniaturize(_:)), keyEquivalent: "m"))
+        windowItem.submenu = windowMenu
+        mainMenu.addItem(windowItem)
+        NSApp.windowsMenu = windowMenu
+        NSApp.mainMenu = mainMenu
+    }
+
     private func configureStatusItem() {
         let item = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
         item.button?.image = NSImage(systemSymbolName: "capsule.tophalf.filled", accessibilityDescription: "Dynamic Island")
@@ -230,7 +311,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
         let menu = NSMenu()
         menu.addItem(NSMenuItem(title: "显示 Dynamic Island", action: #selector(showIsland), keyEquivalent: ""))
         menu.addItem(NSMenuItem(title: "隐藏 Dynamic Island", action: #selector(hideIsland), keyEquivalent: ""))
-        menu.addItem(NSMenuItem(title: "插件管理…", action: #selector(showPluginExtensions), keyEquivalent: ","))
+        menu.addItem(NSMenuItem(title: "设置…", action: #selector(showSettings), keyEquivalent: ","))
+        menu.addItem(NSMenuItem(title: "插件管理…", action: #selector(showPluginExtensions), keyEquivalent: ""))
         menu.addItem(NSMenuItem(title: "导入插件…", action: #selector(importPlugin), keyEquivalent: ""))
         menu.addItem(NSMenuItem(title: "插件诊断…", action: #selector(showPluginDiagnostics), keyEquivalent: ""))
         menu.addItem(.separator())
@@ -272,27 +354,32 @@ final class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
         statusItem = item
     }
 
+    @objc fileprivate func showSettings() {
+        guard pluginTerminationTask == nil else { return }
+        NSApp.activate()
+        settingsScene?.environment.openSettings()
+    }
+
     @objc private func showPluginExtensions() {
-        guard let model = pluginExtensionsModel else { return }
-        let controller = pluginExtensionsWindowController ?? PluginExtensionsWindowController(
-            model: model, onShowDiagnostics: { [weak self] in self?.showPluginDiagnostics() },
-            onImport: { [weak self] in self?.importPlugin() }, onDiscover: { [weak self] in self?.showPluginRegistry() })
-        pluginExtensionsWindowController = controller
-        controller.show()
+        settingsModel.selectedTab = .plugins
+        settingsModel.pluginSection = .installed
+        showSettings()
     }
 
     fileprivate func showPluginRegistry() {
-        guard let model = pluginRegistryModel, pluginTerminationTask == nil else { return }
-        let controller = pluginRegistryWindowController ?? PluginRegistryWindowController(model: model, onDownload: { [weak self] entry in
+        guard pluginRegistryModel != nil, pluginTerminationTask == nil else { return }
+        settingsModel.selectedTab = .plugins
+        settingsModel.pluginSection = .discover
+        showSettings()
+    }
+
+    fileprivate func downloadPlugin(_ entry: PluginRegistryEntry) {
+        guard let model = pluginRegistryModel, pluginTerminationTask == nil, model.canDownload(entry) else { return }
+        Task { @MainActor [weak self] in
             guard let self, self.pluginTerminationTask == nil, model.canDownload(entry) else { return }
-            Task { @MainActor [weak self] in
-                guard let self, self.pluginTerminationTask == nil, model.canDownload(entry) else { return }
-                self.showPluginInstaller()
-                _ = await model.download(entry)
-            }
-        })
-        pluginRegistryWindowController = controller
-        controller.show()
+            self.showPluginInstaller()
+            _ = await model.download(entry)
+        }
     }
 
     @objc fileprivate func importPlugin() {
@@ -310,6 +397,9 @@ final class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
             showPluginInstaller()
             return
         }
+        settingsModel.selectedTab = .plugins
+        settingsModel.pluginSection = .installed
+        showSettings()
         let panel = NSOpenPanel()
         panel.title = "导入 Dynamic Island 插件"
         panel.message = "选择一个 .dip 插件包，检查信息与权限后安装。"
@@ -324,29 +414,37 @@ final class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
     }
 
     private func showPluginInstaller() {
-        guard let model = pluginInstallerModel, pluginTerminationTask == nil else { return }
-        let controller = pluginInstallerWindowController ?? PluginInstallerWindowController(model: model)
-        pluginInstallerWindowController = controller
-        controller.show()
+        guard pluginInstallerModel != nil, pluginTerminationTask == nil else { return }
+        settingsModel.selectedTab = .plugins
+        settingsModel.pluginSection = .install
+        showSettings()
+    }
+
+    fileprivate func cancelPluginInstall() {
+        guard let model = pluginInstallerModel, !model.isBusy || model.canCancelDownload else { return }
+        Task { @MainActor [weak self] in
+            guard await model.cancel() else { return }
+            self?.showPluginExtensions()
+        }
     }
 
     @objc fileprivate func showPluginDiagnostics() {
         guard let model = pluginDiagnosticsModel else { return }
-        let controller = pluginDiagnosticsWindowController ?? PluginDiagnosticsWindowController(model: model)
-        pluginDiagnosticsWindowController = controller
-        controller.show()
+        settingsModel.selectedTab = .plugins
+        settingsModel.pluginSection = .diagnostics
+        showSettings()
         Task { await model.refresh() }
     }
 
-    @objc private func showIsland() {
+    @objc fileprivate func showIsland() {
         panelController?.show()
     }
 
-    @objc private func hideIsland() {
+    @objc fileprivate func hideIsland() {
         panelController?.hide()
     }
 
-    @objc private func copyDiagnosticInfo() {
+    @objc fileprivate func copyDiagnosticInfo() {
         guard let screenManager, let viewModel else {
             showStatusFeedback(succeeded: false)
             return

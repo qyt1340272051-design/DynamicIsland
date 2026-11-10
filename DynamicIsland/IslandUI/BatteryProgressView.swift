@@ -11,6 +11,7 @@ struct BatteryProgressView: View {
     @Environment(\.colorScheme) private var colorScheme
     @Environment(\.colorSchemeContrast) private var contrast
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @Environment(\.islandLayoutScale) private var layoutScale
 
     private var level: Double {
         guard value.isFinite else { return 0 }
@@ -37,7 +38,7 @@ struct BatteryProgressView: View {
     }
 
     var body: some View {
-        let metrics = configuration
+        let metrics = configuration.scaled(by: layoutScale)
         HStack(spacing: metrics.terminalGap) {
             ZStack(alignment: .leading) {
                 RoundedRectangle(cornerRadius: metrics.cornerRadius, style: .continuous)
@@ -70,5 +71,11 @@ struct BatteryProgressView: View {
 
         var totalWidth: CGFloat { bodyWidth + terminalGap + terminalWidth }
         var cornerRadius: CGFloat { bodyHeight * 0.28 }
+
+        func scaled(by scale: CGFloat) -> Configuration {
+            Configuration(bodyWidth: bodyWidth * scale, bodyHeight: bodyHeight * scale,
+                          terminalWidth: terminalWidth * scale, terminalHeight: terminalHeight * scale,
+                          terminalGap: terminalGap * scale)
+        }
     }
 }

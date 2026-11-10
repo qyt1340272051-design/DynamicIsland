@@ -72,3 +72,9 @@ CLI 输出单个 JSON 对象，成功退出码为 0，错误为非零；不打�
 ## 版本和参考
 
 兼容策略见 [VERSIONING.md](VERSIONING.md)，冻结的接口承诺与变更见 [CHANGELOG.md](CHANGELOG.md)，独立分发和本地归档见 [DISTRIBUTION.md](DISTRIBUTION.md)。官方 Pomodoro 与 GitHub 保留在完整仓库的 `docs/plugin-system/examples/`，进度表位于 `docs/plugin-system/PROGRESS.md`；这些仓库资料不包含在独立 SDK 中，也不是运行作者工具所需的文件。SDK 自身的实际验证与边界见[验证说明](docs/verification.md)。
+
+## SDK 1.1.0 开发中的媒体扩展
+
+当前工作树新增 Host 0.6.1 的可选 `mediaProvider` 包元数据；已发布的 SDK 1.0.0 归档和标签保持原样。新包必须声明 `music.provider`、`media.read`、`media.control`，最低 Host 版本为 0.6.1。媒体信息和控制分别由用户授权，插件启用不授予权限。
+
+辅助脚本随可选插件包下载，由 Host 校验摘要、可信脚本白名单和生命周期后运行；JS 插件本身仍没有进程启动或原生对象访问接口。格式与限制见 [Manifest](docs/manifest.md) 和 [Permissions](docs/permissions.md)。
