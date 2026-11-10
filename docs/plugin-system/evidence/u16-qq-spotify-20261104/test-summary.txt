@@ -1,0 +1,17 @@
+Test Suite 'IslandCompactMusicRefreshTests' passed at 2026-11-04 12:39:41.052.
+	 Executed 3 tests, with 0 failures (0 unexpected) in 6.004 (6.005) seconds
+Test Suite 'MusicActivityProviderTests' passed at 2026-11-04 12:39:41.795.
+	 Executed 7 tests, with 0 failures (0 unexpected) in 0.742 (0.743) seconds
+Test Suite 'MusicControlServiceTests' passed at 2026-11-04 12:39:41.899.
+	 Executed 21 tests, with 0 failures (0 unexpected) in 0.091 (0.104) seconds
+Test Suite 'MusicRefreshLatencyTests' passed at 2026-11-04 12:39:42.936.
+	 Executed 6 tests, with 0 failures (0 unexpected) in 1.033 (1.035) seconds
+Test Suite 'OptionalMusicPluginIntegrationTests' passed at 2026-11-04 12:39:43.247.
+	 Executed 7 tests, with 0 failures (0 unexpected) in 0.309 (0.310) seconds
+Test Suite 'PluginMusicControlServiceTests' passed at 2026-11-04 12:39:51.326.
+	 Executed 25 tests, with 0 failures (0 unexpected) in 8.070 (8.079) seconds
+Test Suite 'DynamicIslandTests.xctest' passed at 2026-11-04 12:39:51.327.
+	 Executed 69 tests, with 0 failures (0 unexpected) in 16.249 (16.280) seconds
+Test Suite 'Selected tests' passed at 2026-11-04 12:39:51.327.
+	 Executed 69 tests, with 0 failures (0 unexpected) in 16.249 (16.280) seconds
+** TEST SUCCEEDED **

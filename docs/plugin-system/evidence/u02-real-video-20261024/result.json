@@ -1,0 +1,61 @@
+{
+  "appVersion": "0.6.0",
+  "build": 7,
+  "sourceCommit": "926a0290f83142d77ac4355226b1a49964884747",
+  "resolution": "2560x1664; current device mode verified in System Settings earlier this session",
+  "userFeedback": "已完成，显示正常",
+  "sourceVideo": {
+    "sha256": "9eb94b64b2a6ef1a312ab0efc9a3a2968d11dc202501a7ef58ee512e29a65a4d",
+    "bytes": 2145084,
+    "durationSeconds": 27.321666666666665,
+    "cropPixels": [
+      1150,
+      336
+    ],
+    "nominalFrameRate": 17.262773513793945,
+    "originalAndExtractedImages": "retained privately; not included in repository"
+  },
+  "analysis": {
+    "decodedFrameCount": 473,
+    "maximumTimestampGapSeconds": 0.14999999999999947,
+    "firstTimestamp": 0,
+    "lastTimestamp": 27.283333333333335,
+    "blackThresholdPerChannel": 12,
+    "probeX": [
+      406,
+      778
+    ],
+    "topOffsetFailureCount": 0
+  },
+  "reviewedIntermediateFrames": [
+    {
+      "index": 235,
+      "seconds": 10.583333333333334
+    },
+    {
+      "index": 240,
+      "seconds": 10.666666666666666
+    },
+    {
+      "index": 376,
+      "seconds": 19.15
+    },
+    {
+      "index": 381,
+      "seconds": 19.233333333333334
+    }
+  ],
+  "scope": [
+    "One actual compact to expanded to compact stopwatch cycle",
+    "No top gap detected at both wing probes in any decoded frame; reviewed intermediate frames agree",
+    "Compact stopwatch wings visible and user reports normal display"
+  ],
+  "notCovered": [
+    "Other Activity wing states",
+    "Page-height transitions",
+    "Menu-bar changes",
+    "Resolution changes",
+    "Long-menu return"
+  ],
+  "cleanup": "Stopwatch paused and reset to 00:00.0 through real controls after recording; no timer running"
+}

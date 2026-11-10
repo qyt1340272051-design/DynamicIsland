@@ -1,0 +1,62 @@
+[
+  {
+    "sample": 1,
+    "seconds": 0.097,
+    "exit": 0,
+    "playing": true,
+    "hasTitle": true,
+    "artworkBase64Bytes": 13456,
+    "error": null,
+    "identityDigest": "ebe5023a"
+  },
+  {
+    "sample": 2,
+    "seconds": 0.086,
+    "exit": 0,
+    "playing": true,
+    "hasTitle": true,
+    "artworkBase64Bytes": 13456,
+    "error": null,
+    "identityDigest": "ebe5023a"
+  },
+  {
+    "sample": 3,
+    "seconds": 0.084,
+    "exit": 0,
+    "playing": true,
+    "hasTitle": true,
+    "artworkBase64Bytes": 13456,
+    "error": null,
+    "identityDigest": "ebe5023a"
+  },
+  {
+    "sample": 4,
+    "seconds": 0.103,
+    "exit": 0,
+    "playing": true,
+    "hasTitle": true,
+    "artworkBase64Bytes": 13456,
+    "error": null,
+    "identityDigest": "ebe5023a"
+  },
+  {
+    "sample": 5,
+    "seconds": 0.08,
+    "exit": 0,
+    "playing": true,
+    "hasTitle": true,
+    "artworkBase64Bytes": 13456,
+    "error": null,
+    "identityDigest": "ebe5023a"
+  },
+  {
+    "sample": 6,
+    "seconds": 0.076,
+    "exit": 0,
+    "playing": true,
+    "hasTitle": true,
+    "artworkBase64Bytes": 13456,
+    "error": null,
+    "identityDigest": "ebe5023a"
+  }
+]

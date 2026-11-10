@@ -1,0 +1,7 @@
+Release configuration is valid for Dynamic Island 0.6.1.
+SDK authoring, packaging, and type checks passed.
+	 Executed 1190 tests, with 3 tests skipped and 0 failures (0 unexpected) in 162.924 (163.372) seconds
+	 Executed 1190 tests, with 3 tests skipped and 0 failures (0 unexpected) in 162.924 (163.374) seconds
+** TEST SUCCEEDED **
+** BUILD SUCCEEDED **
+Tests and Release build passed.

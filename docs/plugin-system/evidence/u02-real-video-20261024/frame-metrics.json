@@ -1,0 +1,5686 @@
+{
+  "coordinateSpace": "provided recording crop pixels; no desktop image data",
+  "probes": [
+    406,
+    778
+  ],
+  "blackThresholdPerChannel": 12,
+  "frames": [
+    {
+      "index": 0,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 0,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 1,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 0.06666666666666667,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 2,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 0.18333333333333332,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 3,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 0.2833333333333333,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 4,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 0.38333333333333336,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 5,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 0.5,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 6,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 0.6,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 7,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 0.6833333333333333,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 8,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 0.7,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 9,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 0.8166666666666667,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 10,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 0.9166666666666666,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 11,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 1.0166666666666666,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 12,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 1.1333333333333333,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 13,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 1.2333333333333334,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 14,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 1.35,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 15,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 1.45,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 16,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 1.55,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 17,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 1.65,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 18,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 1.7666666666666666,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 19,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 1.8666666666666667,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 20,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 1.9666666666666666,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 21,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 2.0833333333333335,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 22,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 2.183333333333333,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 23,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 2.3,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 24,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 2.4,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 25,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 2.5166666666666666,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 26,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 2.6166666666666667,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 27,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 2.683333333333333,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 28,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 2.7,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 29,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 2.716666666666667,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 30,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 2.7333333333333334,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 31,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 2.75,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 32,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 2.7666666666666666,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 33,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 2.783333333333333,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 34,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 2.8,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 35,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 2.816666666666667,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 36,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 2.8333333333333335,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 37,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 2.85,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 38,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 2.8666666666666667,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 39,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 2.9,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 40,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 2.9166666666666665,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 41,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 2.933333333333333,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 42,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 2.95,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 43,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 2.966666666666667,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 44,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 2.9833333333333334,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 45,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 3,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 46,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 3.0166666666666666,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 47,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 3.033333333333333,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 48,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 3.1333333333333333,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 49,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 3.25,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 50,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 3.35,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 51,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 3.45,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 52,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 3.55,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 53,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 3.6666666666666665,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 54,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 3.7666666666666666,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 55,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 3.8666666666666667,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 56,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 3.966666666666667,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 57,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 4.083333333333333,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 58,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 4.183333333333334,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 59,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 4.283333333333333,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 60,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 4.4,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 61,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 4.5,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 62,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 4.6,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 63,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 4.716666666666667,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 64,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 4.816666666666666,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 65,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 4.916666666666667,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 66,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 5.016666666666667,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 67,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 5.133333333333334,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 68,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 5.233333333333333,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 69,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 5.366666666666666,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 70,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 5.45,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 71,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 5.55,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 72,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 5.666666666666667,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 73,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 5.766666666666667,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 74,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 5.866666666666666,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 75,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 5.966666666666667,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 76,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 6.116666666666666,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 77,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 6.166666666666667,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 78,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 6.283333333333333,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 79,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 6.383333333333334,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 80,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 6.483333333333333,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 81,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 6.6,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 82,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 6.7,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 83,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 6.8,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 84,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 6.916666666666667,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 85,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 7.016666666666667,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 86,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 7.116666666666666,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 87,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 7.216666666666667,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 88,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 7.333333333333333,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 89,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 7.433333333333334,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 90,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 7.533333333333333,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 91,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 7.616666666666666,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 92,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 7.65,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 93,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 7.666666666666667,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 94,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 7.683333333333334,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 95,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 7.7,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 96,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 7.716666666666667,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 97,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 7.733333333333333,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 98,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 7.75,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 99,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 7.766666666666667,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 100,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 7.783333333333333,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 101,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 7.8,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 102,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 7.816666666666666,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 103,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 7.833333333333333,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 104,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 7.85,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 105,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 7.866666666666666,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 106,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 7.883333333333334,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 107,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 7.9,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 108,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 7.916666666666667,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 109,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 7.933333333333334,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 110,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 7.95,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 111,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 7.966666666666667,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 112,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 7.983333333333333,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 113,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 8,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 114,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 8.016666666666667,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 115,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 8.033333333333333,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 116,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 8.05,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 117,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 8.066666666666666,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 118,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 8.083333333333334,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 119,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 8.1,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 120,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 8.133333333333333,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 121,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 8.15,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 122,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 8.166666666666666,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 123,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 8.183333333333334,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 124,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 8.2,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 125,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 8.216666666666667,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 126,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 8.233333333333333,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 127,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 8.25,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 128,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 8.266666666666667,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 129,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 8.283333333333333,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 130,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 8.3,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 131,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 8.316666666666666,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 132,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 8.333333333333334,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 133,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 8.35,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 134,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 8.366666666666667,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 135,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 8.483333333333333,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 136,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 8.6,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 137,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 8.683333333333334,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 138,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 8.7,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 139,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 8.716666666666667,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 140,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 8.733333333333333,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 141,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 8.75,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 142,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 8.766666666666667,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 143,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 8.783333333333333,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 144,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 8.8,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 145,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 8.816666666666666,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 146,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 8.833333333333334,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 147,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 8.85,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 148,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 8.866666666666667,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 149,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 8.883333333333333,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 150,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 8.9,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 151,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 8.916666666666666,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 152,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 8.933333333333334,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 153,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 8.95,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 154,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 8.966666666666667,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 155,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 8.983333333333333,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 156,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 9,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 157,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 9.033333333333333,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 158,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 9.05,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 159,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 9.066666666666666,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 160,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 9.083333333333334,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 161,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 9.1,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 162,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 9.116666666666667,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 163,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 9.133333333333333,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 164,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 9.15,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 165,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 9.166666666666666,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 166,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 9.183333333333334,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 167,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 9.2,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 168,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 9.216666666666667,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 169,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 9.233333333333333,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 170,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 9.25,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 171,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 9.266666666666667,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 172,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 9.283333333333333,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 173,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 9.3,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 174,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 9.316666666666666,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 175,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 9.333333333333334,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 176,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 9.35,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 177,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 9.366666666666667,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 178,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 9.383333333333333,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 179,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 9.416666666666666,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 180,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 9.533333333333333,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 181,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 9.566666666666666,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 182,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 9.6,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 183,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 9.616666666666667,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 184,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 9.633333333333333,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 185,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 9.65,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 186,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 9.666666666666666,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 187,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 9.683333333333334,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 188,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 9.7,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 189,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 9.716666666666667,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 190,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 9.733333333333333,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 191,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 9.75,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 192,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 9.766666666666667,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 193,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 9.783333333333333,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 194,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 9.8,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 195,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 9.816666666666666,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 196,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 9.833333333333334,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 197,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 9.85,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 198,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 9.866666666666667,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 199,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 9.883333333333333,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 200,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 9.9,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 201,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 9.916666666666666,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 202,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 9.933333333333334,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 203,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 9.95,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 204,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 9.966666666666667,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 205,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 9.983333333333333,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 206,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 10.016666666666667,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 207,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 10.033333333333333,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 208,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 10.05,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 209,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 10.066666666666666,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 210,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 10.083333333333334,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 211,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 10.1,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 212,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 10.116666666666667,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 213,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 10.133333333333333,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 214,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 10.15,
+      "shellBounds": [
+        368,
+        0,
+        486,
+        56
+      ]
+    },
+    {
+      "index": 215,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 10.166666666666666,
+      "shellBounds": [
+        367,
+        0,
+        488,
+        56
+      ]
+    },
+    {
+      "index": 216,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 10.183333333333334,
+      "shellBounds": [
+        366,
+        0,
+        491,
+        57
+      ]
+    },
+    {
+      "index": 217,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 10.2,
+      "shellBounds": [
+        364,
+        0,
+        494,
+        57
+      ]
+    },
+    {
+      "index": 218,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 10.216666666666667,
+      "shellBounds": [
+        364,
+        0,
+        495,
+        57
+      ]
+    },
+    {
+      "index": 219,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 10.233333333333333,
+      "shellBounds": [
+        362,
+        0,
+        498,
+        57
+      ]
+    },
+    {
+      "index": 220,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 10.25,
+      "shellBounds": [
+        362,
+        0,
+        499,
+        58
+      ]
+    },
+    {
+      "index": 221,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 10.266666666666667,
+      "shellBounds": [
+        360,
+        0,
+        502,
+        58
+      ]
+    },
+    {
+      "index": 222,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 10.283333333333333,
+      "shellBounds": [
+        360,
+        0,
+        502,
+        58
+      ]
+    },
+    {
+      "index": 223,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 10.3,
+      "shellBounds": [
+        360,
+        0,
+        502,
+        58
+      ]
+    },
+    {
+      "index": 224,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 10.316666666666666,
+      "shellBounds": [
+        360,
+        0,
+        502,
+        58
+      ]
+    },
+    {
+      "index": 225,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 10.333333333333334,
+      "shellBounds": [
+        360,
+        0,
+        502,
+        58
+      ]
+    },
+    {
+      "index": 226,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 10.35,
+      "shellBounds": [
+        360,
+        0,
+        502,
+        58
+      ]
+    },
+    {
+      "index": 227,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 10.366666666666667,
+      "shellBounds": [
+        360,
+        0,
+        502,
+        58
+      ]
+    },
+    {
+      "index": 228,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 10.383333333333333,
+      "shellBounds": [
+        360,
+        0,
+        502,
+        58
+      ]
+    },
+    {
+      "index": 229,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 10.4,
+      "shellBounds": [
+        360,
+        0,
+        502,
+        58
+      ]
+    },
+    {
+      "index": 230,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 10.416666666666666,
+      "shellBounds": [
+        360,
+        0,
+        502,
+        58
+      ]
+    },
+    {
+      "index": 231,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 10.483333333333333,
+      "shellBounds": [
+        360,
+        0,
+        502,
+        58
+      ]
+    },
+    {
+      "index": 232,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 10.516666666666667,
+      "shellBounds": [
+        360,
+        0,
+        503,
+        60
+      ]
+    },
+    {
+      "index": 233,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 10.533333333333333,
+      "shellBounds": [
+        354,
+        0,
+        512,
+        66
+      ]
+    },
+    {
+      "index": 234,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 10.566666666666666,
+      "shellBounds": [
+        338,
+        0,
+        539,
+        91
+      ]
+    },
+    {
+      "index": 235,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 10.583333333333334,
+      "shellBounds": [
+        326,
+        0,
+        558,
+        107
+      ]
+    },
+    {
+      "index": 236,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 10.6,
+      "shellBounds": [
+        316,
+        0,
+        575,
+        122
+      ]
+    },
+    {
+      "index": 237,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 10.616666666666667,
+      "shellBounds": [
+        306,
+        0,
+        591,
+        135
+      ]
+    },
+    {
+      "index": 238,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 10.633333333333333,
+      "shellBounds": [
+        298,
+        0,
+        604,
+        147
+      ]
+    },
+    {
+      "index": 239,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 10.65,
+      "shellBounds": [
+        292,
+        0,
+        614,
+        157
+      ]
+    },
+    {
+      "index": 240,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 10.666666666666666,
+      "shellBounds": [
+        285,
+        0,
+        626,
+        166
+      ]
+    },
+    {
+      "index": 241,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 10.683333333333334,
+      "shellBounds": [
+        280,
+        0,
+        634,
+        173
+      ]
+    },
+    {
+      "index": 242,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 10.7,
+      "shellBounds": [
+        275,
+        0,
+        642,
+        179
+      ]
+    },
+    {
+      "index": 243,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 10.716666666666667,
+      "shellBounds": [
+        272,
+        0,
+        647,
+        185
+      ]
+    },
+    {
+      "index": 244,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 10.733333333333333,
+      "shellBounds": [
+        268,
+        0,
+        653,
+        190
+      ]
+    },
+    {
+      "index": 245,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 10.75,
+      "shellBounds": [
+        266,
+        0,
+        657,
+        194
+      ]
+    },
+    {
+      "index": 246,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 10.766666666666667,
+      "shellBounds": [
+        263,
+        0,
+        662,
+        197
+      ]
+    },
+    {
+      "index": 247,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 10.783333333333333,
+      "shellBounds": [
+        260,
+        0,
+        666,
+        200
+      ]
+    },
+    {
+      "index": 248,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 10.8,
+      "shellBounds": [
+        258,
+        0,
+        669,
+        203
+      ]
+    },
+    {
+      "index": 249,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 10.816666666666666,
+      "shellBounds": [
+        258,
+        0,
+        670,
+        205
+      ]
+    },
+    {
+      "index": 250,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 10.833333333333334,
+      "shellBounds": [
+        256,
+        0,
+        673,
+        207
+      ]
+    },
+    {
+      "index": 251,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 10.85,
+      "shellBounds": [
+        256,
+        0,
+        673,
+        208
+      ]
+    },
+    {
+      "index": 252,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 10.866666666666667,
+      "shellBounds": [
+        254,
+        0,
+        676,
+        209
+      ]
+    },
+    {
+      "index": 253,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 10.9,
+      "shellBounds": [
+        254,
+        0,
+        676,
+        210
+      ]
+    },
+    {
+      "index": 254,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 10.916666666666666,
+      "shellBounds": [
+        254,
+        0,
+        676,
+        210
+      ]
+    },
+    {
+      "index": 255,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 10.933333333333334,
+      "shellBounds": [
+        254,
+        0,
+        676,
+        210
+      ]
+    },
+    {
+      "index": 256,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 10.95,
+      "shellBounds": [
+        254,
+        0,
+        676,
+        210
+      ]
+    },
+    {
+      "index": 257,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 10.966666666666667,
+      "shellBounds": [
+        254,
+        0,
+        676,
+        210
+      ]
+    },
+    {
+      "index": 258,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 10.983333333333333,
+      "shellBounds": [
+        254,
+        0,
+        676,
+        210
+      ]
+    },
+    {
+      "index": 259,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 11,
+      "shellBounds": [
+        254,
+        0,
+        676,
+        210
+      ]
+    },
+    {
+      "index": 260,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 11.016666666666667,
+      "shellBounds": [
+        254,
+        0,
+        676,
+        210
+      ]
+    },
+    {
+      "index": 261,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 11.033333333333333,
+      "shellBounds": [
+        254,
+        0,
+        676,
+        210
+      ]
+    },
+    {
+      "index": 262,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 11.05,
+      "shellBounds": [
+        254,
+        0,
+        676,
+        210
+      ]
+    },
+    {
+      "index": 263,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 11.066666666666666,
+      "shellBounds": [
+        254,
+        0,
+        676,
+        210
+      ]
+    },
+    {
+      "index": 264,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 11.083333333333334,
+      "shellBounds": [
+        254,
+        0,
+        676,
+        210
+      ]
+    },
+    {
+      "index": 265,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 11.1,
+      "shellBounds": [
+        254,
+        0,
+        676,
+        210
+      ]
+    },
+    {
+      "index": 266,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 11.116666666666667,
+      "shellBounds": [
+        254,
+        0,
+        676,
+        210
+      ]
+    },
+    {
+      "index": 267,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 11.133333333333333,
+      "shellBounds": [
+        254,
+        0,
+        676,
+        210
+      ]
+    },
+    {
+      "index": 268,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 11.15,
+      "shellBounds": [
+        254,
+        0,
+        676,
+        210
+      ]
+    },
+    {
+      "index": 269,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 11.166666666666666,
+      "shellBounds": [
+        254,
+        0,
+        676,
+        210
+      ]
+    },
+    {
+      "index": 270,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 11.183333333333334,
+      "shellBounds": [
+        254,
+        0,
+        676,
+        210
+      ]
+    },
+    {
+      "index": 271,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 11.2,
+      "shellBounds": [
+        254,
+        0,
+        676,
+        210
+      ]
+    },
+    {
+      "index": 272,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 11.216666666666667,
+      "shellBounds": [
+        254,
+        0,
+        676,
+        210
+      ]
+    },
+    {
+      "index": 273,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 11.233333333333333,
+      "shellBounds": [
+        254,
+        0,
+        676,
+        210
+      ]
+    },
+    {
+      "index": 274,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 11.25,
+      "shellBounds": [
+        254,
+        0,
+        676,
+        210
+      ]
+    },
+    {
+      "index": 275,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 11.283333333333333,
+      "shellBounds": [
+        254,
+        0,
+        676,
+        210
+      ]
+    },
+    {
+      "index": 276,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 11.3,
+      "shellBounds": [
+        254,
+        0,
+        676,
+        210
+      ]
+    },
+    {
+      "index": 277,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 11.316666666666666,
+      "shellBounds": [
+        254,
+        0,
+        676,
+        210
+      ]
+    },
+    {
+      "index": 278,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 11.333333333333334,
+      "shellBounds": [
+        254,
+        0,
+        676,
+        210
+      ]
+    },
+    {
+      "index": 279,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 11.35,
+      "shellBounds": [
+        254,
+        0,
+        676,
+        210
+      ]
+    },
+    {
+      "index": 280,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 11.366666666666667,
+      "shellBounds": [
+        254,
+        0,
+        676,
+        210
+      ]
+    },
+    {
+      "index": 281,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 11.383333333333333,
+      "shellBounds": [
+        254,
+        0,
+        676,
+        210
+      ]
+    },
+    {
+      "index": 282,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 11.4,
+      "shellBounds": [
+        254,
+        0,
+        676,
+        210
+      ]
+    },
+    {
+      "index": 283,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 11.416666666666666,
+      "shellBounds": [
+        254,
+        0,
+        676,
+        210
+      ]
+    },
+    {
+      "index": 284,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 11.433333333333334,
+      "shellBounds": [
+        254,
+        0,
+        676,
+        210
+      ]
+    },
+    {
+      "index": 285,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 11.533333333333333,
+      "shellBounds": [
+        254,
+        0,
+        676,
+        210
+      ]
+    },
+    {
+      "index": 286,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 11.633333333333333,
+      "shellBounds": [
+        254,
+        0,
+        676,
+        210
+      ]
+    },
+    {
+      "index": 287,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 11.75,
+      "shellBounds": [
+        254,
+        0,
+        676,
+        210
+      ]
+    },
+    {
+      "index": 288,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 11.85,
+      "shellBounds": [
+        254,
+        0,
+        676,
+        210
+      ]
+    },
+    {
+      "index": 289,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 11.95,
+      "shellBounds": [
+        254,
+        0,
+        676,
+        210
+      ]
+    },
+    {
+      "index": 290,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 12.05,
+      "shellBounds": [
+        254,
+        0,
+        676,
+        210
+      ]
+    },
+    {
+      "index": 291,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 12.166666666666666,
+      "shellBounds": [
+        254,
+        0,
+        676,
+        210
+      ]
+    },
+    {
+      "index": 292,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 12.266666666666667,
+      "shellBounds": [
+        254,
+        0,
+        676,
+        210
+      ]
+    },
+    {
+      "index": 293,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 12.366666666666667,
+      "shellBounds": [
+        254,
+        0,
+        676,
+        210
+      ]
+    },
+    {
+      "index": 294,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 12.466666666666667,
+      "shellBounds": [
+        254,
+        0,
+        676,
+        210
+      ]
+    },
+    {
+      "index": 295,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 12.583333333333334,
+      "shellBounds": [
+        254,
+        0,
+        676,
+        210
+      ]
+    },
+    {
+      "index": 296,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 12.683333333333334,
+      "shellBounds": [
+        254,
+        0,
+        676,
+        210
+      ]
+    },
+    {
+      "index": 297,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 12.783333333333333,
+      "shellBounds": [
+        254,
+        0,
+        676,
+        210
+      ]
+    },
+    {
+      "index": 298,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 12.883333333333333,
+      "shellBounds": [
+        254,
+        0,
+        676,
+        210
+      ]
+    },
+    {
+      "index": 299,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 13,
+      "shellBounds": [
+        254,
+        0,
+        676,
+        210
+      ]
+    },
+    {
+      "index": 300,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 13.1,
+      "shellBounds": [
+        254,
+        0,
+        676,
+        210
+      ]
+    },
+    {
+      "index": 301,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 13.2,
+      "shellBounds": [
+        254,
+        0,
+        676,
+        210
+      ]
+    },
+    {
+      "index": 302,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 13.3,
+      "shellBounds": [
+        254,
+        0,
+        676,
+        210
+      ]
+    },
+    {
+      "index": 303,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 13.35,
+      "shellBounds": [
+        254,
+        0,
+        676,
+        210
+      ]
+    },
+    {
+      "index": 304,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 13.416666666666666,
+      "shellBounds": [
+        254,
+        0,
+        676,
+        210
+      ]
+    },
+    {
+      "index": 305,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 13.516666666666667,
+      "shellBounds": [
+        254,
+        0,
+        676,
+        210
+      ]
+    },
+    {
+      "index": 306,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 13.616666666666667,
+      "shellBounds": [
+        254,
+        0,
+        676,
+        210
+      ]
+    },
+    {
+      "index": 307,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 13.733333333333333,
+      "shellBounds": [
+        254,
+        0,
+        676,
+        210
+      ]
+    },
+    {
+      "index": 308,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 13.833333333333334,
+      "shellBounds": [
+        254,
+        0,
+        676,
+        210
+      ]
+    },
+    {
+      "index": 309,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 13.933333333333334,
+      "shellBounds": [
+        254,
+        0,
+        676,
+        210
+      ]
+    },
+    {
+      "index": 310,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 14.05,
+      "shellBounds": [
+        254,
+        0,
+        676,
+        210
+      ]
+    },
+    {
+      "index": 311,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 14.15,
+      "shellBounds": [
+        254,
+        0,
+        676,
+        210
+      ]
+    },
+    {
+      "index": 312,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 14.25,
+      "shellBounds": [
+        254,
+        0,
+        676,
+        210
+      ]
+    },
+    {
+      "index": 313,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 14.366666666666667,
+      "shellBounds": [
+        254,
+        0,
+        676,
+        210
+      ]
+    },
+    {
+      "index": 314,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 14.45,
+      "shellBounds": [
+        254,
+        0,
+        676,
+        210
+      ]
+    },
+    {
+      "index": 315,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 14.566666666666666,
+      "shellBounds": [
+        254,
+        0,
+        676,
+        210
+      ]
+    },
+    {
+      "index": 316,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 14.666666666666666,
+      "shellBounds": [
+        254,
+        0,
+        676,
+        210
+      ]
+    },
+    {
+      "index": 317,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 14.783333333333333,
+      "shellBounds": [
+        254,
+        0,
+        676,
+        210
+      ]
+    },
+    {
+      "index": 318,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 14.883333333333333,
+      "shellBounds": [
+        254,
+        0,
+        676,
+        210
+      ]
+    },
+    {
+      "index": 319,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 14.983333333333333,
+      "shellBounds": [
+        254,
+        0,
+        676,
+        210
+      ]
+    },
+    {
+      "index": 320,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 15.083333333333334,
+      "shellBounds": [
+        254,
+        0,
+        676,
+        210
+      ]
+    },
+    {
+      "index": 321,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 15.183333333333334,
+      "shellBounds": [
+        254,
+        0,
+        676,
+        210
+      ]
+    },
+    {
+      "index": 322,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 15.3,
+      "shellBounds": [
+        254,
+        0,
+        676,
+        210
+      ]
+    },
+    {
+      "index": 323,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 15.4,
+      "shellBounds": [
+        254,
+        0,
+        676,
+        210
+      ]
+    },
+    {
+      "index": 324,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 15.5,
+      "shellBounds": [
+        254,
+        0,
+        676,
+        210
+      ]
+    },
+    {
+      "index": 325,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 15.616666666666667,
+      "shellBounds": [
+        254,
+        0,
+        676,
+        210
+      ]
+    },
+    {
+      "index": 326,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 15.716666666666667,
+      "shellBounds": [
+        254,
+        0,
+        676,
+        210
+      ]
+    },
+    {
+      "index": 327,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 15.833333333333334,
+      "shellBounds": [
+        254,
+        0,
+        676,
+        210
+      ]
+    },
+    {
+      "index": 328,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 15.933333333333334,
+      "shellBounds": [
+        254,
+        0,
+        676,
+        210
+      ]
+    },
+    {
+      "index": 329,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 16.033333333333335,
+      "shellBounds": [
+        254,
+        0,
+        676,
+        210
+      ]
+    },
+    {
+      "index": 330,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 16.133333333333333,
+      "shellBounds": [
+        254,
+        0,
+        676,
+        210
+      ]
+    },
+    {
+      "index": 331,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 16.25,
+      "shellBounds": [
+        254,
+        0,
+        676,
+        210
+      ]
+    },
+    {
+      "index": 332,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 16.366666666666667,
+      "shellBounds": [
+        254,
+        0,
+        676,
+        210
+      ]
+    },
+    {
+      "index": 333,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 16.45,
+      "shellBounds": [
+        254,
+        0,
+        676,
+        210
+      ]
+    },
+    {
+      "index": 334,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 16.55,
+      "shellBounds": [
+        254,
+        0,
+        676,
+        210
+      ]
+    },
+    {
+      "index": 335,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 16.666666666666668,
+      "shellBounds": [
+        254,
+        0,
+        676,
+        210
+      ]
+    },
+    {
+      "index": 336,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 16.766666666666666,
+      "shellBounds": [
+        254,
+        0,
+        676,
+        210
+      ]
+    },
+    {
+      "index": 337,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 16.866666666666667,
+      "shellBounds": [
+        254,
+        0,
+        676,
+        210
+      ]
+    },
+    {
+      "index": 338,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 16.966666666666665,
+      "shellBounds": [
+        254,
+        0,
+        676,
+        210
+      ]
+    },
+    {
+      "index": 339,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 17.083333333333332,
+      "shellBounds": [
+        254,
+        0,
+        676,
+        210
+      ]
+    },
+    {
+      "index": 340,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 17.183333333333334,
+      "shellBounds": [
+        254,
+        0,
+        676,
+        210
+      ]
+    },
+    {
+      "index": 341,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 17.3,
+      "shellBounds": [
+        254,
+        0,
+        676,
+        210
+      ]
+    },
+    {
+      "index": 342,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 17.4,
+      "shellBounds": [
+        254,
+        0,
+        676,
+        210
+      ]
+    },
+    {
+      "index": 343,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 17.5,
+      "shellBounds": [
+        254,
+        0,
+        676,
+        210
+      ]
+    },
+    {
+      "index": 344,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 17.6,
+      "shellBounds": [
+        254,
+        0,
+        676,
+        210
+      ]
+    },
+    {
+      "index": 345,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 17.7,
+      "shellBounds": [
+        254,
+        0,
+        676,
+        210
+      ]
+    },
+    {
+      "index": 346,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 17.816666666666666,
+      "shellBounds": [
+        254,
+        0,
+        676,
+        210
+      ]
+    },
+    {
+      "index": 347,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 17.916666666666668,
+      "shellBounds": [
+        254,
+        0,
+        676,
+        210
+      ]
+    },
+    {
+      "index": 348,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 18.033333333333335,
+      "shellBounds": [
+        254,
+        0,
+        676,
+        210
+      ]
+    },
+    {
+      "index": 349,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 18.083333333333332,
+      "shellBounds": [
+        254,
+        0,
+        676,
+        210
+      ]
+    },
+    {
+      "index": 350,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 18.133333333333333,
+      "shellBounds": [
+        254,
+        0,
+        676,
+        210
+      ]
+    },
+    {
+      "index": 351,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 18.233333333333334,
+      "shellBounds": [
+        254,
+        0,
+        676,
+        210
+      ]
+    },
+    {
+      "index": 352,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 18.35,
+      "shellBounds": [
+        254,
+        0,
+        676,
+        210
+      ]
+    },
+    {
+      "index": 353,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 18.45,
+      "shellBounds": [
+        254,
+        0,
+        676,
+        210
+      ]
+    },
+    {
+      "index": 354,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 18.55,
+      "shellBounds": [
+        254,
+        0,
+        676,
+        210
+      ]
+    },
+    {
+      "index": 355,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 18.666666666666668,
+      "shellBounds": [
+        254,
+        0,
+        676,
+        210
+      ]
+    },
+    {
+      "index": 356,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 18.766666666666666,
+      "shellBounds": [
+        254,
+        0,
+        676,
+        210
+      ]
+    },
+    {
+      "index": 357,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 18.816666666666666,
+      "shellBounds": [
+        254,
+        0,
+        676,
+        210
+      ]
+    },
+    {
+      "index": 358,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 18.85,
+      "shellBounds": [
+        254,
+        0,
+        676,
+        210
+      ]
+    },
+    {
+      "index": 359,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 18.866666666666667,
+      "shellBounds": [
+        254,
+        0,
+        676,
+        210
+      ]
+    },
+    {
+      "index": 360,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 18.883333333333333,
+      "shellBounds": [
+        254,
+        0,
+        676,
+        210
+      ]
+    },
+    {
+      "index": 361,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 18.9,
+      "shellBounds": [
+        254,
+        0,
+        676,
+        210
+      ]
+    },
+    {
+      "index": 362,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 18.916666666666668,
+      "shellBounds": [
+        254,
+        0,
+        676,
+        210
+      ]
+    },
+    {
+      "index": 363,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 18.933333333333334,
+      "shellBounds": [
+        254,
+        0,
+        676,
+        210
+      ]
+    },
+    {
+      "index": 364,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 18.95,
+      "shellBounds": [
+        254,
+        0,
+        676,
+        210
+      ]
+    },
+    {
+      "index": 365,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 18.966666666666665,
+      "shellBounds": [
+        254,
+        0,
+        676,
+        210
+      ]
+    },
+    {
+      "index": 366,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 18.983333333333334,
+      "shellBounds": [
+        254,
+        0,
+        676,
+        210
+      ]
+    },
+    {
+      "index": 367,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 19,
+      "shellBounds": [
+        254,
+        0,
+        676,
+        210
+      ]
+    },
+    {
+      "index": 368,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 19.016666666666666,
+      "shellBounds": [
+        254,
+        0,
+        676,
+        210
+      ]
+    },
+    {
+      "index": 369,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 19.033333333333335,
+      "shellBounds": [
+        254,
+        0,
+        676,
+        210
+      ]
+    },
+    {
+      "index": 370,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 19.05,
+      "shellBounds": [
+        254,
+        0,
+        676,
+        210
+      ]
+    },
+    {
+      "index": 371,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 19.066666666666666,
+      "shellBounds": [
+        254,
+        0,
+        676,
+        210
+      ]
+    },
+    {
+      "index": 372,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 19.083333333333332,
+      "shellBounds": [
+        256,
+        0,
+        673,
+        207
+      ]
+    },
+    {
+      "index": 373,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 19.1,
+      "shellBounds": [
+        260,
+        0,
+        666,
+        202
+      ]
+    },
+    {
+      "index": 374,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 19.116666666666667,
+      "shellBounds": [
+        268,
+        0,
+        653,
+        191
+      ]
+    },
+    {
+      "index": 375,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 19.133333333333333,
+      "shellBounds": [
+        279,
+        0,
+        634,
+        176
+      ]
+    },
+    {
+      "index": 376,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 19.15,
+      "shellBounds": [
+        292,
+        0,
+        613,
+        161
+      ]
+    },
+    {
+      "index": 377,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 19.166666666666668,
+      "shellBounds": [
+        302,
+        0,
+        596,
+        146
+      ]
+    },
+    {
+      "index": 378,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 19.183333333333334,
+      "shellBounds": [
+        312,
+        0,
+        579,
+        132
+      ]
+    },
+    {
+      "index": 379,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 19.2,
+      "shellBounds": [
+        322,
+        0,
+        563,
+        120
+      ]
+    },
+    {
+      "index": 380,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 19.216666666666665,
+      "shellBounds": [
+        329,
+        0,
+        551,
+        110
+      ]
+    },
+    {
+      "index": 381,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 19.233333333333334,
+      "shellBounds": [
+        336,
+        0,
+        539,
+        101
+      ]
+    },
+    {
+      "index": 382,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 19.266666666666666,
+      "shellBounds": [
+        346,
+        0,
+        522,
+        87
+      ]
+    },
+    {
+      "index": 383,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 19.283333333333335,
+      "shellBounds": [
+        350,
+        0,
+        515,
+        82
+      ]
+    },
+    {
+      "index": 384,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 19.3,
+      "shellBounds": [
+        354,
+        0,
+        509,
+        77
+      ]
+    },
+    {
+      "index": 385,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 19.316666666666666,
+      "shellBounds": [
+        358,
+        0,
+        503,
+        72
+      ]
+    },
+    {
+      "index": 386,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 19.333333333333332,
+      "shellBounds": [
+        360,
+        0,
+        499,
+        69
+      ]
+    },
+    {
+      "index": 387,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 19.35,
+      "shellBounds": [
+        362,
+        0,
+        495,
+        66
+      ]
+    },
+    {
+      "index": 388,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 19.366666666666667,
+      "shellBounds": [
+        364,
+        0,
+        492,
+        63
+      ]
+    },
+    {
+      "index": 389,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 19.383333333333333,
+      "shellBounds": [
+        366,
+        0,
+        489,
+        61
+      ]
+    },
+    {
+      "index": 390,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 19.4,
+      "shellBounds": [
+        368,
+        0,
+        486,
+        59
+      ]
+    },
+    {
+      "index": 391,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 19.416666666666668,
+      "shellBounds": [
+        368,
+        0,
+        486,
+        58
+      ]
+    },
+    {
+      "index": 392,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 19.433333333333334,
+      "shellBounds": [
+        369,
+        0,
+        484,
+        57
+      ]
+    },
+    {
+      "index": 393,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 19.45,
+      "shellBounds": [
+        370,
+        0,
+        483,
+        56
+      ]
+    },
+    {
+      "index": 394,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 19.466666666666665,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 395,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 19.483333333333334,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 396,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 19.5,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 397,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 19.516666666666666,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 398,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 19.616666666666667,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 399,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 19.716666666666665,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 400,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 19.816666666666666,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 401,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 19.916666666666668,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 402,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 20.033333333333335,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 403,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 20.133333333333333,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 404,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 20.25,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 405,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 20.35,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 406,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 20.45,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 407,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 20.55,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 408,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 20.666666666666668,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 409,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 20.766666666666666,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 410,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 20.866666666666667,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 411,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 20.983333333333334,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 412,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 21.083333333333332,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 413,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 21.2,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 414,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 21.3,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 415,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 21.4,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 416,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 21.516666666666666,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 417,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 21.616666666666667,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 418,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 21.716666666666665,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 419,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 21.833333333333332,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 420,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 21.933333333333334,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 421,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 22.033333333333335,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 422,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 22.133333333333333,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 423,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 22.25,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 424,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 22.35,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 425,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 22.45,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 426,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 22.566666666666666,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 427,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 22.666666666666668,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 428,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 22.766666666666666,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 429,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 22.85,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 430,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 22.9,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 431,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 22.983333333333334,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 432,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 23.083333333333332,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 433,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 23.183333333333334,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 434,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 23.3,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 435,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 23.4,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 436,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 23.5,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 437,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 23.616666666666667,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 438,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 23.716666666666665,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 439,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 23.816666666666666,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 440,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 23.916666666666668,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 441,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 24.016666666666666,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 442,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 24.133333333333333,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 443,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 24.233333333333334,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 444,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 24.333333333333332,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 445,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 24.433333333333334,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 446,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 24.55,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 447,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 24.65,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 448,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 24.75,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 449,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 24.85,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 450,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 24.95,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 451,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 25.066666666666666,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 452,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 25.166666666666668,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 453,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 25.266666666666666,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 454,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 25.383333333333333,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 455,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 25.483333333333334,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 456,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 25.6,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 457,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 25.716666666666665,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 458,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 25.8,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 459,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 25.916666666666668,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 460,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 26.016666666666666,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 461,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 26.116666666666667,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 462,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 26.233333333333334,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 463,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 26.333333333333332,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 464,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 26.466666666666665,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 465,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 26.533333333333335,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 466,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 26.65,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 467,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 26.75,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 468,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 26.85,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 469,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 26.95,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 470,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 27.066666666666666,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 471,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 27.166666666666668,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    },
+    {
+      "index": 472,
+      "leftWingTopOffset": 0,
+      "rightWingTopOffset": 0,
+      "seconds": 27.283333333333335,
+      "shellBounds": [
+        370,
+        0,
+        482,
+        56
+      ]
+    }
+  ]
+}

@@ -1,0 +1,48 @@
+{
+  "date": "2026-10-27",
+  "version": "0.6.1",
+  "build": "11",
+  "appPath": "/Users/rong5/Dynamiclsland/build/u05/Dynamic Island.app",
+  "cause": "ViewThatFits measured long music text at unconstrained ideal width and replaced the entire music tree with a title-only fallback.",
+  "fullRegression": {
+    "total": 1201,
+    "skipped": 3,
+    "failures": 0,
+    "result": "/tmp/dynamic-island-u05-full.xcresult",
+    "scope": "Layout and marquee implementation before the final collapsed accessibility visibility refinement."
+  },
+  "finalFocusedRegression": {
+    "total": 33,
+    "failures": 0,
+    "result": "/tmp/dynamic-island-u05-final-visibility.xcresult",
+    "scope": "Final source including collapsed accessibility visibility and static text role."
+  },
+  "releaseBuild": "passed",
+  "signatureVerification": "passed",
+  "nativeAppVersionVerified": true,
+  "sourcePreserved": "网易云音乐",
+  "readPermissionPreserved": "granted",
+  "controlPermissionPreserved": "granted",
+  "playbackCommandsSent": false,
+  "motion": {
+    "pointsPerDesignSecond": 24,
+    "endpointPauseSeconds": 1,
+    "direction": "ping-pong",
+    "activeOnlyWhenVisibleAndOverflowing": true,
+    "honorsReduceMotion": true,
+    "shortTextKeepsIntrinsicWidth": true,
+    "timeProgressDoesNotRestartMetadataMotion": true
+  },
+  "verificationScope": {
+    "expandedMusic": "Native hosting-window regression with exact reported title, metadata variants and short-long-short transitions.",
+    "motion": "Visible native-window screenshots after initial pause and after1.75seconds, plus deterministic bidirectional cycle tests.",
+    "ordinaryApp": "Version, source, unchanged grants and collapsed accessibility state inspected through native UI."
+  },
+  "artifacts": {
+    "before.png": "8cd7e8e1a69fbe4daca53d061ff05aff6646b9baa79453154e4345f4825d8ce3",
+    "marquee-start.png": "fd5153604624059eaf6b25b44af904bc70a97a33c0bca907673b168c86a21677",
+    "after.png": "4ff4677e883dc9dece9d701f3680d8b2eaefc0c6d4288e95ca837bef8f6b64de",
+    "user-report.png": "538796a3b1a77dda0f22ca051c60ea759bade9f0d1414448f65e2cba8bab0182",
+    "marquee-moving.png": "041dfcb956280a5410c1a32f73dec2cdbd4a495c483a19017017fe89e712844f"
+  }
+}

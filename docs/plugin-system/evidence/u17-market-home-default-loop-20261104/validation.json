@@ -1,0 +1,20 @@
+{
+  "hostVersion": "0.6.1",
+  "hostBuild": 22,
+  "uniqueFocusedTestsPassed": 177,
+  "remainingFailures": [],
+  "sdkPythonTestsPassed": 45,
+  "releaseBuild": true,
+  "codesignVerified": true,
+  "realMusicPlaybackVerified": false,
+  "physicalTrackpadAcceptance": false,
+  "oldPublicHostRejectsMediaExamples": true,
+  "defaultRegistryVerified": true,
+  "marketMerged": true,
+  "marketCITotal": 1092,
+  "marketCIPassed": 1087,
+  "marketCISkipped": 5,
+  "marketCIFailed": 0,
+  "marketCIReleaseBuild": true,
+  "combinedGeneralSettingsVerified": true
+}

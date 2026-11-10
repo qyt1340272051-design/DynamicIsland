@@ -1,0 +1,11 @@
+full
+	 Executed 1201 tests, with 3 tests skipped and 0 failures (0 unexpected) in 168.438 (168.931) seconds
+	 Executed 1201 tests, with 3 tests skipped and 0 failures (0 unexpected) in 168.438 (168.933) seconds
+** TEST SUCCEEDED **
+** BUILD SUCCEEDED **
+Tests and Release build passed.
+final-focused
+	 Executed 33 tests, with 0 failures (0 unexpected) in 9.075 (9.084) seconds
+	 Executed 33 tests, with 0 failures (0 unexpected) in 9.075 (9.085) seconds
+** TEST SUCCEEDED **
+** BUILD SUCCEEDED **

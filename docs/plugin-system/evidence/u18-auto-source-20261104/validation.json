@@ -1,0 +1,13 @@
+{
+  "hostVersion": "0.6.1",
+  "hostBuild": 23,
+  "focusedTestsPassed": 160,
+  "focusedTestsFailed": 0,
+  "sdkPythonTestsPassed": 45,
+  "releaseBuild": true,
+  "codesignVerified": true,
+  "readOnlySystemProbeInSandbox": true,
+  "realMultiPlayerPlaybackControlsVerified": false,
+  "pluginReleaseAssetsChanged": false,
+  "outOfOrderDetectionProtected": true
+}

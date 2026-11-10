@@ -1,0 +1,41 @@
+{
+  "schemaVersion": 1,
+  "plugins": [
+    {
+      "id": "com.dynamicisland.pomodoro",
+      "name": "番茄钟",
+      "version": "0.3.1",
+      "download": "https://github.com/qyt1340272051-design/DynamicIsland/releases/download/plugins-pomodoro-0.3.1/pomodoro-0.3.1.dip",
+      "source": "https://github.com/qyt1340272051-design/DynamicIsland",
+      "minHostVersion": "0.6.1",
+      "hash": "125f4c58b6439cd2721aaed4b0487ec3de0b2f09d07f83f223008cc354db42b0"
+    },
+    {
+      "id": "com.dynamicisland.github",
+      "name": "GitHub",
+      "version": "0.1.0",
+      "download": "https://github.com/qyt1340272051-design/DynamicIsland/releases/download/plugins-0.6.0/github-0.1.0.dip",
+      "source": "https://github.com/qyt1340272051-design/DynamicIsland",
+      "minHostVersion": "0.6.0",
+      "hash": "5a090cbc251b48d34ffed3bd82d8fd5ff42214e7c6386b769e1ba70477bae0fa"
+    },
+    {
+      "id": "com.dynamicisland.qq-music",
+      "name": "QQ 音乐",
+      "version": "0.1.0",
+      "download": "https://github.com/qyt1340272051-design/DynamicIsland/releases/download/plugins-music-0.1.0/qq-music-0.1.0.dip",
+      "source": "https://github.com/qyt1340272051-design/DynamicIsland",
+      "minHostVersion": "0.6.1",
+      "hash": "4d5abeea4ec84a32447742130fdb7b596b2e1b47492da45da7c10d3a302b4aa4"
+    },
+    {
+      "id": "com.dynamicisland.spotify",
+      "name": "Spotify",
+      "version": "0.1.0",
+      "download": "https://github.com/qyt1340272051-design/DynamicIsland/releases/download/plugins-music-0.1.0/spotify-0.1.0.dip",
+      "source": "https://github.com/qyt1340272051-design/DynamicIsland",
+      "minHostVersion": "0.6.1",
+      "hash": "23788519eb3d7a203e18e90c8a4ce024cc355206f92489ab138912f5bc5c36d3"
+    }
+  ]
+}
