@@ -69,7 +69,7 @@
     "permissions": {
       "description": "Permissions requested by the plugin. Declaration does not grant access; unknown permissions are invalid.",
       "type": "array",
-      "maxItems": 8,
+      "maxItems": 10,
       "uniqueItems": true,
       "items": {
         "$ref": "#/$defs/permission"
@@ -78,7 +78,7 @@
     "capabilities": {
       "description": "V1 Host API capabilities used by the plugin. Unknown capabilities are invalid.",
       "type": "array",
-      "maxItems": 10,
+      "maxItems": 11,
       "uniqueItems": true,
       "items": {
         "$ref": "#/$defs/capability"
@@ -87,6 +87,34 @@
     "developer": {
       "$ref": "#/properties/name",
       "description": "Optional self-reported developer display name. This does not verify publisher identity."
+    },
+    "mediaProvider": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Optional Host-managed trusted media adapter; requires Host 0.6.1 or newer. Declaring a helper does not authorize executing it.",
+      "required": [
+        "targetBundleIdentifier",
+        "displayName",
+        "helperPath",
+        "helperSHA256"
+      ],
+      "properties": {
+        "targetBundleIdentifier": {
+          "type": "string",
+          "maxLength": 255,
+          "pattern": "^[A-Za-z0-9-]{1,63}(?:\\.[A-Za-z0-9-]{1,63})+$"
+        },
+        "displayName": {
+          "$ref": "#/properties/name"
+        },
+        "helperPath": {
+          "$ref": "#/properties/entry"
+        },
+        "helperSHA256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      }
     }
   },
   "$defs": {
@@ -110,7 +138,9 @@
         "clipboard.read",
         "clipboard.write",
         "calendar.read",
-        "files.userSelected"
+        "files.userSelected",
+        "media.read",
+        "media.control"
       ]
     },
     "capability": {
@@ -125,8 +155,76 @@
         "scheduler",
         "countdown",
         "links.open",
-        "presentation.request"
+        "presentation.request",
+        "music.provider"
       ]
     }
-  }
+  },
+  "allOf": [
+    {
+      "if": {
+        "required": [
+          "mediaProvider"
+        ]
+      },
+      "then": {
+        "properties": {
+          "engine": {
+            "const": "javascriptcore"
+          },
+          "permissions": {
+            "allOf": [
+              {
+                "contains": {
+                  "const": "media.read"
+                }
+              },
+              {
+                "contains": {
+                  "const": "media.control"
+                }
+              }
+            ]
+          },
+          "capabilities": {
+            "contains": {
+              "const": "music.provider"
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "anyOf": [
+          {
+            "properties": {
+              "permissions": {
+                "contains": {
+                  "enum": [
+                    "media.read",
+                    "media.control"
+                  ]
+                }
+              }
+            }
+          },
+          {
+            "properties": {
+              "capabilities": {
+                "contains": {
+                  "const": "music.provider"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "then": {
+        "required": [
+          "mediaProvider"
+        ]
+      }
+    }
+  ]
 }

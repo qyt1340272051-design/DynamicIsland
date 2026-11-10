@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "urn:dynamicisland:sdk:island-node-v1",
   "title": "DynamicIsland authoring subset nodes",
-  "description": "SDK 1.0.0 stable editor aid for the eight node kinds used by the official Pomodoro/GitHub examples. This is narrower authoring preflight, not Host admission or a declaration of the full Host contract.",
+  "description": "SDK 1.1.0 development editor aid for the eight node kinds used by the official Pomodoro/GitHub examples, including finite typography, button and timer appearances. This is narrower authoring preflight, not Host admission or a declaration of the full Host contract.",
   "$comment": "Run di_plugin.py validate-node for raw 65536-byte JSON input, strict UTF-8, duplicate keys, finite numbers, UTF-8 text limits, maximum depth 8 and aggregate nodes 128. Schema checks alone do not enforce these aggregate or byte constraints. Host independently checks rendering-mode support, capabilities, permissions, active instance and countdown generation.",
   "$ref": "#/$defs/node",
   "$defs": {
@@ -32,6 +32,18 @@
             "warning",
             "danger"
           ]
+        },
+        "font": {
+          "type": "string",
+          "enum": [
+            "caption",
+            "body",
+            "headline",
+            "title",
+            "metric",
+            "timer"
+          ],
+          "default": "body"
         }
       }
     },
@@ -51,6 +63,18 @@
           "minLength": 1,
           "maxLength": 128,
           "pattern": "^[A-Za-z0-9._:-]+$"
+        },
+        "color": {
+          "type": "string",
+          "enum": [
+            "primary",
+            "secondary",
+            "accent",
+            "success",
+            "warning",
+            "danger"
+          ],
+          "default": "accent"
         }
       }
     },
@@ -126,7 +150,8 @@
           "type": "string",
           "enum": [
             "linear",
-            "battery"
+            "battery",
+            "track"
           ]
         },
         "color": {
@@ -170,7 +195,9 @@
           "type": "string",
           "enum": [
             "time",
-            "progress"
+            "progress",
+            "timer",
+            "track"
           ]
         },
         "color": {
@@ -211,6 +238,31 @@
           "type": "string",
           "maxLength": 256,
           "description": "At most 256 UTF-8 bytes; CLI enforces bytes in addition to this editor character bound."
+        },
+        "style": {
+          "type": "string",
+          "enum": [
+            "standard",
+            "secondary",
+            "primary"
+          ],
+          "default": "standard"
+        },
+        "color": {
+          "type": "string",
+          "enum": [
+            "primary",
+            "secondary",
+            "accent",
+            "success",
+            "warning",
+            "danger"
+          ],
+          "default": "accent"
+        },
+        "isEnabled": {
+          "type": "boolean",
+          "default": true
         }
       }
     },

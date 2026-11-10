@@ -6,7 +6,7 @@
 | --- | --- |
 | CLI invalidManifest / duplicateField | 确认 JSON 类型、必填字段、重复键和声明闭集。看 CLI path；它是开发预检，不等同 Host 安装错误。 |
 | 安装失败 / 最低版本不符 | 使用支持 minimumHostVersion 的开发 Host；确认根目录 Manifest、入口和规范路径。 |
-| 启用后没有 UI | 检查初始化拒绝；tool 需展开后从工具菜单选择。Hello 隐藏 compact，不自动展开。 |
+| 启用后没有 UI | 检查初始化拒绝；tool 需展开后进入分配的计时区或工具区，在岛内切换栏选择（旧版 Host 使用工具菜单）。默认工具区；Hello 隐藏 compact，不自动展开。 |
 | capabilityRequired / permissionRequired | 添加确实需要的声明后重新打包、导入；权限还要单独确认。 |
 | permissionNotGranted / permissionDenied / permissionRevoked | 在插件管理查看该项状态；业务采用有限降级，不循环弹窗或自动重试授权。 |
 | invalidArguments | 对照类型与节点 Schema；不要传 null 替代省略、undefined、非有限数、未知字段或假的 generation。 |

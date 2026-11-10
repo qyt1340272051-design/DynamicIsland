@@ -17,6 +17,7 @@ import os
 from pathlib import Path
 import re
 import stat
+import hashlib
 import sys
 import uuid
 import zipfile
@@ -24,18 +25,23 @@ import zipfile
 from package_plugin import inspect_source, package
 
 
-SDK_VERSION = '1.0.0'
+SDK_VERSION = '1.1.0'
 MAX_JSON_BYTES = 65_536
 PERMISSIONS = frozenset((
     'network', 'storage.local', 'links.open', 'notifications.publish',
     'clipboard.read', 'clipboard.write', 'calendar.read', 'files.userSelected',
+    'media.read', 'media.control',
 ))
 CAPABILITIES = frozenset((
     'activity.publish', 'activity.update', 'activity.end', 'ui.islandNode',
     'actions.handle', 'storage.local', 'scheduler', 'countdown', 'links.open',
-    'presentation.request',
+    'presentation.request', 'music.provider',
 ))
 COLORS = frozenset(('primary', 'secondary', 'accent', 'success', 'warning', 'danger'))
+TYPOGRAPHY = frozenset(('caption', 'body', 'headline', 'title', 'metric', 'timer'))
+BUTTON_STYLES = frozenset(('standard', 'secondary', 'primary'))
+PROGRESS_STYLES = frozenset(('linear', 'battery', 'track'))
+COUNTDOWN_STYLES = frozenset(('time', 'progress', 'timer', 'track'))
 NODE_KINDS = frozenset(('text', 'icon', 'hStack', 'vStack', 'spacer',
                         'progress', 'countdown', 'button'))
 MANIFEST_FIELDS = frozenset((
@@ -210,7 +216,7 @@ def _closed_array(value, allowed, path):
 
 
 def validate_manifest(value):
-    fields(value, MANIFEST_FIELDS, ('developer',), 'invalidManifest', '$')
+    fields(value, MANIFEST_FIELDS, ('developer', 'mediaProvider'), 'invalidManifest', '$')
     version = value['schemaVersion']
     if type(version) not in (int, float) or version != 1:
         fail('invalidManifest', '$.schemaVersion')
@@ -232,6 +238,32 @@ def validate_manifest(value):
         fail('invalidManifest', '$.entry')
     _closed_array(value['permissions'], PERMISSIONS, '$.permissions')
     _closed_array(value['capabilities'], CAPABILITIES, '$.capabilities')
+    provider = value.get('mediaProvider')
+    if 'mediaProvider' in value:
+        fields(provider, ('targetBundleIdentifier', 'displayName', 'helperPath', 'helperSHA256'),
+               (), 'invalidManifest', '$.mediaProvider')
+        target = string(provider['targetBundleIdentifier'], 'invalidManifest',
+                        '$.mediaProvider.targetBundleIdentifier', 255, True)
+        if re.fullmatch(r'[A-Za-z0-9-]{1,63}(?:\.[A-Za-z0-9-]{1,63})+', target) is None:
+            fail('invalidManifest', '$.mediaProvider.targetBundleIdentifier')
+        _name(provider['displayName'], '$.mediaProvider.displayName')
+        helper = string(provider['helperPath'], 'invalidManifest', '$.mediaProvider.helperPath', 240, True)
+        parts = helper.split('/')
+        if (not helper.endswith('.js') or len(parts[-1]) <= 3 or helper == entry
+                or any(part in ('.', '..') or ENTRY_COMPONENT.fullmatch(part) is None for part in parts)):
+            fail('invalidManifest', '$.mediaProvider.helperPath')
+        digest = provider['helperSHA256']
+        if type(digest) is not str or re.fullmatch(r'[0-9a-f]{64}', digest) is None:
+            fail('invalidManifest', '$.mediaProvider.helperSHA256')
+        version = value['minimumHostVersion']
+        core = tuple(map(int, version.split('-')[0].split('+')[0].split('.')))
+        if (value['engine'] != 'javascriptcore' or 'music.provider' not in value['capabilities']
+                or not {'media.read', 'media.control'}.issubset(value['permissions'])
+                or core < (0, 6, 1) or (core == (0, 6, 1) and '-' in version.split('+')[0])):
+            fail('invalidManifest', '$.mediaProvider')
+    elif ('music.provider' in value['capabilities']
+          or {'media.read', 'media.control'}.intersection(value['permissions'])):
+        fail('invalidManifest', '$.mediaProvider')
     return value
 
 
@@ -259,14 +291,14 @@ def validate_node(value):
             fail('invalidNode', path)
         kind = node['type']
         shapes = {
-            'text': (('type', 'content'), ('color',)),
-            'icon': (('type', 'symbolName'), ()),
+            'text': (('type', 'content'), ('color', 'font')),
+            'icon': (('type', 'symbolName'), ('color',)),
             'hStack': (('type', 'children'), ()),
             'vStack': (('type', 'children'), ()),
             'spacer': (('type',), ()),
             'progress': (('type', 'value'), ('style', 'color')),
             'countdown': (('type', 'id', 'generation'), ('style', 'color')),
-            'button': (('type', 'actionID', 'label'), ('accessibilityLabel',)),
+            'button': (('type', 'actionID', 'label'), ('accessibilityLabel', 'style', 'color', 'isEnabled')),
         }
         if kind not in shapes:
             fail('invalidNode', path)
@@ -275,6 +307,8 @@ def validate_node(value):
             _token(node['color'], COLORS, path + '.color')
         if kind == 'text':
             string(node['content'], 'invalidNode', path + '.content', 256)
+            if 'font' in node:
+                _token(node['font'], TYPOGRAPHY, path + '.font')
         elif kind == 'icon':
             _identifier(node['symbolName'], path + '.symbolName', symbol=True)
         elif kind in ('hStack', 'vStack'):
@@ -290,7 +324,7 @@ def validate_node(value):
             if type(number) not in (int, float) or not 0 <= number <= 1:
                 fail('invalidNode', path + '.value')
             if 'style' in node:
-                _token(node['style'], ('linear', 'battery'), path + '.style')
+                _token(node['style'], PROGRESS_STYLES, path + '.style')
         elif kind == 'countdown':
             _identifier(node['id'], path + '.id', 80)
             generation = string(node['generation'], 'invalidNode', path + '.generation', 36)
@@ -300,11 +334,15 @@ def validate_node(value):
             except (ValueError, AttributeError):
                 fail('invalidNode', path + '.generation')
             if 'style' in node:
-                _token(node['style'], ('time', 'progress'), path + '.style')
+                _token(node['style'], COUNTDOWN_STYLES, path + '.style')
         elif kind == 'button':
             _identifier(node['actionID'], path + '.actionID', 80)
             if 'accessibilityLabel' in node:
                 string(node['accessibilityLabel'], 'invalidNode', path + '.accessibilityLabel', 256)
+            if 'style' in node:
+                _token(node['style'], BUTTON_STYLES, path + '.style')
+            if 'isEnabled' in node and type(node['isEnabled']) is not bool:
+                fail('invalidNode', path + '.isEnabled')
             visit(node['label'], depth + 1, path + '.label')
     visit(value, 1, '$')
     return {'nodes': count, 'depth': deepest}
@@ -318,6 +356,21 @@ def validate_directory(source):
         entry_info = entry.lstat()
         if not stat.S_ISREG(entry_info.st_mode) or entry_info.st_nlink != 1:
             fail('unsafeFile')
+        if 'mediaProvider' in manifest:
+            provider = manifest['mediaProvider']
+            helper = root.joinpath(*provider['helperPath'].split('/'))
+            helper_info = helper.lstat()
+            if (not stat.S_ISREG(helper_info.st_mode) or helper_info.st_nlink != 1
+                    or not 0 < helper_info.st_size <= 128 * 1024):
+                fail('invalidPackage')
+            data = helper.read_bytes()
+            if (b'\x00' in data or data.startswith(b'\xef\xbb\xbf')
+                    or hashlib.sha256(data).hexdigest() != provider['helperSHA256']):
+                fail('invalidPackage')
+            try:
+                data.decode('utf-8')
+            except UnicodeDecodeError:
+                fail('invalidPackage')
         # The declared entry is never interpreted or executed by this tool.
         return {'files': file_count, 'bytes': total}
     except ValidationError:

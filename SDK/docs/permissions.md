@@ -15,3 +15,9 @@ Manifest Schema 还识别 notifications.publish、clipboard.read、clipboard.wri
 常见状态错误：未声明 `permissionRequired`、尚未批准 `permissionNotGranted`、用户拒绝 `permissionDenied`、被撤销或包发生变化 `permissionRevoked`。缺少 capability 是 `capabilityRequired`。处理方式见 [Debugging](debugging.md)。
 
 需要系统级许可的资源还受 macOS 控制；本 SDK 不提供绕过系统授权的接口。Hello 的 permissions 为空，按钮计数完全不依赖资源授权。
+
+## Host 0.6.1 媒体权限
+
+`media.read` 允许读取所声明播放器当前歌曲的曲名、歌手、专辑、封面、时长、进度和播放状态；这些信息可能反映个人收听内容。`media.control` 允许对同一个播放器发送播放暂停、上下曲和进度跳转。两者单独批准、拒绝和撤销，不能因启用插件或安装官方插件而自动批准。
+
+媒体插件需要额外的 `mediaProvider` 对象及 `music.provider` 声明；Host 管理媒体会话，当前 SDK 不提供 JS 媒体请求或进程执行方法。禁用、暂停、卸载或撤销授权会关闭对应会话并阻止在途结果继续交付。包更新需要重新审核，见 [Manifest](manifest.md)。

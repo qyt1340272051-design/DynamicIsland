@@ -1,9 +1,9 @@
 {
-  "status": "stable-limited-authoring-preflight",
-  "sdkVersion": "1.0.0",
+  "status": "development-media-provider-preflight",
+  "sdkVersion": "1.1.0",
   "manifestSchema": {
     "canonicalRepositoryPath": "docs/plugin-system/schema/plugin-manifest-v1.schema.json",
-    "canonicalSHA256": "8187d31f0ee571ba6575362c1804ac8c1119a5bd6095d7de7a6717d282d616b9",
+    "canonicalSHA256": "0b8ea97dd8046b474d0b9c312075f1a4e7b79fddd921039b1028a22684855db7",
     "copyPath": "plugin-manifest-v1.schema.json",
     "copiedWithoutSemanticChanges": true,
     "driftPolicy": "Host parity tests must compare this copy with the canonical JSON. Update both deliberately; this copy is not an independent authority."
@@ -24,7 +24,13 @@
       "countdown",
       "button"
     ],
-    "narrowerThanHost": true
+    "narrowerThanHost": true,
+    "developmentAdditions": [
+      "finite Text.font typography tokens including timer",
+      "finite Button.style and semantic color with strict isEnabled boolean",
+      "Progress.track and Countdown.timer/track Host-owned appearances",
+      "finite optional Icon.color semantic token; default accent preserves legacy encoding"
+    ]
   },
   "cliOnlyChecks": [
     "raw JSON UTF-8 byte limit 65536",

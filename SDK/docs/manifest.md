@@ -35,3 +35,13 @@
 Host Schema 另识别 `superisland` 引擎；这不表示原始上游插件可直接安装或所有上游 API 均受支持。本手册和 Hello 面向 Native SDK。原始上游许可与实际兼容验收单独追踪，不属于本 SDK 的完整兼容承诺。
 
 离线 [Manifest Schema](../schema/plugin-manifest-v1.schema.json)用于编辑器提示；CLI 还检查重复键和字节限额。完整 Manifest 最多 65,536 bytes。校验和打包见 [Packaging](packaging.md)。
+
+## Host 0.6.1 可选媒体适配器
+
+SDK 1.1.0 增加可选 `mediaProvider` 对象，只允许四个必填字符串字段：`targetBundleIdentifier` 是目标应用 Bundle ID；`displayName` 使用与 name 相同的规则；`helperPath` 是与 entry 不同的规范化相对 `.js` 路径；`helperSHA256` 为该文件的 64 位小写十六进制 SHA-256。
+
+媒体包使用 `javascriptcore` 引擎，并同时声明 `music.provider` capability、`media.read` 和 `media.control` 权限，`minimumHostVersion` 至少为 `0.6.1`。没有该对象的旧包编码不变；仅添加媒体权限或 capability 而不提供对象会被拒绝。旧 Host 会拒绝新声明，因此不要降低最低版本来绕过检查。
+
+Host 安全读取并保留辅助脚本的不可变快照，要求非空、无 BOM/NUL 的 UTF-8，最大 128 KiB，并校验摘要。`validate` 和打包预检也执行这些资源检查。摘要只表明内容一致，不能授予执行信任：Host 另行匹配内置可信脚本摘要，未知辅助脚本不会执行。文件不会被设置为可执行，常规插件仍不能请求任意 shell 或进程。Manifest、entry 或辅助脚本变化会使先前授权失效。
+
+当前源码的官方媒体包包括网易云音乐、QQ 音乐和 Spotify。后两者需要含新增信任摘要的 Host 0.6.1/build21 或更新开发构建；Manifest 的最低版本字段只比较语义版本，无法表达 build 号，因此旧 0.6.1 虽可预览包，仍会拒绝启用未知 helper。新增包不是通过修改清单自行获得执行权限。
